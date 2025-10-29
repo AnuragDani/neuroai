@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+.env/
+.DS_Store
+.config/
+.content/
+
+# Data and results
+/data/*
+!/data/README.md
+/artifacts/*
+!/artifacts/.keep
+
+# Hidden AI planning files
+.yourai/
+.yourai/
