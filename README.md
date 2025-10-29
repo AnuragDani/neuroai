@@ -8,7 +8,6 @@ This repository contains a reproducible pipeline for applying AI methods to neur
 | notebooks/ | Jupyter notebooks (01_data → 06_report) |
 | data/ | Public datasets (not tracked in git) |
 | artifacts/ | Generated models, metrics, figures (not tracked) |
-| .yourai/ | Private planning files (hidden) |
 
 ## Quickstart
 1. Create a Python 3.10 environment.
