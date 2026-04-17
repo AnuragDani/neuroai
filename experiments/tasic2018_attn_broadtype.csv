@@ -1,0 +1,5 @@
+cell_type,n_test,genomic_mean,program_mean,genomic_std
+Non-Neuronal,201,0.6078,0.3922,0.0316
+GABAergic,1912,0.8474,0.1526,0.0217
+Endothelial,62,0.8688,0.1312,0.0051
+Glutamatergic,2248,0.8949,0.1051,0.0244

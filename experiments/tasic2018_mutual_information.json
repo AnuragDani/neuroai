@@ -1,0 +1,10 @@
+{
+  "hvg_to_label_mean": 0.1132,
+  "hvg_to_label_max": 1.0824,
+  "pca_to_label_mean": 0.6033,
+  "pca_to_label_max": 1.5375,
+  "pairwise_hvg_pca_mean": 0.0027,
+  "pairwise_hvg_pca_max": 0.4816,
+  "pca_total_variance_explained": 0.3797,
+  "n_samples_used": 5000
+}

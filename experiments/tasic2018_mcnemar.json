@@ -1,0 +1,9 @@
+{
+  "attn_correct_concat_wrong": 128,
+  "attn_wrong_concat_correct": 156,
+  "chi2_continuity_corrected": 2.5669,
+  "p_value": 0.109121,
+  "significant_005": false,
+  "attn_acc": 0.9149130832570905,
+  "concat_acc": 0.9213174748398902
+}
