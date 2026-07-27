@@ -1,0 +1,86 @@
+{
+  "manifest_version": "1",
+  "recorded_for_step": "C02",
+  "data_mode": "legacy read-only",
+  "source_dataset": {
+    "reference": "Tasic et al. 2018 mouse cortex SMART-seq",
+    "accession": "GSE115746",
+    "matrix_tracked_in_repository": false,
+    "donor_identifiers_available_in_outputs": "unknown"
+  },
+  "boundary": [
+    "Both views are derived from one RNA count matrix: view one is highly variable gene expression, view two is a principal component projection of the same matrix.",
+    "This is an architecture proof of concept, not independent two-modality validation.",
+    "This is not condition-specific evidence and contains no clinical cohort.",
+    "Attention weights are routing signals; no intervention test supports treating them as explanations.",
+    "The projection for view two was fitted on all cells before splitting, so leakage cannot be ruled out.",
+    "Splits were stratified over cells with one seed; no donor grouping and no seed variability estimate.",
+    "Reported intervals were resampled over test cells, not over donors."
+  ],
+  "files": [
+    {
+      "relative_path": "experiments/run_tasic2018_pipeline.py",
+      "bytes": 39140,
+      "sha256": "32038e473a1380048b1ad28d9d8383e1aed90d83f1135378662503845933fefa",
+      "generator": "human-authored legacy script",
+      "evidence_label": "verified",
+      "description": "Legacy pipeline that builds two views from one RNA count matrix and trains single-view, concatenation, and attention-fusion classifiers."
+    },
+    {
+      "relative_path": "experiments/tasic2018_summary.json",
+      "bytes": 6481,
+      "sha256": "bc4706cb5484eeffbf8f79f6f165a54c8fd891304b8a27823c508e238f009e3a",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Dataset counts, per-model metrics with cell-level intervals, paired test, mutual information."
+    },
+    {
+      "relative_path": "experiments/tasic2018_broadtype_metrics.csv",
+      "bytes": 851,
+      "sha256": "5bce6ffd242d8d0a1c75f7fbc961510b8e9b5eeb550b47c7b40b6580dabf2a02",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Four-class task metrics per model; accuracy saturates at or near 1.0."
+    },
+    {
+      "relative_path": "experiments/tasic2018_finegrained_metrics.csv",
+      "bytes": 1457,
+      "sha256": "caf8ab34cd1ce5f59a259183733e2b24c58279d865cb5c16a72fa49d5921dd83",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "130-class task metrics per model, single seed."
+    },
+    {
+      "relative_path": "experiments/tasic2018_attn_broadtype.csv",
+      "bytes": 205,
+      "sha256": "ee2e685c9612c2b9cd2acb1caf2322fa5824a24fa8ad94cce51999c84dbf55e8",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Per-class mean attention weight over the two views, four-class task."
+    },
+    {
+      "relative_path": "experiments/tasic2018_attn_finegrained.csv",
+      "bytes": 5320,
+      "sha256": "2ab759ed887243b0bf5b3545cc306a6c3a008677bd92c4f4f8827aa48548da68",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Per-class mean attention weight over the two views, 130-class task."
+    },
+    {
+      "relative_path": "experiments/tasic2018_mcnemar.json",
+      "bytes": 234,
+      "sha256": "71cc29f50764903e9891d613a51a4e63d02929909cf8274768ee46523de4e1db",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Paired test comparing attention fusion with concatenation fusion, 130-class task."
+    },
+    {
+      "relative_path": "experiments/tasic2018_mutual_information.json",
+      "bytes": 261,
+      "sha256": "01b7a74c8f22cc7f00cd45290ee29c3994995556c310978a3272ba2229e1ec6c",
+      "generator": "experiments/run_tasic2018_pipeline.py",
+      "evidence_label": "experimental result",
+      "description": "Mutual information between each view and the label, and between paired features."
+    }
+  ]
+}
