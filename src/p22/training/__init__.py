@@ -1,0 +1,51 @@
+"""Training loop and the multi-seed benchmark runner."""
+
+from p22.training.loop import (
+    DEFAULT_DEVICE,
+    SELECTION_METRICS,
+    EpochRecord,
+    TrainedModel,
+    forward_logits,
+    forward_views,
+    predict,
+    set_all_seeds,
+    train_model,
+)
+from p22.training.seed_runner import (
+    HoldoutAlreadyUsedError,
+    ModelOutcome,
+    SeedRun,
+    SingleUseHoldout,
+    build_model,
+    build_record,
+    evaluate_predictions,
+    require_synthetic,
+    run_all_seeds,
+    run_one_seed,
+    summarize_across_seeds,
+    summarize_routing,
+)
+
+__all__ = [
+    "DEFAULT_DEVICE",
+    "SELECTION_METRICS",
+    "EpochRecord",
+    "HoldoutAlreadyUsedError",
+    "ModelOutcome",
+    "SeedRun",
+    "SingleUseHoldout",
+    "TrainedModel",
+    "build_model",
+    "build_record",
+    "evaluate_predictions",
+    "forward_logits",
+    "forward_views",
+    "predict",
+    "require_synthetic",
+    "run_all_seeds",
+    "run_one_seed",
+    "set_all_seeds",
+    "summarize_across_seeds",
+    "summarize_routing",
+    "train_model",
+]
