@@ -1,0 +1,67 @@
+[project]
+name = "p22"
+version = "0.1.0"
+description = "Modality-routing research scaffold, synthetic-only until explicit approval"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==2.2.2",
+    "scikit-learn==1.7.2",
+    "scipy==1.17.1",
+    "torch==2.8.0",
+    "anndata==0.12.6",
+    "h5py==3.16.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9.0",
+    "ruff>=0.6,<0.16",
+    "jupyterlab==4.6.1",
+    "nbconvert==7.17.1",
+    "nbclient==0.11.0",
+    "ipykernel==7.3.0",
+    "matplotlib==3.10.9",
+]
+# Restores the packages the legacy Tasic scripts under experiments/ were run with.
+# Not installed by default: the pre-approval sequence never executes those scripts.
+legacy = [
+    "scanpy==1.11.5",
+    "shap==0.48.0",
+    "umap-learn==0.5.12",
+    "seaborn==0.13.2",
+    "statsmodels==0.14.6",
+    "tqdm==4.68.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/p22"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra -p no:cacheprovider"
+markers = [
+    "slow: long-running check, excluded from fast verification",
+    "integration: end-to-end workflow check across modules",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+extend-exclude = [
+    "notebooks",
+    "colab_notebooks",
+    "experiments",
+    "legacy",
+    "reports/generated",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]

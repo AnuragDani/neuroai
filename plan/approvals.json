@@ -1,0 +1,74 @@
+{
+  "approval_state": "blocked",
+  "approver": "Professor Fang",
+  "approval_recorded": false,
+  "approval_date": null,
+  "recorded_by": "researcher",
+  "allowed_data_modes": [
+    "synthetic",
+    "legacy read-only"
+  ],
+  "blocked_data_modes": [
+    "approved real data"
+  ],
+  "allowed_before_approval": [
+    "synthetic arrays and metadata",
+    "reusable package code",
+    "tests",
+    "schemas, configs, reports, methods documentation",
+    "read-only inspection of tracked legacy code and outputs"
+  ],
+  "forbidden_before_approval": [
+    "downloading or inspecting disease matrices",
+    "controlled-access or condition-specific training",
+    "condition-specific target selection",
+    "biological interpretation or mechanism claims",
+    "calling attention or gate values explanations",
+    "cell-level splits when donor IDs exist",
+    "fitting transforms on validation or test data",
+    "tuning against test metrics",
+    "changing legacy experiment outputs",
+    "claims about translational impact or immigration eligibility"
+  ],
+  "real_data_path_patterns": [
+    "*.h5ad",
+    "*.h5",
+    "*.loom",
+    "*.mtx",
+    "*.mtx.gz",
+    "*.rds",
+    "*.zarr",
+    "*.tsv.gz",
+    "*.csv.gz",
+    "*.npz"
+  ],
+  "condition_terms": [
+    "alzheimer",
+    "parkinson",
+    "schizophrenia",
+    "bipolar",
+    "autism",
+    "dementia",
+    "amyotrophic",
+    "sea-ad",
+    "seaad",
+    "rosmap",
+    "psychencode"
+  ],
+  "network_call_patterns": [
+    "requests.get",
+    "requests.post",
+    "urllib.request.urlopen",
+    "urlretrieve",
+    "wget ",
+    "curl ",
+    "gdown",
+    "scanpy.datasets",
+    "sc.datasets",
+    "boto3",
+    "gcsfs",
+    "synapseclient"
+  ],
+  "next_decision_owner": "Professor Fang",
+  "next_decision": "approve or reject condition-specific dataset work described in post-approval plan"
+}

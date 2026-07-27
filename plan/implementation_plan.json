@@ -1,0 +1,237 @@
+{
+  "plan_id": "cursor-implementation-handoff",
+  "plan_version": "2026-07-27",
+  "source_document": "docs/CURSOR_IMPLEMENTATION_HANDOFF.md",
+  "branch": "develop",
+  "evidence_labels": [
+    "verified",
+    "experimental result",
+    "proposed",
+    "inference",
+    "unknown"
+  ],
+  "final_next_action": "awaiting_professor_approval",
+  "steps": [
+    {
+      "id": "C01",
+      "meeting_item": "Approval gate",
+      "subject": "chore: add guarded package and test scaffold",
+      "achievement": "Establishes local, synthetic-only workspace with explicit blocked approval state",
+      "notebook": "notebooks/implementation/00_scope_and_local_setup.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        ".gitignore",
+        ".python-version",
+        "Makefile",
+        "pyproject.toml",
+        "uv.lock",
+        "plan/approvals.json",
+        "plan/implementation_plan.json",
+        "plan/state.json",
+        "scripts/plan_guard.py",
+        "src/p22/__init__.py",
+        "tests/__init__.py",
+        "tests/test_plan_guard.py",
+        "notebooks/implementation/00_scope_and_local_setup.ipynb"
+      ]
+    },
+    {
+      "id": "C02",
+      "meeting_item": "Tasic conclusions",
+      "subject": "docs: preserve legacy Tasic evidence boundary",
+      "achievement": "Converts existing Tasic discussion into traceable evidence record",
+      "notebook": "notebooks/implementation/01_tasic_evidence_boundary.ipynb",
+      "data_mode": "legacy read-only",
+      "allowed_paths": [
+        "legacy/tasic_proxy_view/README.md",
+        "legacy/tasic_proxy_view/manifest.json",
+        "scripts/build_legacy_manifest.py",
+        "tests/test_legacy_manifest.py",
+        "plan/state.json",
+        "notebooks/implementation/01_tasic_evidence_boundary.ipynb"
+      ]
+    },
+    {
+      "id": "C03",
+      "meeting_item": "Prototype validation",
+      "subject": "test: add deterministic synthetic multimodal fixtures",
+      "achievement": "Creates deterministic two-view test world with donor nuisance",
+      "notebook": "notebooks/implementation/02_synthetic_fixture_and_donor_split.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/testing/__init__.py",
+        "src/p22/testing/synthetic.py",
+        "tests/test_synthetic.py",
+        "plan/state.json",
+        "notebooks/implementation/02_synthetic_fixture_and_donor_split.ipynb"
+      ]
+    },
+    {
+      "id": "C04",
+      "meeting_item": "Donor-aware evaluation",
+      "subject": "feat: add donor-held-out split validation",
+      "achievement": "Proves split happens by donor, not cell",
+      "notebook": "notebooks/implementation/02_synthetic_fixture_and_donor_split.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/data/__init__.py",
+        "src/p22/data/splits.py",
+        "tests/test_splits.py",
+        "plan/state.json",
+        "notebooks/implementation/02_synthetic_fixture_and_donor_split.ipynb"
+      ]
+    },
+    {
+      "id": "C05",
+      "meeting_item": "Leakage control",
+      "subject": "feat: add train-only preprocessing contracts",
+      "achievement": "Proves transforms fit train cells only",
+      "notebook": "notebooks/implementation/03_train_only_preprocessing.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/data/transforms.py",
+        "tests/test_transforms.py",
+        "plan/state.json",
+        "notebooks/implementation/03_train_only_preprocessing.ipynb"
+      ]
+    },
+    {
+      "id": "C06",
+      "meeting_item": "Paired RNA/ATAC preflight",
+      "subject": "feat: add metadata preflight schema and reporter",
+      "achievement": "Makes metadata feasibility inspectable before training",
+      "notebook": "notebooks/implementation/04_metadata_preflight.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/data/schema.py",
+        "src/p22/data/preflight.py",
+        "src/p22/cli/preflight.py",
+        "src/p22/cli/__init__.py",
+        "tests/fixtures/.gitkeep",
+        "tests/test_preflight.py",
+        "plan/state.json",
+        "notebooks/implementation/04_metadata_preflight.ipynb"
+      ]
+    },
+    {
+      "id": "C07",
+      "meeting_item": "Baseline fairness",
+      "subject": "feat: extract modality-agnostic model components",
+      "achievement": "Provides neutral view encoders, concat, and gated routing outputs",
+      "notebook": "notebooks/implementation/05_model_baseline_comparison.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/models/__init__.py",
+        "src/p22/models/encoders.py",
+        "src/p22/models/baselines.py",
+        "src/p22/models/fusion.py",
+        "tests/test_models.py",
+        "plan/state.json",
+        "notebooks/implementation/05_model_baseline_comparison.ipynb"
+      ]
+    },
+    {
+      "id": "C08",
+      "meeting_item": "Metrics quality",
+      "subject": "feat: add benchmark metrics and donor bootstrap",
+      "achievement": "Adds donor-level uncertainty and valid comparison statistics",
+      "notebook": "notebooks/implementation/06_metrics_and_run_reporting.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/eval/__init__.py",
+        "src/p22/eval/metrics.py",
+        "src/p22/eval/statistics.py",
+        "tests/test_metrics.py",
+        "tests/test_statistics.py",
+        "plan/state.json",
+        "notebooks/implementation/06_metrics_and_run_reporting.ipynb"
+      ]
+    },
+    {
+      "id": "C09",
+      "meeting_item": "Reproducibility",
+      "subject": "feat: add reproducible run registry and reports",
+      "achievement": "Captures enough run context to replay and audit result",
+      "notebook": "notebooks/implementation/06_metrics_and_run_reporting.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "configs/toy_pilot.json",
+        "src/p22/runs/__init__.py",
+        "src/p22/runs/config.py",
+        "src/p22/runs/registry.py",
+        "src/p22/reports/__init__.py",
+        "src/p22/reports/render.py",
+        "tests/test_run_config.py",
+        "tests/test_reports.py",
+        "plan/state.json",
+        "notebooks/implementation/06_metrics_and_run_reporting.ipynb"
+      ]
+    },
+    {
+      "id": "C10",
+      "meeting_item": "Baseline question",
+      "subject": "feat: add deterministic synthetic benchmark runner",
+      "achievement": "Compares logistic regression, MLP, concat, and gated fusion across five seeds",
+      "notebook": "notebooks/implementation/07_five_seed_benchmark.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/training/__init__.py",
+        "src/p22/training/loop.py",
+        "src/p22/training/seed_runner.py",
+        "scripts/run_toy_pilot.py",
+        "tests/test_training.py",
+        "tests/test_seed_runner.py",
+        "plan/state.json",
+        "notebooks/implementation/07_five_seed_benchmark.ipynb"
+      ]
+    },
+    {
+      "id": "C11",
+      "meeting_item": "Faithfulness question",
+      "subject": "feat: add routing faithfulness interventions",
+      "achievement": "Tests whether prediction depends on routed views",
+      "notebook": "notebooks/implementation/08_faithfulness_interventions.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "src/p22/eval/faithfulness.py",
+        "tests/test_faithfulness.py",
+        "plan/state.json",
+        "notebooks/implementation/08_faithfulness_interventions.ipynb"
+      ]
+    },
+    {
+      "id": "C12",
+      "meeting_item": "Local workflow",
+      "subject": "test: add end-to-end plan compliance workflow",
+      "achievement": "Proves one local command executes checks and notebooks",
+      "notebook": "notebooks/implementation/09_local_end_to_end.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        ".github/workflows/ci.yml",
+        "scripts/verify_repository.py",
+        "tests/test_end_to_end.py",
+        "plan/state.json",
+        "notebooks/implementation/09_local_end_to_end.ipynb"
+      ]
+    },
+    {
+      "id": "C13",
+      "meeting_item": "Handoff",
+      "subject": "docs: finalize synthetic-only implementation handoff",
+      "achievement": "Leaves human-readable methods, limitations, and approval request",
+      "notebook": "notebooks/implementation/10_handoff.ipynb",
+      "data_mode": "synthetic",
+      "allowed_paths": [
+        "README.md",
+        "DATA_CARD.md",
+        "MODEL_CARD.md",
+        "docs/interim_methods_protocol.md",
+        "docs/decision_log.md",
+        "HANDOFF.md",
+        "tests/test_documentation.py",
+        "plan/state.json",
+        "notebooks/implementation/10_handoff.ipynb"
+      ]
+    }
+  ]
+}

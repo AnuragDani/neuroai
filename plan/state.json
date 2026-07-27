@@ -1,0 +1,91 @@
+{
+  "plan_version": "2026-07-27",
+  "branch": "develop",
+  "base_commit": "d892897bc129cb99fe8e7f1a70472178b644eb92",
+  "base_commit_subject": "chore: commit pending portability and Colab pipeline work",
+  "base_commit_note": "Handoff names a613ae8 as baseline. That commit is documentation-only and its file is excluded from version control via .git/info/exclude, so it is not an ancestor of develop. C01 base rule applied: recorded current HEAD before C01.",
+  "data_mode": "synthetic",
+  "approval_state": "blocked",
+  "next_action": "C02",
+  "commit_hash_policy": "each step back-fills the previous step commit hash so the working tree stays clean at commit time",
+  "steps": {
+    "C01": {
+      "status": "complete",
+      "commit": null,
+      "notebook_gate": "PASS",
+      "verified_at": "2026-07-27"
+    },
+    "C02": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C03": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C04": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C05": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C06": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C07": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C08": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C09": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C10": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C11": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C12": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    },
+    "C13": {
+      "status": "pending",
+      "commit": null,
+      "notebook_gate": null,
+      "verified_at": null
+    }
+  }
+}
