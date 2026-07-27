@@ -1,0 +1,65 @@
+name: checks
+
+# The local command is the primary gate: `make verify` on a developer machine is what decides
+# whether work is reportable. This workflow runs the same steps so a reviewer can see the
+# result without a checkout, and it deliberately does not add checks that only exist here.
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # verify_repository.py reads git history for the legacy manifest and the plan state.
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Create the environment
+        run: uv sync --python 3.11 --extra dev
+        env:
+          UV_PROJECT_ENVIRONMENT: .venv-p22
+
+      - name: Plan status
+        run: make plan-status
+
+      - name: Lint
+        run: make lint
+
+      - name: Fast tests
+        run: make test-fast
+
+      - name: Full tests, including the end-to-end workflow
+        run: make test-all
+
+      - name: Execute the synthetic notebooks
+        # Longer kernel startup than make notebook-check: cold scientific imports exceed 60s here.
+        run: .venv-p22/bin/python scripts/verify_repository.py --execute-notebooks
+
+      - name: Repository verification
+        # Exit code 3 means INCONCLUSIVE: evidence is missing rather than a rule being broken.
+        # That is reported here and not treated as a pass.
+        run: .venv-p22/bin/python scripts/verify_repository.py --json
+
+      - name: Upload generated evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-evidence
+          path: reports/generated
+          retention-days: 14
+          if-no-files-found: warn
