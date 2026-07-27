@@ -18,6 +18,7 @@ Outputs saved to P22/experiments/:
 import os
 import sys
 import json
+import tempfile
 import time
 import gzip
 import warnings
@@ -50,11 +51,26 @@ SEED = 42
 np.random.seed(SEED)
 torch.manual_seed(SEED)
 
+def writable_dir(preferred, fallback):
+    """Use preferred output directory, falling back when sandbox blocks writes."""
+    try:
+        os.makedirs(preferred, exist_ok=True)
+        probe = os.path.join(preferred, ".p22_write_test")
+        with open(probe, "w"):
+            pass
+        os.remove(probe)
+        return preferred
+    except OSError:
+        os.makedirs(fallback, exist_ok=True)
+        print(f"Directory not writable: {preferred}; using {fallback}")
+        return fallback
+
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
-EXPERIMENTS_DIR = SCRIPT_DIR  # save outputs here
-os.makedirs(DATA_DIR, exist_ok=True)
+RUNTIME_ROOT = os.path.join(tempfile.gettempdir(), "P22")
+DATA_DIR = writable_dir(os.path.join(PROJECT_ROOT, "data"), os.path.join(RUNTIME_ROOT, "data"))
+EXPERIMENTS_DIR = writable_dir(SCRIPT_DIR, os.path.join(RUNTIME_ROOT, "experiments"))
 
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 print(f"Device: {DEVICE}")
@@ -357,7 +373,7 @@ def run_all_models(X_expr, X_morph, label_codes, class_names, class_weights,
     # --- Logistic Regression ---
     print(f"  [{tag}] Logistic Regression...")
     lr = LogisticRegression(max_iter=2000, C=1.0, solver="lbfgs",
-                            multi_class="multinomial", random_state=SEED, n_jobs=-1)
+                            random_state=SEED)
     lr.fit(X_expr[train_idx], y_tr)
     lr_preds = lr.predict(X_expr[test_idx])
     lr_probs = lr.predict_proba(X_expr[test_idx])

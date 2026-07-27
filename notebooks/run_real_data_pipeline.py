@@ -20,6 +20,7 @@ All artifacts saved with "real_" prefix to /artifacts/.
 import os
 import sys
 import json
+import tempfile
 import warnings
 import time
 import numpy as np
@@ -46,8 +47,27 @@ SEED = 42
 np.random.seed(SEED)
 torch.manual_seed(SEED)
 
+def writable_dir(preferred, fallback):
+    """Use preferred output directory, falling back when sandbox blocks writes."""
+    try:
+        os.makedirs(preferred, exist_ok=True)
+        probe = os.path.join(preferred, ".p22_write_test")
+        with open(probe, "w"):
+            pass
+        os.remove(probe)
+        return preferred
+    except OSError:
+        os.makedirs(fallback, exist_ok=True)
+        print(f"Directory not writable: {preferred}; using {fallback}")
+        return fallback
+
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ARTIFACTS_DIR = os.path.join(PROJECT_ROOT, "artifacts")
+RAW_DATA_PATH = os.path.join(PROJECT_ROOT, "artifacts", "real_brain_data.h5ad")
+ARTIFACTS_DIR = writable_dir(
+    os.path.join(PROJECT_ROOT, "artifacts"),
+    os.path.join(tempfile.gettempdir(), "P22", "artifacts"),
+)
 FIGURES_DIR = os.path.join(ARTIFACTS_DIR, "figures")
 os.makedirs(FIGURES_DIR, exist_ok=True)
 
@@ -445,7 +465,7 @@ print("=" * 80)
 t0 = time.time()
 
 # Load
-raw_path = os.path.join(ARTIFACTS_DIR, "real_brain_data.h5ad")
+raw_path = RAW_DATA_PATH
 adata = sc.read_h5ad(raw_path)
 print(f"  Loaded: {adata.n_obs} cells x {adata.n_vars} genes")
 print(f"  Cell types in broad_type: {adata.obs['broad_type'].value_counts().to_dict()}")
@@ -604,7 +624,7 @@ all_baseline_results = []
 # --- Baseline (a): Logistic Regression ---
 print("\n  BASELINE (a): Logistic Regression on gene expression")
 lr_model = LogisticRegression(
-    max_iter=2000, multi_class="multinomial", solver="lbfgs",
+    max_iter=2000, solver="lbfgs",
     random_state=SEED, C=1.0, class_weight="balanced")
 lr_model.fit(X_expr_train, y_train)
 lr_pred = lr_model.predict(X_expr_test)
