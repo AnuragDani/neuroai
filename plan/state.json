@@ -6,7 +6,7 @@
   "base_commit_note": "Handoff names a613ae8 as baseline. That commit is documentation-only and its file is excluded from version control via .git/info/exclude, so it is not an ancestor of develop. C01 base rule applied: recorded current HEAD before C01.",
   "data_mode": "synthetic",
   "approval_state": "blocked",
-  "next_action": "C06",
+  "next_action": "C07",
   "commit_hash_policy": "each step back-fills the previous step commit hash so the working tree stays clean at commit time",
   "steps": {
     "C01": {
@@ -35,15 +35,15 @@
     },
     "C05": {
       "status": "complete",
-      "commit": null,
+      "commit": "330dafc0a07ecefbb90a0c9b28b34a1c25106b0d",
       "notebook_gate": "PASS",
       "verified_at": "2026-07-27"
     },
     "C06": {
-      "status": "pending",
+      "status": "complete",
       "commit": null,
-      "notebook_gate": null,
-      "verified_at": null
+      "notebook_gate": "PASS",
+      "verified_at": "2026-07-27"
     },
     "C07": {
       "status": "pending",
