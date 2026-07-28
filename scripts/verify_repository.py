@@ -343,7 +343,10 @@ def check_no_condition_specific_work() -> CheckResult:
 
 
 def check_generated_outputs_ignored() -> CheckResult:
-    ignored = run(["git", "check-ignore", "reports/generated"]).returncode == 0
+    # Trailing slash matches the .gitignore directory rule and still works when
+    # reports/generated has been removed by make clean-generated. A bare path
+    # name fails check-ignore when the directory is absent.
+    ignored = run(["git", "check-ignore", "reports/generated/"]).returncode == 0
     tracked = [
         path
         for path in run(["git", "ls-files"]).stdout.split()

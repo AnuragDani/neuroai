@@ -56,16 +56,18 @@ notebook-check: notebook-kernel
 	@if [ -z "$(SYNTHETIC_NOTEBOOKS)" ]; then \
 	  echo "notebook-check: no synthetic notebooks present yet"; \
 	else \
-	  JUPYTER_PATH=$(KERNEL_ROOT) $(PY) -m jupyter nbconvert --to notebook --execute \
+	  JUPYTER_PATH=$(KERNEL_ROOT) PYTHONDONTWRITEBYTECODE=1 $(PY) -m jupyter nbconvert --to notebook --execute \
 	    --ExecutePreprocessor.timeout=1800 \
+	    --ExecutePreprocessor.startup_timeout=300 \
 	    --output-dir $(GENERATED)/notebooks $(SYNTHETIC_NOTEBOOKS); \
 	fi
 
 notebook-check-legacy: notebook-kernel
 	@mkdir -p $(GENERATED)/notebooks
 	@if [ -f $(LEGACY_NOTEBOOK) ]; then \
-	  JUPYTER_PATH=$(KERNEL_ROOT) $(PY) -m jupyter nbconvert --to notebook --execute \
+	  JUPYTER_PATH=$(KERNEL_ROOT) PYTHONDONTWRITEBYTECODE=1 $(PY) -m jupyter nbconvert --to notebook --execute \
 	    --ExecutePreprocessor.timeout=1800 \
+	    --ExecutePreprocessor.startup_timeout=300 \
 	    --output-dir $(GENERATED)/notebooks $(LEGACY_NOTEBOOK); \
 	else \
 	  echo "notebook-check-legacy: legacy notebook not present yet"; \
@@ -73,7 +75,7 @@ notebook-check-legacy: notebook-kernel
 
 verify-fast: lint test-fast plan-status
 
-verify: verify-fast test-all notebook-check
+verify: verify-fast test-all notebook-check notebook-check-legacy
 	@if [ -f scripts/verify_repository.py ]; then \
 	  $(PY) scripts/verify_repository.py; \
 	else \
