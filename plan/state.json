@@ -83,7 +83,7 @@
     },
     "C13": {
       "status": "complete",
-      "commit": null,
+      "commit": "9a45e40cdf79e9269726537b6c0e1a784f730175",
       "notebook_gate": "PASS",
       "verified_at": "2026-07-27"
     }
