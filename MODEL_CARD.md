@@ -16,6 +16,11 @@ Neutral view names `view_a` and `view_b`:
 5. Concatenation fusion
 6. Gated fusion (`RoutingGate` + `GatedFusionModel`)
 
+Gated fusion is a routing MLP over concatenated branch embeddings followed by a
+weighted sum. It is not query/key/value cross-attention. Legacy Tasic outputs
+may still say "attention fusion"; that name belongs to the frozen legacy
+experiment, not to `GatedFusionModel`.
+
 `FusionOutput` fields: `logits`, `routing_weights`, `branch_embeddings`,
 `fused_embedding`. Routing weights are non-negative and sum to one. Validated
 overrides `[1, 0]`, `[0, 1]`, and `[0.5, 0.5]` are supported for interventions.

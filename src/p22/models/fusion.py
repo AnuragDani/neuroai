@@ -177,7 +177,11 @@ class ConcatFusionModel(nn.Module):
 
 
 class GatedFusionModel(nn.Module):
-    """Combine two view embeddings with per-cell routing weights, then classify."""
+    """Combine two view embeddings with per-cell routing weights, then classify.
+
+    This is gated multimodal fusion (routing MLP + weighted branch sum), not
+    query/key/value cross-attention.
+    """
 
     has_gate = True
 
