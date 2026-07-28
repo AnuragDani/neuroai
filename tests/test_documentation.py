@@ -21,7 +21,9 @@ REQUIRED_FILES = (
     "HANDOFF.md",
     "docs/interim_methods_protocol.md",
     "docs/decision_log.md",
+    "docs/scale_benchmark.md",
     "notebooks/implementation/10_handoff.ipynb",
+    "notebooks/scale/11_scale_benchmark.ipynb",
 )
 
 
@@ -97,6 +99,15 @@ def test_handoff_names_next_action_and_confirms_no_condition_data():
     assert "make verify" in lowered
     assert "reports/generated" in lowered
     assert p22.approval_blocked()
+
+
+def test_scale_document_preserves_synthetic_boundary():
+    text = read("docs/scale_benchmark.md").lower()
+    assert "synthetic" in text
+    assert "engineering evidence" in text
+    assert "not evidence" in text
+    assert "professor fang" in text
+    assert "32,000" in text
 
 
 def test_approvals_remain_blocked_after_documentation():

@@ -8,6 +8,7 @@ GENERATED := reports/generated
 NOTEBOOK_DIR := notebooks/implementation
 LEGACY_NOTEBOOK := $(NOTEBOOK_DIR)/01_tasic_evidence_boundary.ipynb
 SYNTHETIC_NOTEBOOKS := $(filter-out $(LEGACY_NOTEBOOK),$(sort $(wildcard $(NOTEBOOK_DIR)/*.ipynb)))
+SCALE_NOTEBOOK := notebooks/scale/11_scale_benchmark.ipynb
 LINT_PATHS := src tests scripts
 KERNEL_ROOT := $(CURDIR)/$(GENERATED)/jupyter
 KERNEL_DIR := $(KERNEL_ROOT)/kernels/python3
@@ -15,7 +16,8 @@ KERNEL_DIR := $(KERNEL_ROOT)/kernels/python3
 export UV_PROJECT_ENVIRONMENT := $(VENV)
 
 .PHONY: setup plan-status plan-check lint test-fast test-all verify-step \
-        notebook-kernel notebook-check notebook-check-legacy verify-fast verify clean-generated
+        notebook-kernel notebook-check notebook-check-legacy scale-check \
+        verify-fast verify clean-generated
 
 setup:
 	uv sync --python $(PYTHON_BIN) --extra dev
@@ -72,6 +74,13 @@ notebook-check-legacy: notebook-kernel
 	else \
 	  echo "notebook-check-legacy: legacy notebook not present yet"; \
 	fi
+
+scale-check: notebook-kernel
+	@mkdir -p $(GENERATED)/scale-notebooks
+	@JUPYTER_PATH=$(KERNEL_ROOT) PYTHONDONTWRITEBYTECODE=1 $(PY) -m jupyter nbconvert --to notebook --execute \
+		--ExecutePreprocessor.timeout=1800 \
+		--ExecutePreprocessor.startup_timeout=300 \
+		--output-dir $(GENERATED)/scale-notebooks $(SCALE_NOTEBOOK)
 
 verify-fast: lint test-fast plan-status
 

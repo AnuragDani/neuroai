@@ -11,7 +11,8 @@ Current data mode: `synthetic` (plus read-only legacy Tasic evidence).
 Reusable package code under `src/p22`, synthetic fixtures, donor-held-out
 splits, train-only transforms, six baselines, five-seed reporting, routing
 interventions, and a local verification command. Meeting-linked notebooks live
-under `notebooks/implementation/`.
+under `notebooks/implementation/`; the larger scale gate lives under
+`notebooks/scale/`.
 
 ## What this repository is not
 
@@ -38,12 +39,16 @@ Python 3.11 is required. CPU is the supported default.
 | `make verify-fast` | Lint + fast tests + plan status |
 | `make verify` | Fast checks, all tests, notebooks, repository verifier |
 | `make notebook-check` | Execute synthetic notebooks into ignored outputs |
+| `make scale-check` | Execute larger synthetic full-pipeline and stress notebook |
 | `python scripts/verify_repository.py` | PASS / INCONCLUSIVE / BLOCKED report |
 | `python scripts/verify_repository.py --execute-notebooks` | Notebook execution with a 300s kernel startup budget |
 | `python scripts/run_toy_pilot.py` | Five-seed synthetic benchmark from `configs/toy_pilot.json` |
 
 Generated files go under `reports/generated/` (gitignored). Source notebooks are
 never overwritten by verification.
+
+The larger scale result is recorded in `docs/scale_benchmark.md`. It measures
+local engineering capacity only; it does not replace real-cohort preflight.
 
 ## Donor-first evaluation order
 

@@ -28,6 +28,7 @@ from p22.runs.registry import (
 )
 
 CONFIG_PATH = p22.REPO_ROOT / "configs" / "toy_pilot.json"
+SCALE_CONFIG_PATH = p22.REPO_ROOT / "configs" / "scale_pilot.json"
 COMMIT = "a" * 40
 
 
@@ -108,6 +109,18 @@ class TestShippedConfig:
     def test_repository_config_metrics_are_known(self):
         config = load_run_config(CONFIG_PATH)
         assert set(config.metrics) <= set(KNOWN_METRICS)
+
+    def test_scale_config_loads_as_larger_synthetic_cpu_pilot(self):
+        config = load_run_config(SCALE_CONFIG_PATH)
+        assert config.name == "scale_pilot"
+        assert config.data_mode == p22.SYNTHETIC
+        assert len(config.seeds) == 5
+        assert config.dataset["n_donors"] == 64
+        assert config.dataset["cells_per_donor"] == 100
+        assert config.dataset["n_features_a"] == 256
+        assert config.dataset["n_features_b"] == 256
+        assert config.training["device"] == "cpu"
+        assert any("real cohort" in item for item in config.limitations)
 
 
 class TestConfigValidation:

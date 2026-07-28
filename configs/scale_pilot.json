@@ -1,0 +1,60 @@
+{
+  "name": "scale_pilot",
+  "data_mode": "synthetic",
+  "seeds": [0, 1, 2, 3, 4],
+  "dataset": {
+    "n_donors": 64,
+    "cells_per_donor": 100,
+    "n_features_a": 256,
+    "n_features_b": 256,
+    "n_classes": 3,
+    "class_signal": 0.9,
+    "donor_nuisance": 0.7,
+    "noise": 1.0
+  },
+  "split": {
+    "val_fraction": 0.2,
+    "test_fraction": 0.2
+  },
+  "transform": {
+    "kind": "standard_scaler",
+    "n_components": null
+  },
+  "models": [
+    {"name": "logistic_regression_view_a", "family": "logistic_regression", "views": ["view_a"]},
+    {"name": "logistic_regression_view_b", "family": "logistic_regression", "views": ["view_b"]},
+    {"name": "mlp_view_a", "family": "mlp", "views": ["view_a"]},
+    {"name": "mlp_view_b", "family": "mlp", "views": ["view_b"]},
+    {"name": "concat_fusion", "family": "concat_fusion", "views": ["view_a", "view_b"]},
+    {"name": "gated_fusion", "family": "gated_fusion", "views": ["view_a", "view_b"]}
+  ],
+  "training": {
+    "max_epochs": 12,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "hidden_dim": 64,
+    "embedding_dim": 32,
+    "patience": 4,
+    "device": "cpu"
+  },
+  "metrics": [
+    "accuracy",
+    "balanced_accuracy",
+    "macro_f1",
+    "weighted_f1",
+    "macro_ovr_auroc",
+    "multiclass_ece"
+  ],
+  "bootstrap": {
+    "n_replicates": 200,
+    "level": 0.95
+  },
+  "limitations": [
+    "Data are synthetic: absolute predictive numbers have no biological meaning and do not transfer to a real cohort.",
+    "This scale tests local CPU memory and runtime, not whether an approved cohort has enough donors or paired cells.",
+    "The larger donor count narrows synthetic donor intervals but does not establish a power calculation for a real study.",
+    "Model selection uses validation only; the test split is evaluated once per model and seed.",
+    "Routing weights are signals about fused representations, not causal explanations.",
+    "No approved real dataset is present, and no condition-specific result is produced."
+  ]
+}

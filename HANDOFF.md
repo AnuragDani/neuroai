@@ -28,6 +28,7 @@
 | Metrics and donor bootstrap | `src/p22/eval/` |
 | Run registry and reports | `src/p22/runs/`, `src/p22/reports/` |
 | Five-seed runner | `src/p22/training/`, `scripts/run_toy_pilot.py` |
+| Larger synthetic scale benchmark | `configs/scale_pilot.json`, `notebooks/scale/11_scale_benchmark.ipynb` |
 | Faithfulness interventions | `src/p22/eval/faithfulness.py` |
 | Local + CI verification | `scripts/verify_repository.py`, `.github/workflows/ci.yml` |
 | Meeting notebooks | `notebooks/implementation/00`–`10` |
@@ -39,6 +40,7 @@
 - Routing weights are not explanations without interventions
 - MPS unavailable in the recorded local environment; CPU remains required
 - Generated evidence under `reports/generated/` must be re-built after clone
+- Larger synthetic scale evidence measures local engineering capacity only; it does not establish real-cohort adequacy
 
 ## Explicit approval blocker
 
@@ -55,6 +57,16 @@ make plan-status
 make verify
 python scripts/verify_repository.py --json
 ```
+
+The larger synthetic scale gate is separate because it is more expensive than the normal
+verification suite:
+
+```bash
+make scale-check
+```
+
+It runs a 64-donor, 6,400-cell, five-seed full pipeline and a 32,000-cell data-path stress
+check. Both remain synthetic and approval-blocked.
 
 If notebooks need re-execution on a cold machine:
 
