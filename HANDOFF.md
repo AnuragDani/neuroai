@@ -29,6 +29,7 @@
 | Run registry and reports | `src/p22/runs/`, `src/p22/reports/` |
 | Five-seed runner | `src/p22/training/`, `scripts/run_toy_pilot.py` |
 | Larger synthetic scale benchmark | `configs/scale_pilot.json`, `notebooks/scale/11_scale_benchmark.ipynb` |
+| Single live local walkthrough | `notebooks/live/P22_live_local.ipynb`, `make live` |
 | Faithfulness interventions | `src/p22/eval/faithfulness.py` |
 | Local + CI verification | `scripts/verify_repository.py`, `.github/workflows/ci.yml` |
 | Meeting notebooks | `notebooks/implementation/00`–`10` |

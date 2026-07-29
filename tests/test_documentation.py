@@ -24,6 +24,7 @@ REQUIRED_FILES = (
     "docs/scale_benchmark.md",
     "notebooks/implementation/10_handoff.ipynb",
     "notebooks/scale/11_scale_benchmark.ipynb",
+    "notebooks/live/P22_live_local.ipynb",
 )
 
 

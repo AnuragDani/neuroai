@@ -40,6 +40,8 @@ Python 3.11 is required. CPU is the supported default.
 | `make verify` | Fast checks, all tests, notebooks, repository verifier |
 | `make notebook-check` | Execute synthetic notebooks into ignored outputs |
 | `make scale-check` | Execute larger synthetic full-pipeline and stress notebook |
+| `make live-check` | Execute one all-in-one live local synthetic notebook |
+| `make live` | Open the all-in-one notebook in local JupyterLab |
 | `python scripts/verify_repository.py` | PASS / INCONCLUSIVE / BLOCKED report |
 | `python scripts/verify_repository.py --execute-notebooks` | Notebook execution with a 300s kernel startup budget |
 | `python scripts/run_toy_pilot.py` | Five-seed synthetic benchmark from `configs/toy_pilot.json` |
@@ -47,8 +49,15 @@ Python 3.11 is required. CPU is the supported default.
 Generated files go under `reports/generated/` (gitignored). Source notebooks are
 never overwritten by verification.
 
-The larger scale result is recorded in `docs/scale_benchmark.md`. It measures
-local engineering capacity only; it does not replace real-cohort preflight.
+The larger scale result is recorded in `docs/scale_benchmark.md`. The one-notebook
+live walkthrough is `notebooks/live/P22_live_local.ipynb`. Both measure local
+engineering capacity only; neither replaces real-cohort preflight.
+
+Open live notebook locally with:
+
+```bash
+make live
+```
 
 ## Donor-first evaluation order
 
