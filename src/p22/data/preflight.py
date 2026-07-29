@@ -9,6 +9,7 @@ modality. Anything the files cannot answer is reported as ``unknown``.
 from __future__ import annotations
 
 import json
+import os
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -383,8 +384,15 @@ def write_preflight_report(
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     payload = report.to_dict()
-    target.write_text(json.dumps(payload, indent=2, default=_json_default) + "\n", encoding="utf-8")
-    return target
+    body = json.dumps(payload, indent=2, default=_json_default) + "\n"
+    try:
+        target.write_text(body, encoding="utf-8")
+        return target
+    except OSError:
+        # Some local environments deny overwrite of prior generated files.
+        fallback = target.with_name(f"{target.stem}_{os.getpid()}{target.suffix}")
+        fallback.write_text(body, encoding="utf-8")
+        return fallback
 
 
 def _json_default(value: Any) -> Any:
