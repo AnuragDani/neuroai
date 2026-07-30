@@ -88,18 +88,34 @@ def build_validation_report(
     findings_available: bool = False,
     resources: list[ValidationResource] | None = None,
     approval_present: bool = False,
+    external_matrix_ingested: bool = False,
+    internal_holdout_measured: bool = False,
 ) -> ValidationReport:
-    """Report G8 honestly when validation cannot run."""
+    """Report G8 honestly when validation cannot run.
+
+    ``PASS`` needs an external matrix that was actually harmonised and tested.
+    A frozen marker panel measured on held-out donors inside this cohort is
+    internal evidence and yields ``INCONCLUSIVE``, never ``PASS``.
+    """
     resources = list(resources or default_validation_resources())
     blocking: list[str] = []
     unknowns: list[str] = []
 
     if not approval_present:
-        blocking.append("dated approval absent; real validation run blocked")
+        blocking.append("approval attestation absent; real validation run blocked")
     if marker_set is None:
         unknowns.append("marker/enhancer/pathway set unnamed; gate cannot PASS")
     if not findings_available:
         unknowns.append("held-out biological findings unavailable")
+    if not external_matrix_ingested:
+        unknowns.append(
+            "no external expression matrix was downloaded or harmonised; external "
+            "validation is UNKNOWN"
+        )
+    if internal_holdout_measured:
+        unknowns.append(
+            "internal held-out marker association is in-cohort evidence, not independent validation"
+        )
     rna = next((item for item in resources if item.accession == PRIMARY_RNA_VALIDATION), None)
     if rna is None:
         blocking.append(f"{PRIMARY_RNA_VALIDATION} missing from validation plan")
@@ -108,20 +124,12 @@ def build_validation_report(
     elif rna.available is None:
         unknowns.append(f"{PRIMARY_RNA_VALIDATION} availability not verified locally")
 
-    if blocking:
+    if blocking or marker_set is None or not findings_available:
         status = "BLOCKED"
-    elif unknowns or marker_set is None or not findings_available:
-        status = "INCONCLUSIVE" if not blocking else "BLOCKED"
-        # Without findings or marker set, do not PASS.
-        status = "BLOCKED" if not findings_available else "INCONCLUSIVE"
-        if marker_set is None:
-            status = "BLOCKED"
+    elif not external_matrix_ingested:
+        status = "INCONCLUSIVE"
     else:
         status = "PASS"
-
-    # Default pre-approval posture: BLOCKED.
-    if not approval_present or not findings_available or marker_set is None:
-        status = "BLOCKED"
 
     return ValidationReport(
         status=status,
