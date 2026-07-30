@@ -72,6 +72,24 @@ def fetch_json(url: str, timeout: float = 60.0) -> dict[str, Any]:
     return payload
 
 
+def remote_content_length(url: str, timeout: float = 30.0) -> int | None:
+    """Return the byte size a HEAD request reports, or ``None`` when unavailable.
+
+    Used to price the ATAC fragment asset before deciding B2a versus B2b. The
+    catalog omits ``file_size`` for that asset, so the number has to be measured.
+    """
+    request = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            length = response.headers.get("Content-Length")
+    except (urllib.error.URLError, TimeoutError, ValueError):
+        return None
+    try:
+        return int(length) if length is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
 def _labels(items: list[dict[str, Any]] | None) -> list[str]:
     if not items:
         return []
@@ -122,6 +140,12 @@ def build_catalog_summary(
             "present": fragment_asset is not None,
             "filetype": None if fragment_asset is None else fragment_asset.get("filetype"),
             "file_size": None if fragment_asset is None else fragment_asset.get("file_size"),
+            "filename": None if fragment_asset is None else fragment_asset.get("filename"),
+            "url": (
+                None
+                if fragment_asset is None or not fragment_asset.get("filename")
+                else f"https://datasets.cellxgene.cziscience.com/{fragment_asset['filename']}"
+            ),
         },
         "same_nucleus_evidence": "unknown_until_h5ad_inspection",
         "metadata_missingness": "catalog_only",
