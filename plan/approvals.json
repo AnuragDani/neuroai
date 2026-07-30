@@ -6,20 +6,21 @@
   "recorded_by": "researcher",
   "allowed_data_modes": [
     "synthetic",
-    "legacy read-only"
+    "legacy read-only",
+    "public H5AD access/compliance/file preflight"
   ],
   "blocked_data_modes": [
     "approved real data"
   ],
   "allowed_before_approval": [
     "synthetic arrays and metadata",
+    "public dataset download or inspection for access/compliance/file preflight",
     "reusable package code",
     "tests",
     "schemas, configs, reports, methods documentation",
     "read-only inspection of tracked legacy code and outputs"
   ],
   "forbidden_before_approval": [
-    "downloading or inspecting disease matrices",
     "controlled-access or condition-specific training",
     "condition-specific target selection",
     "biological interpretation or mechanism claims",

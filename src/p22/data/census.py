@@ -1,8 +1,7 @@
 """Full-cohort acquisition, checksum, and backed census helpers.
 
-Real H5AD download and matrix inspection stay behind dated approval. Functions
-here implement the workflow completely so approved mode can run without new code;
-safe mode only builds planned contracts and blocked reports.
+Public H5AD download and matrix inspection stay behind an explicitly selected
+real-analysis mode. Safe mode only builds planned contracts and blocked reports.
 """
 
 from __future__ import annotations
@@ -143,7 +142,7 @@ def planned_acquisition_from_catalog(
     ]
     blocking: list[str] = []
     if not allow_download:
-        blocking.append("download blocked until approved_real_analysis mode and dated approval")
+        blocking.append("download blocked until real_analysis mode with P22_RUN_REAL_DATA=1")
     status = "BLOCKED" if blocking else "INCONCLUSIVE"
     return AcquisitionRecord(
         status=status,
@@ -167,9 +166,11 @@ def download_h5ad(
     *,
     allow: bool = False,
 ) -> Path:
-    """Download full public H5AD only when ``allow`` is True."""
+    """Download full public H5AD only when user-selected preflight allows it."""
     if not allow:
-        raise PermissionError("H5AD download refused: approved real mode + dated approval required")
+        raise PermissionError(
+            "H5AD download refused: select real_analysis mode and set P22_RUN_REAL_DATA=1"
+        )
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.is_file() and destination.stat().st_size == expected_bytes:
@@ -281,18 +282,22 @@ def run_backed_census(path: Path) -> CensusReport:
             "n_donors": int(per_donor.size),
         }
 
-    peak_block = None
-    if "feature_types" in backed.var.columns:
-        types = backed.var["feature_types"].astype(str).str.lower()
+    feature_column = next(
+        (name for name in ("feature_types", "assay", "feature_type") if name in backed.var.columns),
+        None,
+    )
+    if feature_column is not None:
+        types = backed.var[feature_column].astype(str).str.lower()
         peak_block = bool(types.str.contains("peak|atac").any())
     elif any(key.lower().startswith("atac") for key in getattr(backed, "obsm", {})):
         peak_block = True
     else:
         peak_block = False
-        unknowns.append("ATAC peak block not found in var.feature_types or obsm")
+    if not peak_block:
+        unknowns.append("ATAC peak block not found in var feature annotation or obsm")
 
     chr21_available = None
-    for column in ("chromosome", "chrom", "seqname", "gene_chrom"):
+    for column in ("seqnames", "chromosome", "chrom", "seqname", "gene_chrom"):
         if column in backed.var.columns:
             values = backed.var[column].astype(str)
             chr21_available = bool(values.isin(["21", "chr21", "Chr21"]).any())

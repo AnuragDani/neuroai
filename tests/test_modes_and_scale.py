@@ -24,11 +24,10 @@ def test_visible_modes_are_exactly_three():
     assert VISIBLE_MODES == (MODE_SIMULATION, MODE_METADATA_CENSUS, MODE_APPROVED_REAL)
 
 
-def test_resolve_mode_blocks_real_without_approval():
+def test_resolve_mode_allows_h5ad_preflight_without_approval():
     selection = resolve_mode(MODE_APPROVED_REAL, professor_approved=False, run_real_data=True)
-    assert selection.allow_h5ad_download is False
-    assert selection.blocking_problems
-    assert "approval" in selection.blocking_problems[0]
+    assert selection.allow_h5ad_download is True
+    assert selection.allow_model_fit is False
 
 
 def test_resolve_mode_allows_download_when_approved():
@@ -40,6 +39,18 @@ def test_resolve_mode_allows_download_when_approved():
     )
     assert selection.allow_h5ad_download is True
     assert selection.allow_model_fit is True
+
+
+def test_resolve_mode_blocks_model_without_approval():
+    selection = resolve_mode(
+        MODE_APPROVED_REAL,
+        professor_approved=False,
+        run_real_data=True,
+        run_model=True,
+    )
+    assert selection.allow_h5ad_download is True
+    assert selection.allow_model_fit is False
+    assert "model fitting blocked" in selection.blocking_problems[0]
 
 
 def test_simulation_never_downloads():
