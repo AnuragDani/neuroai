@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -1117,18 +1118,36 @@ def sample_capped_cells(
     seed: int = 0,
 ) -> np.ndarray:
     """Pick at most ``cap`` retained cells per donor, deterministically."""
+    return sample_nested_capped_cells(obs, keep_mask, caps=(cap,), seed=seed)[cap]
+
+
+def sample_nested_capped_cells(
+    obs: pd.DataFrame,
+    keep_mask: np.ndarray,
+    caps: Sequence[int],
+    seed: int = 0,
+) -> dict[int, np.ndarray]:
+    """Pick nested donor-level samples from one deterministic random ordering."""
+    ordered_caps = tuple(sorted({int(cap) for cap in caps}))
+    if not ordered_caps or ordered_caps[0] < 1:
+        raise ValueError("caps must contain positive integers")
     donors = obs[DONOR_COLUMN].astype(str).to_numpy()
     positions = np.flatnonzero(keep_mask)
     rng = np.random.default_rng(seed)
-    chosen: list[np.ndarray] = []
+    chosen: dict[int, list[np.ndarray]] = {cap: [] for cap in ordered_caps}
     for donor in sorted(set(donors[positions])):
         donor_positions = positions[donors[positions] == donor]
-        if donor_positions.size > cap:
-            donor_positions = rng.choice(donor_positions, size=cap, replace=False)
-        chosen.append(np.sort(donor_positions))
-    if not chosen:
-        return np.zeros(0, dtype=np.int64)
-    return np.sort(np.concatenate(chosen)).astype(np.int64)
+        donor_order = rng.permutation(donor_positions)
+        for cap in ordered_caps:
+            chosen[cap].append(np.sort(donor_order[:cap]))
+    return {
+        cap: (
+            np.sort(np.concatenate(groups)).astype(np.int64)
+            if groups
+            else np.zeros(0, dtype=np.int64)
+        )
+        for cap, groups in chosen.items()
+    }
 
 
 def load_cell_matrix(

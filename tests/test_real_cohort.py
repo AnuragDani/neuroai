@@ -27,6 +27,7 @@ from p22.data.real_cohort import (
     mito_gene_mask,
     run_cohort_qc,
     sample_capped_cells,
+    sample_nested_capped_cells,
 )
 
 N_DONORS_PER_CLASS = 15
@@ -258,6 +259,22 @@ def test_capped_sampling_is_deterministic_and_per_donor(fixture_h5ad: Path):
     assert first.size == 2 * N_DONORS_PER_CLASS * 5
     donors = report.obs["donor_id"].astype(str).to_numpy()[first]
     assert set(pd.Series(donors).value_counts().unique()) == {5}
+
+
+def test_nested_capped_sampling_reuses_one_donor_ordering(fixture_h5ad: Path):
+    report = run_cohort_qc(fixture_h5ad)
+    caps = (5, 11, 23)
+
+    first = sample_nested_capped_cells(report.obs, report.keep_mask, caps=caps, seed=7)
+    second = sample_nested_capped_cells(report.obs, report.keep_mask, caps=caps, seed=7)
+
+    assert set(first) == set(caps)
+    for cap in caps:
+        assert np.array_equal(first[cap], second[cap])
+        donors = report.obs["donor_id"].astype(str).to_numpy()[first[cap]]
+        assert set(pd.Series(donors).value_counts().unique()) == {cap}
+    assert set(first[5]).issubset(first[11])
+    assert set(first[11]).issubset(first[23])
 
 
 def test_load_cell_matrix_returns_requested_rows(fixture_h5ad: Path):
