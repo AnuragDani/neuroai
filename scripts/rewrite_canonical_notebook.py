@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E501
 """Rewrite canonical notebook cells to wire C24-C31 real_pipeline path."""
 
 from __future__ import annotations
@@ -9,9 +10,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 NB_PATH = ROOT / "P22_down_syndrome_all_in_one.ipynb"
 
+
+def build_embedded_source_literal() -> str:
+    """Embed runtime source as readable file-by-file Python literals."""
+    paths = sorted((ROOT / "src" / "p22").rglob("*.py")) + [ROOT / "plan" / "approvals.json"]
+    lines = ["{\n"]
+    for path in paths:
+        relative = path.relative_to(ROOT).as_posix()
+        text = path.read_text(encoding="utf-8")
+        if "'''" in text:
+            raise ValueError(f"embedded source contains triple-single-quote delimiter: {path}")
+        lines.append(f"    {relative!r}: r'''\n{text}''',\n")
+    lines.append("}\n")
+    return "".join(lines)
+
+
+EMBEDDED_SOURCE_LITERAL = build_embedded_source_literal()
+
 CELL0 = """# P22: Down syndrome fetal cortex Multiome — one-notebook workflow
 
-**Canonical notebook only.** Local Jupyter + Google Colab.
+**Standalone notebook only.** Local Jupyter + Google Colab. No GitHub checkout required.
 
 | | |
 |---|---|
@@ -26,6 +44,8 @@ CELL0 = """# P22: Down syndrome fetal cortex Multiome — one-notebook workflow
 1. **simulation** — synthetic wiring only (default safe)
 2. **metadata_census** — live catalog; no H5AD download
 3. **real_analysis** — full public H5AD schema/QC, resources, donor-held-out models, interventions, validation
+
+The implementation needed to run this notebook is embedded file-by-file in the first code cell. H5AD and fragment files are never embedded.
 
 Professor approval is an external attestation (`P22_PROFESSOR_APPROVED=1`). No approval date is invented here.
 
@@ -44,6 +64,25 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 os.environ.setdefault("PYTHONDONTWRITEBYTECODE", "1")
+
+EMBEDDED_PROJECT_FILES = __P22_EMBEDDED_SOURCE_FILES__
+
+
+def materialize_embedded_project(root: Path) -> Path:
+    """Write embedded runtime source; no repository or network is required."""
+    root = Path(root).resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    for relative_name, text in EMBEDDED_PROJECT_FILES.items():
+        destination = (root / relative_name).resolve()
+        if root not in destination.parents:
+            raise RuntimeError(f"embedded path escapes project root: {relative_name}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(text, encoding="utf-8")
+    return root
+
+
+def has_project_source(root: Path) -> bool:
+    return (Path(root) / "src" / "p22" / "__init__.py").is_file()
 
 # ---------------------------------------------------------------------------
 # Visible mode controls (edit these; env flags also work)
@@ -80,28 +119,42 @@ if IN_COLAB:
         except ImportError:
             need.append(pkg)
     if need:
-        import subprocess as _sp
-        _sp.check_call([sys.executable, "-m", "pip", "install", "-q", *need])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *need])
     PROJECT_ROOT = Path("/content/p22")
     PROJECT_ROOT.mkdir(parents=True, exist_ok=True)
     DATA_ROOT = Path(os.getenv("P22_DATA_ROOT", "/content/p22_data"))
     OUTPUT_BASE = Path(os.getenv("P22_OUTPUT_ROOT", "/content/p22_output"))
     for candidate in (Path("/content/P22"), Path("/content/niw-eb1a/P22"), Path.cwd()):
-        if (candidate / "src" / "p22").is_dir():
+        if has_project_source(candidate):
             PROJECT_ROOT = candidate
             break
+    if not has_project_source(PROJECT_ROOT):
+        PROJECT_ROOT = materialize_embedded_project(Path("/content/p22_standalone"))
+        print("Using embedded P22 implementation; no GitHub checkout required.")
 else:
     CWD = Path.cwd().resolve()
     PROJECT_ROOT = CWD
     for candidate in (CWD, *CWD.parents):
-        if (candidate / "pyproject.toml").is_file() and (candidate / "src" / "p22").is_dir():
+        if (candidate / "pyproject.toml").is_file() and has_project_source(candidate):
             PROJECT_ROOT = candidate
             break
     DATA_ROOT = Path(os.getenv("P22_DATA_ROOT", PROJECT_ROOT / "data" / "real"))
     OUTPUT_BASE = Path(os.getenv("P22_OUTPUT_ROOT", PROJECT_ROOT / "reports" / "generated" / "verification" / "down_syndrome"))
 
+    if not has_project_source(PROJECT_ROOT):
+        PROJECT_ROOT = materialize_embedded_project(Path.cwd() / ".p22_standalone")
+        DATA_ROOT = Path(os.getenv("P22_DATA_ROOT", PROJECT_ROOT / "data" / "real"))
+        OUTPUT_BASE = Path(os.getenv("P22_OUTPUT_ROOT", PROJECT_ROOT / "reports" / "generated" / "verification" / "down_syndrome"))
+        print("Using embedded P22 implementation; no GitHub checkout required.")
+
 if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+# Colab can preload an unrelated namespace package named p22. Remove it so
+# imports resolve from this checkout rather than stale interpreter state.
+for module_name in list(sys.modules):
+    if module_name == "p22" or module_name.startswith("p22."):
+        del sys.modules[module_name]
 
 from p22 import load_approvals
 from p22.data.adequacy import catalog_donor_frame, evaluate_donor_adequacy
@@ -175,7 +228,8 @@ SEED = 20260728
 MODEL_INIT_SEED = 0
 DATASET_ID = DEFAULT_DATASET_ID
 COLLECTION_ID = DEFAULT_COLLECTION_ID
-SOURCE_NOTEBOOK = PROJECT_ROOT / "P22_down_syndrome_all_in_one.ipynb"
+UPLOADED_NOTEBOOK = Path.cwd() / "P22_down_syndrome_all_in_one.ipynb"
+SOURCE_NOTEBOOK = UPLOADED_NOTEBOOK if UPLOADED_NOTEBOOK.is_file() else PROJECT_ROOT / "P22_down_syndrome_all_in_one.ipynb"
 
 approvals = load_approvals(PROJECT_ROOT / "plan" / "approvals.json") if (PROJECT_ROOT / "plan" / "approvals.json").is_file() else load_approvals()
 PROFESSOR_APPROVED = PROFESSOR_APPROVED_ENV or (
@@ -243,7 +297,7 @@ CELL6 = """## G2 / R2 / R3 — Schema, QC, donor census
 Full-cohort schema/QC uses every retained cell before any 256-cell cap. Real mode runs derived QC and stop rules. Simulation/metadata modes stay catalog-only.
 """
 
-CELL7 = r'''donor_ids = list(summary.get("donor_ids") or [])
+CELL7 = r"""donor_ids = list(summary.get("donor_ids") or [])
 donor_frame = catalog_donor_frame(donor_ids) if donor_ids else pd.DataFrame(columns=["donor_id", "condition"])
 adequacy = evaluate_donor_adequacy(donor_frame, pairing_known=False)
 
@@ -326,14 +380,14 @@ if qc_report is None:
     EVIDENCE_BUCKETS["blocked_or_unknown"].append("R2/R3 full-cohort QC not run")
 else:
     EVIDENCE_BUCKETS["verified_real"].append("R2/R3 full-cohort schema and QC")
-'''
+"""
 
 CELL8 = """## G3 / R4 — Resources, caps, ATAC B1/B2
 
 Layers: **full-cohort** (census/pseudobulk all retained) vs **cell-level model** (256 primary; 64/128 sensitivity). Fragment build is B2a only when explicitly approved and budgeted; otherwise B2b RNA-only.
 """
 
-CELL9 = r'''fragment_asset = summary.get("atac_fragment_asset") or {}
+CELL9 = r"""fragment_asset = summary.get("atac_fragment_asset") or {}
 fragment_present = bool(fragment_asset.get("present"))
 peak_present = None
 if real_state.schema:
@@ -423,14 +477,16 @@ r4_status = resource.status if hasattr(resource, "status") else real_state.resou
 scale_board.set(make_scale("R4", r4_status, evidence=resource.to_dict() if hasattr(resource, "to_dict") else real_state.resource,
                            notes="resource + ATAC branch"))
 print("G3:", r4_status, "R4:", r4_status, "branch:", atac_branch.branch)
-'''
+"""
+
+CELL1 = CELL1.replace("__P22_EMBEDDED_SOURCE_FILES__", EMBEDDED_SOURCE_LITERAL)
 
 CELL10 = """## G4 — Frozen estimand (before predictions)
 
 Donor unit, StratifiedGroupKFold, mean-probability aggregation, threshold 0.5, donor balanced accuracy, resolution-derived margin (≥0.07 with 15/class).
 """
 
-CELL11 = r'''if REAL_MODE_ACTIVE and real_state.keep_mask is not None and PROFESSOR_APPROVED and mode.allow_model_fit:
+CELL11 = r"""if REAL_MODE_ACTIVE and real_state.keep_mask is not None and PROFESSOR_APPROVED and mode.allow_model_fit:
     freeze_real_estimand(real_state, seed=SEED)
     estimand_report = type("E", (), {
         "status": real_state.estimand.get("status"),
@@ -469,14 +525,14 @@ board.set(make_gate("G4", estimand_report.status if hasattr(estimand_report, "st
                     unknowns=getattr(estimand_report, "open_questions", tuple(real_state.estimand.get("open_questions") or ())),
                     notes="frozen before predictions"))
 print("G4:", getattr(estimand_report, "status", real_state.estimand.get("status")))
-'''
+"""
 
 CELL12 = """## G5 — Donor-held-out leakage control
 
 Real mode: repeated StratifiedGroupKFold on post-QC donors. Simulation: synthetic wiring only.
 """
 
-CELL13 = r'''synth = make_synthetic_multimodal(n_donors=30, cells_per_donor=24, n_features_a=32, n_features_b=32, n_classes=2, seed=SEED)
+CELL13 = r"""synth = make_synthetic_multimodal(n_donors=30, cells_per_donor=24, n_features_a=32, n_features_b=32, n_classes=2, seed=SEED)
 # Donor-pure labels from donor id (synthetic view labels intentionally carry donor nuisance).
 synth_labels = np.asarray([0 if int(str(d).split("_")[1]) < 15 else 1 for d in synth.donor_ids])
 split_report = build_repeated_group_split_report(
@@ -502,14 +558,14 @@ else:
     }, notes="synthetic wiring proof; real matrix evaluation uses model flag"))
     print("G5:", g5_status, "synthetic_overlap=", split_report.donor_overlap_count)
     EVIDENCE_BUCKETS["synthetic"].append("G5 StratifiedGroupKFold zero-overlap wiring")
-'''
+"""
 
 CELL14 = """## G6 — Named baselines + real donor-held-out comparison
 
 Order fixed: majority → chr21 dosage → QC/covariate → pseudobulk RNA → RNA-only → ATAC/concat/gated (NA under B2b).
 """
 
-CELL15 = r'''fold0 = split_report.folds[0]
+CELL15 = r"""fold0 = split_report.folds[0]
 train_donors, test_donors = fold0.train_donors, fold0.test_donors
 y, donors = synth_labels, np.asarray(synth.donor_ids, dtype=object)
 rna, atac = synth.view_a, synth.view_b
@@ -584,14 +640,14 @@ else:
     print(pd.DataFrame(baseline_rows)[["name", "status", "donor_balanced_accuracy", "not_applicable"]].to_string(index=False))
     print("G6:", g6_status)
     EVIDENCE_BUCKETS["synthetic"].append("G6 named baseline wiring")
-'''
+"""
 
 CELL16 = """## G7 — Routing faithfulness (held-out only)
 
 Real B2b path: RNA ablations/clamps/permutations. ATAC/gate interventions marked NOT_APPLICABLE. Gate values are routing signals, not explanations.
 """
 
-CELL17 = r'''intervention_rows = []
+CELL17 = r"""intervention_rows = []
 
 if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_state.keep_mask is not None:
     run_real_interventions(h5ad_path, real_state, primary_cap=PRIMARY_CAP, n_features=64)
@@ -640,14 +696,14 @@ else:
     print(pd.DataFrame(intervention_rows).to_string(index=False))
     print("G7:", g7_status, "n_interventions=", len(INTERVENTIONS))
     EVIDENCE_BUCKETS["synthetic"].append("G7 routing interventions")
-'''
+"""
 
 CELL18 = """## G8 / R5 — External validation + donor-limited scale
 
 Frozen marker panels tested on held-out donors (internal evidence). GSE280175 is RNA-only validation candidate; matrix not auto-ingested. Independent multimodal validation remains UNKNOWN.
 """
 
-CELL19 = r'''if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_state.keep_mask is not None:
+CELL19 = r"""if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_state.keep_mask is not None:
     run_real_validation(h5ad_path, real_state)
     validation = type("V", (), {
         "status": real_state.validation.get("status"),
@@ -692,16 +748,21 @@ if REAL_MODE_ACTIVE and real_state.panel_rows:
     print(pd.DataFrame(real_state.panel_rows).to_string(index=False)[:1500])
 else:
     EVIDENCE_BUCKETS["blocked_or_unknown"].append("G8 external validation not run in this mode")
-'''
+"""
 
 CELL20 = """## G9 / R6 — Evidence package + handoff
 
 Writes `manifest.json`, `metrics.csv`, `interventions.csv`, `validation.csv`, `figures/`, `SUMMARY.md`. Never overwrites source notebook.
 """
 
-CELL21 = r'''def git_head() -> str:
+CELL21 = r"""def git_head() -> str:
     try:
-        return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT, text=True).strip()
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=PROJECT_ROOT,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
     except Exception:
         return "unknown"
 
@@ -850,7 +911,7 @@ print(scale_df.to_string(index=False))
 print(json.dumps(final_summary, indent=2))
 assert board.get("G0") is not None and board.get("G9").status == "PASS"
 assert len(scale_board.status_map()) == 6
-'''
+"""
 
 
 def set_source(cell, text: str) -> None:
