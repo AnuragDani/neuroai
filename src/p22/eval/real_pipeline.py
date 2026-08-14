@@ -81,6 +81,7 @@ class RealAnalysisState:
     split: dict[str, Any] = field(default_factory=dict)
     metrics_rows: list[dict[str, Any]] = field(default_factory=list)
     paired_deltas: list[dict[str, Any]] = field(default_factory=list)
+    same_cap_summary: dict[str, Any] = field(default_factory=dict)
     intervention_rows: list[dict[str, Any]] = field(default_factory=list)
     validation: dict[str, Any] = field(default_factory=dict)
     validation_rows: list[dict[str, Any]] = field(default_factory=list)
@@ -362,6 +363,113 @@ def _log_cpm(gene_sums: np.ndarray) -> np.ndarray:
     return np.log1p(gene_sums / totals * 1e6)
 
 
+CAP_MODEL_NAMES = ("chr21_dosage", "pseudobulk_rna_logistic", "rna_only")
+CAP_MODEL_LABELS = {
+    "chr21_dosage": "Chromosome 21 dosage",
+    "pseudobulk_rna_logistic": "Pseudobulk RNA",
+    "rna_only": "RNA-only",
+}
+
+
+def summarize_same_cap_results(
+    metric_rows: list[dict[str, Any]],
+    paired_deltas: list[dict[str, Any]],
+    *,
+    primary_cap: int,
+    margin: float = 0.07,
+) -> dict[str, Any]:
+    """Give a conservative plain-language conclusion for the capped comparison."""
+    scores_by_cap: dict[int, dict[str, float]] = {}
+    for row in metric_rows:
+        cap = row.get("cap")
+        model = row.get("model")
+        score = row.get("donor_balanced_accuracy")
+        if (
+            cap is None
+            or model not in CAP_MODEL_NAMES
+            or row.get("status") != "measured"
+            or score is None
+        ):
+            continue
+        scores_by_cap.setdefault(int(cap), {})[str(model)] = float(score)
+
+    point_winner_by_cap: dict[int, str | None] = {}
+    for cap, scores in scores_by_cap.items():
+        if set(scores) != set(CAP_MODEL_NAMES):
+            point_winner_by_cap[cap] = None
+            continue
+        best = max(scores.values())
+        winners = [name for name, score in scores.items() if np.isclose(score, best)]
+        point_winner_by_cap[cap] = winners[0] if len(winners) == 1 else None
+
+    winners = set(point_winner_by_cap.values())
+    stable_winner = next(iter(winners)) if len(winners) == 1 and None not in winners else None
+    primary_winner = point_winner_by_cap.get(primary_cap)
+    summary = {
+        "status": "INCONCLUSIVE",
+        "primary_cap": int(primary_cap),
+        "practical_margin": float(margin),
+        "scores_by_cap": scores_by_cap,
+        "point_winner_by_cap": point_winner_by_cap,
+        "primary_point_winner": primary_winner,
+        "stable_point_winner": stable_winner,
+    }
+
+    if primary_cap not in scores_by_cap or len(scores_by_cap[primary_cap]) != len(CAP_MODEL_NAMES):
+        summary["conclusion"] = "The primary same-cap comparison is incomplete."
+        return summary
+    if stable_winner is None:
+        summary["conclusion"] = (
+            "The point-estimate ranking changes across cell caps or contains a tie. "
+            "The comparison remains sampling-sensitive and inconclusive."
+        )
+        return summary
+
+    primary_deltas = {
+        str(row.get("reference")): row
+        for row in paired_deltas
+        if row.get("cap") == primary_cap and row.get("model") == "rna_only"
+    }
+    label = CAP_MODEL_LABELS[stable_winner]
+    if stable_winner == "rna_only":
+        supported = all(
+            primary_deltas.get(reference, {}).get("verdict") == "success"
+            for reference in ("chr21_dosage", "pseudobulk_rna_logistic")
+        )
+        if supported:
+            summary["status"] = "SUPPORTED"
+            summary["conclusion"] = (
+                f"{label} has the highest point estimate at every cap and exceeds both capped "
+                f"baselines by the {margin:.2f} margin at the primary cap."
+            )
+        else:
+            summary["conclusion"] = (
+                f"{label} has the highest point estimate at every cap, but paired donor "
+                "intervals do not support superiority."
+            )
+        return summary
+
+    comparison = primary_deltas.get(stable_winner, {})
+    delta = comparison.get("donor_balanced_accuracy_delta")
+    upper = comparison.get("bootstrap_upper")
+    supported = bool(
+        delta is not None and upper is not None and float(delta) <= -margin and float(upper) < 0.0
+    )
+    if supported:
+        summary["status"] = "SUPPORTED"
+        summary["conclusion"] = (
+            f"{label} has the highest point estimate at every cap and exceeds RNA-only by "
+            f"the {margin:.2f} margin at the primary cap. Baseline-to-baseline superiority "
+            "was not tested."
+        )
+    else:
+        summary["conclusion"] = (
+            f"{label} has the highest point estimate at every cap, but the paired donor "
+            "interval does not support superiority over RNA-only."
+        )
+    return summary
+
+
 def run_real_model_comparison(
     h5ad_path: str | Path,
     state: RealAnalysisState,
@@ -551,6 +659,12 @@ def run_real_model_comparison(
     state.model_runs = runs
     state.metrics_rows = [run.to_row() for run in runs.values()]
     state.paired_deltas = deltas
+    state.same_cap_summary = summarize_same_cap_results(
+        state.metrics_rows,
+        deltas,
+        primary_cap=primary_cap,
+        margin=margin,
+    )
     state.split = {
         **state.split,
         "donor_level_status": donor_split.status,
@@ -567,25 +681,10 @@ def run_real_model_comparison(
         else:
             state.evidence_buckets["blocked_or_unknown"].append(f"{run.name}: {run.not_applicable}")
 
-    rna = capped_runs.get(primary_cap, {}).get("rna_only")
-    if rna is not None and rna.balanced_accuracy is not None:
-        beaters = [
-            name
-            for name in ("chr21_dosage", "pseudobulk_rna_logistic")
-            if capped_runs[primary_cap][name].status == "measured"
-            and capped_runs[primary_cap][name].balanced_accuracy is not None
-            and capped_runs[primary_cap][name].balanced_accuracy >= rna.balanced_accuracy
-        ]
-        if beaters:
-            state.headline.append(
-                "Cheap baseline matches or beats RNA-only; revise claim toward "
-                "biology/dosage, not deep routing"
-            )
-            state.headline.append(f"Baselines at or above RNA-only: {beaters}")
-        else:
-            state.headline.append(
-                "RNA-only exceeds named cheap baselines under donor-held-out evaluation"
-            )
+    state.headline.append(str(state.same_cap_summary["conclusion"]))
+    state.evidence_buckets["verified_real"].append(
+        "Same-cap comparison: " + str(state.same_cap_summary["status"])
+    )
     return state
 
 
