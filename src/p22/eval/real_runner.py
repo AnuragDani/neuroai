@@ -70,6 +70,12 @@ class ModelRun:
             "split_repeats_max": float(repeats.max()) if repeats.size else None,
             "n_donors": self.n_donors,
             "n_cells": self.n_cells,
+            "cap": self.detail.get("cap"),
+            "sample_seed": self.detail.get("sample_seed"),
+            "sample_row_sha256": self.detail.get("sample_row_sha256"),
+            "cells_per_donor_min": self.detail.get("cells_per_donor_min"),
+            "cells_per_donor_median": self.detail.get("cells_per_donor_median"),
+            "cells_per_donor_max": self.detail.get("cells_per_donor_max"),
             "max_donor_overlap_per_fold": (
                 max(self.donor_overlap_per_fold) if self.donor_overlap_per_fold else None
             ),

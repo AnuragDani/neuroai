@@ -44,15 +44,36 @@ def test_real_pipeline_stages(fixture_path: Path) -> None:
     assert state.estimand["status"] == "PASS"
     assert state.split["donor_overlap_count"] == 0
 
-    run_real_model_comparison(fixture_path, state, primary_cap=32, n_features=64)
-    names = [row["model"] for row in state.metrics_rows]
-    assert names[:5] == [
+    run_real_model_comparison(
+        fixture_path,
+        state,
+        primary_cap=32,
+        sensitivity_caps=(8, 16),
+        n_features=64,
+    )
+    context_rows = [row for row in state.metrics_rows if row.get("cap") is None]
+    assert [row["model"] for row in context_rows[:4]] == [
         "majority_class",
         "chr21_dosage",
         "qc_covariate_logistic",
         "pseudobulk_rna_logistic",
-        "rna_only",
     ]
+
+    capped_rows = [row for row in state.metrics_rows if row.get("cap") is not None]
+    assert len(capped_rows) == 9
+    for cap in (8, 16, 32):
+        rows = [row for row in capped_rows if row["cap"] == cap]
+        assert {row["model"] for row in rows} == {
+            "chr21_dosage",
+            "pseudobulk_rna_logistic",
+            "rna_only",
+        }
+        assert len({row["sample_row_sha256"] for row in rows}) == 1
+        assert {row["n_donors"] for row in rows} == {30}
+        assert {row["sample_seed"] for row in rows} == {0}
+
+    assert len(state.paired_deltas) == 6
+    assert {row["cap"] for row in state.paired_deltas} == {8, 16, 32}
     assert all(row["status"] in {"measured", "NOT_APPLICABLE"} for row in state.metrics_rows)
     assert state.split["donor_level_overlap"] == 0
 

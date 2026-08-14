@@ -9,6 +9,7 @@ Synthetic outputs are never mixed into the returned metric tables.
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -29,6 +30,7 @@ from p22.data.real_cohort import (
     read_var,
     run_cohort_qc,
     sample_capped_cells,
+    sample_nested_capped_cells,
     symbol_series,
 )
 from p22.data.resources import (
@@ -365,9 +367,10 @@ def run_real_model_comparison(
     state: RealAnalysisState,
     *,
     primary_cap: int = PRIMARY_CAP,
+    sensitivity_caps: tuple[int, ...] = SENSITIVITY_CAPS,
     n_features: int = 2000,
 ) -> RealAnalysisState:
-    """C25+C28: named baselines and applicable models under identical splits."""
+    """Run full-cohort context and fair cap-matched models under shared splits."""
     path = Path(h5ad_path)
     if state.obs is None or state.keep_mask is None:
         raise RuntimeError("QC must run before model comparison")
@@ -444,28 +447,86 @@ def run_real_model_comparison(
         detail={"n_cells_total": int(bulk.n_cells.sum())},
     )
 
-    rows = sample_capped_cells(state.obs, state.keep_mask, primary_cap, seed=0)
-    cell_matrix = load_cell_matrix(path, rows)
-    cell_obs = state.obs.iloc[rows]
-    cell_labels = (cell_obs["disease"].astype(str) == POSITIVE_CONDITION).astype(int).to_numpy()
-    cell_donors = cell_obs["donor_id"].astype(str).to_numpy()
-    cell_split = build_repeated_group_split_report(
-        cell_donors,
-        cell_labels,
-        n_repeats=n_repeats,
-        n_folds=n_folds,
-        base_seed=SEED,
-    )
-    runs["rna_only"] = run_cell_level_model(
-        "rna_only",
-        cell_matrix,
-        cell_labels,
-        cell_donors,
-        cell_split.folds,
-        n_features=n_features,
-        layer=f"{CAPPED_LAYER}_{primary_cap}",
-        detail={"cap": primary_cap, "n_cells": int(len(rows))},
-    )
+    caps = tuple(sorted({primary_cap, *sensitivity_caps}))
+    sampled_rows = sample_nested_capped_cells(state.obs, state.keep_mask, caps=caps, seed=0)
+    capped_runs: dict[int, dict[str, ModelRun]] = {}
+    for cap in caps:
+        rows = sampled_rows[cap]
+        sample_hash = hashlib.sha256(np.asarray(rows, dtype="<i8").tobytes()).hexdigest()
+        cell_obs = state.obs.iloc[rows]
+        cell_labels = (cell_obs["disease"].astype(str) == POSITIVE_CONDITION).astype(int).to_numpy()
+        cell_donors = cell_obs["donor_id"].astype(str).to_numpy()
+        donor_counts = pd.Series(cell_donors).value_counts()
+        detail = {
+            "cap": cap,
+            "sample_seed": 0,
+            "sample_row_sha256": sample_hash,
+            "n_cells": int(rows.size),
+            "cells_per_donor_min": int(donor_counts.min()),
+            "cells_per_donor_median": float(donor_counts.median()),
+            "cells_per_donor_max": int(donor_counts.max()),
+        }
+
+        cap_mask = np.zeros_like(state.keep_mask, dtype=bool)
+        cap_mask[rows] = True
+        cap_bulk, cap_measurement = measure_stage(
+            f"donor_pseudobulk_cap_{cap}",
+            lambda current_mask=cap_mask: donor_pseudobulk(
+                path,
+                state.obs,
+                current_mask,
+                chr21_mapping=chr21,
+            ),
+            cells_per_donor_cap=cap,
+            disk_path=path.parent,
+            notes="same sampled cells as cap-matched RNA-only model",
+        )
+        state.resource.setdefault("measurements", []).append(cap_measurement.to_dict())
+        cell_matrix = load_cell_matrix(path, rows)
+
+        cap_models: dict[str, ModelRun] = {}
+        if chr21 is not None and chr21.usable and cap_bulk.chr21_fraction is not None:
+            cap_models["chr21_dosage"] = run_donor_level_model(
+                "chr21_dosage",
+                cap_bulk.chr21_fraction,
+                cap_bulk.labels,
+                cap_bulk.donor_ids,
+                folds,
+                layer=f"{CAPPED_LAYER}_{cap}",
+                detail=detail
+                | {
+                    "mapping_sha256": chr21.mapping_sha256,
+                    "n_chr21_genes": chr21.n_chr21_genes,
+                },
+            )
+        else:
+            reason = "chr21 mapping not verified" if chr21 is None else (chr21.reason or "unusable")
+            cap_models["chr21_dosage"] = not_applicable_run(
+                "chr21_dosage", reason, layer=f"{CAPPED_LAYER}_{cap}"
+            )
+        cap_models["pseudobulk_rna_logistic"] = run_donor_level_model(
+            "pseudobulk_rna_logistic",
+            cap_bulk.gene_sums,
+            cap_bulk.labels,
+            cap_bulk.donor_ids,
+            folds,
+            layer=f"{CAPPED_LAYER}_{cap}",
+            n_features=n_features,
+            detail=detail,
+        )
+        cap_models["rna_only"] = run_cell_level_model(
+            "rna_only",
+            cell_matrix,
+            cell_labels,
+            cell_donors,
+            folds,
+            n_features=n_features,
+            layer=f"{CAPPED_LAYER}_{cap}",
+            detail=detail,
+        )
+        capped_runs[cap] = cap_models
+        for name, run in cap_models.items():
+            runs[f"{name}_cap_{cap}"] = run
 
     multimodal_allowed = bool(state.atac_branch.get("multimodal_claim_allowed"))
     branch = state.atac_branch.get("branch")
@@ -476,15 +537,16 @@ def run_real_model_comparison(
 
     margin = float(((state.estimand or {}).get("estimand") or {}).get("practical_margin") or 0.07)
     deltas = []
-    for name in (
-        "majority_class",
-        "chr21_dosage",
-        "qc_covariate_logistic",
-        "pseudobulk_rna_logistic",
-    ):
-        if runs["rna_only"].status != "measured" or runs[name].status != "measured":
-            continue
-        deltas.append(paired_donor_delta(runs["rna_only"], runs[name], margin=margin).to_dict())
+    for cap, cap_models in capped_runs.items():
+        for name in ("chr21_dosage", "pseudobulk_rna_logistic"):
+            if cap_models["rna_only"].status != "measured" or cap_models[name].status != "measured":
+                continue
+            deltas.append(
+                paired_donor_delta(
+                    cap_models["rna_only"], cap_models[name], margin=margin
+                ).to_dict()
+                | {"cap": cap}
+            )
 
     state.model_runs = runs
     state.metrics_rows = [run.to_row() for run in runs.values()]
@@ -493,8 +555,9 @@ def run_real_model_comparison(
         **state.split,
         "donor_level_status": donor_split.status,
         "donor_level_overlap": donor_split.donor_overlap_count,
-        "cell_level_status": cell_split.status,
-        "cell_level_overlap": cell_split.donor_overlap_count,
+        "cell_level_status": donor_split.status,
+        "cell_level_overlap": donor_split.donor_overlap_count,
+        "shared_across_caps": True,
     }
     for run in runs.values():
         if run.status == "measured":
@@ -504,19 +567,14 @@ def run_real_model_comparison(
         else:
             state.evidence_buckets["blocked_or_unknown"].append(f"{run.name}: {run.not_applicable}")
 
-    rna = runs.get("rna_only")
+    rna = capped_runs.get(primary_cap, {}).get("rna_only")
     if rna is not None and rna.balanced_accuracy is not None:
         beaters = [
             name
-            for name in (
-                "majority_class",
-                "chr21_dosage",
-                "qc_covariate_logistic",
-                "pseudobulk_rna_logistic",
-            )
-            if runs[name].status == "measured"
-            and runs[name].balanced_accuracy is not None
-            and runs[name].balanced_accuracy >= rna.balanced_accuracy
+            for name in ("chr21_dosage", "pseudobulk_rna_logistic")
+            if capped_runs[primary_cap][name].status == "measured"
+            and capped_runs[primary_cap][name].balanced_accuracy is not None
+            and capped_runs[primary_cap][name].balanced_accuracy >= rna.balanced_accuracy
         ]
         if beaters:
             state.headline.append(
