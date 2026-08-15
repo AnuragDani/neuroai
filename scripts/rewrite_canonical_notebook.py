@@ -628,7 +628,7 @@ if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_sta
         delta_frame = pd.DataFrame(paired_deltas)
         delta_columns = [
             "cap", "model", "reference", "donor_balanced_accuracy_delta",
-            "bootstrap_lower", "bootstrap_upper", "practical_margin", "verdict",
+            "bootstrap_lower", "bootstrap_upper", "practical_margin", "comparison_result",
         ]
         print("\nPAIRED DIFFERENCES: RNA-ONLY MINUS BASELINE")
         display(delta_frame[delta_columns].sort_values(["cap", "reference"]).reset_index(drop=True))

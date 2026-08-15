@@ -6,6 +6,7 @@ import numpy as np
 
 from p22.data.group_splits import build_repeated_group_split_report
 from p22.eval.real_runner import (
+    ModelRun,
     not_applicable_run,
     paired_donor_delta,
     run_cell_level_model,
@@ -112,6 +113,35 @@ def test_paired_delta_not_applicable_against_unscored_model():
     delta = paired_donor_delta(strong, blocked, margin=0.07)
     assert delta.verdict == "not_applicable"
     assert delta.delta is None
+
+
+def test_paired_delta_reports_when_reference_is_better():
+    donors = tuple(f"D{index:02d}" for index in range(20))
+    labels = np.asarray([0] * 10 + [1] * 10, dtype=int)
+    weak = ModelRun(
+        name="weak",
+        layer="donor_level",
+        status="measured",
+        donor_ids=donors,
+        labels=labels,
+        donor_prediction=1 - labels,
+    )
+    strong = ModelRun(
+        name="strong",
+        layer="donor_level",
+        status="measured",
+        donor_ids=donors,
+        labels=labels,
+        donor_prediction=labels,
+    )
+
+    delta = paired_donor_delta(weak, strong, margin=0.07)
+
+    assert delta.delta == -1.0
+    assert delta.meets_margin is True
+    assert delta.interval_excludes_zero is True
+    assert delta.verdict == "success"
+    assert delta.to_dict()["comparison_result"] == "reference_better"
 
 
 def test_not_applicable_run_carries_reason():

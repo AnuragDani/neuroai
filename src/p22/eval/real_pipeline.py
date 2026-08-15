@@ -433,7 +433,13 @@ def summarize_same_cap_results(
     label = CAP_MODEL_LABELS[stable_winner]
     if stable_winner == "rna_only":
         supported = all(
-            primary_deltas.get(reference, {}).get("verdict") == "success"
+            primary_deltas.get(reference, {}).get(
+                "comparison_result",
+                "model_better"
+                if primary_deltas.get(reference, {}).get("verdict") == "success"
+                else "inconclusive",
+            )
+            == "model_better"
             for reference in ("chr21_dosage", "pseudobulk_rna_logistic")
         )
         if supported:
@@ -452,7 +458,7 @@ def summarize_same_cap_results(
     comparison = primary_deltas.get(stable_winner, {})
     delta = comparison.get("donor_balanced_accuracy_delta")
     upper = comparison.get("bootstrap_upper")
-    supported = bool(
+    supported = comparison.get("comparison_result") == "reference_better" or bool(
         delta is not None and upper is not None and float(delta) <= -margin and float(upper) < 0.0
     )
     if supported:

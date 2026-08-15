@@ -335,6 +335,14 @@ class PairedDelta:
     verdict: str
 
     def to_dict(self) -> dict[str, Any]:
+        if self.verdict == "not_applicable":
+            comparison_result = "not_applicable"
+        elif self.verdict != "success" or self.delta is None:
+            comparison_result = "inconclusive"
+        elif self.delta > 0:
+            comparison_result = "model_better"
+        else:
+            comparison_result = "reference_better"
         return {
             "model": self.model,
             "reference": self.reference,
@@ -346,6 +354,7 @@ class PairedDelta:
             "meets_margin": self.meets_margin,
             "interval_excludes_zero": self.interval_excludes_zero,
             "verdict": self.verdict,
+            "comparison_result": comparison_result,
         }
 
 
@@ -400,8 +409,8 @@ def paired_donor_delta(
     lower = upper = None
     if values:
         lower, upper = (float(value) for value in np.percentile(values, [2.5, 97.5]))
-    excludes_zero = bool(lower is not None and lower > 0.0)
-    meets = bool(point is not None and point >= margin)
+    excludes_zero = bool(lower is not None and upper is not None and (lower > 0.0 or upper < 0.0))
+    meets = bool(point is not None and abs(point) >= margin)
     if point is None:
         verdict = "not_applicable"
     elif meets and excludes_zero:
