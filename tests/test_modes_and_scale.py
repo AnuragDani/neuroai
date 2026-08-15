@@ -1,5 +1,8 @@
 """Tests for visible modes, R1-R6 board, and census planning."""
 
+import json
+from pathlib import Path
+
 import pytest
 
 from p22.data.catalog import EXPECTED_CELLS, EXPECTED_H5AD_BYTES
@@ -104,3 +107,21 @@ def test_census_placeholder_and_data_scale_section():
     section = data_scale_section(acquisition, census)
     assert section["caps"]["capped_output_is_not_full_dataset"] is True
     assert section["inferential_scale"]["unit"] == "donor"
+
+
+def test_canonical_notebook_exposes_fair_same_cap_result():
+    notebook_path = Path(__file__).parents[1] / "P22_down_syndrome_all_in_one.ipynb"
+    notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+    markdown = "\n".join(
+        "".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "markdown"
+    )
+    code = "\n".join(
+        "".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"
+    )
+
+    assert "Fair same-cell comparison" in markdown
+    assert "same_cap_summary" in code
+    assert "same_cap_sensitivity.png" in code
+    assert "git clone" not in code
+    assert notebook["cells"][1]["metadata"]["jupyter"]["source_hidden"] is True
+    assert notebook["cells"][1]["metadata"]["collapsed"] is True

@@ -27,7 +27,7 @@ def build_embedded_source_literal() -> str:
 
 EMBEDDED_SOURCE_LITERAL = build_embedded_source_literal()
 
-CELL0 = """# P22: Down syndrome fetal cortex Multiome — one-notebook workflow
+CELL0 = """# P22: Down syndrome fetal cortex — one-notebook analysis
 
 **Standalone notebook only.** Local Jupyter + Google Colab. No GitHub checkout required.
 
@@ -45,11 +45,9 @@ CELL0 = """# P22: Down syndrome fetal cortex Multiome — one-notebook workflow
 2. **metadata_census** — live catalog; no H5AD download
 3. **real_analysis** — full public H5AD schema/QC, resources, donor-held-out models, interventions, validation
 
-The implementation needed to run this notebook is embedded file-by-file in the first code cell. H5AD and fragment files are never embedded.
+The implementation needed to run this notebook is embedded in the first code cell and collapsed by default. It is there only so the notebook can run without a repository. H5AD and fragment files are never embedded.
 
-Professor approval is an external attestation (`P22_PROFESSOR_APPROVED=1`). No approval date is invented here.
-
-Gates **G0–G9**. Data-size stages **R1–R6**. Capped models ≠ full dataset. Synthetic ≠ disease evidence.
+The main result separates full-cohort context from a fair comparison in which chromosome 21 dosage, pseudobulk RNA, and RNA-only models use exactly the same sampled cells. The technical evidence record appears at the end.
 """
 
 CELL1 = r'''from __future__ import annotations
@@ -113,7 +111,7 @@ except ImportError:
 if IN_COLAB:
     import importlib
     need = []
-    for pkg, mod in [("anndata", "anndata"), ("torch", "torch"), ("scikit-learn", "sklearn"), ("h5py", "h5py")]:
+    for pkg, mod in [("anndata", "anndata"), ("torch", "torch"), ("scikit-learn", "sklearn"), ("h5py", "h5py"), ("matplotlib", "matplotlib")]:
         try:
             importlib.import_module(mod)
         except ImportError:
@@ -269,6 +267,7 @@ EVIDENCE_BUCKETS = {"verified_real": [], "synthetic": [], "metadata_only": [], "
 real_state = RealAnalysisState()
 REAL_MODE_ACTIVE = mode.mode == MODE_REAL_ANALYSIS and mode.allow_h5ad_download
 paired_deltas = []
+same_cap_summary = {}
 validation_rows = []
 baseline_rows = []
 intervention_rows = []
@@ -560,9 +559,13 @@ else:
     EVIDENCE_BUCKETS["synthetic"].append("G5 StratifiedGroupKFold zero-overlap wiring")
 """
 
-CELL14 = """## G6 — Named baselines + real donor-held-out comparison
+CELL14 = """## Fair same-cell comparison
 
-Order fixed: majority → chr21 dosage → QC/covariate → pseudobulk RNA → RNA-only → ATAC/concat/gated (NA under B2b).
+**Question:** Does the model ranking change when chromosome 21 dosage, pseudobulk RNA, and RNA-only use exactly the same cells from every donor?
+
+The primary comparison uses 256 cells per donor. The 64- and 128-cell results test sensitivity to cell sampling. Every model uses the same 30 donors, repeated donor-held-out folds, donor-level balanced accuracy, and donor-bootstrap uncertainty. A difference is called supported only when it reaches the frozen 0.07 practical margin and the paired interval excludes zero.
+
+Full-cohort majority, chromosome 21 dosage, QC/covariate, and pseudobulk results are retained below as context, not mixed into the capped ranking.
 """
 
 CELL15 = r"""fold0 = split_report.folds[0]
@@ -573,24 +576,86 @@ train_idx, test_idx = fold0.train_index, fold0.test_index
 
 baseline_rows = []
 paired_deltas = []
+same_cap_summary = {
+    "status": "NOT_REAL_DATA",
+    "conclusion": "Simulation checks implementation wiring only; no disease conclusion is drawn.",
+}
 
 if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_state.keep_mask is not None:
-    print("Running real donor-held-out baselines/models (this can take several minutes)...")
-    print("Data layer: full cohort for census/pseudobulk; capped", PRIMARY_CAP, "cells/donor for RNA cell model")
+    print("Running real donor-held-out comparisons (this can take several minutes)...")
+    print("Fair comparison caps:", sorted({PRIMARY_CAP, *SENSITIVITY_CAPS}), "cells per donor")
     print("ATAC branch:", real_state.atac_branch_label)
     run_real_model_comparison(h5ad_path, real_state, primary_cap=PRIMARY_CAP, n_features=2000)
     baseline_rows = real_state.metrics_rows
     paired_deltas = real_state.paired_deltas
+    same_cap_summary = real_state.same_cap_summary
     g6_status = "PASS" if any(row.get("status") == "measured" for row in baseline_rows) else "BLOCKED"
     if real_state.split.get("donor_level_overlap", 0) != 0 or real_state.split.get("cell_level_overlap", 0) != 0:
         g6_status = "BLOCKED"
     board.set(make_gate("G6", g6_status, evidence={"metrics": baseline_rows, "paired_deltas": paired_deltas,
                                                     "atac_branch": real_state.atac_branch},
                         notes="real donor-held-out comparison; cheap baselines before gated fusion"))
-    print(pd.DataFrame(baseline_rows)[["model", "layer", "status", "donor_balanced_accuracy", "not_applicable"]].to_string(index=False))
+    print("\nMAIN RESULT")
+    print(same_cap_summary["conclusion"])
+    print("Interpretation status:", same_cap_summary["status"])
+
+    metric_frame = pd.DataFrame(baseline_rows)
+    capped_frame = metric_frame[
+        metric_frame["cap"].notna()
+        & metric_frame["model"].isin(["chr21_dosage", "pseudobulk_rna_logistic", "rna_only"])
+    ].copy()
+    capped_frame["model"] = capped_frame["model"].map({
+        "chr21_dosage": "Chromosome 21 dosage",
+        "pseudobulk_rna_logistic": "Pseudobulk RNA",
+        "rna_only": "RNA-only",
+    })
+    capped_columns = [
+        "cap", "model", "donor_balanced_accuracy", "bootstrap_lower", "bootstrap_upper",
+        "n_donors", "n_cells", "cells_per_donor_min", "cells_per_donor_median",
+        "cells_per_donor_max",
+    ]
+    print("\nFAIR SAME-CELL RESULTS")
+    from IPython.display import display
+    display(capped_frame[capped_columns].sort_values(["cap", "model"]).reset_index(drop=True))
+    sample_audit = (
+        metric_frame[metric_frame["cap"].notna()]
+        .groupby("cap", as_index=False)
+        .agg(sample_row_sha256=("sample_row_sha256", "first"), unique_sample_hashes=("sample_row_sha256", "nunique"))
+    )
+    print("Same sampled-cell hash within each cap (unique_sample_hashes must equal 1):")
+    display(sample_audit)
     if paired_deltas:
-        print("Paired deltas (rna_only vs baselines):")
-        print(pd.DataFrame(paired_deltas).to_string(index=False))
+        delta_frame = pd.DataFrame(paired_deltas)
+        delta_columns = [
+            "cap", "model", "reference", "donor_balanced_accuracy_delta",
+            "bootstrap_lower", "bootstrap_upper", "practical_margin", "verdict",
+        ]
+        print("\nPAIRED DIFFERENCES: RNA-ONLY MINUS BASELINE")
+        display(delta_frame[delta_columns].sort_values(["cap", "reference"]).reset_index(drop=True))
+
+    context_frame = metric_frame[metric_frame["cap"].isna()].copy()
+    print("\nFULL-COHORT CONTEXT (NOT PART OF SAME-CAP RANKING)")
+    display(context_frame[["model", "layer", "status", "donor_balanced_accuracy", "bootstrap_lower", "bootstrap_upper", "not_applicable"]].reset_index(drop=True))
+
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    colors = {"Chromosome 21 dosage": "#C44E52", "Pseudobulk RNA": "#4C72B0", "RNA-only": "#55A868"}
+    for model_name, model_rows in capped_frame.groupby("model", sort=False):
+        ordered = model_rows.sort_values("cap")
+        scores = ordered["donor_balanced_accuracy"].astype(float).to_numpy()
+        lower = ordered["bootstrap_lower"].astype(float).to_numpy()
+        upper = ordered["bootstrap_upper"].astype(float).to_numpy()
+        ax.errorbar(
+            ordered["cap"], scores, yerr=[scores - lower, upper - scores], marker="o",
+            linewidth=2, capsize=4, color=colors[model_name], label=model_name,
+        )
+    ax.axhline(0.5, color="#777777", linestyle="--", linewidth=1, label="Chance")
+    ax.set(xlabel="Cells sampled per donor", ylabel="Donor balanced accuracy", ylim=(0, 1.05),
+           title="Does the model ranking change with the cell cap?")
+    ax.set_xticks(sorted(capped_frame["cap"].astype(int).unique()))
+    ax.legend(frameon=False, ncol=2)
+    fig.tight_layout()
+    plt.show()
     for key, values in real_state.evidence_buckets.items():
         for item in values:
             if item not in EVIDENCE_BUCKETS[key]:
@@ -810,6 +875,7 @@ package = EvidencePackage(
         "estimand": estimand_report.to_dict() if hasattr(estimand_report, "to_dict") else real_state.estimand,
         "split": real_state.split or split_report.to_dict(),
         "paired_deltas": paired_deltas if "paired_deltas" in dir() else [],
+        "same_cap_summary": same_cap_summary if "same_cap_summary" in dir() else {},
         "gates": board.to_dict(),
         "data_size_stages": scale_board.to_dict(),
         "data_scale": data_scale,
@@ -859,25 +925,33 @@ summary_path = write_human_summary(package.run_dir, package.manifest)
 executed_candidate = OUTPUT_BASE.parent / "notebooks" / "P22_down_syndrome_all_in_one.executed.ipynb"
 copied = copy_executed_notebook(executed_candidate, package.run_dir)
 
-# Simple figure: donor BA bar chart when real metrics exist
+# Shareable cap-sensitivity figure from the fair same-cell rows.
 figures_dir = Path(paths["figures"])
 try:
-    import matplotlib
-    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     frame = pd.DataFrame(metrics_for_package)
-    if not frame.empty and "donor_balanced_accuracy" in frame.columns:
-        measured = frame[frame["status"] == "measured"].copy()
+    if not frame.empty and "donor_balanced_accuracy" in frame.columns and "cap" in frame.columns:
+        measured = frame[
+            (frame["status"] == "measured")
+            & frame["cap"].notna()
+            & frame["model"].isin(["chr21_dosage", "pseudobulk_rna_logistic", "rna_only"])
+        ].copy()
         if not measured.empty:
-            label_col = "model" if "model" in measured.columns else "name"
-            fig, ax = plt.subplots(figsize=(8, 4))
-            ax.bar(measured[label_col].astype(str), measured["donor_balanced_accuracy"].astype(float), color="#2F4F4F")
-            ax.set_ylim(0, 1.05)
-            ax.set_ylabel("Donor balanced accuracy")
-            ax.set_title("Donor-held-out comparison")
-            ax.tick_params(axis="x", rotation=30)
+            labels = {"chr21_dosage": "Chromosome 21 dosage", "pseudobulk_rna_logistic": "Pseudobulk RNA", "rna_only": "RNA-only"}
+            colors = {"chr21_dosage": "#C44E52", "pseudobulk_rna_logistic": "#4C72B0", "rna_only": "#55A868"}
+            fig, ax = plt.subplots(figsize=(8, 4.5))
+            for model_name, model_rows in measured.groupby("model", sort=False):
+                ordered = model_rows.sort_values("cap")
+                scores = ordered["donor_balanced_accuracy"].astype(float).to_numpy()
+                lower = ordered["bootstrap_lower"].astype(float).to_numpy()
+                upper = ordered["bootstrap_upper"].astype(float).to_numpy()
+                ax.errorbar(ordered["cap"], scores, yerr=[scores - lower, upper - scores], marker="o", linewidth=2, capsize=4, color=colors[model_name], label=labels[model_name])
+            ax.axhline(0.5, color="#777777", linestyle="--", linewidth=1, label="Chance")
+            ax.set(xlabel="Cells sampled per donor", ylabel="Donor balanced accuracy", ylim=(0, 1.05), title="Does the model ranking change with the cell cap?")
+            ax.set_xticks(sorted(measured["cap"].astype(int).unique()))
+            ax.legend(frameon=False, ncol=2)
             fig.tight_layout()
-            fig.savefig(figures_dir / "donor_balanced_accuracy.png", dpi=120)
+            fig.savefig(figures_dir / "same_cap_sensitivity.png", dpi=150)
             plt.close(fig)
 except Exception as exc:  # noqa: BLE001 — figure is optional
     safe_write_text(figures_dir / "figure_error.txt", str(exc))
@@ -899,6 +973,7 @@ final_summary = {
     "artifact_paths": {**paths, "summary": str(summary_path), "executed_copy": None if copied is None else str(copied)},
     "evidence_buckets": EVIDENCE_BUCKETS,
     "headline": real_state.headline,
+    "same_cap_summary": same_cap_summary if "same_cap_summary" in dir() else {},
     "claim_boundary": "Separate verified-real / synthetic / metadata-only / blocked.",
 }
 safe_write_text(OUTPUT_ROOT / "notebook_summary.json", json.dumps(final_summary, indent=2) + "\n")
@@ -923,6 +998,7 @@ def set_source(cell, text: str) -> None:
     if cell["cell_type"] == "code":
         cell["outputs"] = []
         cell["execution_count"] = None
+        cell.setdefault("metadata", {}).pop("execution", None)
 
 
 def main() -> None:
@@ -951,6 +1027,8 @@ def main() -> None:
     }
     for index, text in updates.items():
         set_source(nb["cells"][index], text)
+    nb["cells"][1].setdefault("metadata", {}).setdefault("jupyter", {})["source_hidden"] = True
+    nb["cells"][1]["metadata"]["collapsed"] = True
     # Prefer p22 kernel
     nb.setdefault("metadata", {}).setdefault("kernelspec", {})
     nb["metadata"]["kernelspec"] = {
