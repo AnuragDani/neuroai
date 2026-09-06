@@ -18,6 +18,11 @@ import numpy as np
 import torch
 from torch import nn
 
+from p22.data.group_splits import (
+    _donor_labels_for_stratification,
+    aggregate_donor_probabilities,
+)
+from p22.data.splits import _as_donor_array
 from p22.eval.metrics import (
     accuracy,
     balanced_accuracy,
@@ -99,11 +104,15 @@ class TrainedModel:
     stopped_early: bool
     seed: int
     device: str
+    selection_unit: str = "cell"
+    training_weighting: str = "uniform_cell"
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "selection_metric": self.selection_metric,
             "selection_split": "val",
+            "selection_unit": self.selection_unit,
+            "training_weighting": self.training_weighting,
             "best_epoch": self.best_epoch,
             "best_val_score": self.best_val_score,
             "epochs_run": self.epochs_run,
@@ -169,6 +178,8 @@ def train_model(
     seed: int = 0,
     selection_metric: str = "balanced_accuracy",
     device: str = DEFAULT_DEVICE,
+    train_donor_ids: Sequence[str] | None = None,
+    val_donor_ids: Sequence[str] | None = None,
 ) -> TrainedModel:
     """Fit a model on the training split and select the epoch on validation.
 
@@ -187,6 +198,9 @@ def train_model(
         seed: seed for shuffling and initialisation-time randomness.
         selection_metric: validation metric maximised during selection.
         device: torch device; CPU by default.
+        train_donor_ids: optional donor IDs for equal-donor loss weighting.
+        val_donor_ids: supply with train IDs for binary donor-mean probability
+            selection at threshold 0.5. Donors must be disjoint between splits.
 
     Returns:
         A :class:`TrainedModel` with the best validation weights restored.
@@ -211,6 +225,22 @@ def train_model(
     if not 0.0 < float(learning_rate) < 1.0:
         raise ValueError(f"learning_rate must lie in (0, 1), got {learning_rate}")
 
+    donor_mode = train_donor_ids is not None or val_donor_ids is not None
+    weights = None
+    if donor_mode:
+        if train_donor_ids is None or val_donor_ids is None:
+            raise ValueError("supply both train_donor_ids and val_donor_ids")
+        train_donors, _ = _binary_donors(train_donor_ids, train_labels)
+        val_donors, donor_val_labels = _binary_donors(val_donor_ids, val_labels)
+        if set(train_donors) & set(val_donors):
+            raise ValueError("train and validation donor IDs overlap")
+        _, inverse, counts = np.unique(train_donors, return_inverse=True, return_counts=True)
+        weights = torch.as_tensor(
+            len(train_donors) / (len(counts) * counts[inverse]),
+            dtype=torch.float32,
+            device=device,
+        )
+
     train_tensors, train_target = _prepare(train_views, train_labels, "train", device)
     val_tensors, val_target = _prepare(val_views, val_labels, "val", device)
     if sorted(train_tensors) != sorted(val_tensors):
@@ -229,7 +259,9 @@ def train_model(
     model = model.to(device)
     generator = torch.Generator().manual_seed(int(seed))
     optimiser = torch.optim.Adam(model.parameters(), lr=float(learning_rate))
-    criterion = nn.CrossEntropyLoss()
+    # Unreduced loss permits per-cell weights, not class weights.
+    # https://docs.pytorch.org/docs/2.8/generated/torch.nn.CrossEntropyLoss.html
+    criterion = nn.CrossEntropyLoss(reduction="none" if donor_mode else "mean")
     metric_fn = SELECTION_METRICS[selection_metric]
 
     n_train = train_target.shape[0]
@@ -249,7 +281,12 @@ def train_model(
             batch = {name: tensor[index] for name, tensor in train_tensors.items()}
             optimiser.zero_grad()
             logits = forward_logits(model, batch)
+            if donor_mode and logits.shape[1] != 2:
+                raise ValueError("donor selection requires two output classes")
             loss = criterion(logits, train_target[index])
+            if weights is not None:
+                # Fixed global normalization: each donor has equal total loss weight.
+                loss = (loss * weights[index]).mean()
             loss.backward()
             optimiser.step()
             epoch_loss += float(loss.detach()) * index.numel()
@@ -257,8 +294,14 @@ def train_model(
         model.eval()
         with torch.no_grad():
             val_logits = forward_logits(model, val_tensors)
-        val_pred = val_logits.argmax(dim=1).cpu().numpy()
-        scored = metric_fn(val_target.cpu().numpy(), val_pred)
+        if donor_mode:
+            donor_predictions = aggregate_donor_probabilities(
+                torch.softmax(val_logits, dim=1)[:, 1].cpu().numpy(), val_donors
+            )
+            scored = metric_fn(donor_val_labels, donor_predictions["prediction"].to_numpy())
+        else:
+            val_pred = val_logits.argmax(dim=1).cpu().numpy()
+            scored = metric_fn(val_target.cpu().numpy(), val_pred)
         if not scored.applicable:
             raise ValueError(
                 f"validation split cannot support {selection_metric!r}: {scored.not_applicable}"
@@ -294,7 +337,23 @@ def train_model(
         stopped_early=stopped_early,
         seed=seeds["torch"],
         device=device,
+        selection_unit="donor" if donor_mode else "cell",
+        training_weighting="inverse_donor_cell_count" if donor_mode else "uniform_cell",
     )
+
+
+def _binary_donors(
+    donor_ids: Sequence[str], labels: Sequence[int]
+) -> tuple[np.ndarray, np.ndarray]:
+    """Validate binary donor labels before any fitting or integer conversion."""
+    donors = _as_donor_array(donor_ids).astype(str)
+    target = np.asarray(labels)
+    if target.ndim != 1 or len(target) != len(donors):
+        raise ValueError("donor IDs and labels length mismatch")
+    if not np.isin(target, [0, 1]).all() or set(target) != {0, 1}:
+        raise ValueError("each split must contain both binary classes, 0 and 1")
+    _, donor_labels = _donor_labels_for_stratification(donors, target)
+    return donors, donor_labels
 
 
 def predict(

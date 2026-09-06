@@ -331,3 +331,71 @@ class TestTrainingRefusals:
         single_class = np.zeros(self.val_labels.size, dtype=int)
         with pytest.raises(ValueError, match="cannot support"):
             self._train(val_labels=single_class, selection_metric="balanced_accuracy")
+
+
+class EpochProbabilityModel(torch.nn.Module):
+    """Controlled predictions expose cell-versus-donor checkpoint selection."""
+
+    def __init__(self):
+        super().__init__()
+        self.bias = torch.nn.Parameter(torch.tensor(0.0))
+        self.epoch = 0
+
+    def forward(self, features):
+        if self.training:
+            self.epoch += 1
+            probability = torch.full((len(features),), 0.8)
+        else:
+            probability = torch.tensor(
+                [0.1] * 9 + [0.9, 0.9] if self.epoch == 1 else [0.9] * 4 + [0.01] * 5 + [0.1, 0.9]
+            )
+        return torch.stack([(1 - probability).log(), probability.log()], dim=1) + self.bias
+
+
+def donor_training_arguments():
+    return dict(
+        train_views={VIEW_A: np.ones((4, 1))},
+        train_labels=np.array([0, 0, 0, 1]),
+        val_views={VIEW_A: np.ones((11, 1))},
+        val_labels=np.array([0] * 10 + [1]),
+        train_donor_ids=["t0"] * 3 + ["t1"],
+        val_donor_ids=["v0"] * 9 + ["v1", "v2"],
+        max_epochs=2,
+        batch_size=64,
+        patience=2,
+    )
+
+
+def test_donor_selection_differs_from_cell_selection_and_weights_donors_equally():
+    arguments = donor_training_arguments()
+    donor_run = train_model(EpochProbabilityModel(), **arguments)
+    assert donor_run.best_epoch == 2
+    assert donor_run.best_val_score == 1.0
+    assert donor_run.to_dict()["selection_unit"] == "donor"
+    assert donor_run.to_dict()["training_weighting"] == "inverse_donor_cell_count"
+    assert donor_run.history[0].train_loss == pytest.approx(-np.log([0.2, 0.8]).mean())
+    arguments.pop("train_donor_ids")
+    arguments.pop("val_donor_ids")
+    cell_run = train_model(EpochProbabilityModel(), **arguments)
+    assert cell_run.best_epoch == 1
+    assert cell_run.to_dict()["selection_unit"] == "cell"
+
+
+@pytest.mark.parametrize(
+    "overrides, message",
+    [
+        ({"train_donor_ids": None}, "both"),
+        ({"val_donor_ids": ["t0"] * 9 + ["v1", "v2"]}, "overlap"),
+        ({"train_donor_ids": ["t0"] * 4}, "mixed labels"),
+        ({"val_donor_ids": ["v0"]}, "length"),
+        ({"val_donor_ids": [None] * 11}, "null"),
+        ({"val_labels": [0] * 11}, "both binary classes"),
+        ({"train_labels": [0, 0, 0, 0.5]}, "both binary classes"),
+    ],
+)
+def test_donor_training_rejects_invalid_identity_or_labels_before_fitting(overrides, message):
+    arguments = donor_training_arguments() | overrides
+    model = EpochProbabilityModel()
+    with pytest.raises(ValueError, match=message):
+        train_model(model, **arguments)
+    assert model.epoch == 0
