@@ -1,0 +1,28 @@
+{
+  "data_mode": "synthetic",
+  "dataset": {
+    "n_donors": 30,
+    "cells_per_donor": 256,
+    "n_features_a": 32,
+    "n_features_b": 24,
+    "seed": 22
+  },
+  "protocol": {
+    "n_tokens": 4,
+    "embed_dim": 16,
+    "hidden_dim": 32,
+    "n_heads": 2,
+    "dropout": 0.1,
+    "feature_budget": 128,
+    "cell_cap": 256,
+    "max_epochs": 20,
+    "patience": 5,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0,
+    "model_seed": 0,
+    "sampling_seed": 22
+  }
+}
