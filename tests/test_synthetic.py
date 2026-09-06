@@ -20,6 +20,7 @@ def test_donor_label_fixture_is_pure_balanced_and_reproducible():
     with pytest.raises(ValueError, match="label_unit"):
         make_synthetic_multimodal(label_unit="unknown")
 
+
 BIOLOGICAL_WORDS = ("gene", "rna", "atac", "cell_type", "neuron", "expression", "morph")
 
 
