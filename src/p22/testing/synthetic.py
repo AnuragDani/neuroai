@@ -116,6 +116,7 @@ def make_synthetic_multimodal(
     donor_nuisance: float = 0.7,
     noise: float = 1.0,
     label_concentration: float = 3.0,
+    label_unit: str = "cell",
 ) -> SyntheticMultimodal:
     """Generate a deterministic two-view dataset with donor nuisance.
 
@@ -131,6 +132,8 @@ def make_synthetic_multimodal(
         noise: per-cell latent noise scale.
         label_concentration: Dirichlet concentration for per-donor class mix;
             smaller values make donors more skewed.
+        label_unit: "cell" preserves the original class-mix fixture; "donor"
+            assigns one neutral class per donor for binary donor-training tests.
 
     Returns:
         A :class:`SyntheticMultimodal` whose arrays contain no NaN or infinity.
@@ -155,6 +158,10 @@ def make_synthetic_multimodal(
         raise ValueError(f"label_concentration must be > 0, got {label_concentration}")
     if n_donors * cells_per_donor < n_classes:
         raise ValueError("not enough cells to place every class at least once")
+    if label_unit not in {"cell", "donor"}:
+        raise ValueError("label_unit must be cell or donor")
+    if label_unit == "donor" and n_donors < n_classes:
+        raise ValueError("not enough donors to place every class at least once")
 
     rng = np.random.default_rng(seed)
     n_cells = n_donors * cells_per_donor
@@ -162,7 +169,10 @@ def make_synthetic_multimodal(
     donor_index = np.repeat(np.arange(n_donors), cells_per_donor)
     donor_ids = np.array([f"donor_{index:02d}" for index in donor_index], dtype=object)
     cell_ids = np.array([f"cell_{index:05d}" for index in range(n_cells)], dtype=object)
-    labels = _sample_labels(rng, n_donors, cells_per_donor, n_classes, label_concentration)
+    if label_unit == "donor":
+        labels = np.repeat(rng.permutation(np.arange(n_donors) % n_classes), cells_per_donor)
+    else:
+        labels = _sample_labels(rng, n_donors, cells_per_donor, n_classes, label_concentration)
 
     class_centres = rng.normal(0.0, 1.0, size=(n_classes, LATENT_DIM))
     donor_offsets = rng.normal(0.0, 1.0, size=(n_donors, LATENT_DIM))
@@ -230,6 +240,8 @@ def make_synthetic_multimodal(
         ),
     }
 
+    if label_unit == "donor":
+        generation["label_unit"] = label_unit
     return SyntheticMultimodal(
         view_a=view_a,
         view_b=view_b,

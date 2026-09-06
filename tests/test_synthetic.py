@@ -10,6 +10,16 @@ from sklearn.linear_model import LogisticRegression
 
 from p22.testing import LATENT_DIM, make_synthetic_multimodal
 
+
+def test_donor_label_fixture_is_pure_balanced_and_reproducible():
+    fixture = make_synthetic_multimodal(n_donors=12, n_classes=2, label_unit="donor")
+    assert (fixture.metadata.groupby("donor_id")["label"].nunique() == 1).all()
+    assert sorted(fixture.metadata.groupby("donor_id")["label"].first().value_counts()) == [6, 6]
+    again = make_synthetic_multimodal(n_donors=12, n_classes=2, label_unit="donor")
+    np.testing.assert_array_equal(fixture.view_a, again.view_a)
+    with pytest.raises(ValueError, match="label_unit"):
+        make_synthetic_multimodal(label_unit="unknown")
+
 BIOLOGICAL_WORDS = ("gene", "rna", "atac", "cell_type", "neuron", "expression", "morph")
 
 
