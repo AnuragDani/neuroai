@@ -1,6 +1,9 @@
 # Paired multiome audit: implemented first stage
 
-Date: 2026-09-05. Scope: public-file diagnostics and reusable ingestion code. No model training, external predictive evaluation, or approval changes.
+Date: 2026-09-05. Scope of this audit: public-file diagnostics and reusable ingestion
+code. It performs no training, external predictive evaluation, or approval changes.
+The subsequent [synthetic neural-network implementation](PAIRED_MULTIOME_TRAINING.md)
+is a separate verified development stage.
 
 ## Run
 
@@ -51,6 +54,45 @@ Separate read-only cross-check of the existing CELLxGENE H5AD found 248,998 cell
 
 The first pilot used B10D1N, whose donor is among those absent from the final H5AD. Its [original report](../reports/generated/multiome/audit_20260905/SUMMARY.md) remains preserved as a raw-file test. The replacement pilot uses B17C2L, whose donor is present in that H5AD. Its donor has 2,450 retained cells, including 550 from B17C2L. The current pilot still samples the 652 raw MEX cells; a final retained-barcode join remains necessary.
 
+### Follow-up: exact retained-cell identity check
+
+Read-only inspection now verifies that all **550** final-release B17C2L cell IDs
+match `B17C2L_` plus an exact raw barcode. No retained cell is missing from the raw
+list; **102 of 652** raw cells are not retained. The retained donor is
+`PCW17_CON_14310`. This establishes the one-library ID mapping, not the reason for
+exclusions, the complete cohort's release history, or a new QC policy. The existing
+audit command still samples raw cells; it has not applied this retention mask.
+
+Pinned H5AD SHA-256: `08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb`.
+Raw-barcode hash remains the value in [the audit manifest](../configs/paired_multiome_audit.json).
+Sorted retained IDs joined by newline hash to
+`855b64ed34fa487f99306c337077c29ab5ad8c0c6b2f004162ac92016f5a75c7`.
+The final H5AD contains 37 nonempty libraries across its 30 donors.
+
+Reproduce without loading expression/ATAC matrices:
+
+```bash
+.venv-p22/bin/python - <<'PY'
+import gzip
+from pathlib import Path
+import h5py
+import numpy as np
+from p22.data.census import sha256_file
+
+path = Path('data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad')
+assert sha256_file(path) == '08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb'
+with h5py.File(path) as handle:
+    obs = handle['obs']
+    category = np.flatnonzero(obs['library/categories'].asstr()[:] == 'B17C2L')[0]
+    rows = np.flatnonzero(obs['library/codes'][:] == category)
+    retained = set(obs['cell_id'].asstr()[rows])
+with gzip.open('data/multiome/GSE305146_B17C2L_barcodes.tsv.gz', 'rt') as stream:
+    raw = {'B17C2L_' + line.strip() for line in stream}
+assert len(retained) == 550 and len(raw) == 652 and retained <= raw
+print({'retained': len(retained), 'raw_only': len(raw - retained)})
+PY
+```
+
 ## Verification
 
 ```bash
@@ -63,7 +105,9 @@ Results: 51 focused tests passed; 529 full-suite tests passed; lint and formatti
 
 ## What remains
 
-Follow [the development checklist](../tasks/todo.md). The first audit stage does not complete M1–M4 scientific acceptance, and M5–M8 remain pending.
+Follow [the development checklist](../tasks/todo.md). The audit does not complete
+M1–M4 scientific acceptance. Reusable M5–M8 training/comparison code has since advanced
+through synthetic verification; accepted real-data protocol and execution remain pending.
 
 1. Reconcile the final training donor/cell set and pin its retained-barcode mapping.
 2. Explain NeMO's release/QC difference and complete the cross-study specimen audit.
@@ -71,6 +115,9 @@ Follow [the development checklist](../tasks/todo.md). The first audit stage does
 4. Establish count semantics and genome-build provenance for the chosen representation.
 5. Record professor approval and freeze the donor-level protocol before condition-specific training.
 
-The existing synthetic safeguards, approval record, historical results, and user notebook changes remain untouched. Neural-network implementation and training remain later gated tasks, not completed deliverables of this slice.
+The existing synthetic safeguards, approval record, historical results, and user
+notebook changes remain untouched. Neural-network code and synthetic training are
+now documented in [the training guide](PAIRED_MULTIOME_TRAINING.md). They do not
+resolve this audit's outstanding real-data gates.
 
 Implementation references: [Python archive streams](https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile), [SciPy Matrix Market reader](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.mmread.html), [10x feature matrices](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/feature-barcode-matrices), and [Signac peak-merging limitations](https://stuartlab.org/signac/articles/merging).

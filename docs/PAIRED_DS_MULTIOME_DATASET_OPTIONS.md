@@ -256,4 +256,10 @@ Measure available disk, extraction overhead, sparse loading, peak memory, and wa
 
 Next deliverable: **a bounded paired-data ingestion and compatibility report**, followed by donor-aware training only when its required gates pass. Keep GSE280175 for RNA replication. Public availability is established; full ingestion, comparable ATAC features, and independent validation are not yet completed.
 
-The [development checklist](../tasks/todo.md) orders source/QC reconciliation, age normalization, sparse ingestion, ATAC compatibility, protocol freeze, donor-aware baseline training, a distinct cross-attention implementation, and locked external evaluation. Data-audit code and a bounded public-file pilot are now available; model development and predictive evaluation remain gated by the unresolved inputs and approval.
+The [development checklist](../tasks/todo.md) orders source/QC reconciliation, age
+normalization, sparse ingestion, ATAC compatibility, protocol freeze, donor-aware
+baseline training, distinct cross-attention, and locked external evaluation.
+Data-audit code, a bounded public-file pilot, and [verified neural-network software](PAIRED_MULTIOME_TRAINING.md)
+are now available. The latter completed 150 synthetic fits locally; it does not
+establish a real-data result. Real training and independent predictive evaluation
+remain gated by unresolved input contracts and the professor-specific approval record.

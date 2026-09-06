@@ -1,18 +1,26 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-05. Data-audit implementation and bounded public-file pilot available; scientific acceptance gates remain open.
+Updated: 2026-09-05. Data-audit and neural-network implementation available; 150 synthetic
+model fits verified locally. Scientific acceptance gates remain open.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
-Commands below remain per-task acceptance targets. Completed development evidence and the runnable command are in [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md). Synthetic fixtures establish software behavior only; public-file audits establish file facts, not disease-model results.
+Commands below remain per-task acceptance targets. Runnable evidence is in
+[the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md) and [training guide](../docs/PAIRED_MULTIOME_TRAINING.md).
+Synthetic fixtures establish software behavior only; public-file audits establish file
+facts, not disease-model results.
 
 ## Current checkpoint
 
-- M1: Identity, library, and count-audit code implemented. All 46 GEO libraries mapped, but final-donor flags disagree with the final CELLxGENE release. Specimen independence and retained-cell mapping remain pending.
+- M1: Identity/library/count-audit code implemented. All 46 GEO libraries mapped; GEO final flags still disagree with the final release. Read-only B17C2L check exactly matches all 550 retained cells to raw barcodes, with 102 raw-only cells. Full cohort reconciliation, retained-cell ingestion, and specimen independence remain pending.
 - M2: Conversion and support checks implemented and tested. NeMO's canonical PCW 13–20 sensitivity has 8 control and 10 trisomy-21 donors before new QC exclusions.
 - M3: Both MEX layouts tested with fixtures; bounded combined-MEX public pilot completed. Raw-library cells are not yet joined to final retained barcodes. NeMO count packages remain unaudited.
 - M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred.
-- M5–M8: Pending. Professor approval record remains blocked and unchanged. No neural-network training or external predictive evaluation performed.
+- M5: Immutable software benchmark settings and strict paired uncertainty implemented. The real scientific protocol and gate-bound acceptance remain pending.
+- M6: Donor-aware training and bounded paired-array adapter implemented. Six neural families and majority control ran on 25 synthetic outer folds. Biological controls and accepted real-data orchestration remain pending.
+- M7: Genuine cross-attention and matched token-concat control implemented; gradients, direction, axes, and ablations tested. Real internal comparison remains pending.
+- M8: Strict donor-paired comparison helper implemented. Final all-development refit, serialized final model/transform artifacts, locked external evaluation, and validation report remain pending.
+- User approved continuing development. Professor approval record remains blocked and unchanged. No condition-specific training or external predictive evaluation performed.
 
 ## M1: Freeze source release, QC, and specimen mapping
 
@@ -104,7 +112,7 @@ Connect accepted real paired inputs to the existing models and training loop whi
 **Acceptance criteria:**
 
 - [ ] Reuse preprocessing fingerprints, `BaselineMLP`, `ConcatFusionModel`, `GatedFusionModel`, and existing cheap controls; fit transforms only inside training partitions and give donors equal training weight.
-- [ ] Add optional donor-aggregated validation scoring to `train_model`, preserving existing behavior for callers without donor IDs. Checkpoint selection and final metrics use the declared donor aggregation.
+- [x] Add optional donor-aggregated validation scoring to `train_model`, preserving existing behavior for callers without donor IDs. Checkpoint selection and fold metrics use the declared donor aggregation; verified on synthetic donor fixtures.
 - [ ] A small internal run reports all eligible baseline families on identical donor splits/cell caps, with parameters, runtime, and negative/inconclusive outcomes; NeMO never selects checkpoints or hyperparameters.
 
 **Verification:** `.venv-p22/bin/python -m pytest -q tests/test_multiome_runner.py tests/test_training.py`; verify donor-balanced selection can differ from cell-level selection, and that changing held-out data cannot refit transforms. Run one bounded real internal fold and record the command/config hash.
@@ -123,7 +131,7 @@ Add a small attention model as a distinct family and compare it with concatenati
 **Acceptance criteria:**
 
 - [ ] Implement the frozen query/key/value direction, tokenization, dimensions, heads, pooling, and output contract with installed PyTorch. More than one key/value token is required; gating remains separately named.
-- [ ] Outputs/gradients are finite, both modalities affect the computation on controlled examples, and modality ablations work; latent token weights are not presented as regulatory mechanisms.
+- [x] Outputs/gradients are finite, both modalities affect the computation on controlled examples, and modality ablations work; latent token weights are not presented as regulatory mechanisms.
 - [ ] Integrate with the real runner; report parameter counts and a concatenation control with matched token encoders, feature budgets, and selection effort. Select architecture/checkpoints using development donors only.
 
 **Verification:** `.venv-p22/bin/python -m pytest -q tests/test_cross_attention.py tests/test_multiome_runner.py`; inspect token axes and an internal comparison with matching inputs and recorded budgets.

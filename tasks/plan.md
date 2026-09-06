@@ -1,12 +1,18 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-05. Status: first data-audit stage implemented; training and scientific gates pending.
+Updated: 2026-09-05. Status: data-audit and donor-aware neural-network code implemented;
+150 synthetic model fits verified locally. Real-data scientific gates remain pending.
 
 ## Scope
 
 Extend P22 toward real RNA+ATAC comparisons using GSE305146 for development and Vuong/NeMO as the reserved external candidate. The scientific contract and source evidence live in [the dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). This plan does not replace [external RNA replication](../docs/EXTERNAL_RNA_REPLICATION_PLAN.md) or change historical results or legacy plan-guard state.
 
-The first ingestion/compatibility report is available through [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md). It records unresolved release/QC questions and incompatible inspected peak spaces. Training still depends on an accepted cohort, a valid ATAC representation, a frozen evaluation protocol, and the recorded professor approval. Discovery of downloadable files is not a completed validation result.
+The ingestion/compatibility report is available through [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md).
+The [training guide](../docs/PAIRED_MULTIOME_TRAINING.md) records donor-aware selection,
+genuine cross-attention, matched token concatenation, paired uncertainty, and a completed
+synthetic benchmark. Real-data training still depends on an accepted cohort, valid ATAC
+representation, frozen scientific protocol, and recorded professor approval. User
+approval to continue development does not itself establish that professor-specific record.
 
 ## Decisions
 
