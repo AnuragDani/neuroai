@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "purpose": "Public file preflight only; no training or approval changes",
+  "hash_note": "SHA-256 values pin the downloaded bytes, not a publisher signature",
+  "geo": {
+    "cohort_id": "GSE305146",
+    "release": "GEO SOFT and supplementary files audited 2026-09-05",
+    "published_donors": 30,
+    "published_cells": 248998,
+    "soft": {
+      "path": "../data/multiome/GSE305146_family.soft.gz",
+      "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/soft/GSE305146_family.soft.gz",
+      "sha256": "8299f15e35f6eda820ac9c9995be94fce648299b12e0ec12e4b7e68d3ab3f087"
+    },
+    "pilot_library": "B17C2L",
+    "pilot_selection": "Small library whose donor and library occur in the final CELLxGENE metadata; raw cells still require a retained-barcode join",
+    "previous_pilot": "B10D1N proved raw-file ingestion but its donor was absent from the final CELLxGENE release; original report preserved",
+    "combined_mex": {
+      "matrix": {
+        "path": "../data/multiome/GSE305146_B17C2L_matrix.mtx.gz",
+        "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_B17C2L_matrix.mtx.gz",
+        "sha256": "6b00b2912a2a8bdc874f0aa0ede5d7966ad1a87439f337128401329c426fb7ab"
+      },
+      "features": {
+        "path": "../data/multiome/GSE305146_B17C2L_features.tsv.gz",
+        "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_B17C2L_features.tsv.gz",
+        "sha256": "ce00c8b9f67609576e2c0d4b5a2feae348d6c43fd6556f1490e9e629acc1ad5d"
+      },
+      "barcodes": {
+        "path": "../data/multiome/GSE305146_B17C2L_barcodes.tsv.gz",
+        "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_B17C2L_barcodes.tsv.gz",
+        "sha256": "ac0475dd27fba640d008dbea0f7d19298dc47244178692ddf94abf67b2e54566"
+      }
+    },
+    "comparison_library": "B10C1Q",
+    "comparison_features": {
+      "path": "../data/multiome/GSE305146_B10C1Q_features.tsv.gz",
+      "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_B10C1Q_features.tsv.gz",
+      "sha256": "a0a43245c9d3a0351ba3641be0bb73f548803805d213d3df892532df4e5a4827"
+    }
+  },
+  "external": {
+    "cohort_id": "nemo:col-umstjg0",
+    "release": "VuongWeber_2025_DSdevctx_metadata_20260128",
+    "published_donors": 26,
+    "published_cells": 113801,
+    "metadata": {
+      "path": "../data/multiome/VuongWeber_DSdevctx_metadata.tar",
+      "source_url": "https://assets.nemoarchive.org/col-umstjg0",
+      "sha256": "72cf7284663aeaee76ed3bab16ce0b414faf82847a883e946e7c2afab21b1526",
+      "member": "VuongWeber_2025_DSdevctx_metadata_20260128/VuongWeber_2025_DSdevctx_metadata_20260128.csv.gz"
+    },
+    "columns": {
+      "donor": "donor_id",
+      "sample": "library_id",
+      "gw": "age_raw"
+    },
+    "condition_map": {"Ctrl": 0, "Ts21": 1},
+    "age_unit": "obstetric_GW",
+    "age_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13225313/"
+  }
+}

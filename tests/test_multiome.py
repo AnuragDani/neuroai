@@ -3,6 +3,9 @@
 import gzip
 import hashlib
 import io
+import json
+import subprocess
+import sys
 import tarfile
 
 import numpy as np
@@ -298,3 +301,132 @@ def test_mex_preserves_unmapped_rna_but_rejects_unmapped_peaks(tmp_path):
     bad = mex_assets(tmp_path, "bad", features=features.replace("Gene Expression", "Peaks"))
     with pytest.raises(ValueError, match="intervals"):
         load_mex(bad, ReadBudget())
+
+
+def test_public_audit_cli_reports_blockers_without_training_or_overwrite(tmp_path):
+    import p22
+
+    manifest = {
+        "schema_version": 1,
+        "geo": {
+            "soft": asset(tmp_path / "family.soft", geo_soft().encode()),
+            "published_donors": 1,
+            "published_cells": 2,
+            "pilot_library": "L1",
+            "combined_mex": mex_assets(tmp_path),
+            "comparison_library": "L2",
+            "comparison_features": mex_assets(tmp_path, "compare")["features"],
+        },
+        "external": {
+            "metadata": asset(tmp_path / "metadata.csv", metadata().to_csv(index=False).encode()),
+            "published_donors": 2,
+            "published_cells": 2,
+            "condition_map": {"Ctrl": 0, "Ts21": 1},
+            "columns": {},
+            "age_unit": "obstetric_GW",
+            "age_source": "documented LMP",
+        },
+    }
+    config = tmp_path / "manifest.json"
+    config.write_text(json.dumps(manifest))
+    output = tmp_path / "audit"
+    command = [
+        sys.executable,
+        str(p22.REPO_ROOT / "scripts/audit_multiome.py"),
+        "--manifest",
+        str(config),
+        "--output-dir",
+        str(output),
+        "--cell-cap",
+        "1",
+    ]
+    approvals_before = p22.APPROVALS_PATH.read_bytes()
+    result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+    assert result.returncode == 0, result.stderr
+    report = json.loads((output / "audit.json").read_text())
+    assert report["preflight_status"] == "COMPLETED"
+    assert report["training_allowed"] is False
+    assert report["external"]["count_difference"] == 1
+    assert report["pilot"]["selected_cells"] == 1
+    assert report["pilot"]["data_kind"] == "raw_library_not_final_qc"
+    assert report["resources"]["elapsed_seconds"] >= 0
+    assert (output / "SUMMARY.md").is_file()
+    assert (output / "manifest.json").read_bytes() == config.read_bytes()
+    assert p22.APPROVALS_PATH.read_bytes() == approvals_before
+    before = (output / "audit.json").read_bytes()
+    second = subprocess.run(command, capture_output=True, text=True, timeout=30)
+    assert second.returncode != 0
+    assert (output / "audit.json").read_bytes() == before
+
+
+def test_asset_pax_headers_cannot_bypass_expansion_budget(tmp_path):
+    from p22.data.multiome import ReadBudget, read_asset
+
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w", format=tarfile.PAX_FORMAT) as archive:
+        member = tarfile.TarInfo("metadata.csv")
+        member.size = 1
+        member.pax_headers = {"comment": "x" * 5_000_000}
+        archive.addfile(member, io.BytesIO(b"x"))
+    spec = asset(tmp_path / "pax.tar.gz", gzip.compress(buffer.getvalue()), member=member.name)
+    with pytest.raises(ValueError, match="expanded"):
+        read_asset(spec, ReadBudget(max_expanded_bytes=16384))
+
+
+@pytest.mark.parametrize("value", [True, 0, -1, 1.5, float("inf"), float("nan")])
+def test_limits_and_published_counts_need_positive_integers(tmp_path, value):
+    from p22.data.multiome import ReadBudget, load_mex
+
+    with pytest.raises(ValueError):
+        ReadBudget(max_input_bytes=value)
+    with pytest.raises(ValueError):
+        metadata_report(normalized(), published_cells=value, expected_donors=2)
+    with pytest.raises(ValueError):
+        metadata_report(normalized(), published_cells=3, expected_donors=value)
+    with pytest.raises(ValueError):
+        load_mex(mex_assets(tmp_path), ReadBudget(), max_nnz=value)
+
+
+def test_budget_counters_cannot_be_injected():
+    from p22.data.multiome import ReadBudget
+
+    with pytest.raises(TypeError):
+        ReadBudget(input_bytes=-1_000_000)
+
+
+def test_manifest_preserves_valid_multiplexed_library():
+    frame = metadata().iloc[[0, 2]].copy()
+    frame["library_id"] = "GEM6"
+    result = normalized(frame)
+    assert result.donor_id.nunique() == 2
+    assert result.library_id.nunique() == 1
+
+
+def test_public_audit_cli_records_truncated_input_failure(tmp_path):
+    import p22
+
+    manifest = {
+        "schema_version": 1,
+        "external": {},
+        "geo": {"soft": asset(tmp_path / "truncated.gz", b"\x1f\x8b\x08")},
+    }
+    config = tmp_path / "manifest.json"
+    config.write_text(json.dumps(manifest))
+    output = tmp_path / "failure"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(p22.REPO_ROOT / "scripts/audit_multiome.py"),
+            "--manifest",
+            str(config),
+            "--output-dir",
+            str(output),
+        ],
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 2, result.stderr
+    report = json.loads((output / "audit.json").read_text())
+    assert report["preflight_status"] == "FAILED"
+    assert report["training_allowed"] is False

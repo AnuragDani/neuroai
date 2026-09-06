@@ -26,13 +26,30 @@ class ReadBudget:
 
     max_input_bytes: int = 64 * 1024**2
     max_expanded_bytes: int = 256 * 1024**2
-    input_bytes: int = 0
-    expanded_bytes: int = 0
-    records: list[dict] = field(default_factory=list)
+    input_bytes: int = field(default=0, init=False)
+    expanded_bytes: int = field(default=0, init=False)
+    records: list[dict] = field(default_factory=list, init=False)
 
     def __post_init__(self):
-        if self.max_input_bytes < 1 or self.max_expanded_bytes < 1:
-            raise ValueError("byte budgets must be positive")
+        _positive_integer(self.max_input_bytes, "input byte budget")
+        _positive_integer(self.max_expanded_bytes, "expanded byte budget")
+
+
+def _positive_integer(value: int, name: str) -> None:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+        raise ValueError(f"{name} must be a positive integer")
+
+
+def _decode_bounded(raw: bytes, budget: ReadBudget) -> bytes:
+    """Charge every materialized layer, including tar headers, before parsing it."""
+    remaining = budget.max_expanded_bytes - budget.expanded_bytes
+    if raw.startswith(b"\x1f\x8b"):
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            raw = stream.read(remaining + 1)
+    if len(raw) > remaining:
+        raise ValueError("expanded byte budget exceeded")
+    budget.expanded_bytes += len(raw)
+    return raw
 
 
 def read_asset(spec: dict, budget: ReadBudget) -> bytes:
@@ -57,10 +74,13 @@ def read_asset(spec: dict, budget: ReadBudget) -> bytes:
     if sha256_file(path) != expected:
         raise ValueError("asset checksum mismatch")
     budget.input_bytes += size
-    remaining = budget.max_expanded_bytes - budget.expanded_bytes
+    expanded_before = budget.expanded_bytes
+    with path.open("rb") as stream:
+        raw = _decode_bounded(stream.read(size + 1), budget)
     if "member" in spec:
-        # ponytail: no filesystem extraction. Large archives need a separately budgeted loader.
-        with tarfile.open(path, "r:*") as archive:
+        # Bound the ENTIRE outer tar before tarfile consumes PAX/GNU extension headers.
+        # ponytail: bounded buffer, no extraction. Large archives need a streaming loader.
+        with tarfile.open(fileobj=io.BytesIO(raw), mode="r:") as archive:
             names, total, target = set(), 0, None
             for member in archive:
                 name = PurePosixPath(member.name)
@@ -72,23 +92,14 @@ def read_asset(spec: dict, budget: ReadBudget) -> bytes:
                 if not (member.isfile() or member.isdir()) or member.issparse():
                     raise ValueError("unsafe archive member type")
                 total += member.size
-                if total > remaining or len(names) > 10_000:
+                if total > len(raw) or len(names) > 10_000:
                     raise ValueError("archive expanded byte/member budget exceeded")
                 if member.name == spec["member"] and member.isfile():
                     target = member
             if target is None:
                 raise ValueError("requested archive member missing")
             with archive.extractfile(target) as stream:
-                raw = stream.read(remaining + 1)
-    else:
-        with path.open("rb") as stream:
-            raw = stream.read(size + 1)
-    if raw.startswith(b"\x1f\x8b"):
-        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
-            raw = stream.read(remaining + 1)
-    if len(raw) > remaining:
-        raise ValueError("expanded byte budget exceeded")
-    budget.expanded_bytes += len(raw)
+                raw = _decode_bounded(stream.read(target.size + 1), budget)
     budget.records.append(
         {
             "path": str(path.resolve()),
@@ -96,7 +107,7 @@ def read_asset(spec: dict, budget: ReadBudget) -> bytes:
             "source_url": spec["source_url"],
             "sha256": expected,
             "input_bytes": size,
-            "expanded_bytes": len(raw),
+            "expanded_bytes": budget.expanded_bytes - expanded_before,
         }
     )
     return raw
@@ -155,6 +166,7 @@ def load_mex(
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.mmread.html
     https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/feature-barcode-matrices
     """
+    _positive_integer(max_nnz, "matrix entry budget")
     features = read_features(assets["features"], budget, modality=modality)
     barcodes = tuple(read_asset(assets["barcodes"], budget).decode().splitlines())
     if (
@@ -335,8 +347,8 @@ def age_overlap_summary(frame: pd.DataFrame, low: float = 13, high: float = 20) 
 
 def metadata_report(frame: pd.DataFrame, *, published_cells: int, expected_donors: int) -> dict:
     """Separate observed metadata counts from published and unverified retained counts."""
-    if published_cells < 1 or expected_donors < 1:
-        raise ValueError("published counts must be positive")
+    _positive_integer(published_cells, "published cells")
+    _positive_integer(expected_donors, "published donors")
     donors = frame.drop_duplicates("donor_id")
     difference = len(frame) - published_cells
     return {

@@ -6,6 +6,7 @@ import hashlib
 import json
 import re
 from collections.abc import Sequence
+from urllib.parse import urlsplit
 
 
 def audit_peak_spaces(
@@ -43,18 +44,22 @@ def audit_peak_spaces(
     sets = [set(values) for values in canonical.values()]
     union, common = set.union(*sets), set.intersection(*sets)
     identical = all(values == sets[0] for values in sets)
-    known_build = all(
-        value not in ("", "unknown", "unverified") for value in genome_builds.values()
-    )
-    same_build = known_build and len(set(genome_builds.values())) == 1
+    builds = [
+        value.strip().lower() if isinstance(value, str) else "" for value in genome_builds.values()
+    ]
+    known_build = all(re.fullmatch(r"grch3[78](?:\.p\d+)?|hg19|hg38", value) for value in builds)
+    same_build = known_build and len(set(builds)) == 1
     same_units = len(set(count_units.values())) == 1 and set(count_units.values()) <= {
         "fragments",
         "tn5_insertions",
     }
     reference = reference or {}
-    documented_reference = reference.get("kind") in ("fixed_reference", "training_fold") and str(
-        reference.get("source", "")
-    ).startswith("https://")
+    reference_url = urlsplit(str(reference.get("source", "")))
+    documented_reference = (
+        reference.get("kind") in ("fixed_reference", "training_fold")
+        and reference_url.scheme == "https"
+        and bool(reference_url.hostname)
+    )
     reasons = []
     if not identical:
         reasons.append("full peak union has unmeasured regions; never zero-fill")

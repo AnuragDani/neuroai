@@ -52,3 +52,17 @@ def test_count_units_and_build_must_match():
         count_units={"left": "fragments", "right": "tn5_insertions"},
     )
     assert result["status"] != "PASS"
+
+
+@pytest.mark.parametrize(
+    "build,url",
+    [("unknown ", "https://example.org"), ("GRCh38", "https://"), (None, "https://example.org")],
+)
+def test_unknown_builds_and_invalid_provenance_never_pass(build, url):
+    result = audit_peak_spaces(
+        {"left": ["chr1:0-10"], "right": ["chr1:0-10"]},
+        genome_builds={"left": build, "right": build},
+        count_units={"left": "tn5_insertions", "right": "tn5_insertions"},
+        reference={"kind": "fixed_reference", "source": url},
+    )
+    assert result["status"] != "PASS"
