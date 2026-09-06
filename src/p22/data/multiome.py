@@ -2,11 +2,214 @@
 
 from __future__ import annotations
 
+import gzip
+import io
 import json
 import re
+import tarfile
+from dataclasses import dataclass, field
+from pathlib import Path, PurePosixPath
+from urllib.parse import urlsplit
 
 import numpy as np
 import pandas as pd
+from scipy import io as scipy_io
+from scipy import sparse
+
+from p22.data.census import sha256_file
+from p22.data.real_cohort import sample_nested_capped_cells
+
+
+@dataclass
+class ReadBudget:
+    """Cumulative file/decompression limits, not an estimate of total process memory."""
+
+    max_input_bytes: int = 64 * 1024**2
+    max_expanded_bytes: int = 256 * 1024**2
+    input_bytes: int = 0
+    expanded_bytes: int = 0
+    records: list[dict] = field(default_factory=list)
+
+    def __post_init__(self):
+        if self.max_input_bytes < 1 or self.max_expanded_bytes < 1:
+            raise ValueError("byte budgets must be positive")
+
+
+def read_asset(spec: dict, budget: ReadBudget) -> bytes:
+    """Read pinned local files or tar members without extraction or network access.
+
+    Archives are untrusted: refuse links, special files, unsafe/duplicate names,
+    and excessive expansion. Python 3.11 extractfile returns a read-only stream:
+    https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile
+    """
+    path = Path(spec["path"])
+    source = urlsplit(spec.get("source_url", ""))
+    if source.scheme != "https" or not source.netloc:
+        raise ValueError("asset needs an HTTPS provenance source_url (never fetched here)")
+    expected = spec.get("sha256", "")
+    if not re.fullmatch(r"[a-f0-9]{64}", expected):
+        raise ValueError("asset needs a pinned SHA-256 checksum")
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("asset path must be a regular local file")
+    size = path.stat().st_size
+    if budget.input_bytes + size > budget.max_input_bytes:
+        raise ValueError("input byte budget exceeded")
+    if sha256_file(path) != expected:
+        raise ValueError("asset checksum mismatch")
+    budget.input_bytes += size
+    remaining = budget.max_expanded_bytes - budget.expanded_bytes
+    if "member" in spec:
+        # ponytail: no filesystem extraction. Large archives need a separately budgeted loader.
+        with tarfile.open(path, "r:*") as archive:
+            names, total, target = set(), 0, None
+            for member in archive:
+                name = PurePosixPath(member.name)
+                if name.is_absolute() or ".." in name.parts or "\\" in member.name:
+                    raise ValueError("unsafe archive path")
+                if str(name) in names:
+                    raise ValueError("duplicate archive path")
+                names.add(str(name))
+                if not (member.isfile() or member.isdir()) or member.issparse():
+                    raise ValueError("unsafe archive member type")
+                total += member.size
+                if total > remaining or len(names) > 10_000:
+                    raise ValueError("archive expanded byte/member budget exceeded")
+                if member.name == spec["member"] and member.isfile():
+                    target = member
+            if target is None:
+                raise ValueError("requested archive member missing")
+            with archive.extractfile(target) as stream:
+                raw = stream.read(remaining + 1)
+    else:
+        with path.open("rb") as stream:
+            raw = stream.read(size + 1)
+    if raw.startswith(b"\x1f\x8b"):
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            raw = stream.read(remaining + 1)
+    if len(raw) > remaining:
+        raise ValueError("expanded byte budget exceeded")
+    budget.expanded_bytes += len(raw)
+    budget.records.append(
+        {
+            "path": str(path.resolve()),
+            "member": spec.get("member"),
+            "source_url": spec["source_url"],
+            "sha256": expected,
+            "input_bytes": size,
+            "expanded_bytes": len(raw),
+        }
+    )
+    return raw
+
+
+def read_features(asset: dict, budget: ReadBudget, *, modality: str | None = None) -> pd.DataFrame:
+    """Read two-/three-column MEX or six-column ARC features without discarding coordinates."""
+    features = pd.read_csv(
+        io.BytesIO(read_asset(asset, budget)),
+        sep="\t",
+        header=None,
+        dtype=str,
+        keep_default_na=False,
+    )
+    if len(features.columns) == 2 and modality in ("Gene Expression", "Peaks"):
+        features[2] = modality
+    if len(features.columns) not in (3, 6) or features.empty:
+        raise ValueError("features need id, name, and explicit modality")
+    names = ["feature_id", "feature_name", "modality"]
+    if len(features.columns) == 6:
+        names += ["chromosome", "start", "end"]
+    features.columns = names
+    if "start" in features:
+        for column in ("start", "end"):
+            values = pd.to_numeric(features[column], errors="raise")
+            if not np.isfinite(values).all() or (values != np.floor(values)).any():
+                raise ValueError("feature coordinates must be finite integers")
+            features[column] = values.astype(np.int64)
+        known = (features.start >= 0) & (features.end > features.start)
+        known &= features.chromosome.str.strip().ne("")
+        unmapped_rna = (
+            features.modality.eq("Gene Expression")
+            & features.start.eq(-1)
+            & features.end.eq(-1)
+            & features.chromosome.eq("")
+        )
+        if (~known & ~unmapped_rna).any():
+            raise ValueError("feature intervals must have nonnegative start < end")
+        features["coordinates_known"] = known
+    if features.feature_id.eq("").any() or features.feature_id.duplicated().any():
+        raise ValueError("empty or duplicate feature identifiers")
+    if not features.modality.isin(["Gene Expression", "Peaks"]).all():
+        raise ValueError("unknown feature modality")
+    if modality and not features.modality.eq(modality).all():
+        raise ValueError("features disagree with declared modality")
+    return features
+
+
+def load_mex(
+    assets: dict, budget: ReadBudget, *, modality: str | None = None, max_nnz: int = 10_000_000
+) -> dict:
+    """Read bounded 10x MEX counts as cells-by-features CSR, never a dense atlas.
+
+    Explicit spmatrix=True matches installed SciPy 1.17.1; reject array-format
+    headers before mmread can allocate a dense matrix. Format references:
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.mmread.html
+    https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/feature-barcode-matrices
+    """
+    features = read_features(assets["features"], budget, modality=modality)
+    barcodes = tuple(read_asset(assets["barcodes"], budget).decode().splitlines())
+    if (
+        not barcodes
+        or len(set(barcodes)) != len(barcodes)
+        or any(not b.strip() or "\t" in b for b in barcodes)
+    ):
+        raise ValueError("empty, duplicate, or malformed barcodes")
+    raw = read_asset(assets["matrix"], budget)
+    rows, columns, entries, storage, kind, symmetry = scipy_io.mminfo(io.BytesIO(raw))
+    if storage != "coordinate" or kind not in ("integer", "real") or symmetry != "general":
+        raise ValueError("only general coordinate count matrices are accepted")
+    if rows != len(features) or columns != len(barcodes):
+        raise ValueError("matrix dimensions disagree with features/barcodes")
+    if max_nnz < 1 or entries < 0 or entries > max_nnz:
+        raise ValueError("matrix entry budget exceeded")
+    counts = scipy_io.mmread(io.BytesIO(raw), spmatrix=True)
+    if (
+        not np.isfinite(counts.data).all()
+        or (counts.data < 0).any()
+        or (counts.data != np.floor(counts.data)).any()
+    ):
+        raise ValueError("counts must be finite nonnegative integers")
+    matrix = counts.T.tocsr()
+    if matrix.nnz != counts.nnz:
+        raise ValueError("duplicate matrix coordinates")
+    return {"matrix": matrix, "features": features, "barcodes": barcodes}
+
+
+def pair_and_cap(rna: dict, atac: dict | None, metadata: pd.DataFrame, *, cap: int) -> dict:
+    """Keep matched nuclei across modalities and sample by donor using existing helpers."""
+    other = rna if atac is None else atac
+    if rna["barcodes"] != other["barcodes"]:
+        raise ValueError("RNA and ATAC ordered barcodes disagree")
+    barcodes = rna["barcodes"]
+    if metadata.barcode.duplicated().any() or set(metadata.barcode) != set(barcodes):
+        raise ValueError("metadata must join each matrix barcode exactly once")
+    ordered = metadata.set_index("barcode").loc[list(barcodes)].reset_index()
+    if not isinstance(cap, int) or isinstance(cap, bool) or cap < 1:
+        raise ValueError("cell cap must be a positive integer")
+    samples = sample_nested_capped_cells(
+        ordered, np.ones(len(ordered), dtype=bool), caps=(cap,), seed=22
+    )[cap]
+    rna_mask = rna["features"].modality.eq("Gene Expression").to_numpy()
+    atac_mask = other["features"].modality.eq("Peaks").to_numpy()
+    if not rna_mask.any() or not atac_mask.any():
+        raise ValueError("both RNA and ATAC features are required")
+    return {
+        "rna": sparse.csr_matrix(rna["matrix"][samples][:, rna_mask]),
+        "atac": sparse.csr_matrix(other["matrix"][samples][:, atac_mask]),
+        "metadata": ordered.iloc[samples].reset_index(drop=True),
+        "source_rows": samples,
+        "rna_features": rna["features"].loc[rna_mask].reset_index(drop=True),
+        "atac_features": other["features"].loc[atac_mask].reset_index(drop=True),
+    }
 
 
 def parse_geo_libraries(soft_text: str) -> pd.DataFrame:

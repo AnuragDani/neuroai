@@ -1,5 +1,10 @@
 """Tiny fixtures prove ingestion contracts, not biological results."""
 
+import gzip
+import hashlib
+import io
+import tarfile
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -113,3 +118,183 @@ def test_manifest_geo_libraries_reject_missing_assay():
 
     with pytest.raises(ValueError, match="both"):
         parse_geo_libraries(geo_soft().split("^SAMPLE = GSM2")[0])
+
+
+def asset(path, data, **extra):
+    path.write_bytes(data)
+    return {
+        "path": str(path),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "source_url": "https://example.org/public-fixture",
+        **extra,
+    }
+
+
+def test_asset_checksum_and_gzip_budget(tmp_path):
+    from p22.data.multiome import ReadBudget, read_asset
+
+    spec = asset(tmp_path / "table.gz", gzip.compress(b"hello"))
+    budget = ReadBudget(max_input_bytes=1000, max_expanded_bytes=5)
+    assert read_asset(spec, budget) == b"hello"
+    assert budget.expanded_bytes == 5
+    assert budget.records[0]["sha256"] == spec["sha256"]
+    with pytest.raises(ValueError, match="expanded"):
+        read_asset(spec, ReadBudget(max_expanded_bytes=4))
+    with pytest.raises(ValueError, match="input"):
+        read_asset(spec, ReadBudget(max_input_bytes=1))
+    with pytest.raises(ValueError, match="checksum"):
+        read_asset(spec | {"sha256": "0" * 64}, ReadBudget())
+
+
+def test_asset_reads_nested_gzip_without_extracting(tmp_path):
+    from p22.data.multiome import ReadBudget, read_asset
+
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w") as archive:
+        data = gzip.compress(b"hello")
+        member = tarfile.TarInfo("folder/metadata.csv.gz")
+        member.size = len(data)
+        archive.addfile(member, io.BytesIO(data))
+    spec = asset(tmp_path / "public.tar", buffer.getvalue(), member=member.name)
+    assert read_asset(spec, ReadBudget()) == b"hello"
+    assert not (tmp_path / "folder").exists()
+
+
+@pytest.mark.parametrize("unsafe", ["../escape", "/absolute", "symlink", "duplicate"])
+def test_asset_rejects_unsafe_archives(tmp_path, unsafe):
+    from p22.data.multiome import ReadBudget, read_asset
+
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w") as archive:
+        member = tarfile.TarInfo(unsafe)
+        if unsafe == "symlink":
+            member.type, member.linkname = tarfile.SYMTYPE, "target"
+        archive.addfile(member)
+        if unsafe == "duplicate":
+            archive.addfile(member)
+    spec = asset(tmp_path / "bad.tar", buffer.getvalue(), member=unsafe)
+    with pytest.raises(ValueError, match="unsafe|duplicate"):
+        read_asset(spec, ReadBudget())
+
+
+def mex_assets(tmp_path, prefix="", *, matrix=None, features=None, barcodes="AA\nBB\n"):
+    return {
+        "matrix": asset(
+            tmp_path / f"{prefix}matrix.mtx",
+            (
+                matrix
+                or "%%MatrixMarket matrix coordinate integer general\n3 2 3\n1 1 2\n2 2 3\n3 1 4\n"
+            ).encode(),
+        ),
+        "features": asset(
+            tmp_path / f"{prefix}features.tsv",
+            (
+                features
+                or "gene1\tG1\tGene Expression\nchr1:0-5\tchr1:0-5\tPeaks\n"
+                "chr1:5-10\tchr1:5-10\tPeaks\n"
+            ).encode(),
+        ),
+        "barcodes": asset(tmp_path / f"{prefix}barcodes.tsv", barcodes.encode()),
+    }
+
+
+def test_mex_combined_and_separate_layouts_give_same_paired_cells(tmp_path):
+    from scipy import sparse
+
+    from p22.data.multiome import ReadBudget, load_mex, pair_and_cap
+
+    meta = normalized(metadata().iloc[[0, 2]])
+    combined = load_mex(mex_assets(tmp_path), ReadBudget())
+    paired = pair_and_cap(combined, None, meta, cap=1)
+    assert sparse.isspmatrix_csr(paired["rna"])
+    assert paired["rna"].toarray().tolist() == [[2], [0]]
+    assert paired["atac"].toarray().tolist() == [[0, 4], [3, 0]]
+    rna = load_mex(
+        mex_assets(
+            tmp_path,
+            "r",
+            matrix="%%MatrixMarket matrix coordinate integer general\n1 2 1\n1 1 2\n",
+            features="gene1\tG1\n",
+        ),
+        ReadBudget(),
+        modality="Gene Expression",
+    )
+    atac = load_mex(
+        mex_assets(
+            tmp_path,
+            "a",
+            matrix="%%MatrixMarket matrix coordinate integer general\n2 2 2\n1 2 3\n2 1 4\n",
+            features="chr1:0-5\tchr1:0-5\nchr1:5-10\tchr1:5-10\n",
+        ),
+        ReadBudget(),
+        modality="Peaks",
+    )
+    split = pair_and_cap(rna, atac, meta, cap=1)
+    assert (split["rna"] != paired["rna"]).nnz == 0
+    assert (split["atac"] != paired["atac"]).nnz == 0
+
+
+@pytest.mark.parametrize(
+    "bad", ["shape", "negative", "fraction", "duplicate", "dense", "barcodes", "budget"]
+)
+def test_mex_rejects_invalid_counts_before_pairing(tmp_path, bad):
+    from p22.data.multiome import ReadBudget, load_mex
+
+    matrix = "%%MatrixMarket matrix coordinate integer general\n3 2 1\n1 1 1\n"
+    if bad == "shape":
+        matrix = matrix.replace("3 2 1", "900000000 2 1")
+    elif bad == "negative":
+        matrix = matrix.replace("1 1 1", "1 1 -1")
+    elif bad == "fraction":
+        matrix = matrix.replace("integer", "real").replace("1 1 1", "1 1 0.5")
+    elif bad == "duplicate":
+        matrix = matrix.replace("3 2 1", "3 2 2") + "1 1 1\n"
+    elif bad == "dense":
+        matrix = "%%MatrixMarket matrix array integer general\n3 2\n1\n1\n1\n1\n1\n1\n"
+    spec = mex_assets(
+        tmp_path, matrix=matrix, barcodes="AA\nAA\n" if bad == "barcodes" else "AA\nBB\n"
+    )
+    with pytest.raises(ValueError):
+        load_mex(spec, ReadBudget(), max_nnz=0 if bad == "budget" else 100)
+
+
+def test_mex_refuses_mismatched_barcode_order(tmp_path):
+    from p22.data.multiome import ReadBudget, load_mex, pair_and_cap
+
+    combined = load_mex(mex_assets(tmp_path), ReadBudget())
+    reverse = load_mex(mex_assets(tmp_path, "other", barcodes="BB\nAA\n"), ReadBudget())
+    with pytest.raises(ValueError, match="ordered barcodes"):
+        pair_and_cap(combined, reverse, normalized(metadata().iloc[[0, 2]]), cap=1)
+
+
+def test_mex_preserves_six_column_arc_coordinates(tmp_path):
+    from p22.data.multiome import ReadBudget, load_mex
+
+    spec = mex_assets(
+        tmp_path,
+        features=(
+            "gene1\tG1\tGene Expression\tchr1\t0\t10\n"
+            "chr1:0-5\tchr1:0-5\tPeaks\tchr1\t0\t5\n"
+            "chr1:5-10\tchr1:5-10\tPeaks\tchr1\t5\t10\n"
+        ),
+    )
+    block = load_mex(spec, ReadBudget())
+    assert block["features"].chromosome.tolist() == ["chr1"] * 3
+    assert block["features"].start.tolist() == [0, 0, 5]
+
+
+def test_mex_preserves_unmapped_rna_but_rejects_unmapped_peaks(tmp_path):
+    from p22.data.multiome import ReadBudget, load_mex
+
+    features = (
+        "gene1\tMT-ND1\tGene Expression\t\t-1\t-1\n"
+        "chr1:0-5\tchr1:0-5\tPeaks\tchr1\t0\t5\n"
+        "chr1:5-10\tchr1:5-10\tPeaks\tchr1\t5\t10\n"
+    )
+    spec = mex_assets(tmp_path, features=features)
+    block = load_mex(spec, ReadBudget())
+    assert not block["features"].coordinates_known.iloc[0]
+    assert block["features"].start.iloc[0] == -1
+    bad = mex_assets(tmp_path, "bad", features=features.replace("Gene Expression", "Peaks"))
+    with pytest.raises(ValueError, match="intervals"):
+        load_mex(bad, ReadBudget())
