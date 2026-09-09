@@ -12,6 +12,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.stats import spearmanr
 
 from p22.data.census import sha256_file
 from p22.data.real_cohort import (
@@ -312,3 +313,170 @@ def fit_discovery_effects(
         expression_floor_reapplied_in_bootstrap=True,
     )
     return DiscoveryEffects(effects, log_cpm, cpm, design, labels, audit)
+
+
+def _metrics(
+    coefficient: np.ndarray, statistic: np.ndarray, external: np.ndarray, top_n: int
+) -> tuple[float, float, np.ndarray]:
+    if np.ptp(coefficient) == 0 or np.ptp(external) == 0:
+        raise ValueError("constant effect vector has undefined Spearman correlation")
+    # Gene rows are alphabetical, so stable sorting fixes ties without randomness.
+    selected = np.argsort(-np.abs(statistic), kind="stable")[:top_n]
+    rho = float(spearmanr(coefficient, external).statistic)
+    agreement = float(np.mean(np.sign(coefficient[selected]) == np.sign(external[selected])))
+    if not np.isfinite(rho):
+        raise ValueError("non-finite Spearman correlation")
+    return rho, agreement, selected
+
+
+def _comparison_outcome(rho_low: float, rho_high: float, p_upper: float, p_lower: float) -> str:
+    if rho_low > 0 and p_upper <= NOMINAL_ALPHA:
+        return "directionally_supported"
+    if rho_high < 0 and p_lower <= NOMINAL_ALPHA:
+        return "discordant"
+    return "inconclusive"
+
+
+def summarize_headline_outcome(comparisons: Sequence[dict]) -> str:
+    """Apply the frozen descriptive 3-of-4 rule; no claimed family-wise calibration."""
+    if len(comparisons) != len(COMPARISONS):
+        raise ValueError("headline requires exactly four comparisons")
+    outcomes = [row["scientific_outcome"] for row in comparisons]
+    if any(row.get("execution_status") == "failed" for row in comparisons):
+        return "not_evaluated"
+    for label, opposite in [
+        ("directionally_supported", "discordant"),
+        ("discordant", "directionally_supported"),
+    ]:
+        if outcomes.count(label) >= 3 and opposite not in outcomes:
+            return label
+    return "inconclusive"
+
+
+def compare_effect_directions(
+    discovery: DiscoveryEffects,
+    external: pd.DataFrame,
+    *,
+    top_n: int = TOP_N,
+    n_bootstrap: int = N_BOOTSTRAP,
+    n_permutations: int = N_PERMUTATIONS,
+    seed: int | np.random.SeedSequence = SEED,
+    min_shared_genes: int = MIN_SHARED_GENES,
+) -> dict:
+    """Refit class-stratified donor bootstraps and permute the entire external vector.
+
+    Bootstrap eligibility is conditional on the observed shared-gene universe;
+    the class expression floor is reapplied and the top-N ranking is recomputed
+    within each replicate. No external p-value or effect magnitude sets a filter.
+    """
+    for value in (top_n, n_bootstrap, n_permutations, min_shared_genes):
+        if isinstance(value, bool) or not isinstance(value, (int, np.integer)) or value < 1:
+            raise ValueError(
+                "resampling counts, top_n, and shared-gene floor must be positive integers"
+            )
+    if not {"gene", "avg_log2FC"}.issubset(external.columns):
+        raise ValueError("external effects schema requires gene and avg_log2FC")
+    clean = external[["gene", "avg_log2FC"]].copy()
+    clean["gene"] = _symbols(clean.gene)
+    duplicate = clean.gene.duplicated(keep=False) & clean.gene.ne("")
+    clean = clean.loc[~duplicate & clean.gene.ne("")]
+    clean["avg_log2FC"] = pd.to_numeric(clean.avg_log2FC, errors="raise")
+    if not np.isfinite(clean.avg_log2FC.to_numpy(dtype=float)).all():
+        raise ValueError("external effects must be finite")
+    joined = discovery.effects.merge(clean, on="gene", validate="one_to_one").sort_values("gene")
+    joined = joined.reset_index(drop=True)
+    result = {
+        **discovery.audit,
+        **external.attrs,
+        "dropped_duplicate_external": int(duplicate.sum())
+        + external.attrs.get("dropped_duplicate_external", 0),
+        "n_shared_genes": len(joined),
+        "joined_effects": joined,
+        "execution_status": "failed",
+        "scientific_outcome": "not_evaluated",
+        "bootstrap_requested": n_bootstrap,
+        "permutations_requested": n_permutations,
+        "bootstrap_failed": 0,
+        "bootstrap_failure_reasons": {},
+        "bootstrap_reranked_top_set_changes": 0,
+        "bootstrap_gene_universe": "observed shared genes; expression floor reapplied",
+        "top_n": top_n,
+    }
+    required = max(min_shared_genes, top_n)
+    if len(joined) < required:
+        return result | {"reason": f"fewer than {required} shared eligible genes"}
+    effect = joined.coefficient.to_numpy(dtype=float)
+    external_effect = joined.avg_log2FC.to_numpy(dtype=float)
+    try:
+        rho, agreement, selected = _metrics(
+            effect, joined.t_statistic.to_numpy(), external_effect, top_n
+        )
+    except ValueError as exc:
+        return result | {"reason": str(exc)}
+    result.update(spearman_rho=rho, top100_direction_agreement=agreement)
+    positions = pd.Index(discovery.effects.gene).get_indexer(joined.gene)
+    log_cpm, cpm = discovery.log_cpm[:, positions], discovery.cpm[:, positions]
+    # Clone a supplied child sequence: reusing the same seed object must not advance it.
+    # https://numpy.org/doc/1.26/reference/random/parallel.html
+    sequence = (
+        np.random.SeedSequence(seed.entropy, spawn_key=seed.spawn_key, pool_size=seed.pool_size)
+        if isinstance(seed, np.random.SeedSequence)
+        else np.random.SeedSequence(seed)
+    )
+    bootstrap_rng, permutation_rng = [np.random.default_rng(child) for child in sequence.spawn(2)]
+    classes = [np.flatnonzero(discovery.labels == label) for label in (0, 1)]
+    bootstrap = []
+    shared_sizes = []
+    for _ in range(n_bootstrap):
+        rows = np.concatenate(
+            [bootstrap_rng.choice(group, size=len(group), replace=True) for group in classes]
+        )
+        try:
+            coefficient, _, statistic = _fit_ols(log_cpm[rows], discovery.design[rows])
+            eligible = _expression_floor(cpm[rows], discovery.labels[rows])
+            if eligible.sum() < required:
+                raise ValueError("bootstrap shared-gene floor")
+            boot_rho, boot_agreement, boot_selected = _metrics(
+                coefficient[eligible], statistic[eligible], external_effect[eligible], top_n
+            )
+            selected_positions = np.flatnonzero(eligible)[boot_selected]
+            result["bootstrap_reranked_top_set_changes"] += int(
+                set(selected_positions) != set(selected)
+            )
+            bootstrap.append((boot_rho, boot_agreement))
+            shared_sizes.append(int(eligible.sum()))
+        except (ValueError, np.linalg.LinAlgError) as exc:
+            result["bootstrap_failed"] += 1
+            reasons = result["bootstrap_failure_reasons"]
+            reasons[str(exc)] = reasons.get(str(exc), 0) + 1
+    result["bootstrap_successful"] = len(bootstrap)
+    result["bootstrap_failure_fraction"] = result["bootstrap_failed"] / n_bootstrap
+    if result["bootstrap_failure_fraction"] > MAX_FAILED_BOOTSTRAP_FRACTION:
+        return result | {"reason": "more than 5% failed bootstrap fits"}
+    intervals = np.quantile(np.asarray(bootstrap), [0.025, 0.975], axis=0)
+    null = np.array(
+        [
+            np.mean(
+                np.sign(effect[selected])
+                == np.sign(permutation_rng.permutation(external_effect)[selected])
+            )
+            for _ in range(n_permutations)
+        ]
+    )
+    upper = float((1 + np.count_nonzero(null >= agreement)) / (1 + n_permutations))
+    lower = float((1 + np.count_nonzero(null <= agreement)) / (1 + n_permutations))
+    result.update(
+        spearman_ci_low=float(intervals[0, 0]),
+        spearman_ci_high=float(intervals[1, 0]),
+        agreement_ci_low=float(intervals[0, 1]),
+        agreement_ci_high=float(intervals[1, 1]),
+        agreement_permutation_p_upper=upper,
+        agreement_permutation_p_lower=lower,
+        agreement_null_mean=float(null.mean()),
+        bootstrap_shared_genes_min=min(shared_sizes),
+        bootstrap_shared_genes_max=max(shared_sizes),
+        execution_status="completed",
+        scientific_outcome=_comparison_outcome(intervals[0, 0], intervals[1, 0], upper, lower),
+        reason="completed frozen summary-effect direction comparison",
+    )
+    return result
