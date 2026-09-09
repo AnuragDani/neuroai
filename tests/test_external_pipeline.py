@@ -71,7 +71,9 @@ def test_replication_extends_alias_and_preserves_g8(inputs, tmp_path):
     )
     assert result["execution_status"] == "completed", result["rows"]
     assert alias is state.validation_rows and len(alias) == 5
-    assert state.validation == {"status": "INCONCLUSIVE"}
+    assert state.validation["status"] == "INCONCLUSIVE"
+    assert state.validation["processed_rna_summary"]["execution_status"] == "completed"
+    assert state.validation["processed_rna_summary"]["external_sha256"] == sha256_file(book)
     assert result["external_matrix_ingested"] is False
     assert len(result["gene_tables"]) == 4
     assert {row["n_ds_donors"] for row in result["rows"]} == {10}

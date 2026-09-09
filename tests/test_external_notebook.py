@@ -5,6 +5,7 @@ import hashlib
 import importlib.util
 import io
 import json
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -13,6 +14,7 @@ import pandas as pd
 import pytest
 
 from p22.data.census import sha256_file
+from p22.eval.gates import GateBoard, make_gate
 
 matplotlib.use("Agg")
 ROOT = Path(__file__).resolve().parents[1]
@@ -88,7 +90,16 @@ def test_external_cell_checks_hash_reuses_cache_and_preserves_alias(tmp_path, mo
 
     monkeypatch.setattr("urllib.request.urlopen", open_source)
     monkeypatch.setattr("matplotlib.pyplot.show", lambda: None)
-    state = SimpleNamespace(keep_mask=[True], validation_rows=[{"analysis": "existing"}])
+    state = SimpleNamespace(
+        keep_mask=[True],
+        validation_rows=[{"analysis": "existing"}],
+        validation={
+            "status": "INCONCLUSIVE",
+            "processed_rna_summary": {"execution_status": "completed"},
+        },
+    )
+    board = GateBoard()
+    board.set(make_gate("G8", "INCONCLUSIVE"))
     alias = state.validation_rows
     populations = ("oRG", "vRG", "CP", "IP")
 
@@ -123,6 +134,8 @@ def test_external_cell_checks_hash_reuses_cache_and_preserves_alias(tmp_path, mo
         "sha256_file": sha256_file,
         "hashlib": hashlib,
         "pd": pd,
+        "board": board,
+        "replace": replace,
     }
     exec(module.CELL_EXTERNAL, namespace)
     assert namespace["external_rna_result"]["execution_status"] == "failed"
@@ -134,6 +147,9 @@ def test_external_cell_checks_hash_reuses_cache_and_preserves_alias(tmp_path, mo
     assert len(calls) == 2
     assert len(alias) == 5
     assert namespace["external_rna_result"]["headline_outcome"] == "inconclusive"
+    assert board.get("G8").status == "INCONCLUSIVE"
+    assert "verified and analyzed" in board.get("G8").notes
+    assert board.get("G8").evidence["processed_rna_summary"]["execution_status"] == "completed"
     figure = tmp_path / "output/runs/real_analysis_22/figures/external_rna_concordance.png"
     assert figure.is_file()
     exec(module.CELL_EXTERNAL, namespace)

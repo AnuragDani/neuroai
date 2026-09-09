@@ -119,7 +119,7 @@ def build_validation_report(
     if not external_matrix_ingested:
         unknowns.append(
             "no external expression matrix was downloaded or harmonised; external "
-            "validation is UNKNOWN"
+            "predictive validation is UNKNOWN"
         )
     if internal_holdout_measured:
         unknowns.append(
@@ -131,7 +131,9 @@ def build_validation_report(
     elif rna.available is False:
         blocking.append(f"{PRIMARY_RNA_VALIDATION} unavailable")
     elif rna.available is None:
-        unknowns.append(f"{PRIMARY_RNA_VALIDATION} availability not verified locally")
+        unknowns.append(
+            f"{PRIMARY_RNA_VALIDATION} raw expression-matrix availability not verified locally"
+        )
 
     if blocking or marker_set is None or not findings_available:
         status = "BLOCKED"

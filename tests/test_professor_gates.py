@@ -112,6 +112,16 @@ def test_validation_blocked_without_approval_and_marker_set():
     assert "not independent multimodal" in report.claim_boundary
 
 
+def test_validation_unknowns_specify_raw_matrix_not_processed_summary():
+    report = build_validation_report(
+        marker_set="panel", findings_available=True, approval_present=True
+    )
+    assert (
+        "GSE280175 raw expression-matrix availability not verified locally" in report.open_questions
+    )
+    assert any("predictive validation is UNKNOWN" in item for item in report.open_questions)
+
+
 def test_evidence_package_writes_required_files(tmp_path: Path):
     package = EvidencePackage(
         run_dir=tmp_path / "run",

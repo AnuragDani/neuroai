@@ -811,7 +811,7 @@ def run_real_validation(h5ad_path: str | Path, state: RealAnalysisState) -> Real
     )
     state.headline.append(
         f"G8={validation.status}: internal panels measured; "
-        "external validation UNKNOWN/INCONCLUSIVE"
+        "external matrix/predictive validation UNKNOWN/INCONCLUSIVE"
     )
     return state
 
@@ -954,6 +954,13 @@ def run_external_rna_replication(
             raise ValueError("; ".join(failed))
         result["headline_outcome"] = summarize_headline_outcome(rows)
         result["execution_status"] = "completed"
+        state.validation["processed_rna_summary"] = {
+            "execution_status": "completed",
+            "headline_outcome": result["headline_outcome"],
+            "external_sha256": source_hash,
+            "evidence_scope": EVIDENCE_SCOPE,
+            "external_matrix_ingested": False,
+        }
         for row in rows:
             row["headline_outcome"] = result["headline_outcome"]
     except (ValueError, RuntimeError, OSError, KeyError, np.linalg.LinAlgError) as exc:

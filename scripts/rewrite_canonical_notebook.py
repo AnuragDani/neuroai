@@ -862,6 +862,11 @@ if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_sta
         )
     except (OSError, ValueError) as exc:
         external_rna_result.update(execution_status="failed", reason=str(exc))
+    if external_rna_result["execution_status"] == "completed":
+        board.set(replace(
+            board.get("G8"), evidence=dict(real_state.validation),
+            notes="Processed Supplementary Data 2 verified and analyzed; raw external matrix not ingested. Predictive/multimodal validation remains unknown.",
+        ))
     if external_rna_result["rows"]:
         from IPython.display import display
         display(pd.DataFrame(external_rna_result["rows"]))
