@@ -30,7 +30,11 @@ from p22.data.multiome import (  # noqa: E402
     read_asset,
     read_features,
 )
-from p22.data.multiome_retention import read_retained_release, retained_mask  # noqa: E402
+from p22.data.multiome_retention import (  # noqa: E402
+    read_retained_release,
+    reconcile_author_libraries,
+    retained_mask,
+)
 from p22.data.resources import measure_stage  # noqa: E402
 
 
@@ -92,6 +96,13 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         geo_report["retained_release"] = release_report
         geo_report["retained_cells"] = release_report["release_cells"]
         geo_report["retained_cell_barcode_mapping"] = "PILOT_EXACT_RELEASE_JOIN"
+        if "author_filtered_libraries" in geo:
+            author = pd.read_csv(
+                io.BytesIO(read_asset(local(geo["author_filtered_libraries"]), budget))
+            )
+            geo_report["author_release_reconciliation"] = reconcile_author_libraries(
+                author, release_report["library_manifest"]
+            )
     paired = pair_and_cap(block, None, pilot_metadata, cap=cap, keep=keep)
     comparison = read_features(local(geo["comparison_features"]), budget)
     peak_sets = {
@@ -106,7 +117,7 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         count_units={key: "unverified" for key in peak_sets},
     )
     blockers = [
-        "GEO full-cohort raw barcode coverage and final-flag difference explanation remain pending",
+        "GEO full-cohort raw barcode coverage and per-cell QC reproduction remain pending",
         "NeMO release/QC reconciliation, specimen provenance, and paired matrices remain pending",
         "ATAC shared-region/count contract and donor-level experiment protocol remain pending",
     ]

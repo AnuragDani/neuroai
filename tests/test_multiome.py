@@ -457,6 +457,23 @@ def test_retained_release_filters_before_cap_and_keeps_raw_row_positions(tmp_pat
         retained_mask(bad, retained)
 
 
+def test_author_filtered_libraries_reconcile_membership_not_raw_qc():
+    from p22.data.multiome_retention import reconcile_author_libraries
+
+    manifest = [
+        {"library_id": "L1", "donor_id": "d1", "condition": "CON", "retained_cells": 10},
+        {"library_id": "L2", "donor_id": "d2", "condition": "DS", "retained_cells": 0},
+    ]
+    author = pd.DataFrame({"library": ["L1"], "sample_name": ["d1"], "group": ["CON"]})
+    result = reconcile_author_libraries(author, manifest)
+    assert result["status"] == "EXACT_AUTHOR_FILTERED_RELEASE_MATCH"
+    assert result["raw_qc_reproduced"] is False
+    with pytest.raises(ValueError, match="donor"):
+        reconcile_author_libraries(author.assign(sample_name="wrong"), manifest)
+    with pytest.raises(ValueError, match="library"):
+        reconcile_author_libraries(pd.concat([author, author]), manifest)
+
+
 def test_manifest_preserves_valid_multiplexed_library():
     frame = metadata().iloc[[0, 2]].copy()
     frame["library_id"] = "GEM6"

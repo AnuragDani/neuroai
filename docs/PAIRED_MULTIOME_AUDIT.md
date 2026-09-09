@@ -43,7 +43,9 @@ The loader buffers bounded files before sparse parsing. It is **not** a full-atl
 
 ## Measured public-file results
 
-Primary evidence: [audit summary](../reports/generated/multiome/audit_20260908_retained/SUMMARY.md), [full audit](../reports/generated/multiome/audit_20260908_retained/audit.json).
+Primary retained-pilot evidence: [audit summary](../reports/generated/multiome/audit_20260908_retained/SUMMARY.md), [full audit](../reports/generated/multiome/audit_20260908_retained/audit.json).
+The subsequent [author-reconciled audit](../reports/generated/multiome/audit_20260908_author_reconciled/audit.json)
+adds the pinned author filtered-library table below.
 
 | Check | Observed result | Meaning |
 |---|---|---|
@@ -67,7 +69,32 @@ list; **102 of 652** raw cells are not retained. The retained donor is
 exclusions, the complete cohort's release history, or a new QC policy. The audit
 now applies this mask, rejects missing retained cells or mismatched donor/condition
 labels, and records retained counts for all 46 GEO libraries. Full raw-file coverage
-and the explanation of release differences remain pending.
+and per-cell QC reproduction remain pending. The subsequent source-table check
+below reconciles the final library/donor membership.
+
+### Author-defined final cohort, checked 2026-09-08
+
+The [author's downstream filtered table](https://github.com/lattkem1/Down_Syndrome_Multiome/blob/227f51b4e63c6a7d9c73be44f06ab21ac11e45ba/B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv)
+has exactly the final H5AD's 37 libraries and 30 donors. Every library's donor and
+condition agree. This table is an input to the author's
+[non-cortical subsetting step](https://github.com/lattkem1/Down_Syndrome_Multiome/blob/227f51b4e63c6a7d9c73be44f06ab21ac11e45ba/C_subsetting_all_cells_non_cx_excl_scripts/C01_v040_subsetting_reintegration.R).
+Use that downstream release membership, not GEO's broader inclusion flags, to
+define the cohort. The audit now checks this automatically and rejects mismatches.
+
+Pinned source commit: `227f51b4e63c6a7d9c73be44f06ab21ac11e45ba`.
+Table: 6,304 bytes; SHA-256 `7f2113cf235795ab1f06a9999069a25b1c713d42f3c1dc913df3bcd8f59c412c`.
+Latest audit: 2.021 seconds, 0.5671 GB peak RSS, 1,582,118,205 input bytes.
+This is membership reconciliation, not a replay of every original QC decision.
+The author's per-cell/library QC script and local Seurat checkpoint names were
+inspected; no downloadable shared-region count checkpoint was established from
+those scripts. Raw per-library peak unions remain invalid for exact comparison.
+
+NeMO's [public RNA](https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_RNAseq/human/processed/counts/)
+and [ATAC](https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/)
+listings were rechecked. A direct manifest request failed TLS; count packages were
+not fetched in this increment. No evidence was found here resolving the 3,731-cell
+release discrepancy or specimen-level independence. Those are pending, not failed
+biological replication. No controlled access requested and no authors contacted.
 
 Pinned H5AD SHA-256: `08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb`.
 Raw-barcode hash remains the value in [the audit manifest](../configs/paired_multiome_audit.json).

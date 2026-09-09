@@ -98,3 +98,34 @@ def retained_mask(raw_metadata: pd.DataFrame, retained: pd.DataFrame):
             "\n".join(sorted(final.release_cell_id)).encode()
         ).hexdigest(),
     }
+
+
+def reconcile_author_libraries(author: pd.DataFrame, release_manifest: list[dict]) -> dict:
+    """Check the author's downstream non-cortical-exclusion table against final membership."""
+    author = author.rename(
+        columns={"library": "library_id", "sample_name": "donor_id", "group": "condition"}
+    )
+    for column in ("library_id", "donor_id", "condition"):
+        if (
+            column not in author
+            or author[column].isna().any()
+            or author[column].astype(str).str.strip().eq("").any()
+        ):
+            raise ValueError(f"missing author {column}")
+    if author.library_id.duplicated().any():
+        raise ValueError("duplicate author library")
+    observed = pd.DataFrame(release_manifest).loc[lambda frame: frame.retained_cells.gt(0)]
+    if set(author.library_id) != set(observed.library_id):
+        raise ValueError("author and retained library sets disagree")
+    author, observed = (frame.set_index("library_id").sort_index() for frame in (author, observed))
+    for column in ("donor_id", "condition"):
+        if not np.array_equal(author[column], observed[column]):
+            raise ValueError(f"author and retained {column} disagree")
+    return {
+        "status": "EXACT_AUTHOR_FILTERED_RELEASE_MATCH",
+        "n_libraries": len(author),
+        "n_donors": int(author.donor_id.nunique()),
+        "raw_qc_reproduced": False,
+        "interpretation": "Author downstream filtered table matches final membership; "
+        "GEO final flags are not used as the retained-cohort definition",
+    }

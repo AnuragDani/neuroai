@@ -19,6 +19,11 @@
       "source_url": "https://datasets.cellxgene.cziscience.com/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
       "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb"
     },
+    "author_filtered_libraries": {
+      "path": "../data/multiome/Lattke_B02_gr_tab_filtered_non_cx_excl_227f51b.csv",
+      "source_url": "https://raw.githubusercontent.com/lattkem1/Down_Syndrome_Multiome/227f51b4e63c6a7d9c73be44f06ab21ac11e45ba/B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv",
+      "sha256": "7f2113cf235795ab1f06a9999069a25b1c713d42f3c1dc913df3bcd8f59c412c"
+    },
     "previous_pilot": "B10D1N proved raw-file ingestion but its donor was absent from the final CELLxGENE release; original report preserved",
     "combined_mex": {
       "matrix": {
