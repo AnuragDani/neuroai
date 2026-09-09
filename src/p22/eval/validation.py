@@ -61,10 +61,13 @@ def default_validation_resources() -> list[ValidationResource]:
             accession=PRIMARY_RNA_VALIDATION,
             modality="RNA-only",
             role="independent_rna_validation",
-            n_control=3,
-            n_case=3,
+            n_control=5,
+            n_case=5,
             available=None,
-            notes="mid-gestational prenatal human DS brain; too small for multimodal pooling",
+            notes=(
+                "5+5 prenatal human snRNA-seq donors; not paired RNA/ATAC validation. "
+                "https://www.nature.com/articles/s41467-025-63752-0"
+            ),
         ),
         ValidationResource(
             accession=SCALE_POOL_CANDIDATE,
@@ -74,11 +77,17 @@ def default_validation_resources() -> list[ValidationResource]:
             notes="same-study scale expansion only after disjointness audit",
         ),
         ValidationResource(
-            accession="UNKNOWN",
+            accession="nemo:col-umstjg0",
             modality="paired_RNA_ATAC",
             role="independent_multimodal_validation",
-            available=False,
-            notes="no approved independent paired RNA/ATAC validation accession",
+            n_control=13,
+            n_case=13,
+            available=None,
+            notes=(
+                "Open processed candidate; release/QC, specimen independence and common "
+                "ATAC counts pending. Metadata has 117532 cells, published 113801. "
+                "https://assets.nemoarchive.org/col-umstjg0"
+            ),
         ),
     ]
 

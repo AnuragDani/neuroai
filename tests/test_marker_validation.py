@@ -12,9 +12,19 @@ from p22.eval.marker_validation import (
     CONTROL_PANEL_NAME,
     evaluate_panel,
 )
-from p22.eval.validation import build_validation_report
+from p22.eval.validation import build_validation_report, default_validation_resources
 
 N_PER_CLASS = 8
+
+
+def test_registry_names_rna_and_multiome_candidates_without_claiming_acceptance():
+    resources = {item.accession: item for item in default_validation_resources()}
+    assert (resources["GSE280175"].n_control, resources["GSE280175"].n_case) == (5, 5)
+    candidate = resources["nemo:col-umstjg0"]
+    assert (candidate.n_control, candidate.n_case) == (13, 13)
+    assert candidate.available is None
+    assert "pending" in candidate.notes
+    assert resources["GSE305153"].role == "scale_pool_candidate_not_independent"
 
 
 def _panel_frame(dosage_effect: float, control_effect: float = 0.0, seed: int = 0):
