@@ -30,6 +30,7 @@ from p22.data.multiome import (  # noqa: E402
     read_asset,
     read_features,
 )
+from p22.data.multiome_retention import read_retained_release, retained_mask  # noqa: E402
 from p22.data.resources import measure_stage  # noqa: E402
 
 
@@ -82,7 +83,16 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         age_unit="PCW",
         age_source=geo["soft"]["source_url"] + "#dev-stage-pcw",
     )
-    paired = pair_and_cap(block, None, pilot_metadata, cap=cap)
+    keep, retention = None, None
+    if "retained_release" in geo:
+        retained, release_report = read_retained_release(
+            local(geo["retained_release"]), budget, libraries
+        )
+        keep, retention = retained_mask(pilot_metadata, retained)
+        geo_report["retained_release"] = release_report
+        geo_report["retained_cells"] = release_report["release_cells"]
+        geo_report["retained_cell_barcode_mapping"] = "PILOT_EXACT_RELEASE_JOIN"
+    paired = pair_and_cap(block, None, pilot_metadata, cap=cap, keep=keep)
     comparison = read_features(local(geo["comparison_features"]), budget)
     peak_sets = {
         geo["pilot_library"]: paired["atac_features"].feature_id.tolist(),
@@ -96,7 +106,7 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         count_units={key: "unverified" for key in peak_sets},
     )
     blockers = [
-        "GEO retained-cell barcode mapping and final cohort reconciliation remain pending",
+        "GEO full-cohort raw barcode coverage and final-flag difference explanation remain pending",
         "NeMO release/QC reconciliation, specimen provenance, and paired matrices remain pending",
         "ATAC shared-region/count contract and donor-level experiment protocol remain pending",
     ]
@@ -113,7 +123,10 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         "atac_compatibility": compatibility,
         "pilot": {
             "library": geo["pilot_library"],
-            "data_kind": "raw_library_not_final_qc",
+            "data_kind": "final_release_retained_cells"
+            if retention
+            else "raw_library_not_final_qc",
+            "retention": retention,
             "source_cells": len(block["barcodes"]),
             "selected_cells": len(paired["metadata"]),
             "n_donors": int(paired["metadata"].donor_id.nunique()),
@@ -122,7 +135,7 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
             "atac_features": paired["atac"].shape[1],
             "rna_nnz": paired["rna"].nnz,
             "atac_nnz": paired["atac"].nnz,
-            "donors_below_cap": int(pilot_metadata.groupby("donor_id").size().lt(cap).sum()),
+            "donors_below_cap": int(paired["metadata"].groupby("donor_id").size().lt(cap).sum()),
             "sample_seed": 22,
             "selected_cell_ids_sha256": hashlib.sha256(
                 "\n".join(paired["metadata"].cell_id).encode()
@@ -200,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
             f"- NeMO metadata cells: {report['external']['metadata_cells']}; "
             f"published: {report['external']['published_cells']}.",
             f"- Pilot selected cells: {report['pilot']['selected_cells']} "
-            "(raw library, not final QC).",
+            f"({report['pilot']['data_kind']}).",
             f"- ATAC full-peak-union status: {report['atac_compatibility']['status']}.",
             f"- Exactly shared peaks: {report['atac_compatibility']['n_exact_common_regions']}.",
             "",

@@ -1,6 +1,6 @@
 # Paired multiome audit: implemented first stage
 
-Date: 2026-09-05. Scope of this audit: public-file diagnostics and reusable ingestion
+Updated: 2026-09-08. Scope of this audit: public-file diagnostics and reusable ingestion
 code. It performs no training, external predictive evaluation, or approval changes.
 The subsequent [synthetic neural-network implementation](PAIRED_MULTIOME_TRAINING.md)
 is a separate verified development stage.
@@ -14,12 +14,16 @@ From the repository root, using the existing environment:
   --manifest configs/paired_multiome_audit.json \
   --output-dir reports/generated/multiome/audit_next \
   --cell-cap 256 \
-  --max-input-bytes 67108864 \
+  --max-input-bytes 1700000000 \
   --max-expanded-bytes 268435456 \
   --max-nnz 10000000
 ```
 
-Inputs are already present under the ignored `data/multiome/` directory on this machine. On another machine, obtain the public files named in [the manifest](../configs/paired_multiome_audit.json), preserve their names, and verify the pinned hashes. GEO URLs point directly to files; the NeMO URL identifies the source collection. The command never downloads data or requests controlled access.
+Inputs are already present under the ignored `data/multiome/` and `data/real/` directories on this machine. On another machine, obtain the public files named in [the manifest](../configs/paired_multiome_audit.json), preserve their names, and verify the pinned hashes. GEO URLs point directly to files; the NeMO URL identifies the source collection. The command never downloads data or requests controlled access.
+
+The explicit 1.7 GB input budget includes streaming the 1.57 GB H5AD checksum;
+only its identity columns are materialized, not its expression matrix. The default
+64 MiB limit remains suitable for tiny fixtures and will refuse this full manifest.
 
 Use a new output directory for each run. Existing directories are refused. Exit code `0` means the file audit completed, **not** that training is permitted. Invalid inputs produce exit code `2` and a failure report when the output directory can be created.
 
@@ -39,20 +43,20 @@ The loader buffers bounded files before sparse parsing. It is **not** a full-atl
 
 ## Measured public-file results
 
-Primary evidence: [audit summary](../reports/generated/multiome/audit_20260905_retained_donor/SUMMARY.md), [full audit](../reports/generated/multiome/audit_20260905_retained_donor/audit.json).
+Primary evidence: [audit summary](../reports/generated/multiome/audit_20260908_retained/SUMMARY.md), [full audit](../reports/generated/multiome/audit_20260908_retained/audit.json).
 
 | Check | Observed result | Meaning |
 |---|---|---|
 | GEO library mapping | 46 libraries, 37 donor identifiers; final-analysis flags include 41 libraries and 33 donors | Flags alone do not reproduce the published 30-donor cohort |
 | NeMO metadata | 117,532 cells, 26 donors, 13 per class | The 3,731-cell difference from the paper remains unresolved |
 | NeMO age sensitivity | 8 control and 10 trisomy-21 donors at canonical PCW 13–20 | Before new QC exclusions; not a power guarantee |
-| B17C2L sparse pilot | 652 raw cells; 256 selected; 36,601 RNA features and 22,676 ATAC features | One donor, file-level pairing only; not a trained model |
+| B17C2L sparse pilot | 652 raw cells; 550 retained; 256 selected from retained cells; 36,601 RNA features and 22,676 ATAC features | One donor, final-release identity join; not a trained model |
 | B17C2L versus B10C1Q | Zero exactly shared intervals across 22,676 and 46,672 peak regions | These matrices cannot provide a shared exact peak subset as supplied |
-| Pilot resources | 0.72 seconds; 0.372 GB process peak RSS; 12,453,041 input bytes | This bounded audit on this machine, not an estimate for full training |
+| Pilot resources | 2.286 seconds; 0.5834 GB process peak RSS; 1,582,111,901 input bytes including streamed H5AD hash | This bounded audit on this machine, not an estimate for full training |
 
 Separate read-only cross-check of the existing CELLxGENE H5AD found 248,998 cells and 30 donors. Three GEO final-flag donor IDs are absent: `PCW10_DS_17630`, `PCW11_CON_14674`, and `PCW12_CON_14550`. All 30 H5AD donor IDs occur among the GEO flagged donors. This identifies the differing set; it does not establish why the releases differ or authorize arbitrary exclusions.
 
-The first pilot used B10D1N, whose donor is among those absent from the final H5AD. Its [original report](../reports/generated/multiome/audit_20260905/SUMMARY.md) remains preserved as a raw-file test. The replacement pilot uses B17C2L, whose donor is present in that H5AD. Its donor has 2,450 retained cells, including 550 from B17C2L. The current pilot still samples the 652 raw MEX cells; a final retained-barcode join remains necessary.
+The first pilot used B10D1N, whose donor is among those absent from the final H5AD. Its [original report](../reports/generated/multiome/audit_20260905/SUMMARY.md) remains preserved as a raw-file test. The replacement pilot uses B17C2L, whose donor is present in that H5AD. Its donor has 2,450 retained cells, including 550 from B17C2L. The current command applies the exact retained-barcode join before capping.
 
 ### Follow-up: exact retained-cell identity check
 
@@ -60,8 +64,10 @@ Read-only inspection now verifies that all **550** final-release B17C2L cell IDs
 match `B17C2L_` plus an exact raw barcode. No retained cell is missing from the raw
 list; **102 of 652** raw cells are not retained. The retained donor is
 `PCW17_CON_14310`. This establishes the one-library ID mapping, not the reason for
-exclusions, the complete cohort's release history, or a new QC policy. The existing
-audit command still samples raw cells; it has not applied this retention mask.
+exclusions, the complete cohort's release history, or a new QC policy. The audit
+now applies this mask, rejects missing retained cells or mismatched donor/condition
+labels, and records retained counts for all 46 GEO libraries. Full raw-file coverage
+and the explanation of release differences remain pending.
 
 Pinned H5AD SHA-256: `08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb`.
 Raw-barcode hash remains the value in [the audit manifest](../configs/paired_multiome_audit.json).

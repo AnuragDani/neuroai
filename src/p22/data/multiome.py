@@ -52,13 +52,8 @@ def _decode_bounded(raw: bytes, budget: ReadBudget) -> bytes:
     return raw
 
 
-def read_asset(spec: dict, budget: ReadBudget) -> bytes:
-    """Read pinned local files or tar members without extraction or network access.
-
-    Archives are untrusted: refuse links, special files, unsafe/duplicate names,
-    and excessive expansion. Python 3.11 extractfile returns a read-only stream:
-    https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile
-    """
+def verified_asset_path(spec: dict, budget: ReadBudget) -> Path:
+    """Check provenance/hash and charge streamed file bytes without buffering them."""
     path = Path(spec["path"])
     source = urlsplit(spec.get("source_url", ""))
     if source.scheme != "https" or not source.netloc:
@@ -74,6 +69,26 @@ def read_asset(spec: dict, budget: ReadBudget) -> bytes:
     if sha256_file(path) != expected:
         raise ValueError("asset checksum mismatch")
     budget.input_bytes += size
+    budget.records.append(
+        {
+            "path": str(path.resolve()),
+            "member": spec.get("member"),
+            "source_url": spec["source_url"],
+            "sha256": expected,
+            "input_bytes": size,
+            "expanded_bytes": 0,
+        }
+    )
+    return path
+
+
+def read_asset(spec: dict, budget: ReadBudget) -> bytes:
+    """Read bounded pinned files or tar members without extraction or network access.
+
+    https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile
+    """
+    path = verified_asset_path(spec, budget)
+    size = budget.records[-1]["input_bytes"]
     expanded_before = budget.expanded_bytes
     with path.open("rb") as stream:
         raw = _decode_bounded(stream.read(size + 1), budget)
@@ -100,16 +115,7 @@ def read_asset(spec: dict, budget: ReadBudget) -> bytes:
                 raise ValueError("requested archive member missing")
             with archive.extractfile(target) as stream:
                 raw = _decode_bounded(stream.read(target.size + 1), budget)
-    budget.records.append(
-        {
-            "path": str(path.resolve()),
-            "member": spec.get("member"),
-            "source_url": spec["source_url"],
-            "sha256": expected,
-            "input_bytes": size,
-            "expanded_bytes": budget.expanded_bytes - expanded_before,
-        }
-    )
+    budget.records[-1]["expanded_bytes"] = budget.expanded_bytes - expanded_before
     return raw
 
 
@@ -196,7 +202,14 @@ def load_mex(
     return {"matrix": matrix, "features": features, "barcodes": barcodes}
 
 
-def pair_and_cap(rna: dict, atac: dict | None, metadata: pd.DataFrame, *, cap: int) -> dict:
+def pair_and_cap(
+    rna: dict,
+    atac: dict | None,
+    metadata: pd.DataFrame,
+    *,
+    cap: int,
+    keep: np.ndarray | None = None,
+) -> dict:
     """Keep matched nuclei across modalities and sample by donor using existing helpers."""
     other = rna if atac is None else atac
     if rna["barcodes"] != other["barcodes"]:
@@ -205,11 +218,17 @@ def pair_and_cap(rna: dict, atac: dict | None, metadata: pd.DataFrame, *, cap: i
     if metadata.barcode.duplicated().any() or set(metadata.barcode) != set(barcodes):
         raise ValueError("metadata must join each matrix barcode exactly once")
     ordered = metadata.set_index("barcode").loc[list(barcodes)].reset_index()
+    if keep is None:
+        keep = np.ones(len(metadata), dtype=bool)
+    keep = np.asarray(keep)
+    if keep.dtype != bool or keep.shape != (len(metadata),):
+        raise ValueError("keep must be a boolean mask in metadata row order")
+    keep = pd.Series(keep, index=metadata.barcode).loc[list(barcodes)].to_numpy()
+    if not keep.any():
+        raise ValueError("no retained cells in this library")
     if not isinstance(cap, int) or isinstance(cap, bool) or cap < 1:
         raise ValueError("cell cap must be a positive integer")
-    samples = sample_nested_capped_cells(
-        ordered, np.ones(len(ordered), dtype=bool), caps=(cap,), seed=22
-    )[cap]
+    samples = sample_nested_capped_cells(ordered, keep, caps=(cap,), seed=22)[cap]
     rna_mask = rna["features"].modality.eq("Gene Expression").to_numpy()
     atac_mask = other["features"].modality.eq("Peaks").to_numpy()
     if not rna_mask.any() or not atac_mask.any():

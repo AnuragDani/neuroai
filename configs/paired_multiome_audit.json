@@ -13,7 +13,12 @@
       "sha256": "8299f15e35f6eda820ac9c9995be94fce648299b12e0ec12e4b7e68d3ab3f087"
     },
     "pilot_library": "B17C2L",
-    "pilot_selection": "Small library whose donor and library occur in the final CELLxGENE metadata; raw cells still require a retained-barcode join",
+    "pilot_selection": "Small library joined to the pinned final CELLxGENE retained cells before donor capping",
+    "retained_release": {
+      "path": "../data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "source_url": "https://datasets.cellxgene.cziscience.com/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb"
+    },
     "previous_pilot": "B10D1N proved raw-file ingestion but its donor was absent from the final CELLxGENE release; original report preserved",
     "combined_mex": {
       "matrix": {

@@ -357,6 +357,30 @@ def test_public_audit_cli_reports_blockers_without_training_or_overwrite(tmp_pat
     second = subprocess.run(command, capture_output=True, text=True, timeout=30)
     assert second.returncode != 0
     assert (output / "audit.json").read_bytes() == before
+    import anndata as ad
+
+    path = tmp_path / "release.h5ad"
+    ad.AnnData(
+        X=np.zeros((1, 1)),
+        obs=pd.DataFrame(
+            {"library": ["L1"], "donor_id": ["donor1"], "group": ["CON"]},
+            index=pd.Index(["L1_BB"], name="cell_id"),
+        ),
+    ).write_h5ad(path)
+    manifest["geo"]["retained_release"] = {
+        "path": str(path),
+        "source_url": "https://example.org/release.h5ad",
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+    config.write_text(json.dumps(manifest))
+    retained_output = tmp_path / "retained_audit"
+    command[command.index(str(output))] = str(retained_output)
+    result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+    assert result.returncode == 0, result.stderr
+    report = json.loads((retained_output / "audit.json").read_text())
+    assert report["pilot"]["data_kind"] == "final_release_retained_cells"
+    assert report["pilot"]["retention"]["raw_only_cells"] == 1
+    assert report["geo"]["retained_release"]["release_cells"] == 1
 
 
 def test_asset_pax_headers_cannot_bypass_expansion_budget(tmp_path):
@@ -392,6 +416,45 @@ def test_budget_counters_cannot_be_injected():
 
     with pytest.raises(TypeError):
         ReadBudget(input_bytes=-1_000_000)
+
+
+def test_retained_release_filters_before_cap_and_keeps_raw_row_positions(tmp_path):
+    import anndata as ad
+    import numpy as np
+
+    from p22.data.multiome import ReadBudget, load_mex, pair_and_cap, parse_geo_libraries
+    from p22.data.multiome_retention import read_retained_release, retained_mask
+
+    obs = pd.DataFrame(
+        {"library": ["L1"], "donor_id": ["donor1"], "group": ["CON"]},
+        index=pd.Index(["L1_BB"], name="cell_id"),
+    )
+    path = tmp_path / "retained.h5ad"
+    ad.AnnData(X=np.zeros((1, 1)), obs=obs).write_h5ad(path)
+    spec = {
+        "path": str(path),
+        "source_url": "https://example.org/release.h5ad",
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+    libraries = parse_geo_libraries(geo_soft())
+    retained, report = read_retained_release(spec, ReadBudget(), libraries)
+    block = load_mex(mex_assets(tmp_path), ReadBudget())
+    raw = pd.DataFrame([libraries.iloc[0].to_dict()] * 2)
+    raw["barcode"] = block["barcodes"]
+    raw = normalize_metadata(raw, condition_map={"CON": 0, "DS": 1})
+    keep, mapping = retained_mask(raw, retained)
+    paired = pair_and_cap(block, None, raw, cap=1, keep=keep)
+    assert paired["source_rows"].tolist() == [1]
+    assert paired["metadata"].barcode.tolist() == ["BB"]
+    assert paired["atac"].toarray().tolist() == [[3, 0]]
+    assert mapping["raw_only_cells"] == 1 and mapping["retained_cells"] == 1
+    assert report["release_cells"] == 1
+    with pytest.raises(ValueError, match="missing from raw"):
+        retained_mask(raw.iloc[:1], retained)
+    bad = raw.copy()
+    bad["donor_id"] = "wrong"
+    with pytest.raises(ValueError, match="donor"):
+        retained_mask(bad, retained)
 
 
 def test_manifest_preserves_valid_multiplexed_library():
