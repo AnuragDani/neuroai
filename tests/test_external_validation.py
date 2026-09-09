@@ -2,6 +2,7 @@
 
 import hashlib
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -10,6 +11,7 @@ from p22.eval.external_validation import (
     COMPARISONS,
     SHEETS,
     collapse_donor_metadata,
+    fit_discovery_effects,
     gene_eligibility,
     load_external_effects,
 )
@@ -95,3 +97,62 @@ def test_donor_metadata_requires_invariance_and_explicit_classes():
     bad["disease"] = "unknown"
     with pytest.raises(ValueError, match="condition"):
         collapse_donor_metadata(bad)
+
+
+def _discovery_fixture(n_genes=650):
+    rng = np.random.default_rng(9)
+    labels = np.repeat([0, 1], 12)
+    metadata = collapse_donor_metadata(
+        pd.DataFrame(
+            {
+                "donor_id": [f"donor{i:02}" for i in range(24)],
+                "disease": np.where(labels, POSITIVE_CONDITION, CONTROL_CONDITION),
+                "dev_PCW": np.tile([13, 14, 15, 16, 17, 18], 4),
+                "sex": np.tile(["male", "female", "female", "male"], 6),
+            }
+        )
+    )
+    effects = np.linspace(-0.8, 0.8, n_genes)
+    counts = rng.poisson(100 * np.exp(labels[:, None] * effects[None, :]))
+    genes = pd.DataFrame(
+        {
+            "gene_name": [f"GENE{i:04}" for i in range(n_genes)],
+            "seqnames": ["chr1"] * n_genes,
+        }
+    )
+    return counts, metadata, genes
+
+
+def test_ols_matches_direct_fit_and_floor_precedes_ranking():
+    counts, metadata, genes = _discovery_fixture()
+    counts[:, 0] = 0
+    counts[0, 0] = 1
+    counts[12:, 0] = 1000  # A large apparent effect still fails the control-class floor.
+    fitted = fit_discovery_effects(counts, metadata, genes, n_cells=np.full(24, 50))
+    assert "GENE0000" not in set(fitted.effects.gene)
+    assert fitted.audit["n_expression_eligible"] == 649
+    expected = np.linalg.lstsq(fitted.design, fitted.log_cpm, rcond=None)[0][1]
+    np.testing.assert_allclose(fitted.effects.coefficient, expected, atol=1e-12)
+    assert np.sign(fitted.effects.iloc[-1].coefficient) == 1
+    assert set(fitted.effects.columns) >= {"gene", "coefficient", "standard_error", "t_statistic"}
+    assert fitted.audit["design_rank"] == 4
+    assert fitted.audit["residual_df"] == 20
+
+
+@pytest.mark.parametrize("failure", ["rank", "class", "cell_floor", "negative", "empty_donor"])
+def test_discovery_fail_closed(failure):
+    counts, metadata, genes = _discovery_fixture()
+    cells = np.full(24, 50)
+    if failure == "rank":
+        metadata["sex"] = "male"
+    elif failure == "class":
+        metadata["label"] = 0
+        metadata["disease"] = CONTROL_CONDITION
+    elif failure == "cell_floor":
+        cells[0] = 49
+    elif failure == "negative":
+        counts[0, 0] = -1
+    else:
+        counts[0] = 0
+    with pytest.raises(ValueError):
+        fit_discovery_effects(counts, metadata, genes, n_cells=cells)
