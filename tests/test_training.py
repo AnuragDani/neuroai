@@ -399,3 +399,26 @@ def test_donor_training_rejects_invalid_identity_or_labels_before_fitting(overri
     with pytest.raises(ValueError, match=message):
         train_model(model, **arguments)
     assert model.epoch == 0
+
+
+def test_final_refit_runs_exact_frozen_epochs_without_validation():
+    import numpy as np
+    import torch
+
+    from p22.models.baselines import BaselineMLP
+    from p22.training.loop import refit_model, set_all_seeds
+
+    views = {"rna": np.arange(24, dtype=np.float32).reshape(8, 3) / 24}
+    labels = np.array([0] * 4 + [1] * 4)
+    donors = ["a"] * 3 + ["b"] + ["c"] * 2 + ["d"] * 2
+    set_all_seeds(7)
+    model = BaselineMLP(3, n_classes=2, dropout=0)
+    before = {key: value.clone() for key, value in model.state_dict().items()}
+    result = refit_model(model, views, labels, donors, epochs=3, batch_size=4, seed=7)
+    assert result["epochs_run"] == 3 and len(result["train_loss"]) == 3
+    assert result["selection_split"] is None
+    assert result["training_weighting"] == "inverse_donor_cell_count"
+    assert not model.training
+    assert any(not torch.equal(before[key], value) for key, value in model.state_dict().items())
+    with pytest.raises(ValueError):
+        refit_model(model, views, labels, donors, epochs=True)

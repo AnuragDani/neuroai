@@ -264,7 +264,6 @@ def train_model(
     criterion = nn.CrossEntropyLoss(reduction="none" if donor_mode else "mean")
     metric_fn = SELECTION_METRICS[selection_metric]
 
-    n_train = train_target.shape[0]
     history: list[EpochRecord] = []
     best_score = -float("inf")
     best_epoch = 0
@@ -273,23 +272,16 @@ def train_model(
     stopped_early = False
 
     for epoch in range(1, int(max_epochs) + 1):
-        model.train()
-        order = torch.randperm(n_train, generator=generator)
-        epoch_loss = 0.0
-        for start in range(0, n_train, int(batch_size)):
-            index = order[start : start + int(batch_size)]
-            batch = {name: tensor[index] for name, tensor in train_tensors.items()}
-            optimiser.zero_grad()
-            logits = forward_logits(model, batch)
-            if donor_mode and logits.shape[1] != 2:
-                raise ValueError("donor selection requires two output classes")
-            loss = criterion(logits, train_target[index])
-            if weights is not None:
-                # Fixed global normalization: each donor has equal total loss weight.
-                loss = (loss * weights[index]).mean()
-            loss.backward()
-            optimiser.step()
-            epoch_loss += float(loss.detach()) * index.numel()
+        epoch_loss = _train_epoch(
+            model,
+            train_tensors,
+            train_target,
+            weights,
+            optimiser,
+            criterion,
+            generator,
+            int(batch_size),
+        )
 
         model.eval()
         with torch.no_grad():
@@ -309,7 +301,7 @@ def train_model(
         history.append(
             EpochRecord(
                 epoch=epoch,
-                train_loss=epoch_loss / n_train,
+                train_loss=epoch_loss,
                 val_score=float(scored.value),
             )
         )
@@ -340,6 +332,76 @@ def train_model(
         selection_unit="donor" if donor_mode else "cell",
         training_weighting="inverse_donor_cell_count" if donor_mode else "uniform_cell",
     )
+
+
+def _train_epoch(model, tensors, target, weights, optimiser, criterion, generator, batch_size):
+    """Shared update path for internal selection and fixed-epoch final refitting."""
+    model.train()
+    order = torch.randperm(len(target), generator=generator)
+    epoch_loss = 0.0
+    for start in range(0, len(target), batch_size):
+        index = order[start : start + batch_size]
+        batch = {name: tensor[index] for name, tensor in tensors.items()}
+        optimiser.zero_grad()
+        logits = forward_logits(model, batch)
+        if weights is not None and logits.shape[1] != 2:
+            raise ValueError("donor training requires two output classes")
+        loss = criterion(logits, target[index])
+        if weights is not None:
+            # Global weights give each donor equal total influence, including short batches.
+            loss = (loss * weights[index]).mean()
+        if not bool(torch.isfinite(loss)):
+            raise ValueError("non-finite training loss")
+        loss.backward()
+        optimiser.step()
+        epoch_loss += float(loss.detach()) * index.numel()
+    return epoch_loss / len(target)
+
+
+def refit_model(
+    model,
+    views,
+    labels,
+    donor_ids,
+    *,
+    epochs,
+    batch_size=64,
+    learning_rate=1e-3,
+    seed=0,
+) -> dict:
+    """Refit on all development donors for an internally frozen epoch count.
+
+    No validation/test inputs or checkpoint selection. Mutates the supplied model.
+    Uses the same Adam/loss/batching path as internal training, on CPU.
+    """
+    for name, value in (("epochs", epochs), ("batch_size", batch_size)):
+        if type(value) is not int or value < 1:
+            raise ValueError(f"{name} must be a positive integer")
+    if isinstance(learning_rate, bool) or not 0 < learning_rate < 1:
+        raise ValueError("learning_rate must be in (0, 1)")
+    donors, _ = _binary_donors(donor_ids, labels)
+    tensors, target = _prepare(views, labels, "development", "cpu")
+    _, inverse, counts = np.unique(donors, return_inverse=True, return_counts=True)
+    weights = torch.as_tensor(len(donors) / (len(counts) * counts[inverse]), dtype=torch.float32)
+    set_all_seeds(seed)
+    model.to("cpu")
+    generator = torch.Generator().manual_seed(seed)
+    optimiser = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    criterion = nn.CrossEntropyLoss(reduction="none")
+    losses = [
+        _train_epoch(model, tensors, target, weights, optimiser, criterion, generator, batch_size)
+        for _ in range(epochs)
+    ]
+    model.eval()
+    return {
+        "epochs_run": epochs,
+        "train_loss": losses,
+        "selection_split": None,
+        "epoch_selection": "frozen before all-development refit",
+        "training_weighting": "inverse_donor_cell_count",
+        "seed": seed,
+        "n_development_donors": len(counts),
+    }
 
 
 def _binary_donors(
