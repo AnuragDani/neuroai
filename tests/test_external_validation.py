@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from p22.data.real_cohort import CONTROL_CONDITION, POSITIVE_CONDITION
+from p22.data.real_cohort import CONTROL_CONDITION, POSITIVE_CONDITION, DonorPseudobulk
 from p22.eval.external_validation import (
     COMPARISONS,
     SHEETS,
@@ -30,9 +30,13 @@ def _genes():
     )
 
 
-def _workbook(path, *, celltype_error=False, orientation=-1, missing_column=False):
+def _workbook(
+    path, *, celltype_error=False, orientation=-1, missing_column=False, omit_sheet=False
+):
     with pd.ExcelWriter(path, engine="openpyxl") as writer:
         for sheet, celltype in SHEETS.items():
+            if omit_sheet and sheet == "IP":
+                continue
             table = pd.DataFrame(
                 {
                     "gene": ["a", "APP", " b ", "B"],
@@ -66,6 +70,7 @@ def test_workbook_hash_schema_orientation_and_duplicate_drop(tmp_path):
         ({"orientation": -1}, "external orientation check failed"),
         ({"orientation": 1, "celltype_error": True}, "celltype"),
         ({"orientation": 1, "missing_column": True}, "schema"),
+        ({"orientation": 1, "omit_sheet": True}, "sheet"),
     ]:
         digest = _workbook(path, **options)
         with pytest.raises(ValueError, match=reason):
@@ -143,6 +148,32 @@ def test_ols_matches_direct_fit_and_floor_precedes_ranking():
     assert fitted.audit["residual_df"] == 20
 
 
+def test_pseudobulk_path_verifies_identifiers_conditions_and_uses_existing_log_cpm():
+    from dataclasses import replace
+
+    counts, metadata, genes = _discovery_fixture()
+    bulk = DonorPseudobulk(
+        donor_ids=tuple(metadata.index),
+        conditions=tuple(metadata.disease),
+        labels=metadata.label.to_numpy(),
+        n_cells=np.full(24, 50),
+        total_counts=counts.sum(axis=1),
+        gene_sums=counts,
+        chr21_fraction=None,
+        gene_ids=tuple(genes.index.astype(str)),
+        chr21_mapping=None,
+    )
+    fit = fit_discovery_effects(bulk, metadata, genes)
+    np.testing.assert_array_equal(fit.log_cpm, bulk.log_cpm())
+    for bad in (
+        replace(bulk, donor_ids=tuple(reversed(bulk.donor_ids))),
+        replace(bulk, gene_ids=tuple(reversed(bulk.gene_ids))),
+        replace(bulk, conditions=(CONTROL_CONDITION,) * 24),
+    ):
+        with pytest.raises(ValueError, match="mismatch"):
+            fit_discovery_effects(bad, metadata, genes)
+
+
 @pytest.mark.parametrize("failure", ["rank", "class", "cell_floor", "negative", "empty_donor"])
 def test_discovery_fail_closed(failure):
     counts, metadata, genes = _discovery_fixture()
@@ -174,6 +205,8 @@ def test_metrics_rank_by_absolute_t_not_effect_magnitude():
 
 
 def test_bootstrap_refits_reranks_and_permutation_is_reproducible():
+    from scipy.stats import spearmanr
+
     counts, metadata, genes = _discovery_fixture()
     fit = fit_discovery_effects(counts, metadata, genes, n_cells=np.full(24, 50))
     external = pd.DataFrame({"gene": fit.effects.gene, "avg_log2FC": np.linspace(-0.6, 0.8, 650)})
@@ -213,6 +246,32 @@ def test_bootstrap_refits_reranks_and_permutation_is_reproducible():
     )
     assert first["agreement_permutation_p_upper"] == (1 + np.sum(null >= observed)) / 101
     assert first["agreement_permutation_p_lower"] == (1 + np.sum(null <= observed)) / 101
+    # Independent small-fixture calculation checks every refit and the top-N reranking.
+    boot_rng = np.random.default_rng(np.random.SeedSequence(22).spawn(2)[0])
+    manual = []
+    for _ in range(40):
+        rows = np.concatenate(
+            [boot_rng.choice(np.flatnonzero(fit.labels == label), 12) for label in (0, 1)]
+        )
+        x, y = fit.design[rows], fit.log_cpm[rows]
+        beta = np.linalg.lstsq(x, y, rcond=None)[0]
+        se = np.sqrt(np.sum((y - x @ beta) ** 2, axis=0) / 20 * np.linalg.inv(x.T @ x)[1, 1])
+        top = np.argsort(-np.abs(beta[1] / se), kind="stable")[:20]
+        manual.append(
+            (
+                spearmanr(beta[1], external.avg_log2FC).statistic,
+                np.mean(np.sign(beta[1, top]) == np.sign(external.avg_log2FC.to_numpy()[top])),
+            )
+        )
+    intervals = np.quantile(manual, [0.025, 0.975], axis=0)
+    np.testing.assert_allclose(
+        intervals,
+        [
+            [first["spearman_ci_low"], first["agreement_ci_low"]],
+            [first["spearman_ci_high"], first["agreement_ci_high"]],
+        ],
+        atol=1e-12,
+    )
     child = np.random.SeedSequence(22).spawn(1)[0]
     a = compare_effect_directions(fit, external, **{**args, "seed": child})
     b = compare_effect_directions(fit, external, **{**args, "seed": child})
@@ -245,6 +304,21 @@ def test_shared_floor_after_filtering_and_failed_bootstrap_budget(monkeypatch):
     assert failed["execution_status"] == "failed"
     assert failed["bootstrap_failed"] == 2
     assert "5%" in failed["reason"]
+    calls = 1  # Exactly 1/20 failed fits is the allowed boundary.
+    accepted = compare_effect_directions(fit, external, n_bootstrap=20, n_permutations=20)
+    assert accepted["bootstrap_failed"] == 1
+    assert accepted["execution_status"] == "completed"
+
+
+def test_external_duplicates_are_dropped_before_shared_gene_count():
+    counts, metadata, genes = _discovery_fixture(n_genes=500)
+    fit = fit_discovery_effects(counts, metadata, genes, n_cells=np.full(24, 50))
+    external = pd.DataFrame({"gene": fit.effects.gene, "avg_log2FC": np.linspace(-1, 1, 500)})
+    external = pd.concat([external, external.iloc[[0]]], ignore_index=True)
+    result = compare_effect_directions(fit, external, n_bootstrap=20, n_permutations=20)
+    assert result["n_shared_genes"] == 499
+    assert result["dropped_duplicate_external"] == 2
+    assert result["execution_status"] == "failed"
 
 
 def test_nominal_boundaries_and_four_comparison_headline():

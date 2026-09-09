@@ -248,10 +248,11 @@ def fit_discovery_effects(
         if (
             tuple(metadata.index) != bulk.donor_ids
             or tuple(gene_metadata.index.astype(str)) != bulk.gene_ids
+            or tuple(metadata.disease) != bulk.conditions
             or not np.array_equal(labels, bulk.labels)
             or not np.array_equal(values.sum(axis=1), bulk.total_counts)
         ):
-            raise ValueError("pseudobulk identifiers, labels, or totals mismatch")
+            raise ValueError("pseudobulk identifiers, conditions, labels, or totals mismatch")
         n_cells = bulk.n_cells
     cells = np.asarray(n_cells)
     if (
