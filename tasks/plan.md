@@ -52,7 +52,9 @@ The executable audit reports these findings without certifying specimen identity
 reproduced QC, or compatible ATAC counts. Original RNA replication is implemented
 and [executed locally](../docs/EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md): all
 four comparisons are inconclusive, with exactly matching results in three runs.
-Fresh Colab verification remains pending; RNA results cannot satisfy paired-data gates.
+Fresh free-CPU Colab executions finished; final archive retrieval and local comparison
+remain pending (2026-09-09). Approval is recorded and need not be requested again.
+RNA results cannot satisfy paired-data gates.
 
 ## Completion evidence
 

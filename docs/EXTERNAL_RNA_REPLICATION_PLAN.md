@@ -1,12 +1,12 @@
 # External RNA Replication: Implementation Plan
 
-**Status:** Implemented and executed locally; all four comparisons inconclusive. Fresh Colab verification pending (2026-09-08)
+**Status:** Implemented; local and fresh Colab executions finished. Final Colab archive retrieval/comparison pending; all four local comparisons inconclusive (2026-09-09)
 
 **Date:** 2026-09-03  
 **Review applied:** `EXTERNAL_RNA_REPLICATION_PLAN_REVIEW_2026-09-03.md`  
 **Goal:** Turn current negative classifier result into a bounded external-replication analysis with concrete code, tests, notebook output, and claim limits.
 
-## Implementation checkpoint (2026-09-08)
+## Implementation checkpoint (updated 2026-09-09)
 
 - Tasks 1–3 implemented: pinned workbook guards, donor-level OLS and class-stratified
   bootstrap, whole-vector permutation comparison, four-row evidence integration.
@@ -22,12 +22,16 @@
   inconclusive headline, zero failed donor bootstraps, G8 still inconclusive.
 - [Results and verification record](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md)
   contain the final artifacts, exact invocation, hashes, timings and claim limits.
-  Tasks 1–4 and local verification are complete. Task 5 remains partial: fresh
-  Colab needs user sign-in and explicit notebook-upload approval. This requirement
-  is not waived or marked passed.
+  Tasks 1–4 and local verification are complete. Fresh free-CPU Colab executions
+  finished in native Python 3.13 and an isolated Python 3.11 environment. Task 5
+  remains partial until the final archive is retrieved and compared locally.
+  Native G0 is honestly inconclusive because it requires Python 3.11; the isolated
+  execution is not represented as Colab's native kernel. See the results record.
 - Real execution uses the separately recorded
   [user-reported approval attestation](../plan/real_data_attestation_2026-09-08.json),
   not an invented professor approval date or a global historical policy change.
+  The user explicitly confirmed Fang approval and notebook upload/free CPU use;
+  do not request the same approval again for this study.
 
 ## Decision
 

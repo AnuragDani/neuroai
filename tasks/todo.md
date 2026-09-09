@@ -34,7 +34,9 @@ The original [external RNA effect-replication study](../docs/EXTERNAL_RNA_REPLIC
 is now implemented and executed on real data: all four comparisons and the headline
 are inconclusive, with identical results across three local runs and 608 passing
 tests. [Final evidence](../docs/EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md) is saved.
-Fresh Colab verification requires sign-in and notebook-upload approval. This neural
+Fresh free-CPU Colab executions finished; final archive retrieval and local comparison
+remain pending (2026-09-09). Fang approval and notebook upload/free CPU use are
+explicitly confirmed by the user; do not ask again for this study. This neural
 software does not substitute for the RNA study, nor does RNA evidence close M1–M8.
 
 ## M1: Freeze source release, QC, and specimen mapping

@@ -109,3 +109,23 @@
   paired extension still requires accepted ATAC counts, NeMO access/QC, a frozen
   real protocol, and actual internal/external neural comparisons. These gates
   remain open; the full plan is not declared complete.
+
+## 2026-09-09 — Approval confirmed; Colab runs finished, archival check open
+
+- **Authorization:** user answered “Yes dont ask asgain” to the explicit question
+  whether Professor Fang approved this real-data analysis. Save that confirmation
+  in the scoped attestation and do not re-request it for the same study. Notebook
+  upload and free CPU execution were separately authorized. No dated independent
+  approval evidence, paid compute, broader data access or outreach was inferred.
+- **Execution:** native Colab Python 3.13 completed with its truthful G0
+  inconclusive. Isolated Python 3.11 on the same VM then completed the unchanged
+  23-cell canonical notebook with runtime-side zero-error/source checks. Retain
+  startup failures and the isolated-kernel remedy; do not relabel the subprocess
+  as the native Colab kernel.
+- **Evidence:** native notebook downloaded and saved locally; final 40-file archive
+  generated on the VM. Chrome retrieval failed repeatedly before that final
+  archive could be copied and independently compared locally. Exact archive hash,
+  command, recovery steps and limits are in the [results checkpoint](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md).
+- **Status:** original RNA task 5 stays partial. Earlier sign-in/upload statements
+  are historical, not current blockers. No scientific code or paired M1–M8 gate
+  changed, and no completed-plan or positive replication claim is made.

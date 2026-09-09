@@ -1,11 +1,13 @@
 # External RNA replication: real-data results
 
 Completed locally on 2026-09-08 (run timestamps are 2026-09-09 UTC).
+Colab checkpoint updated 2026-09-09; final archive comparison remains pending.
 
 ## Outcome
 
 All four frozen comparisons and the headline are **inconclusive**. The code and
-real local experiment are complete; fresh Colab verification is not. This is an
+real local experiment are complete. Fresh Colab executions finished, but their
+final archive retrieval/comparison is not complete. This is an
 actual summary-effect comparison, not a synthetic demonstration. It neither
 establishes directional replication nor proves that reproducible effects are absent.
 
@@ -107,6 +109,95 @@ and omits this run's output/kernel/thread settings. The audited invocation above
 is the exact command record. Generated manifests have not been silently edited.
 For another run, choose a new output name to preserve the final executed copy.
 
+## Fresh Colab checkpoint (2026-09-09)
+
+The user explicitly confirmed Professor Fang's approval and separately approved
+upload of the canonical notebook and a free CPU run. This confirmation is saved
+in the scoped attestation; do not request the same approval again. No independent
+approval date was invented, and scientific acceptance gates remain unchanged.
+
+[Saved Colab notebook](https://colab.research.google.com/drive/1aQgaq5cq7A5tOxHMYeCKaPGAG2Htxc3c).
+Only the canonical notebook was uploaded from this machine. The VM fetched public
+inputs; no Drive mount, paid compute, GPU, or controlled-access request was used.
+
+- Native Python **3.13.15** completed the scientific notebook and displayed four
+  inconclusive RNA rows. G0 stayed `INCONCLUSIVE` because the project requires
+  Python 3.11. Native RNA time was 183.037 seconds; process peak RSS was 2.8256 GB.
+- A separate **Python 3.11.16** environment on the same free Colab CPU VM executed
+  the unchanged canonical notebook through nbconvert. This was a Colab-hosted
+  subprocess, not the native Colab kernel; its `in_colab=False` is not rewritten.
+- Runtime-side checks confirmed all 23 cell sources exactly match the canonical
+  notebook, every code cell executed, and zero errors in the executed 3.11 notebook.
+  These observed checks do not replace downloading and independently comparing
+  the saved results.
+- Initial 3.11 startup failed because inherited Colab configuration requested
+  `google.colab._kernel.Kernel`, then a Google extension unavailable in the isolated
+  environment. Private IPython/Jupyter configuration directories and explicit
+  standard IPython kernel/empty extension settings fixed startup. Both failures,
+  the passing smoke check and successful final execution remain in the VM logs.
+  No scientific source or native Colab security setting was changed.
+- The native download is saved locally as
+  [P22_colab_native.executed.ipynb](../reports/generated/colab_verification_2026-09-09/P22_colab_native.executed.ipynb).
+  It predates final 3.11 completion; it is not the final combined archive.
+  Its SHA-256 is `accbe892e359a4ebb2c948ee4158868df4a62f75cd21c1c7daea8b68e6cb7e61`.
+  [Independent local inspection](../reports/generated/colab_verification_2026-09-09/native-only-check.json)
+  confirms the exact 23-cell source sequence, all 12 canonical code cells executed,
+  zero scientific-cell errors, and an exact match for all four RNA rows and outer
+  scientific fields (maximum numeric difference zero; timing/RSS/figure excluded).
+  The earlier auxiliary 3.11 startup error remains visible, separate from those
+  scientific cells; the pinned-runtime snapshot/archive is still pending retrieval.
+- The separate [focused test log](../reports/generated/colab_verification_2026-09-09/focused-tests.log)
+  records 15 passing tests. Full-suite/lint records above remain valid; scientific
+  code did not change during this verification.
+
+Successful 3.11 invocation on the VM:
+
+```bash
+/content/p22_py311/bin/jupyter-nbconvert --to notebook --execute \
+  /content/P22_down_syndrome_all_in_one.ipynb \
+  --ExecutePreprocessor.kernel_name=p22-py311 \
+  --ExecutePreprocessor.timeout=1800 \
+  --ExecutePreprocessor.startup_timeout=300 \
+  --output-dir /content/reports/generated/notebooks/py311 \
+  --output P22_colab_py311.executed.ipynb
+```
+
+Its environment enabled `real_analysis`, real data/model and the scoped professor
+attestation; data root was `/content/p22_data`, output root was
+`/content/reports/generated/p22_colab_py311_verification`, BLAS/OpenMP/MKL threads
+were one, and `CUDA_VISIBLE_DEVICES` was empty. Full arguments, package versions,
+timings and environment are in the generated `colab_verification_record` folder.
+
+The completed VM archive `/content/P22_colab_verification_20260909.zip` contains
+40 generated/approved-source files, **1,264,546 bytes**, SHA-256
+`5b26965f218510aa96c123cb07c829c44ba35967a8439229b2b5587f8ae5dfac`.
+The export includes both run folders, the executed 3.11 notebook, canonical source,
+logs and per-file hashes, but no raw datasets. Archive existence/hash were observed
+in Colab; they have **not yet been verified against a local archive**.
+
+Remaining procedure: use **Download verification ZIP** in the saved notebook,
+copy the download into `reports/generated/colab_verification_2026-09-09`, check the
+archive hash, extract without overwrites/path traversal, then run:
+
+```bash
+.venv-p22/bin/python reports/generated/colab_verification_2026-09-09/compare_colab.py EXTRACTION_ROOT
+```
+
+The generated comparator checks original notebook sources, execution/errors,
+manifest source hashes, all four RNA records and cohort fields, G0 and G8 against
+the frozen local run. It reports all differences, with numeric tolerance 1e-9;
+only outer timing, memory and figure paths are excluded. Task 5 must not be marked
+complete before reviewing its output and retaining the final archive.
+
+Retrieval blocker: Chrome's notebook control connection repeatedly became
+unattached/timed out, including a fresh view of the saved notebook. The previously
+downloaded native notebook was copied through Finder because terminal access to
+Downloads is denied by macOS. No OS permissions were expanded. A Drive raw-file
+reference was available but not materialized by the available connector tools.
+The historical local `colab-status.md` above is preserved; this checkpoint
+supersedes its sign-in/upload requirement. Do not rerun analyses solely to retry
+artifact download.
+
 ## Claim limits
 
 This compares aggregate rank/sign directions against published cell-level MAST
@@ -123,14 +214,14 @@ Removing chromosome 21 does not establish dosage-independent causation.
 | Plan component | State | Remaining requirement |
 |---|---|---|
 | Original RNA tasks 1–4: implementation and local execution | Complete | None locally; retain inconclusive result |
-| Original RNA task 5: verification | Partial | Fresh Colab run, output comparison and archived execution record |
+| Original RNA task 5: verification | Partial | Colab runs finished; retrieve final archive, compare locally and retain execution record |
 | Paired M1–M4: accepted real inputs | Partial/blocked | Common measured ATAC counts, external access and accepted release/QC semantics |
 | Paired M5: real scientific protocol | Pending | Freeze preprocessing, covariates, biological controls and sensitivities on accepted inputs |
 | Paired M6–M8: real neural comparison | Pending | Real internal fits and locked external scoring after upstream gates pass |
 
-Colab currently shows **Sign in**. No notebook uploaded and no runtime created.
-User sign-in and explicit approval to upload only the canonical notebook are
-needed for the free CPU verification run. Local repetition is not a substitute.
+Colab sign-in, authorized upload and free CPU execution have occurred. Final
+archive retrieval/comparison is the remaining RNA verification step, not another
+approval request. Local repetition is not a substitute.
 
 For paired work, the [source and transport audit](PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md)
 records the exact NeMO annotation count match, unresolved QC semantics, and public
