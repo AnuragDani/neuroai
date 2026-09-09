@@ -1,7 +1,8 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-05. Data-audit and neural-network implementation available; 150 synthetic
-model fits verified locally. Scientific acceptance gates remain open.
+Updated: 2026-09-08. Retained-cell ingestion, neural training, final artifacts and
+one-shot scoring verified. 150 synthetic internal fits plus six final refits.
+Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
@@ -12,15 +13,25 @@ facts, not disease-model results.
 
 ## Current checkpoint
 
-- M1: Identity/library/count-audit code implemented. All 46 GEO libraries mapped; GEO final flags still disagree with the final release. Read-only B17C2L check exactly matches all 550 retained cells to raw barcodes, with 102 raw-only cells. Full cohort reconciliation, retained-cell ingestion, and specimen independence remain pending.
+- M1: All 46 GEO libraries mapped. The pinned author downstream filtered table exactly matches the final H5AD's 37 libraries, 30 donors and labels; GEO flags are not the final cohort definition. Retained-cell ingestion joins all 550 B17C2L cells before capping and excludes 102 raw-only cells. Full raw-barcode coverage, per-cell QC reproduction and cross-study specimen evidence remain pending.
 - M2: Conversion and support checks implemented and tested. NeMO's canonical PCW 13–20 sensitivity has 8 control and 10 trisomy-21 donors before new QC exclusions.
-- M3: Both MEX layouts tested with fixtures; bounded combined-MEX public pilot completed. Raw-library cells are not yet joined to final retained barcodes. NeMO count packages remain unaudited.
+- M3: Both MEX layouts tested; real pilot now selects 256 from the 550 author-retained cells. NeMO count packages remain unaudited; a fresh direct manifest request failed TLS while indexed public directory listings remained available.
 - M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred.
 - M5: Immutable software benchmark settings and strict paired uncertainty implemented. The real scientific protocol and gate-bound acceptance remain pending.
 - M6: Donor-aware training and bounded paired-array adapter implemented. Six neural families and majority control ran on 25 synthetic outer folds. Biological controls and accepted real-data orchestration remain pending.
 - M7: Genuine cross-attention and matched token-concat control implemented; gradients, direction, axes, and ablations tested. Real internal comparison remains pending.
-- M8: Strict donor-paired comparison helper implemented. Final all-development refit, serialized final model/transform artifacts, locked external evaluation, and validation report remain pending.
-- User approved continuing development. Professor approval record remains blocked and unchanged. No condition-specific training or external predictive evaluation performed.
+- M8: Final all-development refit, numeric scaler/state dictionaries, expected manifest/weight hashes and one-shot scoring implemented and tested on synthetic data. Epochs are ceil(median internal best epochs), frozen before final fits. Synthetic validation.csv produced; registry corrected to GSE280175 5+5 and NeMO candidate 13+13. Accepted real orchestration and real external evidence remain pending.
+- User approved continuing development. Professor approval record remains blocked and unchanged. No condition-specific training or real external predictive evaluation performed.
+
+## Next decisions required for real execution
+
+1. Supply the dated Professor Fang approval and scope. User permission to continue coding is recorded separately.
+2. Accept a specific common-region ATAC count source, or approve a separately bounded fragment-recount task. The two inspected raw libraries have zero exact common peaks; zero-filling cannot fix this. Public fragment packages total roughly 43 GiB compressed before working files, so a full recount is not silently started on this machine's roughly 54 GB free disk.
+3. Resolve NeMO's published-versus-release count difference and specimen provenance using author/archive evidence. Public directories do not prove acceptance. No author contacted or controlled access requested.
+4. With those inputs, freeze real normalization/covariate/chr21 and sensitivity rules, connect biological controls and accepted real inputs to the existing fold/refit/scoring code, then execute M6–M8.
+
+The original [external RNA effect-replication study](../docs/EXTERNAL_RNA_REPLICATION_PLAN.md)
+remains a separate unfinished deliverable; this neural software does not substitute for it.
 
 ## M1: Freeze source release, QC, and specimen mapping
 
@@ -63,7 +74,7 @@ Load combined 10x MEX and separate RNA/ATAC MEX through one narrow adapter. Begi
 **Acceptance criteria:**
 
 - [ ] Hashes, count semantics, dimensions, unique ordered barcodes, and metadata joins agree; mismatches fail with a specific error. Archive paths are validated before extraction.
-- [ ] Preserve sparse arrays until capped cell/feature selection; reuse `sample_nested_capped_cells` for matched 64/128/256-cell comparisons where possible. Report any donor below a cap.
+- [x] Preserve sparse arrays until capped cell/feature selection; reuse `sample_nested_capped_cells` for matched 64/128/256-cell comparisons where possible. Report any donor below a cap. Verified on fixtures and one retained-cell public pilot, not the full external atlas.
 - [x] Emit an ingestion report with source/QC status, pairing counts, disk, memory, and runtime using `measure_stage`; no full dense atlas conversion or automatic large fragment download.
 
 **Verification:** `.venv-p22/bin/python -m pytest -q tests/test_multiome.py`; run the pilot with explicit manifest, cell cap, output directory, and byte budget, and record the exact command. Confirm both layouts on tiny fixtures and one bounded real training sample.
@@ -145,6 +156,7 @@ Apply the frozen model/feature contracts to NeMO and write the donor-level compa
 
 **Acceptance criteria:**
 
+- [x] Software-only precursor: serialize all-development refits and frozen scaler parameters; reject tampering, changed feature order, overlapping donors/cells and repeat scoring. Verify by reloading and scoring a separate synthetic draw, never as biological validation.
 - [ ] Require reconciled release/QC, documented specimen provenance, canonical age units, accepted feature semantics, and frozen model/transform hashes. Structural audit history is disclosed; external values never refit transforms or choose models.
 - [ ] Evaluate the prespecified model set in one locked batch, retain one prediction per donor/model, and require identical unique donor sets and consistent labels before paired comparison. Report primary delta/interval, actual class counts, support-limited sensitivities, and all controls. The entire accepted external set remains outside fitting.
 - [ ] Update the validation resource registry to name the actual candidate/status and the 5+5 RNA cohort correctly; produce `validation.csv` and a compact report. Known overlap, unresolved compatibility, or failed QC produces a bounded pending/inconclusive result instead of an independent multimodal success claim.

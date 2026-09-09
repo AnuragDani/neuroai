@@ -134,7 +134,13 @@ make lint
 make test-all
 ```
 
-Results: 51 focused tests passed; 529 full-suite tests passed; lint and formatting passed. The full suite retains 19 existing scikit-learn warnings from synthetic end-to-end tests. Tests cover both MEX layouts, malformed counts, archive expansion attacks, ambiguous ages, valid multiplexing, output preservation, and failure reports. An independent code review found archive-budget and validation defects; regression tests reproduced them before fixes. All required review findings were then closed.
+Latest verification: 43 multiome ingestion tests passed; 576 full-suite tests passed;
+lint and formatting passed. The full suite retains 19 existing scikit-learn warnings
+from synthetic end-to-end tests. Tests cover both MEX layouts, malformed counts,
+archive expansion attacks, ambiguous ages, valid multiplexing, output preservation,
+retained-cell joins, author release reconciliation and failure reports. Independent
+review found the documented audit byte budget needed updating for the H5AD checksum;
+that was corrected. No required findings remain in the reviewed increments.
 
 ## What remains
 
@@ -142,7 +148,7 @@ Follow [the development checklist](../tasks/todo.md). The audit does not complet
 M1–M4 scientific acceptance. Reusable M5–M8 training/comparison code has since advanced
 through synthetic verification; accepted real-data protocol and execution remain pending.
 
-1. Reconcile the final training donor/cell set and pin its retained-barcode mapping.
+1. Extend the verified final-release barcode join beyond the one-library pilot. Author library/donor membership is now reconciled; full raw-file coverage is not.
 2. Explain NeMO's release/QC difference and complete the cross-study specimen audit.
 3. Inspect an author-provided common-count object or budget exact counts on frozen regions. Do not use peak overlap as an exact projection.
 4. Establish count semantics and genome-build provenance for the chosen representation.

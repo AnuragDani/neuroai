@@ -52,3 +52,27 @@
   fits, 25 donor-held-out folds, 25.883 seconds and 0.4351 GB process peak RSS on CPU.
 - **Consequence:** no GPU/cloud provisioning justified by this workload. These
   small-feature measurements do not estimate full-matrix loading or exact recounting.
+
+## 2026-09-08 — Retained release, final artifacts and stopping boundaries
+
+- **Authorization:** user requested finishing the plan with regular commits. Continue
+  code and public-file diagnostics; do not invent a dated Professor Fang approval.
+- **Retained source:** pinned author downstream filtered table exactly matches all
+  37 final H5AD libraries and 30 donors/conditions. GEO flags alone are not the
+  retained-cohort contract. Apply the exact retained-barcode mask before sampling.
+- **Final fitting:** reuse the existing optimizer update, freeze each family's
+  epochs to ceiling of median internal best epochs, then refit on all development
+  donors. Store state dictionaries and numeric scaler parameters with hashes.
+- **Evaluation:** exact feature order and disjoint cell/donor IDs required. An
+  exclusive durable one-shot lock is acquired before predictions and retained on
+  failure. Synthetic scoring does not prove specimen independence or real benefit.
+- **Evidence:** [audit](PAIRED_MULTIOME_AUDIT.md), [training](PAIRED_MULTIOME_TRAINING.md),
+  150 synthetic internal fits plus six final refits, reload and scoring; 27.286 seconds
+  and 0.4466 GB process peak RSS. Different-model review found no required defects
+  after the audit command's documented byte budget was corrected.
+- **Verification:** 576 full-suite tests passed, 19 pre-existing warnings; lint and
+  formatting passed. All 26 local links in the changed plan/evidence documents resolve.
+- **Unfinished research:** accepted common-region ATAC counts, external release/QC
+  and specimen evidence, real protocol/normalization and biological controls, real
+  execution and the separate original RNA replication. These stay unchecked in
+  [the plan](../tasks/todo.md); no fabricated successful outcome or completed-plan claim.

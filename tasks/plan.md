@@ -1,7 +1,8 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-05. Status: data-audit and donor-aware neural-network code implemented;
-150 synthetic model fits verified locally. Real-data scientific gates remain pending.
+Updated: 2026-09-08. Status: retained-cell ingestion, donor-aware networks, final
+saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
+plus six final refits verified. Real-data scientific gates remain pending.
 
 ## Scope
 
@@ -10,7 +11,8 @@ Extend P22 toward real RNA+ATAC comparisons using GSE305146 for development and 
 The ingestion/compatibility report is available through [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md).
 The [training guide](../docs/PAIRED_MULTIOME_TRAINING.md) records donor-aware selection,
 genuine cross-attention, matched token concatenation, paired uncertainty, and a completed
-synthetic benchmark. Real-data training still depends on an accepted cohort, valid ATAC
+synthetic benchmark, final refit and reload/scoring. The author's filtered library
+table now exactly matches final-release membership. Real-data training still depends on an accepted cohort, valid ATAC
 representation, frozen scientific protocol, and recorded professor approval. User
 approval to continue development does not itself establish that professor-specific record.
 

@@ -1,6 +1,6 @@
 # Paired-model development: runnable synthetic verification
 
-Date: 2026-09-05. Neural-network implementation is now available and tested locally.
+Updated: 2026-09-08. Neural training and final artifact/scoring code verified locally.
 This is **software verification**, not a real-data experiment or scientific result.
 
 ## Run locally
@@ -16,6 +16,12 @@ it has no real-data input option, performs no downloads, and refuses `data_mode:
 It writes resolved settings before fitting, then `run.json` and `SUMMARY.md`. Invalid
 inputs return exit code 2; failures after directory creation leave `failure.json`.
 No GPU, cloud service, new dependency, or change to professor approval was needed.
+
+It also writes `final/refit_contract.json` before final fitting, then `models.pt`
+and `manifest.json`. The saved tensors contain six state dictionaries plus numeric
+scaler parameters, loaded with `weights_only=True`, not pickled executable models.
+`synthetic_external/` contains donor predictions, `validation.csv` and a JSON report.
+These files are all labeled synthetic; the real-data entry path remains refused.
 
 ## What was implemented
 
@@ -46,20 +52,34 @@ independent observations. The majority control learns from training donors only.
 Chromosome-21 dosage, biological QC, and pseudobulk RNA controls are explicitly not
 applicable to this neutral fixture; they remain required for the real experiment.
 
+Final refit uses all development donors, with each model's epoch count fixed to
+`ceil(median(internal best epochs))`. It refits preprocessing on development cells
+only and uses the same donor-balanced optimizer update as internal training. A
+separate synthetic draw, seed 23 for the default fixture, exercises artifact reload
+and held-out scoring. Neither its inputs nor outcomes select the saved parameters.
+
+Scoring checks an expected manifest hash, the contained weight/scaler hash, exact
+feature order, and disjoint donor/cell IDs. An exclusive lock is created before any
+prediction and retained even after a scoring failure. Do not remove/copy locks to
+turn evaluation into model selection. This is accidental-repeat protection, not a
+security barrier against someone modifying files. Different donor IDs alone still
+do not establish independent biological specimens.
+
 ## Measured execution
 
-[Saved summary](../reports/generated/multiome/training_20260905/SUMMARY.md) and
-[full record](../reports/generated/multiome/training_20260905/run.json):
+[Saved summary](../reports/generated/multiome/training_20260908_final/SUMMARY.md) and
+[full record](../reports/generated/multiome/training_20260908_final/run.json):
 
 - 30 synthetic donors, 256 cells each, 32 view-A and 24 view-B features.
-- 25 outer folds; 150 neural-model fits. Early stopping used 6–8 epochs of a 20-epoch maximum.
-- CPU, one PyTorch thread: **25.883 seconds**, **0.4351 GB process peak RSS**.
+- 25 outer folds; 150 internal fits plus six final refits and reload/scoring.
+- Final epochs: ATAC-only 2; all other neural families 1, from internal validation only.
+- CPU, one PyTorch thread: **27.286 seconds**, **0.4466 GB process peak RSS**.
 - Trainable parameters: single-view A 1,618; single-view B 1,362; standard concat
   2,978; gated fusion 4,068; token concat 6,146; cross-attention 7,234.
 
 The report includes split identities, preprocessing and checkpoint hashes, exact
-source hashes, environment, donor predictions, and per-model resources. Fold weights
-are hashed in memory, not saved as deployable checkpoints. This small-feature fixture
+source hashes captured before training, environment, donor predictions, and resources.
+Fold weights are hashed in memory; final weights and scalers are saved. This small-feature fixture
 does **not** establish full-atlas ingestion, fragment-recount, or real-training costs.
 
 ## Remaining real-data requirements
@@ -70,8 +90,8 @@ release/QC reconciliation, specimen independence, sensitivities/covariate polici
 and the dated professor-specific approval remain unresolved. User authorization to
 continue development was received; it was not relabeled as Professor Fang's approval.
 
-The real-data orchestrator, final all-development refit/serialized artifacts, and
-locked external evaluation are not implemented by the synthetic command. Do not feed
+Final all-development refit/serialized artifacts and locked scoring now exist, but
+the accepted real-data orchestrator remains blocked by those contracts. Do not feed
 raw atlas counts directly to the array adapter and interpret its standard scaling as
 an accepted RNA/ATAC normalization. Matrix-row/barcode identity must be established
 upstream; matching row counts alone cannot prove it. See [the checklist](../tasks/todo.md).
@@ -80,7 +100,7 @@ upstream; matching row counts alone cannot prove it. See [the checklist](../task
 
 ```bash
 .venv-p22/bin/python -m pytest -q tests/test_training.py tests/test_cross_attention.py \
-  tests/test_multiome_protocol.py tests/test_multiome_runner.py tests/test_synthetic.py
+  tests/test_multiome_protocol.py tests/test_multiome_runner.py tests/test_multiome_final.py
 make lint
 make test-all
 ```
@@ -91,9 +111,11 @@ held-out preprocessing invariance, strict paired bootstrap, synthetic execution,
 refusal of real-data configurations or output overwrites. Independent review found
 no required defects in the completed training slices.
 
-Verification on this implementation: **566 full-suite tests passed**, with 19
+Verification including the author-table audit increment: **576 full-suite tests passed**, with 19
 pre-existing scikit-learn warnings. Lint and formatting passed. No tests were disabled.
 
 Implementation follows the installed PyTorch 2.8 APIs:
 [MultiheadAttention](https://docs.pytorch.org/docs/2.8/generated/torch.nn.MultiheadAttention.html)
 and [unreduced cross entropy](https://docs.pytorch.org/docs/2.8/generated/torch.nn.CrossEntropyLoss.html).
+Final artifacts follow [state-dictionary saving/loading](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html)
+with an explicit [weights-only load](https://docs.pytorch.org/docs/2.8/generated/torch.load.html).
