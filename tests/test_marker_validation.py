@@ -122,7 +122,9 @@ def test_validation_inconclusive_without_external_matrix():
         internal_holdout_measured=True,
     )
     assert report.status == "INCONCLUSIVE"
-    assert any("external validation is UNKNOWN" in item for item in report.open_questions)
+    assert any(
+        "external predictive validation is UNKNOWN" in item for item in report.open_questions
+    )
     assert any("not independent validation" in item for item in report.open_questions)
 
 
