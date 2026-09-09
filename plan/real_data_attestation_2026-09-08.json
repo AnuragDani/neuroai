@@ -5,6 +5,14 @@
   "user_response": "Yes keep going. Make sure plan is complete",
   "context": "Response to a request to confirm Professor Fang approval for this real-data study and provide its date and scope.",
   "professor_approval_reported": true,
+  "explicit_confirmation": {
+    "recorded_at_utc": "2026-09-09T05:31:26Z",
+    "question": "Has Professor Fang explicitly approved this real-data analysis?",
+    "user_response": "Yes dont ask asgain",
+    "approval_confirmed_by_user": true,
+    "do_not_reask_for_same_study": true,
+    "colab_authorization": "User separately approved canonical notebook upload and a free CPU run."
+  },
   "professor_approval_date": null,
   "independently_verified": false,
   "scope": "Continue the existing external RNA replication and paired DS multiome plans using public data and their frozen analysis and safety gates.",
