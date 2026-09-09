@@ -150,6 +150,10 @@ def test_synthetic_command_runs_and_refuses_real_data_or_existing_outputs(tmp_pa
     assert report["data_mode"] == "synthetic" and not report["scientific_claim_allowed"]
     assert len(report["folds"]) == 2
     assert report["real_data_training_performed"] is False
+    assert report["final_artifacts"]["epoch_rule"] == "ceil(median(internal best epochs))"
+    assert (output / "final/models.pt").is_file()
+    assert (output / "synthetic_external/validation.csv").is_file()
+    assert report["synthetic_external_evaluation"]["scientific_claim_allowed"] is False
     assert subprocess.run(command, capture_output=True).returncode != 0
     config["data_mode"] = "real"
     config_path.write_text(json.dumps(config))

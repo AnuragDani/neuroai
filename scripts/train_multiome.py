@@ -23,6 +23,7 @@ from p22.data.group_splits import (  # noqa: E402
 )
 from p22.data.real_cohort import sample_nested_capped_cells  # noqa: E402
 from p22.data.resources import environment_record, measure_stage  # noqa: E402
+from p22.eval.multiome_final import evaluate_final, freeze_final  # noqa: E402
 from p22.eval.multiome_protocol import MultiomeProtocol, paired_comparison  # noqa: E402
 from p22.eval.multiome_runner import run_paired_fold  # noqa: E402
 from p22.models.fusion import VIEW_A, VIEW_B  # noqa: E402
@@ -30,7 +31,7 @@ from p22.runs.registry import current_git_commit, data_fingerprint  # noqa: E402
 from p22.testing.synthetic import make_synthetic_multimodal  # noqa: E402
 
 
-def benchmark(protocol, dataset):
+def benchmark(protocol, dataset, output_dir):
     fixture = make_synthetic_multimodal(**dataset, n_classes=2, label_unit="donor")
     rows = sample_nested_capped_cells(
         fixture.metadata,
@@ -90,6 +91,52 @@ def benchmark(protocol, dataset):
                 **paired_comparison(tables["cross_attention"], tables["token_concat"]),
             }
         )
+    epochs = {
+        name: int(
+            np.ceil(
+                np.median([record["models"][name]["training"]["best_epoch"] for record in records])
+            )
+        )
+        for name in records[0]["models"]
+    }
+    features = {
+        key: [f"{key}:{i}" for i in range(matrix.shape[1])] for key, matrix in views.items()
+    }
+    final = freeze_final(
+        views,
+        metadata,
+        features,
+        protocol,
+        epochs=epochs,
+        output_dir=output_dir / "final",
+        mode="synthetic",
+    )
+    # A separate neutral draw exercises reload/scoring. It is NOT a biological cohort.
+    external = make_synthetic_multimodal(
+        **(dataset | {"seed": dataset["seed"] + 1}), n_classes=2, label_unit="donor"
+    )
+    external_rows = sample_nested_capped_cells(
+        external.metadata,
+        np.ones(external.n_cells, dtype=bool),
+        (protocol.cell_cap,),
+        protocol.sampling_seed,
+    )[protocol.cell_cap]
+    external_meta = external.metadata.iloc[external_rows].copy().reset_index(drop=True)
+    external_meta["cell_id"] = "external:" + external_meta.cell_id
+    external_meta["donor_id"] = "external:" + external_meta.donor_id
+    external_views = {
+        VIEW_A: external.view_a[external_rows],
+        VIEW_B: external.view_b[external_rows],
+    }
+    evaluation = evaluate_final(
+        output_dir / "final",
+        final["manifest_sha256"],
+        external_views,
+        external_meta,
+        features,
+        output_dir=output_dir / "synthetic_external",
+        mode="synthetic",
+    )
     return {
         "data_mode": "synthetic",
         "scientific_claim_allowed": False,
@@ -103,6 +150,15 @@ def benchmark(protocol, dataset):
         .to_dict(),
         "folds": records,
         "synthetic_paired_comparisons_by_repeat": comparisons,
+        "final_artifacts": {
+            key: final[key]
+            for key in ("manifest_sha256", "models_sha256", "epoch_counts", "epoch_rule")
+        },
+        "synthetic_external_evaluation": evaluation,
+        "synthetic_external_generation": external.generation,
+        "synthetic_external_data_fingerprint": data_fingerprint(
+            external_views, external_meta.label, external_meta.donor_id
+        ),
         "not_applicable_controls": {
             "chr21_dosage": "no biological chromosome annotation in neutral fixture",
             "qc_covariate_logistic": "no biological QC covariates in neutral fixture",
@@ -111,8 +167,8 @@ def benchmark(protocol, dataset):
         "limitations": [
             "Synthetic wiring only; scores and advantage flags are not scientific evidence.",
             "No accepted real normalization, release/QC, specimen, or ATAC feature contract.",
-            "No external cohort, final all-development refit, or frozen external checkpoint.",
-            "Fold weights are hashed in memory, not saved deployment artifacts.",
+            "No biological external cohort. Final refit and saved artifacts are synthetic only.",
+            "Final weights/scalers are saved; internal fold weights remain in-memory hashes.",
             "Attention has more parameters than its matched-token concat control.",
             "Each repeat resamples donors, never cells or repeat rows as independent donors.",
             "Resource figures apply to this bounded synthetic workload only.",
@@ -163,9 +219,14 @@ def main(argv=None):
         resolved = config | {"protocol": asdict(protocol)}
         (args.output_dir / "config.json").write_text(json.dumps(resolved, indent=2) + "\n")
         torch.set_num_threads(1)
+        paths = [Path(__file__), *(ROOT / "src/p22").rglob("*.py")]
+        source_hashes = {
+            str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(paths)
+        }
         report, resource = measure_stage(
             "synthetic_paired_training",
-            lambda: benchmark(protocol, dataset),
+            lambda: benchmark(protocol, dataset, args.output_dir),
             cells_per_donor_cap=protocol.cell_cap,
             disk_path=args.output_dir,
             notes="Complete synthetic run on CPU with one PyTorch thread; not a real-data estimate",
@@ -178,11 +239,7 @@ def main(argv=None):
             resources=resource.to_dict(),
             torch_threads=torch.get_num_threads(),
         )
-        paths = [Path(__file__), *(ROOT / "src/p22").rglob("*.py")]
-        report["source_sha256"] = {
-            str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in sorted(paths)
-        }
+        report["source_sha256"] = source_hashes
         (args.output_dir / "run.json").write_text(
             json.dumps(report, indent=2, allow_nan=False) + "\n"
         )
@@ -196,6 +253,7 @@ def main(argv=None):
             f"process peak RAM: {resource.peak_rss_gb} GB.",
             f"- Protocol SHA-256: `{protocol.fingerprint}`.",
             "- Real-data training and external evaluation: not performed.",
+            "- Six final synthetic model/scaler artifacts saved and reloaded for one-shot scoring.",
             "",
             "See run.json for per-model results, checkpoint hashes, splits, and limitations.",
         ]
