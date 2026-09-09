@@ -24,6 +24,7 @@ from p22.data.multiome import (  # noqa: E402
     ReadBudget,
     load_mex,
     metadata_report,
+    nemo_metadata_diagnostics,
     normalize_metadata,
     pair_and_cap,
     parse_geo_libraries,
@@ -60,8 +61,12 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         "retained_cell_barcode_mapping": "PENDING",
     }
     raw_metadata = pd.read_csv(io.BytesIO(read_asset(local(external["metadata"]), budget)))
+    raw_metadata = raw_metadata.rename(columns=external["columns"])
+    annotation_diagnostics = nemo_metadata_diagnostics(
+        raw_metadata, published_cells=external["published_cells"]
+    )
     metadata = normalize_metadata(
-        raw_metadata.rename(columns=external["columns"]),
+        raw_metadata,
         condition_map=external["condition_map"],
         age_unit=external["age_unit"],
         age_source=external["age_source"],
@@ -72,6 +77,7 @@ def audit(manifest: dict, base: Path, budget: ReadBudget, cap: int, max_nnz: int
         expected_donors=external["published_donors"],
     )
     external_report["paired_matrices_checked"] = False
+    external_report["annotation_diagnostics"] = annotation_diagnostics
     block = load_mex(
         {key: local(value) for key, value in geo["combined_mex"].items()}, budget, max_nnz=max_nnz
     )
@@ -223,6 +229,9 @@ def main(argv: list[str] | None = None) -> int:
             f"published: {report['geo']['published_donors']}.",
             f"- NeMO metadata cells: {report['external']['metadata_cells']}; "
             f"published: {report['external']['published_cells']}.",
+            "- NeMO annotation diagnostics: "
+            f"{report['external']['annotation_diagnostics']['status']}; "
+            "no exclusion applied, QC and specimen independence not certified.",
             f"- Pilot selected cells: {report['pilot']['selected_cells']} "
             f"({report['pilot']['data_kind']}).",
             f"- ATAC full-peak-union status: {report['atac_compatibility']['status']}.",

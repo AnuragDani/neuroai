@@ -72,6 +72,93 @@ def test_manifest_reports_count_gap_without_deleting_cells():
     assert len(result) == 3
 
 
+def nemo_metadata():
+    return metadata().assign(
+        **{
+            "class": ["RG", "Unk", "EN"],
+            "cluster.ids": ["oRG", "Unk", "EN-Newborn"],
+            "source": ["UCLA", "UCLA", "NIH_NBB"],
+            "sex": ["Male", "Male", "Female"],
+            "ancestry": ["AMR", "AMR", "EUR"],
+            "nCount_ATAC": [100, 50, 101],
+            "percent.mt": [5.0, 0.0, 0.0],
+        }
+    )
+
+
+def test_nemo_annotation_diagnostics_never_apply_or_accept_candidate_filter():
+    from p22.data.multiome import nemo_metadata_diagnostics
+
+    frame = nemo_metadata()
+    before = frame.copy(deep=True)
+    report = nemo_metadata_diagnostics(frame, published_cells=2)
+    assert report["status"] == "ANNOTATION_COUNT_MATCH_QC_UNVERIFIED"
+    assert report["unknown_masks_equal"] is True
+    assert report["class_unknown_cells"] == report["cluster_unknown_cells"] == 1
+    assert report["candidate"]["cells"] == 2
+    assert report["candidate"]["donors"] == 2
+    assert report["candidate"]["cells_per_condition"] == {"Ctrl": 1, "Ts21": 1}
+    assert report["candidate"]["donors_per_source"] == {"NIH_NBB": 1, "UCLA": 1}
+    assert report["all_rows"]["cells"] == 3
+    assert report["all_rows"]["cells_per_source"] == {"NIH_NBB": 1, "UCLA": 2}
+    assert report["donor_invariants"]["source"] == {
+        "conflicting_donors": [],
+        "missing_cells": 0,
+    }
+    assert report["candidate"]["qc_threshold_counters"] == {
+        "atac_count_le_100": 1,
+        "mitochondrial_percent_ge_5": 1,
+        "either": 1,
+    }
+    assert report["exclusion_applied"] is False
+    assert report["qc_reproduced"] is False
+    assert report["specimen_independence_certified"] is False
+    pd.testing.assert_frame_equal(frame, before)
+
+
+def test_nemo_diagnostics_distinguish_disagreement_missing_fields_and_conflicts():
+    from p22.data.multiome import nemo_metadata_diagnostics
+
+    frame = nemo_metadata()
+    frame.loc[1, "cluster.ids"] = "oRG"
+    frame.loc[1, "source"] = "NIH_NBB"
+    frame.loc[2, "ancestry"] = None
+    report = nemo_metadata_diagnostics(frame, published_cells=2)
+    assert report["status"] == "ANNOTATION_DISAGREEMENT_QC_UNVERIFIED"
+    assert report["donor_invariants"]["source"]["conflicting_donors"] == ["A"]
+    assert report["donor_invariants"]["ancestry"]["missing_cells"] == 1
+    missing = nemo_metadata_diagnostics(frame.drop(columns="class"), published_cells=2)
+    assert missing["status"] == "MISSING_METADATA"
+    assert missing["missing_columns"] == ["class"]
+    assert missing["qc_reproduced"] is False
+    assert nemo_metadata_diagnostics(nemo_metadata(), published_cells=1)["status"] == (
+        "ANNOTATION_COUNT_MISMATCH_QC_UNVERIFIED"
+    )
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -1, 1.5])
+def test_nemo_diagnostics_reject_invalid_qc_counts(value):
+    from p22.data.multiome import nemo_metadata_diagnostics
+
+    frame = nemo_metadata().astype({"nCount_ATAC": float})
+    frame.loc[0, "nCount_ATAC"] = value
+    with pytest.raises(ValueError, match="nCount_ATAC"):
+        nemo_metadata_diagnostics(frame, published_cells=2)
+
+
+def test_nemo_diagnostics_reject_missing_nullable_counts_and_invalid_percentages():
+    from p22.data.multiome import nemo_metadata_diagnostics
+
+    frame = nemo_metadata().astype({"nCount_ATAC": "Int64"})
+    frame.loc[0, "nCount_ATAC"] = pd.NA
+    with pytest.raises(ValueError, match="nCount_ATAC"):
+        nemo_metadata_diagnostics(frame, published_cells=2)
+    frame = nemo_metadata()
+    frame.loc[0, "percent.mt"] = 101
+    with pytest.raises(ValueError, match="percent.mt"):
+        nemo_metadata_diagnostics(frame, published_cells=2)
+
+
 @pytest.mark.parametrize("failure", ["duplicate", "conflict", "missing", "unknown_label"])
 def test_manifest_rejects_ambiguous_identity(failure):
     frame = metadata()
@@ -318,7 +405,9 @@ def test_public_audit_cli_reports_blockers_without_training_or_overwrite(tmp_pat
             "comparison_features": mex_assets(tmp_path, "compare")["features"],
         },
         "external": {
-            "metadata": asset(tmp_path / "metadata.csv", metadata().to_csv(index=False).encode()),
+            "metadata": asset(
+                tmp_path / "metadata.csv", nemo_metadata().to_csv(index=False).encode()
+            ),
             "published_donors": 2,
             "published_cells": 2,
             "condition_map": {"Ctrl": 0, "Ts21": 1},
@@ -347,6 +436,12 @@ def test_public_audit_cli_reports_blockers_without_training_or_overwrite(tmp_pat
     assert report["preflight_status"] == "COMPLETED"
     assert report["training_allowed"] is False
     assert report["external"]["count_difference"] == 1
+    assert report["external"]["annotation_diagnostics"]["candidate"]["cells"] == 2
+    assert report["external"]["annotation_diagnostics"]["status"] == (
+        "ANNOTATION_COUNT_MATCH_QC_UNVERIFIED"
+    )
+    assert report["external"]["retained_cells"] is None
+    assert report["external"]["confirmatory_ready"] is False
     assert report["pilot"]["selected_cells"] == 1
     assert report["pilot"]["data_kind"] == "raw_library_not_final_qc"
     assert report["resources"]["elapsed_seconds"] >= 0

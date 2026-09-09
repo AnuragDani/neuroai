@@ -386,3 +386,89 @@ def metadata_report(frame: pd.DataFrame, *, published_cells: int, expected_donor
         "specimen_independence": "UNRESOLVED",
         "confirmatory_ready": False,
     }
+
+
+def nemo_metadata_diagnostics(frame: pd.DataFrame, *, published_cells: int) -> dict:
+    """Describe the RNA annotation count match, never apply or certify its exclusions."""
+    _positive_integer(published_cells, "published cells")
+    report = {
+        "exclusion_applied": False,
+        "qc_reproduced": False,
+        "specimen_independence_certified": False,
+    }
+    invariants = ("condition", "source", "age_raw", "sex", "ancestry")
+    required = {"donor_id", "class", "cluster.ids", "nCount_ATAC", "percent.mt", *invariants}
+    missing = sorted(required - set(frame.columns))
+    if missing:
+        return report | {"status": "MISSING_METADATA", "missing_columns": missing}
+    if frame.empty:
+        raise ValueError("NeMO metadata is empty")
+    for column in ("donor_id", "condition", "class", "cluster.ids"):
+        if frame[column].isna().any() or frame[column].astype(str).str.strip().eq("").any():
+            raise ValueError(f"missing NeMO metadata value: {column}")
+    atac = pd.to_numeric(frame.nCount_ATAC, errors="coerce")
+    mito = pd.to_numeric(frame["percent.mt"], errors="coerce")
+    if (
+        atac.isna().any()
+        or not np.isfinite(atac).all()
+        or atac.lt(0).any()
+        or atac.ne(np.floor(atac)).any()
+    ):
+        raise ValueError("invalid NeMO nCount_ATAC")
+    if mito.isna().any() or not np.isfinite(mito).all() or not mito.between(0, 100).all():
+        raise ValueError("invalid NeMO percent.mt")
+
+    def summarize(mask):
+        selected = frame.loc[mask]
+        low_atac, high_mito = atac.loc[mask].le(100), mito.loc[mask].ge(5)
+        result = {
+            "cells": len(selected),
+            "donors": int(selected.donor_id.nunique()),
+            "qc_threshold_counters": {
+                "atac_count_le_100": int(low_atac.sum()),
+                "mitochondrial_percent_ge_5": int(high_mito.sum()),
+                "either": int((low_atac | high_mito).sum()),
+            },
+        }
+        for column in ("condition", "source"):
+            grouped = selected.groupby(column)
+            result[f"cells_per_{column}"] = {
+                str(key): int(value) for key, value in grouped.size().items()
+            }
+            result[f"donors_per_{column}"] = {
+                str(key): int(value) for key, value in grouped.donor_id.nunique().items()
+            }
+        return result
+
+    unknown = frame["class"].eq("Unk")
+    cluster_unknown = frame["cluster.ids"].eq("Unk")
+    candidate = summarize(~unknown)
+    match = candidate["cells"] == published_cells
+    status = (
+        "ANNOTATION_COUNT_MATCH_QC_UNVERIFIED"
+        if match
+        else "ANNOTATION_COUNT_MISMATCH_QC_UNVERIFIED"
+    )
+    if not unknown.equals(cluster_unknown):
+        status = "ANNOTATION_DISAGREEMENT_QC_UNVERIFIED"
+    donor_invariants = {}
+    for column in invariants:
+        values = frame[column].replace(r"^\s*$", np.nan, regex=True)
+        conflicts = values.groupby(frame.donor_id).nunique().gt(1)
+        donor_invariants[column] = {
+            "conflicting_donors": sorted(str(value) for value in conflicts.index[conflicts]),
+            "missing_cells": int(values.isna().sum()),
+        }
+    return report | {
+        "status": status,
+        "published_cells": published_cells,
+        "candidate_count_matches_published": match,
+        "candidate_rule": "class != 'Unk'; diagnostic only, no exclusion applied",
+        "class_unknown_cells": int(unknown.sum()),
+        "cluster_unknown_cells": int(cluster_unknown.sum()),
+        "unknown_masks_equal": unknown.equals(cluster_unknown),
+        "all_rows": summarize(pd.Series(True, index=frame.index)),
+        "candidate": candidate,
+        "donor_invariants": donor_invariants,
+        "qc_counter_interpretation": "Current metadata values, not reproduced upstream QC",
+    }
