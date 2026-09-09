@@ -814,3 +814,159 @@ def run_real_validation(h5ad_path: str | Path, state: RealAnalysisState) -> Real
         "external validation UNKNOWN/INCONCLUSIVE"
     )
     return state
+
+
+def run_external_rna_replication(
+    h5ad_path: str | Path,
+    external_xlsx: str | Path,
+    *,
+    state: RealAnalysisState | None = None,
+    approval_present: bool = False,
+    expected_sha256: str | None = None,
+    n_bootstrap: int = 1_000,
+    n_permutations: int = 1_000,
+    seed: int = 22,
+) -> dict[str, Any]:
+    """Append four summary-effect rows in place; never upgrade external G8.
+
+    The approval argument is the existing per-run attestation, not an amendment
+    of the historical approval policy. An alternate workbook hash is explicit
+    for fixture verification; the canonical run always uses the pinned source.
+    """
+    import time
+
+    import h5py
+    from anndata.io import read_elem
+
+    from p22.data.census import sha256_file
+    from p22.eval.external_validation import (
+        COMPARISONS,
+        EVIDENCE_SCOPE,
+        EXTERNAL_ACCESSION,
+        EXTERNAL_SHA256,
+        collapse_donor_metadata,
+        compare_effect_directions,
+        fit_discovery_effects,
+        load_external_effects,
+        summarize_headline_outcome,
+    )
+
+    started = time.perf_counter()
+    state = RealAnalysisState() if state is None else state
+    source_hash = expected_sha256 or EXTERNAL_SHA256
+    rows = [
+        {
+            "analysis": "external_rna_direction_replication",
+            "discovery_population": population,
+            "primary_labels": "|".join(labels),
+            "external_population": sheet,
+            "external_accession": EXTERNAL_ACCESSION,
+            "external_sha256": None,
+            "expected_external_sha256": source_hash,
+            "evidence_scope": EVIDENCE_SCOPE,
+            "execution_status": "failed",
+            "scientific_outcome": "not_evaluated",
+            "headline_outcome": "not_evaluated",
+            "external_matrix_ingested": False,
+        }
+        for population, labels, sheet in COMPARISONS
+    ]
+    result: dict[str, Any] = {
+        "rows": rows,
+        "gene_tables": {},
+        "external_matrix_ingested": False,
+        "execution_status": "failed",
+        "headline_outcome": "not_evaluated",
+        "approval_attested": approval_present is True,
+        "protocol": {
+            "pcw_range": [13, 19],
+            "min_cells_per_donor": 50,
+            "n_bootstrap": n_bootstrap,
+            "n_permutations": n_permutations,
+            "seed": seed,
+            "top_n": 100,
+            "min_shared_genes": 500,
+        },
+    }
+    try:
+        if approval_present is not True:
+            raise ValueError("explicit per-run professor approval attestation required")
+        path = Path(h5ad_path)
+        with h5py.File(path, "r") as handle:
+            source_obs = read_elem(handle["obs"])
+            var = read_elem(handle["var"])
+            raw_var = read_elem(handle["raw/var"])
+            if not raw_var.index.equals(var.index):
+                raise ValueError("raw count gene order differs from var")
+            result["data_mode"] = (
+                read_elem(handle["uns/data_mode"])
+                if "uns/data_mode" in handle
+                else "real_public_summary_replication"
+            )
+        external = load_external_effects(
+            external_xlsx, gene_metadata=var, expected_sha256=source_hash
+        )
+        for row in rows:
+            row["external_sha256"] = source_hash
+        result["primary_sha256"] = sha256_file(path)
+        if state.obs is None or state.keep_mask is None:
+            run_schema_qc_census(path, state)
+        if state.qc.get("status") != "PASS":
+            raise ValueError("primary cohort QC did not pass")
+        obs = state.obs
+        columns = ["donor_id", "disease", "dev_PCW", "sex", "author_cell_type"]
+        if not obs.index.equals(source_obs.index) or not obs[columns].astype("string").equals(
+            source_obs[columns].astype("string")
+        ):
+            raise ValueError("QC metadata does not match source cell order and annotations")
+        keep = np.asarray(state.keep_mask)
+        if keep.dtype != bool or keep.shape != (len(obs),):
+            raise ValueError("QC keep mask must be row-aligned boolean values")
+        collapse_donor_metadata(obs.loc[keep])
+        window = keep & pd.to_numeric(obs.dev_PCW).between(13, 19).to_numpy()
+        streams = np.random.SeedSequence(seed).spawn(len(COMPARISONS))
+        discovery = {}
+        for row, (population, labels, sheet), stream in zip(
+            rows, COMPARISONS, streams, strict=True
+        ):
+            if population not in discovery:
+                mask = window & obs.author_cell_type.isin(labels).to_numpy()
+                bulk = donor_pseudobulk(path, obs, mask)
+                metadata = collapse_donor_metadata(obs.loc[mask], bulk.donor_ids)
+                discovery[population] = (fit_discovery_effects(bulk, metadata, var), bulk)
+            fitted, bulk = discovery[population]
+            comparison = compare_effect_directions(
+                fitted,
+                external[sheet],
+                n_bootstrap=n_bootstrap,
+                n_permutations=n_permutations,
+                seed=stream,
+            )
+            result["gene_tables"][sheet] = comparison.pop("joined_effects")
+            row.update(comparison)
+            row.update(
+                primary_cells=int(bulk.n_cells.sum()),
+                min_cells_per_donor=int(bulk.n_cells.min()),
+                donor_ids=list(bulk.donor_ids),
+            )
+        failed = [row["reason"] for row in rows if row["execution_status"] != "completed"]
+        if failed:
+            raise ValueError("; ".join(failed))
+        result["headline_outcome"] = summarize_headline_outcome(rows)
+        result["execution_status"] = "completed"
+        for row in rows:
+            row["headline_outcome"] = result["headline_outcome"]
+    except (ValueError, RuntimeError, OSError, KeyError, np.linalg.LinAlgError) as exc:
+        # A partial execution is not a four-comparison scientific conclusion.
+        for row in rows:
+            row.update(
+                execution_status="failed",
+                scientific_outcome="not_evaluated",
+                headline_outcome="not_evaluated",
+                reason=str(exc),
+            )
+        result["reason"] = str(exc)
+    result["wall_seconds"] = time.perf_counter() - started
+    result["peak_rss_gb"] = peak_rss_gb()
+    state.validation_rows.extend(rows)
+    return result
