@@ -13,12 +13,13 @@ The [training guide](../docs/PAIRED_MULTIOME_TRAINING.md) records donor-aware se
 genuine cross-attention, matched token concatenation, paired uncertainty, and a completed
 synthetic benchmark, final refit and reload/scoring. The author's filtered library
 table now exactly matches final-release membership. Real-data training still depends on an accepted cohort, valid ATAC
-representation, frozen scientific protocol, and recorded professor approval. User
-approval to continue development does not itself establish that professor-specific record.
+representation and frozen scientific protocol. The user has now reported professor
+approval through the [scoped per-run attestation](../plan/real_data_attestation_2026-09-08.json);
+the actual professor approval date remains unknown and historical policy is unchanged.
 
 ## Decisions
 
-- Reconcile NeMO's 117,532 metadata rows with 113,801 published high-quality nuclei. Record a reasoned release/QC explanation; do not force a target count by arbitrary exclusions.
+- NeMO's 3,731 RNA `Unk` rows explain the count difference exactly. Record this candidate reconciliation separately from unresolved upstream QC; do not apply it as an accepted exclusion without source evidence.
 - Map all GSE305146 libraries to biological donors and retained cells. Check specimen provenance across studies; different donor names do not establish independence.
 - Normalize documented obstetric GW to approximate PCW with an explicit minus-two conversion. Preserve original values and unresolved units.
 - Require common measured ATAC regions/count semantics for confirmatory evaluation. Peak-derived gene scores can support an exploratory pilot; exact recounting and its resource budget remain possible.
@@ -44,6 +45,14 @@ Checkpoints follow M1–M2, M3–M4, M5–M6, and M7–M8. M3 diagnostics can pr
 ## Remaining evidence requirements
 
 The dataset proposal addresses all six review findings, but the empirical questions remain open: release/QC reconciliation, specimen provenance, age conventions, compatible ATAC counts, resource measurements, and whether an attention model adds value with 30 development donors and at most 26 external donors. Architectural hyperparameters and approximation acceptance limits must be written into the protocol before fitting/evaluation; they are not implicit defaults.
+
+The [2026-09-08 source check](../docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md)
+now documents UCLA/NIH procurement versus HDBR and the exact annotation count match.
+The executable audit reports these findings without certifying specimen identity,
+reproduced QC, or compatible ATAC counts. Original RNA replication is implemented
+and [executed locally](../docs/EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md): all
+four comparisons are inconclusive, with exactly matching results in three runs.
+Fresh Colab verification remains pending; RNA results cannot satisfy paired-data gates.
 
 ## Completion evidence
 

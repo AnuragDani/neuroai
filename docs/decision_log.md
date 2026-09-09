@@ -91,3 +91,21 @@
   and specimen evidence, real protocol/normalization and biological controls, real
   execution and the separate original RNA replication. These stay unchecked in
   [the plan](../tasks/todo.md); no fabricated successful outcome or completed-plan claim.
+
+## 2026-09-08 — Real external RNA replication completed locally
+
+- **Result:** all four prespecified summary-effect comparisons and the headline
+  are inconclusive. Each comparison has nine DS and eight control discovery
+  donors, 1,000 successful donor bootstraps and 1,000 whole-vector permutations.
+  No cutoffs, gene filters or endpoints changed after seeing these results.
+- **Verification:** three zero-error real notebook executions gave exactly equal
+  RNA result rows. Final full suite: 608 passed, 19 existing warnings; lint/format
+  passed. The final report distinguishes verified processed summaries from
+  untested external raw matrices; G8 remains inconclusive.
+- **Evidence:** [results, commands and completion ledger](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md).
+  User-reported approval is the scoped per-run attestation, not independent proof
+  or a new dated professor approval record.
+- **Remaining:** fresh Colab execution needs sign-in and upload approval. The
+  paired extension still requires accepted ATAC counts, NeMO access/QC, a frozen
+  real protocol, and actual internal/external neural comparisons. These gates
+  remain open; the full plan is not declared complete.

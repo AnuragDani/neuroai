@@ -1,9 +1,33 @@
 # External RNA Replication: Implementation Plan
 
-**Status:** Plan only  
+**Status:** Implemented and executed locally; all four comparisons inconclusive. Fresh Colab verification pending (2026-09-08)
+
 **Date:** 2026-09-03  
 **Review applied:** `EXTERNAL_RNA_REPLICATION_PLAN_REVIEW_2026-09-03.md`  
 **Goal:** Turn current negative classifier result into a bounded external-replication analysis with concrete code, tests, notebook output, and claim limits.
+
+## Implementation checkpoint (2026-09-08)
+
+- Tasks 1–3 implemented: pinned workbook guards, donor-level OLS and class-stratified
+  bootstrap, whole-vector permutation comparison, four-row evidence integration.
+- Task 4 implemented: idempotent 23-cell notebook, pinned reader dependency,
+  bounded workbook acquisition, table, plot, and explicit claim boundary.
+- Verification: 608 full-suite tests passed, including 15 statistical-core tests;
+  lint/format passed. Regeneration was byte-identical across two consecutive runs;
+  hand-maintained cells 2, 3 and 5 are unchanged. Independent review found and
+  resolved an empty-QC-record bypass; no required findings remain.
+- The actual external workbook matches the frozen SHA-256 and passes all four
+  schema/orientation guards. Three local real notebook executions completed with
+  zero errors and exactly identical RNA results: four inconclusive comparisons,
+  inconclusive headline, zero failed donor bootstraps, G8 still inconclusive.
+- [Results and verification record](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md)
+  contain the final artifacts, exact invocation, hashes, timings and claim limits.
+  Tasks 1–4 and local verification are complete. Task 5 remains partial: fresh
+  Colab needs user sign-in and explicit notebook-upload approval. This requirement
+  is not waived or marked passed.
+- Real execution uses the separately recorded
+  [user-reported approval attestation](../plan/real_data_attestation_2026-09-08.json),
+  not an invented professor approval date or a global historical policy change.
 
 ## Decision
 
@@ -298,4 +322,4 @@ Add raw reanalysis only if processed-effect replication is informative or a revi
 
 ## Repository safety
 
-Do not overwrite `notebooks/implementation/06_metrics_and_run_reporting.ipynb`, root-level `P22_down_syndrome_all_in_one_executed.ipynb`, or unrelated untracked files. Executed notebook output belongs under gitignored `reports/generated/notebooks`. No `tasks/` directory exists. Separate Colab verification is tracked in `docs/CURSOR_VERIFICATION_HANDOFF.md`.
+Do not overwrite `notebooks/implementation/06_metrics_and_run_reporting.ipynb`, root-level `P22_down_syndrome_all_in_one_executed.ipynb`, or unrelated untracked files. Executed notebook output belongs under gitignored `reports/generated/notebooks`. The separate paired-multiome extension is tracked in `tasks/plan.md` and `tasks/todo.md`; it does not replace this RNA study. Separate Colab verification is tracked in `docs/CURSOR_VERIFICATION_HANDOFF.md`.

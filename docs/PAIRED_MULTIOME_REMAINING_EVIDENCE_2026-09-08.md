@@ -137,6 +137,14 @@ budgets. A different GPU cannot resolve missing measurements or provenance.
   because it also contains controlled data. No redistribution permission inferred.
 - Repeated direct public NeMO manifest download failed TLS with curl exit 35;
   cached directory/collection listings remained readable. No matrix downloaded.
+- Follow-up transport checks reached TCP but closed during TLS negotiation, before
+  a server certificate or HTTP response. TLS 1.2 with both curl and Python/OpenSSL
+  failed; plain HTTP returned an empty reply. The documented public asset API also
+  failed TLS. This establishes a transport blocker here, not its server-side cause;
+  no certificate checks were disabled and no supported working mirror was found.
+  The official [RNA manifest](https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_RNAseq/human/processed/col-mbgxwtz-Vuong_delaTorre_Human_snMultiome_Analysis_RNA-Open-manifest.tsv)
+  is under `/processed/`; the [ATAC manifest](https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/col-ad8t52b-Vuong_delaTorre_Human_snMultiome_Analysis_ATAC-Open-manifest.tsv)
+  is under `/processed/counts/`. Do not conflate their directory layouts.
 - PMC article HTML returned a browser challenge. The documented
   [NCBI E-utilities route](https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=13225313)
   returned the actual manuscript XML with DOI `10.1126/science.aea1259`.
