@@ -110,12 +110,18 @@ except ImportError:
 
 if IN_COLAB:
     import importlib
+    from importlib.metadata import PackageNotFoundError, version
     need = []
     for pkg, mod in [("anndata", "anndata"), ("torch", "torch"), ("scikit-learn", "sklearn"), ("h5py", "h5py"), ("matplotlib", "matplotlib")]:
         try:
             importlib.import_module(mod)
         except ImportError:
             need.append(pkg)
+    try:
+        if version("openpyxl") != "3.1.5":
+            need.append("openpyxl==3.1.5")
+    except PackageNotFoundError:
+        need.append("openpyxl==3.1.5")
     if need:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *need])
     PROJECT_ROOT = Path("/content/p22")
@@ -171,6 +177,7 @@ from p22.data.census import (
     estimate_download_gb,
     planned_acquisition_from_catalog,
     run_backed_census,
+    sha256_file,
     verify_local_h5ad,
 )
 from p22.data.group_splits import (
@@ -199,6 +206,7 @@ from p22.eval.modes import (
 from p22.eval.real_pipeline import (
     RealAnalysisState,
     freeze_real_estimand,
+    run_external_rna_replication,
     run_real_interventions,
     run_real_model_comparison,
     run_real_validation,
@@ -226,6 +234,9 @@ SEED = 20260728
 MODEL_INIT_SEED = 0
 DATASET_ID = DEFAULT_DATASET_ID
 COLLECTION_ID = DEFAULT_COLLECTION_ID
+EXTERNAL_RNA_URL = "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-025-63752-0/MediaObjects/41467_2025_63752_MOESM4_ESM.xlsx"
+EXTERNAL_RNA_BYTES = 19_576_790
+EXTERNAL_RNA_SHA256 = "ea0e5a0d96e122ce39ace8be29b65039c3f7775cc96699873a8acc4ee74ccf13"
 UPLOADED_NOTEBOOK = Path.cwd() / "P22_down_syndrome_all_in_one.ipynb"
 SOURCE_NOTEBOOK = UPLOADED_NOTEBOOK if UPLOADED_NOTEBOOK.is_file() else PROJECT_ROOT / "P22_down_syndrome_all_in_one.ipynb"
 
@@ -815,6 +826,71 @@ else:
     EVIDENCE_BUCKETS["blocked_or_unknown"].append("G8 external validation not run in this mode")
 """
 
+CELL_EXTERNAL = r"""# External RNA direction replication: summary effects, not predictive validation.
+external_rna_limits = (
+    "Published cell-level MAST summary effects (donor covariate), not raw external reanalysis. "
+    "Aggregate RNA direction only; no per-gene, classifier, ATAC, routing, multimodal, or causal claim. "
+    "G8 remains INCONCLUSIVE: no external matrix ingested. "
+    "Primary PCW 19 absent; nominal cell-label mappings; batch unmodelled. "
+    "PCW18_DS_16545 has sub-quality tissue; PCW17_CON_14310 is thin near the cell floor. "
+    "Natural-log discovery coefficients and external log2 effects compare by rank/sign, not magnitude."
+)
+external_rna_result = {
+    "execution_status": "blocked", "headline_outcome": None, "rows": [], "gene_tables": {},
+    "reason": "Requires approved real mode, model fitting enabled, and retained-cell QC.",
+}
+external_rna_figure = None
+if REAL_MODE_ACTIVE and mode.allow_model_fit and PROFESSOR_APPROVED and real_state.keep_mask is not None:
+    import urllib.request
+    external_xlsx = DATA_ROOT / "41467_2025_63752_MOESM4_ESM.xlsx"
+    try:
+        if not external_xlsx.exists():
+            print("Downloading pinned Supplementary Data 2:", EXTERNAL_RNA_BYTES, "bytes")
+            with urllib.request.urlopen(EXTERNAL_RNA_URL, timeout=60) as response:
+                workbook_bytes = response.read(EXTERNAL_RNA_BYTES + 1)
+            if len(workbook_bytes) != EXTERNAL_RNA_BYTES:
+                raise ValueError("external workbook size mismatch")
+            if hashlib.sha256(workbook_bytes).hexdigest() != EXTERNAL_RNA_SHA256:
+                raise ValueError("external workbook SHA-256 mismatch")
+            with external_xlsx.open("xb") as handle:
+                handle.write(workbook_bytes)
+            del workbook_bytes
+        if external_xlsx.stat().st_size != EXTERNAL_RNA_BYTES or sha256_file(external_xlsx) != EXTERNAL_RNA_SHA256:
+            raise ValueError("external workbook size or SHA-256 mismatch; cached file preserved")
+        external_rna_result = run_external_rna_replication(
+            h5ad_path, external_xlsx, state=real_state, approval_present=PROFESSOR_APPROVED,
+        )
+    except (OSError, ValueError) as exc:
+        external_rna_result.update(execution_status="failed", reason=str(exc))
+    if external_rna_result["rows"]:
+        from IPython.display import display
+        display(pd.DataFrame(external_rna_result["rows"]))
+    if external_rna_result["gene_tables"]:
+        import matplotlib.pyplot as plt
+        fig, axes = plt.subplots(2, 2, figsize=(9, 7))
+        for ax, population in zip(axes.flat, ("oRG", "vRG", "CP", "IP")):
+            genes = pd.DataFrame(external_rna_result["gene_tables"].get(population, []))
+            if not genes.empty:
+                ax.scatter(genes["coefficient"], genes["avg_log2FC"], s=5, alpha=0.25, rasterized=True)
+            ax.axhline(0, color="grey", linewidth=0.5)
+            ax.axvline(0, color="grey", linewidth=0.5)
+            ax.set(title=population, xlabel="Discovery DS coefficient (natural log)", ylabel="External DS effect (log2)")
+        fig.suptitle("RNA effect directions: ranks/signs only, not comparable magnitudes")
+        fig.tight_layout()
+        external_rna_figure = OUTPUT_ROOT / "runs" / f"{mode.mode}_{SEED}" / "figures" / "external_rna_concordance.png"
+        external_rna_figure.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(external_rna_figure, dpi=150)
+        plt.show()
+        plt.close(fig)
+external_rna_record = {key: value for key, value in external_rna_result.items() if key != "gene_tables"}
+external_rna_record["limitations"] = external_rna_limits
+external_rna_record["figure"] = str(external_rna_figure) if external_rna_figure else None
+print("EXTERNAL RNA:", external_rna_result["execution_status"], "| headline:", external_rna_result["headline_outcome"])
+if external_rna_result.get("reason"):
+    print("Reason:", external_rna_result["reason"])
+print(external_rna_limits)
+"""
+
 CELL20 = """## G9 / R6 — Evidence package + handoff
 
 Writes `manifest.json`, `metrics.csv`, `interventions.csv`, `validation.csv`, `figures/`, `SUMMARY.md`. Never overwrites source notebook.
@@ -876,6 +952,7 @@ package = EvidencePackage(
         "split": real_state.split or split_report.to_dict(),
         "paired_deltas": paired_deltas if "paired_deltas" in dir() else [],
         "same_cap_summary": same_cap_summary if "same_cap_summary" in dir() else {},
+        "external_rna_replication": external_rna_record,
         "gates": board.to_dict(),
         "data_size_stages": scale_board.to_dict(),
         "data_scale": data_scale,
@@ -921,6 +998,14 @@ board.set(make_gate("G9", "PASS", evidence={"run_dir": str(package.run_dir)}, no
 package.manifest["gates"] = board.to_dict()
 paths = package.write()
 summary_path = write_human_summary(package.run_dir, package.manifest)
+safe_write_text(summary_path, summary_path.read_text(encoding="utf-8") + (
+    "\n## External RNA direction replication\n\n"
+    f"Execution: {external_rna_record['execution_status']}. "
+    f"Headline: {external_rna_record['headline_outcome']}.\n\n"
+    f"Reason: {external_rna_record.get('reason') or 'none'}.\n\n"
+    f"Comparison rows recorded: {len(external_rna_record['rows'])}; see validation.csv and manifest.json.\n\n"
+    + external_rna_limits + "\n"
+))
 # Executed notebook copy is filled by the outer nbconvert runner when present.
 executed_candidate = OUTPUT_BASE.parent / "notebooks" / "P22_down_syndrome_all_in_one.executed.ipynb"
 copied = copy_executed_notebook(executed_candidate, package.run_dir)
@@ -974,6 +1059,7 @@ final_summary = {
     "evidence_buckets": EVIDENCE_BUCKETS,
     "headline": real_state.headline,
     "same_cap_summary": same_cap_summary if "same_cap_summary" in dir() else {},
+    "external_rna_replication": external_rna_record,
     "claim_boundary": "Separate verified-real / synthetic / metadata-only / blocked.",
 }
 safe_write_text(OUTPUT_ROOT / "notebook_summary.json", json.dumps(final_summary, indent=2) + "\n")
@@ -1003,7 +1089,22 @@ def set_source(cell, text: str) -> None:
 
 def main() -> None:
     nb = json.loads(NB_PATH.read_text())
-    assert len(nb["cells"]) == 22, len(nb["cells"])
+    if len(nb["cells"]) == 22:
+        assert all(cell.get("id") != "ext-rna1" for cell in nb["cells"])
+        nb["cells"].insert(
+            20,
+            {
+                "cell_type": "code",
+                "id": "ext-rna1",
+                "metadata": {},
+                "outputs": [],
+                "execution_count": None,
+                "source": [],
+            },
+        )
+    assert len(nb["cells"]) == 23, len(nb["cells"])
+    assert nb["cells"][20].get("id") == "ext-rna1"
+    assert sum(cell.get("id") == "ext-rna1" for cell in nb["cells"]) == 1
     updates = {
         0: CELL0,
         1: CELL1,
@@ -1022,8 +1123,9 @@ def main() -> None:
         17: CELL17,
         18: CELL18,
         19: CELL19,
-        20: CELL20,
-        21: CELL21,
+        20: CELL_EXTERNAL,
+        21: CELL20,
+        22: CELL21,
     }
     for index, text in updates.items():
         set_source(nb["cells"][index], text)
