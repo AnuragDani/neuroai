@@ -67,6 +67,19 @@ def prepare_paired_fold(
     if any(donor_sets[i] & donor_sets[j] for i, j in ((0, 1), (0, 2), (1, 2))):
         raise ValueError("train/val/test donors overlap")
 
+    transformed, evidence, _ = fit_paired_preprocessing(
+        views,
+        ids,
+        indices["train"],
+        np.concatenate((indices["val"], indices["test"])),
+        protocol,
+        max_dense_elements,
+    )
+    return transformed, evidence
+
+
+def fit_paired_preprocessing(views, ids, train, holdout, protocol, max_dense_elements=2_000_000):
+    """Shared training-only feature/scaler fit for folds and all-development refits."""
     for name, matrix in views.items():
         if matrix.ndim != 2 or matrix.shape[0] != len(ids) or matrix.shape[1] < 1:
             raise ValueError(f"{name} dimensions do not match metadata")
@@ -77,9 +90,7 @@ def prepare_paired_fold(
     )
     if selected_size > max_dense_elements:
         raise ValueError("selected arrays exceed max_dense_elements; lower cap/feature budget")
-    train = indices["train"]
-    holdout = np.concatenate((indices["val"], indices["test"]))
-    transformed, evidence = {}, {}
+    transformed, evidence, fitted_views = {}, {}, {}
     for name, matrix in views.items():
         training = matrix[train].astype(np.float64)
         if sparse.issparse(training):
@@ -94,7 +105,48 @@ def prepare_paired_fold(
         fitted = fit_train_only(bounded, ids, ids[train], ids[holdout])
         transformed[name] = fitted.transform(bounded)
         evidence[name] = {"selected_features": selected.tolist(), "transform": fitted.metadata}
-    return transformed, evidence
+        fitted_views[name] = fitted
+    return transformed, evidence, fitted_views
+
+
+NEURAL_FAMILIES = (
+    "rna_only",
+    "atac_only",
+    "rna_atac_concat",
+    "gated_fusion",
+    "token_concat",
+    "cross_attention",
+)
+
+
+def paired_model(name, widths, protocol):
+    """Same initialized architecture for internal folds, final refit, and reload."""
+    set_all_seeds(protocol.model_seed)
+    common = dict(
+        n_classes=2,
+        embed_dim=protocol.embed_dim,
+        hidden_dim=protocol.hidden_dim,
+        dropout=protocol.dropout,
+    )
+    if name in {"rna_only", "atac_only"}:
+        return BaselineMLP(widths[0 if name == "rna_only" else 1], **common)
+    families = {
+        "rna_atac_concat": ConcatFusionModel,
+        "gated_fusion": GatedFusionModel,
+        "token_concat": TokenConcatFusionModel,
+        "cross_attention": CrossAttentionModel,
+    }
+    extras = {"n_tokens": protocol.n_tokens} if name in {"token_concat", "cross_attention"} else {}
+    if name == "cross_attention":
+        extras["n_heads"] = protocol.n_heads
+    return families[name](*widths, **common, **extras)
+
+
+def model_inputs(name, views):
+    if name in {"rna_only", "atac_only"}:
+        view = VIEW_A if name == "rna_only" else VIEW_B
+        return {view: views[view]}
+    return views
 
 
 def run_paired_fold(
@@ -112,37 +164,10 @@ def run_paired_fold(
     train, val, test = (indices[name] for name in ("train", "val", "test"))
     labels, donors = metadata.label.to_numpy(), metadata.donor_id.astype(str).to_numpy()
     widths = [transformed[name].shape[1] for name in (VIEW_A, VIEW_B)]
-    common = dict(
-        n_classes=2,
-        embed_dim=protocol.embed_dim,
-        hidden_dim=protocol.hidden_dim,
-        dropout=protocol.dropout,
-    )
-    families = {
-        "rna_only": BaselineMLP,
-        "atac_only": BaselineMLP,
-        "rna_atac_concat": ConcatFusionModel,
-        "gated_fusion": GatedFusionModel,
-        "token_concat": TokenConcatFusionModel,
-        "cross_attention": CrossAttentionModel,
-    }
     records = {}
-    for name, model_type in families.items():
-        set_all_seeds(protocol.model_seed)
-        if name in {"rna_only", "atac_only"}:
-            view = VIEW_A if name == "rna_only" else VIEW_B
-            inputs = {view: transformed[view]}
-            model = model_type(n_features=inputs[view].shape[1], **common)
-        else:
-            inputs = transformed
-            extras = (
-                {"n_tokens": protocol.n_tokens}
-                if name in {"token_concat", "cross_attention"}
-                else {}
-            )
-            if name == "cross_attention":
-                extras["n_heads"] = protocol.n_heads
-            model = model_type(*widths, **common, **extras)
+    for name in NEURAL_FAMILIES:
+        inputs = model_inputs(name, transformed)
+        model = paired_model(name, widths, protocol)
         trained, resource = measure_stage(
             name,
             lambda model=model, inputs=inputs: train_model(
