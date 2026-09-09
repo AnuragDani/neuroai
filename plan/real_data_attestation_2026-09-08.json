@@ -1,0 +1,19 @@
+{
+  "record_type": "user_reported_approval_attestation",
+  "reported_on": "2026-09-08",
+  "reported_by": "user in the current Codex task",
+  "user_response": "Yes keep going. Make sure plan is complete",
+  "context": "Response to a request to confirm Professor Fang approval for this real-data study and provide its date and scope.",
+  "professor_approval_reported": true,
+  "professor_approval_date": null,
+  "independently_verified": false,
+  "scope": "Continue the existing external RNA replication and paired DS multiome plans using public data and their frozen analysis and safety gates.",
+  "execution_mechanism": "Existing per-run P22_PROFESSOR_APPROVED attestation; historical plan/approvals.json is unchanged.",
+  "not_authorized": [
+    "controlled-access data acquisition",
+    "paid cloud provisioning",
+    "unbounded fragment download or recount",
+    "bypassing unresolved scientific acceptance gates",
+    "claiming independently verified or dated Professor Fang approval"
+  ]
+}

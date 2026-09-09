@@ -26,6 +26,21 @@
 - **Status:** open
 - **Label:** unknown until recorded
 
+## 2026-09-08 — User-reported real-data approval attestation
+
+- **Record:** [scoped attestation](../plan/real_data_attestation_2026-09-08.json).
+  User answered yes to the question about Professor Fang approval and asked to
+  complete the existing plan. This records the user's report, not independent
+  verification or an invented professor approval date.
+- **Execution:** use the existing per-run approval-attestation mechanism for the
+  public-data study. Preserve historical `plan/approvals.json`. Controlled access,
+  paid infrastructure, unbounded fragment recounts and scientific-gate bypasses
+  remain outside this authorization.
+- **Statistics:** retain the frozen RNA comparison and headline rules, but remove
+  the review's unsupported 2.5% arbitrary-dependence family-wise guarantee. Four
+  nominal 0.025 events can have a three-or-more union probability of 0.0333;
+  the descriptive rule is not a calibrated strong family-wise test.
+
 ## Historical — Tasic proxy-view architecture proof
 
 - **Decision:** Preserve outputs as legacy evidence; do not treat as
