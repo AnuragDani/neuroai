@@ -6,6 +6,166 @@ Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
+## Advancement queue — planning revision 2026-09-09
+
+These tasks extend the existing P22 work; they do not replace or complete M1–M8.
+This turn changes the plan only. Proposed commands/tests below do not exist yet
+unless explicitly identified as existing. Implementation requires plan review.
+Keep work in an isolated branch, preserve unrelated dirty files, and record one
+verified slice per local commit. No push, merge or GNHF resume.
+
+### F1: Bring the reviewed coordinate guard into the implementation branch
+
+**Description:** Recover only isolated commit `3b677d5`'s adapter/test change after
+checking the target branch. Do not import its accompanying old plan documents.
+
+**Acceptance criteria:**
+
+- [ ] Contradictory coordinate-shaped peak IDs are rejected by the shared reader;
+  valid ARC/MEX, opaque peak IDs and unmapped RNA retain their existing behavior.
+- [ ] Source/dirty-file hashes are preserved; the change is present exactly once
+  in an isolated reviewed commit, without changing RNA evidence or scientific gates.
+
+**Verification:** existing `tests/test_multiome.py` regression fails against the
+base and passes with the patch; run `tests/test_atac_features.py`, `make lint` and
+`make test-fast`. Inspect the staged diff and three existing public feature lists.
+**Dependencies:** plan approval and clean implementation workspace.
+**Files likely touched:** `src/p22/data/multiome.py`, `tests/test_multiome.py`.
+**Estimated scope:** Small, two files.
+
+### F2: Implement a bounded metadata-only archive probe
+
+**Description:** One dedicated probe separates network retrieval from the existing
+offline audit. Inspect only the pinned NeMO ATAC archive prefix, not the matrix.
+
+**Acceptance criteria:**
+
+- [ ] Enforce the plan's 1 MiB body/5 MiB decoded caps, request count and timeout;
+  require HTTP 206 with exact Content-Range before consuming the body. Reject
+  unexpected redirects/encoding, unsafe paths, nonregular members and changed
+  source identity; stop on matrix content. Never follow remote instructions.
+- [ ] Emit source URL/time, requested/received ranges, partial-response hash,
+  inspected member names and completeness, byte ledger and a specific stop reason.
+  Do not label a prefix hash as the full archive checksum or infer final QC.
+- [ ] HTTP 200, missing/wrong ranges, gzip expansion, truncated tar/gzip, unsafe
+  headers and a matrix-first archive all stop safely without a whole-file fallback.
+
+**Verification:** proposed `tests/test_release_probe.py` with local HTTP fixtures
+and tiny malicious/truncated archives; one real bounded probe only after fixtures
+pass. Run `make lint` and `make test-fast`; manually check the byte ledger.
+**Dependencies:** F1; reuse its validated feature path when complete metadata exists.
+**Files likely touched:** new `scripts/probe_multiome_release.py`,
+new `tests/test_release_probe.py` (reuse `ReadBudget` semantics, not its complete-
+archive parser on an incomplete prefix).
+**Estimated scope:** Small, two files.
+
+### Checkpoint F-A: Safe inspection
+
+- [ ] F1/F2 pass focused tests; original files unchanged; probe is bounded even
+  when the server ignores Range. No newly completed scientific gate is inferred.
+
+### F3: Produce one actionable input-feasibility decision
+
+**Description:** Extend the offline audit report to connect inspected facts with
+the existing M1–M4 acceptance requirements. Do not repeat unchanged source searches.
+
+**Acceptance criteria:**
+
+- [ ] Record separate development/external evidence for retained barcodes/QC,
+  pairing, specimen provenance, genome/coordinate convention, count units, exact
+  measured regions and feature provenance, with pinned sources/hashes. Missing
+  evidence cannot be replaced by a user-supplied `PASS` boolean.
+- [ ] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
+  gates. A partial archive, matching row total or annotation mask cannot certify
+  full membership, common counts, author QC or readiness to train.
+- [ ] A blocked report names the exact missing artifact, inspected source scope,
+  and one smallest next action with proposed bytes/disk and required authority.
+  Do not claim exhaustive absence or automatically launch that next action.
+
+**Verification:** extend existing `tests/test_multiome.py` and
+`tests/test_atac_features.py`; fixtures cover unknown QC despite equal totals,
+partial coverage, count-unit mismatch and unmeasured regions. Run existing offline
+audit with preserved inputs, `make lint` and `make test-fast`; independent evidence review.
+**Dependencies:** F2; source facts can be incomplete but must be labeled honestly.
+**Files likely touched:** `scripts/audit_multiome.py`, `tests/test_multiome.py`,
+`tests/test_atac_features.py`, `docs/PAIRED_MULTIOME_AUDIT.md`.
+**Estimated scope:** Medium, four files.
+
+### Checkpoint F-B: Input decision, not perpetual inspection
+
+- [ ] F3 produces accepted evidence or a concrete blocker. Stop paired execution
+  if required inputs fail; do not repeat F2 without a changed source or new budget.
+- [ ] Any development-only pilot has its own reviewed scope and all relevant
+  development gates. Original combined-cohort Checkpoint B and external gates
+  remain unchecked while their requirements are unmet.
+
+### F4: Freeze the new RNA donor-influence diagnostic
+
+**Description:** Define one follow-up question before running it: how much does
+omitting each discovery donor change the four existing effect-direction summaries?
+This is a new post-hoc exploratory analysis, not a redo of the primary study.
+
+**Acceptance criteria:**
+
+- [ ] Pin existing H5AD/workbook hashes, four comparison mappings, current cell/QC
+  and gene rules, age/sex model, and every eligible discovery donor. Freeze the
+  diagnostic before viewing its results; no outcome-selected omissions.
+- [ ] Define baseline and leave-one-donor-out Spearman correlation, change from
+  baseline, shared-gene counts, class support and fit status. Reapply the existing
+  expression rule and disclose changes in eligible genes rather than silently
+  comparing different universes. Rank-deficient or insufficient-support fits are
+  reported as unavailable, not repaired by dropping covariates or donors.
+- [ ] Label outputs `POST_HOC_EXPLORATORY`; no new significance cutoff, headline
+  reclassification, causal claim or external-donor uncertainty claim. Freeze the
+  no-download/CPU/resource limits from the plan; no bootstrap per omitted donor.
+
+**Verification:** independent protocol review and canonical config fingerprint;
+validate local input paths/hashes without running the analysis. F5 adds executable
+schema, deterministic-fixture and preservation checks before using real data.
+**Dependencies:** plan approval of this follow-up scope; independent of F1–F3.
+**Files likely touched:** new `configs/rna_donor_influence.json`.
+**Estimated scope:** Small, one file.
+
+### F5: Deliver the one-command donor-influence experiment
+
+**Description:** Reuse `donor_pseudobulk`, `collapse_donor_metadata` and
+`fit_discovery_effects`; aggregate existing counts once per unique population and
+reuse compact donor aggregates across all omissions. Do not rerun the full original
+pipeline just to produce a diagnostic.
+
+**Acceptance criteria:**
+
+- [ ] New diagnostic command validates F4's contract, reproduces baseline point
+  summaries within a declared numeric tolerance, then refits every eligible donor
+  omission. Count/metadata/gene alignment and each omission are auditable.
+- [ ] New exclusive output directory contains `donor_influence.csv`, one labeled
+  plot, `SUMMARY.md`, config/source hashes and measured resources. It reports all
+  comparisons and invalid fits, with uncertainty limitations and one next decision.
+- [ ] Original outputs, validation rows, headline/G8, approvals, source data and
+  notebook hashes stay unchanged. No resampling cells as independent donors,
+  donor exclusion recommendation from favorable scores, or fake ATAC input.
+
+**Verification:** proposed `tests/test_rna_donor_influence.py` includes a planted
+influential donor, stable-data control, rank failure, gene-set/support changes,
+determinism, stale-cache rejection if caching is used, and no-overwrite checks.
+Run existing `tests/test_external_validation.py`, `make lint`, `make test-fast`,
+then one bounded real diagnostic after the fixture checks pass.
+**Dependencies:** F4, not NeMO or GNHF.
+**Files likely touched:** new `src/p22/eval/rna_donor_influence.py`,
+new `scripts/diagnose_rna_replication.py`, new `tests/test_rna_donor_influence.py`.
+**Estimated scope:** Medium, three files.
+
+### Checkpoint F-C: First new scientific artifact
+
+- [ ] F5 table/plot/report reproduce from their frozen inputs and are independently
+  reviewed. Primary RNA results remain unchanged even if the diagnostic is positive.
+- [ ] Record whether donor influence, changing gene support or unresolved external
+  uncertainty limits interpretation. A null/inconclusive diagnostic still completes
+  this bounded question; expanding to new cohorts or methods requires a new plan.
+
+**Next:** once inputs and the real protocol are accepted, continue existing M5–M8
+below, using the M6a–M6c slices. Do not build another neural architecture.
+
 Commands below remain per-task acceptance targets. Runnable evidence is in
 [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md) and [training guide](../docs/PAIRED_MULTIOME_TRAINING.md).
 Synthetic fixtures establish software behavior only; public-file audits establish file
@@ -121,7 +281,7 @@ Turn the proposed research question into a versioned configuration before fittin
 **Verification:** `.venv-p22/bin/python -m pytest -q tests/test_multiome_protocol.py`; validate both-class support, donor disjointness, immutable fingerprints, margin calculation, and rejection of unresolved required gates. Check paired deltas against hand-calculated cases and existing `paired_donor_delta`, including invalid-resample counts. Confirm 30/26 are donor counts, not cell-based power claims.
 
 **Dependencies:** M1–M4 accepted for the selected analysis mode. **Scope:** Medium.
-**Likely files:** `configs/paired_multiome.json`, `src/p22/eval/multiome_protocol.py`, `tests/test_multiome_protocol.py`.
+**Likely files:** new `configs/paired_multiome_real.json`, `src/p22/eval/multiome_protocol.py`, `tests/test_multiome_protocol.py`. Preserve the existing `configs/paired_multiome.json` synthetic benchmark unchanged.
 
 ## M6: Run donor-aware baseline models
 
@@ -137,6 +297,73 @@ Connect accepted real paired inputs to the existing models and training loop whi
 
 **Dependencies:** M5. **Scope:** Medium.
 **Likely files:** `src/p22/eval/multiome_runner.py`, `tests/test_multiome_runner.py`, `src/p22/training/loop.py`, `tests/test_training.py`.
+
+### M6a: Expose real-data readiness without fitting
+
+**Description:** Add a separate real-data entrypoint that defaults to dry-run.
+The existing synthetic-only entrypoint remains unchanged.
+
+**Acceptance criteria:**
+
+- [ ] Validate M5 protocol and input-evidence fingerprints for the requested stage;
+  print missing gates and the exact next action before opening training matrices.
+- [ ] Dry-run never fits, scores, downloads or changes approval state. An explicit
+  execution request with unresolved required gates is refused, with a saved reason.
+
+**Verification:** new `tests/test_real_multiome_cli.py` covers default no-op,
+tampered hashes, unresolved QC/count contracts and synthetic-entrypoint preservation;
+run existing professor/gate tests, `make lint`, `make test-fast`.
+**Dependencies:** F3 evidence schema; fixture development can precede acceptance,
+but real execution additionally requires M5 and applicable accepted M1–M4 inputs.
+**Files likely touched:** new `scripts/run_real_multiome.py`,
+new `tests/test_real_multiome_cli.py`, `docs/PAIRED_MULTIOME_TRAINING.md`.
+**Estimated scope:** Medium, three files.
+
+### M6b: Implement the frozen real transforms and biological controls
+
+**Description:** Connect M5's chosen RNA/ATAC normalization and required controls
+to the bounded array adapter. Standard scaling of raw counts is not an implicit
+scientific normalization; reuse existing control implementations where applicable.
+
+**Acceptance criteria:**
+
+- [ ] Fit each learned transform/feature selection on training donors only;
+  preserve exact measured feature order, sparse bounds and matched cell caps.
+- [ ] Required RNA, ATAC, dosage, QC/covariate and matched-fusion controls use the
+  same declared splits and report inapplicability rather than invented measurements.
+
+**Verification:** hand-calculated transform fixtures, held-out perturbation tests,
+donor-weight checks and real-control applicability tests; existing multiome/real-
+runner tests plus `make lint` and `make test-fast`.
+**Dependencies:** accepted M5, M6a.
+**Files likely touched:** `src/p22/eval/multiome_runner.py`,
+`src/p22/eval/real_runner.py`, `tests/test_multiome_runner.py`, `tests/test_real_runner.py`.
+**Estimated scope:** Medium, at most four files.
+
+### M6c: Run one accepted internal fold before expanding
+
+**Description:** Wire the real entrypoint to existing donor-split and model helpers;
+run a single fixed internal fold as a bounded correctness/resource pilot.
+
+**Acceptance criteria:**
+
+- [ ] An explicit stage/config selects one fixed donor-disjoint fold with the
+  required class support, models and controls. NeMO does not fit transforms, select
+  parameters or receive predictions; a one-library sample is not donor validation.
+- [ ] Save per-donor predictions, split/config/input hashes and resource measures;
+  label pilot scores exploratory and never use them to redesign the test endpoint.
+- [ ] Expansion to M7's full frozen comparison requires pilot integrity/resource
+  review. M8 external scoring is separate and requires accepted external QC,
+  features, protocol and frozen final artifacts; no automatic execution chain.
+
+**Verification:** new real-CLI fixtures plus existing split/training/final-artifact
+tests; `make lint`, `make test-fast`, then one measured real fold only after gates pass.
+**Dependencies:** M6b and accepted real inputs; a development-only mode requires
+separate protocol review and cannot mark combined-cohort gates complete.
+**Files likely touched:** `scripts/run_real_multiome.py`,
+`tests/test_real_multiome_cli.py`, `src/p22/eval/multiome_runner.py`,
+`tests/test_multiome_runner.py`, `docs/PAIRED_MULTIOME_TRAINING.md`.
+**Estimated scope:** Medium, at most five files.
 
 ## Checkpoint C: Donor-aware baseline evidence
 

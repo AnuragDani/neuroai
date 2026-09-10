@@ -1,8 +1,121 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-08. Status: retained-cell ingestion, donor-aware networks, final
+Updated: 2026-09-09 (PDT). Planning revision only; no new experiment authorized
+or executed by this revision. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
+
+## Next implementation: usable experiment paths
+
+The immediate deliverable is a small command-line workflow with readable result
+files, not another architecture, dashboard, or autonomous orchestrator. Extend
+this same P22 plan; preserve all existing M1–M8 checkboxes below and in `todo.md`.
+
+Two tracks can progress independently after this plan is approved:
+
+| Track | What the user gets | What it can establish |
+|---|---|---|
+| Local RNA follow-up, F4–F5 | One command producing donor-influence table, plot, and summary | Whether discovery estimates are sensitive to individual donors; not a new replication verdict |
+| Paired inputs, F1–F3 | Bounded archive probe plus evidence-linked readiness report | What can be inspected within budget, which gates remain unmet, and the exact next input needed |
+| Real paired training, M5–M8 | Dry-run preflight, then one internal fold, full internal comparison, and locked external scoring | Model evidence only after the applicable input/protocol gates pass |
+
+**Recommended first scientific output:** the RNA donor-influence diagnostic. The
+local H5AD and frozen external workbook are present under `data/real/`; verify
+their hashes before use. This new, explicitly post-hoc exploratory analysis does
+not wait for NeMO and does not replace the completed RNA study. Do not add another
+binary DS classifier to work around the unresolved paired-data question.
+
+**Recommended paired-input action:** one metadata-only probe of the NeMO Open
+bag's `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, then one evidence
+decision. A gzip prefix can be incomplete or matrix-first. Do not assume random
+tar offsets, successful metadata retrieval, or final QC from a file listing.
+
+### Dependency order and checkpoints
+
+```text
+Plan approval + isolated workspace
+├─ F4 freeze RNA diagnostic → F5 implement/run diagnostic → RNA checkpoint
+└─ F1 recover reviewed fix → F2 bounded probe → F3 input decision → input checkpoint
+                                                   ├─ blocked: exact missing input + stop
+                                                   └─ accepted inputs → M5 → M6a/b/c → M7 → M8
+```
+
+Detailed acceptance criteria, verification, dependencies and file scope are in
+[todo.md](todo.md), tasks F1–F5 and M6a–M6c. The diagram does not authorize fitting
+while a required gate is unresolved. An internal-only pilot may proceed only
+under a separately reviewed development-only protocol with all development QC,
+pairing, feature, normalization and donor-split requirements satisfied. It cannot
+close the original combined-cohort Checkpoint B or M8 while NeMO remains pending.
+
+### Intended commands and outputs
+
+The following interfaces are **proposals to implement**, not commands available
+today. Existing `scripts/audit_multiome.py` stays an offline verifier, and
+`scripts/train_multiome.py` stays synthetic-only.
+
+- `scripts/probe_multiome_release.py --manifest <pinned-release> --output-dir <new-dir>`:
+  writes `probe.json` with inspected members, source identity, byte use and a stop
+  reason. No matrix loading or training.
+- `scripts/diagnose_rna_replication.py --config <frozen-diagnostic> --output-dir <new-dir>`:
+  writes `donor_influence.csv`, `donor_influence.png`, `SUMMARY.md`, and run hashes.
+- `scripts/run_real_multiome.py --config <frozen-real-protocol> --stage internal-pilot --dry-run`:
+  writes or displays the readiness decision, planned resources, and exact missing
+  inputs. Dry-run is the default and performs no fit or network access.
+- The same real entrypoint with explicit `--execute` runs only the selected,
+  accepted stage. External scoring remains a separate locked stage using the
+  existing final-artifact/scoring machinery; no automatic stage escalation.
+
+Every result should answer: what ran, what changed, what remains blocked, and
+which single action can change the decision. No repeated unchanged API/tree
+refreshes, automatic new datasets, or silently enlarged budgets.
+
+### Boundaries and resources
+
+- Preserve completed RNA results, thresholds, G8, approvals, notebooks and source
+  hashes. Diagnostic output must use a new directory and the label
+  `POST_HOC_EXPLORATORY`; it cannot turn the primary inconclusive result positive.
+- Existing paired integrity fix is in isolated commit `3b677d5`, not this checkout.
+  Recover only that reviewed code/test slice when implementing F1; do not merge
+  the entire isolated branch or overwrite this revised plan with its old docs.
+- The previous GNHF run exceeded its cap: 872,648 reported worker tokens. Do not
+  resume it. GNHF repair is a separate tooling task, not a prerequisite for P22:
+  use directly supervised, small implementation slices. Do not promise a strict
+  token ceiling from the current end-of-turn accounting or substitute a wall
+  clock limit for a token limit.
+- Probe ceiling: 1 MiB total response-body bytes, 5 MiB total decoded content,
+  at most one HEAD and one range GET, 30-second network timeout. Stop on a missing
+  or mismatched range response, matrix payload, invalid/truncated metadata or cap.
+  No larger retry without a separately reviewed budget. Compression and any
+  archive-extension headers count toward decoded limits.
+- RNA diagnostic: no new downloads; aggregate existing raw RNA once per unique
+  population and reuse compact donor aggregates. Initially at most four comparison
+  sets times their existing eligible donors; no nested 1,000-resample analysis
+  per omission. CPU only, proposed 30-minute job ceiling and 6 GiB memory budget;
+  preflight and record resources, refuse or stop rather than silently scale up.
+- No full fragments, recount, paid compute, author outreach, controlled access,
+  push or merge. No new GPU purchase. Real-training budgets must be measured on
+  accepted inputs before expansion; synthetic timings are not real-data estimates.
+- One verified implementation slice per local commit. Preserve unrelated dirty
+  files; keep raw data/generated outputs ignored and commit concise evidence.
+
+### Decision rules and fallback
+
+Archive metadata can resolve availability or barcode/feature facts, but not
+author QC meaning. F3 must identify the evidence separately for each gate. If
+the probe cannot reach metadata within budget, report `INCONCLUSIVE` rather than
+claiming no suitable data exist. If measured spaces demonstrably mismatch, retain
+`NEEDS_RECOUNT`; never manufacture measurements through zero-filling or overlap.
+
+When paired inputs remain blocked, finish the RNA diagnostic and present one
+specific follow-up request: the exact QC/count artifact or a measured, bounded
+processed-object inspection/recount proposal. Do not start that larger work.
+If the RNA diagnostic also remains inconclusive, that is a valid output: report
+which influence/support question remains unanswered, without tuning exclusions.
+
+Open choices for plan review: accept the proposed post-hoc RNA diagnostic scope;
+choose whether to pursue a development-only paired pilot if its own gates pass
+before external gates. Neither choice reopens the already recorded professor
+approval for the completed RNA study. All new tasks remain unapproved/unexecuted.
 
 ## Scope
 
