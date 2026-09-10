@@ -1,12 +1,13 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-09. Retained-cell ingestion, neural training, final artifacts and
+Updated: 2026-09-10. Plan review corrections only.
+Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
-## Advancement queue — planning revision 2026-09-09
+## Advancement queue — review-corrected planning revision 2026-09-10
 
 These tasks extend the existing P22 work; they do not replace or complete M1–M8.
 This turn changes the plan only. Proposed commands/tests below do not exist yet
@@ -16,8 +17,15 @@ verified slice per local commit. No push, merge or GNHF resume.
 
 ### F1: Bring the reviewed coordinate guard into the implementation branch
 
-**Description:** Recover only isolated commit `3b677d5`'s adapter/test change after
-checking the target branch. Do not import its accompanying old plan documents.
+**Description:** Recover only the reviewed adapter/test slice from
+`reports/generated/gnhf_companion_2026-09-09/0001-fix-reject-contradictory-peak-identifiers-and-coordi.patch`
+after checking the target branch. Source commit: `3b677d5`; fallback bundle:
+`reports/generated/gnhf_companion_2026-09-09/reviewed-candidate.bundle`, head
+`7a9bedf97394afd2a3b1c6beee202f9a30619444`, prerequisite
+`54e0e371d1263463aca9f8f79748ea35aaddcccc`. The isolated checkout
+`/private/tmp/p22-gnhf-companion.scEOcw/workspace` still existed on 2026-09-10.
+Do not import accompanying old plan documents. Preserve ignored recovery artifacts
+until the verified code/test slice has a durable local commit; no cleanup before then.
 
 **Acceptance criteria:**
 
@@ -26,8 +34,13 @@ checking the target branch. Do not import its accompanying old plan documents.
 - [ ] Source/dirty-file hashes are preserved; the change is present exactly once
   in an isolated reviewed commit, without changing RNA evidence or scientific gates.
 
-**Verification:** existing `tests/test_multiome.py` regression fails against the
-base and passes with the patch; run `tests/test_atac_features.py`, `make lint` and
+**Verification:** verify patch SHA256
+`c23e79578ae6540e147b339cbab5699337eb4249b0057ed8b3842f50f5898aec`,
+then run `git apply --check` on the exact patch in the intended
+clean workspace (read-only); if using the fallback, run `git bundle verify` and
+inspect the isolated slice before recovery. Stop on divergence or missing evidence.
+The recovered `tests/test_multiome.py` regression must fail against the base and
+pass with the patch; run `tests/test_atac_features.py`, `make lint` and
 `make test-fast`. Inspect the staged diff and three existing public feature lists.
 **Dependencies:** plan approval and clean implementation workspace.
 **Files likely touched:** `src/p22/data/multiome.py`, `tests/test_multiome.py`.
@@ -67,7 +80,10 @@ archive parser on an incomplete prefix).
 ### F3: Produce one actionable input-feasibility decision
 
 **Description:** Extend the offline audit report to connect inspected facts with
-the existing M1–M4 acceptance requirements. Do not repeat unchanged source searches.
+the existing M1–M4 acceptance requirements. Explicitly identify the development
+common-count blocker; NeMO metadata cannot resolve it. Preserve the distinction
+between inspected incompatible raw libraries and uninspected published processed
+objects. Do not repeat unchanged source searches or imply F3 produces new counts.
 
 **Acceptance criteria:**
 
@@ -101,23 +117,48 @@ audit with preserved inputs, `make lint` and `make test-fast`; independent evide
 
 ### F4: Freeze the new RNA donor-influence diagnostic
 
-**Description:** Define one follow-up question before running it: how much does
-omitting each discovery donor change the four existing effect-direction summaries?
-This is a new post-hoc exploratory analysis, not a redo of the primary study.
+**Description:** Determine which discovery donors drive changes and whether their
+influence is concentrated or diffuse. The completed bootstrap already measures
+aggregate uncertainty; this new post-hoc diagnostic attributes leave-one-donor-out
+changes descriptively, without identifying a causal donor or resolving power.
 
 **Acceptance criteria:**
 
-- [ ] Pin existing H5AD/workbook hashes, four comparison mappings, current cell/QC
-  and gene rules, age/sex model, and every eligible discovery donor. Freeze the
-  diagnostic before viewing its results; no outcome-selected omissions.
-- [ ] Define baseline and leave-one-donor-out Spearman correlation, change from
-  baseline, shared-gene counts, class support and fit status. Reapply the existing
-  expression rule and disclose changes in eligible genes rather than silently
-  comparing different universes. Rank-deficient or insufficient-support fits are
-  reported as unavailable, not repaired by dropping covariates or donors.
+- [ ] Pin existing H5AD/workbook and reference-result hashes, four comparison
+  mappings, current cell/QC and gene rules, age/sex model and every eligible donor.
+  Freeze baseline-gene derivation before results. Baseline Spearman must match saved
+  values with `atol=1e-10, rtol=0`; donor identities and saved gene/donor counts must
+  match exactly, with gene IDs/order checked against pinned inputs. A mismatch
+  stops execution, not a tolerance retune or outcome-selected omission.
+- [ ] Freeze the same-support comparison contract below; report each donor's
+  same-support correlation delta separately from its support-shift component,
+  gene counts, class support and fit status. Rank absolute same-support deltas
+  within each comparison with support counts beside them; do not pool comparisons
+  as independent evidence or describe rank changes as coefficient magnitudes.
 - [ ] Label outputs `POST_HOC_EXPLORATORY`; no new significance cutoff, headline
   reclassification, causal claim or external-donor uncertainty claim. Freeze the
   no-download/CPU/resource limits from the plan; no bootstrap per omitted donor.
+
+**Same-support contract:** F5's baseline-only preflight derives and fingerprints
+`G0`, the baseline shared-gene set, from F4's frozen rules before any omission.
+Reproduce saved summaries first; do not claim historical gene identities were
+verified if the old run saved only counts. Let
+`Gi = G0 ∩ omission-eligible genes` after refitting donor omission `i` and reapplying
+the existing expression floor. Use identical gene order and external values for:
+
+- `same_support_delta = rho_loo(Gi) - rho_baseline(Gi)`;
+- `support_delta = rho_baseline(Gi) - rho_baseline(G0)`;
+- their sum, the total change on the retained baseline-gene support.
+
+Report `|G0|`, `|Gi|`, lost and newly eligible shared-gene counts. Newly eligible
+genes stay outside this primary diagnostic; report their count without expanding
+the endpoint. These are descriptive, support-conditional components, not a causal
+decomposition or proof that gene selection dominates. Constant vectors, fewer than
+the existing 500 shared genes, insufficient class support or rank failure produce
+an unavailable result; do not relax gates, drop covariates or silently replace
+genes. No top-100 agreement extension or bootstrap-SD standardization is scheduled.
+All comparisons share discovery donors; RG → oRG and RG → vRG additionally share
+the same discovery cells. Summary and plot must disclose this non-independence.
 
 **Verification:** independent protocol review and canonical config fingerprint;
 validate local input paths/hashes without running the analysis. F5 adds executable
@@ -135,19 +176,24 @@ pipeline just to produce a diagnostic.
 
 **Acceptance criteria:**
 
-- [ ] New diagnostic command validates F4's contract, reproduces baseline point
-  summaries within a declared numeric tolerance, then refits every eligible donor
-  omission. Count/metadata/gene alignment and each omission are auditable.
+- [ ] New diagnostic command validates F4's contract, reproduces baseline
+  Spearman summaries within F4's frozen tolerance and saves baseline `G0`/hash,
+  then refits every eligible donor omission. Implement both delta components;
+  alignment and each omission are auditable.
 - [ ] New exclusive output directory contains `donor_influence.csv`, one labeled
   plot, `SUMMARY.md`, config/source hashes and measured resources. It reports all
-  comparisons and invalid fits, with uncertainty limitations and one next decision.
+  comparisons and invalid fits, ranked donor influence, support changes, shared-donor
+  non-independence, uncertainty limitations and one next decision. No new power claim.
 - [ ] Original outputs, validation rows, headline/G8, approvals, source data and
   notebook hashes stay unchanged. No resampling cells as independent donors,
   donor exclusion recommendation from favorable scores, or fake ATAC input.
 
 **Verification:** proposed `tests/test_rna_donor_influence.py` includes a planted
 influential donor, stable-data control, rank failure, gene-set/support changes,
-determinism, stale-cache rejection if caching is used, and no-overwrite checks.
+hand-calculated delta decomposition, baseline-mismatch refusal, determinism,
+stale-cache rejection if caching is used, and no-overwrite checks. Edge-case guards
+need fixtures even if current real omissions do not trigger them; do not call
+fixture behavior an observed real-data failure.
 Run existing `tests/test_external_validation.py`, `make lint`, `make test-fast`,
 then one bounded real diagnostic after the fixture checks pass.
 **Dependencies:** F4, not NeMO or GNHF.
@@ -159,12 +205,16 @@ new `scripts/diagnose_rna_replication.py`, new `tests/test_rna_donor_influence.p
 
 - [ ] F5 table/plot/report reproduce from their frozen inputs and are independently
   reviewed. Primary RNA results remain unchanged even if the diagnostic is positive.
-- [ ] Record whether donor influence, changing gene support or unresolved external
-  uncertainty limits interpretation. A null/inconclusive diagnostic still completes
+- [ ] Report donor-specific influence and its concentration separately from gene
+  support changes; retain unresolved external uncertainty. A null/inconclusive
+  diagnostic still completes
   this bounded question; expanding to new cohorts or methods requires a new plan.
 
-**Next:** once inputs and the real protocol are accepted, continue existing M5–M8
-below, using the M6a–M6c slices. Do not build another neural architecture.
+**Next:** real M5–M8 execution remains deferred pending development common-count
+acceptance (or a separately specified and accepted exploratory representation),
+the real protocol, and each stage's additional gates. F1–F3 do not supply that
+representation. Keep M6a's offline readiness work separate from fitting; no new
+neural architecture or implicit peak-to-gene implementation.
 
 Commands below remain per-task acceptance targets. Runnable evidence is in
 [the audit guide](../docs/PAIRED_MULTIOME_AUDIT.md) and [training guide](../docs/PAIRED_MULTIOME_TRAINING.md).
@@ -186,7 +236,7 @@ facts, not disease-model results.
 ## Next decisions required for real execution
 
 1. Use the recorded user-reported attestation only for the existing public-data plans and their gates. Independent documentation/date can be added later; do not invent it or let approval bypass scientific acceptance.
-2. Accept a specific common-region ATAC count source, or approve a separately bounded fragment-recount task. The two inspected raw libraries have zero exact common peaks; zero-filling cannot fix this. Public fragment packages total roughly 43 GiB compressed before working files, so a full recount is not silently started on this machine's roughly 54 GB free disk.
+2. Accept a specific common-region ATAC count source, or approve a separately bounded fragment-recount task. The inspected B17C2L/B10C1Q raw libraries have zero exact common peaks; zero-filling cannot fix this. Published processed objects remain uninspected, not proven unusable. Public fragment packages total roughly 43 GiB compressed before working files. Before any larger proposal, record current free disk in GiB with a timestamp and estimate compressed, decoded, intermediate and output working sets plus safety headroom. Do not rely on stale GB/GiB figures, start a full recount, or require different hardware without that estimate.
 3. Resolve the remaining NeMO QC/release semantics. RNA `Unk` removal matches the published count exactly, but current retained-candidate QC columns still include 1,751 ATAC counts <=100 and six mitochondrial percentages >=5; original-stage semantics are unverified. UCLA/NIH versus HDBR provenance is now documented. No author contacted or controlled access requested.
 4. With those inputs, freeze real normalization/covariate/chr21 and sensitivity rules, connect biological controls and accepted real inputs to the existing fold/refit/scoring code, then execute M6–M8.
 

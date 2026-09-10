@@ -1,6 +1,7 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-09 (PDT). Planning revision only; no new experiment authorized
+Updated: 2026-09-10 (PDT). Review corrections; planning revision only.
+No new experiment authorized
 or executed by this revision. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
@@ -15,15 +16,19 @@ Two tracks can progress independently after this plan is approved:
 
 | Track | What the user gets | What it can establish |
 |---|---|---|
-| Local RNA follow-up, F4–F5 | One command producing donor-influence table, plot, and summary | Whether discovery estimates are sensitive to individual donors; not a new replication verdict |
+| Local RNA follow-up, F4–F5 | One command producing donor-influence table, plot, and summary | Which donors drive changes and whether influence is concentrated or diffuse; not a new replication verdict |
 | Paired inputs, F1–F3 | Bounded archive probe plus evidence-linked readiness report | What can be inspected within budget, which gates remain unmet, and the exact next input needed |
-| Real paired training, M5–M8 | Dry-run preflight, then one internal fold, full internal comparison, and locked external scoring | Model evidence only after the applicable input/protocol gates pass |
+| Real paired training, M5–M8 | Dry-run preflight; real fits deferred pending accepted development ATAC inputs, followed by separately gated external scoring | Conditional follow-on work, not a promised result of F1–F3 inspection |
 
 **Recommended first scientific output:** the RNA donor-influence diagnostic. The
 local H5AD and frozen external workbook are present under `data/real/`; verify
 their hashes before use. This new, explicitly post-hoc exploratory analysis does
 not wait for NeMO and does not replace the completed RNA study. Do not add another
 binary DS classifier to work around the unresolved paired-data question.
+The completed donor bootstrap already measures aggregate uncertainty. The new
+question is donor-specific concentration of influence, separating same-support
+correlation changes from changing gene support. It does not resolve statistical
+power versus absent reproducible effects. See F4's frozen comparison contract.
 
 **Recommended paired-input action:** one metadata-only probe of the NeMO Open
 bag's `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, then one evidence
@@ -37,8 +42,17 @@ Plan approval + isolated workspace
 ├─ F4 freeze RNA diagnostic → F5 implement/run diagnostic → RNA checkpoint
 └─ F1 recover reviewed fix → F2 bounded probe → F3 input decision → input checkpoint
                                                    ├─ blocked: exact missing input + stop
-                                                   └─ accepted inputs → M5 → M6a/b/c → M7 → M8
+                                                   └─ M4 development inputs accepted* → M5 → M6a/b/c → M7 → M8
 ```
+
+*Development common measured ATAC counts are a binding unresolved requirement;
+F1–F3 can report this gap but do not produce those counts. The inspected raw
+libraries do not establish a usable common space. This is not a cohort-wide
+absence claim: two published processed objects remain uninspected, as recorded in
+[the source evidence](../docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md).
+Possible next actions are separately bounded inspection of a documented published
+common-count object, acquisition of a supplied compatible object, or an approved,
+measured recount. None is automatically authorized by this planning revision.
 
 Detailed acceptance criteria, verification, dependencies and file scope are in
 [todo.md](todo.md), tasks F1–F5 and M6a–M6c. The diagram does not authorize fitting
@@ -46,6 +60,11 @@ while a required gate is unresolved. An internal-only pilot may proceed only
 under a separately reviewed development-only protocol with all development QC,
 pairing, feature, normalization and donor-split requirements satisfied. It cannot
 close the original combined-cohort Checkpoint B or M8 while NeMO remains pending.
+Peak-to-gene aggregation is not implemented and remains deferred, not an implicit
+M6 input producer. If proposed later, it needs its own task and reviewed annotation,
+coverage/missingness, count-unit and approximation contract. Shared gene names
+alone do not make different ATAC measurements comparable; `EXPLORATORY_ONLY` never
+closes confirmatory M4 or M8. Until a representation is accepted, the pilot is deferred.
 
 ### Intended commands and outputs
 
@@ -75,8 +94,10 @@ refreshes, automatic new datasets, or silently enlarged budgets.
   hashes. Diagnostic output must use a new directory and the label
   `POST_HOC_EXPLORATORY`; it cannot turn the primary inconclusive result positive.
 - Existing paired integrity fix is in isolated commit `3b677d5`, not this checkout.
-  Recover only that reviewed code/test slice when implementing F1; do not merge
-  the entire isolated branch or overwrite this revised plan with its old docs.
+  F1 names the recovery patch, bundle and application checks. The isolated checkout
+  still existed on 2026-09-10; do not depend on temporary storage alone. Keep the
+  ignored recovery package out of cleanup until F1's code/test slice is committed
+  durably. Do not merge its entire branch or overwrite this plan with its old docs.
 - The previous GNHF run exceeded its cap: 872,648 reported worker tokens. Do not
   resume it. GNHF repair is a separate tooling task, not a prerequisite for P22:
   use directly supervised, small implementation slices. Do not promise a strict
@@ -112,10 +133,27 @@ processed-object inspection/recount proposal. Do not start that larger work.
 If the RNA diagnostic also remains inconclusive, that is a valid output: report
 which influence/support question remains unanswered, without tuning exclusions.
 
-Open choices for plan review: accept the proposed post-hoc RNA diagnostic scope;
-choose whether to pursue a development-only paired pilot if its own gates pass
-before external gates. Neither choice reopens the already recorded professor
-approval for the completed RNA study. All new tasks remain unapproved/unexecuted.
+The 2026-09-10 user request authorizes these plan corrections, not experiment
+execution. F4's frozen configuration requires review before F5 runs. Any later
+development-only pilot needs its own accepted scope and inputs; it is not scheduled
+as an immediately executable fallback. The completed RNA study's recorded
+professor approval is unchanged. This revision executes none of the pending
+implementation/experiment tasks.
+
+### Review disposition
+
+Accepted: explicit development-input dependency, recovery instructions, a focused
+donor-concentration question, fixed numeric tolerance, same-support comparisons,
+shared-donor disclosure, and fresh resource estimates before larger work.
+
+Not adopted: compulsory bootstrap-SD scaling (only intervals, not SDs, were saved),
+or an extra top-100 diagnostic. Top-set changes alone do not show that reselection
+dominates agreement. A chromosome-21-only arm is optional future dosage sanity
+checking, not a power test or replacement for F4–F5: matching positive signs do
+not imply matching ranks or adequate sensitivity to weaker non-chromosome-21
+effects. Existing external chromosome-21 sets have 91–101 genes, below the frozen
+500-shared-gene floor; such an arm requires a separate contract, not weakened
+primary gates. No new control arm is added here.
 
 ## Scope
 
