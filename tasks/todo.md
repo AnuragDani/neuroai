@@ -1,6 +1,6 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-10. Plan review corrections only.
+Updated: 2026-09-10. F4–F5 completed and independently reviewed on real RNA inputs.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
@@ -10,8 +10,10 @@ Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Ove
 ## Advancement queue — review-corrected planning revision 2026-09-10
 
 These tasks extend the existing P22 work; they do not replace or complete M1–M8.
-This turn changes the plan only. Proposed commands/tests below do not exist yet
-unless explicitly identified as existing. Implementation requires plan review.
+F4 is frozen and F5's diagnostic ran successfully in the isolated branch:
+68 valid donor omissions, 45.94 seconds, 4.14 GiB peak sampled RSS; 628 tests pass.
+F1–F3 remain planned. See [results](../docs/RNA_DONOR_INFLUENCE_RESULTS_2026-09-10.md)
+and [the diagnostic guide](../docs/RNA_DONOR_INFLUENCE.md).
 Keep work in an isolated branch, preserve unrelated dirty files, and record one
 verified slice per local commit. No push, merge or GNHF resume.
 
@@ -124,18 +126,18 @@ changes descriptively, without identifying a causal donor or resolving power.
 
 **Acceptance criteria:**
 
-- [ ] Pin existing H5AD/workbook and reference-result hashes, four comparison
+- [x] Pin existing H5AD/workbook and reference-result hashes, four comparison
   mappings, current cell/QC and gene rules, age/sex model and every eligible donor.
   Freeze baseline-gene derivation before results. Baseline Spearman must match saved
   values with `atol=1e-10, rtol=0`; donor identities and saved gene/donor counts must
   match exactly, with gene IDs/order checked against pinned inputs. A mismatch
   stops execution, not a tolerance retune or outcome-selected omission.
-- [ ] Freeze the same-support comparison contract below; report each donor's
+- [x] Freeze the same-support comparison contract below; report each donor's
   same-support correlation delta separately from its support-shift component,
   gene counts, class support and fit status. Rank absolute same-support deltas
   within each comparison with support counts beside them; do not pool comparisons
   as independent evidence or describe rank changes as coefficient magnitudes.
-- [ ] Label outputs `POST_HOC_EXPLORATORY`; no new significance cutoff, headline
+- [x] Label outputs `POST_HOC_EXPLORATORY`; no new significance cutoff, headline
   reclassification, causal claim or external-donor uncertainty claim. Freeze the
   no-download/CPU/resource limits from the plan; no bootstrap per omitted donor.
 
@@ -176,19 +178,19 @@ pipeline just to produce a diagnostic.
 
 **Acceptance criteria:**
 
-- [ ] New diagnostic command validates F4's contract, reproduces baseline
+- [x] New diagnostic command validates F4's contract, reproduces baseline
   Spearman summaries within F4's frozen tolerance and saves baseline `G0`/hash,
   then refits every eligible donor omission. Implement both delta components;
   alignment and each omission are auditable.
-- [ ] New exclusive output directory contains `donor_influence.csv`, one labeled
+- [x] New exclusive output directory contains `donor_influence.csv`, one labeled
   plot, `SUMMARY.md`, config/source hashes and measured resources. It reports all
   comparisons and invalid fits, ranked donor influence, support changes, shared-donor
   non-independence, uncertainty limitations and one next decision. No new power claim.
-- [ ] Original outputs, validation rows, headline/G8, approvals, source data and
+- [x] Original outputs, validation rows, headline/G8, approvals, source data and
   notebook hashes stay unchanged. No resampling cells as independent donors,
   donor exclusion recommendation from favorable scores, or fake ATAC input.
 
-**Verification:** proposed `tests/test_rna_donor_influence.py` includes a planted
+**Verification:** `tests/test_rna_donor_influence.py` and companion fixtures include a planted
 influential donor, stable-data control, rank failure, gene-set/support changes,
 hand-calculated delta decomposition, baseline-mismatch refusal, determinism,
 stale-cache rejection if caching is used, and no-overwrite checks. Edge-case guards
@@ -203,9 +205,9 @@ new `scripts/diagnose_rna_replication.py`, new `tests/test_rna_donor_influence.p
 
 ### Checkpoint F-C: First new scientific artifact
 
-- [ ] F5 table/plot/report reproduce from their frozen inputs and are independently
+- [x] F5 table/plot/report reproduce from their frozen inputs and are independently
   reviewed. Primary RNA results remain unchanged even if the diagnostic is positive.
-- [ ] Report donor-specific influence and its concentration separately from gene
+- [x] Report donor-specific influence and its concentration separately from gene
   support changes; retain unresolved external uncertainty. A null/inconclusive
   diagnostic still completes
   this bounded question; expanding to new cohorts or methods requires a new plan.
