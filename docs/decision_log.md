@@ -146,3 +146,15 @@
   G8 stay inconclusive. [Final evidence](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md).
   The preceding pending checkpoint is superseded. Paired M1–M8 requirements remain
   open; RNA reproducibility is not accepted paired input or neural validation.
+
+## 2026-09-09 — NeMO public transport recovered; paired inputs not yet accepted
+
+- **New evidence:** verified HTTPS succeeds for the ATAC manifest, both collection
+  APIs and official Open bags; live APIs report open access. The existing metadata
+  checksum matches the declared release. Retain the manifest's conflicting embargo
+  field and absent redistribution license. [Source audit](PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md).
+- **Boundary:** this closes the tested transport/public-analysis-access blocker,
+  not the retained-QC or cross-cohort common-region measurement requirements.
+  Neither the release inventories nor the unchanged Lattke source tree establishes
+  the missing accepted inputs. No large payload, recount, real neural fit, outreach,
+  controlled access, paid compute or scientific gate override was initiated.

@@ -1,6 +1,6 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-08. Retained-cell ingestion, neural training, final artifacts and
+Updated: 2026-09-09. Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
@@ -15,7 +15,7 @@ facts, not disease-model results.
 
 - M1: All 46 GEO libraries mapped. The pinned author downstream filtered table exactly matches the final H5AD's 37 libraries, 30 donors and labels. Retained-cell ingestion joins all 550 B17C2L cells before capping and excludes 102 raw-only cells. New NeMO diagnostics identify exactly 3,731 RNA `Unk` rows and a 113,801-cell candidate, but do not certify its QC. Author methods and metadata document UCLA/NIH sources versus HDBR: no overlap evidence, not independently certified specimen identity. Full raw-barcode coverage and accepted per-cell QC remain pending.
 - M2: Conversion and support checks implemented and tested. NeMO's canonical PCW 13–20 sensitivity has 8 control and 10 trisomy-21 donors before new QC exclusions.
-- M3: Both MEX layouts tested; real pilot now selects 256 from the 550 author-retained cells. NeMO count packages remain unaudited; a fresh direct manifest request failed TLS while indexed public directory listings remained available.
+- M3: Both MEX layouts tested; real pilot now selects 256 from the 550 author-retained cells. NeMO count packages remain unaudited. September 9 public manifest/API/Open-bag requests succeeded; the earlier transport blocker is cleared for those endpoints. Release metadata checksum matches locally, but QC/common-feature acceptance does not follow from access.
 - M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred.
 - M5: Immutable software benchmark settings and strict paired uncertainty implemented. The real scientific protocol and gate-bound acceptance remain pending.
 - M6: Donor-aware training and bounded paired-array adapter implemented. Six neural families and majority control ran on 25 synthetic outer folds. Biological controls and accepted real-data orchestration remain pending.
@@ -35,8 +35,9 @@ is now implemented and executed on real data: all four comparisons and the headl
 are inconclusive, with identical results across three local runs and 608 passing
 tests. [Final evidence](../docs/EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md) is saved.
 Original RNA Tasks 1–5 are complete: fresh free-CPU Colab archive retrieved, hashes
-verified and results exactly matched locally (2026-09-09). Fang approval and notebook upload/free CPU use are
-explicitly confirmed by the user; do not ask again for this study. This neural
+verified and results exactly matched locally (2026-09-09). Fang approval and
+notebook upload/free CPU use are explicitly confirmed by the user; do not ask
+again for this study. This neural
 software does not substitute for the RNA study, nor does RNA evidence close M1–M8.
 
 ## M1: Freeze source release, QC, and specimen mapping

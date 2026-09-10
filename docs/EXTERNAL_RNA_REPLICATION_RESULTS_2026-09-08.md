@@ -224,7 +224,7 @@ Removing chromosome 21 does not establish dosage-independent causation.
 |---|---|---|
 | Original RNA tasks 1–4: implementation and local execution | Complete | None locally; retain inconclusive result |
 | Original RNA task 5: verification | Complete | Fresh Colab evidence archived; source/hash/result comparison passes |
-| Paired M1–M4: accepted real inputs | Partial/blocked | Common measured ATAC counts, external access and accepted release/QC semantics |
+| Paired M1–M4: accepted real inputs | Partial/blocked | Common measured ATAC counts and accepted release/QC semantics |
 | Paired M5: real scientific protocol | Pending | Freeze preprocessing, covariates, biological controls and sensitivities on accepted inputs |
 | Paired M6–M8: real neural comparison | Pending | Real internal fits and locked external scoring after upstream gates pass |
 
@@ -233,8 +233,9 @@ archive retrieval and independent local comparison are complete. This closes the
 RNA plan without changing its inconclusive scientific conclusion.
 
 For paired work, the [source and transport audit](PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md)
-records the exact NeMO annotation count match, unresolved QC semantics, and public
-manifest TLS failures. The annotation match is not automatic QC acceptance.
+records the exact NeMO annotation count match and unresolved QC semantics. Its
+September 9 recheck confirms public transport/release access now works; that clears
+the earlier TLS blocker, not QC or cross-cohort feature acceptance.
 The [paired checklist](../tasks/todo.md) retains all real-data requirements.
 Accept a documented common-count release or separately approve a bounded fragment
 recount with adequate storage; do not zero-fill unmeasured regions or silently

@@ -1,7 +1,8 @@
 # Remaining paired-multiome evidence: bounded source check
 
-Checked 2026-09-08. Public metadata and methods only; no model fitting, count-matrix
-download, controlled access, author contact, approval change, or exclusion applied.
+Checked 2026-09-08; public transport/release rechecked 2026-09-09. Public metadata
+and methods only; no model fitting, count-matrix download, controlled access,
+author contact, approval change, or exclusion applied.
 
 ## Result
 
@@ -129,7 +130,38 @@ common-count checkpoint and compare measured region/count semantics; otherwise
 scope an exact fragment recount on frozen regions with measured disk/network
 budgets. A different GPU cannot resolve missing measurements or provenance.
 
-## Verification record
+## 2026-09-09 update: public transport recovered, scientific gates unchanged
+
+The previous transport blocker is cleared for the tested endpoints. Verified HTTPS
+now returns the ATAC manifest, both collection APIs and both official Open release
+bags. The live [ATAC API](https://assets.nemoarchive.org/api/collection/nemo:col-ad8t52b)
+and [RNA API](https://assets.nemoarchive.org/api/collection/nemo:col-mbgxwtz) explicitly
+report `access: open`. NeMO's [ATAC Open bag](https://data.nemoarchive.org/publication_release/Vuong_delaTorre_Human_snMultiome-2026-05-04/Analysis_bag_3_Vuong_delaTorre_Human_snMultiome_Analysis_ATAC_Open.tgz)
+and [RNA Open bag](https://data.nemoarchive.org/publication_release/Vuong_delaTorre_Human_snMultiome-2026-05-04/Analysis_bag_4_Vuong_delaTorre_Human_snMultiome_Analysis_RNA_Open.tgz)
+list the DSdevctx processed counts. These support public analysis-release access;
+the manifest's conflicting `Access=embargo` field is retained, not hidden. Neither
+API supplies a license, and no redistribution grant is inferred.
+
+The Open bags declare ATAC counts of 1,540,753,269 bytes, RNA counts of 717,659,049
+bytes, and metadata of 4,618,240 bytes. The existing local metadata's MD5 exactly
+matches the release declaration, `b48ba7434b20db66d89447899ef72b15`. This ties the
+prior audit to the released metadata; it does not certify retained-cell QC.
+
+The complete bag inventories add no separate QC rule, retained-barcode artifact,
+or cross-cohort fixed-region count matrix. Barcodes inside the large count archives
+were not inspected. The checked Lattke source tree is unchanged at
+`227f51b4e63c6a7d9c73be44f06ab21ac11e45ba`. Thus `ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`
+and the common-measured-region requirement remain open; do not start confirmatory
+neural training or treat unmatched peaks as zeros.
+
+[Recheck record](../reports/generated/paired_public_recheck_2026-09-09/verification.md)
+contains exact URLs, response hashes and limits. Checked at 2026-09-10 02:21:26 UTC
+(September 9 PDT). Direct metadata traffic was approximately 69 KB and bounded
+below 1.26 MB; browser/search response sizes were not exposed. No count/fragment
+payload, author outreach, controlled access or paid compute was used. Raw response
+snapshots were not retained; their measured hashes and findings are recorded.
+
+## Verification record (2026-09-08 historical checks)
 
 - Public [RNA child collection](https://assets.nemoarchive.org/collection/nemo:col-mbgxwtz)
   and [ATAC child collection](https://assets.nemoarchive.org/collection/nemo:col-ad8t52b)
