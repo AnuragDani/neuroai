@@ -1,0 +1,199 @@
+{
+  "description": "Frozen RNA donor-influence diagnostic; POST_HOC_EXPLORATORY only",
+  "schema_version": 1,
+  "source_code_sha256": {
+    "src/p22/data/real_cohort.py": "dbefc37baceb14f8cb8b895c9f7504e57fa8fa330d95f61cdcb19b099dd188b8",
+    "src/p22/eval/external_validation.py": "a8110d71b539eeef4ce6b245e31e03e8655e7b87c7e31a2dd7fbeed7a1706303",
+    "src/p22/eval/real_pipeline.py": "6f8cf226f79665e11b8e8dc7664d0497fc8e5b3ed447f507c309ca7b44a81d19",
+    "src/p22/data/census.py": "096c3d5f5e0d848c6eb37d40865b064c136db1945e0d6edaa7a8251c928d310e"
+  },
+  "contract": {
+    "phase": "F4",
+    "baseline_preflight_before_any_omission": true,
+    "baseline_gene_set": "G0: alphabetical one-to-one join of eligible discovery genes and unchanged external effects",
+    "historical_gene_ids_saved": false,
+    "derive_and_fingerprint_G0_after_baseline_reproduction": true,
+    "exact_checks": ["donor_ids_and_order", "saved_gene_donor_cell_counts", "raw_var_vs_var_gene_order"],
+    "baseline_mismatch": "STOP; no retuning or outcome-selected omission"
+  },
+  "sources": {
+    "h5ad": {
+      "path": "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb"
+    },
+    "workbook": {
+      "path": "data/real/41467_2025_63752_MOESM4_ESM.xlsx",
+      "sha256": "ea0e5a0d96e122ce39ace8be29b65039c3f7775cc96699873a8acc4ee74ccf13"
+    },
+    "reference": {
+      "path": "reports/generated/external_rna_20260908_final/run_20260909T044905Z/runs/real_analysis_20260728/validation.csv",
+      "sha256": "3986bff0db4153f9915e57012e021e7dcdd580837a63ef565061ed6bc17c0a52",
+      "analysis": "external_rna_direction_replication"
+    }
+  },
+  "comparisons": [
+    {
+      "population": "RG",
+      "labels": ["RG"],
+      "sheet": "oRG",
+      "celltype": "oRG",
+      "rho": -0.007896057814944415,
+      "shared_count": 9051,
+      "expression_eligible_genes": 17077,
+      "discovery_eligible_genes": 16291,
+      "retained_cells": 16855,
+      "min_cells_per_donor": 164
+    },
+    {
+      "population": "RG",
+      "labels": ["RG"],
+      "sheet": "vRG",
+      "celltype": "vRG",
+      "rho": -0.030549913790135615,
+      "shared_count": 8572,
+      "expression_eligible_genes": 17077,
+      "discovery_eligible_genes": 16291,
+      "retained_cells": 16855,
+      "min_cells_per_donor": 164
+    },
+    {
+      "population": "cycling_progenitors",
+      "labels": ["RG_prol", "IPC_prol"],
+      "sheet": "CP",
+      "celltype": "Cycling_progenitors",
+      "rho": 0.09671205487456373,
+      "shared_count": 9213,
+      "expression_eligible_genes": 16152,
+      "discovery_eligible_genes": 15412,
+      "retained_cells": 8417,
+      "min_cells_per_donor": 111
+    },
+    {
+      "population": "IPC",
+      "labels": ["IPC"],
+      "sheet": "IP",
+      "celltype": "IP",
+      "rho": 0.009666405318778718,
+      "shared_count": 7857,
+      "expression_eligible_genes": 15914,
+      "discovery_eligible_genes": 15178,
+      "retained_cells": 10621,
+      "min_cells_per_donor": 131
+    }
+  ],
+  "donors": {
+    "ordered_ids": [
+      "PCW13_CON_11928", "PCW13_CON_15044", "PCW13_DS_12740", "PCW13_DS_14239",
+      "PCW13_DS_15848", "PCW13_DS_16427", "PCW14_CON_15077", "PCW15_DS_15744",
+      "PCW16_CON_14940", "PCW16_DS_15877", "PCW17_CON_14310", "PCW17_CON_14559",
+      "PCW17_DS_16070", "PCW18_CON_16419", "PCW18_CON_18189", "PCW18_DS_16485",
+      "PCW18_DS_16545"
+    ],
+    "ds_count": 9,
+    "control_count": 8,
+    "baseline_design_rank": 4,
+    "baseline_residual_df": 13,
+    "omissions": "every eligible donor; no favorable-score exclusions"
+  },
+  "model": {
+    "formula": "log1p(CPM) ~ 1 + DS + exact_PCW + female",
+    "covariates": ["DS", "PCW", "female"],
+    "intercept": true,
+    "batch_correction": false,
+    "donor_pseudobulk": true,
+    "collapse_metadata": true,
+    "estimator": "fit_discovery_effects; unweighted donor-level OLS",
+    "correlation": "Spearman of DS coefficient versus external avg_log2FC; never t-statistics",
+    "covariate_drop_allowed": false
+  },
+  "qc": {
+    "source_aligned_cohort_qc": "run_schema_qc_census; require PASS before population subsetting",
+    "pre_filter": {
+      "genes_per_cell_min": 200,
+      "counts_per_cell_min": 500,
+      "mito_max": 10
+    },
+    "atac_covariates_as_filters": false,
+    "pcw_range": {"min": 13, "max": 19, "inclusive": true},
+    "min_retained_cells_per_donor": 50,
+    "cells_per_donor_cap": null,
+    "retained_cells": "ALL source-QC-retained cells in frozen population/window",
+    "counts": "stream raw/X once per unique population; reuse full-gene donor aggregates"
+  },
+  "gene_rules": {
+    "strip_symbols": true,
+    "uppercase": true,
+    "remove_duplicates": "remove every duplicated normalized symbol on either side",
+    "remove_missing_symbols": true,
+    "autosomes_only": "canonical chromosomes 1 through 22",
+    "exclude_chr21": true,
+    "exclude_mitochondrial": true,
+    "expression_min_cpm": 1.0,
+    "expression_min_fraction_per_class": 0.5,
+    "expression_floor_reapplied_after_each_omission": true
+  },
+  "normalization": {
+    "method": "log1p(CPM)",
+    "denominator_sums": "all_raw_genes",
+    "before_gene_filtering": true,
+    "after_omission": "remove donor rows only; denominator still sums ALL raw genes",
+    "renormalize_on_selected_genes": false
+  },
+  "external_effects": {
+    "schema": "unchanged",
+    "load_external_avg_log2fc": true,
+    "p_value_filter": false,
+    "chr21_sanity_check": "existing workbook orientation guard only; not a new outcome arm"
+  },
+  "output": {
+    "labels": ["POST_HOC_EXPLORATORY"],
+    "headline": "unchanged_original_inconclusive",
+    "G8_status": "unchanged",
+    "no_causal_claims": true,
+    "no_power_claims": true,
+    "no_external_donor_uncertainty_claims": true,
+    "exclusive_directory": true,
+    "overwrite": false,
+    "preserve": ["original_outputs", "validation_rows", "headline_G8", "approvals", "notebooks", "source_data"],
+    "non_independence": "All comparisons share discovery donors; RG to oRG and vRG also share discovery cells. Never pool as independent evidence.",
+    "limitations": "Descriptive support-conditional influence, not causal attribution or a power test; external donor uncertainty remains unresolved."
+  },
+  "constraints": {
+    "cpu_only": true,
+    "max_real_time_seconds": 1800,
+    "max_memory_gib": 6,
+    "resource_monitor": "owned CPU child, wall deadline, sampled RSS; early stop at 5 GiB with 1 GiB headroom",
+    "rss_poll_seconds": 0.1,
+    "memory_enforcement": "observed-threshold enforcement; not a kernel hard ceiling; refuse missing monitor",
+    "no_bootstrap_per_donor": true,
+    "no_top100_extension": true,
+    "no_bootstrap_sd_standardization": true,
+    "no_chr21_outcome_arm": true,
+    "no_downloads": true,
+    "no_network": true,
+    "no_permutations": true,
+    "no_paid_compute_fragments_outreach_push_merge": true,
+    "cache": false
+  },
+  "same_support_contract": {
+    "rho_atol": 1e-10,
+    "rho_rtol": 0,
+    "min_shared_genes_for_fit": 500,
+    "Gi": "G0 intersect omission-eligible shared genes; identical sorted order and external values",
+    "same_support_delta": "rho_loo(Gi) - rho_baseline(Gi)",
+    "support_delta": "rho_baseline(Gi) - rho_baseline(G0)",
+    "total_delta": "same_support_delta + support_delta",
+    "newly_eligible_genes": "report count, exclude from endpoint",
+    "report": ["G0_count", "Gi_count", "lost_count", "new_count", "class_support", "fit_status", "reason"],
+    "ranking": "descending absolute same_support_delta within each comparison; donor ID breaks ties; show support counts",
+    "invalid_result": "UNAVAILABLE for constant/nonfinite vectors, fewer than 500 shared genes, absent class, rank failure or no residual degrees of freedom; never relax gates"
+  },
+  "files_to_create": [
+    "donor_influence.csv",
+    "donor_influence.png",
+    "SUMMARY.md",
+    "baseline_genes.csv",
+    "run.json",
+    "resources.json"
+  ]
+}
