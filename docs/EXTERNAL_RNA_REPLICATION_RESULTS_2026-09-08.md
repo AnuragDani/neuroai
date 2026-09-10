@@ -1,13 +1,13 @@
 # External RNA replication: real-data results
 
 Completed locally on 2026-09-08 (run timestamps are 2026-09-09 UTC).
-Colab checkpoint updated 2026-09-09; final archive comparison remains pending.
+Fresh Colab verification and final archive comparison completed 2026-09-09.
 
 ## Outcome
 
 All four frozen comparisons and the headline are **inconclusive**. The code and
-real local experiment are complete. Fresh Colab executions finished, but their
-final archive retrieval/comparison is not complete. This is an
+real experiment and all five original RNA plan tasks are complete. Fresh Colab
+executions, archived hashes and local result comparison passed. This is an
 actual summary-effect comparison, not a synthetic demonstration. It neither
 establishes directional replication nor proves that reproducible effects are absent.
 
@@ -109,7 +109,7 @@ and omits this run's output/kernel/thread settings. The audited invocation above
 is the exact command record. Generated manifests have not been silently edited.
 For another run, choose a new output name to preserve the final executed copy.
 
-## Fresh Colab checkpoint (2026-09-09)
+## Fresh Colab verification (complete 2026-09-09)
 
 The user explicitly confirmed Professor Fang's approval and separately approved
 upload of the canonical notebook and a free CPU run. This confirmation is saved
@@ -126,10 +126,14 @@ inputs; no Drive mount, paid compute, GPU, or controlled-access request was used
 - A separate **Python 3.11.16** environment on the same free Colab CPU VM executed
   the unchanged canonical notebook through nbconvert. This was a Colab-hosted
   subprocess, not the native Colab kernel; its `in_colab=False` is not rewritten.
-- Runtime-side checks confirmed all 23 cell sources exactly match the canonical
-  notebook, every code cell executed, and zero errors in the executed 3.11 notebook.
-  These observed checks do not replace downloading and independently comparing
-  the saved results.
+  G0 passed. Final successful invocation took 664.508 seconds; RNA stage took
+  163.391 seconds, with 2.0403 GB process peak RSS. This timing includes notebook
+  execution, not initial environment setup; RSS includes preceding stages.
+- Independent checks of the downloaded archive confirmed all 23 cell sources
+  exactly match the canonical notebook, every code cell executed, and zero errors
+  in the executed 3.11 notebook. Both Colab runs' four RNA rows, scientific fields
+  and cohort counts match the frozen local run exactly: maximum numeric difference
+  **zero**. G8 and all RNA outcomes remain inconclusive.
 - Initial 3.11 startup failed because inherited Colab configuration requested
   `google.colab._kernel.Kernel`, then a Google extension unavailable in the isolated
   environment. Private IPython/Jupyter configuration directories and explicit
@@ -145,7 +149,8 @@ inputs; no Drive mount, paid compute, GPU, or controlled-access request was used
   zero scientific-cell errors, and an exact match for all four RNA rows and outer
   scientific fields (maximum numeric difference zero; timing/RSS/figure excluded).
   The earlier auxiliary 3.11 startup error remains visible, separate from those
-  scientific cells; the pinned-runtime snapshot/archive is still pending retrieval.
+  scientific cells. The final snapshot and pinned-runtime archive are now retained
+  separately below; this earlier native check is historical evidence.
 - The separate [focused test log](../reports/generated/colab_verification_2026-09-09/focused-tests.log)
   records 15 passing tests. Full-suite/lint records above remain valid; scientific
   code did not change during this verification.
@@ -168,35 +173,39 @@ attestation; data root was `/content/p22_data`, output root was
 were one, and `CUDA_VISIBLE_DEVICES` was empty. Full arguments, package versions,
 timings and environment are in the generated `colab_verification_record` folder.
 
-The completed VM archive `/content/P22_colab_verification_20260909.zip` contains
+The downloaded [verification archive](../reports/generated/colab_verification_2026-09-09/P22_colab_verification_20260909.zip) contains
 40 generated/approved-source files, **1,264,546 bytes**, SHA-256
 `5b26965f218510aa96c123cb07c829c44ba35967a8439229b2b5587f8ae5dfac`.
 The export includes both run folders, the executed 3.11 notebook, canonical source,
-logs and per-file hashes, but no raw datasets. Archive existence/hash were observed
-in Colab; they have **not yet been verified against a local archive**.
+logs and per-file hashes, but no raw datasets. Local archive size/SHA and all 39
+listed file hashes pass; the fortieth file is the inventory itself, covered by the
+ZIP hash. Extraction rejected unsafe paths, symlinks and duplicate names and did
+not overwrite existing files. [Integrity record](../reports/generated/colab_verification_2026-09-09/archive-integrity.json).
 
-Remaining procedure: use **Download verification ZIP** in the saved notebook,
-copy the download into `reports/generated/colab_verification_2026-09-09`, check the
-archive hash, extract without overwrites/path traversal, then run:
+- [Python 3.11 executed notebook](../reports/generated/colab_verification_2026-09-09/archive/reports/generated/notebooks/py311/P22_colab_py311.executed.ipynb): SHA-256 `14002e327e4d7b6cfcc1b457f874c857ae8aed5c88ca70a38e8916d065c02c8a`.
+- [Final saved Colab snapshot](../reports/generated/colab_verification_2026-09-09/P22_colab_final.downloaded.ipynb): 2,679,354 bytes; SHA-256 `5141f209670dc0674e56bfff27462fe2e203792256df914ef68ff2da96907e92`.
+- [Exact execution/environment record](../reports/generated/colab_verification_2026-09-09/archive/reports/generated/colab_verification_record/execution_record.json), [final execution log](../reports/generated/colab_verification_2026-09-09/archive/reports/generated/colab_verification_record/execute_canonical_python311_isolated.log), [file hash inventory](../reports/generated/colab_verification_2026-09-09/archive/reports/generated/colab_verification_record/verification_checks.json).
+- [Passing comparison](../reports/generated/colab_verification_2026-09-09/comparison.json), [command output](../reports/generated/colab_verification_2026-09-09/comparison.log), [completed Colab status](../reports/generated/colab_verification_2026-09-09/colab-status.md).
+
+Reproduce the comparison against retained evidence:
 
 ```bash
-.venv-p22/bin/python reports/generated/colab_verification_2026-09-09/compare_colab.py EXTRACTION_ROOT
+.venv-p22/bin/python reports/generated/colab_verification_2026-09-09/compare_colab.py \
+  reports/generated/colab_verification_2026-09-09/archive
 ```
 
 The generated comparator checks original notebook sources, execution/errors,
 manifest source hashes, all four RNA records and cohort fields, G0 and G8 against
 the frozen local run. It reports all differences, with numeric tolerance 1e-9;
-only outer timing, memory and figure paths are excluded. Task 5 must not be marked
-complete before reviewing its output and retaining the final archive.
+only outer timing, memory and figure paths are excluded. The report passes with
+no failures or pending checks. Task 5 is complete; the native Python-version
+difference, isolated-kernel startup failures and resource differences are retained.
 
-Retrieval blocker: Chrome's notebook control connection repeatedly became
-unattached/timed out, including a fresh view of the saved notebook. The previously
-downloaded native notebook was copied through Finder because terminal access to
-Downloads is denied by macOS. No OS permissions were expanded. A Drive raw-file
-reference was available but not materialized by the available connector tools.
-The historical local `colab-status.md` above is preserved; this checkpoint
-supersedes its sign-in/upload requirement. Do not rerun analyses solely to retry
-artifact download.
+Retrieval was resolved without another analysis run: the normal Google Drive
+download contained the saved archive link's embedded ZIP. The notebook was copied
+through Finder, decoded locally and checked against the previously recorded ZIP
+hash. No OS permissions were expanded. Historical pending status files and earlier
+startup errors are preserved; this completed record supersedes them.
 
 ## Claim limits
 
@@ -214,14 +223,14 @@ Removing chromosome 21 does not establish dosage-independent causation.
 | Plan component | State | Remaining requirement |
 |---|---|---|
 | Original RNA tasks 1–4: implementation and local execution | Complete | None locally; retain inconclusive result |
-| Original RNA task 5: verification | Partial | Colab runs finished; retrieve final archive, compare locally and retain execution record |
+| Original RNA task 5: verification | Complete | Fresh Colab evidence archived; source/hash/result comparison passes |
 | Paired M1–M4: accepted real inputs | Partial/blocked | Common measured ATAC counts, external access and accepted release/QC semantics |
 | Paired M5: real scientific protocol | Pending | Freeze preprocessing, covariates, biological controls and sensitivities on accepted inputs |
 | Paired M6–M8: real neural comparison | Pending | Real internal fits and locked external scoring after upstream gates pass |
 
-Colab sign-in, authorized upload and free CPU execution have occurred. Final
-archive retrieval/comparison is the remaining RNA verification step, not another
-approval request. Local repetition is not a substitute.
+No original RNA task remains. Colab sign-in, authorized upload, free CPU execution,
+archive retrieval and independent local comparison are complete. This closes the
+RNA plan without changing its inconclusive scientific conclusion.
 
 For paired work, the [source and transport audit](PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md)
 records the exact NeMO annotation count match, unresolved QC semantics, and public

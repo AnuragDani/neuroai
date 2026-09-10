@@ -129,3 +129,20 @@
 - **Status:** original RNA task 5 stays partial. Earlier sign-in/upload statements
   are historical, not current blockers. No scientific code or paired M1–M8 gate
   changed, and no completed-plan or positive replication claim is made.
+
+## 2026-09-09 — Original RNA plan completed with archived Colab evidence
+
+- **Recovery:** downloaded the saved notebook through Google Drive's normal UI;
+  its embedded archive exactly matches the previously recorded ZIP size/SHA.
+  No rerun, permission expansion or additional local upload was needed.
+- **Verification:** all 39 listed file hashes pass; safe extraction retained 40
+  files including the inventory. The Python 3.11 notebook has the exact original
+  23 cell sources, all code executed and zero errors. Both Colab runs match all
+  checked RNA/cohort fields against local results exactly (maximum difference 0).
+- **Differences retained:** native Python 3.13 G0 remains inconclusive; isolated
+  Python 3.11 G0 passes. Startup failures, actual environment/commands, resource
+  differences and the truthful subprocess flag are archived, not rewritten.
+- **Completion:** original RNA Tasks 1–5 complete; four comparisons, headline and
+  G8 stay inconclusive. [Final evidence](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md).
+  The preceding pending checkpoint is superseded. Paired M1–M8 requirements remain
+  open; RNA reproducibility is not accepted paired input or neural validation.

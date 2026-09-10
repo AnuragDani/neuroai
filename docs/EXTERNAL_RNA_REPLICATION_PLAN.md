@@ -1,6 +1,6 @@
 # External RNA Replication: Implementation Plan
 
-**Status:** Implemented; local and fresh Colab executions finished. Final Colab archive retrieval/comparison pending; all four local comparisons inconclusive (2026-09-09)
+**Status:** Complete — Tasks 1–5 implemented, executed and verified locally and on fresh free-CPU Colab. All four comparisons and headline inconclusive (2026-09-09)
 
 **Date:** 2026-09-03  
 **Review applied:** `EXTERNAL_RNA_REPLICATION_PLAN_REVIEW_2026-09-03.md`  
@@ -22,11 +22,14 @@
   inconclusive headline, zero failed donor bootstraps, G8 still inconclusive.
 - [Results and verification record](EXTERNAL_RNA_REPLICATION_RESULTS_2026-09-08.md)
   contain the final artifacts, exact invocation, hashes, timings and claim limits.
-  Tasks 1–4 and local verification are complete. Fresh free-CPU Colab executions
-  finished in native Python 3.13 and an isolated Python 3.11 environment. Task 5
-  remains partial until the final archive is retrieved and compared locally.
-  Native G0 is honestly inconclusive because it requires Python 3.11; the isolated
-  execution is not represented as Colab's native kernel. See the results record.
+  Tasks 1–5 are complete. Fresh free-CPU Colab executions finished in native Python
+  3.13 and an isolated Python 3.11 environment. The final archive is saved locally:
+  ZIP and all 39 listed file hashes pass; both runs' four RNA rows and scientific
+  fields match the frozen local run exactly. The unchanged 23-cell Python 3.11
+  notebook executed without errors and G0 passed. Native 3.13 G0 remains honestly
+  inconclusive; the isolated execution is not represented as Colab's native kernel.
+  G8 and every RNA outcome remain inconclusive. This completes the RNA plan, not
+  the separate paired-neural extension.
 - Real execution uses the separately recorded
   [user-reported approval attestation](../plan/real_data_attestation_2026-09-08.json),
   not an invented professor approval date or a global historical policy change.
