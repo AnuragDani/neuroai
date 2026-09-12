@@ -28,7 +28,7 @@ EXPECTED_LINES = [
     "SPARSE_ROUNDTRIP_PASS",
     "SCIENTIFIC_GATES_UNCHANGED",
 ]
-FIXTURE_SHA256 = "ec0abdab6c1a931f989bd7dbf7fa50690df8f4572364bbc0ae5fb3109a4cf05a"
+FIXTURE_SHA256 = "aef9ccc1a8c19bf0ab53f848a5edcbb86bbb76195a3dbd288a0520dec67e36e7"
 
 
 def create_args(name, image, command, memory):

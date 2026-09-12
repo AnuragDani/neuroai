@@ -59,6 +59,7 @@ cat("FIXTURE_MD5\t", unname(tools::md5sum(output)), "\n", sep = "")
 cat("ROWS\t", paste(rownames(restored$counts), collapse = ","), "\n", sep = "")
 cat("COLUMNS\t", paste(colnames(restored$counts), collapse = ","), "\n", sep = "")
 cat("DONORS\t", paste(restored$cells$donor, collapse = ","), "\n", sep = "")
-entries <- summary(restored$counts)
+entries <- data.frame(i = restored$counts@i + 1L,
+  j = rep.int(seq_len(ncol(restored$counts)), diff(restored$counts@p)), x = restored$counts@x)
 for (n in seq_len(nrow(entries))) cat("ENTRY\t", entries$i[n], "\t", entries$j[n], "\t", entries$x[n], "\n", sep = "")
 cat("SPARSE_ROUNDTRIP_PASS\nSCIENTIFIC_GATES_UNCHANGED\n")
