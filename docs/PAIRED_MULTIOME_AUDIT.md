@@ -188,3 +188,26 @@ fixture input at most 1 MiB. Pin dependencies and reject unmetered installer
 fetches before starting. No dependencies or fixture were installed/run here.
 Prior free-CPU approval stands, but that dependency step is outside this cycle.
 It does not authorize the large object or establish that it fits in memory.
+
+F2s resolved the exact NeMO payload declaration on 2026-09-12 at 21:08:11 UTC.
+One GET returned 1,867 bytes; aggregate decoded content was 23,394 bytes and
+network elapsed time 3.25775 seconds. The complete bag matches the original
+SHA256 `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
+The saved bag permits offline replay; no count payload was requested.
+
+Exact declared URL:
+`https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`.
+Declared payload size is 1,540,753,269 bytes and MD5 is
+`796c8b3aa587b257af0a46615a437dba`. Bag ETag/Last-Modified were recorded; they do
+not identify the payload version or certify its QC/count semantics.
+
+Reviewed input hashes for F3:
+
+- `source/source_identity.json`:
+  `45ed2cb478fa4b780f8f29f3e2499109f0a93a3e9610bcc298d1d7813f154735`.
+- `development_object_feasibility.json`:
+  `988dabad83afd162244f372a88f37ca633cf45ad704392efe84078a8d63ad0a2`.
+
+Both records live under `reports/generated/input_feasibility_20260912/`.
+Resolver implementation `83cf31e` passed 20 focused tests, 617 fast tests and
+lint before the sole request; separate review approved the source resolver.
