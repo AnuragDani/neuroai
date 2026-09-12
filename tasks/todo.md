@@ -1,13 +1,13 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-11. Specific next-cycle plan only; no new execution.
+Updated: 2026-09-12. Specific next-cycle plan only; no new execution.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
-## Advancement queue — bounded planning revision 2026-09-11
+## Advancement queue — bounded planning revision 2026-09-12
 
 These tasks extend the existing P22 work; they do not replace or complete M1–M8.
 F4–F5 are complete in isolated head `46d7523`, not merged into this checkout.
@@ -18,11 +18,13 @@ This revision changes only the plan. Next implementation requires approval of
 Keep work in an isolated branch, preserve unrelated dirty files, and record one
 verified slice per local commit. No push, merge or GNHF resume.
 
-**Cycle endpoint:** F1 → F2a → F2b → F3 → reviewed decision and STOP. The result is
-code/tests plus a specific input decision, not trained models or new common counts.
-At most one candidate archive/probe and one offline audit. Only F2b uses network;
-F2a fixtures use local transports. Full numeric limits and report fields are in
-`plan.md`; these are acceptance requirements, not adjustable implementation defaults.
+**Cycle endpoint:** F1 → F2d → F2s → F3 → reviewed decision and STOP. Result is
+one guard commit, resolved or explicitly unresolved source identity, executable
+proposal for the first unmet development-inspection prerequisite, and a specific
+input decision. Only F2s uses network: one tiny official-bag read.
+No NeMO payload probe or processed-object download occurs in this cycle.
+F2d comes first and remains useful even when F2s fails. Internal model comparison
+is a later development milestone; M5's planned external primary contrast stays intact.
 
 **Before implementation:** verify the RNA recovery bundle and preserve its
 accepted code/results. Use an isolated checkout containing `46d7523` plus these
@@ -64,73 +66,91 @@ pass with the patch; run `tests/test_atac_features.py`, `make lint` and
 **Files likely touched:** `src/p22/data/multiome.py`, `tests/test_multiome.py`.
 **Estimated scope:** Small, two files.
 
-### F2a: Implement the bounded probe and offline tests
+### F2d: Freeze development processed-object inspection feasibility
 
-**Description:** Implement the proposed `scripts/probe_multiome_release.py` with
-`configs/nemo_atac_probe.json` and `tests/test_release_probe.py`. Keep network
-retrieval separate from the existing offline audit. No live source request in F2a.
+**Description:** Produce an offline capability/resource record for only
+`GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` (listed as 7.6G).
 
-**Reason:** the archive can be metadata-first, matrix-first, truncated, or served
-without Range support. Prove safe refusal before touching the real endpoint.
-
-**Acceptance criteria:**
-
-- [ ] Validate the frozen source manifest and report schema defined in `plan.md`.
-  Enforce its aggregate 1 MiB body/5 MiB decoded caps, request count and total deadline;
-  require HTTP 206 with exact Content-Range before consuming the body. Reject
-  unexpected redirects/encoding, unsafe paths, nonregular members and changed
-  source identity; stop on matrix content. Never follow remote instructions.
-- [ ] Emit source URL/time, requested/received ranges, partial-response hash,
-  inspected member names and completeness, byte ledger and a specific stop reason.
-  Do not label a prefix hash as the full archive checksum or infer final QC.
-- [ ] Local fixtures cover success, missing source identity, changed declared size,
-  HTTP 200, wrong/missing ranges, redirect, encoded HTTP body, slow-drip/stalled
-  response, gzip expansion, truncated tar/gzip, unsafe/PAX/GNU/nonregular headers,
-  matrix-first input and existing output directories. Every refusal preserves
-  its observed-byte ledger without a retry, source change or full-file fallback.
-
-**Verification:** `PYTHONPATH=src .venv-p22/bin/python -m pytest -q tests/test_release_probe.py`;
-`make lint`; `PYTHONPATH=src make test-fast`. Independently compare fixture byte
-ledgers with fixture payload lengths and test the single deadline, not per-read timeouts.
-**Dependencies:** F1; reuse its validated feature path when complete metadata exists.
-**Files likely touched:** new `scripts/probe_multiome_release.py`,
-new `tests/test_release_probe.py`, new `configs/nemo_atac_probe.json`
-(reuse `ReadBudget` semantics, not its complete-
-archive parser on an incomplete prefix).
-**Estimated scope:** Medium, three files. One reviewed local implementation commit.
-
-### F2b: Record the single bounded live-probe outcome
-
-**Description:** Use F2a unchanged with a new output directory. Inspect only the
-declared NeMO DSdevctx ATAC prefix, with the exact manifest URL and reviewed limits.
-
-**Reason:** determine whether barcode/feature metadata are reachable inside this
-budget. Neither an archive listing nor complete barcodes prove the author's QC rule.
+**Reason:** development common measured ATAC counts gate internal training. NeMO
+source metadata cannot supply them. Planning checks found no R executable on PATH
+or `pyreadr`/`rpy2` in `.venv-p22`; current free disk was 27.75 GiB. Refresh these
+observations; missing executables in one environment do not prove global absence.
 
 **Acceptance criteria:**
 
-- [ ] Preflight records config/code/source-evidence fingerprints before a live
-  request. Missing exact URL or source identity yields `SOURCE_IDENTITY_UNRESOLVED`
-  with `request_attempted=false`; do not construct a URL or fetch a bag as a workaround.
-- [ ] At most one HEAD and one range GET produce `probe.json` with complete-member
-  facts, completeness flags, exact observed-byte totals and a stop reason. HTTP,
-  deadline, matrix-first or cap refusal is evidence of limited inspection, not
-  evidence that a compatible dataset does not exist.
-- [ ] Independently review the ledger and preservation hashes. Commit a concise
-  evidence note; keep payloads/generated artifacts ignored. No retry or budget change.
+- [ ] Manually assemble `development_object_feasibility.json` using the schema
+  in `plan.md`: timestamp, commands/results, source hashes, runtime paths/versions,
+  disk/memory evidence and resource unknowns. Check `R`, `Rscript`, `pyreadr`, and
+  `rpy2`; distinguish availability from proven support for the serialized object
+  classes and sparse assays. Generic-reader presence alone cannot pass this check.
+- [ ] Freeze later inspection questions: object/classes, assay names, raw-count
+  layer/slot, sparse dimensions, feature identifiers/coordinates and genome build,
+  count units, donor/cell metadata, retained-cell semantics, and presence of a
+  common measured ATAC matrix such as `peaks_by_cluster`, and donors/labels used
+  for peak discovery. Shared columns do not establish training-only selection.
+- [ ] Select one follow-up targeting the first unmet prerequisite: bounded reader
+  enablement/tiny sparse fixture if support is absent or untested; bounded sizing
+  if full-object fit is unknown; full inspection only when both are supported.
+  Specify that action's runtime, numeric byte/disk/RSS/time limits, enforcement,
+  headroom, outputs and stop rule. Keep unknown full-object quantities unresolved;
+  even reading assay names can deserialize the whole object. No dense conversion,
+  install, fixture execution, HEAD/GET or object download occurs in F2d.
 
-**Verification:** review `probe.json` against the frozen manifest and fixture-tested
-limits. No second live run for verification. Record whether a live request actually
-occurred; a source-preflight refusal must not be presented as a completed live probe.
-**Dependencies:** F1 and reviewed F2a, then valid source preflight for a live request.
-**Files likely touched:** `docs/PAIRED_MULTIOME_AUDIT.md` only; generated output directory.
-**Estimated scope:** Small, one evidence note and at most one live probe.
+**Verification:** compare record with local executable/module checks and current
+disk report; unknown quantities must be null with reasons. A later tiny fixture
+does not prove real-object resource fit. Ensure the proposal selects one object,
+checks existing approvals and identifies only uncovered authority. Do not require
+approval again for an already authorized action within its existing limits.
+**Dependencies:** F1; run before F2s, with no dependency on external access.
+**Files likely touched:** `docs/PAIRED_MULTIOME_AUDIT.md` plus ignored generated record.
+**Estimated scope:** Small, one evidence note; no code or network.
 
-### Checkpoint F-A: Safe inspection
+### F2s: Resolve NeMO payload identity before considering a probe
 
-- [ ] F1/F2a pass focused tests and F2b has a reviewed bounded outcome (including
-  explicit preflight refusal). Original files remain unchanged; ignored Range
-  does not trigger whole-file fallback. No scientific gate passes from access alone.
+**Description:** Implement one small stdlib resolver for the pinned official ATAC
+Open bag. Read the complete 1,867-byte bag once under the frozen caps, validate
+its preserved hash, then join its target fetch and checksum declarations locally.
+
+**Reason:** exact payload URL is absent from preserved local evidence. Defer
+payload-probe construction; this tiny source check updates the external track.
+
+**Acceptance criteria:**
+
+- [ ] One GET only; no HEAD, retry or redirect; 65,536 application-read body bytes,
+  262,144 aggregate decoded bytes including headers, and one 15-second monotonic
+  deadline covering DNS/connect/TLS/read. Require HTTP 200, disable HTTP decoding,
+  and stop before parsing unless body is exactly 1,867 bytes with SHA256
+  `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
+- [ ] Require one matching row in `fetch.txt` and `manifest-md5.txt`, joined by
+  bag-relative payload path. URL/size come from the former, MD5 from the latter;
+  match target filename, 1,540,753,269 bytes and
+  `796c8b3aa587b257af0a46615a437dba`. Reject ambiguous rows, unsafe paths and links;
+  allow regular metadata and directory entries. Never infer or follow payload URL.
+- [ ] Write `source_identity.json` per `plan.md` and preserve the hash-matching
+  raw bag for offline verification. Record supplied bag `ETag`/`Last-Modified`,
+  byte totals and elapsed time; these are not payload validators. Mismatch yields
+  `SOURCE_EVIDENCE_CHANGED`; transport/preflight failure is explicit, with null
+  resolved fields. No failure causes a retry or blocks the development proposal.
+
+**Verification:** local fixtures cover the successful two-manifest join, changed
+hash/length, absent/duplicate rows, mismatched path/size/MD5, unsafe members,
+redirect, encoded response, byte/expansion caps, truncated archive, stalled and
+slow-drip deadline expiry, and existing output directory. Fixture pins must not
+override production target/limits through the CLI. Run
+`PYTHONPATH=src .venv-p22/bin/python -m pytest -q tests/test_resolve_nemo_source.py`,
+`make lint`, and `PYTHONPATH=src make test-fast` before the live request. Compare
+saved bag, row join and request ledger offline afterward; no second network run.
+**Dependencies:** F1 and the F2d record; no accepted counts or R reader required.
+**Files likely touched:** new `scripts/resolve_nemo_source.py` and
+`tests/test_resolve_nemo_source.py`; concise evidence in `docs/PAIRED_MULTIOME_AUDIT.md`.
+**Estimated scope:** Medium, two code/test files, one shared evidence note and
+one bounded request. Commit tested implementation before recording the live outcome.
+
+### Checkpoint F-A: Useful preflight
+
+- [ ] F1/F2s pass focused tests; F2s has one reviewed bounded outcome; F2d has one
+  reviewed offline record. Original inputs remain unchanged. No scientific gate
+  passes from URL recovery, file size, reader availability or object name alone.
 
 ### F3: Produce one actionable input-feasibility decision
 
@@ -149,11 +169,12 @@ general research. Development readiness and external readiness must stay separat
   pairing, specimen provenance, genome/coordinate convention, count units, exact
   measured regions and feature provenance, with pinned sources/hashes. Missing
   evidence cannot be replaced by a user-supplied `PASS` boolean. Consume the pinned
-  probe manifest and report, including a valid preflight-refusal record, through
-  proposed `--probe-manifest` and `--probe-report` options; preserve callers that
-  omit these options. Reject malformed/tampered reports or unexplained source/budget
-  discrepancies. Add `input_decision.json` and `INPUT_DECISION.md` with the exact
-  fields and missing-evidence semantics frozen in `plan.md`.
+  F2s source-identity and F2d development-feasibility records through proposed
+  `--source-identity` and `--development-feasibility` options; preserve callers
+  that omit them. Verify successful source resolution against the saved raw bag
+  and manifest join. Reject malformed/tampered records or unexplained source/budget
+  discrepancies; a well-formed unresolved-source record is valid input. Add
+  `input_decision.json` and `INPUT_DECISION.md` with fields frozen in `plan.md`.
 - [ ] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
   gates. A partial archive, matching row total or annotation mask cannot certify
   full membership, common counts, author QC or readiness to train.
@@ -161,16 +182,18 @@ general research. Development readiness and external readiness must stay separat
   and one smallest next action with proposed bytes/disk and required authority.
   Do not claim exhaustive absence or automatically launch that next action. Keep
   `training_allowed=false` and `model_training_performed=false`; an input decision
-  cannot supply the absent M5 protocol. Stop after the independent decision review.
+  cannot supply the absent M5 protocol. Source-resolution failure does not move
+  NeMO ahead of the first unmet development prerequisite. Stop after review.
 
 **Verification:** extend `tests/test_multiome.py`, `tests/test_atac_features.py` and
 new `tests/test_input_decision.py`. Include equal totals with unknown QC, partial
-coverage, count-unit mismatch, unmeasured regions, missing/tampered probe fields,
-preflight-only refusal, source hash mismatch and existing-directory refusal.
+coverage, count-unit mismatch, unmeasured regions, missing/tampered feasibility
+fields, source-resolution failure, source hash/join mismatch, fabricated reader
+readiness, unknown resource quantities and existing-directory refusal.
 Run these focused tests, `make lint`, `PYTHONPATH=src make test-fast`, then the
 existing offline audit once with the exact caps in `plan.md`. Review all report
 claims against pinned sources without any training or fresh source searches.
-**Dependencies:** reviewed F2b outcome; source facts can be incomplete but must be labeled honestly.
+**Dependencies:** reviewed F2d/F2s outcomes; facts can be incomplete but must be labeled honestly.
 **Files likely touched:** `scripts/audit_multiome.py`, `tests/test_multiome.py`,
 `tests/test_atac_features.py`, new `tests/test_input_decision.py`,
 `docs/PAIRED_MULTIOME_AUDIT.md`.
@@ -180,12 +203,13 @@ followed by a concise reviewed decision record.
 ### Checkpoint F-B: Input decision, not perpetual inspection
 
 - [ ] F3 produces accepted evidence or a concrete blocker. Stop paired execution
-  if required inputs fail; do not repeat F2 without a changed source or new budget.
+  if required inputs fail; do not repeat F2s or expand F2d without changed evidence
+  and separate authority.
 - [ ] Any development-only pilot has its own reviewed scope and all relevant
   development gates. Original combined-cohort Checkpoint B and external gates
   remain unchecked while their requirements are unmet.
 - [ ] F1–F3 changed only the permitted files; tests, source/RNA/dirty-file hashes,
-  probe ledger and final decision pass independent review. Code failure is not
+  source ledger, feasibility record and final decision pass independent review. Code failure is not
   an accepted blocked-input conclusion. Handoff names exactly one next action and
   its required authority; no automatic M6a, real fold or processed-object inspection.
 

@@ -1,6 +1,6 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-11 (PDT). Bounded next-cycle contract; planning revision only.
+Updated: 2026-09-12 (PDT). Bounded next-cycle contract; planning revision only.
 This revision authorizes no implementation, download, or experiment. Status:
 retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
@@ -17,7 +17,7 @@ Current track status:
 | Track | What the user gets | What it can establish |
 |---|---|---|
 | Local RNA follow-up, F4–F5: complete in isolated branch | Reviewed donor-influence table, plot, and summary | 68 valid omissions; original inconclusive conclusion unchanged; no repeat scheduled |
-| Paired inputs, F1–F3 | Bounded archive probe plus evidence-linked readiness report | What can be inspected within budget, which gates remain unmet, and the exact next input needed |
+| Paired inputs, F1–F3 | Coordinate guard, two bounded feasibility records, and evidence-linked decision | Whether source identity and development-object inspection are executable, which gates remain unmet, and the exact next action |
 | Real paired training, M5–M8 | Dry-run preflight; real fits deferred pending accepted development ATAC inputs, followed by separately gated external scoring | Conditional follow-on work, not a promised result of F1–F3 inspection |
 
 **Completed baseline:** F4–F5 ran once on real inputs: 68 valid omissions,
@@ -34,79 +34,121 @@ matched concatenation using valid paired RNA+ATAC measurements? This cycle does
 not answer that model-performance question. It establishes which input requirements
 remain unsatisfied and the single next action that can change the decision.
 
-**Deliverable:** one reviewed coordinate-guard commit, one tested bounded probe,
-and one evidence-linked input decision. `INCONCLUSIVE` with exact missing inputs
+**Deliverable:** one reviewed coordinate-guard commit, one tested source resolver,
+one development-object feasibility record, and one evidence-linked input decision.
+`INCONCLUSIVE` with exact missing inputs
 is a valid cycle outcome; a software failure is not a completed scientific decision.
 
 | Step | Why it is necessary | Completion evidence |
 |---|---|---|
 | F1: recover the existing coordinate guard | Conflicting peak IDs and coordinates can invalidate measurement comparisons before a model sees them | The regression fails on the base, passes with the exact reviewed patch, and existing readers still pass |
-| F2a/F2b: implement, then use one bounded probe | Archive member order and reachable barcode/feature metadata are unknown; a full count download is unnecessary for this narrow question | Adversarial fixtures pass; one `probe.json` records complete-member facts, byte ledger and stop reason, including an explicit preflight refusal if needed |
-| F3: join evidence into one decision | Archive access, matching cell totals, compatible measurements and accepted QC are different claims | `input_decision.json` and `INPUT_DECISION.md` state each gate separately and name one next action |
+| F2d: freeze development-object inspection feasibility | Development common measured counts are the binding input, while both published `.rda.gz` objects and required reader/runtime remain unverified | One offline capability/resource record names the selected object, missing reader/runtime facts, exact inspection questions and a bounded follow-up |
+| F2s: resolve NeMO source identity | Exact payload URL is absent from preserved local evidence; building a payload probe before resolving it would likely create unused code | One capped read of the pinned 1,867-byte official bag produces a reviewed `source_identity.json`, or an explicit source-resolution failure; this external check cannot block F2d |
+| F3: join evidence into one decision | Source access, reader feasibility, compatible measurements and accepted QC are different claims | `input_decision.json` and `INPUT_DECISION.md` state each gate separately and name one development-focused next action |
 
 F1–F3 **do not create common measured ATAC counts**. Development data are the
 binding concern for an internal pilot. NeMO metadata cannot solve that concern.
 The inspected B17C2L/B10C1Q peak lists mismatch, but the two published processed
 objects remain uninspected. Do not claim that no usable object exists.
+An accepted development object can support a donor-held-out internal milestone;
+the current M5 plan still requires freezing external donor balanced-accuracy
+improvement as the primary contrast. Its real protocol remains pending. Internal
+results are a separate milestone; they cannot satisfy or replace that endpoint.
 
 ### Frozen scope of this cycle
 
-- Work only on F1, F2a/F2b and F3. M5, M6a–M6c, M7 and M8 remain separate later
+- Work only on F1, F2d, F2s and F3, in that order. F2d does not depend on NeMO
+  access or F2s success. M5, M6a–M6c, M7 and M8 remain separate later
   work. No RNA reruns, new datasets, new model families, peak-to-gene approximation,
-  count projection, full fragments, recount, paid compute, outreach, push or merge.
+  count projection, payload-prefix probe, processed-object download, full fragments,
+  recount, dependency installation, paid compute, outreach, push or merge.
 - Start implementation in an isolated checkout containing the accepted RNA code
   from `46d7523`, plus these two current plan files. Record both revisions and
   dirty/source/result fingerprints before editing. Do not import old GNHF plan
   documents or automatically commit unrelated files. Never rerun GNHF.
-- Proposed edits: F1 two existing files; F2a three files; F2b one evidence note
-  plus generated artifacts; F3 at most five files. Use the existing Python environment and installed
-  libraries. No dependency, framework, dashboard or general download manager.
-- One candidate source only: NeMO's
+- Proposed edits: F1 two existing files; F2d one evidence note; F2s one small
+  stdlib script, one test and that shared evidence note; F3 at most five files.
+  Use the existing Python environment and installed libraries. No dependency,
+  framework, dashboard or general download manager.
+- One external payload candidate only: NeMO's
   `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, declared size
   1,540,753,269 bytes and declared MD5 `796c8b3aa587b257af0a46615a437dba`.
   These are publisher declarations, not a locally verified full-file checksum.
-- Proposed `configs/nemo_atac_probe.json` pins the exact HTTPS payload URL,
-  source-evidence path/hash, filename, declared size/checksum and numeric limits.
-  Recover the exact URL from local first-party response evidence before launch;
-  never infer it from a filename or directory. If unavailable, record
-  `SOURCE_IDENTITY_UNRESOLVED` without a live request. The existing source review
-  saved summaries/hashes rather than all raw responses; no fresh bag/API fetch is
-  silently added to this cycle. A required small source-resolution request becomes
-  the single next proposal instead.
-- F2b uses at most one HEAD and one prefix range GET, with no retries or redirects.
-  Aggregate application-read response bodies must not exceed 1,048,576 bytes.
-  Aggregate decoded content, including archive headers and nested layers, must
-  not exceed 5,242,880 bytes. A single 30-second monotonic deadline covers network
-  work, including DNS/connect/TLS, HEAD and GET; it is not a new timeout per read.
-  Tests must cover stalled/slow-drip responses and deadline enforcement. These
-  body limits do not claim to meter TLS/TCP overhead or bytes already buffered by
-  the OS. Stop body reads immediately when a response fails validation.
-- Require HTTP 206 and the exact requested Content-Range/declared total before
-  reading the prefix. Disable HTTP content decoding. Stop at matrix content,
-  unknown/nonregular/unsafe members, incomplete metadata, cap or timeout. Do not
-  extract to disk, follow archive instructions, skip through matrix payloads, or
-  use a full-download fallback. Prefix chunks can already contain matrix bytes;
-  do not parse or continue past the first matrix member.
+- F2s reads only the pinned official ATAC Open bag URL already recorded in local
+  [recheck evidence](../reports/generated/paired_public_recheck_2026-09-09/verification.md):
+  `https://data.nemoarchive.org/publication_release/Vuong_delaTorre_Human_snMultiome-2026-05-04/Analysis_bag_3_Vuong_delaTorre_Human_snMultiome_Analysis_ATAC_Open.tgz`.
+  It permits one GET, no HEAD, retry or redirect, at most 65,536 body bytes,
+  262,144 aggregate decoded bytes (including archive headers), and one 15-second
+  monotonic network deadline covering DNS/connect/TLS and all reads. Require HTTP
+  200, disable HTTP decoding, and compare the complete body with preserved evidence:
+  1,867 bytes and SHA256
+  `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
+  Any mismatch yields `SOURCE_EVIDENCE_CHANGED`; do not parse or make another
+  request. On exact match, read `fetch.txt` and `manifest-md5.txt` locally without
+  extracting files. Require one target row in each, joined on the same bag-relative
+  payload path: URL/size from `fetch.txt`, MD5 from `manifest-md5.txt`. Match the
+  target filename, 1,540,753,269 bytes and declared MD5 above. Reject ambiguous
+  rows, unsafe paths and links; allow directory entries and regular bag metadata.
+  Preserve the complete hash-matching bag in the new ignored output directory so
+  the URL/declaration join can be verified offline. Never construct or follow the
+  payload URL. Record bag-response `ETag` and `Last-Modified` when supplied; these
+  do not bind the payload version. Test caps and the absolute deadline offline
+  before the single live request; no retry for verification.
+- F2d performs no network access. Record whether `R`, `Rscript`, `pyreadr`, or
+  `rpy2` are available, current free disk in GiB, and unknown compressed,
+  decompressed, in-memory and working-space requirements. Presence of a generic R
+  reader is insufficient: later inspection must support the serialized object
+  classes and sparse assays, including required Seurat/Signac dependencies if
+  applicable. Reading only assay names can still deserialize the whole object.
+  Select only
+  `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` (publisher listing
+  7.6G) for a later proposal. File name and size do not prove assay contents.
+  Freeze later inspection questions: object/classes; assay names; raw-count
+  layer/slot; sparse dimensions; feature identifiers/coordinates and genome build;
+  count units; donor/cell metadata and retained-cell semantics; and whether
+  `peaks_by_cluster` or another common measured ATAC matrix exists. Also ask which
+  donors/labels contributed to peak discovery; shared columns alone do not prove
+  training-only feature provenance. No dense materialization is acceptable.
 - F3 runs the existing local audit once, with its existing explicit caps:
   1,700,000,000 input bytes, 268,435,456 expanded bytes, 10,000,000 nonzeros and
   256 retained cells per donor in the existing single-library pilot. This is
   neither a new cohort-wide ingestion nor a donor-validation experiment. No
   network is permitted in F3. Byte limits are not process-RAM guarantees.
 
+Read-only planning inventory on 2026-09-12: neither `R` nor `Rscript` was found on
+PATH; neither `pyreadr` nor `rpy2` was found in `.venv-p22`. Repository-volume free
+space was 29,096,732 KiB (27.75 GiB), not the review's earlier 55 GiB. Host memory
+was not established by this check. These observations do not prove that every
+possible runtime is absent. F2d must refresh them before proposing a resource
+budget; the publisher's rounded `7.6G` listing is not an exact byte count.
+
 ### Outputs, decision rules and terminal condition
 
 All proposed interfaces below must refuse existing output directories. Keep
 generated data ignored; commit concise code, tests and evidence descriptions.
 
-`probe.json` must contain schema version, exact command/config/code hashes, UTC
-time, source declaration versus observed headers, requests, cumulative body and
-decoded bytes, elapsed time, inspected member names/completeness, prefix SHA256,
-and a specific stop reason. `request_attempted=false` distinguishes preflight
-refusal from a live probe: unresolved URL, prefix hash and observed headers are
-null; requests and inspected members are empty; body and decoded byte counters
-are zero. F3 must reject a no-request record with contradictory observations.
-Complete members may support local facts; partial
-coverage never proves full archive membership, final QC or dataset absence.
+`source_identity.json` must contain schema version, exact command/code and local
+source-evidence hashes, UTC time, pinned bag URL, request ledger, supplied
+`Content-Length`/`Content-Encoding`/`ETag`/`Last-Modified`, cumulative body and decoded
+bytes, elapsed time, raw-bag path/hash, declared target and separately resolved
+URL/size/MD5, matched member paths and one stop reason. Keep expected declarations
+separate from observations: resolved fields remain null unless both manifest rows
+validate. Preflight refusal records `request_attempted=false`, empty requests,
+zero byte counters and null response fields; a failed request preserves measured
+bytes and elapsed time. F3 rejects contradictions and verifies the saved bag/join
+for a successful resolution. This record establishes
+source identity only, not payload immutability, archive contents, QC or usability.
+
+`development_object_feasibility.json` is a small manually assembled record of the
+offline checks, not a new collector service. Include schema version, UTC time,
+commands/results, source paths/hashes, runtime paths/versions, selected object,
+free disk, host/available memory where measurable, and known/unknown compressed,
+decoded, peak-RSS and working-disk quantities with units. Unknowns are null with
+reasons, never zero. State whether reader support is proven, untested or absent,
+the exact inspection questions, and the smallest next action. It cannot mark
+counts, QC, coordinates or donor pairing as accepted. A later full-object proposal
+requires numeric network/decoded/RSS/disk/time ceilings, a means to enforce them,
+headroom and a stop rule; unknown full-object fit must remain unresolved.
 
 `input_decision.json` must keep separate `development`, `external`, and
 `cross_cohort` evidence. Each gate records `PASS`, `UNRESOLVED`, or `FAIL`, its
@@ -119,35 +161,43 @@ Retain M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` vocabulary separately
 Both `training_allowed` and `model_training_performed` remain false in F3: this
 cycle has no accepted real M5 protocol. `INPUT_DECISION.md` gives inspected scope,
 what changed, unresolved requirements, and exactly one prioritized next action.
-If development counts remain missing, prefer a separately budgeted inspection
-proposal for `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz`, listed as
-7.6G in the existing evidence. That name does not establish assay contents,
-compatible counts, training-only feature provenance, or cross-cohort readiness.
-Record current free disk in GiB and identify unknown compressed/decoded/working
-sizes before requesting a larger inspection. Do not download it in this cycle.
-If an earlier missing source identity prevents the probe, prioritize that smaller
-source-resolution proposal and retain the development-count blocker explicitly.
+If development counts remain missing, select the first unmet prerequisite for
+inspecting the named development object. With absent or untested reader support,
+propose a bounded reader-enablement and tiny sparse-object fixture check in an
+isolated local/free-CPU environment. With a proven reader but unknown full-object
+resource fit, propose only the smallest sizing check with explicit limits. Only
+when both are supported may the next action be a resource-bounded object
+inspection. A tiny fixture does not prove that the real object fits in memory.
+Check existing approvals against the exact proposed action; identify only any
+uncovered authorization. NeMO source resolution cannot displace this development
+priority, even if its request fails.
 
-**Stop after F3's reviewed decision.** No second live probe, source substitution,
-expanded budget, processed-object download or real fit follows automatically.
+**Stop after F3's reviewed decision.** No payload probe, second source request,
+source substitution, dependency installation, expanded budget, processed-object
+download or real fit follows automatically.
 Complete means all implementation criteria/tests pass, evidence is preserved,
-and a reviewer accepts the decision and next action. A transport or partial-prefix
-stop can complete the evidence question; broken code must be fixed offline first.
+and a reviewer accepts the decision and next action. A bounded source-resolution
+failure can complete that evidence question; broken code must be fixed offline first.
 
-**Recommended paired-input action:** one metadata-only probe of the NeMO Open
-bag's `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, then one evidence
-decision. A gzip prefix can be incomplete or matrix-first. Do not assume random
-tar offsets, successful metadata retrieval, or final QC from a file listing.
+**Recommended paired-input action:** establish reader/resource feasibility for
+the selected development object, then resolve external payload identity cheaply.
+Do not reuse a gzip/tar prefix probe for `.rda.gz`:
+its format and resource needs differ. NeMO payload inspection remains a later
+external-input task, worth building only if source resolution succeeds and a
+predeclared question can change an external-input decision. HTTP size or
+Accept-Ranges headers cannot establish assay contents or actual Range behavior.
 
 ### Dependency order and checkpoints
 
 ```text
 Completed: F4/F5 RNA diagnostic (isolated 46d7523); preserve, do not repeat
 Next-cycle approval + isolated workspace
-└─ F1 recover fix → F2a offline probe/tests → F2b at most one probe → F3 decision → STOP
+└─ F1 recover fix → F2d offline development feasibility → F2s one tiny source read → F3 decision → STOP
 Later, separately reviewed: accepted development inputs* → M5 → M6a/b/c → M7
 External evaluation additionally requires accepted external inputs + frozen models → M8
 ```
+
+F2s failure is recorded in F3 and does not undo or stall the development proposal.
 
 *Development common measured ATAC counts are a binding unresolved requirement;
 F1–F3 can report this gap but do not produce those counts. The inspected raw
@@ -177,10 +227,9 @@ The RNA diagnostic already exists in isolated `a0049f2` and is not part of this
 cycle. Existing `scripts/audit_multiome.py` stays an offline verifier, and
 `scripts/train_multiome.py` stays synthetic-only.
 
-- `scripts/probe_multiome_release.py --manifest configs/nemo_atac_probe.json --output-dir <new-dir>`:
-  writes `probe.json` with inspected members, source identity, byte use and a stop
-  reason. No matrix loading or training.
-- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --probe-report <probe.json> --probe-manifest configs/nemo_atac_probe.json --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
+- `scripts/resolve_nemo_source.py --output-dir <new-dir>`: reads only the pinned
+  1,867-byte official bag under the frozen limits and writes `source_identity.json`.
+- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --source-identity <source_identity.json> --development-feasibility <development_object_feasibility.json> --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
   retains current audit artifacts and adds `input_decision.json` and
   `INPUT_DECISION.md` within the explicit existing local caps.
 - `scripts/run_real_multiome.py --config <frozen-real-protocol> --stage internal-pilot --dry-run`:
@@ -209,12 +258,13 @@ refreshes, automatic new datasets, or silently enlarged budgets.
   use directly supervised, small implementation slices. Do not promise a strict
   token ceiling from the current end-of-turn accounting or substitute a wall
   clock limit for a token limit.
-- Probe ceiling: 1 MiB total application-read response-body bytes, 5 MiB total decoded
-  content, at most one HEAD and one range GET, and one 30-second total network
-  deadline as defined above. Stop on a missing
-  or mismatched range response, matrix payload, invalid/truncated metadata or cap.
-  No larger retry without a separately reviewed budget. Compression and any
-  archive-extension headers count toward decoded limits.
+- Current network ceiling: F2s's one bag GET, 65,536 application-read body bytes,
+  262,144 decoded bytes and 15-second total network deadline. These body counters
+  exclude TLS/TCP overhead and bytes buffered by the OS. The previous 1 MiB/5 MiB
+  payload-prefix probe is deferred; its earlier budget grants no current request.
+  A later payload probe needs its own fixed target and question, and must compare
+  payload response validators across requests where available. Bag ETags cannot
+  stand in for payload validators; even payload validators do not establish QC.
 - RNA diagnostic: no new downloads; aggregate existing raw RNA once per unique
   population and reuse compact donor aggregates. Initially at most four comparison
   sets times their existing eligible donors; no nested 1,000-resample analysis
@@ -228,10 +278,11 @@ refreshes, automatic new datasets, or silently enlarged budgets.
 
 ### Decision rules and fallback
 
-Archive metadata can resolve availability or barcode/feature facts, but not
-author QC meaning. F3 must identify the evidence separately for each gate. If
-the probe cannot reach metadata within budget, report `INCONCLUSIVE` rather than
-claiming no suitable data exist. If measured spaces demonstrably mismatch, retain
+The source resolver establishes only a declared URL/size/checksum, and F2d
+establishes inspection prerequisites. Neither inspects count-archive contents or
+certifies author QC. F3 must identify the evidence separately for each gate. A
+source failure or unresolved resource estimate yields a bounded `INCONCLUSIVE`
+decision, never a dataset-absence claim. If measured spaces demonstrably mismatch, retain
 `NEEDS_RECOUNT`; never manufacture measurements through zero-filling or overlap.
 
 The RNA diagnostic is complete. When paired inputs remain blocked, present one
@@ -240,7 +291,7 @@ processed-object inspection/recount proposal. Do not start that larger work.
 If the RNA diagnostic also remains inconclusive, that is a valid output: report
 which influence/support question remains unanswered, without tuning exclusions.
 
-The 2026-09-11 user request authorizes these plan corrections, not experiment
+The 2026-09-12 user request authorizes these plan corrections, not experiment
 execution. F4–F5 already passed review and execution in their isolated branch. Any later
 development-only pilot needs its own accepted scope and inputs; it is not scheduled
 as an immediately executable fallback. The completed RNA study's recorded
@@ -248,6 +299,14 @@ professor approval is unchanged. This revision executes none of the pending
 implementation/experiment tasks.
 
 ### Review disposition
+
+September 12 second opinion: accepted source resolution before any payload-probe
+build, development-reader/resource checks first, separate internal/external
+milestones, and response-validator recording. Deferred F2a/F2b payload-probe
+implementation entirely for this cycle. Rejected broad HEAD surveys as proof of
+counts, switching to whichever target is reachable, and treating R serialization
+as MEX/tar. Corrected the draft's `fetch.txt`/checksum-manifest join. M1–M8 and the
+external primary contrast remain unchanged.
 
 Accepted: explicit development-input dependency, recovery instructions, a focused
 donor-concentration question, fixed numeric tolerance, same-support comparisons,
