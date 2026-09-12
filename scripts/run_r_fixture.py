@@ -192,6 +192,9 @@ def run(output):
                 if case["state"]["ExitCode"] == 0 or error not in case["output"]:
                     raise ValueError("EXPECTED_REFUSAL_MISSING")
             else:
+                if case["state"]["ExitCode"] == 127 or "NOT_RUN: Matrix absent" in case["output"]:
+                    report["status"] = "NOT_RUN"
+                    raise ValueError("READER_DEPENDENCY_ABSENT")
                 if case["state"]["ExitCode"] != 0:
                     raise ValueError("FIXTURE_FAILED")
                 verify_transcript(case["output"])

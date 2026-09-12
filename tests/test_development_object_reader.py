@@ -116,3 +116,23 @@ def test_changed_control_refuses_before_start(monkeypatch, field):
     with pytest.raises(ValueError, match="CONTAINER_LIMIT_MISMATCH"):
         module.run_owned("sha256:" + "0" * 64, ["Rscript", "-"])
     assert calls == ["inspect", "rm"]
+
+
+def test_missing_dependency_remains_not_run(tmp_path, monkeypatch):
+    module = reader()
+    image = module.pinned_config()["image_config_digest"]
+    monkeypatch.setattr(module.shutil, "which", lambda _: "docker")
+    monkeypatch.setattr(module, "docker", lambda *args, **kwargs: image)
+    monkeypatch.setattr(
+        module,
+        "run_owned",
+        lambda *args, **kwargs: {
+            "timeout": False,
+            "state": {"ExitCode": 1},
+            "output": "NOT_RUN: Matrix absent",
+        },
+    )
+    result = module.run(tmp_path / "result")
+    assert result["status"] == "NOT_RUN"
+    assert result["reason"] == "READER_DEPENDENCY_ABSENT"
+    assert result["scientific_gate_effect"] == "NONE"
