@@ -1,7 +1,7 @@
 # Paired DS multiome implementation checklist
 
 Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
-E0–E4 conditional routes are planning-only additions; no new execution.
+E0 completed after user execution approval; E1 environment preflight in progress.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
@@ -10,7 +10,7 @@ Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Ove
 
 ## Conditional follow-up queue — E0–E4
 
-Planning addition only; all tasks below are unexecuted. Use
+User approved execution after reviewing this addition. Use
 [the route/limit contract](plan.md#conditional-follow-up-paths--planning-only).
 Preserve the completed F1–F5 evidence and all M1–M8 criteria. Only one route is
 active at a time, with explicit checkpoints before installation or acquisition.
@@ -23,17 +23,19 @@ exists. Record when D/E would become relevant; do not run a discovery campaign.
 
 **Acceptance criteria:**
 
-- [ ] One `route_decision.md` names target/source hashes, route, specific question,
+- [x] One `route_decision.md` names target/source hashes, route, specific question,
   known/unknown facts, failure category, fallback trigger and uncovered authority.
-- [ ] Resource/enforcement availability and shared E1 counters are specified;
+- [x] Resource/enforcement availability and shared E1 counters are specified;
   original dirty/RNA/evidence fingerprints and existing approvals are preserved.
-- [ ] Stop within 30 minutes, no network/install/data read beyond existing evidence.
+- [x] Stop within 30 minutes, no network/install/data read beyond existing evidence.
   Missing target identity or controls yields an explicit refusal, not a guessed URL.
 
 **Verification:** inspect saved evidence against F2d/F3 and the source note;
 table-top trace local installation failure, missing assay, missing provenance,
 unknown memory and no exact export. Each yields one justified next action.
 **Dependencies:** reviewed plan; accepted F1–F3 baseline `48b90c9`.
+**Result:** [E0 record](../reports/generated/reader_enablement_20260912/route_decision.md).
+A lacks R and an active Docker daemon. B capability preflight next, not a data read.
 **Files likely touched:** one concise evidence note in `docs/PAIRED_MULTIOME_AUDIT.md`;
 new ignored record. **Estimated scope:** Small.
 

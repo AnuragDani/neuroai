@@ -279,3 +279,15 @@ dependency-installation scope, not renewed free-CPU approval. No professor messa
 large download, paid compute, fragment processing, push or merge occurred.
 See [the durable reviewed delivery](../reports/generated/input_feasibility_20260912/REVIEW.md)
 for the evidence, reviewed plan/checklist and recoverable Git history.
+
+## E0 reader-route checkpoint — September 12
+
+The subsequent user instruction “Ok execute the plan” approves bounded E1 setup;
+the preceding F1–F3 stop record remains historical and immutable. E0 completed
+offline in 370 seconds with zero network/install/dataset bytes. Local R is absent;
+Docker's verified local socket is absent, so no controlled reader was launched.
+The [new route record](../reports/generated/reader_enablement_20260912/route_decision.md)
+pins evidence, resources, failure categories and shared E1 limits. Select the
+already-approved free-CPU B capability preflight once. Do not install or run a
+fixture without tested controls. E1 is not yet complete; E2/E3 remain gated.
+Original 12 dirty-file fingerprints and all 15 F1–F3 delivery checksums match.
