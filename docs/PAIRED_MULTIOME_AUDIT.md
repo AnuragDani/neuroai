@@ -284,10 +284,35 @@ for the evidence, reviewed plan/checklist and recoverable Git history.
 
 The subsequent user instruction “Ok execute the plan” approves bounded E1 setup;
 the preceding F1–F3 stop record remains historical and immutable. E0 completed
-offline in 370 seconds with zero network/install/dataset bytes. Local R is absent;
+offline in 267 seconds with zero network/install/dataset bytes. Local R is absent;
 Docker's verified local socket is absent, so no controlled reader was launched.
 The [new route record](../reports/generated/reader_enablement_20260912/route_decision.md)
 pins evidence, resources, failure categories and shared E1 limits. Select the
 already-approved free-CPU B capability preflight once. Do not install or run a
 fixture without tested controls. E1 is not yet complete; E2/E3 remain gated.
 Original 12 dirty-file fingerprints and all 15 F1–F3 delivery checksums match.
+
+### E1 environment prerequisite
+
+`scripts/reader_environment.py` is a small read-only capability probe, not an R
+reader or job supervisor. It uses Python 3.11+ standard libraries, launches no
+subprocesses, fetches no dependencies and opens no datasets. It reports bounded
+control-file snapshots, the actual unified cgroup path when safely resolvable,
+R executable locations and free disk. Missing/truncated controls stay unknown;
+`NOT_RUN`, `UNVERIFIED` and `training_allowed: false` are unconditional. Cgroup
+write access alone does not prove delegation or enforceable resource isolation.
+Use only within an authorized environment-preflight attempt:
+
+```sh
+.venv-p22/bin/python scripts/reader_environment.py
+```
+
+The same standalone source can be pasted into the already-approved free-CPU
+notebook without uploading project data. This is a separate control-prerequisite
+slice; it does not close E1's sparse-object/descendant-stop criteria. Tests cover
+bounded/missing reads and nested, ambiguous, legacy and traversal cgroup paths.
+
+Verification: seven focused tests pass after observed red/green regressions;
+independent review reran all seven and approved the read-only probe. Full suite:
+675 passed, 19 existing sklearn warnings (62.47 seconds); lint/format: 113 files.
+These software tests do not certify a reader fixture or resource controls.
