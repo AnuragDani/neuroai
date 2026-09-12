@@ -43,6 +43,41 @@ and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md
 
 ### Conditional follow-up paths — planning only
 
+#### Local-resource amendment — 2026-09-12
+
+After the control stop, the user approved the setup proposal and said “You can
+use any local resources that you would like”. This authorizes one local setup
+continuation, including starting the already-installed Docker Desktop. It does
+not authorize paid compute, dataset/fragment downloads, another Colab attempt,
+outreach, weakened scientific gates, push or merge. Archived attempts stay intact.
+
+Use the installed Docker Desktop 4.73.0 / CLI 29.4.3; existing settings are
+8,092 MiB VM RAM, 1,024 MiB swap, 16 CPUs and a 61,035 MiB logical disk ceiling.
+The existing sparse disk occupies 17,028,120,576 bytes; it is not a new download.
+Current local approval allows this pre-existing host-runtime allocation outside
+the earlier 4 GiB reader-job cap; do not mislabel host observations as hard
+process-tree enforcement. Do not change Docker settings or delete cached work.
+Maintain at least 10 GiB host disk headroom; check before/after startup and work.
+
+1. Start the installed runtime once (45-second command timeout); inspect local
+   endpoint, cached images and running containers. No pull, update or build.
+2. If a compatible cached reader exists, pin its immutable image ID and installed
+   package versions, then implement/test the tiny sparse fixture. Keep its job
+   at 4 GiB memory with no swap, bounded temporary writes and timeout; no network
+   or host data mounts. Prove descendant termination before claiming controls.
+3. If no compatible image exists, freeze one exact dependency-acquisition proposal
+   and stop before an unmetered pull/install. Keep original 2 GiB fetched/4 GiB
+   decoded dependency limits unless explicitly revised; do not invent asset sizes.
+
+This continuation has a 20-minute active setup ceiling, added to the previous
+360 seconds (maximum cumulative 1,560 seconds), not a reset. Record fresh outputs
+under `reports/generated/local_reader_setup_20260912/`. Runtime startup failure,
+unexpected agreement/access prompt or insufficient headroom yields a precise
+blocker. E2/E3 require their own exact object contract as before.
+
+Native reference: [Docker Desktop start](https://docs.docker.com/reference/cli/docker/desktop/start/)
+and [container memory/swap controls](https://docs.docker.com/engine/containers/resource_constraints/).
+
 This addition originally planned alternatives after completed F1–F3. The later
 user instruction approved bounded execution, not E3's still-missing exact contract.
 The heading remains the original contract anchor; current status is recorded above.

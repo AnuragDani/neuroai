@@ -11,6 +11,24 @@ Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Ove
 
 ## Conditional follow-up queue — E0–E4
 
+### Authorized local setup continuation
+
+User approved local resources after E-A's stop. Follow the
+[local amendment](plan.md#local-resource-amendment--2026-09-12), retaining old
+attempts and the 360-second ledger. No scientific acceptance changes.
+
+- [ ] L0: start installed Docker once within 45 seconds, verify local endpoint,
+  headroom and cached image inventory; do not pull/update/build or delete work.
+- [ ] L1: select one immutable compatible cached image, if present; prove isolated
+  sparse fixture and negative/descendant-stop checks. R absence is NOT_RUN.
+- [ ] L2: save reviewed outcome/resources and commit tested slices. If no suitable
+  cached reader exists, name one exact acquisition proposal rather than install
+  without declared assets/sizes. Do not enter E2/E3 or restart B automatically.
+
+Verification: inspect runtime/image evidence and actual test outputs; retain
+original dirty/RNA fingerprints. Files: existing plan/checklist, shared audit
+guide; fixture slice remains at most one script and one test plus guide.
+
 User approved execution after reviewing this addition. Use
 [the route/limit contract](plan.md#conditional-follow-up-paths--planning-only).
 Preserve the completed F1–F5 evidence and all M1–M8 criteria. Only one route is
