@@ -1,8 +1,8 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-10 (PDT). Review corrections; planning revision only.
-No new experiment authorized
-or executed by this revision. Status: retained-cell ingestion, donor-aware networks, final
+Updated: 2026-09-11 (PDT). Bounded next-cycle contract; planning revision only.
+This revision authorizes no implementation, download, or experiment. Status:
+retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
 
@@ -12,23 +12,127 @@ The immediate deliverable is a small command-line workflow with readable result
 files, not another architecture, dashboard, or autonomous orchestrator. Extend
 this same P22 plan; preserve all existing M1–M8 checkboxes below and in `todo.md`.
 
-Two tracks can progress independently after this plan is approved:
+Current track status:
 
 | Track | What the user gets | What it can establish |
 |---|---|---|
-| Local RNA follow-up, F4–F5 | One command producing donor-influence table, plot, and summary | Which donors drive changes and whether influence is concentrated or diffuse; not a new replication verdict |
+| Local RNA follow-up, F4–F5: complete in isolated branch | Reviewed donor-influence table, plot, and summary | 68 valid omissions; original inconclusive conclusion unchanged; no repeat scheduled |
 | Paired inputs, F1–F3 | Bounded archive probe plus evidence-linked readiness report | What can be inspected within budget, which gates remain unmet, and the exact next input needed |
 | Real paired training, M5–M8 | Dry-run preflight; real fits deferred pending accepted development ATAC inputs, followed by separately gated external scoring | Conditional follow-on work, not a promised result of F1–F3 inspection |
 
-**Recommended first scientific output:** the RNA donor-influence diagnostic. The
-local H5AD and frozen external workbook are present under `data/real/`; verify
-their hashes before use. This new, explicitly post-hoc exploratory analysis does
-not wait for NeMO and does not replace the completed RNA study. Do not add another
-binary DS classifier to work around the unresolved paired-data question.
-The completed donor bootstrap already measures aggregate uncertainty. The new
-question is donor-specific concentration of influence, separating same-support
-correlation changes from changing gene support. It does not resolve statistical
-power versus absent reproducible effects. See F4's frozen comparison contract.
+**Completed baseline:** F4–F5 ran once on real inputs: 68 valid omissions,
+45.94 seconds, 4.14 GiB sampled peak RSS, and 628 passing tests. Code/results
+are committed in isolated head `46d7523`, not merged into this checkout.
+[Durable delivery and recovery instructions](../reports/generated/rna_donor_influence_20260910_supervised/REVIEW.md)
+include the bundle and reviewed checklist. Preserve that work. Do not repeat the
+diagnostic, remove an influential donor, or add a classifier to change the RNA verdict.
+
+### Next-cycle objective and reasoning
+
+**Long-term question:** does cross-attention improve donor-level prediction over
+matched concatenation using valid paired RNA+ATAC measurements? This cycle does
+not answer that model-performance question. It establishes which input requirements
+remain unsatisfied and the single next action that can change the decision.
+
+**Deliverable:** one reviewed coordinate-guard commit, one tested bounded probe,
+and one evidence-linked input decision. `INCONCLUSIVE` with exact missing inputs
+is a valid cycle outcome; a software failure is not a completed scientific decision.
+
+| Step | Why it is necessary | Completion evidence |
+|---|---|---|
+| F1: recover the existing coordinate guard | Conflicting peak IDs and coordinates can invalidate measurement comparisons before a model sees them | The regression fails on the base, passes with the exact reviewed patch, and existing readers still pass |
+| F2a/F2b: implement, then use one bounded probe | Archive member order and reachable barcode/feature metadata are unknown; a full count download is unnecessary for this narrow question | Adversarial fixtures pass; one `probe.json` records complete-member facts, byte ledger and stop reason, including an explicit preflight refusal if needed |
+| F3: join evidence into one decision | Archive access, matching cell totals, compatible measurements and accepted QC are different claims | `input_decision.json` and `INPUT_DECISION.md` state each gate separately and name one next action |
+
+F1–F3 **do not create common measured ATAC counts**. Development data are the
+binding concern for an internal pilot. NeMO metadata cannot solve that concern.
+The inspected B17C2L/B10C1Q peak lists mismatch, but the two published processed
+objects remain uninspected. Do not claim that no usable object exists.
+
+### Frozen scope of this cycle
+
+- Work only on F1, F2a/F2b and F3. M5, M6a–M6c, M7 and M8 remain separate later
+  work. No RNA reruns, new datasets, new model families, peak-to-gene approximation,
+  count projection, full fragments, recount, paid compute, outreach, push or merge.
+- Start implementation in an isolated checkout containing the accepted RNA code
+  from `46d7523`, plus these two current plan files. Record both revisions and
+  dirty/source/result fingerprints before editing. Do not import old GNHF plan
+  documents or automatically commit unrelated files. Never rerun GNHF.
+- Proposed edits: F1 two existing files; F2a three files; F2b one evidence note
+  plus generated artifacts; F3 at most five files. Use the existing Python environment and installed
+  libraries. No dependency, framework, dashboard or general download manager.
+- One candidate source only: NeMO's
+  `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, declared size
+  1,540,753,269 bytes and declared MD5 `796c8b3aa587b257af0a46615a437dba`.
+  These are publisher declarations, not a locally verified full-file checksum.
+- Proposed `configs/nemo_atac_probe.json` pins the exact HTTPS payload URL,
+  source-evidence path/hash, filename, declared size/checksum and numeric limits.
+  Recover the exact URL from local first-party response evidence before launch;
+  never infer it from a filename or directory. If unavailable, record
+  `SOURCE_IDENTITY_UNRESOLVED` without a live request. The existing source review
+  saved summaries/hashes rather than all raw responses; no fresh bag/API fetch is
+  silently added to this cycle. A required small source-resolution request becomes
+  the single next proposal instead.
+- F2b uses at most one HEAD and one prefix range GET, with no retries or redirects.
+  Aggregate application-read response bodies must not exceed 1,048,576 bytes.
+  Aggregate decoded content, including archive headers and nested layers, must
+  not exceed 5,242,880 bytes. A single 30-second monotonic deadline covers network
+  work, including DNS/connect/TLS, HEAD and GET; it is not a new timeout per read.
+  Tests must cover stalled/slow-drip responses and deadline enforcement. These
+  body limits do not claim to meter TLS/TCP overhead or bytes already buffered by
+  the OS. Stop body reads immediately when a response fails validation.
+- Require HTTP 206 and the exact requested Content-Range/declared total before
+  reading the prefix. Disable HTTP content decoding. Stop at matrix content,
+  unknown/nonregular/unsafe members, incomplete metadata, cap or timeout. Do not
+  extract to disk, follow archive instructions, skip through matrix payloads, or
+  use a full-download fallback. Prefix chunks can already contain matrix bytes;
+  do not parse or continue past the first matrix member.
+- F3 runs the existing local audit once, with its existing explicit caps:
+  1,700,000,000 input bytes, 268,435,456 expanded bytes, 10,000,000 nonzeros and
+  256 retained cells per donor in the existing single-library pilot. This is
+  neither a new cohort-wide ingestion nor a donor-validation experiment. No
+  network is permitted in F3. Byte limits are not process-RAM guarantees.
+
+### Outputs, decision rules and terminal condition
+
+All proposed interfaces below must refuse existing output directories. Keep
+generated data ignored; commit concise code, tests and evidence descriptions.
+
+`probe.json` must contain schema version, exact command/config/code hashes, UTC
+time, source declaration versus observed headers, requests, cumulative body and
+decoded bytes, elapsed time, inspected member names/completeness, prefix SHA256,
+and a specific stop reason. `request_attempted=false` distinguishes preflight
+refusal from a live probe: unresolved URL, prefix hash and observed headers are
+null; requests and inspected members are empty; body and decoded byte counters
+are zero. F3 must reject a no-request record with contradictory observations.
+Complete members may support local facts; partial
+coverage never proves full archive membership, final QC or dataset absence.
+
+`input_decision.json` must keep separate `development`, `external`, and
+`cross_cohort` evidence. Each gate records `PASS`, `UNRESOLVED`, or `FAIL`, its
+source path/hash, inspected scope, reason and missing artifact. Required fields
+cover release/retained barcodes, donor pairing, QC/count-stage meaning, age/class
+support, specimen provenance, genome/coordinate convention, count units, exact
+measured regions and feature-selection provenance. Missing evidence is not PASS.
+Retain M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` vocabulary separately.
+
+Both `training_allowed` and `model_training_performed` remain false in F3: this
+cycle has no accepted real M5 protocol. `INPUT_DECISION.md` gives inspected scope,
+what changed, unresolved requirements, and exactly one prioritized next action.
+If development counts remain missing, prefer a separately budgeted inspection
+proposal for `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz`, listed as
+7.6G in the existing evidence. That name does not establish assay contents,
+compatible counts, training-only feature provenance, or cross-cohort readiness.
+Record current free disk in GiB and identify unknown compressed/decoded/working
+sizes before requesting a larger inspection. Do not download it in this cycle.
+If an earlier missing source identity prevents the probe, prioritize that smaller
+source-resolution proposal and retain the development-count blocker explicitly.
+
+**Stop after F3's reviewed decision.** No second live probe, source substitution,
+expanded budget, processed-object download or real fit follows automatically.
+Complete means all implementation criteria/tests pass, evidence is preserved,
+and a reviewer accepts the decision and next action. A transport or partial-prefix
+stop can complete the evidence question; broken code must be fixed offline first.
 
 **Recommended paired-input action:** one metadata-only probe of the NeMO Open
 bag's `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`, then one evidence
@@ -38,11 +142,11 @@ tar offsets, successful metadata retrieval, or final QC from a file listing.
 ### Dependency order and checkpoints
 
 ```text
-Plan approval + isolated workspace
-├─ F4 freeze RNA diagnostic → F5 implement/run diagnostic → RNA checkpoint
-└─ F1 recover reviewed fix → F2 bounded probe → F3 input decision → input checkpoint
-                                                   ├─ blocked: exact missing input + stop
-                                                   └─ M4 development inputs accepted* → M5 → M6a/b/c → M7 → M8
+Completed: F4/F5 RNA diagnostic (isolated 46d7523); preserve, do not repeat
+Next-cycle approval + isolated workspace
+└─ F1 recover fix → F2a offline probe/tests → F2b at most one probe → F3 decision → STOP
+Later, separately reviewed: accepted development inputs* → M5 → M6a/b/c → M7
+External evaluation additionally requires accepted external inputs + frozen models → M8
 ```
 
 *Development common measured ATAC counts are a binding unresolved requirement;
@@ -68,15 +172,17 @@ closes confirmatory M4 or M8. Until a representation is accepted, the pilot is d
 
 ### Intended commands and outputs
 
-The following interfaces are **proposals to implement**, not commands available
-today. Existing `scripts/audit_multiome.py` stays an offline verifier, and
+The paired interfaces below are **proposals**, not commands available today.
+The RNA diagnostic already exists in isolated `a0049f2` and is not part of this
+cycle. Existing `scripts/audit_multiome.py` stays an offline verifier, and
 `scripts/train_multiome.py` stays synthetic-only.
 
-- `scripts/probe_multiome_release.py --manifest <pinned-release> --output-dir <new-dir>`:
+- `scripts/probe_multiome_release.py --manifest configs/nemo_atac_probe.json --output-dir <new-dir>`:
   writes `probe.json` with inspected members, source identity, byte use and a stop
   reason. No matrix loading or training.
-- `scripts/diagnose_rna_replication.py --config <frozen-diagnostic> --output-dir <new-dir>`:
-  writes `donor_influence.csv`, `donor_influence.png`, `SUMMARY.md`, and run hashes.
+- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --probe-report <probe.json> --probe-manifest configs/nemo_atac_probe.json --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
+  retains current audit artifacts and adds `input_decision.json` and
+  `INPUT_DECISION.md` within the explicit existing local caps.
 - `scripts/run_real_multiome.py --config <frozen-real-protocol> --stage internal-pilot --dry-run`:
   writes or displays the readiness decision, planned resources, and exact missing
   inputs. Dry-run is the default and performs no fit or network access.
@@ -103,8 +209,9 @@ refreshes, automatic new datasets, or silently enlarged budgets.
   use directly supervised, small implementation slices. Do not promise a strict
   token ceiling from the current end-of-turn accounting or substitute a wall
   clock limit for a token limit.
-- Probe ceiling: 1 MiB total response-body bytes, 5 MiB total decoded content,
-  at most one HEAD and one range GET, 30-second network timeout. Stop on a missing
+- Probe ceiling: 1 MiB total application-read response-body bytes, 5 MiB total decoded
+  content, at most one HEAD and one range GET, and one 30-second total network
+  deadline as defined above. Stop on a missing
   or mismatched range response, matrix payload, invalid/truncated metadata or cap.
   No larger retry without a separately reviewed budget. Compression and any
   archive-extension headers count toward decoded limits.
@@ -127,14 +234,14 @@ the probe cannot reach metadata within budget, report `INCONCLUSIVE` rather than
 claiming no suitable data exist. If measured spaces demonstrably mismatch, retain
 `NEEDS_RECOUNT`; never manufacture measurements through zero-filling or overlap.
 
-When paired inputs remain blocked, finish the RNA diagnostic and present one
+The RNA diagnostic is complete. When paired inputs remain blocked, present one
 specific follow-up request: the exact QC/count artifact or a measured, bounded
 processed-object inspection/recount proposal. Do not start that larger work.
 If the RNA diagnostic also remains inconclusive, that is a valid output: report
 which influence/support question remains unanswered, without tuning exclusions.
 
-The 2026-09-10 user request authorizes these plan corrections, not experiment
-execution. F4's frozen configuration requires review before F5 runs. Any later
+The 2026-09-11 user request authorizes these plan corrections, not experiment
+execution. F4–F5 already passed review and execution in their isolated branch. Any later
 development-only pilot needs its own accepted scope and inputs; it is not scheduled
 as an immediately executable fallback. The completed RNA study's recorded
 professor approval is unchanged. This revision executes none of the pending
