@@ -48,6 +48,19 @@ and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md
 
 #### Local-resource amendment — 2026-09-12
 
+**Execution continuation:** the subsequent “keep going and complete the plan”
+instruction authorizes implementing and running the already-pinned local reader
+acquisition, not another setup-only handoff. Retain the 814-second prior ledger;
+remaining active acquisition/import/fixture time is 746 seconds. Offline coding,
+tests and review are tracked separately, not represented as installer runtime.
+The fixed acquisition script has a 480-second deadline, no retries and checks the
+reviewed proposal hash before network access. Its stricter raw-layer ceiling
+reserves three copies plus 256 MiB within 6 GiB before Docker import; no host
+archive extraction. Import is local/offline, at most 90 seconds; fixture/control
+tests share the remaining time. Only UUID-owned test containers may be removed.
+No dataset request, E3 execution, package updater, user-container change or training
+is authorized by this runtime step. E2 remains an offline next contract.
+
 After the control stop, the user approved the setup proposal and said “You can
 use any local resources that you would like”. This authorizes one local setup
 continuation, including starting the already-installed Docker Desktop. It does
