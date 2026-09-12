@@ -1,21 +1,22 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-12. Specific next-cycle plan only; no new execution.
+Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
-## Advancement queue — bounded planning revision 2026-09-12
+## Advancement queue — bounded execution record 2026-09-12
 
 These tasks extend the existing P22 work; they do not replace or complete M1–M8.
-F4–F5 are complete in isolated head `46d7523`, not merged into this checkout.
+F4–F5 are complete in accepted head `46d7523`, the baseline of this isolated
+branch; work is not merged into the original user checkout.
 [Durable RNA evidence](../reports/generated/rna_donor_influence_20260910_supervised/REVIEW.md)
 records 68 valid omissions and 628 passing tests. Do not schedule those tasks again.
-This revision changes only the plan. Next implementation requires approval of
+User then authorized implementation of
 [the frozen cycle contract](plan.md#frozen-scope-of-this-cycle).
-Keep work in an isolated branch, preserve unrelated dirty files, and record one
+Work is isolated in `codex/p22-input-feasibility`; preserve unrelated dirty files and record one
 verified slice per local commit. No push, merge or GNHF resume.
 
 **Cycle endpoint:** F1 → F2d → F2s → F3 → reviewed decision and STOP. Result is
@@ -26,9 +27,9 @@ No NeMO payload probe or processed-object download occurs in this cycle.
 F2d comes first and remains useful even when F2s fails. Internal model comparison
 is a later development milestone; M5's planned external primary contrast stays intact.
 
-**Before implementation:** verify the RNA recovery bundle and preserve its
-accepted code/results. Use an isolated checkout containing `46d7523` plus these
-current plan files, recording both source revisions. Fingerprint original dirty
+**Workspace verification completed:** RNA recovery bundle verified; accepted
+code/results preserved. Isolated baseline is `46d7523` plus plan files from
+`4219705` (carried by `81ffd12`). Fingerprint original dirty
 files and protected evidence. If that context cannot be recovered, stop without
 resetting, overwriting, or automatically committing unrelated work.
 
@@ -49,9 +50,9 @@ measurement comparison. Reuse the reviewed 26-line fix; do not redesign ingestio
 
 **Acceptance criteria:**
 
-- [ ] Contradictory coordinate-shaped peak IDs are rejected by the shared reader;
+- [x] Contradictory coordinate-shaped peak IDs are rejected by the shared reader;
   valid ARC/MEX, opaque peak IDs and unmapped RNA retain their existing behavior.
-- [ ] Source/dirty-file hashes are preserved; the change is present exactly once
+- [x] Source/dirty-file hashes are preserved; the change is present exactly once
   in an isolated reviewed commit, without changing RNA evidence or scientific gates.
 
 **Verification:** verify patch SHA256
@@ -78,17 +79,17 @@ observations; missing executables in one environment do not prove global absence
 
 **Acceptance criteria:**
 
-- [ ] Manually assemble `development_object_feasibility.json` using the schema
+- [x] Manually assemble `development_object_feasibility.json` using the schema
   in `plan.md`: timestamp, commands/results, source hashes, runtime paths/versions,
   disk/memory evidence and resource unknowns. Check `R`, `Rscript`, `pyreadr`, and
   `rpy2`; distinguish availability from proven support for the serialized object
   classes and sparse assays. Generic-reader presence alone cannot pass this check.
-- [ ] Freeze later inspection questions: object/classes, assay names, raw-count
+- [x] Freeze later inspection questions: object/classes, assay names, raw-count
   layer/slot, sparse dimensions, feature identifiers/coordinates and genome build,
   count units, donor/cell metadata, retained-cell semantics, and presence of a
   common measured ATAC matrix such as `peaks_by_cluster`, and donors/labels used
   for peak discovery. Shared columns do not establish training-only selection.
-- [ ] Select one follow-up targeting the first unmet prerequisite: bounded reader
+- [x] Select one follow-up targeting the first unmet prerequisite: bounded reader
   enablement/tiny sparse fixture if support is absent or untested; bounded sizing
   if full-object fit is unknown; full inspection only when both are supported.
   Specify that action's runtime, numeric byte/disk/RSS/time limits, enforcement,
@@ -116,17 +117,17 @@ payload-probe construction; this tiny source check updates the external track.
 
 **Acceptance criteria:**
 
-- [ ] One GET only; no HEAD, retry or redirect; 65,536 application-read body bytes,
+- [x] One GET only; no HEAD, retry or redirect; 65,536 application-read body bytes,
   262,144 aggregate decoded bytes including headers, and one 15-second monotonic
   deadline covering DNS/connect/TLS/read. Require HTTP 200, disable HTTP decoding,
   and stop before parsing unless body is exactly 1,867 bytes with SHA256
   `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
-- [ ] Require one matching row in `fetch.txt` and `manifest-md5.txt`, joined by
+- [x] Require one matching row in `fetch.txt` and `manifest-md5.txt`, joined by
   bag-relative payload path. URL/size come from the former, MD5 from the latter;
   match target filename, 1,540,753,269 bytes and
   `796c8b3aa587b257af0a46615a437dba`. Reject ambiguous rows, unsafe paths and links;
   allow regular metadata and directory entries. Never infer or follow payload URL.
-- [ ] Write `source_identity.json` per `plan.md` and preserve the hash-matching
+- [x] Write `source_identity.json` per `plan.md` and preserve the hash-matching
   raw bag for offline verification. Record supplied bag `ETag`/`Last-Modified`,
   byte totals and elapsed time; these are not payload validators. Mismatch yields
   `SOURCE_EVIDENCE_CHANGED`; transport/preflight failure is explicit, with null
@@ -148,7 +149,7 @@ one bounded request. Commit tested implementation before recording the live outc
 
 ### Checkpoint F-A: Useful preflight
 
-- [ ] F1/F2s pass focused tests; F2s has one reviewed bounded outcome; F2d has one
+- [x] F1/F2s pass focused tests; F2s has one reviewed bounded outcome; F2d has one
   reviewed offline record. Original inputs remain unchanged. No scientific gate
   passes from URL recovery, file size, reader availability or object name alone.
 
@@ -165,20 +166,21 @@ general research. Development readiness and external readiness must stay separat
 
 **Acceptance criteria:**
 
-- [ ] Record separate development/external evidence for retained barcodes/QC,
+- [x] Record separate development/external evidence for retained barcodes/QC,
   pairing, specimen provenance, genome/coordinate convention, count units, exact
   measured regions and feature provenance, with pinned sources/hashes. Missing
   evidence cannot be replaced by a user-supplied `PASS` boolean. Consume the pinned
-  F2s source-identity and F2d development-feasibility records through proposed
-  `--source-identity` and `--development-feasibility` options; preserve callers
+  F2s source-identity and F2d development-feasibility records through
+  `--source-identity` and `--development-feasibility`, each with its required
+  reviewed `-sha256` option; preserve callers
   that omit them. Verify successful source resolution against the saved raw bag
   and manifest join. Reject malformed/tampered records or unexplained source/budget
   discrepancies; a well-formed unresolved-source record is valid input. Add
   `input_decision.json` and `INPUT_DECISION.md` with fields frozen in `plan.md`.
-- [ ] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
+- [x] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
   gates. A partial archive, matching row total or annotation mask cannot certify
   full membership, common counts, author QC or readiness to train.
-- [ ] A blocked report names the exact missing artifact, inspected source scope,
+- [x] A blocked report names the exact missing artifact, inspected source scope,
   and one smallest next action with proposed bytes/disk and required authority.
   Do not claim exhaustive absence or automatically launch that next action. Keep
   `training_allowed=false` and `model_training_performed=false`; an input decision
@@ -189,7 +191,8 @@ general research. Development readiness and external readiness must stay separat
 new `tests/test_input_decision.py`. Include equal totals with unknown QC, partial
 coverage, count-unit mismatch, unmeasured regions, missing/tampered feasibility
 fields, source-resolution failure, source hash/join mismatch, fabricated reader
-readiness, unknown resource quantities and existing-directory refusal.
+readiness, unknown resource quantities, changed/omitted frozen caps and
+existing-directory refusal.
 Run these focused tests, `make lint`, `PYTHONPATH=src make test-fast`, then the
 existing offline audit once with the exact caps in `plan.md`. Review all report
 claims against pinned sources without any training or fresh source searches.
@@ -202,16 +205,24 @@ followed by a concise reviewed decision record.
 
 ### Checkpoint F-B: Input decision, not perpetual inspection
 
-- [ ] F3 produces accepted evidence or a concrete blocker. Stop paired execution
+- [x] F3 produces accepted evidence or a concrete blocker. Stop paired execution
   if required inputs fail; do not repeat F2s or expand F2d without changed evidence
   and separate authority.
 - [ ] Any development-only pilot has its own reviewed scope and all relevant
   development gates. Original combined-cohort Checkpoint B and external gates
   remain unchecked while their requirements are unmet.
-- [ ] F1–F3 changed only the permitted files; tests, source/RNA/dirty-file hashes,
+  Not applicable to this completed cycle: no internal pilot or new fit was run.
+- [x] F1–F3 changed only the permitted files; tests, source/RNA/dirty-file hashes,
   source ledger, feasibility record and final decision pass independent review. Code failure is not
   an accepted blocked-input conclusion. Handoff names exactly one next action and
   its required authority; no automatic M6a, real fold or processed-object inspection.
+
+**Completion evidence:** F1 `cf8ed33`; F2d `6c101bb`; F2s `83cf31e` and
+outcome `879ff1c`; F3 `3b007d7`. One source GET and one offline audit completed.
+Final verification: 636 fast tests, 668 full tests and lint; separate code and
+artifact review approved the scoped decision. Nine scientific gates remain
+explicit; no training ran. [Full evidence and hashes](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure).
+Next action is only the bounded reader/fixture proposal, not a full object download.
 
 ### F4: Freeze the new RNA donor-influence diagnostic
 

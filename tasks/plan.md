@@ -1,12 +1,12 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-12 (PDT). Bounded next-cycle contract; planning revision only.
-This revision authorizes no implementation, download, or experiment. Status:
-retained-cell ingestion, donor-aware networks, final
+Updated: 2026-09-12 (PDT). F1–F3 implemented and the bounded audit completed;
+final decision review is recorded in the audit guide. No further execution is
+authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
 
-## Next implementation: usable experiment paths
+## Bounded implementation: usable experiment paths
 
 The immediate deliverable is a small command-line workflow with readable result
 files, not another architecture, dashboard, or autonomous orchestrator. Extend
@@ -17,15 +17,26 @@ Current track status:
 | Track | What the user gets | What it can establish |
 |---|---|---|
 | Local RNA follow-up, F4–F5: complete in isolated branch | Reviewed donor-influence table, plot, and summary | 68 valid omissions; original inconclusive conclusion unchanged; no repeat scheduled |
-| Paired inputs, F1–F3 | Coordinate guard, two bounded feasibility records, and evidence-linked decision | Whether source identity and development-object inspection are executable, which gates remain unmet, and the exact next action |
+| Paired inputs, F1–F3: bounded cycle complete | Coordinate guard, resolved NeMO declaration, development-reader inventory and evidence-linked decision | Source identity resolved; development reader absent in checked environment; compatible counts/QC still unresolved |
 | Real paired training, M5–M8 | Dry-run preflight; real fits deferred pending accepted development ATAC inputs, followed by separately gated external scoring | Conditional follow-on work, not a promised result of F1–F3 inspection |
 
 **Completed baseline:** F4–F5 ran once on real inputs: 68 valid omissions,
 45.94 seconds, 4.14 GiB sampled peak RSS, and 628 passing tests. Code/results
-are committed in isolated head `46d7523`, not merged into this checkout.
+are committed in accepted head `46d7523`, the baseline of this isolated branch;
+neither branch is merged into the original user checkout.
 [Durable delivery and recovery instructions](../reports/generated/rna_donor_influence_20260910_supervised/REVIEW.md)
 include the bundle and reviewed checklist. Preserve that work. Do not repeat the
 diagnostic, remove an influential donor, or add a classifier to change the RNA verdict.
+
+**Current cycle result:** implementation `3b007d7` completed the one offline audit:
+1,582,118,205 input bytes, 57,855,276 expanded bytes, 256 selected retained cells,
+and zero exact shared regions between the two inspected raw peak lists.
+NeMO's 1,867-byte declaration resolved in one request. Both processed development
+objects remain uninspected. `INCONCLUSIVE` is the input decision, not a new
+biological finding. The next action is bounded reader enablement plus a tiny
+sparse fixture, outside this cycle's no-install scope. See the
+[decision and verification record](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure)
+and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md).
 
 ### Next-cycle objective and reasoning
 
@@ -191,8 +202,8 @@ Accept-Ranges headers cannot establish assay contents or actual Range behavior.
 
 ```text
 Completed: F4/F5 RNA diagnostic (isolated 46d7523); preserve, do not repeat
-Next-cycle approval + isolated workspace
-└─ F1 recover fix → F2d offline development feasibility → F2s one tiny source read → F3 decision → STOP
+Completed under user approval in isolated workspace:
+└─ F1 recovered fix → F2d offline feasibility → F2s one tiny source read → F3 decision → STOPPED
 Later, separately reviewed: accepted development inputs* → M5 → M6a/b/c → M7
 External evaluation additionally requires accepted external inputs + frozen models → M8
 ```
@@ -220,18 +231,22 @@ coverage/missingness, count-unit and approximation contract. Shared gene names
 alone do not make different ATAC measurements comparable; `EXPLORATORY_ONLY` never
 closes confirmatory M4 or M8. Until a representation is accepted, the pilot is deferred.
 
-### Intended commands and outputs
+### Available bounded commands and deferred interfaces
 
-The paired interfaces below are **proposals**, not commands available today.
-The RNA diagnostic already exists in isolated `a0049f2` and is not part of this
-cycle. Existing `scripts/audit_multiome.py` stays an offline verifier, and
+The source resolver and decision-mode audit are implemented in this isolated
+branch. Their one real execution is complete; these commands document the
+interface, not permission to repeat it. The real-data runner remains a
+**proposal**, not an available command. The RNA diagnostic already exists in
+accepted `a0049f2` and is not part of this cycle.
+Existing `scripts/audit_multiome.py` stays an offline verifier, and
 `scripts/train_multiome.py` stays synthetic-only.
 
 - `scripts/resolve_nemo_source.py --output-dir <new-dir>`: reads only the pinned
   1,867-byte official bag under the frozen limits and writes `source_identity.json`.
-- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --source-identity <source_identity.json> --development-feasibility <development_object_feasibility.json> --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
+- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --source-identity <source_identity.json> --source-identity-sha256 <reviewed-source-hash> --development-feasibility <development_object_feasibility.json> --development-feasibility-sha256 <reviewed-development-hash> --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
   retains current audit artifacts and adds `input_decision.json` and
-  `INPUT_DECISION.md` within the explicit existing local caps.
+  `INPUT_DECISION.md`. Both reviewed record hashes and all four exact caps are
+  required in decision mode. Legacy audit callers retain their existing interface.
 - `scripts/run_real_multiome.py --config <frozen-real-protocol> --stage internal-pilot --dry-run`:
   writes or displays the readiness decision, planned resources, and exact missing
   inputs. Dry-run is the default and performs no fit or network access.
@@ -248,9 +263,9 @@ refreshes, automatic new datasets, or silently enlarged budgets.
 - Preserve completed RNA results, thresholds, G8, approvals, notebooks and source
   hashes. Diagnostic output must use a new directory and the label
   `POST_HOC_EXPLORATORY`; it cannot turn the primary inconclusive result positive.
-- Existing paired integrity fix is in isolated commit `3b677d5`, not this checkout.
-  F1 names the recovery patch, bundle and application checks. The isolated checkout
-  still existed on 2026-09-10; do not depend on temporary storage alone. Keep the
+- The paired integrity fix from `3b677d5` was recovered exactly in isolated
+  `cf8ed33`. F1 records the recovery patch, bundle and application checks.
+  Do not depend on temporary storage alone. Keep the
   ignored recovery package out of cleanup until F1's code/test slice is committed
   durably. Do not merge its entire branch or overwrite this plan with its old docs.
 - The previous GNHF run exceeded its cap: 872,648 reported worker tokens. Do not
@@ -291,12 +306,13 @@ processed-object inspection/recount proposal. Do not start that larger work.
 If the RNA diagnostic also remains inconclusive, that is a valid output: report
 which influence/support question remains unanswered, without tuning exclusions.
 
-The 2026-09-12 user request authorizes these plan corrections, not experiment
-execution. F4–F5 already passed review and execution in their isolated branch. Any later
+The initial 2026-09-12 request authorized plan corrections only; the subsequent
+“Develop the plan” request authorized this bounded F1–F3 implementation.
+It is now complete and stopped at its decision. F4–F5 already passed review and
+execution in their isolated branch. Any later
 development-only pilot needs its own accepted scope and inputs; it is not scheduled
 as an immediately executable fallback. The completed RNA study's recorded
-professor approval is unchanged. This revision executes none of the pending
-implementation/experiment tasks.
+professor approval is unchanged. No pending M5–M8 real experiment was executed.
 
 ### Review disposition
 

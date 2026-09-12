@@ -211,3 +211,71 @@ Reviewed input hashes for F3:
 Both records live under `reports/generated/input_feasibility_20260912/`.
 Resolver implementation `83cf31e` passed 20 focused tests, 617 fast tests and
 lint before the sole request; separate review approved the source resolver.
+
+### F3 decision and closure
+
+F3 completed once at 2026-09-12 21:18:23 UTC using implementation `3b007d7`.
+The offline audit read 1,582,118,205 input bytes and 57,855,276 decoded bytes;
+measured stage time was 2.431 seconds and process peak RSS 0.5834 GB (decimal).
+These byte ceilings are not RAM limits. The B17C2L pilot selected 256 cells from
+550 author-retained cells, excluding 102 raw-only cells. This is one library,
+not a new cohort-wide donor experiment.
+
+The two inspected raw peak lists have 22,676 and 46,672 regions and zero exact
+shared regions. Existing M4 status remains `NEEDS_RECOUNT` for their full peak
+union; this does not prove the published processed objects unusable or require
+recounting before inspecting them. The decision is `INCONCLUSIVE`:
+development exact-region compatibility fails only in that inspected raw-list
+scope; the other eight development requirements and all nine external/cross-cohort
+requirements remain unresolved. A separate source-identity PASS certifies only
+the pinned NeMO declaration. No model was trained and no scientific gate was waived.
+
+Executed command, preserved for audit only; do not rerun this completed cycle:
+
+```sh
+PYTHONPATH=src .venv-p22/bin/python scripts/audit_multiome.py \
+  --manifest configs/paired_multiome_audit.json \
+  --source-identity reports/generated/input_feasibility_20260912/source/source_identity.json \
+  --source-identity-sha256 45ed2cb478fa4b780f8f29f3e2499109f0a93a3e9610bcc298d1d7813f154735 \
+  --development-feasibility reports/generated/input_feasibility_20260912/development_object_feasibility.json \
+  --development-feasibility-sha256 988dabad83afd162244f372a88f37ca633cf45ad704392efe84078a8d63ad0a2 \
+  --output-dir reports/generated/input_feasibility_20260912/decision \
+  --max-input-bytes 1700000000 --max-expanded-bytes 268435456 \
+  --max-nnz 10000000 --cell-cap 256
+```
+
+Decision mode requires both reviewed record hashes and those four exact caps;
+malformed records or a failed audit cannot emit an accepted input decision.
+Existing audit callers without feasibility records keep their interface.
+
+Pinned results under `reports/generated/input_feasibility_20260912/decision/`:
+
+| Artifact | SHA256 |
+|---|---|
+| audit.json | `4682a51acd4aafa8479de28f32051d52f4b05d1996380a036776e8c1f6875a2c` |
+| input_decision.json | `78cd057e4d5cb26c698120099f5f43546acb65b45c04f128850082b4ef543250` |
+| INPUT_DECISION.md | `9c601f50850b85e413775b4b4b3941ae3a0ac937b9139f690706361f855669a5` |
+| SUMMARY.md | `931137d564e21f0c24f43960b3424834e780e2d07e3da775b5dbe065872b7000` |
+| manifest.json | `2317c0fa59017273863d3d9987873d44c4c2a543afc228c1a833666da0b90d7c` |
+
+The inherited SUMMARY line “Professor approval record remains blocked” reports
+the unchanged historical global policy flag. It does not revoke the scoped
+user-reported professor attestation or ask again for completed RNA/free-CPU
+approval. Unresolved input gates remain binding regardless of approval.
+
+Verification: 19 decision tests and 20 resolver tests pass; separate review
+independently reran all 39. Final fast suite: 636 passed, 32 deselected. Full
+suite: 668 passed with 19 existing sklearn class-support warnings; lint/format
+passes for 111 files. Reviewer replayed the preserved bag locally, checked all
+decision/input hashes and measured caps, and approved the scoped decision.
+No second source request, second real audit or real fit was used for verification.
+Original 12 dirty-file hashes, seven RNA source/code/reference hashes, diagnostic
+implementation and saved result hashes all still match. M1–M8 criteria are unchanged.
+
+**Stop reached:** F1–F3 are complete; the full research plan is not. The single
+next action remains bounded R-reader enablement plus a tiny sparse-object fixture
+under the F2d proposal above. It was not executed and needs an expanded
+dependency-installation scope, not renewed free-CPU approval. No professor message,
+large download, paid compute, fragment processing, push or merge occurred.
+See [the durable reviewed delivery](../reports/generated/input_feasibility_20260912/REVIEW.md)
+for the evidence, reviewed plan/checklist and recoverable Git history.
