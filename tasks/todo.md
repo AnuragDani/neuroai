@@ -1,8 +1,9 @@
 # Paired DS multiome implementation checklist
 
 Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
-E0 complete; E1 blocked by environment controls; E-A/E4 early-stop record complete.
-E2/E3 unexecuted. This does not complete reader proof or the full research plan.
+E0 and E1 tiny-reader proof complete; nine live fixture/control cases pass.
+E2 offline pass recorded SOURCE_UNRESOLVED; exact object contract and E3 pending.
+This clears the runtime blocker, not the real-input or full research-plan gates.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
@@ -19,7 +20,7 @@ attempts and the 360-second ledger. No scientific acceptance changes.
 
 - [x] L0: start installed Docker once within 45 seconds, verify local endpoint,
   headroom and cached image inventory; do not pull/update/build or delete work.
-- [ ] L1: select one immutable compatible cached image, if present; prove isolated
+- [x] L1: select one immutable compatible cached image, if present; prove isolated
   sparse fixture and negative/descendant-stop checks. R absence is NOT_RUN.
 - [x] L2: save reviewed outcome/resources and commit tested slices. If no suitable
   cached reader exists, name one exact acquisition proposal rather than install
@@ -31,6 +32,12 @@ See [setup evidence](../reports/generated/local_reader_setup_20260912/SETUP.md)
 and [pinned acquisition proposal](../configs/local_r_reader_acquisition.json).
 L2 closes only the reviewed proposal outcome. L1/E1 remain NOT_RUN; bounded
 transfer/decode/import implementation is still required before any image install.
+
+**Superseding result:** subsequent execution implemented and ran bounded image
+acquisition/import, followed by the isolated sparse fixture. L1/E1 now pass for
+the tested classes only. R 4.6.1 / Matrix 1.7.6; nine live cases; no dataset bytes.
+Prior NOT_RUN/failed records are retained, not overwritten. See
+[verified completion and ledger](../reports/generated/r_reader_completion_20260912/REVIEW.md).
 
 Verification: inspect runtime/image evidence and actual test outputs; retain
 original dirty/RNA fingerprints. Files: existing plan/checklist, shared audit
@@ -72,13 +79,14 @@ B only after the installation scope is approved. Do not inspect a real object.
 
 **Acceptance criteria:**
 
-- [ ] Pin runtime/package assets; fixture preserves sparse integer counts, row/column
+- [x] Pin runtime/package assets; fixture preserves sparse integer counts, row/column
   identifiers, interval fields and donor metadata across save/load. Record actual
   classes tested, unsupported classes and no dense conversion.
-- [ ] Malformed fixture, missing dependency, output reuse and budget failure refuse
+- [x] Malformed fixture, missing dependency, output reuse and budget failure refuse
   safely. All descendants stop on timeout/resource failure; tests cover that
   behavior. Missing R produces explicit NOT_RUN, never a passing scientific gate.
-- [ ] At most two environment attempts share the E1 limits in plan.md; no object
+- [x] Original attempts plus the explicitly authorized local continuation share
+  the amended E1 limits in plan.md; no object
   bytes fetched. Record cumulative bytes/time/disk and process-tree memory evidence.
   One successful fixture closes E1; both failures or cap exhaustion stop.
 
@@ -93,6 +101,13 @@ process-tree controls cannot fit a separately reviewed small slice, stop and
 scope that prerequisite; do not repurpose the accepted RNA supervisor.
 **Estimated scope:** Medium, at most three files for the fixture slice.
 
+**Result:** E1 passes for `list`/`data.frame`/`dgCMatrix` only. The 392-byte fixture
+preserves four nonzero counts, empty cell column, IDs, intervals and donors exactly.
+Live malformed-count/ID/field/interval and output-reuse refusals pass. Timeout
+kills child/grandchild container; 128 MiB OOM kills R and its child. All test
+containers end with Running=false/Pid=0 and are removed. No Seurat/ChromatinAssay
+support, real-assay availability, QC acceptance or training readiness is implied.
+
 ### Checkpoint E-A: Reader evidence, not permission to download
 
 - [x] Review E0/E1 artifacts and counters. Exactly one applicable reader route is
@@ -100,10 +115,11 @@ scope that prerequisite; do not repurpose the accepted RNA supervisor.
 - [x] No real-object contents, counts/QC acceptance or training readiness inferred.
   Stop unless E2's next contract is separately reviewed and approved.
 
-**Result:** [CONTROL_UNRESOLVED](../reports/generated/reader_enablement_20260912/DECISION.md).
+**Historical result:** [CONTROL_UNRESOLVED](../reports/generated/reader_enablement_20260912/DECISION.md).
 A lacks a reader/active local Docker daemon. B has R but a read-only cgroup mount;
 the actual membership cannot be safely resolved. One read-only B probe, no R or
 installer launch. E1 fixture/descendant-stop criteria remain unchecked, not waived.
+The approved local continuation above subsequently proved those fixture controls.
 
 ### E2: Freeze one target and an enforceable inspection budget
 
@@ -119,7 +135,7 @@ evidence-backed missing-assay/coverage reason, never just a memory failure.
 - [ ] Specify numeric network/decoded/disk/process-tree-RSS/wall ceilings, headroom,
   enforcement, preservation/cleanup rules and uncovered authority before any
   acquisition. Unknown expected requirements do not mean unlimited permission.
-- [ ] Finish one offline proposal within 30 minutes, 0 network/installs/downloads.
+- [x] Finish one offline proposal within 30 minutes, 0 network/installs/downloads.
   If identity or defensible controls/limits cannot be fixed, stop RESOURCE_UNRESOLVED
   or SOURCE_UNRESOLVED. Do not start an exploratory whole-object load to estimate RAM.
   For missing identity, name only the separately bounded listing-read proposal in
@@ -132,6 +148,13 @@ Check that B does not assert free capacity and D has its own contract.
 is needed to execute the resulting contract.
 **Files likely touched:** one proposed source/budget JSON in `configs/` and shared
 audit guide, plus ignored snapshots. **Estimated scope:** Small, at most two files.
+
+**Result:** [offline source contract](../configs/development_object_source_contract.json)
+records SOURCE_UNRESOLVED. Exact payload href/bytes/checksum, serialization classes
+and full-object resource needs remain unknown. The next action is one separately
+approved, 64 KiB/15-second official GEO listing read; no payload or class-package
+installation follows automatically. Other E2 acceptance boxes intentionally remain
+open; E3 cannot start under a zero-byte object budget.
 
 ### E3: Inspect only the approved source and report measured facts
 

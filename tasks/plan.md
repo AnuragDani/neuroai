@@ -5,12 +5,12 @@ final decision review is recorded in the audit guide. No further execution is
 authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
-Conditional E0–E4 follow-up: user later approved execution. E0 complete;
-E1 stopped at environment controls; E-A/E4 record the bounded early stop.
-E2/E3 remain unexecuted. See the [reader decision](../reports/generated/reader_enablement_20260912/DECISION.md).
-Subsequent local-resource approval: installed Docker started successfully;
-one exact ARM64 R image acquisition proposal is pinned below. Reader fixture
-remains NOT_RUN; no image or dataset payload was acquired.
+Conditional E0–E4 follow-up: E0 and E1 tiny-reader proof now complete after the
+approved local continuation. The pinned ARM64 R image was acquired/imported;
+nine live fixture/control checks passed. E2's offline source-contract pass ended
+SOURCE_UNRESOLVED; E3 remains unexecuted. No real dataset payload was acquired.
+The earlier control-stop record remains historical. Current evidence and remaining
+gate: [reader completion](../reports/generated/r_reader_completion_20260912/REVIEW.md).
 
 ## Bounded implementation: usable experiment paths
 
@@ -207,6 +207,15 @@ framework. These filenames/interfaces are proposals, not commands available now.
 Only after E2 approval, extend that slice narrowly for the selected object's
 read-only inspection, or reuse the existing MEX reader for C. New evidence must
 not overwrite F2d/F3 or silently relax the current F3 record validator.
+
+**Implementation update:** the fixture slice now exists, with
+`scripts/run_r_fixture.py` providing the separately reviewed native-control checks.
+It reads no real object. `scripts/acquire_r_image.py` acquires only the fixed
+reviewed R image; it is not a general downloader and was run once in a cached
+Linux Python container after macOS refused RLIMIT_AS before any request. Do not
+rerun acquisition: the verified archive and imported image are retained. Current
+E2 outcome is [the source contract](../configs/development_object_source_contract.json),
+not permission to load an unverified Seurat object or fit a model.
 
 The future `development_object_inspection.json` must separate observed facts
 from acceptance: object/classes and raw assay/layer; sparse dimensions; exact

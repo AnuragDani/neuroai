@@ -360,3 +360,32 @@ and its ledger record 454 seconds this continuation, 814 cumulative, 746 remaini
 under the local amendment. Next implementation: enforce bounded six-layer
 acquisition/decode/import before the tiny fixture. Existing local-resource
 approval stands; no unmetered pull or weakened scientific gate is implied.
+
+### Verified local reader and scoped E2 outcome — September 12
+
+The subsequent “keep going” instruction was executed. The pinned ARM64 R image
+was acquired once with reviewed bounded streaming and imported offline. Exact
+registry/auth bodies: 763,368,314 bytes; gzip expansion: 1,920,443,904 bytes;
+three-copy import reservation: 6,029,817,856 bytes, below 6 GiB. The host retained
+over 10 GiB free. R 4.6.1 and Matrix 1.7.6 were observed locally.
+
+`inspect_development_object.R` supplies only the tiny fixture; `run_r_fixture.py`
+checks every relied-on native container limit before execution. All nine live
+cases pass: exact 392-byte sparse round-trip, five malformed/output-reuse
+refusals, filesystem limits, timeout tree termination and OOM tree termination.
+No data mount, dense conversion, package installer or scientific input was used.
+Seurat/ChromatinAssay and actual `.rda` workspace support remain unproven.
+
+The macOS address-space preflight failure and initial R transcript bug remain in
+the [durable execution record](../reports/generated/r_reader_completion_20260912/REVIEW.md).
+Linux cgroup isolation resolved the former; direct CSC-slot export fixed the
+latter without modifying counts. Cached bootstrap Python's inherited loopback
+health check is disclosed; fixture containers explicitly disable inherited checks.
+Existing user workloads, original dirty work and accepted RNA results are intact.
+
+The [E2 offline contract](../configs/development_object_source_contract.json)
+records SOURCE_UNRESOLVED and zero object-acquisition/inspection permission.
+Next: one separately approved official GEO listing read (64 KiB, 15 seconds),
+not the 7.6G-listed payload. It resolves source identity only. Exact object
+classes/resources and all scientific acceptance gates remain separate. No new
+training, source substitution, fragment download, paid compute, push or merge.

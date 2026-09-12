@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_UNRESOLVED",
+  "phase": "E2_OFFLINE_CONTRACT",
+  "object_inspection_authorized": false,
+  "selected_target": "GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz",
+  "intended_scope": "Lattke excitatory-lineage PCW10-20 development donors; actual coverage unverified",
+  "declared_listing_size": "7.6G (rounded, not an exact byte measurement)",
+  "format_declared": "gzip-compressed R workspace; actual serialized classes unknown",
+  "exact_payload_url": null,
+  "exact_payload_bytes": null,
+  "publisher_payload_checksum": null,
+  "expected_decoded_bytes": null,
+  "expected_peak_memory_bytes": null,
+  "source_evidence": {
+    "path": "docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md",
+    "sha256": "66b1d8158f5b6c4260085cddb736db2d59de9df610e5dcac5ccfc2c4f63b18b9"
+  },
+  "reader_proof": {
+    "image_id": "sha256:264df259ebb2fa4ff2a3db6d346ec273e18d4c84af727b1cc4b39065a9e8edbb",
+    "r_version": "4.6.1",
+    "matrix_version": "1.7.6",
+    "tested_classes": ["list", "dgCMatrix", "data.frame"],
+    "fixture_report_sha256": "1cf56325eb4f08c86d11661b59ec9985d9300e18a1f9a738c60fed57c9b99813",
+    "not_proven": ["Seurat", "ChromatinAssay", "real-object memory fit", "real raw ATAC assay"]
+  },
+  "current_object_permissions": {
+    "network_bytes": 0,
+    "decoded_bytes": 0,
+    "output_bytes": 0,
+    "execution_seconds": 0,
+    "training_allowed": false
+  },
+  "single_next_action_proposal": {
+    "status": "REQUIRES_SEPARATE_SCOPE_APPROVAL",
+    "purpose": "Resolve the exact selected href and any published size/checksum declarations, not fetch the object",
+    "method": "GET",
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/",
+    "maximum_requests": 1,
+    "redirects": 0,
+    "retries": 0,
+    "maximum_response_body_bytes": 65536,
+    "maximum_decoded_bytes": 262144,
+    "maximum_retained_output_bytes": 1048576,
+    "maximum_process_tree_memory_bytes": 268435456,
+    "maximum_swap_bytes": 0,
+    "maximum_wall_seconds": 15,
+    "minimum_host_free_disk_bytes": 10737418240,
+    "controls": "Pinned cached Python in an inspected non-root container; absolute deadline; identity HTTP encoding; fail before exceeding body/decode caps; no host-data mounts",
+    "preservation": "New output directory only; preserve prior evidence and downloaded R archive; no cache/user-data deletion",
+    "stop_conditions": ["non-200 or redirect", "deadline or byte limit", "missing/ambiguous exact filename href", "source evidence changed"],
+    "after_success": "Review exact source declaration, then separately specify and approve object/class-support inspection limits. Do not GET payload or install Seurat automatically.",
+    "after_failure": "Record scoped SOURCE_UNRESOLVED with reason and a response hash when response bytes were received; no retry or source substitution"
+  },
+  "scientific_acceptance_requirements_unchanged": [
+    "paired raw RNA and measured ATAC counts with exact retained barcode/donor join",
+    "release and QC/count-stage semantics",
+    "age/class support and specimen provenance",
+    "genome build, interval coordinates and count units",
+    "exact common measured regions; never zero-fill unmatched peaks",
+    "feature-selection provenance including discovery donors/labels",
+    "separate development, external and cross-cohort decisions"
+  ]
+}
