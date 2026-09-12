@@ -316,3 +316,25 @@ Verification: seven focused tests pass after observed red/green regressions;
 independent review reran all seven and approved the read-only probe. Full suite:
 675 passed, 19 existing sklearn warnings (62.47 seconds); lint/format: 113 files.
 These software tests do not certify a reader fixture or resource controls.
+
+### E-A / E4: environment-control stop
+
+Code commit `6d3529b` supplied the independently reviewed prerequisite probe. Its
+single free-CPU Colab execution at 21:57:16 UTC took 0.071 seconds; copied-back
+cell source exactly matched the tested script. R and Rscript are present, but
+`/proc/self/cgroup` returned `0::/../../jupyter-children` and the visible cgroup-v2
+mount is read-only. The probe safely leaves the current cgroup unresolved; do not
+normalize parent traversal or treat installed R/free RAM as isolation proof.
+
+The [new decision and ledger](../reports/generated/reader_enablement_20260912/DECISION.md)
+record `CONTROL_UNRESOLVED`, 360 conservative preflight seconds, zero dependency
+and dataset bytes, and fixture `NOT_RUN`. No resource-controlled R job launched,
+so process-tree peak/disk enforcement is not claimed. E0 and E-A/E4 early-stop
+review are complete; E1 reader proof and E2/E3 remain pending. All scientific
+gates retain their prior scope. Independent review agreed with this stop.
+
+Exactly one next action: a separately reviewed local container-runtime setup
+proposal with exact assets/controls and explicit handling of consumed attempts
+and time. No automatic runtime launch, pull, new B session, object download or
+larger GPU request. The saved notebook remains available in Chrome; no code is
+running. Original dirty work, archived F2d/F3 and RNA results remain untouched.

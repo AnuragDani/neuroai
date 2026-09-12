@@ -5,7 +5,9 @@ final decision review is recorded in the audit guide. No further execution is
 authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
-Conditional E0–E4 fallback routes added below for review only; none executed.
+Conditional E0–E4 follow-up: user later approved execution. E0 complete;
+E1 stopped at environment controls; E-A/E4 record the bounded early stop.
+E2/E3 remain unexecuted. See the [reader decision](../reports/generated/reader_enablement_20260912/DECISION.md).
 
 ## Bounded implementation: usable experiment paths
 
@@ -41,7 +43,9 @@ and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md
 
 ### Conditional follow-up paths — planning only
 
-This addition plans alternatives after completed F1–F3; it authorizes no execution.
+This addition originally planned alternatives after completed F1–F3. The later
+user instruction approved bounded execution, not E3's still-missing exact contract.
+The heading remains the original contract anchor; current status is recorded above.
 The saved F2d/F3 records and September 12 delivery remain immutable. Do not change
 their single next action, repeat the source GET/audit, or turn a fixture result
 into an accepted scientific input. New work uses new output directories and

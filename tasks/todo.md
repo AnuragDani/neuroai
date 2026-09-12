@@ -1,7 +1,8 @@
 # Paired DS multiome implementation checklist
 
 Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
-E0 completed after user execution approval; E1 environment preflight in progress.
+E0 complete; E1 blocked by environment controls; E-A/E4 early-stop record complete.
+E2/E3 unexecuted. This does not complete reader proof or the full research plan.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
@@ -69,10 +70,15 @@ scope that prerequisite; do not repurpose the accepted RNA supervisor.
 
 ### Checkpoint E-A: Reader evidence, not permission to download
 
-- [ ] Review E0/E1 artifacts and counters. Exactly one applicable reader route is
+- [x] Review E0/E1 artifacts and counters. Exactly one applicable reader route is
   demonstrated, or a specific environment/control blocker is documented.
-- [ ] No real-object contents, counts/QC acceptance or training readiness inferred.
+- [x] No real-object contents, counts/QC acceptance or training readiness inferred.
   Stop unless E2's next contract is separately reviewed and approved.
+
+**Result:** [CONTROL_UNRESOLVED](../reports/generated/reader_enablement_20260912/DECISION.md).
+A lacks a reader/active local Docker daemon. B has R but a read-only cgroup mount;
+the actual membership cannot be safely resolved. One read-only B probe, no R or
+installer launch. E1 fixture/descendant-stop criteria remain unchecked, not waived.
 
 ### E2: Freeze one target and an enforceable inspection budget
 
@@ -136,19 +142,22 @@ gets a separate proposal when development progress makes it useful.
 
 **Acceptance criteria:**
 
-- [ ] Each relevant development gate has evidence-linked PASS/FAIL/UNRESOLVED,
+- [x] Each relevant development gate has evidence-linked PASS/FAIL/UNRESOLVED,
   inspected scope, donor/class support and missing artifact; external/cross-cohort
   gates remain separate. No checkbox closes on a file name, fixture or matching total.
-- [ ] Select one justified next action: M5 review only if development inputs are
+- [x] Select one justified next action: M5 review only if development inputs are
   accepted, otherwise a newly bounded missing-evidence/resource proposal or STOP.
   E/external costing each allows one 30-minute offline pass, no payload/fragments.
-- [ ] Decision states biological question remains untested until real held-out
+- [x] Decision states biological question remains untested until real held-out
   comparison; internal results cannot replace the external primary contrast.
   No RNA rerun, donor deletion, new dataset, paid compute, outreach or weakened gate.
 
 **Verification:** review failure/success traces and evidence hashes; ensure no
 hidden NeMO-to-development switch, automatic M6c fit or renewed F2s request.
 **Dependencies:** E3 outcome, or a documented earlier stop; route-specific review.
+**Result:** [earlier control stop](../reports/generated/reader_enablement_20260912/DECISION.md).
+One next action: separately reviewed local container setup proposal with explicit
+attempt/counter amendment. No new runtime launch or data acquisition is authorized.
 **Files likely touched:** shared audit guide and `tasks/todo.md`; new ignored
 decision record. **Estimated scope:** Small.
 
