@@ -338,3 +338,25 @@ proposal with exact assets/controls and explicit handling of consumed attempts
 and time. No automatic runtime launch, pull, new B session, object download or
 larger GPU request. The saved notebook remains available in Chrome; no code is
 running. Original dirty work, archived F2d/F3 and RNA results remain untouched.
+
+### Local-resource continuation: runtime available, acquisition proposed
+
+After the user approved use of local resources, the installed Docker Desktop
+4.73.0 was started once, without updates/pulls/settings changes. The local server
+reports cgroup v2; this removes the inactive-runtime blocker, not the untested
+container-control or sparse-reader criteria. Existing workloads auto-resumed and
+were left untouched; Docker remains running. No P22 container was created.
+
+No dedicated R image was identified in cache; the selected exact ARM64 config ID
+is absent. The new [dependency proposal](../configs/local_r_reader_acquisition.json)
+pins official R 4.6.1 by immutable ARM64 manifest and six layer digests/sizes.
+763,355,676 compressed bytes is a publisher declaration, not a completed download.
+Decoded size and ARM64 package versions remain unverified. A separately observed
+AMD64 package report is not substituted as ARM64 proof. No new dependencies,
+image layers, datasets or fragments were downloaded; no R fixture/model was run.
+
+[Local setup evidence](../reports/generated/local_reader_setup_20260912/SETUP.md)
+and its ledger record 454 seconds this continuation, 814 cumulative, 746 remaining
+under the local amendment. Next implementation: enforce bounded six-layer
+acquisition/decode/import before the tiny fixture. Existing local-resource
+approval stands; no unmetered pull or weakened scientific gate is implied.

@@ -8,6 +8,9 @@ plus six final refits verified. Real-data scientific gates remain pending.
 Conditional E0–E4 follow-up: user later approved execution. E0 complete;
 E1 stopped at environment controls; E-A/E4 record the bounded early stop.
 E2/E3 remain unexecuted. See the [reader decision](../reports/generated/reader_enablement_20260912/DECISION.md).
+Subsequent local-resource approval: installed Docker started successfully;
+one exact ARM64 R image acquisition proposal is pinned below. Reader fixture
+remains NOT_RUN; no image or dataset payload was acquired.
 
 ## Bounded implementation: usable experiment paths
 
@@ -77,6 +80,16 @@ blocker. E2/E3 require their own exact object contract as before.
 
 Native reference: [Docker Desktop start](https://docs.docker.com/reference/cli/docker/desktop/start/)
 and [container memory/swap controls](https://docs.docker.com/engine/containers/resource_constraints/).
+
+**Result:** local Docker is available; selected R image config ID is not cached.
+The [acquisition proposal](../configs/local_r_reader_acquisition.json) pins six
+ARM64 layers totaling 763,355,676 declared compressed bytes. Expansion remains
+unknown; the required next implementation is bounded acquisition/decode/import,
+then the existing E1 fixture task. This proposal is not an executable installer.
+Local setup consumed 454 conservative seconds, cumulative 814, leaving 746 under
+this amendment. [Evidence and ledger](../reports/generated/local_reader_setup_20260912/SETUP.md)
+preserve the earlier failed A/B attempts. No repeated approval for local resources
+is needed; applicable scientific/data-acquisition gates and technical bounds remain.
 
 This addition originally planned alternatives after completed F1–F3. The later
 user instruction approved bounded execution, not E3's still-missing exact contract.

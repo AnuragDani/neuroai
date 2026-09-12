@@ -17,13 +17,20 @@ User approved local resources after E-A's stop. Follow the
 [local amendment](plan.md#local-resource-amendment--2026-09-12), retaining old
 attempts and the 360-second ledger. No scientific acceptance changes.
 
-- [ ] L0: start installed Docker once within 45 seconds, verify local endpoint,
+- [x] L0: start installed Docker once within 45 seconds, verify local endpoint,
   headroom and cached image inventory; do not pull/update/build or delete work.
 - [ ] L1: select one immutable compatible cached image, if present; prove isolated
   sparse fixture and negative/descendant-stop checks. R absence is NOT_RUN.
-- [ ] L2: save reviewed outcome/resources and commit tested slices. If no suitable
+- [x] L2: save reviewed outcome/resources and commit tested slices. If no suitable
   cached reader exists, name one exact acquisition proposal rather than install
   without declared assets/sizes. Do not enter E2/E3 or restart B automatically.
+
+L0 result: Docker started; local cgroup-v2 runtime available. No dedicated cached
+R image identified; selected exact config ID is absent. L1 remains NOT_RUN.
+See [setup evidence](../reports/generated/local_reader_setup_20260912/SETUP.md)
+and [pinned acquisition proposal](../configs/local_r_reader_acquisition.json).
+L2 closes only the reviewed proposal outcome. L1/E1 remain NOT_RUN; bounded
+transfer/decode/import implementation is still required before any image install.
 
 Verification: inspect runtime/image evidence and actual test outputs; retain
 original dirty/RNA fingerprints. Files: existing plan/checklist, shared audit
