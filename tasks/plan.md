@@ -5,6 +5,7 @@ final decision review is recorded in the audit guide. No further execution is
 authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
+Conditional E0–E4 fallback routes added below for review only; none executed.
 
 ## Bounded implementation: usable experiment paths
 
@@ -38,7 +39,161 @@ sparse fixture, outside this cycle's no-install scope. See the
 [decision and verification record](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure)
 and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md).
 
-### Next-cycle objective and reasoning
+### Conditional follow-up paths — planning only
+
+This addition plans alternatives after completed F1–F3; it authorizes no execution.
+The saved F2d/F3 records and September 12 delivery remain immutable. Do not change
+their single next action, repeat the source GET/audit, or turn a fixture result
+into an accepted scientific input. New work uses new output directories and
+evidence records. The original no-install cycle is closed, not silently extended.
+
+**Objective:** obtain one auditable development input with paired raw RNA and
+measured common-region ATAC counts, or identify the specific requirement that
+cannot be met within the permitted routes. This supports a later donor-held-out
+comparison; it neither guarantees a positive effect nor completes external
+validation. Distinguish runtime failure, resource failure, missing assay, and
+missing scientific provenance: each calls for a different response.
+
+#### Route selection
+
+Choose one active route at a time; alternatives are not an instruction to try
+everything. E0–E4 in [todo.md](todo.md#conditional-follow-up-queue--e0e4)
+define the bounded tasks and checkpoints.
+
+| Path | Entry condition and reason | Evidence that closes this path | Failure / next choice |
+|---|---|---|---|
+| A — Local R reader, preferred | Current inventory lacks a compatible reader. Start with the selected 7.6G-listed development object as the future target; no object download in the reader step. | Pinned isolated runtime and tiny sparse-object round trip pass; counts, identifiers and metadata preserved. This proves only the tested fixture/classes. | Environment-specific install/control failure may justify B. Unsupported object class needs a compatible reader, not a larger machine. Scientific assay/QC failure cannot be cured by B. |
+| B — Already-approved free-CPU environment | A fails for a documented local environment/resource reason, or E0 shows a usable pre-existing reader there. No new cloud account, paid tier or GPU request. | Same fixture and resource checks pass in that environment; returned records/hashes independently verify locally. | One attempt only; unavailable capacity or unenforceable limits stops. Do not cycle sessions or claim a runtime reset solved data semantics. |
+| C — Documented sparse-count export | An exact provider-documented compatible export is supplied or located in newly pinned evidence. None is verified today. Prefer this over deserializing a large object if it answers the same question. | Raw paired counts, retained barcodes/donors, measured intervals/build/units and feature-selection provenance satisfy the same contract through existing MEX readers where possible. | Normalized values, embeddings, gene activity, inferred zeros or missing provenance do not qualify. No speculative adapter or open-ended search for an unnamed export. |
+| D — Other already-listed processed object | The selected object is shown to lack the required assay or donor/population coverage, and evidence gives a reason the other object could supply it. Not a response to memory failure. | Separately approved inspection of `GSE305146_seur_integr_labelled_complete_dataset.rda.gz` (listing 8.7G) meets the same input contract. | At most one alternate object; no simultaneous full downloads. If contents/provenance still fail, record the exact missing artifact and consider E only as a proposal. |
+| E — Recount feasibility proposal, last resort | Both named objects have evidence-backed dispositions (inspected or explicitly inaccessible/unresolved), and no documented usable export is available. | A narrowly scoped costing/protocol proposal states exact fragments, donors, frozen regions, count units, storage and authorization needed. A missing estimate remains unknown. | No fragment download or recount under this plan. If permitted data/resources cannot support it, stop with a scoped blocker; do not lower gates or replace the dataset automatically. |
+
+A/B concern runtime location; C/D concern the data artifact. They are not
+interchangeable solutions. The normal route is A, then inspection of
+`GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` after E2 approval.
+B changes location only. A newly documented C can bypass R-specific work, but
+not the resource, pairing, raw-count or provenance checks. D needs a new source
+decision, and E stops at a proposal. The two rounded sizes and the unpublished
+`peaks_by_cluster` checkpoint come from
+[the saved source evidence](../docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md),
+not verified archive contents or current download-size measurements.
+
+#### Limits, authority and stopping rules
+
+- **E0 route preflight:** one offline review, at most 30 minutes, existing local
+  records only; 0 network/installation/dataset bytes. Name the preferred route,
+  fallback trigger, exact target, missing authority and next code slice. Stop with
+  a source request if C has no exact documented artifact; do not invent its URL.
+- **E1 reader attempts A/B:** at most one per environment and two total. Share
+  the existing proposed ceiling across both attempts: 2 GiB cumulative fetched
+  dependencies, 4 GiB cumulative decoded dependencies, 6 GiB peak additional
+  working disk across retained attempt files, 4 GiB peak process-tree RSS and
+  30 minutes total active setup/fixture time. Require at least 10 GiB available
+  disk headroom on each chosen host and a fixture no larger than 1 MiB. Switching
+  environments does not reset counters. Charge failed fetches and cold setup;
+  a free-CPU queue/capacity failure ends that attempt, not a polling loop.
+- Preflight exact dependency assets/versions, their transfer/expansion budget and
+  control availability before installation. No unmetered installer fetches.
+  Record process-tree use, not only the parent R process; the existing RNA
+  supervisor handles one owned process and is not proof of installer-tree control.
+  Use enforceable isolation where available; sampled RSS alone is not a hard
+  ceiling. If controls cannot bound the job, record refusal rather than launch.
+- E1 needs approval to expand dependency-installation scope. Existing free-CPU
+  and scoped professor approvals stand; ask only for an uncovered action. Reader
+  success authorizes neither an object download nor fitting. A synthetic fixture
+  cannot establish the real object's classes, memory fit, assays or provenance.
+- **E2 target/resource contract:** one offline proposal per selected object,
+  at most 30 minutes. No HEAD/GET, archive reads or installation in E2. Freeze the
+  exact identity and available integrity evidence; distinguish publisher checksums
+  from locally measured hashes. Record fresh host resources only when executing
+  that future task. Set numeric transfer, decoded, disk, process-tree RSS and wall
+  ceilings, headroom, controls and cleanup/recovery rules for the proposed next
+  read. Expected requirements may be unknown; permission ceilings may not.
+  If no defensible contract is possible, mark `RESOURCE_UNRESOLVED` and stop.
+  If only exact source identity is missing, the next proposal may name one GET
+  of the already documented GEO supplementary listing, capped at 65,536 body
+  bytes, 262,144 decoded bytes and a 15-second total deadline, without redirect
+  or retry. This requires separate scope approval and cannot certify contents,
+  exact memory use or QC. It is not a new NeMO bag request or a payload download.
+- **E3 object inspection is conditional, not executable from this document.**
+  It needs E2's separately reviewed and approved exact target/limits, plus tested
+  applicable reader support. For C, test the existing supported export reader
+  instead of requiring an R fixture. One target acquisition/inspection per
+  approved contract, no automatic retry; D needs a fresh contract. Unknown full
+  object fit is not an instruction to start downloading. No tar-prefix assumption
+  for R serialization; even inspecting assay names may deserialize the object.
+- After any failed attempt, record command/version hashes, cumulative resources,
+  scope, stop reason and which new evidence could justify the next route. No
+  unchanged retries, hidden budget reset or simultaneous A/B/C/D exploration.
+  Run code tests offline before any authorized real attempt; code failure must
+  be fixed separately, not described as proof that usable measurements are absent.
+- E and external follow-up below are **proposal-only**: at most one 30-minute
+  offline evidence/costing pass each. They confer no network or experiment budget.
+  Full fragments, paid compute, author outreach, new datasets, synthetic
+  substitution, peak projection and weakened scientific gates remain excluded.
+
+#### Code deliverables and scientific handoff
+
+The next implementation slice is one small proposed
+`scripts/inspect_development_object.R` fixture mode plus one focused regression
+test, following E1. Reuse installed libraries, existing sparse/count/coordinate
+validation and output/refusal conventions; no general downloader or orchestration
+framework. These filenames/interfaces are proposals, not commands available now.
+Only after E2 approval, extend that slice narrowly for the selected object's
+read-only inspection, or reuse the existing MEX reader for C. New evidence must
+not overwrite F2d/F3 or silently relax the current F3 record validator.
+
+The future `development_object_inspection.json` must separate observed facts
+from acceptance: object/classes and raw assay/layer; sparse dimensions; exact
+cell/donor pairing and retained-release join; QC/count stage; age/class support;
+specimen provenance; genome/coordinates; count units; measured-region coverage;
+and donors/labels used in peak discovery. Cite source/code/asset hashes and
+inspected scope for each PASS/FAIL/UNRESOLVED gate. Missing entries stay unresolved;
+shared columns or all-donor peak calling cannot establish train-fold-only selection.
+
+```text
+E0: choose one route / exact target
+  A local reader ──environment-only failure──> B free-CPU reader (shared E1 cap)
+  C documented sparse export ────────────────> its existing-reader checks
+        reader check → E2 approved target/budget → E3 bounded inspection
+          missing assay/coverage → D alternate object → new E2 contract
+          resource failure → stop; no automatic larger object/machine
+          no permitted usable input → E recount proposal only → stop
+E4: gate-by-gate decision + one justified next action → STOP
+Later: accepted development input + M5 protocol → M6a/b → one M6c fold → M7
+External: separate NeMO QC/common-region acceptance + frozen models → M8
+```
+
+Before M6c, all relevant development gates and M5's real normalization,
+covariate/chr21 controls, feature construction, donor splits, comparison and
+uncertainty rules must be frozen and reviewed. Pairing may be proven for a subset
+without that subset having sufficient class/donor support. No post-hoc donor
+deletion or endpoint change to manufacture a favorable result.
+The excitatory-lineage object's population/age coverage must be assessed explicitly;
+using a subset changes the estimand if it differs from the eventual M5 cohort.
+Any such change needs prospective protocol review, not silent relabeling as the
+original whole-cohort experiment.
+
+**External lane:** keep NeMO reserved for external evaluation. Once development
+feasibility makes this useful (or genuinely new exact external evidence arrives),
+propose a separate bounded QC/barcode/count-stage and cross-cohort feature check
+using the resolved declaration; do not rerun F2s or switch NeMO into development.
+Current matching annotation totals remain QC-unverified. Internal results must be
+labeled internal; they cannot satisfy M8's primary external contrast.
+
+**Completion of this follow-up:** E4 accepts an evidence-backed input contract
+or documents a precise, scoped blocker and the smallest permissible next action.
+Do not promise a conclusive biological result. If all permitted routes stop,
+deliver the negative feasibility result; no perpetual inspection loop. F1–F5,
+M1–M8 checkboxes and original RNA conclusions retain their recorded meanings.
+
+### Completed F1–F3 contract (historical)
+
+The sections below through Review disposition preserve the completed cycle's
+contract; they do not authorize new execution. Conditional routes above are a
+separate proposal and do not rewrite the archived single-action decision.
+
+### Completed-cycle objective and reasoning
 
 **Long-term question:** does cross-attention improve donor-level prediction over
 matched concatenation using valid paired RNA+ATAC measurements? This cycle does

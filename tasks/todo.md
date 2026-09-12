@@ -1,11 +1,161 @@
 # Paired DS multiome implementation checklist
 
 Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
+E0–E4 conditional routes are planning-only additions; no new execution.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
+
+## Conditional follow-up queue — E0–E4
+
+Planning addition only; all tasks below are unexecuted. Use
+[the route/limit contract](plan.md#conditional-follow-up-paths--planning-only).
+Preserve the completed F1–F5 evidence and all M1–M8 criteria. Only one route is
+active at a time, with explicit checkpoints before installation or acquisition.
+
+### E0: Select the first route and record fallback triggers
+
+**Description:** Review existing evidence offline and select A by default, B only
+for a documented environment reason, or C only when an exact documented export
+exists. Record when D/E would become relevant; do not run a discovery campaign.
+
+**Acceptance criteria:**
+
+- [ ] One `route_decision.md` names target/source hashes, route, specific question,
+  known/unknown facts, failure category, fallback trigger and uncovered authority.
+- [ ] Resource/enforcement availability and shared E1 counters are specified;
+  original dirty/RNA/evidence fingerprints and existing approvals are preserved.
+- [ ] Stop within 30 minutes, no network/install/data read beyond existing evidence.
+  Missing target identity or controls yields an explicit refusal, not a guessed URL.
+
+**Verification:** inspect saved evidence against F2d/F3 and the source note;
+table-top trace local installation failure, missing assay, missing provenance,
+unknown memory and no exact export. Each yields one justified next action.
+**Dependencies:** reviewed plan; accepted F1–F3 baseline `48b90c9`.
+**Files likely touched:** one concise evidence note in `docs/PAIRED_MULTIOME_AUDIT.md`;
+new ignored record. **Estimated scope:** Small.
+
+### E1: Prove a bounded reader path with a tiny sparse fixture
+
+**Description:** Implement the narrow fixture checker, then run A or conditional
+B only after the installation scope is approved. Do not inspect a real object.
+
+**Acceptance criteria:**
+
+- [ ] Pin runtime/package assets; fixture preserves sparse integer counts, row/column
+  identifiers, interval fields and donor metadata across save/load. Record actual
+  classes tested, unsupported classes and no dense conversion.
+- [ ] Malformed fixture, missing dependency, output reuse and budget failure refuse
+  safely. All descendants stop on timeout/resource failure; tests cover that
+  behavior. Missing R produces explicit NOT_RUN, never a passing scientific gate.
+- [ ] At most two environment attempts share the E1 limits in plan.md; no object
+  bytes fetched. Record cumulative bytes/time/disk and process-tree memory evidence.
+  One successful fixture closes E1; both failures or cap exhaustion stop.
+
+**Verification:** smallest offline regression first, then the R fixture under
+approved controls; run relevant repository lint/tests if code changes. Independently
+check sparse values/order and fixture hashes. A fixture is not real-object proof.
+**Dependencies:** E0 plus approval for bounded dependency action; existing free-CPU
+approval is not re-requested. C can instead verify its existing export reader.
+**Files likely touched:** proposed `scripts/inspect_development_object.R`,
+`tests/test_development_object_reader.py`, shared audit guide. If necessary
+process-tree controls cannot fit a separately reviewed small slice, stop and
+scope that prerequisite; do not repurpose the accepted RNA supervisor.
+**Estimated scope:** Medium, at most three files for the fixture slice.
+
+### Checkpoint E-A: Reader evidence, not permission to download
+
+- [ ] Review E0/E1 artifacts and counters. Exactly one applicable reader route is
+  demonstrated, or a specific environment/control blocker is documented.
+- [ ] No real-object contents, counts/QC acceptance or training readiness inferred.
+  Stop unless E2's next contract is separately reviewed and approved.
+
+### E2: Freeze one target and an enforceable inspection budget
+
+**Description:** Produce the offline per-object contract. Default to the selected
+7.6G-listed object; prefer C only with a real documented export. D requires an
+evidence-backed missing-assay/coverage reason, never just a memory failure.
+
+**Acceptance criteria:**
+
+- [ ] Pin one source/target, format and available checksum/version evidence, intended
+  donor/population scope, exact inspection questions and acceptance requirements.
+  Rounded listing size, unknown contents and expected memory are labeled honestly.
+- [ ] Specify numeric network/decoded/disk/process-tree-RSS/wall ceilings, headroom,
+  enforcement, preservation/cleanup rules and uncovered authority before any
+  acquisition. Unknown expected requirements do not mean unlimited permission.
+- [ ] Finish one offline proposal within 30 minutes, 0 network/installs/downloads.
+  If identity or defensible controls/limits cannot be fixed, stop RESOURCE_UNRESOLVED
+  or SOURCE_UNRESOLVED. Do not start an exploratory whole-object load to estimate RAM.
+  For missing identity, name only the separately bounded listing-read proposal in
+  plan.md; no request occurs during this offline task.
+
+**Verification:** review the budget against a timestamped host snapshot, retained
+attempt files, expanded/input/output working sets and the reader's tested limits.
+Check that B does not assert free capacity and D has its own contract.
+**Dependencies:** E0 and applicable E1/export-reader proof; separate review/approval
+is needed to execute the resulting contract.
+**Files likely touched:** one proposed source/budget JSON in `configs/` and shared
+audit guide, plus ignored snapshots. **Estimated scope:** Small, at most two files.
+
+### E3: Inspect only the approved source and report measured facts
+
+**Description:** Conditional later implementation/acquisition; not runnable under
+the current plan-only request. Extend the fixture reader narrowly for the selected
+object, or use existing MEX readers for C. Do not build adapters for unverified formats.
+
+**Acceptance criteria:**
+
+- [ ] New output records target/code hashes and the gate fields in plan.md; missing
+  assays, counts, metadata, coordinates or provenance remain explicit. Preserve
+  paired sparse values/order and refuse duplicate/inconsistent IDs or dense fallback.
+- [ ] Offline tests cover malformed/incomplete objects and resource-stop paths
+  before the single real attempt. Exact target and approved E2 caps are enforced;
+  no source substitution, budget reset, hidden retry or uncontrolled deserialization.
+- [ ] Route decision distinguishes missing assay/coverage (D may be proposed),
+  resource failure (stop/re-scope), and unknown scientific provenance (missing
+  evidence, not runtime failure). Do not rewrite old F2d/F3 records or imply training.
+
+**Verification:** independently inspect sampled sparse entries and complete
+ID/donor/region fingerprints against the source; verify resource/stop ledger and
+all acceptance claims. A read failure cannot establish dataset-wide absence.
+**Dependencies:** E2's approved exact acquisition/inspection contract.
+**Files likely touched:** narrow R reader extension OR existing MEX adapter/test,
+shared audit guide; new ignored inspection record. **Estimated scope:** Medium,
+at most three files; no generic downloader or new training entrypoint.
+
+### E4: Close the route with an input decision or bounded fallback proposal
+
+**Description:** Review E3 evidence and choose exactly one next action. E may be
+costed offline only if no permitted usable object/export remains; external QC work
+gets a separate proposal when development progress makes it useful.
+
+**Acceptance criteria:**
+
+- [ ] Each relevant development gate has evidence-linked PASS/FAIL/UNRESOLVED,
+  inspected scope, donor/class support and missing artifact; external/cross-cohort
+  gates remain separate. No checkbox closes on a file name, fixture or matching total.
+- [ ] Select one justified next action: M5 review only if development inputs are
+  accepted, otherwise a newly bounded missing-evidence/resource proposal or STOP.
+  E/external costing each allows one 30-minute offline pass, no payload/fragments.
+- [ ] Decision states biological question remains untested until real held-out
+  comparison; internal results cannot replace the external primary contrast.
+  No RNA rerun, donor deletion, new dataset, paid compute, outreach or weakened gate.
+
+**Verification:** review failure/success traces and evidence hashes; ensure no
+hidden NeMO-to-development switch, automatic M6c fit or renewed F2s request.
+**Dependencies:** E3 outcome, or a documented earlier stop; route-specific review.
+**Files likely touched:** shared audit guide and `tasks/todo.md`; new ignored
+decision record. **Estimated scope:** Small.
+
+### Checkpoint E-B: Terminal decision
+
+- [ ] Accepted development input or specific blocker reviewed; original RNA,
+  F1–F3 artifacts and M1–M8 acceptance criteria preserved.
+- [ ] Exactly one next action and its uncovered authority named; no automatic
+  full object, fragments, model training or external scoring starts.
 
 ## Advancement queue — bounded execution record 2026-09-12
 
