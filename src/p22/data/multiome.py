@@ -40,6 +40,13 @@ def _positive_integer(value: int, name: str) -> None:
         raise ValueError(f"{name} must be a positive integer")
 
 
+def _parse_peak_id(value: str) -> tuple[str, int, int] | None:
+    match = re.fullmatch(r"([^:\s]+):([0-9]+)-([0-9]+)", value)
+    if match is None:
+        return None
+    return match.group(1), int(match.group(2)), int(match.group(3))
+
+
 def _decode_bounded(raw: bytes, budget: ReadBudget) -> bytes:
     """Charge every materialized layer, including tar headers, before parsing it."""
     remaining = budget.max_expanded_bytes - budget.expanded_bytes
@@ -152,6 +159,10 @@ def read_features(asset: dict, budget: ReadBudget, *, modality: str | None = Non
         )
         if (~known & ~unmapped_rna).any():
             raise ValueError("feature intervals must have nonnegative start < end")
+        for row in features.loc[features.modality.eq("Peaks")].itertuples(index=False):
+            parsed = _parse_peak_id(row.feature_id)
+            if parsed is not None and parsed != (row.chromosome, row.start, row.end):
+                raise ValueError("peak feature_id coordinates disagree with explicit columns")
         features["coordinates_known"] = known
     if features.feature_id.eq("").any() or features.feature_id.duplicated().any():
         raise ValueError("empty or duplicate feature identifiers")
