@@ -160,3 +160,31 @@ now documented in [the training guide](PAIRED_MULTIOME_TRAINING.md). They do not
 resolve this audit's outstanding real-data gates.
 
 Implementation references: [Python archive streams](https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile), [SciPy Matrix Market reader](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.mmread.html), [10x feature matrices](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/feature-barcode-matrices), and [Signac peak-merging limitations](https://stuartlab.org/signac/articles/merging).
+
+## September 12 bounded input-feasibility cycle
+
+Execution uses an isolated worktree at RNA head `46d7523` plus plan revision
+`4219705`; original dirty files and RNA results are preserved. User authorized
+implementation of this cycle after the planning review. No professor update is sent.
+
+F1 recovered the exact 26-line coordinate guard in `cf8ed33`. Its regression
+failed on the base and passed after recovery. All 61 focused ingestion/feature
+tests, 597 fast tests (32 slow checks deselected), lint and three existing public
+feature lists passed. This establishes adapter integrity, not input acceptance.
+
+F2d recorded an offline inventory at 2026-09-12 21:00:26 UTC. Neither R executable
+was on PATH; `pyreadr` and `rpy2` were absent from the project environment.
+The host reported 128 GiB total RAM and 47.51 GiB available; free disk was
+25.24 GiB. These are a snapshot, not guaranteed resources. The chosen development
+object remains `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` (rounded
+publisher listing 7.6G). Its exact compressed size, decoded size, peak RSS,
+assays and count/feature semantics remain unknown.
+
+[The feasibility record](../reports/generated/input_feasibility_20260912/development_object_feasibility.json)
+selects reader enablement and a tiny sparse-object fixture as the first unmet
+prerequisite. Proposed ceilings: 2 GiB network, 4 GiB decoded dependencies,
+6 GiB working disk, 4 GiB peak RSS, 30 minutes, and at least 10 GiB disk headroom;
+fixture input at most 1 MiB. Pin dependencies and reject unmetered installer
+fetches before starting. No dependencies or fixture were installed/run here.
+Prior free-CPU approval stands, but that dependency step is outside this cycle.
+It does not authorize the large object or establish that it fits in memory.
