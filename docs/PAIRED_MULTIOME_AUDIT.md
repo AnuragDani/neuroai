@@ -389,3 +389,35 @@ Next: one separately approved official GEO listing read (64 KiB, 15 seconds),
 not the 7.6G-listed payload. It resolves source identity only. Exact object
 classes/resources and all scientific acceptance gates remain separate. No new
 training, source substitution, fragment download, paid compute, push or merge.
+
+### Planning correction after checked reviews — September 14
+
+The preceding September 12 next-action proposal is historical. It was not run.
+The current [plan amendment](../tasks/plan.md#review-amendment--2026-09-14) and
+[source contract](../configs/development_object_source_contract.json) replace the
+listing GET with one proposed candidate-payload HEAD: 15 seconds, no redirect or
+retry, <=64 KiB total response headers, zero body reads, 256 MiB process-tree
+memory/no swap, <=1 MiB retained output and >=10 GiB free disk. Approval and tested
+controls are required before a request. Candidate URL is derived, not observed.
+Missing/invalid positive length stops with a scoped unresolved reason; optional
+headers remain unknown. Hash the saved header record locally, not the payload.
+
+E2-M metadata can support E2-R's offline resource/class proposal, not an object
+download. E1's tiny `.rds` fixture did not test `.rda` workspaces or target assay
+classes. E3 needs applicable workspace/class proof and separately reviewed exact
+acquisition/full-load limits. Compressed size cannot establish decoded size or
+RAM; a 64 KiB prefix cannot establish complete assays/counts/provenance here.
+Resource failure is not missing-assay evidence. No generic setup is repeated.
+
+Both prior reviews were treated as claims to verify, not authority. The local
+LM Studio review completed once; its `.rda`-proof, HEAD-memory, automatic
+cluster-peak acceptance and 13+13-development-minimum claims were rejected.
+The checked record is retained in the original checkout under
+`reports/generated/lmstudio_review_20260913/REVIEW.md` (SHA-256
+`813afa2a6771072badbda42be555dba1e91e7757aa6b38f4be66e01611f9056b`).
+The amended tasks require donor/class support for the actual outer/inner splits,
+training-only learned selection and separate external QC/common-region gates.
+
+This edit adds no execution permission and closes no scientific checkbox.
+E4 still ends with a gate-linked input decision or precise blocker and one next
+action. RNA, F1–F3, E1 ledgers and saved review/execution records are preserved.

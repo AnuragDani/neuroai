@@ -1,9 +1,10 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-12. Bounded F1–F3 implementation and input decision complete.
+Updated: 2026-09-14 (planning only). Bounded F1–F3 implementation and input decision complete.
 E0 and E1 tiny-reader proof complete; nine live fixture/control cases pass.
 E2 offline pass recorded SOURCE_UNRESOLVED; exact object contract and E3 pending.
-This clears the runtime blocker, not the real-input or full research-plan gates.
+This clears only generic fixture/runtime controls; target workspace/class support
+is unproven. E2-M HEAD proposal supersedes the old listing GET; nothing executed.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
@@ -138,8 +139,8 @@ evidence-backed missing-assay/coverage reason, never just a memory failure.
 - [x] Finish one offline proposal within 30 minutes, 0 network/installs/downloads.
   If identity or defensible controls/limits cannot be fixed, stop RESOURCE_UNRESOLVED
   or SOURCE_UNRESOLVED. Do not start an exploratory whole-object load to estimate RAM.
-  For missing identity, name only the separately bounded listing-read proposal in
-  plan.md; no request occurs during this offline task.
+  Source follow-up is only the separately bounded E2-M HEAD proposal below;
+  no request occurs during this offline task.
 
 **Verification:** review the budget against a timestamped host snapshot, retained
 attempt files, expanded/input/output working sets and the reader's tested limits.
@@ -150,11 +151,74 @@ is needed to execute the resulting contract.
 audit guide, plus ignored snapshots. **Estimated scope:** Small, at most two files.
 
 **Result:** [offline source contract](../configs/development_object_source_contract.json)
-records SOURCE_UNRESOLVED. Exact payload href/bytes/checksum, serialization classes
-and full-object resource needs remain unknown. The next action is one separately
-approved, 64 KiB/15-second official GEO listing read; no payload or class-package
-installation follows automatically. Other E2 acceptance boxes intentionally remain
-open; E3 cannot start under a zero-byte object budget.
+records SOURCE_UNRESOLVED. A candidate URL is derived from pinned directory/name
+evidence; payload bytes/checksum, classes and full-object resource needs remain
+unknown. E2-M replaces the earlier listing-GET proposal; no request, payload or
+class-package installation has run. Other E2 acceptance boxes remain open;
+E3 cannot start under a zero-byte object budget.
+
+#### E2-M: Resolve available source metadata once
+
+**Description:** Conditional metadata-only request, not execution authorized by
+this plan edit. Use only the contract's candidate URL; no directory reread.
+
+**Acceptance criteria:**
+
+- [ ] After separate scope approval, one HEAD; 15 seconds, no redirect/retry,
+  <=65,536 total header bytes, zero body/decoded-body reads, 256 MiB process-tree
+  memory/no swap, <=1 MiB output, >=10 GiB free disk. Test these bounds offline
+  before requesting; refuse if the selected client/runtime cannot enforce them.
+- [ ] Record URL, timestamp, status, headers, locally computed header-record hash,
+  and positive Content-Length when valid. Distinguish server-declared transfer size
+  from measured payload bytes. Missing ETag/Last-Modified/Accept-Ranges/checksum
+  stays unknown, not a fabricated observation or automatic failure of identity.
+- [ ] Non-200/redirect, missing/invalid length, changed source evidence or bound
+  failure stops SOURCE_UNRESOLVED with the exact reason. No GET/Range/retry or
+  package install follows. Success permits only E2-R planning, not object access.
+
+**Verification:** offline mocked 200/missing-length/redirect/oversize/deadline
+cases plus independent header/hash review if the request is authorized and runs.
+**Dependencies:** E2 offline record and approval of this exact metadata scope.
+**Files likely touched:** one narrow request/check script, one focused test,
+shared audit guide; new ignored response record. **Scope:** Medium, <=3 files.
+
+#### E2-R: Cost target-compatible reading before acquisition
+
+**Description:** One offline proposal, <=30 minutes, zero network/install/object
+bytes. No generic runtime restart or repeated image acquisition.
+
+**Acceptance criteria:**
+
+- [ ] Pin the selected workspace/extraction path and compatible package versions
+  or equivalent reader. Cost exact missing dependency assets first; missing sizes
+  or support stay unresolved. For R, require a <=1 MiB `save/load` workspace/class fixture
+  with exact sparse-count/ID/metadata checks and unexpected-class refusal before E3.
+  The prior `saveRDS/readRDS` fixture remains complete but does not satisfy this.
+- [ ] Propose separate numeric transfer, decoded, retained/temporary disk,
+  process-tree memory/swap and wall caps, >=10 GiB disk headroom, control/stop
+  evidence, and required authority. Fresh host resources and justified estimates
+  must support the full-load proposal; neither HEAD nor compressed size proves RAM.
+  Package/class-fixture work has its own explicit allocation against preserved
+  ledgers or an approved amendment; no implicit new 506-second setup attempt.
+- [ ] Stop RESOURCE_UNRESOLVED (or name missing reader evidence) if no defensible
+  contract exists. No install, VM adjustment, object download or full-load probe
+  is authorized here. Record exactly what evidence/allocation could change that.
+
+**Verification:** table-top missing-package, unknown expansion, insufficient
+memory/disk and unsupported-class cases; each yields a distinct refusal. An
+approved later R fixture must test `.rda` and applicable classes, not generic R
+only. Route C instead verifies its documented format with the supported export reader.
+**Dependencies:** usable E2-M metadata or a separately reviewed documented export;
+existing generic E1 evidence. E3 additionally requires actual applicable proof.
+**Files likely touched:** source/resource contract and shared audit guide; new
+ignored proposal evidence. **Scope:** Small, <=2 files.
+
+#### Checkpoint E2-C: Real-object go/no-go
+
+- [ ] E2-M metadata and E2-R resource/class contract independently accepted;
+  separately authorized applicable fixture passes before any real-object load.
+- [ ] Exact acquisition/inspection permission is explicit; otherwise STOP with
+  the unresolved item. No checkbox closes because a model endorsed the plan.
 
 ### E3: Inspect only the approved source and report measured facts
 
@@ -177,7 +241,9 @@ object, or use existing MEX readers for C. Do not build adapters for unverified 
 **Verification:** independently inspect sampled sparse entries and complete
 ID/donor/region fingerprints against the source; verify resource/stop ledger and
 all acceptance claims. A read failure cannot establish dataset-wide absence.
-**Dependencies:** E2's approved exact acquisition/inspection contract.
+**Dependencies:** E2-C and E2's approved exact acquisition/inspection contract;
+applicable `.rda`/class proof for R, or supported export-reader proof for C.
+A prefix/Range probe is not that proof.
 **Files likely touched:** narrow R reader extension OR existing MEX adapter/test,
 shared audit guide; new ignored inspection record. **Estimated scope:** Medium,
 at most three files; no generic downloader or new training entrypoint.
@@ -645,6 +711,11 @@ Determine whether published counts support a common measurement space before pro
 ## M5: Freeze the donor-level experiment
 
 Turn the proposed research question into a versioned configuration before fitting or external predictions.
+
+Eligibility clarification: after QC, verify both-class support in every planned
+outer/inner donor partition. Two donors per class cannot satisfy the specified
+five-fold protocol. The 13+13 external count below informs the practical margin;
+it is not a universal development-cohort minimum or a power guarantee.
 
 **Acceptance criteria:**
 

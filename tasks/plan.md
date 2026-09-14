@@ -1,6 +1,6 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-12 (PDT). F1–F3 implemented and the bounded audit completed;
+Updated: 2026-09-14 (PDT; planning revision only). F1–F3 implemented and the bounded audit completed;
 final decision review is recorded in the audit guide. No further execution is
 authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
@@ -11,6 +11,11 @@ nine live fixture/control checks passed. E2's offline source-contract pass ended
 SOURCE_UNRESOLVED; E3 remains unexecuted. No real dataset payload was acquired.
 The earlier control-stop record remains historical. Current evidence and remaining
 gate: [reader completion](../reports/generated/r_reader_completion_20260912/REVIEW.md).
+
+Current next proposal: one metadata-only HEAD of the documented candidate object,
+then a target-compatible reader/resource contract, then one conditional inspection.
+The September 12 listing-GET proposal is superseded, not executed. See
+[review amendment](#review-amendment--2026-09-14); real-object execution gates remain closed.
 
 ## Bounded implementation: usable experiment paths
 
@@ -45,6 +50,54 @@ sparse fixture, outside this cycle's no-install scope. See the
 and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md).
 
 ### Conditional follow-up paths — planning only
+
+#### Review amendment — 2026-09-14
+
+**Scope:** revise E2/E3 planning, not execute it. Preserve completed E1, RNA and
+F1–F3 evidence and their original ledgers. The prior critique and locally checked
+model opinion justify a narrower next action, not an automatic gate promotion.
+
+1. **E2-M, source metadata:** propose one HEAD of the candidate payload URL in
+   the [source contract](../configs/development_object_source_contract.json).
+   Directory plus the recorded filename supplies a candidate, not a fresh source
+   observation. HEAD can provide size/validators without an object-body read;
+   a second directory index cannot guarantee exact size. Record missing headers
+   as unknown, and hash the saved header record, not an undownloaded payload.
+2. **E2-R, target reader and resources:** after usable metadata, make one offline
+   proposal (30 minutes; zero network/install/object bytes). Pin compatible
+   workspace/class support, dependency assets if needed, and separate acquisition,
+   decoded, retained/temporary disk, process-tree memory and wall ceilings. Use a
+   fresh host snapshot and evidence-backed estimates; compressed size is not RAM.
+   The historical 4 GiB job/8,092 MiB VM limits do not become a real-load allowance.
+   Unknown requirements remain unknown; an indefensible contract stops
+   RESOURCE_UNRESOLVED. No new setup budget or resource-setting change is granted.
+3. **E3, conditional inspection:** only after the resulting exact contract is
+   reviewed/authorized and a tiny applicable workspace/class fixture passes,
+   acquire/load one target and record the required sparse counts/metadata gates.
+   E4 then delivers an input decision or a concrete blocker and one next action.
+   No speculative 64 KiB range probe, automatic retry, alternate object or fitting.
+
+E1 proved `saveRDS/readRDS` of a tiny `.rds` list, not `save/load` of a real `.rda`.
+Before E3, prove the applicable `.rda` and Seurat/ChromatinAssay extraction path
+(or a demonstrated equivalent narrow reader) on a <=1 MiB fixture, preserving
+sparse counts/IDs/metadata and refusing unexpected classes. Cost any missing
+packages before acquisition; do not assume all Seurat dependencies are necessary,
+already installed, or fit the remaining setup budget. Generic E1 remains complete.
+
+**Scientific rules unchanged:** cluster-based peaks are not proven label-independent
+by their name; all-donor feature discovery is not train-fold-only selection.
+Presence plus disclosure does not meet the existing gate. A different exploratory
+representation needs a prospective protocol decision, not a silent relaxation.
+After QC, check donor/class support for five repeated five-fold evaluation and
+inner validation; two donors per class do not suffice for that protocol. The
+13+13 count informs the external practical margin, not a development minimum.
+Development acceptance cannot substitute for NeMO QC/common-region acceptance.
+
+Verification: source-linked decisions and matching E2-M/E2-R tasks in `todo.md`;
+no scientific checkbox closes on metadata, a fixture, model agreement or an OOM.
+Technical basis: [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.2),
+[optional Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#section-8.6),
+and [R workspace loading](https://stat.ethz.ch/R-manual/R-devel/library/base/html/load.html).
 
 #### Local-resource amendment — 2026-09-12
 
@@ -167,19 +220,23 @@ not verified archive contents or current download-size measurements.
   and scoped professor approvals stand; ask only for an uncovered action. Reader
   success authorizes neither an object download nor fitting. A synthetic fixture
   cannot establish the real object's classes, memory fit, assays or provenance.
-- **E2 target/resource contract:** one offline proposal per selected object,
-  at most 30 minutes. No HEAD/GET, archive reads or installation in E2. Freeze the
+- **E2 offline target/resource contract:** one proposal per selected object,
+  at most 30 minutes. No HEAD/GET, archive reads or installation in the offline
+  pass; E2-M is a separately authorized follow-up, not part of that pass. Freeze the
   exact identity and available integrity evidence; distinguish publisher checksums
   from locally measured hashes. Record fresh host resources only when executing
   that future task. Set numeric transfer, decoded, disk, process-tree RSS and wall
   ceilings, headroom, controls and cleanup/recovery rules for the proposed next
   read. Expected requirements may be unknown; permission ceilings may not.
   If no defensible contract is possible, mark `RESOURCE_UNRESOLVED` and stop.
-  If only exact source identity is missing, the next proposal may name one GET
-  of the already documented GEO supplementary listing, capped at 65,536 body
-  bytes, 262,144 decoded bytes and a 15-second total deadline, without redirect
-  or retry. This requires separate scope approval and cannot certify contents,
-  exact memory use or QC. It is not a new NeMO bag request or a payload download.
+  The next proposal is E2-M's one HEAD of the documented candidate payload:
+  65,536 total response-header bytes, zero body/decoded-body reads, 15-second total
+  deadline, no redirect/retry, 256 MiB process-tree memory/no swap, at most 1 MiB
+  retained output and at least 10 GiB free disk. It needs separate scope approval.
+  Missing/invalid positive Content-Length, non-200, redirect or a bound failure
+  stops with the precise unresolved field. ETag/Last-Modified/Accept-Ranges are
+  optional observations, not payload checksums or guaranteed future range support.
+  HEAD cannot certify contents, decoded size, memory or QC. No Range GET follows.
 - **E3 object inspection is conditional, not executable from this document.**
   It needs E2's separately reviewed and approved exact target/limits, plus tested
   applicable reader support. For C, test the existing supported export reader
@@ -187,6 +244,8 @@ not verified archive contents or current download-size measurements.
   approved contract, no automatic retry; D needs a fresh contract. Unknown full
   object fit is not an instruction to start downloading. No tar-prefix assumption
   for R serialization; even inspecting assay names may deserialize the object.
+  E2-R must explicitly demonstrate applicable workspace/class support and bound
+  the full load; compressed bytes below a RAM cap do not establish memory fit.
 - After any failed attempt, record command/version hashes, cumulative resources,
   scope, stop reason and which new evidence could justify the next route. No
   unchanged retries, hidden budget reset or simultaneous A/B/C/D exploration.
@@ -199,14 +258,12 @@ not verified archive contents or current download-size measurements.
 
 #### Code deliverables and scientific handoff
 
-The next implementation slice is one small proposed
-`scripts/inspect_development_object.R` fixture mode plus one focused regression
-test, following E1. Reuse installed libraries, existing sparse/count/coordinate
-validation and output/refusal conventions; no general downloader or orchestration
-framework. These filenames/interfaces are proposals, not commands available now.
-Only after E2 approval, extend that slice narrowly for the selected object's
-read-only inspection, or reuse the existing MEX reader for C. New evidence must
-not overwrite F2d/F3 or silently relax the current F3 record validator.
+The generic E1 fixture slice is complete. Next code work, if separately authorized,
+is E2-M's narrow metadata request/check, then only the target-specific reader
+extension justified by E2-R. Reuse installed libraries, existing sparse/count/
+coordinate validation and output/refusal conventions; no general downloader or
+orchestrator. E3 may instead reuse the existing MEX reader for a documented C.
+New evidence must not overwrite F2d/F3 or relax the current F3 record validator.
 
 **Implementation update:** the fixture slice now exists, with
 `scripts/run_r_fixture.py` providing the separately reviewed native-control checks.
