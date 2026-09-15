@@ -157,6 +157,139 @@ unknown. E2-M replaces the earlier listing-GET proposal; no request, payload or
 class-package installation has run. Other E2 acceptance boxes remain open;
 E3 cannot start under a zero-byte object budget.
 
+#### E2-M launcher breakdown — planning update 2026-09-14
+
+These subtasks refine, not replace, the existing E2-M contract below. All pending
+items remain proposals. Preserve source-contract and source-note hashes, original
+ledgers, RNA findings and all existing checkboxes. Future live scope remains:
+one HEAD, 15 seconds total, <=65,536 header bytes, zero application body/decoded
+reads, <=256 MiB process-tree memory, zero swap, <=1 MiB retained output and
+>=10 GiB free host disk. No retry, redirect, GET/Range, install or budget reset.
+
+#### E2-M0: Accepted capture-core evidence
+
+- [x] `11a4b7b` adds `scripts/capture_development_head.py` and
+  `tests/test_development_head_capture.py`; existing parser unchanged.
+- [x] Supervisor record: 45 focused tests, 836 full-suite tests, Ruff passing;
+  no default live transport, CLI or dataset request.
+  [Evidence](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/lmstudio_head_capture_split_20260914.mOJ8o9/REVIEW.md).
+
+This closes the core coding slice only, not runtime proof or parent E2-M.
+
+#### E2-M1: Establish runtime/control feasibility
+
+**Description:** One proposed <=30-minute read-only/offline pass over the existing
+host, cached runtime and control evidence. No runtime launch, setting changes,
+network, installs or destructive cleanup.
+
+**Acceptance criteria:**
+
+- [ ] Pin available compatible Python/TLS runtime and code identities; record
+  actual isolation, hard aggregate memory/no-swap, watchdog, output/disk controls
+  and their uncovered proof. A flag or per-process limit alone is not proof.
+- [ ] Define bounded, safe offline test allocations against preserved ledgers,
+  non-root/no-host-data-mount configuration and one end-to-end wall budget;
+  identify missing permission separately from missing technical evidence.
+- [ ] If any prerequisite is unknown/unavailable, document the exact blocker
+  and smallest scoped next action; no installation or weaker fallback.
+
+**Dependencies:** E2 offline source record and E2-M0.
+**Verification:** timestamped inventory/configuration evidence mapped to each
+frozen limit; independent review before runtime probes. No claimed host inspection
+or hard-control proof from this planning edit.
+**Files likely touched:** existing `docs/PAIRED_MULTIOME_AUDIT.md`; ignored evidence
+under a new `reports/generated/` directory. **Scope:** Small, 1 tracked file.
+**Stop outcome:** named resource/authority blocker; source status stays unresolved.
+
+#### E2-M2: Build a refusal-first launcher binding
+
+**Description:** Implement one narrow wrapper around the accepted core, using only
+the reviewed cached runtime/control design. Develop against offline fakes first;
+no real default connection or startup side effect during tests.
+
+**Acceptance criteria:**
+
+- [ ] Before transport, validate the unchanged source contract AND source-note
+  hashes, code/runtime identity, owner's exact HEAD approval, bounded labels and
+  output destination; refuse stale/missing evidence or unsupported controls.
+- [ ] Configure verified TLS with no proxy/retry/redirect and inspected non-root
+  isolation. Enforce hard aggregate memory/no-swap before child execution, with
+  an external process-tree watchdog for the single wall budget covering startup,
+  connection/TLS, request/read and cleanup; no polling-only or phase-reset shortcut.
+- [ ] Bound aggregate output including errors/logs, check disk headroom, preserve
+  evidence in a new directory, and refuse late/failed cleanup. Never promote
+  capture success into payload/scientific acceptance.
+
+**Dependencies:** accepted E2-M1 design and applicable local implementation scope.
+**Verification:** proposed focused tests for preflight refusals, input/output
+bounds, transport binding and cleanup; existing parser/core regressions also pass.
+No live network. Command for new tests once present:
+`PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src .venv-p22/bin/python -m pytest -q tests/test_launcher_head_capture.py`.
+**Files likely touched:** proposed `scripts/launcher_head_capture.py`,
+proposed `tests/test_launcher_head_capture.py`, existing audit guide.
+**Scope:** Medium, <=3 tracked files.
+**Stop outcome:** unproven control or missing asset/permission blocks live use.
+
+#### E2-M3: Prove bounded launcher failure controls
+
+**Description:** Within accepted offline test allocations only, exercise the real
+selected containment mechanism with tiny hostile fixtures; no host exhaustion,
+new dependency acquisition or real dataset endpoint.
+
+**Acceptance criteria:**
+
+- [ ] Independently verify child/process-tree termination for hangs (including
+  non-cooperative work) within the total deadline, with bounded cleanup evidence;
+  a fake-clock unit test alone does not establish this.
+- [ ] Demonstrate hard aggregate memory/no-swap and output containment in safe
+  capped tests. Missing enforcement or nonzero swap refuses before the workload;
+  monitoring a breach then killing is not hard-limit proof.
+- [ ] Verify changed hashes, absent scope approval, unsafe input/transport,
+  insufficient disk, excessive output and late/failed cleanup all refuse.
+  Preserve proof of no live request and no leftover child processes.
+
+**Dependencies:** E2-M2 and reviewed explicit probe allocations from E2-M1;
+missing allocation is a blocker, not permission to improvise.
+**Verification:** proposed launcher focused tests, existing parser/core focused
+tests, `make lint`, and `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src make test-all`;
+inspect real containment/termination records separately from mocked tests.
+**Files likely touched:** proposed launcher test file and existing audit guide;
+ignored probe evidence. **Scope:** Small, <=2 tracked files.
+**Stop outcome:** any failed/unproven control blocks HEAD; record smallest fix.
+
+#### Checkpoint E2-M-Review: Controls accepted; live authority separate
+
+- [ ] Independent review accepts code and real control evidence; tests match the
+  frozen limits and no existing scientific gate or source contract changed.
+- [ ] Owner's explicit approval covers this exact one-HEAD scope. Reviewer/model
+  agreement cannot grant permission; missing approval means no request.
+- [ ] Resource and source checks will be repeated immediately before the attempt.
+  Changed facts or stronger body-byte semantics require review, not silent relaxation.
+
+#### E2-M4: Execute the existing one-HEAD scope conditionally
+
+**Description:** After the checkpoint only, execute parent E2-M once. This task
+adds no live command or permission to the current plan edit.
+
+**Acceptance criteria:**
+
+- [ ] Revalidate approval, hashes and controls; make at most one HEAD under every
+  parent limit. No GET/Range, redirect, retry, alternate source or budget reset.
+- [ ] Record URL/time/status, exact captured headers/prefix and its local hash,
+  bounds/stop evidence and valid positive server-declared Content-Length.
+  Missing optional validators remain unknown; no payload checksum is invented.
+- [ ] Non-200, redirect, invalid/missing length, changed evidence or any control
+  failure stops SOURCE_UNRESOLVED with its reason. Success permits only E2-R
+  offline planning; it does not establish measured ATAC counts or authorize E3.
+
+**Dependencies:** accepted E2-M-Review and existing parent E2-M authorization.
+**Verification:** independent raw-header/hash and ledger review; no second request
+to verify the first. Existing E2-M, E2-R and E2-C requirements remain authoritative.
+**Files likely touched:** existing audit guide; result in a new ignored
+`reports/generated/` directory, not a tracked payload. **Scope:** Small, 1 tracked file.
+**Stop outcome:** one reviewed metadata result or concrete blocker; no automatic
+object acquisition, reader installation, fixture run or training.
+
 #### E2-M: Resolve available source metadata once
 
 **Description:** Conditional metadata-only request, not execution authorized by

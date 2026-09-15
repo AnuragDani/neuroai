@@ -49,6 +49,36 @@ sparse fixture, outside this cycle's no-install scope. See the
 [decision and verification record](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure)
 and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md).
 
+### Capture-core completion and launcher tasks — 2026-09-14
+
+Commit `11a4b7b` adds the offline-tested capture core and its tests. Supervisor
+verification recorded 45 focused tests, 836 full-suite tests and Ruff passing;
+these are historical results, not tests rerun for this plan edit.
+[Review and durable code bundle](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/lmstudio_head_capture_split_20260914.mOJ8o9/REVIEW.md).
+The core reuses the existing parser, has no default live transport/CLI, and
+does not prove operating-system containment. E2-M remains open.
+
+The immediate next task is **E2-M1, read-only runtime/control feasibility**.
+The next *live* proposal remains the existing single HEAD, not a new request:
+
+1. E2-M1: inspect already-available runtime/control evidence; stop on missing
+   hard-limit support or authority before building a launcher around assumptions.
+2. E2-M2: bind the reviewed core to that proven control design; test refusals
+   offline. Reuse existing helpers where inspection justifies it.
+3. E2-M3: verify bounded adversarial process-tree controls, then independently
+   review code, resource evidence and the owner's exact-scope approval.
+4. E2-M4: only then execute the existing one-HEAD scope. Success permits E2-R
+   offline planning only; E2-C/E3 and scientific gates remain unchanged.
+
+Unknowns: cached compatible Python/TLS runtime, effective non-root isolation,
+hard aggregate memory/no-swap enforcement, watchdog coverage and safe test
+allocations. Flag presence, sampled RSS or killing after a detected memory
+breach do not prove the frozen limits. Python signals cannot replace the hard
+watchdog. Missing proof yields a concrete resource/authority blocker without
+changing the source contract's `SOURCE_UNRESOLVED` status.
+`body_bytes=0` means application reads, not TLS/OS buffering; stronger required
+semantics need review. This plan grants no execution, installation or new budget.
+
 ### Conditional follow-up paths — planning only
 
 #### Review amendment — 2026-09-14
