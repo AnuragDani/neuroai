@@ -443,3 +443,23 @@ race-free live use, authorization, runtime/TLS identity or hard resource control
 All existing plan checkboxes and scientific gates remain unchanged. Next:
 complete E2-M1's native-control design and bounded offline probe allocations
 before the live launcher binding. Original dirty work and RNA results are intact.
+
+### Executed Jupyter entry point — September 14
+
+Commit `0e0f413` adds [the paired-workflow notebook](../notebooks/P22_paired_workflow.ipynb)
+and a fresh-kernel regression test. It combines source preflight, unchanged RNA
+result tables, input criteria, synthetic HEAD examples, exact current code, and
+the bounded next-step sequence. It imports the accepted implementation rather
+than duplicating it, and links the existing full RNA notebook without rerunning it.
+
+All 9 code cells executed in order with zero errors and unchanged cell sources.
+The first working cell ran all 181 parser/capture/preflight tests successfully.
+Full regression suite: 891 passed, 19 classification warnings; Ruff passed.
+[Executed notebook and verification](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/paired_notebook_20260914.p6Tv07/P22_paired_workflow.executed.ipynb).
+Future changes must also pass the fresh-kernel test, not just isolated code tests.
+
+Initial kernel startup hit the sandbox's local-port restriction. The permitted
+local run passed after retry; kernel ownership/cleanup is explicit in the test.
+This notebook changes no dataset, RNA result, scientific gate, approval, or live
+resource limit. Its final decision remains INCONCLUSIVE / SOURCE_UNRESOLVED,
+with zero live requests and no real training.
