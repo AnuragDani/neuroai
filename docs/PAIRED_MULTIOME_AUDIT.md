@@ -421,3 +421,25 @@ training-only learned selection and separate external QC/common-region gates.
 This edit adds no execution permission and closes no scientific checkbox.
 E4 still ends with a gate-linked input decision or precise blocker and one next
 action. RNA, F1–F3, E1 ledgers and saved review/execution records are preserved.
+
+### Parallel local-worker input-preflight slice — September 14
+
+Commit `0957cf2` adds `scripts/launcher_head_capture.py` and 53 offline tests.
+Two local Qwen roles (implementation and independent tests) ran concurrently,
+followed by one repair per role. Supervisor review corrected remaining test
+oracle/fault-injection errors, bounded-read and cleanup handling, unavailable OS
+flags and unsafe/erroring paths. Raw model drafts were not accepted unchecked.
+
+Verification: 181 focused parser/core/preflight tests; 889 full-suite tests
+passed with 19 classification warnings; Ruff checks and formatting passed.
+The real checkout's read-only observation matched all four source/code pins
+and observed sufficient disk headroom without creating an output directory.
+[Durable review and verification](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/qwen_launcher_batch_20260914.4wHgFo/REVIEW.md).
+
+This is only an independently useful diagnostic sub-slice of E2-M2. Its success
+explicitly retains `live_allowed=false`, `runtime_controls=UNVERIFIED`,
+`output_reserved=false` and zero requests/body reads. It does not prove
+race-free live use, authorization, runtime/TLS identity or hard resource controls.
+All existing plan checkboxes and scientific gates remain unchanged. Next:
+complete E2-M1's native-control design and bounded offline probe allocations
+before the live launcher binding. Original dirty work and RNA results are intact.
