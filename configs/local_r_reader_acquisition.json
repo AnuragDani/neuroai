@@ -1,0 +1,40 @@
+{
+  "status": "PROPOSAL_NOT_EXECUTED",
+  "purpose": "Acquire one pinned local R runtime for a tiny sparse fixture, not a real dataset",
+  "source": "https://api.github.com/repos/docker-library/repo-info/git/blobs/0dcf01e3bd1410ee217aad3935b371dd3fbca229",
+  "source_content_sha256": "0d277d4682ace273758e9f8b1fe2ead34fdfef7922093d099c7c1a388558b73b",
+  "source_content_bytes": 21918,
+  "source_verified_utc": "2026-09-12T22:27:43Z",
+  "source_kind": "Publisher image report; exact registry manifest and blobs not fetched",
+  "repository": "docker.io/library/r-base",
+  "reported_tag": "4.6.1",
+  "platform": "linux/arm64/v8",
+  "manifest_digest": "sha256:48cac789b99e187475667451b18a66c8ced4f71f0f948247f0c70c0426e9a137",
+  "image_config_digest": "sha256:264df259ebb2fa4ff2a3db6d346ec273e18d4c84af727b1cc4b39065a9e8edbb",
+  "compressed_layer_bytes_declared": 763355676,
+  "layers": [
+    {"digest": "sha256:30f4d11c972e1812e323af417c2a97df915c25e06b3f845e71563f63add52edc", "bytes": 49503919},
+    {"digest": "sha256:e9488e45769983073afb56dfdbd483f6a9dc9de3347edce9570794ec451041ad", "bytes": 3312},
+    {"digest": "sha256:4fc19048bd1c0a54c1e7beff8533e3e261f7291a7f488b55b38fd7ab2c0e5468", "bytes": 27020835},
+    {"digest": "sha256:db5f33c3f49e659302b67f26f00cac86ad80007ff2782590861e1d25a40d6716", "bytes": 868663},
+    {"digest": "sha256:07287be396b6648b353999dc66cf0edd555632661a1a8f13a8e123edc428ddb1", "bytes": 422},
+    {"digest": "sha256:59f6d30e477cf2c3cf0ec94e79d5c99749b96f2f1d7074f36f5f48ff9cb68e4b", "bytes": 685958525}
+  ],
+  "decoded_layer_bytes": null,
+  "arm64_package_versions_locally_verified": false,
+  "proposed_limits": {
+    "aggregate_dependency_network_bytes": 2147483648,
+    "aggregate_decoded_dependency_bytes": 4294967296,
+    "additional_working_disk_bytes": 6442450944,
+    "minimum_host_free_disk_bytes": 10737418240,
+    "metadata_response_bytes": 65536,
+    "fixture_memory_bytes": 4294967296,
+    "fixture_swap_bytes": 0,
+    "fixture_tmpfs_bytes": 67108864,
+    "fixture_input_bytes": 1048576
+  },
+  "execution_prerequisite": "Reviewed bounded acquisition/import mechanism; enforce cumulative transfer and decoded-byte limits before import. No unmetered Docker pull or package installer.",
+  "scientific_gate_effect": "NONE",
+  "dataset_bytes_authorized": 0,
+  "training_allowed": false
+}

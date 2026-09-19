@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "planning_revision": "2026-09-14",
+  "status": "SOURCE_UNRESOLVED",
+  "phase": "E2_OFFLINE_CONTRACT",
+  "object_inspection_authorized": false,
+  "selected_target": "GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz",
+  "intended_scope": "Lattke excitatory-lineage PCW10-20 development donors; actual coverage unverified",
+  "declared_listing_size": "7.6G (rounded, not an exact byte measurement)",
+  "format_declared": "gzip-compressed R workspace; actual serialized classes unknown",
+  "candidate_payload_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz",
+  "candidate_url_basis": "Derived from the pinned source note's directory and exact filename; not a new HTTP observation",
+  "exact_payload_url": null,
+  "exact_payload_bytes": null,
+  "publisher_payload_checksum": null,
+  "expected_decoded_bytes": null,
+  "expected_peak_memory_bytes": null,
+  "source_evidence": {
+    "path": "docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md",
+    "sha256": "66b1d8158f5b6c4260085cddb736db2d59de9df610e5dcac5ccfc2c4f63b18b9"
+  },
+  "reader_proof": {
+    "image_id": "sha256:264df259ebb2fa4ff2a3db6d346ec273e18d4c84af727b1cc4b39065a9e8edbb",
+    "r_version": "4.6.1",
+    "matrix_version": "1.7.6",
+    "tested_serialization": "saveRDS/readRDS of a 392-byte .rds fixture; not save/load of a .rda workspace",
+    "tested_classes": ["list", "dgCMatrix", "data.frame"],
+    "fixture_report_sha256": "1cf56325eb4f08c86d11661b59ec9985d9300e18a1f9a738c60fed57c9b99813",
+    "not_proven": [".rda workspace loading", "Seurat", "ChromatinAssay", "real-object memory fit", "real raw ATAC assay"]
+  },
+  "current_object_permissions": {
+    "network_bytes": 0,
+    "decoded_bytes": 0,
+    "output_bytes": 0,
+    "execution_seconds": 0,
+    "training_allowed": false
+  },
+  "single_next_action_proposal": {
+    "status": "REQUIRES_SEPARATE_SCOPE_APPROVAL",
+    "purpose": "Observe candidate payload status and available size/validator headers without reading the object body; supersedes the unexecuted listing GET",
+    "method": "HEAD",
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz",
+    "maximum_requests": 1,
+    "redirects": 0,
+    "retries": 0,
+    "maximum_response_header_bytes": 65536,
+    "maximum_response_body_bytes": 0,
+    "maximum_decoded_bytes": 0,
+    "maximum_retained_output_bytes": 1048576,
+    "maximum_process_tree_memory_bytes": 268435456,
+    "maximum_swap_bytes": 0,
+    "maximum_wall_seconds": 15,
+    "minimum_host_free_disk_bytes": 10737418240,
+    "controls": "Proposed pinned cached Python in an inspected non-root container; offline-tested aggregate header cap and absolute deadline; HEAD only with identity HTTP encoding and no body reads, redirects or Range fallback; no host-data mounts; refuse before request if controls are unproven",
+    "preservation": "New output directory only; preserve prior evidence and downloaded R archive; no cache/user-data deletion",
+    "stop_conditions": ["non-200 or redirect", "deadline or header limit", "missing/invalid/non-positive Content-Length", "source evidence changed", "required controls unavailable"],
+    "optional_observations": ["ETag", "Last-Modified", "Accept-Ranges", "publisher checksum if explicitly supplied; never infer one from validators"],
+    "evidence_semantics": "Save URL/time/status/headers and a locally computed header-record SHA-256. Content-Length, if valid, is server-declared GET representation length, not measured payload bytes, decoded size or memory. Optional missing headers remain unknown; validators/header hashes are not payload checksums; Accept-Ranges does not guarantee a future partial response.",
+    "after_success": "E2-R offline target-reader/resource planning only. Source observations do not authorize package installation, fixture execution, GET/Range, object loading or training.",
+    "after_failure": "Record SOURCE_UNRESOLVED and the exact missing field/control or request failure, with a local header-record hash if headers were received; no retry or source substitution"
+  },
+  "target_reader_resource_gate": {
+    "status": "NOT_RUN",
+    "offline_proposal_minutes": 30,
+    "network_install_object_bytes_authorized": 0,
+    "maximum_proposed_fixture_bytes": 1048576,
+    "required_reader_proof": "Applicable save/load .rda workspace and Seurat/ChromatinAssay extraction, or demonstrated equivalent narrow reader; exact sparse counts, IDs and metadata; unexpected classes refuse. Cost missing package assets before acquisition; generic E1 proof is preserved but insufficient.",
+    "required_resource_proposal": "Separate numeric transfer, decoded, retained/temporary disk, process-tree memory/swap and wall caps, current host headroom, evidence-backed full-load estimates and enforceable stop controls. Preserve ledgers and specify class-fixture/dependency allocation or amendment; do not infer memory from compressed length or reset setup budgets.",
+    "stop_rule": "No defensible resource contract yields RESOURCE_UNRESOLVED; missing class support stays explicitly unproven. Installation or runtime setting changes require their own reviewed exact authorization before execution. A real load additionally requires applicable fixture proof and its reviewed exact acquisition/inspection contract.",
+    "forbidden_shortcuts": ["64 KiB prefix/Range probe as assay proof", "compressed bytes below RAM cap as memory-fit proof", "OOM as proof of missing assay", "automatic alternate object or retry"]
+  },
+  "scientific_acceptance_requirements_unchanged": [
+    "paired raw RNA and measured ATAC counts with exact retained barcode/donor join",
+    "release and QC/count-stage semantics",
+    "age/class support and specimen provenance",
+    "genome build, interval coordinates and count units",
+    "exact common measured regions; never zero-fill unmatched peaks",
+    "feature-selection provenance including discovery donors/labels; cohort-wide cluster peaks are not automatically label-independent or train-fold-only, even when disclosed",
+    "post-QC donor/class support for five repeated five-fold internal evaluation and inner validation; two donors per class are insufficient and 13+13 is external margin context, not a development minimum",
+    "separate development, external and cross-cohort decisions"
+  ]
+}

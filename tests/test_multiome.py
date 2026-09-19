@@ -373,6 +373,21 @@ def test_mex_preserves_six_column_arc_coordinates(tmp_path):
     assert block["features"].start.tolist() == [0, 0, 5]
 
 
+def test_mex_rejects_peak_ids_that_disagree_with_explicit_coordinates(tmp_path):
+    from p22.data.multiome import ReadBudget, load_mex
+
+    spec = mex_assets(
+        tmp_path,
+        features=(
+            "gene1\tG1\tGene Expression\tchr1\t0\t10\n"
+            "chr1:0-10\tchr1:0-10\tPeaks\tchr2\t20\t30\n"
+            "custom_peak\tcustom_peak\tPeaks\tchr1\t5\t10\n"
+        ),
+    )
+    with pytest.raises(ValueError, match="feature_id coordinates"):
+        load_mex(spec, ReadBudget())
+
+
 def test_mex_preserves_unmapped_rna_but_rejects_unmapped_peaks(tmp_path):
     from p22.data.multiome import ReadBudget, load_mex
 

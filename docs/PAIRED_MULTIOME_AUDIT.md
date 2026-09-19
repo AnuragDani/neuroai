@@ -160,3 +160,306 @@ now documented in [the training guide](PAIRED_MULTIOME_TRAINING.md). They do not
 resolve this audit's outstanding real-data gates.
 
 Implementation references: [Python archive streams](https://docs.python.org/3.11/library/tarfile.html#tarfile.TarFile.extractfile), [SciPy Matrix Market reader](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.mmread.html), [10x feature matrices](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/feature-barcode-matrices), and [Signac peak-merging limitations](https://stuartlab.org/signac/articles/merging).
+
+## September 12 bounded input-feasibility cycle
+
+Execution uses an isolated worktree at RNA head `46d7523` plus plan revision
+`4219705`; original dirty files and RNA results are preserved. User authorized
+implementation of this cycle after the planning review. No professor update is sent.
+
+F1 recovered the exact 26-line coordinate guard in `cf8ed33`. Its regression
+failed on the base and passed after recovery. All 61 focused ingestion/feature
+tests, 597 fast tests (32 slow checks deselected), lint and three existing public
+feature lists passed. This establishes adapter integrity, not input acceptance.
+
+F2d recorded an offline inventory at 2026-09-12 21:00:26 UTC. Neither R executable
+was on PATH; `pyreadr` and `rpy2` were absent from the project environment.
+The host reported 128 GiB total RAM and 47.51 GiB available; free disk was
+25.24 GiB. These are a snapshot, not guaranteed resources. The chosen development
+object remains `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` (rounded
+publisher listing 7.6G). Its exact compressed size, decoded size, peak RSS,
+assays and count/feature semantics remain unknown.
+
+[The feasibility record](../reports/generated/input_feasibility_20260912/development_object_feasibility.json)
+selects reader enablement and a tiny sparse-object fixture as the first unmet
+prerequisite. Proposed ceilings: 2 GiB network, 4 GiB decoded dependencies,
+6 GiB working disk, 4 GiB peak RSS, 30 minutes, and at least 10 GiB disk headroom;
+fixture input at most 1 MiB. Pin dependencies and reject unmetered installer
+fetches before starting. No dependencies or fixture were installed/run here.
+Prior free-CPU approval stands, but that dependency step is outside this cycle.
+It does not authorize the large object or establish that it fits in memory.
+
+F2s resolved the exact NeMO payload declaration on 2026-09-12 at 21:08:11 UTC.
+One GET returned 1,867 bytes; aggregate decoded content was 23,394 bytes and
+network elapsed time 3.25775 seconds. The complete bag matches the original
+SHA256 `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
+The saved bag permits offline replay; no count payload was requested.
+
+Exact declared URL:
+`https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`.
+Declared payload size is 1,540,753,269 bytes and MD5 is
+`796c8b3aa587b257af0a46615a437dba`. Bag ETag/Last-Modified were recorded; they do
+not identify the payload version or certify its QC/count semantics.
+
+Reviewed input hashes for F3:
+
+- `source/source_identity.json`:
+  `45ed2cb478fa4b780f8f29f3e2499109f0a93a3e9610bcc298d1d7813f154735`.
+- `development_object_feasibility.json`:
+  `988dabad83afd162244f372a88f37ca633cf45ad704392efe84078a8d63ad0a2`.
+
+Both records live under `reports/generated/input_feasibility_20260912/`.
+Resolver implementation `83cf31e` passed 20 focused tests, 617 fast tests and
+lint before the sole request; separate review approved the source resolver.
+
+### F3 decision and closure
+
+F3 completed once at 2026-09-12 21:18:23 UTC using implementation `3b007d7`.
+The offline audit read 1,582,118,205 input bytes and 57,855,276 decoded bytes;
+measured stage time was 2.431 seconds and process peak RSS 0.5834 GB (decimal).
+These byte ceilings are not RAM limits. The B17C2L pilot selected 256 cells from
+550 author-retained cells, excluding 102 raw-only cells. This is one library,
+not a new cohort-wide donor experiment.
+
+The two inspected raw peak lists have 22,676 and 46,672 regions and zero exact
+shared regions. Existing M4 status remains `NEEDS_RECOUNT` for their full peak
+union; this does not prove the published processed objects unusable or require
+recounting before inspecting them. The decision is `INCONCLUSIVE`:
+development exact-region compatibility fails only in that inspected raw-list
+scope; the other eight development requirements and all nine external/cross-cohort
+requirements remain unresolved. A separate source-identity PASS certifies only
+the pinned NeMO declaration. No model was trained and no scientific gate was waived.
+
+Executed command, preserved for audit only; do not rerun this completed cycle:
+
+```sh
+PYTHONPATH=src .venv-p22/bin/python scripts/audit_multiome.py \
+  --manifest configs/paired_multiome_audit.json \
+  --source-identity reports/generated/input_feasibility_20260912/source/source_identity.json \
+  --source-identity-sha256 45ed2cb478fa4b780f8f29f3e2499109f0a93a3e9610bcc298d1d7813f154735 \
+  --development-feasibility reports/generated/input_feasibility_20260912/development_object_feasibility.json \
+  --development-feasibility-sha256 988dabad83afd162244f372a88f37ca633cf45ad704392efe84078a8d63ad0a2 \
+  --output-dir reports/generated/input_feasibility_20260912/decision \
+  --max-input-bytes 1700000000 --max-expanded-bytes 268435456 \
+  --max-nnz 10000000 --cell-cap 256
+```
+
+Decision mode requires both reviewed record hashes and those four exact caps;
+malformed records or a failed audit cannot emit an accepted input decision.
+Existing audit callers without feasibility records keep their interface.
+
+Pinned results under `reports/generated/input_feasibility_20260912/decision/`:
+
+| Artifact | SHA256 |
+|---|---|
+| audit.json | `4682a51acd4aafa8479de28f32051d52f4b05d1996380a036776e8c1f6875a2c` |
+| input_decision.json | `78cd057e4d5cb26c698120099f5f43546acb65b45c04f128850082b4ef543250` |
+| INPUT_DECISION.md | `9c601f50850b85e413775b4b4b3941ae3a0ac937b9139f690706361f855669a5` |
+| SUMMARY.md | `931137d564e21f0c24f43960b3424834e780e2d07e3da775b5dbe065872b7000` |
+| manifest.json | `2317c0fa59017273863d3d9987873d44c4c2a543afc228c1a833666da0b90d7c` |
+
+The inherited SUMMARY line “Professor approval record remains blocked” reports
+the unchanged historical global policy flag. It does not revoke the scoped
+user-reported professor attestation or ask again for completed RNA/free-CPU
+approval. Unresolved input gates remain binding regardless of approval.
+
+Verification: 19 decision tests and 20 resolver tests pass; separate review
+independently reran all 39. Final fast suite: 636 passed, 32 deselected. Full
+suite: 668 passed with 19 existing sklearn class-support warnings; lint/format
+passes for 111 files. Reviewer replayed the preserved bag locally, checked all
+decision/input hashes and measured caps, and approved the scoped decision.
+No second source request, second real audit or real fit was used for verification.
+Original 12 dirty-file hashes, seven RNA source/code/reference hashes, diagnostic
+implementation and saved result hashes all still match. M1–M8 criteria are unchanged.
+
+**Stop reached:** F1–F3 are complete; the full research plan is not. The single
+next action remains bounded R-reader enablement plus a tiny sparse-object fixture
+under the F2d proposal above. It was not executed and needs an expanded
+dependency-installation scope, not renewed free-CPU approval. No professor message,
+large download, paid compute, fragment processing, push or merge occurred.
+See [the durable reviewed delivery](../reports/generated/input_feasibility_20260912/REVIEW.md)
+for the evidence, reviewed plan/checklist and recoverable Git history.
+
+## E0 reader-route checkpoint — September 12
+
+The subsequent user instruction “Ok execute the plan” approves bounded E1 setup;
+the preceding F1–F3 stop record remains historical and immutable. E0 completed
+offline in 267 seconds with zero network/install/dataset bytes. Local R is absent;
+Docker's verified local socket is absent, so no controlled reader was launched.
+The [new route record](../reports/generated/reader_enablement_20260912/route_decision.md)
+pins evidence, resources, failure categories and shared E1 limits. Select the
+already-approved free-CPU B capability preflight once. Do not install or run a
+fixture without tested controls. E1 is not yet complete; E2/E3 remain gated.
+Original 12 dirty-file fingerprints and all 15 F1–F3 delivery checksums match.
+
+### E1 environment prerequisite
+
+`scripts/reader_environment.py` is a small read-only capability probe, not an R
+reader or job supervisor. It uses Python 3.11+ standard libraries, launches no
+subprocesses, fetches no dependencies and opens no datasets. It reports bounded
+control-file snapshots, the actual unified cgroup path when safely resolvable,
+R executable locations and free disk. Missing/truncated controls stay unknown;
+`NOT_RUN`, `UNVERIFIED` and `training_allowed: false` are unconditional. Cgroup
+write access alone does not prove delegation or enforceable resource isolation.
+Use only within an authorized environment-preflight attempt:
+
+```sh
+.venv-p22/bin/python scripts/reader_environment.py
+```
+
+The same standalone source can be pasted into the already-approved free-CPU
+notebook without uploading project data. This is a separate control-prerequisite
+slice; it does not close E1's sparse-object/descendant-stop criteria. Tests cover
+bounded/missing reads and nested, ambiguous, legacy and traversal cgroup paths.
+
+Verification: seven focused tests pass after observed red/green regressions;
+independent review reran all seven and approved the read-only probe. Full suite:
+675 passed, 19 existing sklearn warnings (62.47 seconds); lint/format: 113 files.
+These software tests do not certify a reader fixture or resource controls.
+
+### E-A / E4: environment-control stop
+
+Code commit `6d3529b` supplied the independently reviewed prerequisite probe. Its
+single free-CPU Colab execution at 21:57:16 UTC took 0.071 seconds; copied-back
+cell source exactly matched the tested script. R and Rscript are present, but
+`/proc/self/cgroup` returned `0::/../../jupyter-children` and the visible cgroup-v2
+mount is read-only. The probe safely leaves the current cgroup unresolved; do not
+normalize parent traversal or treat installed R/free RAM as isolation proof.
+
+The [new decision and ledger](../reports/generated/reader_enablement_20260912/DECISION.md)
+record `CONTROL_UNRESOLVED`, 360 conservative preflight seconds, zero dependency
+and dataset bytes, and fixture `NOT_RUN`. No resource-controlled R job launched,
+so process-tree peak/disk enforcement is not claimed. E0 and E-A/E4 early-stop
+review are complete; E1 reader proof and E2/E3 remain pending. All scientific
+gates retain their prior scope. Independent review agreed with this stop.
+
+Exactly one next action: a separately reviewed local container-runtime setup
+proposal with exact assets/controls and explicit handling of consumed attempts
+and time. No automatic runtime launch, pull, new B session, object download or
+larger GPU request. The saved notebook remains available in Chrome; no code is
+running. Original dirty work, archived F2d/F3 and RNA results remain untouched.
+
+### Local-resource continuation: runtime available, acquisition proposed
+
+After the user approved use of local resources, the installed Docker Desktop
+4.73.0 was started once, without updates/pulls/settings changes. The local server
+reports cgroup v2; this removes the inactive-runtime blocker, not the untested
+container-control or sparse-reader criteria. Existing workloads auto-resumed and
+were left untouched; Docker remains running. No P22 container was created.
+
+No dedicated R image was identified in cache; the selected exact ARM64 config ID
+is absent. The new [dependency proposal](../configs/local_r_reader_acquisition.json)
+pins official R 4.6.1 by immutable ARM64 manifest and six layer digests/sizes.
+763,355,676 compressed bytes is a publisher declaration, not a completed download.
+Decoded size and ARM64 package versions remain unverified. A separately observed
+AMD64 package report is not substituted as ARM64 proof. No new dependencies,
+image layers, datasets or fragments were downloaded; no R fixture/model was run.
+
+[Local setup evidence](../reports/generated/local_reader_setup_20260912/SETUP.md)
+and its ledger record 454 seconds this continuation, 814 cumulative, 746 remaining
+under the local amendment. Next implementation: enforce bounded six-layer
+acquisition/decode/import before the tiny fixture. Existing local-resource
+approval stands; no unmetered pull or weakened scientific gate is implied.
+
+### Verified local reader and scoped E2 outcome — September 12
+
+The subsequent “keep going” instruction was executed. The pinned ARM64 R image
+was acquired once with reviewed bounded streaming and imported offline. Exact
+registry/auth bodies: 763,368,314 bytes; gzip expansion: 1,920,443,904 bytes;
+three-copy import reservation: 6,029,817,856 bytes, below 6 GiB. The host retained
+over 10 GiB free. R 4.6.1 and Matrix 1.7.6 were observed locally.
+
+`inspect_development_object.R` supplies only the tiny fixture; `run_r_fixture.py`
+checks every relied-on native container limit before execution. All nine live
+cases pass: exact 392-byte sparse round-trip, five malformed/output-reuse
+refusals, filesystem limits, timeout tree termination and OOM tree termination.
+No data mount, dense conversion, package installer or scientific input was used.
+Seurat/ChromatinAssay and actual `.rda` workspace support remain unproven.
+
+The macOS address-space preflight failure and initial R transcript bug remain in
+the [durable execution record](../reports/generated/r_reader_completion_20260912/REVIEW.md).
+Linux cgroup isolation resolved the former; direct CSC-slot export fixed the
+latter without modifying counts. Cached bootstrap Python's inherited loopback
+health check is disclosed; fixture containers explicitly disable inherited checks.
+Existing user workloads, original dirty work and accepted RNA results are intact.
+
+The [E2 offline contract](../configs/development_object_source_contract.json)
+records SOURCE_UNRESOLVED and zero object-acquisition/inspection permission.
+Next: one separately approved official GEO listing read (64 KiB, 15 seconds),
+not the 7.6G-listed payload. It resolves source identity only. Exact object
+classes/resources and all scientific acceptance gates remain separate. No new
+training, source substitution, fragment download, paid compute, push or merge.
+
+### Planning correction after checked reviews — September 14
+
+The preceding September 12 next-action proposal is historical. It was not run.
+The current [plan amendment](../tasks/plan.md#review-amendment--2026-09-14) and
+[source contract](../configs/development_object_source_contract.json) replace the
+listing GET with one proposed candidate-payload HEAD: 15 seconds, no redirect or
+retry, <=64 KiB total response headers, zero body reads, 256 MiB process-tree
+memory/no swap, <=1 MiB retained output and >=10 GiB free disk. Approval and tested
+controls are required before a request. Candidate URL is derived, not observed.
+Missing/invalid positive length stops with a scoped unresolved reason; optional
+headers remain unknown. Hash the saved header record locally, not the payload.
+
+E2-M metadata can support E2-R's offline resource/class proposal, not an object
+download. E1's tiny `.rds` fixture did not test `.rda` workspaces or target assay
+classes. E3 needs applicable workspace/class proof and separately reviewed exact
+acquisition/full-load limits. Compressed size cannot establish decoded size or
+RAM; a 64 KiB prefix cannot establish complete assays/counts/provenance here.
+Resource failure is not missing-assay evidence. No generic setup is repeated.
+
+Both prior reviews were treated as claims to verify, not authority. The local
+LM Studio review completed once; its `.rda`-proof, HEAD-memory, automatic
+cluster-peak acceptance and 13+13-development-minimum claims were rejected.
+The checked record is retained in the original checkout under
+`reports/generated/lmstudio_review_20260913/REVIEW.md` (SHA-256
+`813afa2a6771072badbda42be555dba1e91e7757aa6b38f4be66e01611f9056b`).
+The amended tasks require donor/class support for the actual outer/inner splits,
+training-only learned selection and separate external QC/common-region gates.
+
+This edit adds no execution permission and closes no scientific checkbox.
+E4 still ends with a gate-linked input decision or precise blocker and one next
+action. RNA, F1–F3, E1 ledgers and saved review/execution records are preserved.
+
+### Parallel local-worker input-preflight slice — September 14
+
+Commit `0957cf2` adds `scripts/launcher_head_capture.py` and 53 offline tests.
+Two local Qwen roles (implementation and independent tests) ran concurrently,
+followed by one repair per role. Supervisor review corrected remaining test
+oracle/fault-injection errors, bounded-read and cleanup handling, unavailable OS
+flags and unsafe/erroring paths. Raw model drafts were not accepted unchecked.
+
+Verification: 181 focused parser/core/preflight tests; 889 full-suite tests
+passed with 19 classification warnings; Ruff checks and formatting passed.
+The real checkout's read-only observation matched all four source/code pins
+and observed sufficient disk headroom without creating an output directory.
+[Durable review and verification](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/qwen_launcher_batch_20260914.4wHgFo/REVIEW.md).
+
+This is only an independently useful diagnostic sub-slice of E2-M2. Its success
+explicitly retains `live_allowed=false`, `runtime_controls=UNVERIFIED`,
+`output_reserved=false` and zero requests/body reads. It does not prove
+race-free live use, authorization, runtime/TLS identity or hard resource controls.
+All existing plan checkboxes and scientific gates remain unchanged. Next:
+complete E2-M1's native-control design and bounded offline probe allocations
+before the live launcher binding. Original dirty work and RNA results are intact.
+
+### Executed Jupyter entry point — September 14
+
+Commit `0e0f413` adds [the paired-workflow notebook](../notebooks/P22_paired_workflow.ipynb)
+and a fresh-kernel regression test. It combines source preflight, unchanged RNA
+result tables, input criteria, synthetic HEAD examples, exact current code, and
+the bounded next-step sequence. It imports the accepted implementation rather
+than duplicating it, and links the existing full RNA notebook without rerunning it.
+
+All 9 code cells executed in order with zero errors and unchanged cell sources.
+The first working cell ran all 181 parser/capture/preflight tests successfully.
+Full regression suite: 891 passed, 19 classification warnings; Ruff passed.
+[Executed notebook and verification](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/paired_notebook_20260914.p6Tv07/P22_paired_workflow.executed.ipynb).
+Future changes must also pass the fresh-kernel test, not just isolated code tests.
+
+Initial kernel startup hit the sandbox's local-port restriction. The permitted
+local run passed after retry; kernel ownership/cleanup is explicit in the test.
+This notebook changes no dataset, RNA result, scientific gate, approval, or live
+resource limit. Its final decision remains INCONCLUSIVE / SOURCE_UNRESOLVED,
+with zero live requests and no real training.

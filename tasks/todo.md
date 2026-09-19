@@ -1,21 +1,430 @@
 # Paired DS multiome implementation checklist
 
-Updated: 2026-09-12. Specific next-cycle plan only; no new execution.
+Updated: 2026-09-14 (planning only). Bounded F1–F3 implementation and input decision complete.
+E0 and E1 tiny-reader proof complete; nine live fixture/control cases pass.
+E2 offline pass recorded SOURCE_UNRESOLVED; exact object contract and E3 pending.
+This clears only generic fixture/runtime controls; target workspace/class support
+is unproven. E2-M HEAD proposal supersedes the old listing GET; nothing executed.
 Retained-cell ingestion, neural training, final artifacts and
 one-shot scoring verified. 150 synthetic internal fits plus six final refits.
 Scientific acceptance gates remain open; the full research plan is not complete.
 
 Contract: [dataset proposal](../docs/PAIRED_DS_MULTIOME_DATASET_OPTIONS.md). Overview: [plan.md](plan.md).
 
-## Advancement queue — bounded planning revision 2026-09-12
+## Conditional follow-up queue — E0–E4
+
+### Authorized local setup continuation
+
+User approved local resources after E-A's stop. Follow the
+[local amendment](plan.md#local-resource-amendment--2026-09-12), retaining old
+attempts and the 360-second ledger. No scientific acceptance changes.
+
+- [x] L0: start installed Docker once within 45 seconds, verify local endpoint,
+  headroom and cached image inventory; do not pull/update/build or delete work.
+- [x] L1: select one immutable compatible cached image, if present; prove isolated
+  sparse fixture and negative/descendant-stop checks. R absence is NOT_RUN.
+- [x] L2: save reviewed outcome/resources and commit tested slices. If no suitable
+  cached reader exists, name one exact acquisition proposal rather than install
+  without declared assets/sizes. Do not enter E2/E3 or restart B automatically.
+
+L0 result: Docker started; local cgroup-v2 runtime available. No dedicated cached
+R image identified; selected exact config ID is absent. L1 remains NOT_RUN.
+See [setup evidence](../reports/generated/local_reader_setup_20260912/SETUP.md)
+and [pinned acquisition proposal](../configs/local_r_reader_acquisition.json).
+L2 closes only the reviewed proposal outcome. L1/E1 remain NOT_RUN; bounded
+transfer/decode/import implementation is still required before any image install.
+
+**Superseding result:** subsequent execution implemented and ran bounded image
+acquisition/import, followed by the isolated sparse fixture. L1/E1 now pass for
+the tested classes only. R 4.6.1 / Matrix 1.7.6; nine live cases; no dataset bytes.
+Prior NOT_RUN/failed records are retained, not overwritten. See
+[verified completion and ledger](../reports/generated/r_reader_completion_20260912/REVIEW.md).
+
+Verification: inspect runtime/image evidence and actual test outputs; retain
+original dirty/RNA fingerprints. Files: existing plan/checklist, shared audit
+guide; fixture slice remains at most one script and one test plus guide.
+
+User approved execution after reviewing this addition. Use
+[the route/limit contract](plan.md#conditional-follow-up-paths--planning-only).
+Preserve the completed F1–F5 evidence and all M1–M8 criteria. Only one route is
+active at a time, with explicit checkpoints before installation or acquisition.
+
+### E0: Select the first route and record fallback triggers
+
+**Description:** Review existing evidence offline and select A by default, B only
+for a documented environment reason, or C only when an exact documented export
+exists. Record when D/E would become relevant; do not run a discovery campaign.
+
+**Acceptance criteria:**
+
+- [x] One `route_decision.md` names target/source hashes, route, specific question,
+  known/unknown facts, failure category, fallback trigger and uncovered authority.
+- [x] Resource/enforcement availability and shared E1 counters are specified;
+  original dirty/RNA/evidence fingerprints and existing approvals are preserved.
+- [x] Stop within 30 minutes, no network/install/data read beyond existing evidence.
+  Missing target identity or controls yields an explicit refusal, not a guessed URL.
+
+**Verification:** inspect saved evidence against F2d/F3 and the source note;
+table-top trace local installation failure, missing assay, missing provenance,
+unknown memory and no exact export. Each yields one justified next action.
+**Dependencies:** reviewed plan; accepted F1–F3 baseline `48b90c9`.
+**Result:** [E0 record](../reports/generated/reader_enablement_20260912/route_decision.md).
+A lacks R and an active Docker daemon. B capability preflight next, not a data read.
+**Files likely touched:** one concise evidence note in `docs/PAIRED_MULTIOME_AUDIT.md`;
+new ignored record. **Estimated scope:** Small.
+
+### E1: Prove a bounded reader path with a tiny sparse fixture
+
+**Description:** Implement the narrow fixture checker, then run A or conditional
+B only after the installation scope is approved. Do not inspect a real object.
+
+**Acceptance criteria:**
+
+- [x] Pin runtime/package assets; fixture preserves sparse integer counts, row/column
+  identifiers, interval fields and donor metadata across save/load. Record actual
+  classes tested, unsupported classes and no dense conversion.
+- [x] Malformed fixture, missing dependency, output reuse and budget failure refuse
+  safely. All descendants stop on timeout/resource failure; tests cover that
+  behavior. Missing R produces explicit NOT_RUN, never a passing scientific gate.
+- [x] Original attempts plus the explicitly authorized local continuation share
+  the amended E1 limits in plan.md; no object
+  bytes fetched. Record cumulative bytes/time/disk and process-tree memory evidence.
+  One successful fixture closes E1; both failures or cap exhaustion stop.
+
+**Verification:** smallest offline regression first, then the R fixture under
+approved controls; run relevant repository lint/tests if code changes. Independently
+check sparse values/order and fixture hashes. A fixture is not real-object proof.
+**Dependencies:** E0 plus approval for bounded dependency action; existing free-CPU
+approval is not re-requested. C can instead verify its existing export reader.
+**Files likely touched:** proposed `scripts/inspect_development_object.R`,
+`tests/test_development_object_reader.py`, shared audit guide. If necessary
+process-tree controls cannot fit a separately reviewed small slice, stop and
+scope that prerequisite; do not repurpose the accepted RNA supervisor.
+**Estimated scope:** Medium, at most three files for the fixture slice.
+
+**Result:** E1 passes for `list`/`data.frame`/`dgCMatrix` only. The 392-byte fixture
+preserves four nonzero counts, empty cell column, IDs, intervals and donors exactly.
+Live malformed-count/ID/field/interval and output-reuse refusals pass. Timeout
+kills child/grandchild container; 128 MiB OOM kills R and its child. All test
+containers end with Running=false/Pid=0 and are removed. No Seurat/ChromatinAssay
+support, real-assay availability, QC acceptance or training readiness is implied.
+
+### Checkpoint E-A: Reader evidence, not permission to download
+
+- [x] Review E0/E1 artifacts and counters. Exactly one applicable reader route is
+  demonstrated, or a specific environment/control blocker is documented.
+- [x] No real-object contents, counts/QC acceptance or training readiness inferred.
+  Stop unless E2's next contract is separately reviewed and approved.
+
+**Historical result:** [CONTROL_UNRESOLVED](../reports/generated/reader_enablement_20260912/DECISION.md).
+A lacks a reader/active local Docker daemon. B has R but a read-only cgroup mount;
+the actual membership cannot be safely resolved. One read-only B probe, no R or
+installer launch. E1 fixture/descendant-stop criteria remain unchecked, not waived.
+The approved local continuation above subsequently proved those fixture controls.
+
+### E2: Freeze one target and an enforceable inspection budget
+
+**Description:** Produce the offline per-object contract. Default to the selected
+7.6G-listed object; prefer C only with a real documented export. D requires an
+evidence-backed missing-assay/coverage reason, never just a memory failure.
+
+**Acceptance criteria:**
+
+- [ ] Pin one source/target, format and available checksum/version evidence, intended
+  donor/population scope, exact inspection questions and acceptance requirements.
+  Rounded listing size, unknown contents and expected memory are labeled honestly.
+- [ ] Specify numeric network/decoded/disk/process-tree-RSS/wall ceilings, headroom,
+  enforcement, preservation/cleanup rules and uncovered authority before any
+  acquisition. Unknown expected requirements do not mean unlimited permission.
+- [x] Finish one offline proposal within 30 minutes, 0 network/installs/downloads.
+  If identity or defensible controls/limits cannot be fixed, stop RESOURCE_UNRESOLVED
+  or SOURCE_UNRESOLVED. Do not start an exploratory whole-object load to estimate RAM.
+  Source follow-up is only the separately bounded E2-M HEAD proposal below;
+  no request occurs during this offline task.
+
+**Verification:** review the budget against a timestamped host snapshot, retained
+attempt files, expanded/input/output working sets and the reader's tested limits.
+Check that B does not assert free capacity and D has its own contract.
+**Dependencies:** E0 and applicable E1/export-reader proof; separate review/approval
+is needed to execute the resulting contract.
+**Files likely touched:** one proposed source/budget JSON in `configs/` and shared
+audit guide, plus ignored snapshots. **Estimated scope:** Small, at most two files.
+
+**Result:** [offline source contract](../configs/development_object_source_contract.json)
+records SOURCE_UNRESOLVED. A candidate URL is derived from pinned directory/name
+evidence; payload bytes/checksum, classes and full-object resource needs remain
+unknown. E2-M replaces the earlier listing-GET proposal; no request, payload or
+class-package installation has run. Other E2 acceptance boxes remain open;
+E3 cannot start under a zero-byte object budget.
+
+#### E2-M launcher breakdown — planning update 2026-09-14
+
+These subtasks refine, not replace, the existing E2-M contract below. All pending
+items remain proposals. Preserve source-contract and source-note hashes, original
+ledgers, RNA findings and all existing checkboxes. Future live scope remains:
+one HEAD, 15 seconds total, <=65,536 header bytes, zero application body/decoded
+reads, <=256 MiB process-tree memory, zero swap, <=1 MiB retained output and
+>=10 GiB free host disk. No retry, redirect, GET/Range, install or budget reset.
+
+#### E2-M0: Accepted capture-core evidence
+
+- [x] `11a4b7b` adds `scripts/capture_development_head.py` and
+  `tests/test_development_head_capture.py`; existing parser unchanged.
+- [x] Supervisor record: 45 focused tests, 836 full-suite tests, Ruff passing;
+  no default live transport, CLI or dataset request.
+  [Evidence](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/lmstudio_head_capture_split_20260914.mOJ8o9/REVIEW.md).
+
+This closes the core coding slice only, not runtime proof or parent E2-M.
+
+#### E2-M1: Establish runtime/control feasibility
+
+**Description:** One proposed <=30-minute read-only/offline pass over the existing
+host, cached runtime and control evidence. No runtime launch, setting changes,
+network, installs or destructive cleanup.
+
+**Acceptance criteria:**
+
+- [ ] Pin available compatible Python/TLS runtime and code identities; record
+  actual isolation, hard aggregate memory/no-swap, watchdog, output/disk controls
+  and their uncovered proof. A flag or per-process limit alone is not proof.
+- [ ] Define bounded, safe offline test allocations against preserved ledgers,
+  non-root/no-host-data-mount configuration and one end-to-end wall budget;
+  identify missing permission separately from missing technical evidence.
+- [ ] If any prerequisite is unknown/unavailable, document the exact blocker
+  and smallest scoped next action; no installation or weaker fallback.
+
+**Dependencies:** E2 offline source record and E2-M0.
+**Verification:** timestamped inventory/configuration evidence mapped to each
+frozen limit; independent review before runtime probes. No claimed host inspection
+or hard-control proof from this planning edit.
+**Files likely touched:** existing `docs/PAIRED_MULTIOME_AUDIT.md`; ignored evidence
+under a new `reports/generated/` directory. **Scope:** Small, 1 tracked file.
+**Stop outcome:** named resource/authority blocker; source status stays unresolved.
+
+#### E2-M2: Build a refusal-first launcher binding
+
+**Description:** Implement one narrow wrapper around the accepted core, using only
+the reviewed cached runtime/control design. Develop against offline fakes first;
+no real default connection or startup side effect during tests.
+
+**Acceptance criteria:**
+
+- [ ] Before transport, validate the unchanged source contract AND source-note
+  hashes, code/runtime identity, owner's exact HEAD approval, bounded labels and
+  output destination; refuse stale/missing evidence or unsupported controls.
+- [ ] Configure verified TLS with no proxy/retry/redirect and inspected non-root
+  isolation. Enforce hard aggregate memory/no-swap before child execution, with
+  an external process-tree watchdog for the single wall budget covering startup,
+  connection/TLS, request/read and cleanup; no polling-only or phase-reset shortcut.
+- [ ] Bound aggregate output including errors/logs, check disk headroom, preserve
+  evidence in a new directory, and refuse late/failed cleanup. Never promote
+  capture success into payload/scientific acceptance.
+
+**Dependencies:** accepted E2-M1 design and applicable local implementation scope.
+**Verification:** proposed focused tests for preflight refusals, input/output
+bounds, transport binding and cleanup; existing parser/core regressions also pass.
+No live network. Command for new tests once present:
+`PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src .venv-p22/bin/python -m pytest -q tests/test_launcher_head_capture.py`.
+**Files likely touched:** proposed `scripts/launcher_head_capture.py`,
+proposed `tests/test_launcher_head_capture.py`, existing audit guide.
+**Scope:** Medium, <=3 tracked files.
+**Stop outcome:** unproven control or missing asset/permission blocks live use.
+
+#### E2-M3: Prove bounded launcher failure controls
+
+**Description:** Within accepted offline test allocations only, exercise the real
+selected containment mechanism with tiny hostile fixtures; no host exhaustion,
+new dependency acquisition or real dataset endpoint.
+
+**Acceptance criteria:**
+
+- [ ] Independently verify child/process-tree termination for hangs (including
+  non-cooperative work) within the total deadline, with bounded cleanup evidence;
+  a fake-clock unit test alone does not establish this.
+- [ ] Demonstrate hard aggregate memory/no-swap and output containment in safe
+  capped tests. Missing enforcement or nonzero swap refuses before the workload;
+  monitoring a breach then killing is not hard-limit proof.
+- [ ] Verify changed hashes, absent scope approval, unsafe input/transport,
+  insufficient disk, excessive output and late/failed cleanup all refuse.
+  Preserve proof of no live request and no leftover child processes.
+
+**Dependencies:** E2-M2 and reviewed explicit probe allocations from E2-M1;
+missing allocation is a blocker, not permission to improvise.
+**Verification:** proposed launcher focused tests, existing parser/core focused
+tests, `make lint`, and `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src make test-all`;
+inspect real containment/termination records separately from mocked tests.
+**Files likely touched:** proposed launcher test file and existing audit guide;
+ignored probe evidence. **Scope:** Small, <=2 tracked files.
+**Stop outcome:** any failed/unproven control blocks HEAD; record smallest fix.
+
+#### Checkpoint E2-M-Review: Controls accepted; live authority separate
+
+- [ ] Independent review accepts code and real control evidence; tests match the
+  frozen limits and no existing scientific gate or source contract changed.
+- [ ] Owner's explicit approval covers this exact one-HEAD scope. Reviewer/model
+  agreement cannot grant permission; missing approval means no request.
+- [ ] Resource and source checks will be repeated immediately before the attempt.
+  Changed facts or stronger body-byte semantics require review, not silent relaxation.
+
+#### E2-M4: Execute the existing one-HEAD scope conditionally
+
+**Description:** After the checkpoint only, execute parent E2-M once. This task
+adds no live command or permission to the current plan edit.
+
+**Acceptance criteria:**
+
+- [ ] Revalidate approval, hashes and controls; make at most one HEAD under every
+  parent limit. No GET/Range, redirect, retry, alternate source or budget reset.
+- [ ] Record URL/time/status, exact captured headers/prefix and its local hash,
+  bounds/stop evidence and valid positive server-declared Content-Length.
+  Missing optional validators remain unknown; no payload checksum is invented.
+- [ ] Non-200, redirect, invalid/missing length, changed evidence or any control
+  failure stops SOURCE_UNRESOLVED with its reason. Success permits only E2-R
+  offline planning; it does not establish measured ATAC counts or authorize E3.
+
+**Dependencies:** accepted E2-M-Review and existing parent E2-M authorization.
+**Verification:** independent raw-header/hash and ledger review; no second request
+to verify the first. Existing E2-M, E2-R and E2-C requirements remain authoritative.
+**Files likely touched:** existing audit guide; result in a new ignored
+`reports/generated/` directory, not a tracked payload. **Scope:** Small, 1 tracked file.
+**Stop outcome:** one reviewed metadata result or concrete blocker; no automatic
+object acquisition, reader installation, fixture run or training.
+
+#### E2-M: Resolve available source metadata once
+
+**Description:** Conditional metadata-only request, not execution authorized by
+this plan edit. Use only the contract's candidate URL; no directory reread.
+
+**Acceptance criteria:**
+
+- [ ] After separate scope approval, one HEAD; 15 seconds, no redirect/retry,
+  <=65,536 total header bytes, zero body/decoded-body reads, 256 MiB process-tree
+  memory/no swap, <=1 MiB output, >=10 GiB free disk. Test these bounds offline
+  before requesting; refuse if the selected client/runtime cannot enforce them.
+- [ ] Record URL, timestamp, status, headers, locally computed header-record hash,
+  and positive Content-Length when valid. Distinguish server-declared transfer size
+  from measured payload bytes. Missing ETag/Last-Modified/Accept-Ranges/checksum
+  stays unknown, not a fabricated observation or automatic failure of identity.
+- [ ] Non-200/redirect, missing/invalid length, changed source evidence or bound
+  failure stops SOURCE_UNRESOLVED with the exact reason. No GET/Range/retry or
+  package install follows. Success permits only E2-R planning, not object access.
+
+**Verification:** offline mocked 200/missing-length/redirect/oversize/deadline
+cases plus independent header/hash review if the request is authorized and runs.
+**Dependencies:** E2 offline record and approval of this exact metadata scope.
+**Files likely touched:** one narrow request/check script, one focused test,
+shared audit guide; new ignored response record. **Scope:** Medium, <=3 files.
+
+#### E2-R: Cost target-compatible reading before acquisition
+
+**Description:** One offline proposal, <=30 minutes, zero network/install/object
+bytes. No generic runtime restart or repeated image acquisition.
+
+**Acceptance criteria:**
+
+- [ ] Pin the selected workspace/extraction path and compatible package versions
+  or equivalent reader. Cost exact missing dependency assets first; missing sizes
+  or support stay unresolved. For R, require a <=1 MiB `save/load` workspace/class fixture
+  with exact sparse-count/ID/metadata checks and unexpected-class refusal before E3.
+  The prior `saveRDS/readRDS` fixture remains complete but does not satisfy this.
+- [ ] Propose separate numeric transfer, decoded, retained/temporary disk,
+  process-tree memory/swap and wall caps, >=10 GiB disk headroom, control/stop
+  evidence, and required authority. Fresh host resources and justified estimates
+  must support the full-load proposal; neither HEAD nor compressed size proves RAM.
+  Package/class-fixture work has its own explicit allocation against preserved
+  ledgers or an approved amendment; no implicit new 506-second setup attempt.
+- [ ] Stop RESOURCE_UNRESOLVED (or name missing reader evidence) if no defensible
+  contract exists. No install, VM adjustment, object download or full-load probe
+  is authorized here. Record exactly what evidence/allocation could change that.
+
+**Verification:** table-top missing-package, unknown expansion, insufficient
+memory/disk and unsupported-class cases; each yields a distinct refusal. An
+approved later R fixture must test `.rda` and applicable classes, not generic R
+only. Route C instead verifies its documented format with the supported export reader.
+**Dependencies:** usable E2-M metadata or a separately reviewed documented export;
+existing generic E1 evidence. E3 additionally requires actual applicable proof.
+**Files likely touched:** source/resource contract and shared audit guide; new
+ignored proposal evidence. **Scope:** Small, <=2 files.
+
+#### Checkpoint E2-C: Real-object go/no-go
+
+- [ ] E2-M metadata and E2-R resource/class contract independently accepted;
+  separately authorized applicable fixture passes before any real-object load.
+- [ ] Exact acquisition/inspection permission is explicit; otherwise STOP with
+  the unresolved item. No checkbox closes because a model endorsed the plan.
+
+### E3: Inspect only the approved source and report measured facts
+
+**Description:** Conditional later implementation/acquisition; not runnable under
+the current plan-only request. Extend the fixture reader narrowly for the selected
+object, or use existing MEX readers for C. Do not build adapters for unverified formats.
+
+**Acceptance criteria:**
+
+- [ ] New output records target/code hashes and the gate fields in plan.md; missing
+  assays, counts, metadata, coordinates or provenance remain explicit. Preserve
+  paired sparse values/order and refuse duplicate/inconsistent IDs or dense fallback.
+- [ ] Offline tests cover malformed/incomplete objects and resource-stop paths
+  before the single real attempt. Exact target and approved E2 caps are enforced;
+  no source substitution, budget reset, hidden retry or uncontrolled deserialization.
+- [ ] Route decision distinguishes missing assay/coverage (D may be proposed),
+  resource failure (stop/re-scope), and unknown scientific provenance (missing
+  evidence, not runtime failure). Do not rewrite old F2d/F3 records or imply training.
+
+**Verification:** independently inspect sampled sparse entries and complete
+ID/donor/region fingerprints against the source; verify resource/stop ledger and
+all acceptance claims. A read failure cannot establish dataset-wide absence.
+**Dependencies:** E2-C and E2's approved exact acquisition/inspection contract;
+applicable `.rda`/class proof for R, or supported export-reader proof for C.
+A prefix/Range probe is not that proof.
+**Files likely touched:** narrow R reader extension OR existing MEX adapter/test,
+shared audit guide; new ignored inspection record. **Estimated scope:** Medium,
+at most three files; no generic downloader or new training entrypoint.
+
+### E4: Close the route with an input decision or bounded fallback proposal
+
+**Description:** Review E3 evidence and choose exactly one next action. E may be
+costed offline only if no permitted usable object/export remains; external QC work
+gets a separate proposal when development progress makes it useful.
+
+**Acceptance criteria:**
+
+- [x] Each relevant development gate has evidence-linked PASS/FAIL/UNRESOLVED,
+  inspected scope, donor/class support and missing artifact; external/cross-cohort
+  gates remain separate. No checkbox closes on a file name, fixture or matching total.
+- [x] Select one justified next action: M5 review only if development inputs are
+  accepted, otherwise a newly bounded missing-evidence/resource proposal or STOP.
+  E/external costing each allows one 30-minute offline pass, no payload/fragments.
+- [x] Decision states biological question remains untested until real held-out
+  comparison; internal results cannot replace the external primary contrast.
+  No RNA rerun, donor deletion, new dataset, paid compute, outreach or weakened gate.
+
+**Verification:** review failure/success traces and evidence hashes; ensure no
+hidden NeMO-to-development switch, automatic M6c fit or renewed F2s request.
+**Dependencies:** E3 outcome, or a documented earlier stop; route-specific review.
+**Result:** [earlier control stop](../reports/generated/reader_enablement_20260912/DECISION.md).
+One next action: separately reviewed local container setup proposal with explicit
+attempt/counter amendment. No new runtime launch or data acquisition is authorized.
+**Files likely touched:** shared audit guide and `tasks/todo.md`; new ignored
+decision record. **Estimated scope:** Small.
+
+### Checkpoint E-B: Terminal decision
+
+- [ ] Accepted development input or specific blocker reviewed; original RNA,
+  F1–F3 artifacts and M1–M8 acceptance criteria preserved.
+- [ ] Exactly one next action and its uncovered authority named; no automatic
+  full object, fragments, model training or external scoring starts.
+
+## Advancement queue — bounded execution record 2026-09-12
 
 These tasks extend the existing P22 work; they do not replace or complete M1–M8.
-F4–F5 are complete in isolated head `46d7523`, not merged into this checkout.
+F4–F5 are complete in accepted head `46d7523`, the baseline of this isolated
+branch; work is not merged into the original user checkout.
 [Durable RNA evidence](../reports/generated/rna_donor_influence_20260910_supervised/REVIEW.md)
 records 68 valid omissions and 628 passing tests. Do not schedule those tasks again.
-This revision changes only the plan. Next implementation requires approval of
+User then authorized implementation of
 [the frozen cycle contract](plan.md#frozen-scope-of-this-cycle).
-Keep work in an isolated branch, preserve unrelated dirty files, and record one
+Work is isolated in `codex/p22-input-feasibility`; preserve unrelated dirty files and record one
 verified slice per local commit. No push, merge or GNHF resume.
 
 **Cycle endpoint:** F1 → F2d → F2s → F3 → reviewed decision and STOP. Result is
@@ -26,9 +435,9 @@ No NeMO payload probe or processed-object download occurs in this cycle.
 F2d comes first and remains useful even when F2s fails. Internal model comparison
 is a later development milestone; M5's planned external primary contrast stays intact.
 
-**Before implementation:** verify the RNA recovery bundle and preserve its
-accepted code/results. Use an isolated checkout containing `46d7523` plus these
-current plan files, recording both source revisions. Fingerprint original dirty
+**Workspace verification completed:** RNA recovery bundle verified; accepted
+code/results preserved. Isolated baseline is `46d7523` plus plan files from
+`4219705` (carried by `81ffd12`). Fingerprint original dirty
 files and protected evidence. If that context cannot be recovered, stop without
 resetting, overwriting, or automatically committing unrelated work.
 
@@ -49,9 +458,9 @@ measurement comparison. Reuse the reviewed 26-line fix; do not redesign ingestio
 
 **Acceptance criteria:**
 
-- [ ] Contradictory coordinate-shaped peak IDs are rejected by the shared reader;
+- [x] Contradictory coordinate-shaped peak IDs are rejected by the shared reader;
   valid ARC/MEX, opaque peak IDs and unmapped RNA retain their existing behavior.
-- [ ] Source/dirty-file hashes are preserved; the change is present exactly once
+- [x] Source/dirty-file hashes are preserved; the change is present exactly once
   in an isolated reviewed commit, without changing RNA evidence or scientific gates.
 
 **Verification:** verify patch SHA256
@@ -78,17 +487,17 @@ observations; missing executables in one environment do not prove global absence
 
 **Acceptance criteria:**
 
-- [ ] Manually assemble `development_object_feasibility.json` using the schema
+- [x] Manually assemble `development_object_feasibility.json` using the schema
   in `plan.md`: timestamp, commands/results, source hashes, runtime paths/versions,
   disk/memory evidence and resource unknowns. Check `R`, `Rscript`, `pyreadr`, and
   `rpy2`; distinguish availability from proven support for the serialized object
   classes and sparse assays. Generic-reader presence alone cannot pass this check.
-- [ ] Freeze later inspection questions: object/classes, assay names, raw-count
+- [x] Freeze later inspection questions: object/classes, assay names, raw-count
   layer/slot, sparse dimensions, feature identifiers/coordinates and genome build,
   count units, donor/cell metadata, retained-cell semantics, and presence of a
   common measured ATAC matrix such as `peaks_by_cluster`, and donors/labels used
   for peak discovery. Shared columns do not establish training-only selection.
-- [ ] Select one follow-up targeting the first unmet prerequisite: bounded reader
+- [x] Select one follow-up targeting the first unmet prerequisite: bounded reader
   enablement/tiny sparse fixture if support is absent or untested; bounded sizing
   if full-object fit is unknown; full inspection only when both are supported.
   Specify that action's runtime, numeric byte/disk/RSS/time limits, enforcement,
@@ -116,17 +525,17 @@ payload-probe construction; this tiny source check updates the external track.
 
 **Acceptance criteria:**
 
-- [ ] One GET only; no HEAD, retry or redirect; 65,536 application-read body bytes,
+- [x] One GET only; no HEAD, retry or redirect; 65,536 application-read body bytes,
   262,144 aggregate decoded bytes including headers, and one 15-second monotonic
   deadline covering DNS/connect/TLS/read. Require HTTP 200, disable HTTP decoding,
   and stop before parsing unless body is exactly 1,867 bytes with SHA256
   `4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45`.
-- [ ] Require one matching row in `fetch.txt` and `manifest-md5.txt`, joined by
+- [x] Require one matching row in `fetch.txt` and `manifest-md5.txt`, joined by
   bag-relative payload path. URL/size come from the former, MD5 from the latter;
   match target filename, 1,540,753,269 bytes and
   `796c8b3aa587b257af0a46615a437dba`. Reject ambiguous rows, unsafe paths and links;
   allow regular metadata and directory entries. Never infer or follow payload URL.
-- [ ] Write `source_identity.json` per `plan.md` and preserve the hash-matching
+- [x] Write `source_identity.json` per `plan.md` and preserve the hash-matching
   raw bag for offline verification. Record supplied bag `ETag`/`Last-Modified`,
   byte totals and elapsed time; these are not payload validators. Mismatch yields
   `SOURCE_EVIDENCE_CHANGED`; transport/preflight failure is explicit, with null
@@ -148,7 +557,7 @@ one bounded request. Commit tested implementation before recording the live outc
 
 ### Checkpoint F-A: Useful preflight
 
-- [ ] F1/F2s pass focused tests; F2s has one reviewed bounded outcome; F2d has one
+- [x] F1/F2s pass focused tests; F2s has one reviewed bounded outcome; F2d has one
   reviewed offline record. Original inputs remain unchanged. No scientific gate
   passes from URL recovery, file size, reader availability or object name alone.
 
@@ -165,20 +574,21 @@ general research. Development readiness and external readiness must stay separat
 
 **Acceptance criteria:**
 
-- [ ] Record separate development/external evidence for retained barcodes/QC,
+- [x] Record separate development/external evidence for retained barcodes/QC,
   pairing, specimen provenance, genome/coordinate convention, count units, exact
   measured regions and feature provenance, with pinned sources/hashes. Missing
   evidence cannot be replaced by a user-supplied `PASS` boolean. Consume the pinned
-  F2s source-identity and F2d development-feasibility records through proposed
-  `--source-identity` and `--development-feasibility` options; preserve callers
+  F2s source-identity and F2d development-feasibility records through
+  `--source-identity` and `--development-feasibility`, each with its required
+  reviewed `-sha256` option; preserve callers
   that omit them. Verify successful source resolution against the saved raw bag
   and manifest join. Reject malformed/tampered records or unexplained source/budget
   discrepancies; a well-formed unresolved-source record is valid input. Add
   `input_decision.json` and `INPUT_DECISION.md` with fields frozen in `plan.md`.
-- [ ] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
+- [x] Report M4's existing `PASS`/`INCONCLUSIVE`/`NEEDS_RECOUNT` plus unresolved
   gates. A partial archive, matching row total or annotation mask cannot certify
   full membership, common counts, author QC or readiness to train.
-- [ ] A blocked report names the exact missing artifact, inspected source scope,
+- [x] A blocked report names the exact missing artifact, inspected source scope,
   and one smallest next action with proposed bytes/disk and required authority.
   Do not claim exhaustive absence or automatically launch that next action. Keep
   `training_allowed=false` and `model_training_performed=false`; an input decision
@@ -189,7 +599,8 @@ general research. Development readiness and external readiness must stay separat
 new `tests/test_input_decision.py`. Include equal totals with unknown QC, partial
 coverage, count-unit mismatch, unmeasured regions, missing/tampered feasibility
 fields, source-resolution failure, source hash/join mismatch, fabricated reader
-readiness, unknown resource quantities and existing-directory refusal.
+readiness, unknown resource quantities, changed/omitted frozen caps and
+existing-directory refusal.
 Run these focused tests, `make lint`, `PYTHONPATH=src make test-fast`, then the
 existing offline audit once with the exact caps in `plan.md`. Review all report
 claims against pinned sources without any training or fresh source searches.
@@ -202,16 +613,24 @@ followed by a concise reviewed decision record.
 
 ### Checkpoint F-B: Input decision, not perpetual inspection
 
-- [ ] F3 produces accepted evidence or a concrete blocker. Stop paired execution
+- [x] F3 produces accepted evidence or a concrete blocker. Stop paired execution
   if required inputs fail; do not repeat F2s or expand F2d without changed evidence
   and separate authority.
 - [ ] Any development-only pilot has its own reviewed scope and all relevant
   development gates. Original combined-cohort Checkpoint B and external gates
   remain unchecked while their requirements are unmet.
-- [ ] F1–F3 changed only the permitted files; tests, source/RNA/dirty-file hashes,
+  Not applicable to this completed cycle: no internal pilot or new fit was run.
+- [x] F1–F3 changed only the permitted files; tests, source/RNA/dirty-file hashes,
   source ledger, feasibility record and final decision pass independent review. Code failure is not
   an accepted blocked-input conclusion. Handoff names exactly one next action and
   its required authority; no automatic M6a, real fold or processed-object inspection.
+
+**Completion evidence:** F1 `cf8ed33`; F2d `6c101bb`; F2s `83cf31e` and
+outcome `879ff1c`; F3 `3b007d7`. One source GET and one offline audit completed.
+Final verification: 636 fast tests, 668 full tests and lint; separate code and
+artifact review approved the scoped decision. Nine scientific gates remain
+explicit; no training ran. [Full evidence and hashes](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure).
+Next action is only the bounded reader/fixture proposal, not a full object download.
 
 ### F4: Freeze the new RNA donor-influence diagnostic
 
@@ -425,6 +844,11 @@ Determine whether published counts support a common measurement space before pro
 ## M5: Freeze the donor-level experiment
 
 Turn the proposed research question into a versioned configuration before fitting or external predictions.
+
+Eligibility clarification: after QC, verify both-class support in every planned
+outer/inner donor partition. Two donors per class cannot satisfy the specified
+five-fold protocol. The 13+13 external count below informs the practical margin;
+it is not a universal development-cohort minimum or a power guarantee.
 
 **Acceptance criteria:**
 

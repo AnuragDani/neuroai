@@ -1,12 +1,23 @@
 # Paired DS multiome development plan
 
-Updated: 2026-09-12 (PDT). Bounded next-cycle contract; planning revision only.
-This revision authorizes no implementation, download, or experiment. Status:
-retained-cell ingestion, donor-aware networks, final
+Updated: 2026-09-14 (PDT; planning revision only). F1–F3 implemented and the bounded audit completed;
+final decision review is recorded in the audit guide. No further execution is
+authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
 saved models/scalers and one-shot scoring implemented. 150 synthetic internal fits
 plus six final refits verified. Real-data scientific gates remain pending.
+Conditional E0–E4 follow-up: E0 and E1 tiny-reader proof now complete after the
+approved local continuation. The pinned ARM64 R image was acquired/imported;
+nine live fixture/control checks passed. E2's offline source-contract pass ended
+SOURCE_UNRESOLVED; E3 remains unexecuted. No real dataset payload was acquired.
+The earlier control-stop record remains historical. Current evidence and remaining
+gate: [reader completion](../reports/generated/r_reader_completion_20260912/REVIEW.md).
 
-## Next implementation: usable experiment paths
+Current next proposal: one metadata-only HEAD of the documented candidate object,
+then a target-compatible reader/resource contract, then one conditional inspection.
+The September 12 listing-GET proposal is superseded, not executed. See
+[review amendment](#review-amendment--2026-09-14); real-object execution gates remain closed.
+
+## Bounded implementation: usable experiment paths
 
 The immediate deliverable is a small command-line workflow with readable result
 files, not another architecture, dashboard, or autonomous orchestrator. Extend
@@ -17,17 +28,333 @@ Current track status:
 | Track | What the user gets | What it can establish |
 |---|---|---|
 | Local RNA follow-up, F4–F5: complete in isolated branch | Reviewed donor-influence table, plot, and summary | 68 valid omissions; original inconclusive conclusion unchanged; no repeat scheduled |
-| Paired inputs, F1–F3 | Coordinate guard, two bounded feasibility records, and evidence-linked decision | Whether source identity and development-object inspection are executable, which gates remain unmet, and the exact next action |
+| Paired inputs, F1–F3: bounded cycle complete | Coordinate guard, resolved NeMO declaration, development-reader inventory and evidence-linked decision | Source identity resolved; development reader absent in checked environment; compatible counts/QC still unresolved |
 | Real paired training, M5–M8 | Dry-run preflight; real fits deferred pending accepted development ATAC inputs, followed by separately gated external scoring | Conditional follow-on work, not a promised result of F1–F3 inspection |
 
 **Completed baseline:** F4–F5 ran once on real inputs: 68 valid omissions,
 45.94 seconds, 4.14 GiB sampled peak RSS, and 628 passing tests. Code/results
-are committed in isolated head `46d7523`, not merged into this checkout.
+are committed in accepted head `46d7523`, the baseline of this isolated branch;
+neither branch is merged into the original user checkout.
 [Durable delivery and recovery instructions](../reports/generated/rna_donor_influence_20260910_supervised/REVIEW.md)
 include the bundle and reviewed checklist. Preserve that work. Do not repeat the
 diagnostic, remove an influential donor, or add a classifier to change the RNA verdict.
 
-### Next-cycle objective and reasoning
+**Current cycle result:** implementation `3b007d7` completed the one offline audit:
+1,582,118,205 input bytes, 57,855,276 expanded bytes, 256 selected retained cells,
+and zero exact shared regions between the two inspected raw peak lists.
+NeMO's 1,867-byte declaration resolved in one request. Both processed development
+objects remain uninspected. `INCONCLUSIVE` is the input decision, not a new
+biological finding. The next action is bounded reader enablement plus a tiny
+sparse fixture, outside this cycle's no-install scope. See the
+[decision and verification record](../docs/PAIRED_MULTIOME_AUDIT.md#f3-decision-and-closure)
+and [durable delivery](../reports/generated/input_feasibility_20260912/REVIEW.md).
+
+### Capture-core completion and launcher tasks — 2026-09-14
+
+Commit `11a4b7b` adds the offline-tested capture core and its tests. Supervisor
+verification recorded 45 focused tests, 836 full-suite tests and Ruff passing;
+these are historical results, not tests rerun for this plan edit.
+[Review and durable code bundle](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/lmstudio_head_capture_split_20260914.mOJ8o9/REVIEW.md).
+The core reuses the existing parser, has no default live transport/CLI, and
+does not prove operating-system containment. E2-M remains open.
+
+The immediate next task is **E2-M1, read-only runtime/control feasibility**.
+The next *live* proposal remains the existing single HEAD, not a new request:
+
+1. E2-M1: inspect already-available runtime/control evidence; stop on missing
+   hard-limit support or authority before building a launcher around assumptions.
+2. E2-M2: bind the reviewed core to that proven control design; test refusals
+   offline. Reuse existing helpers where inspection justifies it.
+3. E2-M3: verify bounded adversarial process-tree controls, then independently
+   review code, resource evidence and the owner's exact-scope approval.
+4. E2-M4: only then execute the existing one-HEAD scope. Success permits E2-R
+   offline planning only; E2-C/E3 and scientific gates remain unchanged.
+
+Unknowns: cached compatible Python/TLS runtime, effective non-root isolation,
+hard aggregate memory/no-swap enforcement, watchdog coverage and safe test
+allocations. Flag presence, sampled RSS or killing after a detected memory
+breach do not prove the frozen limits. Python signals cannot replace the hard
+watchdog. Missing proof yields a concrete resource/authority blocker without
+changing the source contract's `SOURCE_UNRESOLVED` status.
+`body_bytes=0` means application reads, not TLS/OS buffering; stronger required
+semantics need review. This plan grants no execution, installation or new budget.
+
+### Conditional follow-up paths — planning only
+
+#### Review amendment — 2026-09-14
+
+**Scope:** revise E2/E3 planning, not execute it. Preserve completed E1, RNA and
+F1–F3 evidence and their original ledgers. The prior critique and locally checked
+model opinion justify a narrower next action, not an automatic gate promotion.
+
+1. **E2-M, source metadata:** propose one HEAD of the candidate payload URL in
+   the [source contract](../configs/development_object_source_contract.json).
+   Directory plus the recorded filename supplies a candidate, not a fresh source
+   observation. HEAD can provide size/validators without an object-body read;
+   a second directory index cannot guarantee exact size. Record missing headers
+   as unknown, and hash the saved header record, not an undownloaded payload.
+2. **E2-R, target reader and resources:** after usable metadata, make one offline
+   proposal (30 minutes; zero network/install/object bytes). Pin compatible
+   workspace/class support, dependency assets if needed, and separate acquisition,
+   decoded, retained/temporary disk, process-tree memory and wall ceilings. Use a
+   fresh host snapshot and evidence-backed estimates; compressed size is not RAM.
+   The historical 4 GiB job/8,092 MiB VM limits do not become a real-load allowance.
+   Unknown requirements remain unknown; an indefensible contract stops
+   RESOURCE_UNRESOLVED. No new setup budget or resource-setting change is granted.
+3. **E3, conditional inspection:** only after the resulting exact contract is
+   reviewed/authorized and a tiny applicable workspace/class fixture passes,
+   acquire/load one target and record the required sparse counts/metadata gates.
+   E4 then delivers an input decision or a concrete blocker and one next action.
+   No speculative 64 KiB range probe, automatic retry, alternate object or fitting.
+
+E1 proved `saveRDS/readRDS` of a tiny `.rds` list, not `save/load` of a real `.rda`.
+Before E3, prove the applicable `.rda` and Seurat/ChromatinAssay extraction path
+(or a demonstrated equivalent narrow reader) on a <=1 MiB fixture, preserving
+sparse counts/IDs/metadata and refusing unexpected classes. Cost any missing
+packages before acquisition; do not assume all Seurat dependencies are necessary,
+already installed, or fit the remaining setup budget. Generic E1 remains complete.
+
+**Scientific rules unchanged:** cluster-based peaks are not proven label-independent
+by their name; all-donor feature discovery is not train-fold-only selection.
+Presence plus disclosure does not meet the existing gate. A different exploratory
+representation needs a prospective protocol decision, not a silent relaxation.
+After QC, check donor/class support for five repeated five-fold evaluation and
+inner validation; two donors per class do not suffice for that protocol. The
+13+13 count informs the external practical margin, not a development minimum.
+Development acceptance cannot substitute for NeMO QC/common-region acceptance.
+
+Verification: source-linked decisions and matching E2-M/E2-R tasks in `todo.md`;
+no scientific checkbox closes on metadata, a fixture, model agreement or an OOM.
+Technical basis: [HEAD](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.2),
+[optional Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#section-8.6),
+and [R workspace loading](https://stat.ethz.ch/R-manual/R-devel/library/base/html/load.html).
+
+#### Local-resource amendment — 2026-09-12
+
+**Execution continuation:** the subsequent “keep going and complete the plan”
+instruction authorizes implementing and running the already-pinned local reader
+acquisition, not another setup-only handoff. Retain the 814-second prior ledger;
+remaining active acquisition/import/fixture time is 746 seconds. Offline coding,
+tests and review are tracked separately, not represented as installer runtime.
+The fixed acquisition script has a 480-second deadline, no retries and checks the
+reviewed proposal hash before network access. Its stricter raw-layer ceiling
+reserves three copies plus 256 MiB within 6 GiB before Docker import; no host
+archive extraction. Import is local/offline, at most 90 seconds; fixture/control
+tests share the remaining time. Only UUID-owned test containers may be removed.
+No dataset request, E3 execution, package updater, user-container change or training
+is authorized by this runtime step. E2 remains an offline next contract.
+
+After the control stop, the user approved the setup proposal and said “You can
+use any local resources that you would like”. This authorizes one local setup
+continuation, including starting the already-installed Docker Desktop. It does
+not authorize paid compute, dataset/fragment downloads, another Colab attempt,
+outreach, weakened scientific gates, push or merge. Archived attempts stay intact.
+
+Use the installed Docker Desktop 4.73.0 / CLI 29.4.3; existing settings are
+8,092 MiB VM RAM, 1,024 MiB swap, 16 CPUs and a 61,035 MiB logical disk ceiling.
+The existing sparse disk occupies 17,028,120,576 bytes; it is not a new download.
+Current local approval allows this pre-existing host-runtime allocation outside
+the earlier 4 GiB reader-job cap; do not mislabel host observations as hard
+process-tree enforcement. Do not change Docker settings or delete cached work.
+Maintain at least 10 GiB host disk headroom; check before/after startup and work.
+
+1. Start the installed runtime once (45-second command timeout); inspect local
+   endpoint, cached images and running containers. No pull, update or build.
+2. If a compatible cached reader exists, pin its immutable image ID and installed
+   package versions, then implement/test the tiny sparse fixture. Keep its job
+   at 4 GiB memory with no swap, bounded temporary writes and timeout; no network
+   or host data mounts. Prove descendant termination before claiming controls.
+3. If no compatible image exists, freeze one exact dependency-acquisition proposal
+   and stop before an unmetered pull/install. Keep original 2 GiB fetched/4 GiB
+   decoded dependency limits unless explicitly revised; do not invent asset sizes.
+
+This continuation has a 20-minute active setup ceiling, added to the previous
+360 seconds (maximum cumulative 1,560 seconds), not a reset. Record fresh outputs
+under `reports/generated/local_reader_setup_20260912/`. Runtime startup failure,
+unexpected agreement/access prompt or insufficient headroom yields a precise
+blocker. E2/E3 require their own exact object contract as before.
+
+Native reference: [Docker Desktop start](https://docs.docker.com/reference/cli/docker/desktop/start/)
+and [container memory/swap controls](https://docs.docker.com/engine/containers/resource_constraints/).
+
+**Result:** local Docker is available; selected R image config ID is not cached.
+The [acquisition proposal](../configs/local_r_reader_acquisition.json) pins six
+ARM64 layers totaling 763,355,676 declared compressed bytes. Expansion remains
+unknown; the required next implementation is bounded acquisition/decode/import,
+then the existing E1 fixture task. This proposal is not an executable installer.
+Local setup consumed 454 conservative seconds, cumulative 814, leaving 746 under
+this amendment. [Evidence and ledger](../reports/generated/local_reader_setup_20260912/SETUP.md)
+preserve the earlier failed A/B attempts. No repeated approval for local resources
+is needed; applicable scientific/data-acquisition gates and technical bounds remain.
+
+This addition originally planned alternatives after completed F1–F3. The later
+user instruction approved bounded execution, not E3's still-missing exact contract.
+The heading remains the original contract anchor; current status is recorded above.
+The saved F2d/F3 records and September 12 delivery remain immutable. Do not change
+their single next action, repeat the source GET/audit, or turn a fixture result
+into an accepted scientific input. New work uses new output directories and
+evidence records. The original no-install cycle is closed, not silently extended.
+
+**Objective:** obtain one auditable development input with paired raw RNA and
+measured common-region ATAC counts, or identify the specific requirement that
+cannot be met within the permitted routes. This supports a later donor-held-out
+comparison; it neither guarantees a positive effect nor completes external
+validation. Distinguish runtime failure, resource failure, missing assay, and
+missing scientific provenance: each calls for a different response.
+
+#### Route selection
+
+Choose one active route at a time; alternatives are not an instruction to try
+everything. E0–E4 in [todo.md](todo.md#conditional-follow-up-queue--e0e4)
+define the bounded tasks and checkpoints.
+
+| Path | Entry condition and reason | Evidence that closes this path | Failure / next choice |
+|---|---|---|---|
+| A — Local R reader, preferred | Current inventory lacks a compatible reader. Start with the selected 7.6G-listed development object as the future target; no object download in the reader step. | Pinned isolated runtime and tiny sparse-object round trip pass; counts, identifiers and metadata preserved. This proves only the tested fixture/classes. | Environment-specific install/control failure may justify B. Unsupported object class needs a compatible reader, not a larger machine. Scientific assay/QC failure cannot be cured by B. |
+| B — Already-approved free-CPU environment | A fails for a documented local environment/resource reason, or E0 shows a usable pre-existing reader there. No new cloud account, paid tier or GPU request. | Same fixture and resource checks pass in that environment; returned records/hashes independently verify locally. | One attempt only; unavailable capacity or unenforceable limits stops. Do not cycle sessions or claim a runtime reset solved data semantics. |
+| C — Documented sparse-count export | An exact provider-documented compatible export is supplied or located in newly pinned evidence. None is verified today. Prefer this over deserializing a large object if it answers the same question. | Raw paired counts, retained barcodes/donors, measured intervals/build/units and feature-selection provenance satisfy the same contract through existing MEX readers where possible. | Normalized values, embeddings, gene activity, inferred zeros or missing provenance do not qualify. No speculative adapter or open-ended search for an unnamed export. |
+| D — Other already-listed processed object | The selected object is shown to lack the required assay or donor/population coverage, and evidence gives a reason the other object could supply it. Not a response to memory failure. | Separately approved inspection of `GSE305146_seur_integr_labelled_complete_dataset.rda.gz` (listing 8.7G) meets the same input contract. | At most one alternate object; no simultaneous full downloads. If contents/provenance still fail, record the exact missing artifact and consider E only as a proposal. |
+| E — Recount feasibility proposal, last resort | Both named objects have evidence-backed dispositions (inspected or explicitly inaccessible/unresolved), and no documented usable export is available. | A narrowly scoped costing/protocol proposal states exact fragments, donors, frozen regions, count units, storage and authorization needed. A missing estimate remains unknown. | No fragment download or recount under this plan. If permitted data/resources cannot support it, stop with a scoped blocker; do not lower gates or replace the dataset automatically. |
+
+A/B concern runtime location; C/D concern the data artifact. They are not
+interchangeable solutions. The normal route is A, then inspection of
+`GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz` after E2 approval.
+B changes location only. A newly documented C can bypass R-specific work, but
+not the resource, pairing, raw-count or provenance checks. D needs a new source
+decision, and E stops at a proposal. The two rounded sizes and the unpublished
+`peaks_by_cluster` checkpoint come from
+[the saved source evidence](../docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md),
+not verified archive contents or current download-size measurements.
+
+#### Limits, authority and stopping rules
+
+- **E0 route preflight:** one offline review, at most 30 minutes, existing local
+  records only; 0 network/installation/dataset bytes. Name the preferred route,
+  fallback trigger, exact target, missing authority and next code slice. Stop with
+  a source request if C has no exact documented artifact; do not invent its URL.
+- **E1 reader attempts A/B:** at most one per environment and two total. Share
+  the existing proposed ceiling across both attempts: 2 GiB cumulative fetched
+  dependencies, 4 GiB cumulative decoded dependencies, 6 GiB peak additional
+  working disk across retained attempt files, 4 GiB peak process-tree RSS and
+  30 minutes total active setup/fixture time. Require at least 10 GiB available
+  disk headroom on each chosen host and a fixture no larger than 1 MiB. Switching
+  environments does not reset counters. Charge failed fetches and cold setup;
+  a free-CPU queue/capacity failure ends that attempt, not a polling loop.
+- Preflight exact dependency assets/versions, their transfer/expansion budget and
+  control availability before installation. No unmetered installer fetches.
+  Record process-tree use, not only the parent R process; the existing RNA
+  supervisor handles one owned process and is not proof of installer-tree control.
+  Use enforceable isolation where available; sampled RSS alone is not a hard
+  ceiling. If controls cannot bound the job, record refusal rather than launch.
+- E1 needs approval to expand dependency-installation scope. Existing free-CPU
+  and scoped professor approvals stand; ask only for an uncovered action. Reader
+  success authorizes neither an object download nor fitting. A synthetic fixture
+  cannot establish the real object's classes, memory fit, assays or provenance.
+- **E2 offline target/resource contract:** one proposal per selected object,
+  at most 30 minutes. No HEAD/GET, archive reads or installation in the offline
+  pass; E2-M is a separately authorized follow-up, not part of that pass. Freeze the
+  exact identity and available integrity evidence; distinguish publisher checksums
+  from locally measured hashes. Record fresh host resources only when executing
+  that future task. Set numeric transfer, decoded, disk, process-tree RSS and wall
+  ceilings, headroom, controls and cleanup/recovery rules for the proposed next
+  read. Expected requirements may be unknown; permission ceilings may not.
+  If no defensible contract is possible, mark `RESOURCE_UNRESOLVED` and stop.
+  The next proposal is E2-M's one HEAD of the documented candidate payload:
+  65,536 total response-header bytes, zero body/decoded-body reads, 15-second total
+  deadline, no redirect/retry, 256 MiB process-tree memory/no swap, at most 1 MiB
+  retained output and at least 10 GiB free disk. It needs separate scope approval.
+  Missing/invalid positive Content-Length, non-200, redirect or a bound failure
+  stops with the precise unresolved field. ETag/Last-Modified/Accept-Ranges are
+  optional observations, not payload checksums or guaranteed future range support.
+  HEAD cannot certify contents, decoded size, memory or QC. No Range GET follows.
+- **E3 object inspection is conditional, not executable from this document.**
+  It needs E2's separately reviewed and approved exact target/limits, plus tested
+  applicable reader support. For C, test the existing supported export reader
+  instead of requiring an R fixture. One target acquisition/inspection per
+  approved contract, no automatic retry; D needs a fresh contract. Unknown full
+  object fit is not an instruction to start downloading. No tar-prefix assumption
+  for R serialization; even inspecting assay names may deserialize the object.
+  E2-R must explicitly demonstrate applicable workspace/class support and bound
+  the full load; compressed bytes below a RAM cap do not establish memory fit.
+- After any failed attempt, record command/version hashes, cumulative resources,
+  scope, stop reason and which new evidence could justify the next route. No
+  unchanged retries, hidden budget reset or simultaneous A/B/C/D exploration.
+  Run code tests offline before any authorized real attempt; code failure must
+  be fixed separately, not described as proof that usable measurements are absent.
+- E and external follow-up below are **proposal-only**: at most one 30-minute
+  offline evidence/costing pass each. They confer no network or experiment budget.
+  Full fragments, paid compute, author outreach, new datasets, synthetic
+  substitution, peak projection and weakened scientific gates remain excluded.
+
+#### Code deliverables and scientific handoff
+
+The generic E1 fixture slice is complete. Next code work, if separately authorized,
+is E2-M's narrow metadata request/check, then only the target-specific reader
+extension justified by E2-R. Reuse installed libraries, existing sparse/count/
+coordinate validation and output/refusal conventions; no general downloader or
+orchestrator. E3 may instead reuse the existing MEX reader for a documented C.
+New evidence must not overwrite F2d/F3 or relax the current F3 record validator.
+
+**Implementation update:** the fixture slice now exists, with
+`scripts/run_r_fixture.py` providing the separately reviewed native-control checks.
+It reads no real object. `scripts/acquire_r_image.py` acquires only the fixed
+reviewed R image; it is not a general downloader and was run once in a cached
+Linux Python container after macOS refused RLIMIT_AS before any request. Do not
+rerun acquisition: the verified archive and imported image are retained. Current
+E2 outcome is [the source contract](../configs/development_object_source_contract.json),
+not permission to load an unverified Seurat object or fit a model.
+
+The future `development_object_inspection.json` must separate observed facts
+from acceptance: object/classes and raw assay/layer; sparse dimensions; exact
+cell/donor pairing and retained-release join; QC/count stage; age/class support;
+specimen provenance; genome/coordinates; count units; measured-region coverage;
+and donors/labels used in peak discovery. Cite source/code/asset hashes and
+inspected scope for each PASS/FAIL/UNRESOLVED gate. Missing entries stay unresolved;
+shared columns or all-donor peak calling cannot establish train-fold-only selection.
+
+```text
+E0: choose one route / exact target
+  A local reader ──environment-only failure──> B free-CPU reader (shared E1 cap)
+  C documented sparse export ────────────────> its existing-reader checks
+        reader check → E2 approved target/budget → E3 bounded inspection
+          missing assay/coverage → D alternate object → new E2 contract
+          resource failure → stop; no automatic larger object/machine
+          no permitted usable input → E recount proposal only → stop
+E4: gate-by-gate decision + one justified next action → STOP
+Later: accepted development input + M5 protocol → M6a/b → one M6c fold → M7
+External: separate NeMO QC/common-region acceptance + frozen models → M8
+```
+
+Before M6c, all relevant development gates and M5's real normalization,
+covariate/chr21 controls, feature construction, donor splits, comparison and
+uncertainty rules must be frozen and reviewed. Pairing may be proven for a subset
+without that subset having sufficient class/donor support. No post-hoc donor
+deletion or endpoint change to manufacture a favorable result.
+The excitatory-lineage object's population/age coverage must be assessed explicitly;
+using a subset changes the estimand if it differs from the eventual M5 cohort.
+Any such change needs prospective protocol review, not silent relabeling as the
+original whole-cohort experiment.
+
+**External lane:** keep NeMO reserved for external evaluation. Once development
+feasibility makes this useful (or genuinely new exact external evidence arrives),
+propose a separate bounded QC/barcode/count-stage and cross-cohort feature check
+using the resolved declaration; do not rerun F2s or switch NeMO into development.
+Current matching annotation totals remain QC-unverified. Internal results must be
+labeled internal; they cannot satisfy M8's primary external contrast.
+
+**Completion of this follow-up:** E4 accepts an evidence-backed input contract
+or documents a precise, scoped blocker and the smallest permissible next action.
+Do not promise a conclusive biological result. If all permitted routes stop,
+deliver the negative feasibility result; no perpetual inspection loop. F1–F5,
+M1–M8 checkboxes and original RNA conclusions retain their recorded meanings.
+
+### Completed F1–F3 contract (historical)
+
+The sections below through Review disposition preserve the completed cycle's
+contract; they do not authorize new execution. Conditional routes above are a
+separate proposal and do not rewrite the archived single-action decision.
+
+### Completed-cycle objective and reasoning
 
 **Long-term question:** does cross-attention improve donor-level prediction over
 matched concatenation using valid paired RNA+ATAC measurements? This cycle does
@@ -191,8 +518,8 @@ Accept-Ranges headers cannot establish assay contents or actual Range behavior.
 
 ```text
 Completed: F4/F5 RNA diagnostic (isolated 46d7523); preserve, do not repeat
-Next-cycle approval + isolated workspace
-└─ F1 recover fix → F2d offline development feasibility → F2s one tiny source read → F3 decision → STOP
+Completed under user approval in isolated workspace:
+└─ F1 recovered fix → F2d offline feasibility → F2s one tiny source read → F3 decision → STOPPED
 Later, separately reviewed: accepted development inputs* → M5 → M6a/b/c → M7
 External evaluation additionally requires accepted external inputs + frozen models → M8
 ```
@@ -220,18 +547,22 @@ coverage/missingness, count-unit and approximation contract. Shared gene names
 alone do not make different ATAC measurements comparable; `EXPLORATORY_ONLY` never
 closes confirmatory M4 or M8. Until a representation is accepted, the pilot is deferred.
 
-### Intended commands and outputs
+### Available bounded commands and deferred interfaces
 
-The paired interfaces below are **proposals**, not commands available today.
-The RNA diagnostic already exists in isolated `a0049f2` and is not part of this
-cycle. Existing `scripts/audit_multiome.py` stays an offline verifier, and
+The source resolver and decision-mode audit are implemented in this isolated
+branch. Their one real execution is complete; these commands document the
+interface, not permission to repeat it. The real-data runner remains a
+**proposal**, not an available command. The RNA diagnostic already exists in
+accepted `a0049f2` and is not part of this cycle.
+Existing `scripts/audit_multiome.py` stays an offline verifier, and
 `scripts/train_multiome.py` stays synthetic-only.
 
 - `scripts/resolve_nemo_source.py --output-dir <new-dir>`: reads only the pinned
   1,867-byte official bag under the frozen limits and writes `source_identity.json`.
-- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --source-identity <source_identity.json> --development-feasibility <development_object_feasibility.json> --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
+- `scripts/audit_multiome.py --manifest configs/paired_multiome_audit.json --source-identity <source_identity.json> --source-identity-sha256 <reviewed-source-hash> --development-feasibility <development_object_feasibility.json> --development-feasibility-sha256 <reviewed-development-hash> --output-dir <new-dir> --max-input-bytes 1700000000 --max-expanded-bytes 268435456 --max-nnz 10000000 --cell-cap 256`:
   retains current audit artifacts and adds `input_decision.json` and
-  `INPUT_DECISION.md` within the explicit existing local caps.
+  `INPUT_DECISION.md`. Both reviewed record hashes and all four exact caps are
+  required in decision mode. Legacy audit callers retain their existing interface.
 - `scripts/run_real_multiome.py --config <frozen-real-protocol> --stage internal-pilot --dry-run`:
   writes or displays the readiness decision, planned resources, and exact missing
   inputs. Dry-run is the default and performs no fit or network access.
@@ -248,9 +579,9 @@ refreshes, automatic new datasets, or silently enlarged budgets.
 - Preserve completed RNA results, thresholds, G8, approvals, notebooks and source
   hashes. Diagnostic output must use a new directory and the label
   `POST_HOC_EXPLORATORY`; it cannot turn the primary inconclusive result positive.
-- Existing paired integrity fix is in isolated commit `3b677d5`, not this checkout.
-  F1 names the recovery patch, bundle and application checks. The isolated checkout
-  still existed on 2026-09-10; do not depend on temporary storage alone. Keep the
+- The paired integrity fix from `3b677d5` was recovered exactly in isolated
+  `cf8ed33`. F1 records the recovery patch, bundle and application checks.
+  Do not depend on temporary storage alone. Keep the
   ignored recovery package out of cleanup until F1's code/test slice is committed
   durably. Do not merge its entire branch or overwrite this plan with its old docs.
 - The previous GNHF run exceeded its cap: 872,648 reported worker tokens. Do not
@@ -291,12 +622,13 @@ processed-object inspection/recount proposal. Do not start that larger work.
 If the RNA diagnostic also remains inconclusive, that is a valid output: report
 which influence/support question remains unanswered, without tuning exclusions.
 
-The 2026-09-12 user request authorizes these plan corrections, not experiment
-execution. F4–F5 already passed review and execution in their isolated branch. Any later
+The initial 2026-09-12 request authorized plan corrections only; the subsequent
+“Develop the plan” request authorized this bounded F1–F3 implementation.
+It is now complete and stopped at its decision. F4–F5 already passed review and
+execution in their isolated branch. Any later
 development-only pilot needs its own accepted scope and inputs; it is not scheduled
 as an immediately executable fallback. The completed RNA study's recorded
-professor approval is unchanged. This revision executes none of the pending
-implementation/experiment tasks.
+professor approval is unchanged. No pending M5–M8 real experiment was executed.
 
 ### Review disposition
 
