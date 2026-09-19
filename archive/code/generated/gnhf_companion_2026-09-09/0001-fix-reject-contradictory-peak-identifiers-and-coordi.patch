@@ -1,0 +1,70 @@
+From 3b677d5132864d3a123c7163a8eefcefe0120b96 Mon Sep 17 00:00:00 2001
+From: AnuragDani <anurag.d@live.com>
+Date: Wed, 9 Sep 2026 20:00:36 -0700
+Subject: [PATCH 1/2] fix: reject contradictory peak identifiers and
+ coordinates
+
+Recover the exact Codex worker patch after GNHF aborted on delayed token accounting. Independently verified against the baseline regression, 609 tests, lint, and three existing public feature files. This validates adapter integrity, not paired input feasibility.
+---
+ src/p22/data/multiome.py | 11 +++++++++++
+ tests/test_multiome.py   | 15 +++++++++++++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/src/p22/data/multiome.py b/src/p22/data/multiome.py
+index 41c4dda..9f6c135 100644
+--- a/src/p22/data/multiome.py
++++ b/src/p22/data/multiome.py
+@@ -40,6 +40,13 @@ def _positive_integer(value: int, name: str) -> None:
+         raise ValueError(f"{name} must be a positive integer")
+ 
+ 
++def _parse_peak_id(value: str) -> tuple[str, int, int] | None:
++    match = re.fullmatch(r"([^:\s]+):([0-9]+)-([0-9]+)", value)
++    if match is None:
++        return None
++    return match.group(1), int(match.group(2)), int(match.group(3))
++
++
+ def _decode_bounded(raw: bytes, budget: ReadBudget) -> bytes:
+     """Charge every materialized layer, including tar headers, before parsing it."""
+     remaining = budget.max_expanded_bytes - budget.expanded_bytes
+@@ -152,6 +159,10 @@ def read_features(asset: dict, budget: ReadBudget, *, modality: str | None = Non
+         )
+         if (~known & ~unmapped_rna).any():
+             raise ValueError("feature intervals must have nonnegative start < end")
++        for row in features.loc[features.modality.eq("Peaks")].itertuples(index=False):
++            parsed = _parse_peak_id(row.feature_id)
++            if parsed is not None and parsed != (row.chromosome, row.start, row.end):
++                raise ValueError("peak feature_id coordinates disagree with explicit columns")
+         features["coordinates_known"] = known
+     if features.feature_id.eq("").any() or features.feature_id.duplicated().any():
+         raise ValueError("empty or duplicate feature identifiers")
+diff --git a/tests/test_multiome.py b/tests/test_multiome.py
+index 3b3004b..fc28bbb 100644
+--- a/tests/test_multiome.py
++++ b/tests/test_multiome.py
+@@ -373,6 +373,21 @@ def test_mex_preserves_six_column_arc_coordinates(tmp_path):
+     assert block["features"].start.tolist() == [0, 0, 5]
+ 
+ 
++def test_mex_rejects_peak_ids_that_disagree_with_explicit_coordinates(tmp_path):
++    from p22.data.multiome import ReadBudget, load_mex
++
++    spec = mex_assets(
++        tmp_path,
++        features=(
++            "gene1\tG1\tGene Expression\tchr1\t0\t10\n"
++            "chr1:0-10\tchr1:0-10\tPeaks\tchr2\t20\t30\n"
++            "custom_peak\tcustom_peak\tPeaks\tchr1\t5\t10\n"
++        ),
++    )
++    with pytest.raises(ValueError, match="feature_id coordinates"):
++        load_mex(spec, ReadBudget())
++
++
+ def test_mex_preserves_unmapped_rna_but_rejects_unmapped_peaks(tmp_path):
+     from p22.data.multiome import ReadBudget, load_mex
+ 
+-- 
+2.55.0
+

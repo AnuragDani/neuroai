@@ -1,0 +1,710 @@
+{
+  "audited_at": "2026-09-19",
+  "source_roots": [
+    "P22 Git checkout",
+    "Obsidian papers/P22",
+    "Google Drive Colab Notebooks folder"
+  ],
+  "recovered_bundles": [
+    {
+      "bundle": "reports/generated/gnhf_companion_2026-09-09/reviewed-candidate.bundle",
+      "commit": "7a9bedf97394afd2a3b1c6beee202f9a30619444",
+      "ref": "refs/heads/codex/recovered-gnhf_companion_2026-09-09"
+    },
+    {
+      "bundle": "reports/generated/input_feasibility_20260912/reviewed-code.bundle",
+      "commit": "48b90c9bff45b60bf5381afeabf7f0b23871a1b2",
+      "ref": "refs/heads/codex/recovered-input_feasibility_20260912"
+    },
+    {
+      "bundle": "reports/generated/input_paths_plan_20260912/plan-history.bundle",
+      "commit": "b5bdb23e259c38b9fd3b33aff2c8cd9a476279fe",
+      "ref": "refs/heads/codex/recovered-input_paths_plan_20260912"
+    },
+    {
+      "bundle": "reports/generated/local_reader_setup_20260912/reviewed-code.bundle",
+      "commit": "8ab7c47ae6e57c99406fdb38e759292b136d0866",
+      "ref": "refs/heads/codex/recovered-local_reader_setup_20260912"
+    },
+    {
+      "bundle": "reports/generated/local_worker_pilot_20260910/review-only.bundle",
+      "commit": "39e2899d77e1d13814aadd2a555f63ce39567ddf",
+      "ref": "refs/heads/codex/recovered-local_worker_pilot_20260910"
+    },
+    {
+      "bundle": "reports/generated/r_reader_completion_20260912/reviewed-code.bundle",
+      "commit": "775f5502256ecb8fabb00633003fd2065c289d54",
+      "ref": "refs/heads/codex/recovered-r_reader_completion_20260912"
+    },
+    {
+      "bundle": "reports/generated/reader_enablement_20260912/reviewed-code.bundle",
+      "commit": "f180cfc077d5f5068af9cc5932a8cc55a4d5abee",
+      "ref": "refs/heads/codex/recovered-reader_enablement_20260912"
+    },
+    {
+      "bundle": "reports/generated/rna_donor_influence_20260910_supervised/reviewed-code.bundle",
+      "commit": "46d7523d934f6247f499968dfc2c8b0be20d7636",
+      "ref": "refs/heads/codex/recovered-rna_donor_influence_20260910_supervised"
+    },
+    {
+      "bundle": "reports/generated/plan_revision_20260914/reviewed-plan.bundle",
+      "commit": "5dbcf3f141764d067b892a09eedb8385488a0fec",
+      "ref": "refs/heads/codex/recovered-plan_revision_20260914"
+    },
+    {
+      "bundle": "reports/generated/lmstudio_e2m_worker_20260914/repair1/reviewed/reviewed-code.bundle",
+      "commit": "249cf0eb75f1d7a0defa33143ce93eb29cb2f0d5",
+      "ref": "refs/heads/codex/recovered-repair1"
+    },
+    {
+      "bundle": "reports/generated/lmstudio_head_capture_split_20260914.mOJ8o9/reviewed-code.bundle",
+      "commit": "11a4b7b3c99f62d05f9d8f5e15e5041eb7b3d91d",
+      "ref": "refs/heads/codex/recovered-lmstudio_head_capture_split_20260914-mOJ8o9"
+    },
+    {
+      "bundle": "reports/generated/lmstudio_launcher_plan_20260914.zXi3Vd/reviewed-plan.bundle",
+      "commit": "aa0f1fa16bc8aec375665cb7aee85ab60a59b6ac",
+      "ref": "refs/heads/codex/recovered-lmstudio_launcher_plan_20260914-zXi3Vd"
+    },
+    {
+      "bundle": "reports/generated/qwen_launcher_batch_20260914.4wHgFo/reviewed-batch.bundle",
+      "commit": "7b49d06a4ba399c50cdb86cb434c1ff1be8bfde9",
+      "ref": "refs/heads/codex/recovered-qwen_launcher_batch_20260914-4wHgFo"
+    },
+    {
+      "bundle": "reports/generated/paired_notebook_20260914.p6Tv07/reviewed-notebook.bundle",
+      "commit": "8905ccd4b11c85987bb1948cdcab72f006d6de1e",
+      "ref": "refs/heads/codex/recovered-paired_notebook_20260914-p6Tv07"
+    },
+    {
+      "bundle": "reports/generated/paired_colab_20260915.zLaa8r/reviewed-colab.bundle",
+      "commit": "0b62acecea9416034c8fb89cf95ddcfb4cb5be76",
+      "ref": "refs/heads/codex/recovered-paired_colab_20260915-zLaa8r"
+    }
+  ],
+  "exclusions": [
+    "Virtual environments, installed dependencies, caches and notebook checkpoints",
+    "Raw datasets, model weights, container images and unrelated generated reports",
+    "Untitled0.ipynb: unrelated 2025 health-pattern analysis",
+    "July 21 materials Drive link: unavailable (404); contents not verified"
+  ],
+  "files": [
+    {
+      "source_group": "generated",
+      "source": "colab_verification_2026-09-09/P22_colab_final.downloaded.ipynb",
+      "repository_path": "archive/code/generated/colab_verification_2026-09-09/P22_colab_final.downloaded.ipynb",
+      "sha256": "5141f209670dc0674e56bfff27462fe2e203792256df914ef68ff2da96907e92",
+      "bytes": 2679354,
+      "cells": 29,
+      "saved_error_outputs": 1
+    },
+    {
+      "source_group": "generated",
+      "source": "colab_verification_2026-09-09/P22_colab_native.executed.ipynb",
+      "repository_path": "archive/code/generated/colab_verification_2026-09-09/P22_colab_native.executed.ipynb",
+      "sha256": "accbe892e359a4ebb2c948ee4158868df4a62f75cd21c1c7daea8b68e6cb7e61",
+      "bytes": 1153314,
+      "cells": 28,
+      "saved_error_outputs": 1
+    },
+    {
+      "source_group": "generated",
+      "source": "colab_verification_2026-09-09/archive/P22_down_syndrome_all_in_one.ipynb",
+      "repository_path": "P22_down_syndrome_all_in_one.ipynb",
+      "sha256": "819604b370d8784303764ab0e2dbfe4e3a975c88b9a6df750321b7e0c92caf9f",
+      "bytes": 698651,
+      "cells": 23,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "colab_verification_2026-09-09/archive/reports/generated/notebooks/py311/P22_colab_py311.executed.ipynb",
+      "repository_path": "archive/code/generated/colab_verification_2026-09-09/archive/reports/generated/notebooks/py311/P22_colab_py311.executed.ipynb",
+      "sha256": "14002e327e4d7b6cfcc1b457f874c857ae8aed5c88ca70a38e8916d065c02c8a",
+      "bytes": 1013252,
+      "cells": 23,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "colab_verification_2026-09-09/compare_colab.py",
+      "repository_path": "archive/code/generated/colab_verification_2026-09-09/compare_colab.py",
+      "sha256": "427e7caafb5dc155241a04fdd68811e44c65d5887a6bfc2114492fa6f230a51c",
+      "bytes": 14174
+    },
+    {
+      "source_group": "generated",
+      "source": "external_rna_20260908/run_20260909T044111Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "repository_path": "archive/code/generated/external_rna_20260908/run_20260909T044111Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "sha256": "737f88bd37fe918133e31fa269cb2443f325f27573a40cd95aee76cee383b196",
+      "bytes": 73815,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "external_rna_20260908_final/run_20260909T044905Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "repository_path": "archive/code/generated/external_rna_20260908/run_20260909T044111Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "sha256": "737f88bd37fe918133e31fa269cb2443f325f27573a40cd95aee76cee383b196",
+      "bytes": 73815,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "external_rna_20260908_repeat/run_20260909T044602Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "repository_path": "archive/code/generated/external_rna_20260908/run_20260909T044111Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "sha256": "737f88bd37fe918133e31fa269cb2443f325f27573a40cd95aee76cee383b196",
+      "bytes": 73815,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "live-notebooks/P22_live_local.ipynb",
+      "repository_path": "archive/code/generated/live-notebooks/P22_live_local.ipynb",
+      "sha256": "47e0e11895f0c5ed97d2155cac21c53ff45b09cee4803761f949b2b74c6391ea",
+      "bytes": 28392,
+      "cells": 15,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_e2m_worker_20260914/candidate/tests/test_development_head.py",
+      "repository_path": "archive/code/generated/lmstudio_e2m_worker_20260914/candidate/tests/test_development_head.py",
+      "sha256": "cf1ea4336581010ad27cc29d2a6d6babb2a2fc450b925a3825c0f657f9256c30",
+      "bytes": 7256
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_e2m_worker_20260914/repair1/reviewed/scripts/validate_development_head.py",
+      "repository_path": "scripts/validate_development_head.py",
+      "sha256": "c761489202fdbfaba5153f7a508aefa19028cf87f681bd473382c6c4c713ac9d",
+      "bytes": 4753
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_e2m_worker_20260914/repair1/reviewed/tests/test_development_head.py",
+      "repository_path": "tests/test_development_head.py",
+      "sha256": "a5dbeedadd380b3ccb5802eab5d4449935c2300af71a1a5bc53bafacdbe32c77",
+      "bytes": 9131
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_split_20260914.mOJ8o9/implementation/candidate.py",
+      "repository_path": "archive/code/generated/lmstudio_head_capture_split_20260914.mOJ8o9/implementation/candidate.py",
+      "sha256": "2f4403706ebb684fa0958e8911b5da92c6a918ebd77f4a1bdfcd76aaf9718a7e",
+      "bytes": 9809
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_split_20260914.mOJ8o9/reviewed/scripts/capture_development_head.py",
+      "repository_path": "scripts/capture_development_head.py",
+      "sha256": "335d35c51b27d48704eaad62a695d74e6e91f456e3148b15abe8d3aff846029c",
+      "bytes": 7088
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_split_20260914.mOJ8o9/reviewed/tests/test_development_head_capture.py",
+      "repository_path": "tests/test_development_head_capture.py",
+      "sha256": "d011e88988c6d70ae313211aae2fda1f88449a03a365937a9f82cbce752baca2",
+      "bytes": 23760
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_split_20260914.mOJ8o9/tests/candidate.py",
+      "repository_path": "archive/code/generated/lmstudio_head_capture_split_20260914.mOJ8o9/tests/candidate.py",
+      "sha256": "ddcb6a5a4e2b8ed93cca16f738ff7cf6e7c3a79e71c014ef64a280a0c5de45c1",
+      "bytes": 14954
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_split_20260914.mOJ8o9/tests/reviewed_tests.py",
+      "repository_path": "archive/code/generated/lmstudio_head_capture_split_20260914.mOJ8o9/tests/reviewed_tests.py",
+      "sha256": "beefb8bc4c83da45b785caac4ecd741c8ddd6e1f713f492eeb7fe1055a5ab2f4",
+      "bytes": 20239
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_launcher_implementation_20260914.GCVwOg/candidate/scripts/launcher_head_capture.py",
+      "repository_path": "archive/code/generated/lmstudio_launcher_implementation_20260914.GCVwOg/candidate/scripts/launcher_head_capture.py",
+      "sha256": "01afb22f5d6fce4ffda84edda1579fbb84c5ddc128ec2d2631f12c8eaef90fb8",
+      "bytes": 3255,
+      "historical_syntax_error": "unterminated f-string literal (detected at line 103) (<unknown>, line 103)"
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_launcher_implementation_20260914.GCVwOg/candidate/tests/test_launcher_head_capture.py",
+      "repository_path": "archive/code/generated/lmstudio_launcher_implementation_20260914.GCVwOg/candidate/tests/test_launcher_head_capture.py",
+      "sha256": "b13dfb5bf510c1a4a98d30da4caa48ffe2d6a87e9a0b6fa94d81a86d4d7fe84b",
+      "bytes": 30068,
+      "historical_syntax_error": "unexpected character after line continuation character (<unknown>, line 117)"
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/00_scope_and_local_setup.ipynb",
+      "repository_path": "archive/code/generated/notebooks/00_scope_and_local_setup.ipynb",
+      "sha256": "90b640fd3f885227f087e755e0db591c2aef4a5e343e1875b2c9803a31389d51",
+      "bytes": 14277,
+      "cells": 13,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/01_tasic_evidence_boundary.ipynb",
+      "repository_path": "archive/code/generated/notebooks/01_tasic_evidence_boundary.ipynb",
+      "sha256": "c9e22c5bdfaf63f19e03a30cabd6817295d784c76c304c333d9cb4ea8e05470a",
+      "bytes": 27786,
+      "cells": 14,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/02_synthetic_fixture_and_donor_split.ipynb",
+      "repository_path": "archive/code/generated/notebooks/02_synthetic_fixture_and_donor_split.ipynb",
+      "sha256": "3223376c07b4084d8c44dcc4735b3ea6975d8d827ecba25c93a57dfe82b65e22",
+      "bytes": 35701,
+      "cells": 21,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/03_train_only_preprocessing.ipynb",
+      "repository_path": "archive/code/generated/notebooks/03_train_only_preprocessing.ipynb",
+      "sha256": "48f6a68b830dcc35233ed4aefdc14d15b4377ecd73b79015740c06d390d50dd1",
+      "bytes": 21214,
+      "cells": 16,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/04_metadata_preflight.ipynb",
+      "repository_path": "archive/code/generated/notebooks/04_metadata_preflight.ipynb",
+      "sha256": "8fc83e172f86539078a4c69d01b78ca0b4c6ef73eb521b20b736d78da5993d7b",
+      "bytes": 26084,
+      "cells": 16,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/05_model_baseline_comparison.ipynb",
+      "repository_path": "archive/code/generated/notebooks/05_model_baseline_comparison.ipynb",
+      "sha256": "68a03019985b9b69b31954ccd31d2ef327b200dfa3844b86c15122d4506eb57b",
+      "bytes": 21828,
+      "cells": 14,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/06_metrics_and_run_reporting.ipynb",
+      "repository_path": "archive/code/generated/notebooks/06_metrics_and_run_reporting.ipynb",
+      "sha256": "01b2c61efe6307e3732c7de093ad85e5ecbef3614fb8b9e5c9e0a2b46c84cba2",
+      "bytes": 73952,
+      "cells": 36,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/07_five_seed_benchmark.ipynb",
+      "repository_path": "archive/code/generated/notebooks/07_five_seed_benchmark.ipynb",
+      "sha256": "235307e9f686e949c306ddb8981bcb67d69ec50b858371a489829fae54ad0995",
+      "bytes": 51512,
+      "cells": 21,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/08_faithfulness_interventions.ipynb",
+      "repository_path": "archive/code/generated/notebooks/08_faithfulness_interventions.ipynb",
+      "sha256": "9a5eead15d9daf74fd3e89039ef6c864e33f49cdac7ec2faaad80e87c18034c8",
+      "bytes": 43125,
+      "cells": 18,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/09_local_end_to_end.ipynb",
+      "repository_path": "archive/code/generated/notebooks/09_local_end_to_end.ipynb",
+      "sha256": "a70a5c41b9b5507d83b9091d4b30d88e42ed09bd202ae17747007cabb2f10d57",
+      "bytes": 23978,
+      "cells": 14,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/10_handoff.ipynb",
+      "repository_path": "archive/code/generated/notebooks/10_handoff.ipynb",
+      "sha256": "c0b237bbf230b29304471c0ad188f02b52304b6fb5328e3c7548246ea744f24f",
+      "bytes": 11955,
+      "cells": 10,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_down_syndrome_all_in_one.executed.ipynb",
+      "repository_path": "archive/code/generated/external_rna_20260908/run_20260909T044111Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.executed.ipynb",
+      "sha256": "737f88bd37fe918133e31fa269cb2443f325f27573a40cd95aee76cee383b196",
+      "bytes": 73815,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_down_syndrome_all_in_one.real.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_down_syndrome_all_in_one.real.executed.ipynb",
+      "sha256": "27c9179b1976c7f09bb8a08658186ec659ecf9c51768991dc21e1119bf0f6012",
+      "bytes": 79831,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_down_syndrome_all_in_one.same_cap.final.real.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_down_syndrome_all_in_one.same_cap.final.real.executed.ipynb",
+      "sha256": "93440072f053dc11358db41c3612a173b702ddf675d891813d2d96b83c64abdc",
+      "bytes": 659314,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_down_syndrome_all_in_one.same_cap.real.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_down_syndrome_all_in_one.same_cap.real.executed.ipynb",
+      "sha256": "782e6433461a5c2ccfed3b6f8cc7a71d4719f507aece3c84309533569a06abf0",
+      "bytes": 658333,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_external_rna_20260908.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_external_rna_20260908.executed.ipynb",
+      "sha256": "a6dce26adf4e8b40105eef39374e68b7274675dc0ee6df6def1e1b1e68371de8",
+      "bytes": 982931,
+      "cells": 23,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_external_rna_20260908_final.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_external_rna_20260908_final.executed.ipynb",
+      "sha256": "78f74008869606798623718f1eaa826f24ce2727807629446c95fcaa426369b7",
+      "bytes": 989086,
+      "cells": 23,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "notebooks/P22_external_rna_20260908_repeat.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_external_rna_20260908_repeat.executed.ipynb",
+      "sha256": "28720981c4cae3a6856ad7c08836429bf5db2038592a23b0b515e4a97f3e3900",
+      "bytes": 987473,
+      "cells": 23,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab.ipynb",
+      "repository_path": "archive/code/generated/paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab.ipynb",
+      "sha256": "1718bb9172c6c70b476c7b409a260f6cd0daf346d22923fb63ec1a12328a49bb",
+      "bytes": 149841,
+      "cells": 6,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab.saved.ipynb",
+      "repository_path": "archive/code/generated/paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab.saved.ipynb",
+      "sha256": "fa9e40c732dd6b24878c7bb86baafc8f82eeff8f87cbcfea5a7e5c1a27f1860a",
+      "bytes": 350987,
+      "cells": 6,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab_fixed.ipynb",
+      "repository_path": "archive/code/generated/paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab_fixed.ipynb",
+      "sha256": "a5caa060ce2679bdffa87d8f8db5b78fd723187b6b7ba7e193843bb79011b4e8",
+      "bytes": 149970,
+      "cells": 6,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_colab_20260915.zLaa8r/cloud_outputs/P22_paired_workflow.executed.ipynb",
+      "repository_path": "archive/code/generated/paired_colab_20260915.zLaa8r/cloud_outputs/P22_paired_workflow.executed.ipynb",
+      "sha256": "54817b70c64f0f48c72d3644196dba0cc66db7d865f2afe041b1673ee8acc319",
+      "bytes": 223105,
+      "cells": 17,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_notebook_20260914.p6Tv07/P22_paired_workflow.executed.ipynb",
+      "repository_path": "archive/code/generated/paired_notebook_20260914.p6Tv07/P22_paired_workflow.executed.ipynb",
+      "sha256": "fb42834e34c7bf81d5b58bbc9f158835734325cae1c7836e611fa6d396bc0aaf",
+      "bytes": 221132,
+      "cells": 17,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_notebook_20260914.p6Tv07/P22_paired_workflow.ipynb",
+      "repository_path": "notebooks/P22_paired_workflow.ipynb",
+      "sha256": "623ac92645c10cc47e5d96b147d989c2b08eb4d6ec0507ce2c9fc5b480b932d4",
+      "bytes": 17249,
+      "cells": 17,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "paired_notebook_20260914.p6Tv07/test_paired_notebook.py",
+      "repository_path": "tests/test_paired_notebook.py",
+      "sha256": "a1524d9b18eecad51d545e95833b700223eac1ee55d14942b46d8a3e3ac9a1c7",
+      "bytes": 2862
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/implementation/candidate.py",
+      "repository_path": "archive/code/generated/qwen_launcher_batch_20260914.4wHgFo/implementation/candidate.py",
+      "sha256": "af45d9f8569633b0f2326be3a86118391e8daba57e346fd61134b6fda4ab843a",
+      "bytes": 4548
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/implementation/repair/candidate.py",
+      "repository_path": "archive/code/generated/qwen_launcher_batch_20260914.4wHgFo/implementation/repair/candidate.py",
+      "sha256": "d11ab19f497de9374c2cbf2efc4325ac2b4b04207eac2a2d35f2a8118c90a434",
+      "bytes": 4971
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/implementation/reviewed.py",
+      "repository_path": "scripts/launcher_head_capture.py",
+      "sha256": "fd721b8d8522003422223dd38f2bffbb388033ecb4f0c6af369198602fde61e6",
+      "bytes": 5235
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/tests/candidate.py",
+      "repository_path": "archive/code/generated/qwen_launcher_batch_20260914.4wHgFo/tests/candidate.py",
+      "sha256": "3011082b5432c721eb6d0306e26115598a2b10da4bef147b32b47f04f092d3f6",
+      "bytes": 7274
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/tests/repair/candidate.py",
+      "repository_path": "archive/code/generated/qwen_launcher_batch_20260914.4wHgFo/tests/repair/candidate.py",
+      "sha256": "106f51b24428fb6d3b7be965662c2d71400c6ae56801fc04018725375b7f131c",
+      "bytes": 10981
+    },
+    {
+      "source_group": "generated",
+      "source": "qwen_launcher_batch_20260914.4wHgFo/tests/reviewed.py",
+      "repository_path": "tests/test_launcher_head_capture.py",
+      "sha256": "b3ab13cf0c6ceb9ad1b1ffdfd2718237385dc8901e1fcf3c9210b30c09f12fcc",
+      "bytes": 15470
+    },
+    {
+      "source_group": "generated",
+      "source": "reader_enablement_20260912/reader_environment.py",
+      "repository_path": "scripts/reader_environment.py",
+      "sha256": "583991652570cc1bca695a604bc36ca367642ea052511e3a69fbaed86e38d118",
+      "bytes": 2959
+    },
+    {
+      "source_group": "generated",
+      "source": "reader_enablement_20260912/test_reader_environment.py",
+      "repository_path": "tests/test_reader_environment.py",
+      "sha256": "4007e0512dc0d50daa2f51ce1943f22f7bd2f11784ab17cc0e91b3017e7bae29",
+      "bytes": 1662
+    },
+    {
+      "source_group": "generated",
+      "source": "scale-notebooks/11_scale_benchmark.ipynb",
+      "repository_path": "archive/code/generated/scale-notebooks/11_scale_benchmark.ipynb",
+      "sha256": "4c994cd957ef091dd7266926327e513e738447f2d41983e28fb406c13e194c4e",
+      "bytes": 19544,
+      "cells": 12,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "verification/down_syndrome/run_20260730T012032Z/runs/real_analysis_20260728/P22_down_syndrome_all_in_one.real.executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_down_syndrome_all_in_one.real.executed.ipynb",
+      "sha256": "27c9179b1976c7f09bb8a08658186ec659ecf9c51768991dc21e1119bf0f6012",
+      "bytes": 79831,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "generated",
+      "source": "gnhf_companion_2026-09-09/0001-fix-reject-contradictory-peak-identifiers-and-coordi.patch",
+      "repository_path": "archive/code/generated/gnhf_companion_2026-09-09/0001-fix-reject-contradictory-peak-identifiers-and-coordi.patch",
+      "sha256": "c23e79578ae6540e147b339cbab5699337eb4249b0057ed8b3842f50f5898aec",
+      "bytes": 3095
+    },
+    {
+      "source_group": "generated",
+      "source": "gnhf_companion_2026-09-09/0002-docs-record-paired-input-blocker-and-failed-GNHF-bud.patch",
+      "repository_path": "archive/code/generated/gnhf_companion_2026-09-09/0002-docs-record-paired-input-blocker-and-failed-GNHF-bud.patch",
+      "sha256": "cd8032dc8f49e8498cf050d8329734eb146696ca8d3a18f51f8810fe944afff7",
+      "bytes": 14569
+    },
+    {
+      "source_group": "generated",
+      "source": "gnhf_companion_2026-09-09/worker-tracked-changes.patch",
+      "repository_path": "archive/code/generated/gnhf_companion_2026-09-09/worker-tracked-changes.patch",
+      "sha256": "e546c581a6531eb278efc67fbde45397e6d3a45a96f6ab7bbe2ae829cd223eab",
+      "bytes": 5516
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_e2m_worker_20260914/candidate.patch",
+      "repository_path": "archive/code/generated/lmstudio_e2m_worker_20260914/candidate.patch",
+      "sha256": "04bbfd3615a8f7d36f1d83bdd81b7f307b2cc29ad3d61e03251bf6479ba35313",
+      "bytes": 7528
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_e2m_worker_20260914/repair1/candidate.patch",
+      "repository_path": "archive/code/generated/lmstudio_e2m_worker_20260914/repair1/candidate.patch",
+      "sha256": "f394f601601bc3b64d343b0975ff19a3c24013784084274a705671f581d9ffd5",
+      "bytes": 11746
+    },
+    {
+      "source_group": "generated",
+      "source": "lmstudio_head_capture_worker_20260914.b4la3n/candidate.partial.patch",
+      "repository_path": "archive/code/generated/lmstudio_head_capture_worker_20260914.b4la3n/candidate.partial.patch",
+      "sha256": "ec459508bfa53689d7e9295c98856b93e10aafe03bc27fd7b461492157647c6b",
+      "bytes": 20923
+    },
+    {
+      "source_group": "obsidian",
+      "source": "P22_down_syndrome_all_in_one.ipynb",
+      "repository_path": "archive/code/obsidian/P22_down_syndrome_all_in_one.ipynb",
+      "sha256": "70e4411b75bdd9fb29ed403038ba7b124c6d61a77f0cc3a0746d79e4b7f29eac",
+      "bytes": 575868,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "obsidian",
+      "source": "P22_down_syndrome_all_in_one_executed.ipynb",
+      "repository_path": "archive/code/generated/notebooks/P22_down_syndrome_all_in_one.same_cap.final.real.executed.ipynb",
+      "sha256": "93440072f053dc11358db41c3612a173b702ddf675d891813d2d96b83c64abdc",
+      "bytes": 659314,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "obsidian",
+      "source": "P22_down_syndrome_all_in_one_executed_20260816.ipynb",
+      "repository_path": "archive/code/obsidian/P22_down_syndrome_all_in_one_executed_20260816.ipynb",
+      "sha256": "521a28965668a508626ed9ee280fc4bba7e38fae92d55a42171c836d7fc1af10",
+      "bytes": 659002,
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "obsidian",
+      "source": "top3_dataset_exploration_preflight.ipynb",
+      "repository_path": "archive/code/obsidian/top3_dataset_exploration_preflight.ipynb",
+      "sha256": "d52004fd48465a84997006b18df36f64089a6ba240b81e42cdb8a18eb459784f",
+      "bytes": 35023,
+      "cells": 15,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1HUbpwBQWum8XYbmuv5PYvtUvkC-qtjQT/P22_paired_workflow_Colab.ipynb",
+      "repository_path": "archive/code/generated/paired_colab_20260915.zLaa8r/P22_paired_workflow_Colab.saved.ipynb",
+      "sha256": "fa9e40c732dd6b24878c7bb86baafc8f82eeff8f87cbcfea5a7e5c1a27f1860a",
+      "bytes": 350987,
+      "drive_file_id": "1HUbpwBQWum8XYbmuv5PYvtUvkC-qtjQT",
+      "drive_url": "https://colab.research.google.com/drive/1HUbpwBQWum8XYbmuv5PYvtUvkC-qtjQT",
+      "drive_modified_time": "2026-09-16T01:44:43.090Z",
+      "cells": 6,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1LFmvA3vh7DVVRpDV9fs4kBcOJ12tN887/P22_reader_environment_20260912.ipynb",
+      "repository_path": "archive/code/google_drive/1LFmvA3vh7DVVRpDV9fs4kBcOJ12tN887/P22_reader_environment_20260912.ipynb",
+      "sha256": "4e1735d98101e5e2c38e67232414f62d511ed39517a65f328460cd6aef516a5a",
+      "bytes": 10114,
+      "drive_file_id": "1LFmvA3vh7DVVRpDV9fs4kBcOJ12tN887",
+      "drive_url": "https://colab.research.google.com/drive/1LFmvA3vh7DVVRpDV9fs4kBcOJ12tN887",
+      "drive_modified_time": "2026-09-12T21:57:43.512Z",
+      "cells": 1,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1aQgaq5cq7A5tOxHMYeCKaPGAG2Htxc3c/P22_down_syndrome_all_in_one.ipynb",
+      "repository_path": "archive/code/generated/colab_verification_2026-09-09/P22_colab_final.downloaded.ipynb",
+      "sha256": "5141f209670dc0674e56bfff27462fe2e203792256df914ef68ff2da96907e92",
+      "bytes": 2679354,
+      "drive_file_id": "1aQgaq5cq7A5tOxHMYeCKaPGAG2Htxc3c",
+      "drive_url": "https://colab.research.google.com/drive/1aQgaq5cq7A5tOxHMYeCKaPGAG2Htxc3c",
+      "drive_modified_time": "2026-09-09T08:06:46.442Z",
+      "cells": 29,
+      "saved_error_outputs": 1
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1vvQkIEyWf67TOJGtrUfVSbOM6Zl1o16E/P22_down_syndrome_all_in_one.ipynb",
+      "repository_path": "archive/code/google_drive/1vvQkIEyWf67TOJGtrUfVSbOM6Zl1o16E/P22_down_syndrome_all_in_one.ipynb",
+      "sha256": "8f0f292c35fe8badc5b7fdee501ae212c1e08613b54f1794653bcdc65f2c960e",
+      "bytes": 517404,
+      "drive_file_id": "1vvQkIEyWf67TOJGtrUfVSbOM6Zl1o16E",
+      "drive_url": "https://drive.google.com/file/d/1vvQkIEyWf67TOJGtrUfVSbOM6Zl1o16E/view?usp=drivesdk",
+      "drive_modified_time": "2026-07-30T23:32:30.747Z",
+      "cells": 22,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1WBZaj-kIQ2difOYlEXwgLLlji8jHooOU/run_tasic2018_pipeline_colab.ipynb",
+      "repository_path": "archive/code/google_drive/1WBZaj-kIQ2difOYlEXwgLLlji8jHooOU/run_tasic2018_pipeline_colab.ipynb",
+      "sha256": "22147b2a77b7653ef726905be88c6018aac196f9a1ba15f793c8d8b2f6692c9e",
+      "bytes": 45288,
+      "drive_file_id": "1WBZaj-kIQ2difOYlEXwgLLlji8jHooOU",
+      "drive_url": "https://drive.google.com/file/d/1WBZaj-kIQ2difOYlEXwgLLlji8jHooOU/view?usp=drivesdk",
+      "drive_modified_time": "2026-07-30T22:45:28.144Z",
+      "cells": 27,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1fA5SNG45igvF1RpfBOAtZlVZJqNLdCcW/run_real_data_pipeline_colab.ipynb",
+      "repository_path": "archive/code/google_drive/1fA5SNG45igvF1RpfBOAtZlVZJqNLdCcW/run_real_data_pipeline_colab.ipynb",
+      "sha256": "96245f27b29f97004d9e801c679dbcb64b369336ab5c7c8b9489306aeda2986a",
+      "bytes": 100192,
+      "drive_file_id": "1fA5SNG45igvF1RpfBOAtZlVZJqNLdCcW",
+      "drive_url": "https://drive.google.com/file/d/1fA5SNG45igvF1RpfBOAtZlVZJqNLdCcW/view?usp=drivesdk",
+      "drive_modified_time": "2026-07-14T23:32:35.798Z",
+      "cells": 24,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "google_drive",
+      "source": "1Sd7ukFGnOX01F22axR-CK88JDYeGIuXx/run_finegrained_pipeline_colab.ipynb",
+      "repository_path": "archive/code/google_drive/1Sd7ukFGnOX01F22axR-CK88JDYeGIuXx/run_finegrained_pipeline_colab.ipynb",
+      "sha256": "da2174a12417d6b50dd230299cd027798103d92a27e4703668bfb69a69bd84b6",
+      "bytes": 92206,
+      "drive_file_id": "1Sd7ukFGnOX01F22axR-CK88JDYeGIuXx",
+      "drive_url": "https://drive.google.com/file/d/1Sd7ukFGnOX01F22axR-CK88JDYeGIuXx/view?usp=drivesdk",
+      "drive_modified_time": "2026-07-14T21:23:22.790Z",
+      "cells": 24,
+      "saved_error_outputs": 0
+    },
+    {
+      "source_group": "working_tree",
+      "source": "P22_down_syndrome_all_in_one_executed.ipynb",
+      "repository_path": "P22_down_syndrome_all_in_one_executed.ipynb",
+      "sha256": "9105507e965fb69026e8f5707aa38db5cf10196243ef2d17b090a4f050387b61",
+      "bytes": 583339
+    }
+  ]
+}

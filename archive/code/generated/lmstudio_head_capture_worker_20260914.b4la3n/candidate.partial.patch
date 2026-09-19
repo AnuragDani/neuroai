@@ -1,0 +1,548 @@
+*** Begin Patch
+*** Add File: tests/test_development_head_capture.py
++"""Offline tests for the bounded development HEAD capture core.
++
++No real socket, DNS, TLS, process launch, real signals, sleep, or network
++activity occurs. A fake transport is injected and socket entrypoints are
++monkeypatched to fail if anything attempts a live connection.
++"""
++
++import base64
++import hashlib
++import importlib.util
++import os
++import socket
++import sys
++import threading
++from pathlib import Path
++
++import pytest
++
++REPO_ROOT = Path(__file__).resolve().parents[1]
++SCRIPTS_DIR = REPO_ROOT / "scripts"
++SRC_DIR = REPO_ROOT / "src"
++
++PINNED_URL = (
++    "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305146/suppl/"
++    "GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz"
++)
++PINNED_HOST = "ftp.ncbi.nlm.nih.gov"
++PINNED_PATH = (
++    "/geo/series/GSE305nnn/GSE305146/suppl/"
++    "GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz"
++)
++
++
++def _load_capture_module():
++    spec = importlib.util.spec_from_file_location(
++        "capture_development_head", SCRIPTS_DIR / "capture_development_head.py"
++    )
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def _load_parser_module():
++    spec = importlib.util.spec_from_file_location(
++        "parse_head_evidence", SRC_DIR / "parse_head_evidence.py"
++    )
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def _valid_headers():
++    return (
++        b"HTTP/1.1 200 OK\r\n"
++        b"Content-Length: 12345\r\n"
++        b"Content-Encoding: identity\r\n"
++        b"ETag: \"abc123\"\r\n"
++        b"\r\n"
++    )
++
++
++def _headers_with_length(length: str) -> bytes:
++    return (
++        b"HTTP/1.1 200 OK\r\n"
++        + f"Content-Length: {length}\r\n".encode("ascii")
++        + b"\r\n"
++    )
++
++
++class FakeClock:
++    """Deterministic monotonic clock; advances only when told to."""
++
++    def __init__(self, start: float = 1000.0):
++        self.now = start
++
++    def __call__(self) -> float:
++        return self.now
++
++    def advance(self, seconds: float) -> None:
++        self.now += seconds
++
++
++class FakeSignal:
++    """In-memory stand-in for the signal module used by the capture core."""
++
++    def __init__(self, *, supported: bool = True, main_thread: bool = True):
++        self.supported = supported
++        self.main_thread = main_thread
++        self.SIGALRM = 14
++        self.SIG_DFL = 0
++        self._handlers = {}
++        self._timers = {}
++        self.setitimer_calls = []
++
++    def getsignal(self):
++        return self
++
++    def getcurrentthread(self):
++        return threading.main_thread() if self.main_thread else threading.current_thread()
++
++    def main_thread(self):
++        return threading.main_thread()
++
++    def signal(self, signum, handler):
++        previous = self._handlers.get(signum, self.SIG_DFL)
++        self._handlers[signum] = handler
++        return previous
++
++    def setitimer(self, which, interval, interval2=None):
++        self.setitimer_calls.append((which, interval, interval2))
++        self._timers[which] = (interval, interval2)
++        return self._timers.get(which, (0.0, 0.0))
++
++    def getitimer(self, which):
++        return self._timers.get(which, (0.0, 0.0))
++
++    def has_active_timer(self):
++        for which, (interval, interval2) in self._timers.items():
++            if which == self.SIGALRM:
++                continue
++            if interval > 0 or interval2 > 0:
++                return True
++        return False
++
++
++class FakeSocket:
++    """Byte-stream socket with per-read cost and optional failure injection."""
++
++    def __init__(self, data: bytes, *, per_read_cost: float = 0.0, fail_at: int | None = None):
++        self._data = data
++        self._pos = 0
++        self._per_read_cost = per_read_cost
++        self._fail_at = fail_at
++        self._timeout = None
++        self.closed = False
++
++    def settimeout(self, seconds):
++        self._timeout = seconds
++
++    def gettimeout(self):
++        return self._timeout
++
++    def recv(self, n):
++        if self.closed:
++            raise OSError("recv on closed socket")
++        if self._fail_at is not None and self._pos >= self._fail_at:
++            raise OSError("injected I/O failure")
++        if self._pos >= len(self._data):
++            return b""
++        chunk = self._data[self._pos : self._pos + n]
++        self._pos += len(chunk)
++        return chunk
++
++
++class FakeConnection:
++    """HTTPSConnection-like object driven by a fake socket and clock."""
++
++    def __init__(self, data: bytes, clock: FakeClock, *, per_read_cost: float = 0.0,
++                 fail_at: int | None = None, connect_cost: float = 0.0,
++                 request_cost: float = 0.0, connect_error: Exception | None = None,
++                 request_error: Exception | None = None):
++        self._data = data
++        self._clock = clock
++        self._per_read_cost = per_read_cost
++        self._fail_at = fail_at
++        self._connect_cost = connect_cost
++        self._request_cost = request_cost
++        self._connect_error = connect_error
++        self._request_error = request_error
++        self.sock = FakeSocket(data, per_read_cost=per_read_cost, fail_at=fail_at)
++        self.requested = None
++        self.request_count = 0
++        self.closed = False
++
++    def _connect(self):
++        if self._connect_error is not None:
++            raise self._connect_error
++        self._clock.advance(self._connect_cost)
++
++    def request(self, method, path, body=None, headers=None):
++        self.request_count += 1
++        self.requested = (method, path, body, headers)
++        if self._request_error is not None:
++            raise self._request_error
++        self._clock.advance(self._request_cost)
++
++    def close(self):
++        self.closed = True
++        self.sock.closed = True
++
++
++class FakeFactory:
++    """connection_factory(host, port=443, timeout=remaining) -> FakeConnection."""
++
++    def __init__(self, connection: FakeConnection):
++        self.connection = connection
++        self.calls = []
++
++    def __call__(self, host, port=443, timeout=None):
++        self.calls.append({"host": host, "port": port, "timeout": timeout})
++        self.connection._connect()
++        return self.connection
++
++
++@pytest.fixture(autouse=True)
++def _offline(monkeypatch):
++    """Guarantee no live network: fail socket entrypoints if touched."""
++
++    def _boom(*args, **kwargs):
++        raise AssertionError("live socket entrypoint touched during offline test")
++
++    monkeypatch.setattr(socket, "create_connection", _boom)
++    monkeypatch.setattr(socket, "getaddrinfo", _boom)
++    monkeypatch.setattr(socket.socket, "connect", _boom)
++    yield
++
++
++@pytest.fixture
++def cap_module(monkeypatch):
++    monkeypatch.syspath_prepend(str(SRC_DIR))
++    return _load_capture_module()
++
++
++@pytest.fixture
++def parser_module():
++    return _load_parser_module()
++
++
++def _run(cap_module, monkeypatch, factory, *, url=PINNED_URL, observed_at="2024-01-01T00:00:00Z",
++         clock=None, fake_signal=None):
++    clock = clock or FakeClock()
++    fake_signal = fake_signal or FakeSignal()
++    monkeypatch.setattr(cap_module, "_monotonic", clock)
++    monkeypatch.setattr(cap_module, "_signal", fake_signal)
++    return cap_module.capture_head(url=url, observed_at=observed_at, connection_factory=factory)
++
++
++def test_none_factory_refuses_before_any_activity(cap_module, monkeypatch):
++    clock = FakeClock()
++    fake_signal = FakeSignal()
++    monkeypatch.setattr(cap_module, "_monotonic", clock)
++    monkeypatch.setattr(cap_module, "_signal", fake_signal)
++    report = cap_module.capture_head(url=PINNED_URL, observed_at="2024-01-01T00:00:00Z")
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "LIVE_TRANSPORT_NOT_ENABLED"
++    assert report["requests_attempted"] == 0
++    assert report["header_bytes"] == 0
++    assert report["raw_header_base64"] == ""
++    assert report["header_record_sha256"] is None
++    assert report["metadata"] is None
++    assert report["body_bytes"] == 0
++    assert report["scientific_gate_effect"] == "NONE"
++    assert fake_signal.setitimer_calls == []
++
++
++def test_mismatched_url_refuses_without_factory(cap_module, monkeypatch):
++    factory = FakeFactory(FakeConnection(b"", FakeClock()))
++    report = _run(cap_module, monkeypatch, factory, url="https://example.com/other")
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "BAD_TARGET"
++    assert report["requests_attempted"] == 0
++    assert factory.calls == []
++
++
++def test_bad_timestamp_refuses_without_factory(cap_module, monkeypatch):
++    factory = FakeFactory(FakeConnection(b"", FakeClock()))
++    report = _run(cap_module, monkeypatch, factory, observed_at="bad\x01label")
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "BAD_LABEL"
++    assert report["requests_attempted"] == 0
++    assert factory.calls == []
++
++
++def test_empty_timestamp_refuses_without_factory(cap_module, monkeypatch):
++    factory = FakeFactory(FakeConnection(b"", FakeClock()))
++    report = _run(cap_module, monkeypatch, factory, observed_at="")
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "BAD_LABEL"
++    assert factory.calls == []
++
++
++def test_valid_head_captures_exact_bytes_and_metadata(cap_module, monkeypatch, parser_module):
++    data = _valid_headers()
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "CAPTURED"
++    assert report["reason"] is None
++    assert report["url"] == PINNED_URL
++    assert report["observed_at"] == "2024-01-01T00:00:00Z"
++    assert report["requests_attempted"] == 1
++    assert report["header_bytes"] == len(data)
++    assert report["raw_header_base64"] == base64.b64encode(data).decode("ascii")
++    assert report["header_record_sha256"] == hashlib.sha256(data).hexdigest()
++    assert report["body_bytes"] == 0
++    assert report["scientific_gate_effect"] == "NONE"
++    expected = parser_module.parse_head_evidence(data, url=PINNED_URL, observed_at="2024-01-01T00:00:00Z")
++    assert report["metadata"] == expected
++    assert report["metadata"]["header_record_sha256"] == hashlib.sha256(data).hexdigest()
++    assert report["metadata"]["declared_payload_bytes"] == 12345
++    # Exactly one request, HEAD to the fixed origin-form path.
++    assert factory.calls == [{"host": PINNED_HOST, "port": 443, "timeout": 15.0}]
++    method, path, body, headers = connection.requested
++    assert method == "HEAD"
++    assert path == PINNED_PATH
++    assert body is None
++    assert headers["Accept-Encoding"] == "identity"
++    assert headers["Connection"] == "close"
++    # Body sentinel: nothing past the terminator was read.
++    assert connection.sock._pos == len(data)
++    assert connection.closed is True
++
++
++def test_queued_body_sentinel_remains_unread(cap_module, monkeypatch):
++    data = _valid_headers() + b"BODY-SENTINEL-DO-NOT-READ"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "CAPTURED"
++    assert report["header_bytes"] == len(_valid_headers())
++    # Read stopped exactly at the terminator; the sentinel bytes were not consumed.
++    assert connection.sock._pos == len(_valid_headers())
++    assert report["body_bytes"] == 0
++
++
++def test_exact_65536_record_succeeds(cap_module, monkeypatch, parser_module):
++    # Build a record whose full encoded length is exactly 65536 bytes.
++    prefix = b"HTTP/1.1 200 OK\r\n"
++    suffix = b"\r\n"
++    filler = b"X-Filler: " + b"a" * 40 + b"\r\n"
++    # Compute how many filler lines fit so total == 65536.
++    base = len(prefix) + len(suffix)
++    target = 65536
++    # Use a Content-Length line plus filler lines to reach exactly target.
++    cl_line = b"Content-Length: 1\r\n"
++    base += len(cl_line)
++    remaining = target - base
++    assert remaining % len(filler) == 0, "fixture must divide evenly"
++    count = remaining // len(filler)
++    data = prefix + cl_line + filler * count + suffix
++    assert len(data) == 65536
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "CAPTURED"
++    assert report["header_bytes"] == 65536
++    assert report["header_record_sha256"] == hashlib.sha256(data).hexdigest()
++    assert report["metadata"] is not None
++    assert connection.sock._pos == 65536
++
++
++def test_missing_terminator_at_65536_refuses_with_exactly_65536_read(cap_module, monkeypatch):
++    # 65536 bytes with no final CRLF CRLF terminator.
++    data = b"HTTP/1.1 200 OK\r\n" + b"Content-Length: 1\r\n" + b"x" * (65536 - len(b"HTTP/1.1 200 OK\r\nContent-Length: 1\r\n"))
++    assert len(data) == 65536
++    assert b"\r\n\r\n" not in data
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "HEADER_CAP"
++    assert report["header_bytes"] == 65536
++    assert report["raw_header_base64"] == base64.b64encode(data).decode("ascii")
++    assert report["header_record_sha256"] == hashlib.sha256(data).hexdigest()
++    assert report["metadata"] is None
++    # Never read byte 65537; stopped exactly at the cap.
++    assert connection.sock._pos == 65536
++    assert connection.closed is True
++
++
++def test_total_cap_failure_across_many_small_fields(cap_module, monkeypatch):
++    # Many individually small header fields whose cumulative size exceeds 65536
++    # before any terminator appears.
++    lines = [b"HTTP/1.1 200 OK"]
++    total = len(lines[0]) + 2  # status line CRLF
++    i = 0
++    while total < 65536:
++        line = b"X-Field-" + str(i).encode("ascii") + b": " + b"v" * 50
++        lines.append(line)
++        total += len(line) + 2
++        i += 1
++    data = b"\r\n".join(lines)  # no final CRLF CRLF
++    assert len(data) > 65536
++    assert b"\r\n\r\n" not in data
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "HEADER_CAP"
++    assert report["header_bytes"] == 65536
++    assert connection.sock._pos == 65536
++
++
++def test_missing_content_length_refuses(cap_module, monkeypatch):
++    data = b"HTTP/1.1 200 OK\r\nETag: \"x\"\r\n\r\n"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "PARSER_REFUSAL"
++    assert report["header_bytes"] == len(data)
++    assert report["header_record_sha256"] == hashlib.sha256(data).hexdigest()
++    assert report["metadata"] is None
++
++
++def test_invalid_content_length_refuses(cap_module, monkeypatch):
++    data = b"HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "PARSER_REFUSAL"
++    assert report["metadata"] is None
++
++
++def test_redirect_status_refuses_no_second_request(cap_module, monkeypatch):
++    data = b"HTTP/1.1 301 Moved Permanently\r\nLocation: /elsewhere\r\nContent-Length: 5\r\n\r\n"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "PARSER_REFUSAL"
++    assert report["requests_attempted"] == 1
++    assert connection.request_count == 1
++    assert report["metadata"] is None
++
++
++def test_interim_1xx_refuses(cap_module, monkeypatch):
++    data = b"HTTP/1.1 100 Continue\r\nContent-Length: 0\r\n\r\n"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "PARSER_REFUSAL"
++    assert report["requests_attempted"] == 1
++    assert connection.request_count == 1
++
++
++def test_non_identity_encoding_refuses(cap_module, monkeypatch):
++    data = b"HTTP/1.1 200 OK\r\nContent-Length: 10\r\nContent-Encoding: gzip\r\n\r\n"
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "ENCODING_REFUSAL"
++    assert report["metadata"] is None
++
++
++def test_duplicate_content_encoding_refuses(cap_module, monkeypatch):
++    data = (
++        b"HTTP/1.1 200 OK\r\n"
++        b"Content-Length: 10\r\n"
++        b"Content-Encoding: identity\r\n"
++        b"Content-Encoding: identity\r\n"
++        b"\r\n"
++    )
++    clock = FakeClock()
++    connection = FakeConnection(data, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "ENCODING_REFUSAL"
++    assert report["metadata"] is None
++
++
++def test_eof_partway_preserves_prefix_and_hash(cap_module, monkeypatch):
++    full = _valid_headers()
++    partial = full[: len(full) - 6]  # cut before the final CRLF CRLF
++    clock = FakeClock()
++    connection = FakeConnection(partial, clock)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "TRUNCATION"
++    assert report["header_bytes"] == len(partial)
++    assert report["raw_header_base64"] == base64.b64encode(partial).decode("ascii")
++    assert report["header_record_sha256"] == hashlib.sha256(partial).hexdigest()
++    assert report["metadata"] is None
++    assert connection.closed is True
++
++
++def test_io_exception_preserves_prefix_and_hash(cap_module, monkeypatch):
++    full = _valid_headers()
++    fail_at = 20
++    clock = FakeClock()
++    connection = FakeConnection(full, clock, fail_at=fail_at)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "IO_FAILURE"
++    assert report["header_bytes"] == fail_at
++    assert report["raw_header_base64"] == base64.b64encode(full[:fail_at]).decode("ascii")
++    assert report["header_record_sha256"] == hashlib.sha256(full[:fail_at]).hexdigest()
++    assert report["metadata"] is None
++    assert connection.closed is True
++
++
++def test_slow_trickle_fails_total_deadline(cap_module, monkeypatch):
++    # Per-read cost is small (passes any per-read socket limit) but the cumulative
++    # time exceeds the 15-second total deadline.
++    data = _valid_headers()
++    per_read_cost = 0.5  # 30+ reads * 0.5s > 15s
++    clock = FakeClock()
++    connection = FakeConnection(data, clock, per_read_cost=per_read_cost)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "DEADLINE_EXPIRED"
++    assert report["metadata"] is None
++    assert connection.closed is True
++
++
++def test_deadline_expires_during_connect(cap_module, monkeypatch):
++    data = _valid_headers()
++    clock = FakeClock()
++    connection = FakeConnection(data, clock, connect_cost=20.0)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "DEADLINE_EXPIRED"
++    assert report["requests_attempted"] == 0
++    assert connection.request_count == 0
++    assert connection.closed is True
++
++
++def test_deadline_expires_during_request(cap_module, monkeypatch):
++    data = _valid_headers()
++    clock = FakeClock()
++    connection = FakeConnection(data, clock, request_cost=20.0)
++    factory = FakeFactory(connection)
++    report = _run(cap_module, monkeypatch, factory)
++    assert report["capture_status"] == "REFUSED"
++    assert report["reason"] == "DEADLINE_EXPIRED"
++    assert report["requests_attempted"] == 1
++    assert connection.request_count == 1
++    assert

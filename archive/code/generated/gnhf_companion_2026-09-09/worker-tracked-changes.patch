@@ -1,0 +1,76 @@
+diff --git a/src/p22/data/multiome.py b/src/p22/data/multiome.py
+index 41c4dda..9f6c135 100644
+--- a/src/p22/data/multiome.py
++++ b/src/p22/data/multiome.py
+@@ -40,6 +40,13 @@ def _positive_integer(value: int, name: str) -> None:
+         raise ValueError(f"{name} must be a positive integer")
+ 
+ 
++def _parse_peak_id(value: str) -> tuple[str, int, int] | None:
++    match = re.fullmatch(r"([^:\s]+):([0-9]+)-([0-9]+)", value)
++    if match is None:
++        return None
++    return match.group(1), int(match.group(2)), int(match.group(3))
++
++
+ def _decode_bounded(raw: bytes, budget: ReadBudget) -> bytes:
+     """Charge every materialized layer, including tar headers, before parsing it."""
+     remaining = budget.max_expanded_bytes - budget.expanded_bytes
+@@ -152,6 +159,10 @@ def read_features(asset: dict, budget: ReadBudget, *, modality: str | None = Non
+         )
+         if (~known & ~unmapped_rna).any():
+             raise ValueError("feature intervals must have nonnegative start < end")
++        for row in features.loc[features.modality.eq("Peaks")].itertuples(index=False):
++            parsed = _parse_peak_id(row.feature_id)
++            if parsed is not None and parsed != (row.chromosome, row.start, row.end):
++                raise ValueError("peak feature_id coordinates disagree with explicit columns")
+         features["coordinates_known"] = known
+     if features.feature_id.eq("").any() or features.feature_id.duplicated().any():
+         raise ValueError("empty or duplicate feature identifiers")
+diff --git a/tasks/todo.md b/tasks/todo.md
+index cc7dcfe..814142f 100644
+--- a/tasks/todo.md
++++ b/tasks/todo.md
+@@ -16,7 +16,7 @@ facts, not disease-model results.
+ - M1: All 46 GEO libraries mapped. The pinned author downstream filtered table exactly matches the final H5AD's 37 libraries, 30 donors and labels. Retained-cell ingestion joins all 550 B17C2L cells before capping and excludes 102 raw-only cells. New NeMO diagnostics identify exactly 3,731 RNA `Unk` rows and a 113,801-cell candidate, but do not certify its QC. Author methods and metadata document UCLA/NIH sources versus HDBR: no overlap evidence, not independently certified specimen identity. Full raw-barcode coverage and accepted per-cell QC remain pending.
+ - M2: Conversion and support checks implemented and tested. NeMO's canonical PCW 13–20 sensitivity has 8 control and 10 trisomy-21 donors before new QC exclusions.
+ - M3: Both MEX layouts tested; real pilot now selects 256 from the 550 author-retained cells. NeMO count packages remain unaudited. September 9 public manifest/API/Open-bag requests succeeded; the earlier transport blocker is cleared for those endpoints. Release metadata checksum matches locally, but QC/common-feature acceptance does not follow from access.
+-- M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred.
++- M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred. The feature reader now rejects coordinate-shaped peak IDs that disagree with explicit six-column coordinates before audit comparisons.
+ - M5: Immutable software benchmark settings and strict paired uncertainty implemented. The real scientific protocol and gate-bound acceptance remain pending.
+ - M6: Donor-aware training and bounded paired-array adapter implemented. Six neural families and majority control ran on 25 synthetic outer folds. Biological controls and accepted real-data orchestration remain pending.
+ - M7: Genuine cross-attention and matched token-concat control implemented; gradients, direction, axes, and ablations tested. Real internal comparison remains pending.
+@@ -107,6 +107,7 @@ Determine whether published counts support a common measurement space before pro
+ ## Checkpoint B: Input feasibility
+ 
+ - [ ] Cohort/QC evidence and measured resources permit the intended run. Confirmatory work requires M4 `PASS`; an approximation-only pilot remains exploratory. Record any recount work before proceeding.
++  - 2026-09-09 decision: confirmatory paired input feasibility remains blocked by unresolved NeMO final QC membership and missing shared measured ATAC intervals/count semantics; see [decision note](../docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md).
+ 
+ ## M5: Freeze the donor-level experiment
+ 
+diff --git a/tests/test_multiome.py b/tests/test_multiome.py
+index 3b3004b..fc28bbb 100644
+--- a/tests/test_multiome.py
++++ b/tests/test_multiome.py
+@@ -373,6 +373,21 @@ def test_mex_preserves_six_column_arc_coordinates(tmp_path):
+     assert block["features"].start.tolist() == [0, 0, 5]
+ 
+ 
++def test_mex_rejects_peak_ids_that_disagree_with_explicit_coordinates(tmp_path):
++    from p22.data.multiome import ReadBudget, load_mex
++
++    spec = mex_assets(
++        tmp_path,
++        features=(
++            "gene1\tG1\tGene Expression\tchr1\t0\t10\n"
++            "chr1:0-10\tchr1:0-10\tPeaks\tchr2\t20\t30\n"
++            "custom_peak\tcustom_peak\tPeaks\tchr1\t5\t10\n"
++        ),
++    )
++    with pytest.raises(ValueError, match="feature_id coordinates"):
++        load_mex(spec, ReadBudget())
++
++
+ def test_mex_preserves_unmapped_rna_but_rejects_unmapped_peaks(tmp_path):
+     from p22.data.multiome import ReadBudget, load_mex
+ 

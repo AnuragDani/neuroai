@@ -1,0 +1,312 @@
+*** Begin Patch
+*** Add File: scripts/validate_development_head.py
++"""Offline HTTP HEAD evidence validator."""
++import hashlib
++
++MAX_BYTES = 65536
++MAX_CL_DIGITS = 19
++MAX_CL_VALUE = 2**63 - 1
++
++
++def _reject(reason: str) -> None:
++    raise ValueError(reason)
++
++
++def _validate_label(value: str, name: str) -> None:
++    if not isinstance(value, str) or not value:
++        _reject(f"{name} must be a non-empty string")
++    if any(ord(c) < 32 or ord(c) == 127 for c in value):
++        _reject(f"{name} contains control characters")
++
++
++def _parse_content_length(value: str) -> int:
++    if not value:
++        _reject("Content-Length is blank")
++    if len(value) > MAX_CL_DIGITS:
++        _reject("Content-Length has excessive digits")
++    if not value.isascii() or not value.isdigit():
++        _reject("Content-Length contains non-ASCII digits or invalid characters")
++    if value[0] in "+-":
++        _reject("Content-Length has a sign")
++    try:
++        n = int(value)
++    except ValueError:
++        _reject("Content-Length is not a valid integer")
++    if n < 1:
++        _reject("Content-Length must be positive")
++    if n > MAX_CL_VALUE:
++        _reject("Content-Length exceeds maximum")
++    return n
++
++
++def parse_head_evidence(raw_headers: bytes, *, url: str, observed_at: str) -> dict:
++    if not isinstance(raw_headers, bytes):
++        _reject("raw_headers must be bytes")
++    if len(raw_headers) > MAX_BYTES:
++        _reject("raw_headers exceeds maximum size")
++    _validate_label(url, "url")
++    _validate_label(observed_at, "observed_at")
++
++    if b"\r\n\r\n" not in raw_headers:
++        _reject("missing final CRLF CRLF terminator")
++    if raw_headers.count(b"\r\n\r\n") > 1:
++        _reject("multiple CRLF CRLF terminators")
++
++    header_block = raw_headers[: raw_headers.index(b"\r\n\r\n")]
++    lines = header_block.split(b"\r\n")
++    if not lines:
++        _reject("empty header block")
++
++    status_line = lines[0].decode("latin-1")
++    parts = status_line.split(" ", 2)
++    if len(parts) < 3:
++        _reject("malformed status line")
++    if not parts[0].startswith("HTTP/1."):
++        _reject("invalid HTTP version")
++    if not parts[1].isdigit() or len(parts[1]) != 3:
++        _reject("invalid status code")
++    http_status = int(parts[1])
++    if http_status != 200:
++        _reject(f"non-200 status: {http_status}")
++
++    headers: dict[str, list[str]] = {}
++    for line in lines[1:]:
++        if not line:
++            _reject("empty header line")
++        if line.startswith(b" ") or line.startswith(b"\t"):
++            _reject("obsolete folded header")
++        if b"\r" in line or b"\n" in line:
++            _reject("bare LF or CR in header")
++        if b":" not in line:
++            _reject("malformed header line")
++        name_bytes, value_bytes = line.split(b":", 1)
++        name = name_bytes.decode("latin-1")
++        if not name or any(c in name for c in " \t\r\n") or any(ord(c) < 32 or ord(c) == 127 for c in name):
++            _reject(f"invalid header name: {name!r}")
++        value = value_bytes.decode("latin-1").strip(" \t")
++        if any(ord(c) < 32 and c != "\t" for c in value):
++            _reject(f"control character in header value: {name!r}")
++        headers.setdefault(name.lower(), []).append(value)
++
++    if "transfer-encoding" in headers:
++        _reject("Transfer-Encoding is not allowed")
++
++    cl_values = headers.get("content-length")
++    if cl_values is None:
++        _reject("missing Content-Length")
++    if len(cl_values) > 1:
++        _reject("duplicate Content-Length")
++    if "," in cl_values[0]:
++        _reject("Content-Length contains comma list")
++    declared_payload_bytes = _parse_content_length(cl_values[0])
++
++    def _single(name: str) -> str | None:
++        vals = headers.get(name)
++        if vals is None:
++            return None
++        if len(vals) > 1:
++            _reject(f"duplicate {name} header")
++        return vals[0]
++
++    return {
++        "record_kind": "development_head_metadata",
++        "status": "SOURCE_METADATA_OBSERVED",
++        "url": url,
++        "observed_at": observed_at,
++        "http_status": 200,
++        "header_record_sha256": hashlib.sha256(raw_headers).hexdigest(),
++        "header_bytes": len(raw_headers),
++        "declared_payload_bytes": declared_payload_bytes,
++        "etag": _single("etag"),
++        "last_modified": _single("last-modified"),
++        "accept_ranges": _single("accept-ranges"),
++        "publisher_payload_checksum": None,
++        "body_bytes": 0,
++        "scientific_gate_effect": "NONE",
++    }
+*** Add File: tests/test_development_head.py
++import hashlib
++import importlib.util
++from pathlib import Path
++
++import pytest
++
++spec = importlib.util.spec_from_file_location(
++    "validate_development_head", Path(__file__).parents[1] / "scripts/validate_development_head.py"
++)
++mod = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(mod)
++parse_head_evidence = mod.parse_head_evidence
++
++URL = "https://example.invalid/object.rda.gz"
++TS = "2024-01-01T00:00:00Z"
++
++
++def _hdr(status: int = 200, extra: str = "") -> bytes:
++    return f"HTTP/1.1 {status} OK\r\n{extra}Content-Length: 100\r\n\r\n".encode("latin-1")
++
++
++def test_valid_minimal():
++    raw = _hdr()
++    r = parse_head_evidence(raw, url=URL, observed_at=TS)
++    assert r["record_kind"] == "development_head_metadata"
++    assert r["status"] == "SOURCE_METADATA_OBSERVED"
++    assert r["url"] == URL
++    assert r["observed_at"] == TS
++    assert r["http_status"] == 200
++    assert r["header_record_sha256"] == hashlib.sha256(raw).hexdigest()
++    assert r["header_bytes"] == len(raw)
++    assert r["declared_payload_bytes"] == 100
++    assert r["etag"] is None
++    assert r["last_modified"] is None
++    assert r["accept_ranges"] is None
++    assert r["publisher_payload_checksum"] is None
++    assert r["body_bytes"] == 0
++    assert r["scientific_gate_effect"] == "NONE"
++
++
++def test_mixed_case_headers():
++    raw = b"HTTP/1.1 200 OK\r\nETag: \"abc\"\r\nLast-Modified: Mon, 01 Jan 2024 00:00:00 GMT\r\nAccept-Ranges: bytes\r\nContent-Length: 42\r\n\r\n"
++    r = parse_head_evidence(raw, url=URL, observed_at=TS)
++    assert r["etag"] == '"abc"'
++    assert r["last_modified"] == "Mon, 01 Jan 2024 00:00:00 GMT"
++    assert r["accept_ranges"] == "bytes"
++    assert r["declared_payload_bytes"] == 42
++
++
++@pytest.mark.parametrize("status", [301, 302, 304, 404, 500])
++def test_non_200_rejected(status):
++    raw = f"HTTP/1.1 {status} X\r\nContent-Length: 10\r\n\r\n".encode()
++    with pytest.raises(ValueError, match="non-200"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_missing_content_length():
++    raw = b"HTTP/1.1 200 OK\r\n\r\n"
++    with pytest.raises(ValueError, match="missing Content-Length"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_duplicate_content_length():
++    raw = b"HTTP/1.1 200 OK\r\nContent-Length: 10\r\nContent-Length: 10\r\n\r\n"
++    with pytest.raises(ValueError, match="duplicate Content-Length"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++@pytest.mark.parametrize("val", ["", "  ", "+5", "-5", "1e5", "1,000", "0", "007"])
++def test_invalid_content_length(val):
++    raw = f"HTTP/1.1 200 OK\r\nContent-Length: {val}\r\n\r\n".encode("latin-1")
++    with pytest.raises(ValueError):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_unicode_digit_latin1():
++    raw = b"HTTP/1.1 200 OK\r\nContent-Length: \xb25\r\n\r\n"
++    with pytest.raises(ValueError, match="non-ASCII"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_excessive_digits():
++    raw = f"HTTP/1.1 200 OK\r\nContent-Length: {'1' * 20}\r\n\r\n".encode()
++    with pytest.raises(ValueError, match="excessive"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_max_s64_accepted():
++    raw = f"HTTP/1.1 200 OK\r\nContent-Length: {2**63 - 1}\r\n\r\n".encode()
++    r = parse_head_evidence(raw, url=URL, observed_at=TS)
++    assert r["declared_payload_bytes"] == 2**63 - 1
++
++
++def test_over_max_s64_rejected():
++    raw = f"HTTP/1.1 200 OK\r\nContent-Length: {2**63}\r\n\r\n".encode()
++    with pytest.raises(ValueError, match="exceeds maximum"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_boundary_65536():
++    pad_len = 65536 - len(b"HTTP/1.1 200 OK\r\nContent-Length: 1\r\n\r\n")
++    raw = b"HTTP/1.1 200 OK\r\n" + b"X-Pad: " + b"a" * (pad_len - 7) + b"\r\nContent-Length: 1\r\n\r\n"
++    assert len(raw) == 65536
++    r = parse_head_evidence(raw, url=URL, observed_at=TS)
++    assert r["header_bytes"] == 65536
++
++
++def test_boundary_65537_rejected():
++    pad_len = 65537 - len(b"HTTP/1.1 200 OK\r\nContent-Length: 1\r\n\r\n")
++    raw = b"HTTP/1.1 200 OK\r\n" + b"X-Pad: " + b"a" * (pad_len - 7) + b"\r\nContent-Length: 1\r\n\r\n"
++    assert len(raw) == 65537
++    with pytest.raises(ValueError, match="exceeds maximum size"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_folded_header_rejected():
++    raw = b"HTTP/1.1 200 OK\r\nContent-Length: 10\r\n X-Folded: yes\r\n\r\n"
++    with pytest.raises(ValueError, match="folded"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_bare_lf_rejected():
++    raw = b"HTTP/1.1 200 OK\nContent-Length: 10\n\n"
++    with pytest.raises(ValueError):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_appended_body_rejected():
++    raw = b"HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nAB"
++    with pytest.raises(ValueError, match="multiple CRLF"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_truncated_terminator():
++    raw = b"HTTP/1.1 200 OK\r\nContent-Length: 10\r\n"
++    with pytest.raises(ValueError, match="missing final"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_duplicate_optional_rejected():
++    raw = b"HTTP/1.1 200 OK\r\nETag: \"a\"\r\nETag: \"b\"\r\nContent-Length: 10\r\n\r\n"
++    with pytest.raises(ValueError, match="duplicate etag"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_transfer_encoding_rejected():
++    raw = b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Length: 10\r\n\r\n"
++    with pytest.raises(ValueError, match="Transfer-Encoding"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_invalid_header_name():
++    raw = b"HTTP/1.1 200 OK\r\nBad Name: x\r\nContent-Length: 10\r\n\r\n"
++    with pytest.raises(ValueError, match="invalid header name"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_control_byte_in_value():
++    raw = b"HTTP/1.1 200 OK\r\nX-Test: a\x01b\r\nContent-Length: 10\r\n\r\n"
++    with pytest.raises(ValueError, match="control character"):
++        parse_head_evidence(raw, url=URL, observed_at=TS)
++
++
++def test_hash_changes_with_bytes():
++    raw1 = _hdr()
++    raw2 = _hdr(extra="X-Extra: 1\r\n")
++    r1 = parse_head_evidence(raw1, url=URL, observed_at=TS)
++    r2 = parse_head_evidence(raw2, url=URL, observed_at=TS)
++    assert r1["header_record_sha256"] != r2["header_record_sha256"]
++    assert r1["publisher_payload_checksum"] is None
++    assert r2["publisher_payload_checksum"] is None
++    assert r1["scientific_gate_effect"] == "NONE"
++    assert r2["scientific_gate_effect"] == "NONE"
++
++
++@pytest.mark.parametrize("url,ts,match", [
++    ("", TS, "url"),
++    (URL, "", "observed_at"),
++    ("a\x01b", TS, "control"),
++    (URL, "a\x01b", "control"),
++])
++def test_invalid_labels(url, ts, match):
++    with pytest.raises(ValueError, match=match):
++        parse_head_evidence(_hdr(), url=url, observed_at=ts)
+*** End Patch

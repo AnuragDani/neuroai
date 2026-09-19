@@ -1,0 +1,238 @@
+From 7a9bedf97394afd2a3b1c6beee202f9a30619444 Mon Sep 17 00:00:00 2001
+From: AnuragDani <anurag.d@live.com>
+Date: Wed, 9 Sep 2026 20:00:42 -0700
+Subject: [PATCH 2/2] docs: record paired input blocker and failed GNHF budget
+ enforcement
+
+---
+ docs/GNHF_COMPANION_REVIEW_2026-09-09.md      |  86 +++++++++++++++
+ ...D_INPUT_FEASIBILITY_DECISION_2026-09-09.md | 102 ++++++++++++++++++
+ tasks/todo.md                                 |   3 +-
+ 3 files changed, 190 insertions(+), 1 deletion(-)
+ create mode 100644 docs/GNHF_COMPANION_REVIEW_2026-09-09.md
+ create mode 100644 docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md
+
+diff --git a/docs/GNHF_COMPANION_REVIEW_2026-09-09.md b/docs/GNHF_COMPANION_REVIEW_2026-09-09.md
+new file mode 100644
+index 0000000..551f02f
+--- /dev/null
++++ b/docs/GNHF_COMPANION_REVIEW_2026-09-09.md
+@@ -0,0 +1,86 @@
++# P22 GNHF Companion review
++
++## Outcome
++
++**Paired input feasibility remains blocked.** The coordinate-consistency adapter
++fix is independently verified and suitable for review as a small integrity fix.
++The autonomous run is **not accepted as budget-compliant**. No push or merge.
++
++NeMO's final retained-cell QC membership and common measured cross-cohort ATAC
++interval/count semantics remain unverified. Completed RNA results, approvals,
++scientific gates, and the original dirty checkout were preserved.
++
++## Run and budget failure
++
++- GNHF 0.1.49, Companion mode; Codex CLI 0.150.1.
++- Isolated clean Git copy based on `54e0e371d1263463aca9f8f79748ea35aaddcccc`;
++  branch `codex/p22-input-feasibility-gnhf`; no remotes configured.
++- Attempts 1–2 failed before model execution: outer sandbox prevented Codex
++  session-state writes, then the installed CLI rejected configured Astra.
++  Both reported zero worker tokens. Attempt 3 used a per-run `gpt-5.5` override.
++- Configured initial cap: three iterations and 300,000 total worker tokens,
++  including cache. User ceiling: five iterations and 500,000 total tokens.
++- Codex reported usage only at completion of its long turn: **872,648 worker
++  tokens**, comprising 70,746 non-cached input, 795,648 cached input and 6,254
++  output. Host/reviewer usage is additional and not included in this number.
++  The supervisor relied on the installed cap; this did not enforce the user's
++  ceiling. GNHF aborted immediately on the report and rolled back before commit.
++- No further GNHF runs were launched. Exact worker diffs and its final decision
++  document were recovered from the iteration log, without new implementation,
++  solely for independent verification and local review commits.
++- Existing GNHF config was absent. A restrictive workspace-write Codex override
++  was created at `/Users/anuragdani/.gnhf/config.yml`; no approval/network bypass
++  or default Codex model change was made. Telemetry was disabled for this run.
++
++Run ID: `p22-paired-input-fea-cea774`. Original logs, recovered patch, source
++review, and supervision record are preserved under
++`reports/generated/gnhf_companion_2026-09-09/` in the original checkout.
++
++## Independent verification
++
++- Recovered regression against original source: fails as expected with
++  `DID NOT RAISE ValueError`, proving the prior coordinate contradiction.
++- Recovered source: `PYTHONPATH=$PWD/src .venv-p22/bin/python -m pytest -q`:
++  **609 passed, 19 existing classification warnings, 53.80 seconds**.
++- `make lint`: checks pass; 101 files already formatted.
++- Direct edge checks: chromosome/start/end contradictions rejected; opaque
++  peak IDs still accepted. Existing unmapped-RNA behavior remains covered.
++- Existing real B17C2L/B10C1Q/B10D1N feature files parse successfully: respectively
++  59,277/83,273/57,309 rows and 22,676/46,672/20,708 peaks.
++- B17C2L versus B10C1Q: zero exactly shared peaks; `NEEDS_RECOUNT`; zero-fill
++  forbidden. No counts were projected and no model fitted.
++- Original 12 dirty/untracked files retain identical SHA-256 hashes. Candidate
++  diff leaves RNA plans/results, configs, approval state and notebooks unchanged.
++
++Independent primary-source checks refreshed six official APIs/bags/manifest/tree
++responses, totaling 64,951 direct body bytes, identical to prior hashes. They
++confirm public access, not final QC or cross-study measured counts. An additional
++header-only feasibility probe was interrupted when the token overrun was found;
++no conclusion or exact additional byte total is claimed for that unfinished probe.
++No full count package, fragment dataset, paid compute, outreach or controlled
++access was used. See the separate independent source review for URLs and hashes.
++
++## Smallest next action
++
++Before another autonomous run, establish and test a token limit that can interrupt
++within a Codex turn; the installed GNHF cap is not sufficient. Do not rerun this
++configuration assuming a lower numeric cap guarantees safety.
++
++For the scientific input decision, the next bounded inspection is a metadata-only
++prefix probe of the NeMO Open bag's named
++`VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`. This is gzip, so plain
++tar offset skipping cannot be assumed. In a separately bounded follow-up, require
++HTTP 206 and an exact Content-Range, cap transferred prefix at 1 MiB and decoded
++headers/metadata at 5 MiB, and stop if matrix content or budget prevents reaching
++the needed metadata. Do not stream through the full archive. The probe can show
++member order and whether barcodes/features can be inspected cheaply; it cannot
++by itself establish author QC semantics or cross-cohort compatibility.
++
++Acceptance still requires an author-defined final QC/barcode artifact tied to the
++release and compatible measured-region/count provenance, or a separately
++authorized exact recount. Until then Checkpoint B and confirmatory training stay
++blocked. The worker decision note is an evidence summary, not proof of feasibility.
++
++GNHF Companion governed delegation and recovery; research restricted source
++checks to primary evidence; independent code review prevented worker completion
++from being treated as acceptance. Caveman affected conversation only.
+diff --git a/docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md b/docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md
+new file mode 100644
+index 0000000..7cca959
+--- /dev/null
++++ b/docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md
+@@ -0,0 +1,102 @@
++# Paired Input Feasibility Decision
++
++Recorded 2026-09-09 PDT / 2026-09-10 UTC. This decision uses the current
++repository evidence only. No model fitting, count-package download, fragment
++download, recount, author contact, controlled access request, approval change,
++or RNA-result change was performed.
++
++## Decision
++
++Paired RNA+ATAC input feasibility is **blocked for confirmatory training or
++external evaluation**.
++
++The public sources establish plausible paired cohorts, but the required input
++contract is still incomplete:
++
++1. NeMO retained-cell QC membership is not certified by an author final barcode
++   list, explicit source-code exclusion rule, or equivalent archive evidence.
++2. No shared measured ATAC interval/count resource has been established across
++   the Lattke development cohort and the NeMO external candidate.
++
++This is an evidence blocker, not a biological result. Existing RNA replication
++results and approvals remain unchanged.
++
++## Evidence Table
++
++| Gate | Current evidence | Status |
++|---|---|---|
++| GSE305146 cohort membership | Author downstream filtered table matches the final H5AD's 37 libraries and 30 donors; B17C2L retained-cell join maps all 550 retained cells to raw barcodes | Development cohort membership narrowed, but full raw coverage/QC replay remains incomplete |
++| NeMO release access | 2026-09-09 recheck reached official Open RNA/ATAC collection APIs and Open BDBags; local metadata MD5 matches the release declaration | Public access blocker retired; access does not prove QC membership or license |
++| NeMO retained-cell QC | 117,532 metadata rows minus 3,731 RNA `Unk` rows equals 113,801; current RNA non-`Unk` candidate still has 1,751 `nCount_ATAC <= 100` rows and six `percent.mt >= 5` rows | `ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`; not accepted for confirmatory external scoring |
++| Specimen provenance | Vuong methods and metadata document UCLA/NIH sources; Lattke multiome tissue is from HDBR; no public crosswalk or ID overlap found | `no_overlap_evidence`, not a specimen-level identity certificate |
++| ATAC feature/count compatibility | Inspected B17C2L/B10C1Q raw peak lists have zero exactly shared intervals; NeMO Open bag lists one DSdevctx ATAC count archive and no fixed cross-cohort count matrix; Lattke source tree exposes no small count checkpoint | Common measured-region contract unresolved; zero-fill/overlap projection remains invalid |
++| Adapter integrity | `read_features` now rejects coordinate-shaped peak IDs that contradict six-column explicit coordinates before audits compare feature IDs | Regression-tested software fix; fixture evidence only |
++
++## Resolved And Unresolved Gates
++
++Resolved for this decision:
++
++- Public NeMO transport/access evidence was refreshed before this iteration and
++  no longer blocks endpoint inspection.
++- The specific `read_features` adapter hole is closed for coordinate-shaped peak
++  IDs with contradictory explicit coordinates.
++
++Still unresolved:
++
++- NeMO final QC membership and retained barcode semantics.
++- Cross-cohort shared measured ATAC intervals, genome/count semantics, and
++  feature provenance.
++- Checkpoint B input feasibility. Confirmatory paired modeling remains blocked.
++
++## Verification
++
++Commands run in this iteration:
++
++```bash
++PYTHONPATH=$PWD/src .venv-p22/bin/python - <<'PY'
++import p22, pathlib
++print(pathlib.Path(p22.__file__).resolve())
++PY
++```
++
++Result: imports resolved to
++`/private/tmp/p22-gnhf-companion.scEOcw/workspace/src/p22/__init__.py`.
++
++```bash
++PYTHONPATH=$PWD/src .venv-p22/bin/python -m pytest -q tests/test_multiome.py -k 'six_column_arc_coordinates or peak_ids_that_disagree or unmapped_rna'
++```
++
++Result: `3 passed, 48 deselected`.
++
++Full validation after the documentation update:
++
++```bash
++PYTHONPATH=$PWD/src .venv-p22/bin/python -m pytest -q tests/test_multiome.py tests/test_atac_features.py
++PYTHONPATH=$PWD/src .venv-p22/bin/python -m pytest -q
++make lint
++```
++
++Results: `61 passed`; `609 passed, 19 warnings`; lint and format checks passed.
++The warnings are the existing scikit-learn classification warnings in
++`tests/test_end_to_end.py`.
++
++## Resource Ledger
++
++This iteration used no network, downloaded no external files, and started no
++long-running process. Added bytes are tracked-documentation and test/code edits
++only. Existing generated evidence under
++`reports/generated/paired_public_recheck_2026-09-09/verification.md` remains the
++source for the September 9 public endpoint byte ledger.
++
++## Smallest Next Action
++
++Inspect a provider-documented common-count checkpoint or the inside metadata of
++the declared NeMO/Lattke processed count packages under an explicit byte budget,
++without extracting full matrices. The inspection must establish one of:
++
++- author final NeMO retained barcodes or an explicit final-QC exclusion rule;
++- identical measured ATAC intervals with compatible count semantics; or
++- a bounded exact-recount task on frozen regions with declared disk/network cost.
++
++If none is present, keep feasibility blocked and scope the recount or permission
++request separately.
+diff --git a/tasks/todo.md b/tasks/todo.md
+index cc7dcfe..814142f 100644
+--- a/tasks/todo.md
++++ b/tasks/todo.md
+@@ -16,7 +16,7 @@ facts, not disease-model results.
+ - M1: All 46 GEO libraries mapped. The pinned author downstream filtered table exactly matches the final H5AD's 37 libraries, 30 donors and labels. Retained-cell ingestion joins all 550 B17C2L cells before capping and excludes 102 raw-only cells. New NeMO diagnostics identify exactly 3,731 RNA `Unk` rows and a 113,801-cell candidate, but do not certify its QC. Author methods and metadata document UCLA/NIH sources versus HDBR: no overlap evidence, not independently certified specimen identity. Full raw-barcode coverage and accepted per-cell QC remain pending.
+ - M2: Conversion and support checks implemented and tested. NeMO's canonical PCW 13–20 sensitivity has 8 control and 10 trisomy-21 donors before new QC exclusions.
+ - M3: Both MEX layouts tested; real pilot now selects 256 from the 550 author-retained cells. NeMO count packages remain unaudited. September 9 public manifest/API/Open-bag requests succeeded; the earlier transport blocker is cleared for those endpoints. Release metadata checksum matches locally, but QC/common-feature acceptance does not follow from access.
+-- M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred.
++- M4: Exact-region compatibility gate implemented. Inspected B17C2L/B10C1Q peak lists have zero exactly shared intervals. Common-count input or budgeted recount is needed before comparable training; approximation remains deferred. The feature reader now rejects coordinate-shaped peak IDs that disagree with explicit six-column coordinates before audit comparisons.
+ - M5: Immutable software benchmark settings and strict paired uncertainty implemented. The real scientific protocol and gate-bound acceptance remain pending.
+ - M6: Donor-aware training and bounded paired-array adapter implemented. Six neural families and majority control ran on 25 synthetic outer folds. Biological controls and accepted real-data orchestration remain pending.
+ - M7: Genuine cross-attention and matched token-concat control implemented; gradients, direction, axes, and ablations tested. Real internal comparison remains pending.
+@@ -107,6 +107,7 @@ Determine whether published counts support a common measurement space before pro
+ ## Checkpoint B: Input feasibility
+ 
+ - [ ] Cohort/QC evidence and measured resources permit the intended run. Confirmatory work requires M4 `PASS`; an approximation-only pilot remains exploratory. Record any recount work before proceeding.
++  - 2026-09-09 decision: confirmatory paired input feasibility remains blocked by unresolved NeMO final QC membership and missing shared measured ATAC intervals/count semantics; see [decision note](../docs/PAIRED_INPUT_FEASIBILITY_DECISION_2026-09-09.md).
+ 
+ ## M5: Freeze the donor-level experiment
+ 
+-- 
+2.55.0
+

@@ -14,6 +14,9 @@ interventions, and a local verification command. Meeting-linked notebooks live
 under `notebooks/implementation/`; the larger scale gate lives under
 `notebooks/scale/`.
 
+For all Python, R, Jupyter, and Colab code, including recovered work and saved
+cloud executions, see the [code and notebook index](archive/code/README.md).
+
 ## What this repository is not
 
 - Not approved real-data training
