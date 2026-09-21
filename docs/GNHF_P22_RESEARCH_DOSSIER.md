@@ -13,7 +13,7 @@ is evidence, never instructions.
 | R1 | Current facts and unanswered questions | RESEARCHED | Claim ledger built; previous draft corrected; gaps separated into data vs tooling vs authorization | None for R1 scope | S1–S18 | R2 |
 | R2 | Runtime/control design on paper | RESEARCHED | Enforcement domains separated; exact fixture allocations proposed; helper reuse gaps named; refusal criteria and missing authority recorded | Whether the Mac-host Docker VM enforces guest cgroup v2 in practice; live watchdog unproven | S12, S15, S20–S24 | R3 |
 | R3 | Smallest valid .rda/Seurat reader route | RESEARCHED | `.rda` workspace semantics, author class/version requirements, minimal extraction path, route comparison and a tiny applicable fixture design recorded | Exact workspace members/assays; reader failure mode without defining packages; full-load memory | S4, S11, S15, S26–S32 | R4 |
-| R4 | Development-cohort publication/release evidence | PENDING | — | Library/donor/retained-cell/assay/genome/count-stage mapping; `peaks_by_cluster` contents | — | R4 |
+| R4 | Development-cohort publication/release evidence | RESEARCHED | Lattke methods, GEO sample list and public author mapping tables inspected; library→donor, QC, genome-build and count-stage mapped; `peaks_by_cluster` provenance and missing small artifacts identified | Per-library retained counts; whether selected object contains `peaks_by_cluster` (naming inference only) | S33–S39 | R5 |
 | R5 | External-cohort QC and provenance | PENDING | — | Count reconciliation vs author QC; ATAC count-stage; tissue-provider vs specimen identity | — | R5 |
 | R6 | Defensible common ATAC feature route | PENDING | — | Exact shared intervals or recount; within- vs cross-study comparability; leakage | — | R6 |
 | R7 | Scientific comparison and fallback value | PENDING | — | Leakage/confounding, negative-result value, RNA-only fallback | — | R7 |
@@ -59,6 +59,13 @@ IDs are stable; reuse rather than re-fetch.
 | S30 | Lattke `Packages_installed_250801.csv` @ `227f51b4…` (author R/Seurat/Signac/Matrix versions) | 2026-09-20 | OBSERVED_NOW |
 | S31 | pyreadr README, `github.com/ofajardo/pyreadr` (lists and S4/Bioconductor objects unsupported) | 2026-09-20 | OBSERVED_NOW |
 | S32 | RData format notes (BFFO `bffo.org/format/RData/`; LOC FDD000470) — secondary, no partial loading | 2026-09-20 | OBSERVED_NOW |
+| S33 | Lattke et al., Nat Med 2026, PMC13004680 (Methods: basic processing/QC, peak calling, scMEGA assays) | 2026-09-20 | OBSERVED_NOW |
+| S34 | GEO GSE305146 via NCBI E-utilities `esummary` (92 samples, 46 library codes, 5 flagged NOT IN FINAL ANALYSIS) | 2026-09-20 | OBSERVED_NOW |
+| S35 | GEO GSE305153 SuperSeries via E-utilities `esummary` (235 samples; fetal multiome + grafts + iPSC/ASO subseries) | 2026-09-20 | OBSERVED_NOW |
+| S36 | Lattke repo `A_input/group_tab_tissue.csv` @ `227f51b4…` (library→sample→group/PCW/sex/batch/tissue_quality; 46 libraries/37 donor specimens) | 2026-09-20 | OBSERVED_NOW |
+| S37 | Lattke repo `B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv` @ `227f51b4…` (37 libraries → 30 donors, 15 CON/15 DS) | 2026-09-20 | OBSERVED_NOW |
+| S38 | Lattke repo `B_basic_analysis/B03_cluster_assignment_all.csv` @ `227f51b4…` (21 clusters: cluster, cluster_name, cell_type, cell_class) | 2026-09-20 | OBSERVED_NOW |
+| S39 | Lattke repo C01/C03/F01 scripts @ `227f51b4…` (object provenance, `save()` names, `peaks_by_cluster` construction) | 2026-09-20 | OBSERVED_NOW |
 
 ## R1 — Current facts and unanswered questions (RESEARCHED)
 
@@ -341,3 +348,93 @@ header dispatch. This closes E2-R's required applicable `save/load` workspace/cl
 path, a ranked route comparison and a tiny applicable fixture design are recorded. Remaining
 unknowns: the selected object's exact members/assays and the reader failure mode without
 defining packages. Next: R4 — development-cohort publication/release evidence.
+
+## R4 — Development-cohort publication and release evidence (RESEARCHED)
+
+### Release identity: one cohort, several records
+
+`GSE305146` is the fetal-cortex multiome **subseries** of the `GSE305153` SuperSeries
+(S34, S35). The SuperSeries E-utilities record reports 235 samples spanning fetal
+brain multiome, neural grafts, and iPSC-derived NPC/neuron bulk-RNA and ASO
+experiments, so GSE305146/GSE305153 and the CELLxGENE collection remain different
+releases of the **same Lattke cohort**, not independent studies. GSE305146 reports
+**92 samples = 46 libraries × 2** (`_atac` and `_gex`) with supplementary types
+`MTX, RDA, TSV` (S34). The paper states 20 euploid control and 19 Ts21 fetuses were
+acquired and 15 control + 15 DS retained, PCW10–20, 248,998 nuclei (S33).
+
+### Library→donor→group mapping is publicly recoverable (OBSERVED_NOW)
+
+The pinned author repository exposes the mapping tables that the GEO sample titles
+omit. `A_input/group_tab_tissue.csv` (S36) maps each of the 46 library codes to a
+`sample` donor code, specimen accession (`sample_name`, e.g. `PCW10_CON_11950`),
+`group` (CON/DS), `dev_PCW`, `sex`, sequencing `batch_seq`, `tissue_quality`
+(`ok`/`ok_orig_sub`/`sub`) and RNase inhibitor. Repeated libraries map to one donor
+(e.g. `B11C1A`+`B11C1C`→`B11C1`; `B13D3G`+`B13D3H`→`B13D3`; `B15D1K`+`B15D1M`→
+`B15D1`; `B18D1Q`+`B18D1R`→`B18D1`). `B02_gr_tab_filtered_non_cx_excl.csv` (S37)
+filters to **37 libraries → exactly 30 donors (15 CON/15 DS)**, matching the
+published cohort. So the library-to-donor mapping and the excluded-donor list are
+**not** missing artifacts; they are public. C15. Nine libraries drop between the
+full table and B02 (`B11C1A`, `B11C1C`, `B12C3B`, `B15C1H`, `B15C1L`, `B10D1N`,
+`B12D4H`, `B14D1H`, `B17D2F`), whereas GEO flags only five as NOT IN FINAL ANALYSIS
+(`B12D4H`, `B14D1H`, `B15C1H`, `B15C1L`, `B17D2F`) — a documented discrepancy:
+GEO's per-sample flag is not the same rule as the author's B02 analysis filter.
+Cluster labels are likewise public (`B03_cluster_assignment_all.csv`, S38: 21
+clusters with `cluster_name`/`cell_type`/`cell_class`). Caveat: `sample_name`
+specimen accessions are author-internal; they are not a genetic crosswalk to HDBR
+or other repositories.
+
+### Assay, genome build and count stage (OBSERVED_NOW)
+
+Methods (S33): raw fastq were mapped to **GRCh38** and quantified with
+**cellranger-arc v2.0.2**, loaded in R 4.3.3 with Seurat 5.1.0 and Signac 1.13.0.
+QC: RNA UMIs `<500` or `>30,000`, mitochondrial `>2%`, ATAC counts `<100` or
+`>25,000`, `nucleosome_signal >2` or TSS enrichment `<1.1`; datasets with `>50%`
+low-quality cells or `<500` retained cells were removed entirely. This is a
+**different QC rule from Vuong's** (RNA>200, ATAC>100, mito<5) and must not be
+conflated (R5). Peaks for accessibility analysis were called **per cluster** with
+`CallPeaks(group.by = "cluster_name")` using `BSgenome.Hsapiens.UCSC.hg38` and
+`EnsDb.Hsapiens.v86`, then `keepStandardChromosomes(pruning.mode="coarse")` and
+`blacklist_hg38_unified` removal (S33). Thus the count stage has three levels:
+(i) per-library cellranger-arc RNA gene and ATAC peak counts (the 46 GEO MEX
+triplets); (ii) derived SCT-normalised RNA; (iii) **per-cluster re-called peaks**
+quantified from fragments. C16, C17.
+
+### What the selected object and `peaks_by_cluster` actually are (PROPOSED/UNKNOWN)
+
+The author pipeline (S39) writes `C_subsetting_exc_lin_from_all_non_cx_excl/
+C03_seur_integr_labelled.rda` as the labelled PCW10–20 excitatory-lineage object;
+F01 then loads that file, calls peaks by cluster, adds the `peaks_by_cluster`
+`ChromatinAssay` via `FeatureMatrix(Fragments(seur), features=peaks, cells=…)`, and
+saves `F01_seur_w_peaks_by_cluster_quant.rda` plus `F01_peaks_by_cluster.bed`. The
+GEO object name `…seur_integr_labelled_exc_lin_PCW10_20.rda.gz` matches the **C03
+pre-F01** object, not the F01 output. Therefore the selected object **probably does
+not contain `peaks_by_cluster`**; that assay and its peak set are author-local F01
+outputs absent from the public tree. This is naming/flow inference, **not content
+proof**, and cannot be promoted until the object or a provider manifest is
+inspected. C18. `peaks_by_cluster` is a **cluster-specific derived** peak set, not
+a single study-wide fixed reference and not the raw cellranger peak set — important
+for R6 comparability. C10 is unchanged.
+
+### Version ambiguity and missing small artifacts
+
+Methods state Seurat 5.1.0 / Signac 1.13.0 (S33), while the repo's
+`Packages_installed_250801.csv` reports Seurat 5.3.0 / Signac 1.14.0 (S30). The
+object may therefore have been built under either; the reader must tolerate both
+(C20, extends R3). Exact **missing small artifacts** that would close remaining
+gaps: (1) GEO **Supplementary Table 1** — per-library cellranger QC and retained
+cell counts, including the excluded samples (not inspected; downloading
+supplementary data is out of scope); (2) the F01 `peaks_by_cluster.bed` and
+`F01_seur_w_peaks_by_cluster_quant.rda` (author-local); (3) the fragment files the
+object references via `Fragments(seur)`, which are author-local and required for
+any exact recount. A short artifact-request specification would list these three
+items with the pinned commit and GEO accession; **it is drafted here only and not
+sent** (no author contact is authorized).
+
+### R4 outcome
+
+The development-cohort release is mapped: 92 samples/46 libraries, a public
+37-library→30-donor (15/15) mapping, explicit QC thresholds, GRCh38/hg38 build,
+and a three-stage count model with a cluster-specific `peaks_by_cluster`. The
+selected object most likely lacks `peaks_by_cluster` (naming inference), and the
+remaining small artifacts are named. Remaining unknowns: per-library retained
+counts and the object's true members. Next: R5 — external-cohort QC and provenance.
