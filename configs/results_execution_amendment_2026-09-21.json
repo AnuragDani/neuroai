@@ -1,0 +1,46 @@
+{
+  "record_type": "prospective_execution_and_resource_amendment",
+  "recorded_on": "2026-09-21",
+  "run": "p22-results-executio-debda8",
+  "authority": "P22 results-execution assignment (2026-09-21), which supersedes research-only, no-code and no-experiment restrictions for this continuation. Existing study approval is the user attestation in plan/real_data_attestation_2026-09-08.json; it is not independently verified and is not restated as professor approval.",
+  "preserved_historical_records": [
+    "plan/approvals.json (approval_state blocked; historical, unchanged)",
+    "configs/development_object_source_contract.json (SHA-256 9a13d8beafa5e00d81f8f985649a6a466c6b4fe3ebf008206f840c32316113f2)",
+    "docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md (SHA-256 66b1d8158f5b6c4260085cddb736db2d59de9df610e5dcac5ccfc2c4f63b18b9)"
+  ],
+  "scope": "Public-data range/header acquisition and local execution needed for the approved paired DS multiome study.",
+  "not_authorized": [
+    "new paid infrastructure or raised OpenRouter allowance",
+    "controlled-access acquisition",
+    "unbounded fragment download or recount",
+    "sending messages, publishing, pushing or merging",
+    "bypassing embargo/authentication via a mirror"
+  ],
+  "host_headroom_at_start": {
+    "free_disk_bytes_observed": "~18 GiB on /System/Volumes/Data (df -h)",
+    "minimum_free_disk_reserve_bytes": 10737418240,
+    "ram_bytes": 137438953472,
+    "cpus": 16
+  },
+  "iteration_1_allocation_used": {
+    "purpose": "bounded barcode/index header validation of the development CELLxGENE ATAC fragment",
+    "requests": "2 HEAD + 2 Range GET",
+    "fragment_range_bytes": 2097152,
+    "index_range_bytes": 524288,
+    "decoded_bytes": 200000,
+    "retained_evidence_bytes": 2385,
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0
+  },
+  "future_bounded_allocations_proposed": {
+    "development_full_fragment_recount": {
+      "status": "NOT_STARTED",
+      "note": "Requires its own finite transfer/decoded/temp/memory allocation before any whole-asset read; the removed ceilings do not authorize unbounded acquisition."
+    },
+    "external_route": {
+      "status": "UNRESOLVED",
+      "note": "External ATAC counts MEX and fragments are packaged in tar/tar.gz; per-file access is embargo while the collection is open. No bounded range join is possible; route requires a separate access and resource decision."
+    }
+  },
+  "scientific_acceptance_unchanged": true
+}

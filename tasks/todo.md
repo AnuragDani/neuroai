@@ -981,3 +981,19 @@ Apply the frozen model/feature contracts to NeMO and write the donor-level compa
 ## Checkpoint D: Completed evidence package
 
 - [ ] Inputs, exclusions, feature/protocol/model hashes, focused tests, baseline comparisons, and external uncertainty are reviewable. Claims distinguish measured availability, exploratory approximations, predictive comparisons, and biological evidence.
+
+## Results-execution continuation — 2026-09-21
+
+New execution authority for the existing approved study (public data only). Historical
+records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
+`MOM/2026-09-21/GNHF_P22_RESULTS_AND_PROFESSOR_HANDOFF.md`.
+
+- [x] R1: bounded development fragment barcode/index header validation — `PASS`.
+  Open bgzf TSV, `<library>_<barcode>-1` barcodes all join the 248,998-cell H5AD
+  index on the sampled block, `.tbi` is standard tabix. Evidence:
+  `reports/generated/atac_fragment_join_20260921/dev_fragment_join.json`;
+  `docs/ATAC_FRAGMENT_JOIN_VALIDATION_2026-09-21.md`.
+- [ ] R2: bounded development fragment quantification pilot on one retained library
+  over a training-fold-only region set, with a declared finite resource allocation.
+- [ ] R3: external route decision — payloads are tar/tar.gz with per-file embargo;
+  no bounded range join is possible.

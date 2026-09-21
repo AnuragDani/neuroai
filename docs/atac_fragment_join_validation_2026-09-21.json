@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "barcodes_all_in_allowlist": true,
+    "barcodes_library_prefixed": true,
+    "barcodes_minus1_suffix": true,
+    "fragment_bgzf": true,
+    "index_columns_expected": true,
+    "index_is_tabix": true,
+    "interval_columns_valid": true
+  },
+  "fragment": {
+    "all_suffix_minus1": true,
+    "bad_row_examples": [],
+    "barcode_examples": [
+      "B10C1Q_TACAACATCCTACCTA-1",
+      "B18C1S_CACCTCAGTGTTGCAA-1",
+      "B13D2D_GGTACTTAGCAGCTCA-1",
+      "B11D2G_CATGCAAGTGTTTCAC-1",
+      "B10C1Q_TATGGCCCATCTAGCA-1"
+    ],
+    "end_max": 86888,
+    "has_library_prefix": true,
+    "n_bad_rows": 0,
+    "n_barcodes": 3929,
+    "n_nonpositive_counts": 0,
+    "n_rows": 3929,
+    "n_unique_barcodes": 3430,
+    "start_min": 767
+  },
+  "fragment_bgzf_magic": "1f8b",
+  "fragment_head": {
+    "accept_ranges": "bytes",
+    "content_length": 25514837002,
+    "etag": "\"afd8f4fa198ee99efde528e3ec766111-3042\"",
+    "last_modified": "Wed, 10 Jun 2026 21:43:03 GMT",
+    "status": 200
+  },
+  "fragment_range_sha256": "bb8e9f551b80158160af3e2ea4945e1db28c246833ecbb514fabecfd2e043b84",
+  "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+  "generated_at": "2026-09-21T17:29:02+00:00",
+  "index": {
+    "col_beg": 2,
+    "col_end": 3,
+    "col_seq": 1,
+    "format": 65536,
+    "l_nm": 298,
+    "magic_ok": true,
+    "meta": 35,
+    "n_ref": 39,
+    "names": "GL000009.2\u0000GL000194.1\u0000GL000195.1\u0000GL000205.2\u0000GL000213.1\u0000GL000218.1\u0000GL000219.1\u0000KI270711.1\u0000KI270713.1\u0000KI270721.1\u0000KI270726.1\u0000KI270727.1\u0000KI270728.1\u0000KI270731.1\u0000KI270734.1\u0000chr1\u0000chr10\u0000chr11\u0000chr12\u0000chr13\u0000chr14\u0000chr15\u0000chr16\u0000chr17\u0000chr18\u0000chr19\u0000chr2\u0000chr20\u0000chr21\u0000chr22\u0000chr3\u0000chr4\u0000chr5\u0000chr6\u0000chr7\u0000chr8\u0000chr9\u0000chrX\u0000chrY",
+    "skip": 0
+  },
+  "index_head": {
+    "accept_ranges": "bytes",
+    "content_length": 5339155,
+    "etag": "\"e283c582b593f1e64794bf984d5794b3\"",
+    "last_modified": "Wed, 10 Jun 2026 21:44:08 GMT",
+    "status": 200
+  },
+  "index_range_sha256": "845602eaa128865254c92bbf6bf456220fb5e057150b7e7d5ee1acd7916e6d31",
+  "index_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz.tbi",
+  "join": {
+    "allowlist_size": 248998,
+    "complete_coverage": true,
+    "n_in_allowlist": 3430,
+    "n_observed_unique": 3430,
+    "n_unknown": 0,
+    "unknown_examples": []
+  },
+  "requested_fragment_range_bytes": 2097152,
+  "requested_index_range_bytes": 524288,
+  "status": "PASS"
+}
