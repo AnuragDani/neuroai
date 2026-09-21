@@ -1,0 +1,409 @@
+{
+  "record_type": "real_development_paired_faithfulness_and_seed_sensitivity",
+  "run": "p22-results-executio-debda8",
+  "generated_at": "2026-09-21T18:47:00+00:00",
+  "label": "PILOT \u2014 one outer fold, one donor split; not a final estimate, not external validation",
+  "data_mode": "real_development_pilot_faithfulness",
+  "fold": {
+    "repeat": 0,
+    "fold": 0,
+    "split_seed": 0
+  },
+  "inputs": {
+    "h5ad": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "n_genes": 35477
+    },
+    "atac_matrix": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/development_region_set_20260921/counts/counts.npz",
+      "sha256": "b1b7e9e3df01519310f4e7a3f73577acc55e53db8effed113d06b6ceb285c307",
+      "n_regions": 256
+    },
+    "n_cells_available": 248998,
+    "n_cells_sampled": 7680,
+    "cell_cap": 256
+  },
+  "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+  "donor_scores": {
+    "rna_atac_concat": {
+      "donor_balanced_accuracy": 0.625,
+      "n_donors": 6,
+      "n_control": 4,
+      "n_positive": 2
+    },
+    "gated_fusion": {
+      "donor_balanced_accuracy": 0.625,
+      "n_donors": 6,
+      "n_control": 4,
+      "n_positive": 2
+    },
+    "token_concat": {
+      "donor_balanced_accuracy": 0.625,
+      "n_donors": 6,
+      "n_control": 4,
+      "n_positive": 2
+    },
+    "cross_attention": {
+      "donor_balanced_accuracy": 0.625,
+      "n_donors": 6,
+      "n_control": 4,
+      "n_positive": 2
+    }
+  },
+  "primary_comparison": {
+    "metric": "paired_donor_balanced_accuracy_delta",
+    "estimate": 0.0,
+    "interval": [
+      0.0,
+      0.0
+    ],
+    "level": 0.95,
+    "unit": "donor",
+    "n_replicates_requested": 1000,
+    "n_valid": 910,
+    "n_failed": 90,
+    "failure_reasons": [
+      "only 1 class present in y_true"
+    ],
+    "not_applicable": null,
+    "detail": {
+      "n_donors": 6,
+      "n_cells": 6,
+      "seed": 22
+    },
+    "n_control": 4,
+    "n_positive": 2,
+    "practical_margin": 0.5,
+    "advantage_demonstrated": false
+  },
+  "initialization_sensitivity": {
+    "families": [
+      "cross_attention",
+      "token_concat"
+    ],
+    "per_seed": {
+      "0": {
+        "cross_attention": 0.625,
+        "token_concat": 0.625
+      },
+      "1": {
+        "cross_attention": 0.625,
+        "token_concat": 0.625
+      },
+      "2": {
+        "cross_attention": 0.625,
+        "token_concat": 0.625
+      }
+    },
+    "delta_per_seed": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0
+    },
+    "cross_attention_spread": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "scores": {
+        "0": 0.625,
+        "1": 0.625,
+        "2": 0.625
+      },
+      "min": 0.625,
+      "max": 0.625,
+      "mean": 0.625,
+      "spread": 0.0,
+      "n_seeds": 3,
+      "evidence": "initialization-seed sensitivity with the donor split held fixed"
+    },
+    "token_concat_spread": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "scores": {
+        "0": 0.625,
+        "1": 0.625,
+        "2": 0.625
+      },
+      "min": 0.625,
+      "max": 0.625,
+      "mean": 0.625,
+      "spread": 0.0,
+      "n_seeds": 3,
+      "evidence": "initialization-seed sensitivity with the donor split held fixed"
+    },
+    "delta_spread": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "scores": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0
+      },
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "spread": 0.0,
+      "n_seeds": 3,
+      "evidence": "initialization-seed sensitivity with the donor split held fixed"
+    }
+  },
+  "intervention_highlights": {
+    "rna_atac_concat": {
+      "clamp_view_a": {
+        "status": "measured",
+        "cell_flip_rate": 0.3450520833333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.5,
+        "donor_balanced_accuracy_drop": 0.125,
+        "routing_shift": null
+      },
+      "clamp_view_b": {
+        "status": "measured",
+        "cell_flip_rate": 0.054036458333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_a_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.2786458333333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_b_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.061848958333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "ablate_view_a_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.4583333333333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.0,
+        "donor_balanced_accuracy_drop": 0.625,
+        "routing_shift": null
+      },
+      "ablate_view_b_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.054036458333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "fixed_uniform_route": {
+        "status": "NOT_APPLICABLE",
+        "cell_flip_rate": null,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": null,
+        "donor_balanced_accuracy_drop": null,
+        "routing_shift": null
+      }
+    },
+    "gated_fusion": {
+      "clamp_view_a": {
+        "status": "measured",
+        "cell_flip_rate": 0.3033854166666667,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.5,
+        "donor_balanced_accuracy_drop": 0.125,
+        "routing_shift": 0.11335635185241699
+      },
+      "clamp_view_b": {
+        "status": "measured",
+        "cell_flip_rate": 0.033854166666666664,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": 0.03588596358895302
+      },
+      "permute_view_a_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.2682291666666667,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": 0.0552237369120121
+      },
+      "permute_view_b_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.034505208333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": 0.04111357033252716
+      },
+      "ablate_view_a_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.3033854166666667,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.5,
+        "donor_balanced_accuracy_drop": 0.125,
+        "routing_shift": 0.15683181583881378
+      },
+      "ablate_view_b_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.037760416666666664,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": 0.04311026632785797
+      },
+      "fixed_uniform_route": {
+        "status": "measured",
+        "cell_flip_rate": 0.09895833333333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": 0.42137715220451355
+      }
+    },
+    "token_concat": {
+      "clamp_view_a": {
+        "status": "measured",
+        "cell_flip_rate": 0.33984375,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.5,
+        "donor_balanced_accuracy_drop": 0.125,
+        "routing_shift": null
+      },
+      "clamp_view_b": {
+        "status": "measured",
+        "cell_flip_rate": 0.042317708333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_a_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.2506510416666667,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_b_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.05078125,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "ablate_view_a_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.4973958333333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.0,
+        "donor_balanced_accuracy_drop": 0.625,
+        "routing_shift": null
+      },
+      "ablate_view_b_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.052734375,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "fixed_uniform_route": {
+        "status": "NOT_APPLICABLE",
+        "cell_flip_rate": null,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": null,
+        "donor_balanced_accuracy_drop": null,
+        "routing_shift": null
+      }
+    },
+    "cross_attention": {
+      "clamp_view_a": {
+        "status": "measured",
+        "cell_flip_rate": 0.376953125,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.5,
+        "donor_balanced_accuracy_drop": 0.125,
+        "routing_shift": null
+      },
+      "clamp_view_b": {
+        "status": "measured",
+        "cell_flip_rate": 0.036458333333333336,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_a_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.2513020833333333,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "permute_view_b_within_donor": {
+        "status": "measured",
+        "cell_flip_rate": 0.052734375,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "ablate_view_a_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.4908854166666667,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.0,
+        "donor_balanced_accuracy_drop": 0.625,
+        "routing_shift": null
+      },
+      "ablate_view_b_embedding": {
+        "status": "measured",
+        "cell_flip_rate": 0.05078125,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": 0.625,
+        "donor_balanced_accuracy_drop": 0.0,
+        "routing_shift": null
+      },
+      "fixed_uniform_route": {
+        "status": "NOT_APPLICABLE",
+        "cell_flip_rate": null,
+        "donor_balanced_accuracy_before": 0.625,
+        "donor_balanced_accuracy_after": null,
+        "donor_balanced_accuracy_drop": null,
+        "routing_shift": null
+      }
+    }
+  },
+  "limitations": [
+    "Pilot only: one outer fold and one donor split.",
+    "Interventions are held-out manipulation evidence, not causal biology.",
+    "Raw-count standard scaling; the accepted normalization is not frozen.",
+    "Predictions must not be used to select outcome-favourable donors."
+  ],
+  "resources": {
+    "name": "real_paired_faithfulness",
+    "cells_per_donor_cap": 256,
+    "elapsed_seconds": 9.553,
+    "peak_rss_gb": 1.1559,
+    "disk_free_gb": 17.695,
+    "input_bytes": null,
+    "notes": "Real pilot faithfulness/seed sensitivity on CPU; not final or external"
+  },
+  "run_json_sha256": "576882b6d4ab96822a33e7612185e17153adc5fd1bbd2f3837de1079f65820f8"
+}

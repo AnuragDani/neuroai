@@ -1,7 +1,7 @@
 # P22 results execution and professor handoff
 
 Run: `p22-results-executio-debda8` · Worktree base `8217719713c271349d1e54eda679672b82133a56`
-Updated: 2026-09-21 (iteration 3) · Maintained inside the GNHF worktree.
+Updated: 2026-09-21 (iteration 4) · Maintained inside the GNHF worktree.
 
 ## 1. Current status and result
 
@@ -31,6 +31,17 @@ This is the first paired result of the study. It is a pilot: one outer fold, one
 initialization seed, raw-count standard scaling, no final refit, no external
 evaluation, no biological mechanism claim.
 
+Iteration 4 added the **held-out faithfulness and initialization-seed evidence** the
+pilot omitted (`experimental result`): every two-view model's held-out prediction
+depends far more on the RNA view than on the 256-region ATAC view — ablating the RNA
+view collapses donor balanced accuracy from 0.625 to 0.0 (concat/token/cross) or 0.5
+(gated), while ablating the ATAC view leaves it at 0.625. The fixed-uniform-route
+intervention is measured only for the gated family (routing shift 0.42) and reported
+`NOT_APPLICABLE` for the non-gated families. Initialization-seed sensitivity (split
+fixed, seeds 0/1/2) is flat: cross-attention and token-concat both 0.625, primary
+delta 0.0 at every seed. The 256-region ATAC feature set is the likely reason ATAC
+carries little signal; this is an input limitation, not an architecture finding.
+
 ## 2. Delta from prior runs and execution/resource amendment
 
 - Iterations 1–2 cleared the development fragment **barcode-join/index** gate and
@@ -56,7 +67,7 @@ evaluation, no biological mechanism claim.
 | Independent modalities, simple fusion | Jul 21 [15:04],[15:55],[17:39] | Measured RNA/ATAC pairing on shared cells; cross-attention vs token-concat control |
 | Fair supervision / method selection | Jul 2 [14:12],[16:43]; Jul 21 [15:55] | Same splits/labels/feature budget/head for all six families; parameter counts reported |
 | Donor-aware sampling / held-out eval | Jul 21 [03:40], To-Dos 3–4 | Donors split before feature selection; 24 train / 6 test donors, no overlap |
-| Faithfulness / seed variability | Jul 21 To-Do 10 | **Not yet run** (pilot has no interventions; single initialization seed) |
+| Faithfulness / seed variability | Jul 21 To-Do 10 | **Executed** on the pilot fold: seven held-out interventions per two-view family at donor level; init-seed sensitivity flat (spread 0.0 over seeds 0/1/2) |
 | Independent biological validation | Jul 21 [18:51],[20:19],[21:56] | None claimed |
 | Check GenAI claims vs originals | Jul 2 [12:09], To-Do 8 | Region discovery uses per-library cellranger peaks, not cluster peaks |
 | Data access / approval | Jul 2 [03:10],[05:10],[06:46]; Sept attestation | Open public assets only; no restricted access, no contact |
@@ -90,6 +101,13 @@ evaluation, no biological mechanism claim.
 - Tests: `tests/test_freeze_development_region_set.py` (10),
   `tests/test_quantify_development_atac.py` (4). All offline over synthetic
   fixtures; the real pilot is validated by execution, not a fixture.
+- `src/p22/eval/paired_faithfulness.py` — donor-level wrapper over the seven
+  held-out interventions (`run_donor_interventions`), the estimand-consistent
+  `donor_balanced_accuracy`, and `initialization_seed_spread`.
+- `scripts/run_real_paired_faithfulness.py` — reuses the real pilot inputs/fold,
+  fits four two-view families, runs all seven interventions at donor level, and
+  refits the primary families under seeds 0/1/2. `tests/test_paired_faithfulness.py`
+  (9 offline tests).
 
 Commands actually run and status:
 
@@ -97,7 +115,8 @@ Commands actually run and status:
 .venv-p22/bin/python scripts/freeze_development_region_set.py ... --top-n 256 ...  # PASS
 .venv-p22/bin/python scripts/quantify_development_atac.py ... --workers 12 ...      # PASS, 256 x 248998
 .venv-p22/bin/python scripts/run_real_paired_pilot.py --output-dir ...              # PASS, null advantage
-.venv-p22/bin/python -m pytest -q -m "not slow"                                     # 890 passed, 32 deselected
+.venv-p22/bin/python scripts/run_real_paired_faithfulness.py --output-dir ...       # PASS, interventions + seed spread
+.venv-p22/bin/python -m pytest -q -m "not slow"                                     # 899 passed, 32 deselected
 .venv-p22/bin/ruff check scripts tests src && ruff format --check scripts tests src  # pass
 ```
 
@@ -108,9 +127,13 @@ Environment: `/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python`
 
 - Historical (unchanged): RNA replication INCONCLUSIVE; 68 exploratory donor
   omissions preserved; synthetic paired fits only.
-- **Pilot (this run):** one fold, one seed — donor balanced accuracy: rna_only
+- **Pilot (iteration 3):** one fold, one seed — donor balanced accuracy: rna_only
   0.625, atac_only 0.500, concat/gated/token/cross-attention 0.625, majority 0.500;
   cross-attention − token-concat = **0.0**.
+- **Pilot faithfulness (iteration 4):** RNA-view clamp/ablate donor balanced
+  accuracy 0.625 → 0.5/0.0; ATAC-view clamp/ablate stays 0.625; uniform route
+  measured only for the gated family (routing shift 0.42). Init-seed spread 0.0
+  (cross-attention and token-concat both 0.625 at seeds 0/1/2).
 - Final paired estimate: **not produced**.
 - External evaluation: **not launched**.
 
@@ -127,6 +150,10 @@ candidate route but was not accessed this run.
 - Matrix evidence (tracked): `docs/atac_development_matrix_2026-09-21.json`,
   `docs/atac_development_matrix_regions_2026-09-21.tsv`
 - Combined write-up (tracked): `docs/DEVELOPMENT_PAIRED_INPUT_AND_PILOT_2026-09-21.md`
+- Faithfulness write-up (tracked): `docs/PAIRED_FAITHFULNESS_AND_SEED_2026-09-21.md`,
+  `docs/real_paired_faithfulness_2026-09-21.json`; run artifacts (gitignored)
+  `reports/generated/real_paired_faithfulness_20260921/run/run.json`
+  (SHA-256 `576882b6…20f8`)
 - Region set (tracked): `configs/development_region_set_fold0_2026-09-21.json`,
   `configs/development_region_set_fold0_2026-09-21.bed`
 - Run artifacts (gitignored): `reports/generated/development_region_set_20260921/`
@@ -143,12 +170,15 @@ candidate route but was not accessed this run.
 > open indexed fragment with complete barcode joins, and trained the six-family
 > stack on real paired data with donor-isolated splits. Result: no advantage —
 > cross-attention and matched token-concat both reach 0.625 donor balanced
-> accuracy (difference 0.0). This is a pilot (one fold, one seed, raw scaling),
-> not a final estimate, and external validation is not launched because the
-> external payloads are tar-packaged under a per-file embargo. Outstanding
-> decision: approve the final frozen protocol (a stronger region set, accepted
-> normalization, repeated splits, faithfulness and seed sensitivity) and whether
-> to pursue the external paired counts MEX route.
+> accuracy (difference 0.0). This is a pilot (one fold, raw scaling), not a final
+> estimate, and external validation is not launched because the external payloads
+> are tar-packaged under a per-file embargo. We also ran the held-out faithfulness
+> interventions: the models depend on the RNA view (RNA ablation drops donor
+> accuracy to 0.0) far more than on the 256-region ATAC view, and initialization
+> seeds 0/1/2 leave the primary null unchanged. The 256-region feature set is the
+> likely reason. Outstanding decision: approve the final frozen protocol (a
+> stronger region set, accepted normalization, repeated donor splits so all 30
+> donors are tested) and whether to pursue the external paired counts MEX route.
 
 ## 10. Exact unresolved dependency and smallest next action
 
@@ -157,10 +187,12 @@ route** remains tar-packaged/embargoed.
 
 Smallest next action: prospectively re-freeze a stronger development region set
 (fix the chr1 tie-break bias; prevalence max is only 6/28), then run the repeated
-donor-split internal comparison with the primary contrast, uncertainty,
-faithfulness interventions and initialization sensitivity — labeled final, not
-pilot. External execution additionally depends on resolving the tar packaging and
-per-file embargo (or using the external paired counts MEX).
+donor-split internal comparison so all 30 donors are tested and the primary
+contrast has a non-degenerate donor-level interval — labeled final, not pilot.
+Faithfulness and initialization sensitivity are now executed at pilot level (R4a);
+they must be repeated on the frozen final folds. External execution additionally
+depends on resolving the tar packaging and per-file embargo (or using the external
+paired counts MEX).
 
 ## 11. Reproduce
 
@@ -183,4 +215,7 @@ per-file embargo (or using the external paired counts MEX).
 # pilot
 .venv-p22/bin/python scripts/run_real_paired_pilot.py \
   --output-dir reports/generated/real_paired_pilot_20260921/run
+# faithfulness + initialization sensitivity (no network)
+.venv-p22/bin/python scripts/run_real_paired_faithfulness.py \
+  --output-dir reports/generated/real_paired_faithfulness_20260921/run
 ```

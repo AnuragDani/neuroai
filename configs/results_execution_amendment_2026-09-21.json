@@ -54,6 +54,14 @@
     "external_asset_bytes": 0,
     "pilot_compute": "CPU; 9.2 s, 1.14 GB peak RSS"
   },
+  "iteration_4_allocation_used": {
+    "purpose": "held-out faithfulness interventions and initialization-seed sensitivity on the real paired pilot fold",
+    "network_bytes": 0,
+    "compute": "CPU; 9.55 s, 1.16 GB peak RSS; 6 neural fits (4 intervention families + 4 primary refits)",
+    "retained_evidence_bytes": "docs/real_paired_faithfulness_2026-09-21.json plus gitignored run artifacts",
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0
+  },
   "future_bounded_allocations_proposed": {
     "development_region_set_quantification": {
       "status": "DONE_PILOT",
@@ -75,5 +83,11 @@
     "real_paired_pilot": "executed; cross-attention minus token-concat donor balanced accuracy 0.0 (interval [0,0]); honest null",
     "final_estimate": "not produced",
     "external_evaluation": "not launched (tar-packaged, per-file embargo)"
+  },
+  "iteration_4_status": {
+    "faithfulness": "executed on the pilot fold; all seven held-out interventions per two-view family with donor-level scoring; RNA-view ablation collapses donor balanced accuracy to 0.0 while ATAC-view ablation leaves it at 0.625; uniform route NOT_APPLICABLE for non-gated families",
+    "initialization_sensitivity": "cross-attention and token-concat donor balanced accuracy 0.625 at seeds 0,1,2 (spread 0.0); primary delta 0.0 at every seed",
+    "final_estimate": "not produced (needs repeated donor splits and a stronger frozen region set)",
+    "external_evaluation": "not launched"
   }
 }

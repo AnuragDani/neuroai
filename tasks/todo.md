@@ -1018,9 +1018,21 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   final estimate. Evidence: `docs/real_paired_pilot_2026-09-21.json`,
   `reports/generated/real_paired_pilot_20260921/`. Code:
   `scripts/run_real_paired_pilot.py`.
-- [ ] R4: frozen internal comparison — re-freeze a stronger region set prospectively,
-  run repeated donor splits and the primary contrast with uncertainty; then
-  faithfulness (clamping/permutation/branch) and initialization sensitivity.
+- [x] R4a: held-out faithfulness + initialization sensitivity on the real paired
+  pilot — `EXECUTED`. All seven interventions per two-view family scored at the
+  donor level: RNA-view clamp/ablate drop donor balanced accuracy 0.625 → 0.5/0.0,
+  ATAC-view interventions leave it at 0.625, uniform route NOT_APPLICABLE for
+  non-gated families. Init-seed sensitivity: cross-attention and token-concat both
+  0.625 at seeds 0/1/2 (spread 0.0); primary delta 0.0 at every seed. Pilot only.
+  Evidence: `docs/PAIRED_FAITHFULNESS_AND_SEED_2026-09-21.md`,
+  `docs/real_paired_faithfulness_2026-09-21.json`,
+  `reports/generated/real_paired_faithfulness_20260921/`. Code:
+  `src/p22/eval/paired_faithfulness.py`, `scripts/run_real_paired_faithfulness.py`,
+  `tests/test_paired_faithfulness.py`.
+- [ ] R4b: frozen internal comparison — re-freeze a stronger region set prospectively,
+  run repeated donor splits (all 30 donors tested) and the primary contrast with
+  donor-level uncertainty. Pilot R4a tested only 6 test donors, so the bootstrap
+  interval is degenerate.
 - [ ] R5: external route decision — payloads are tar/tar.gz with per-file embargo;
   no bounded range join is possible; external paired counts MEX is the cheaper route
   but is not yet accessed.
