@@ -12,8 +12,9 @@ import numpy as np
 import pytest
 import torch
 
-from p22.eval.faithfulness import INTERVENTIONS, UNIFORM_ROUTE
+from p22.eval.faithfulness import CLAMP_VIEW_A, INTERVENTIONS, UNIFORM_ROUTE
 from p22.eval.paired_faithfulness import (
+    aggregate_interventions,
     donor_balanced_accuracy,
     initialization_seed_spread,
     run_donor_interventions,
@@ -200,3 +201,102 @@ def test_initialization_seed_spread_rejects_empty_and_nonfinite():
         initialization_seed_spread({})
     with pytest.raises(ValueError):
         initialization_seed_spread({0: float("nan")})
+
+
+def _measured_row(name, before, after, drop, routing=None):
+    return {
+        "intervention": name,
+        "status": "measured",
+        "donor_balanced_accuracy_before": before,
+        "donor_balanced_accuracy_after": after,
+        "donor_balanced_accuracy_drop": drop,
+        "routing_shift": routing,
+    }
+
+
+def _not_applicable_row(name, before):
+    return {
+        "intervention": name,
+        "status": "NOT_APPLICABLE",
+        "donor_balanced_accuracy_before": before,
+        "donor_balanced_accuracy_after": None,
+        "donor_balanced_accuracy_drop": None,
+        "routing_shift": None,
+    }
+
+
+def _table(rows_by_name):
+    return [rows_by_name[name] for name in INTERVENTIONS]
+
+
+def test_aggregate_interventions_means_over_measured_folds():
+    clamp = CLAMP_VIEW_A
+    tables = [
+        _table({name: _measured_row(name, 0.6, 0.4, 0.2) for name in INTERVENTIONS}),
+        _table({name: _measured_row(name, 0.4, 0.2, 0.2) for name in INTERVENTIONS}),
+    ]
+    summary = aggregate_interventions({"concat": tables})["concat"][clamp]
+    assert summary["n_folds"] == 2
+    assert summary["n_folds_measured"] == 2
+    assert summary["n_folds_not_applicable"] == 0
+    assert summary["donor_balanced_accuracy_before_mean"] == pytest.approx(0.5)
+    assert summary["donor_balanced_accuracy_after_mean"] == pytest.approx(0.3)
+    assert summary["donor_balanced_accuracy_drop_mean"] == pytest.approx(0.2)
+    assert summary["donor_balanced_accuracy_drop_min"] == pytest.approx(0.2)
+    assert summary["donor_balanced_accuracy_drop_max"] == pytest.approx(0.2)
+
+
+def test_aggregate_interventions_refusal_is_not_a_zero_effect():
+    tables = [
+        _table({name: _measured_row(name, 0.6, 0.5, 0.1) for name in INTERVENTIONS}),
+        _table(
+            {
+                name: (
+                    _not_applicable_row(name, 0.6)
+                    if name == UNIFORM_ROUTE
+                    else _measured_row(name, 0.6, 0.5, 0.1)
+                )
+                for name in INTERVENTIONS
+            }
+        ),
+    ]
+    route = aggregate_interventions({"concat": tables})["concat"][UNIFORM_ROUTE]
+    assert route["n_folds_measured"] == 1
+    assert route["n_folds_not_applicable"] == 1
+    assert route["donor_balanced_accuracy_drop_mean"] == pytest.approx(0.1)
+
+
+def test_aggregate_interventions_reports_routing_shift_only_where_measured():
+    tables = [
+        _table(
+            {
+                name: _measured_row(
+                    name, 0.6, 0.5, 0.1, routing=0.4 if name == UNIFORM_ROUTE else None
+                )
+                for name in INTERVENTIONS
+            }
+        )
+    ]
+    summary = aggregate_interventions({"gated": tables})["gated"]
+    assert summary[UNIFORM_ROUTE]["routing_shift_mean"] == pytest.approx(0.4)
+    assert summary[CLAMP_VIEW_A]["routing_shift_mean"] is None
+
+
+def test_aggregate_interventions_rejects_unknown_status():
+    tables = [
+        _table({name: _measured_row(name, 0.6, 0.5, 0.1) for name in INTERVENTIONS}),
+    ]
+    tables[0][0] = {**tables[0][0], "status": "MAYBE"}
+    with pytest.raises(ValueError, match="unknown status"):
+        aggregate_interventions({"concat": tables})
+
+
+def test_aggregate_interventions_rejects_missing_intervention():
+    tables = [[_measured_row(CLAMP_VIEW_A, 0.6, 0.5, 0.1)]]
+    with pytest.raises(ValueError, match="missing intervention"):
+        aggregate_interventions({"concat": tables})
+
+
+def test_aggregate_interventions_rejects_empty_family():
+    with pytest.raises(ValueError, match="no fold tables"):
+        aggregate_interventions({"concat": []})

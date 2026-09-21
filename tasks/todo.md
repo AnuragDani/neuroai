@@ -1043,8 +1043,20 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   `reports/generated/real_paired_comparison_20260921/`. Code:
   `scripts/freeze_repeated_region_sets.py`, `src/p22/eval/repeated_comparison.py`,
   `scripts/run_real_paired_comparison.py`, matching tests.
-- [ ] R4c: repeat the held-out faithfulness interventions and initialization
-  sensitivity on the frozen final folds (iteration 4 evidence is pilot-fold only).
+- [x] R4c: repeat the held-out faithfulness interventions and initialization
+  sensitivity on the frozen final folds — `EXECUTED`. All 25 folds, all seven
+  interventions per two-view family scored at the donor level: RNA-view interventions
+  dominate (cross-attention ablate_view_a mean drop 0.103; concat 0.145) while
+  ATAC-view interventions are near zero (cross-attention ablate_view_b -0.001);
+  within-donor permutation ~0 (expected for per-cell models); uniform route
+  NOT_APPLICABLE for non-gated families, measured for gated (mean drop 0.001). Init
+  seeds 0/1/2 with donor splits held fixed: mean primary delta +0.0367/-0.0153/-0.0060
+  (spread 0.052), so the null is not an init-seed artifact. No new network. Evidence:
+  `docs/PAIRED_FAITHFULNESS_FROZEN_FOLDS_2026-09-21.md`,
+  `docs/real_paired_faithfulness_frozen_2026-09-21.json`,
+  `reports/generated/real_paired_faithfulness_frozen_20260921/`. Code:
+  `src/p22/eval/paired_faithfulness.py` (`aggregate_interventions`),
+  `scripts/run_real_paired_faithfulness_frozen.py`, `tests/test_paired_faithfulness.py`.
 - [ ] R5: external route decision — payloads are tar/tar.gz with per-file embargo;
   no bounded range join is possible; external paired counts MEX is the cheaper route
   but is not yet accessed.

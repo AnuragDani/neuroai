@@ -1,7 +1,7 @@
 # P22 results execution and professor handoff
 
 Run: `p22-results-executio-debda8` · Worktree base `8217719713c271349d1e54eda679672b82133a56`
-Updated: 2026-09-21 (iteration 5) · Maintained inside the GNHF worktree.
+Updated: 2026-09-21 (iteration 6) · Maintained inside the GNHF worktree.
 
 ## 1. Current status and result
 
@@ -18,6 +18,22 @@ low-signal input rather than an architecture finding.
 
 This replaces the single-fold pilot (iteration 3: 6 test donors, interval [0,0]) as
 the internal estimate. The pilot remains valid as a mechanically passing pilot.
+
+Iteration 6 now covers the frozen folds with the **held-out faithfulness and
+initialization-seed evidence** that iteration 4 had run only on the pilot fold
+(`experimental result`, all 25 folds, no new network). The pattern reproduces: every
+two-view family depends far more on the RNA view than on the 256-region ATAC view —
+mean donor balanced accuracy drop from RNA-view ablation is 0.103 (cross-attention),
+0.145 (concat), 0.116 (token-concat), 0.080 (gated), while ATAC-view ablation is
+-0.001 to +0.027. Within-donor permutation is ~0 (exactly 0.0 for concat/token), as
+expected because no cell attends to another; the tiny cross-attention/gated nonzero
+is a floating-point aggregation-threshold artifact, not cell-order sensitivity. The
+fixed-uniform-route intervention is `NOT_APPLICABLE` for the three non-gated families
+and measured for the gated family (mean drop 0.001, routing shift 0.292). Across
+initialization seeds 0/1/2 with donor splits held fixed, the mean primary delta is
++0.0367 / -0.0153 / -0.0060 (spread 0.052), so the frozen internal null is not an
+initialization-seed artifact. This closes the "applicable faithfulness tests" item
+for the frozen internal comparison.
 
 Six linked artifacts now exist on real data:
 
@@ -60,6 +76,11 @@ comparison:
 6. `experimental result` — the **frozen repeated donor-split internal comparison**:
    25 folds, all 30 donors tested per repeat, primary delta +0.0333 (95% interval
    [-0.0133, 0.0806]), advantage false.
+7. `experimental result` — the **frozen-fold faithfulness and initialization
+   sensitivity** (iteration 6): seven held-out interventions per two-view family on
+   all 25 folds, and the primary contrast refit at init seeds 0/1/2 with donor splits
+   held fixed. RNA-view dependence dominates; seed-to-seed mean delta range
+   [-0.0153, +0.0367]. No new network.
 
 ## 2. Delta from prior runs and execution/resource amendment
 
@@ -78,14 +99,20 @@ comparison:
   It also fixes the pilot's two weaknesses the handoff named: the chr1 tie-break
   bias (each fold now uses only its own training libraries) and the degenerate
   6-donor interval (all 30 donors tested per repeat).
+- Iteration 6 repeats the pilot-fold **faithfulness + initialization-seed** evidence
+  on the frozen folds (`scripts/run_real_paired_faithfulness_frozen.py` and the new
+  `aggregate_interventions` in `src/p22/eval/paired_faithfulness.py`), reusing the
+  measured union matrix with no new network.
 - Prospective amendment in `configs/results_execution_amendment_2026-09-21.json`
   records the iteration-3 allocation (30 GEO features files ≈ 49.5 MB; fragment
   index 5.3 MB; 1.779 GB region-query transfer; 9.9 MB matrix), the iteration-4
-  allocation (no network; 6 neural fits), and the iteration-5 allocation (37 GEO
+  allocation (no network; 6 neural fits), the iteration-5 allocation (37 GEO
   features files ≈ 62 MB; 3.295 GB union-region query transfer; 19.3 MB matrix;
-  25 × 6 neural fits, 43.4 s). Historical records (`plan/approvals.json`, the
-  source contract, the Sept-8 evidence note) remain byte-for-byte unchanged. No paid
-  infra, no controlled access, no unbounded acquisition, no messages.
+  25 × 6 neural fits, 43.4 s) and the iteration-6 allocation (no network; 25 ×
+  (4 intervention + 4 seed-refit) fits, 68.3 s). Historical records
+  (`plan/approvals.json`, the source contract, the Sept-8 evidence note) remain
+  byte-for-byte unchanged. No paid infra, no controlled access, no unbounded
+  acquisition, no messages.
 
 ## 3. Professor-direction coverage
 
@@ -97,7 +124,7 @@ comparison:
 | Independent modalities, simple fusion | Jul 21 [15:04],[15:55],[17:39] | Measured RNA/ATAC pairing on shared cells; cross-attention vs matched token-concat across 5 × 5 donor splits |
 | Fair supervision / method selection | Jul 2 [14:12],[16:43]; Jul 21 [15:55] | Same splits/labels/feature budget/head for all six families across all 25 folds; parameter counts reported |
 | Donor-aware sampling / held-out eval | Jul 21 [03:40], To-Dos 3–4 | Donors split before feature selection every fold; **all 30 donors tested per repeat**; no overlap |
-| Faithfulness / seed variability | Jul 21 To-Do 10 | **Executed on the pilot fold**: seven held-out interventions per two-view family at donor level; init-seed sensitivity flat (spread 0.0 over seeds 0/1/2). Frozen-fold repetition is R4c and still pending |
+| Faithfulness / seed variability | Jul 21 To-Do 10 | **Executed on all 25 frozen folds** (iteration 6): seven held-out interventions per two-view family at donor level; primary contrast refit at init seeds 0/1/2 with splits held fixed (mean delta spread 0.052) |
 | Independent biological validation | Jul 21 [18:51],[20:19],[21:56] | None claimed |
 | Check GenAI claims vs originals | Jul 2 [12:09], To-Do 8 | Region discovery uses per-library cellranger peaks, not cluster peaks |
 | Data access / approval | Jul 2 [03:10],[05:10],[06:46]; Sept attestation | Open public assets only; no restricted access, no contact |
@@ -150,6 +177,15 @@ comparison:
   adapter; refuses overwrite.
 - Tests: `tests/test_freeze_repeated_region_sets.py` (5),
   `tests/test_repeated_comparison.py` (9), all offline.
+- `src/p22/eval/paired_faithfulness.py` — added `aggregate_interventions`, which
+  aggregates per-fold intervention tables across folds (measured vs not-applicable
+  counts, mean before/after/drop, mean routing shift) without treating a refusal as
+  a zero effect.
+- `scripts/run_real_paired_faithfulness_frozen.py` — runs the seven interventions and
+  the initialization-seed sensitivity on all 25 frozen folds, subsetting each fold's
+  training-only regions from the measured union matrix; refuses overwrite.
+- Tests: `tests/test_paired_faithfulness.py` extended with six offline
+  `aggregate_interventions` tests (15 in the file total).
 
 Commands actually run and status:
 
@@ -161,7 +197,8 @@ Commands actually run and status:
 .venv-p22/bin/python scripts/freeze_repeated_region_sets.py ... --top-n 256 ...      # PASS, 480 union
 .venv-p22/bin/python scripts/quantify_development_atac.py ... --workers 6 ...        # PASS, 480 x 248998
 .venv-p22/bin/python scripts/run_real_paired_comparison.py --output-dir ...          # PASS, +0.0333, advantage false
-.venv-p22/bin/python -m pytest -q -m "not slow"                                     # 913 passed, 32 deselected
+.venv-p22/bin/python scripts/run_real_paired_faithfulness_frozen.py --output-dir ...  # PASS, 25 folds, seed spread 0.052
+.venv-p22/bin/python -m pytest -q -m "not slow"                                     # 919 passed, 32 deselected
 .venv-p22/bin/ruff check scripts tests src && ruff format --check scripts tests src  # pass
 ```
 
@@ -186,6 +223,12 @@ Environment: `/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python`
   3: +0.067, 4: +0.067}`; 1000/1000 bootstrap replicates valid. Mean donor balanced
   accuracy: rna_only 0.447, atac_only 0.400, concat 0.540, gated 0.493,
   token_concat 0.493, cross_attention 0.527, majority 0.367.
+- **Frozen-fold faithfulness (iteration 6):** 25 folds. Mean donor balanced accuracy
+  drop by intervention — RNA ablation 0.103 (cross-attention) / 0.145 (concat) /
+  0.116 (token-concat) / 0.080 (gated); ATAC ablation -0.001 to +0.027; within-donor
+  permutation ~0 (0.000 for concat/token); uniform route N/A for non-gated, gated
+  drop 0.001 (routing shift 0.292). Init-seed mean primary delta +0.0367 / -0.0153 /
+  -0.0060 at seeds 0/1/2 (spread 0.052).
 - Final paired estimate: **internal final produced**; external validation **not launched**.
 
 ## 7. External evaluation and biological validation
@@ -212,6 +255,9 @@ candidate route but was not accessed this run.
 - Frozen protocol (tracked): `configs/final_internal_comparison_2026-09-21.json`
 - Internal comparison evidence (tracked): `docs/repeated_internal_comparison_2026-09-21.json`,
   `docs/REPEATED_INTERNAL_COMPARISON_2026-09-21.md`
+- Frozen-fold faithfulness (tracked): `docs/real_paired_faithfulness_frozen_2026-09-21.json`,
+  `docs/PAIRED_FAITHFULNESS_FROZEN_FOLDS_2026-09-21.md`; run artifacts (gitignored)
+  `reports/generated/real_paired_faithfulness_frozen_20260921/run/{run.json,per_fold.json,SUMMARY.md}`
 - Run artifacts (gitignored): `reports/generated/development_region_set_20260921/`
   (`region_set.json`, `regions.bed`, `counts/counts.npz`, `counts/counts.json`,
   `quantify.json`), `reports/generated/real_paired_pilot_20260921/run/run.json`
@@ -236,25 +282,31 @@ candidate route but was not accessed this run.
 > architecture finding. This is the internal estimate; external paired data remain
 > tar-packaged under a per-file embargo and were not accessed, so external
 > validation is not launched. Held-out faithfulness and initialization-seed
-> evidence currently exists only on the earlier single-fold pilot. Outstanding
-> decisions: (a) approve repeating faithfulness/seed checks on the frozen final
-> folds, (b) decide whether the 480-region training-only feature route or the
-> external paired counts MEX route is the better next investment, and (c) confirm
-> the accepted normalization, since raw-count standard scaling is not separately
-> frozen.
+> evidence now covers all 25 frozen folds: RNA-view interventions dominate (ablation
+> costs 0.08-0.15 donor balanced accuracy), ATAC-view interventions are near zero,
+> and the primary null holds across initialization seeds 0/1/2 (mean delta range
+> -0.015 to +0.037). Outstanding decisions: (a) decide whether the 480-region
+> training-only feature route or the external paired counts MEX route is the better
+> next investment, and (b) confirm the accepted normalization, since raw-count
+> standard scaling is not separately frozen.
 
 ## 10. Exact unresolved dependency and smallest next action
 
-Unresolved: (i) faithfulness/initialization evidence on the frozen final folds is
-still pilot-only; (ii) the **external route** remains tar-packaged/embargoed; (iii)
-the accepted normalization is not separately frozen.
+Unresolved: (i) the **external route** remains tar-packaged/embargoed, so external
+validation is not launched; (ii) the accepted normalization is not separately frozen
+(raw-count standard scaling is used); (iii) no independent biological mechanism
+evidence exists.
 
-Smallest next action (R4c): repeat the seven held-out interventions and the
-initialization-seed sensitivity on the frozen final folds, reusing
-`src/p22/eval/paired_faithfulness.py` and the per-fold region sets already measured
-(no new network). This closes the "applicable faithfulness tests" item for the
-frozen internal comparison. External execution additionally depends on resolving the
-tar packaging and per-file embargo (or using the external paired counts MEX).
+Completed this iteration (R4c): the seven held-out interventions and the
+initialization-seed sensitivity now cover all 25 frozen folds, closing the
+"applicable faithfulness tests" item for the frozen internal comparison (no new
+network).
+
+Smallest next action (R5): resolve the external route. The external paired
+RNA+ATAC counts MEX is the cheaper candidate (the fragment route is tar-packaged
+under per-file embargo); it requires per-file access declarations, packaging,
+barcode namespace and cross-cohort feature compatibility to be checked before any
+download. External execution must not tune on external outcomes.
 
 ## 11. Reproduce
 
@@ -298,4 +350,7 @@ tar packaging and per-file embargo (or using the external paired counts MEX).
 # frozen internal comparison
 .venv-p22/bin/python scripts/run_real_paired_comparison.py \
   --output-dir reports/generated/real_paired_comparison_20260921/run
+# frozen-fold faithfulness + initialization sensitivity (no network)
+.venv-p22/bin/python scripts/run_real_paired_faithfulness_frozen.py \
+  --output-dir reports/generated/real_paired_faithfulness_frozen_20260921/run
 ```

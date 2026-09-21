@@ -170,6 +170,71 @@ def run_donor_interventions(
     return rows
 
 
+def _mean_or_none(values: Sequence[float]) -> float | None:
+    usable = [float(value) for value in values if value is not None and np.isfinite(value)]
+    return float(np.mean(usable)) if usable else None
+
+
+def aggregate_interventions(
+    fold_tables: Mapping[str, Sequence[Sequence[dict[str, Any]]]],
+) -> dict[str, dict[str, dict[str, Any]]]:
+    """Aggregate per-fold intervention rows across folds for every family.
+
+    ``fold_tables`` maps a model family to a sequence of per-fold intervention
+    tables, each produced by :func:`run_donor_interventions`. The result keeps one
+    entry per (family, intervention) and reports how many folds measured it versus
+    refused it as not applicable, the mean donor balanced accuracy before and after
+    over measured folds, the mean and range of the drop, and the mean routing shift
+    where a gate exists. Means never treat a refusal as a zero effect.
+    """
+    if not fold_tables:
+        raise ValueError("at least one family is required")
+    aggregated: dict[str, dict[str, dict[str, Any]]] = {}
+    for family, tables in fold_tables.items():
+        if not tables:
+            raise ValueError(f"family {family!r} has no fold tables")
+        by_intervention: dict[str, list[dict[str, Any]]] = {}
+        for rows in tables:
+            for row in rows:
+                by_intervention.setdefault(str(row["intervention"]), []).append(row)
+        summary: dict[str, dict[str, Any]] = {}
+        for name in INTERVENTIONS:
+            rows = by_intervention.get(name)
+            if not rows:
+                raise ValueError(f"family {family!r} is missing intervention {name!r}")
+            measured = [row for row in rows if row.get("status") == "measured"]
+            not_applicable = [row for row in rows if row.get("status") == "NOT_APPLICABLE"]
+            if len(measured) + len(not_applicable) != len(rows):
+                raise ValueError(f"family {family!r} intervention {name!r} has an unknown status")
+            drops = [row.get("donor_balanced_accuracy_drop") for row in measured]
+            finite_drops = [
+                float(value) for value in drops if value is not None and np.isfinite(value)
+            ]
+            summary[name] = {
+                "intervention": name,
+                "n_folds": len(rows),
+                "n_folds_measured": len(measured),
+                "n_folds_not_applicable": len(not_applicable),
+                "donor_balanced_accuracy_before_mean": _mean_or_none(
+                    [row.get("donor_balanced_accuracy_before") for row in measured]
+                ),
+                "donor_balanced_accuracy_after_mean": _mean_or_none(
+                    [row.get("donor_balanced_accuracy_after") for row in measured]
+                ),
+                "donor_balanced_accuracy_drop_mean": _mean_or_none(drops),
+                "donor_balanced_accuracy_drop_min": (
+                    float(min(finite_drops)) if finite_drops else None
+                ),
+                "donor_balanced_accuracy_drop_max": (
+                    float(max(finite_drops)) if finite_drops else None
+                ),
+                "routing_shift_mean": _mean_or_none([row.get("routing_shift") for row in measured]),
+                "evidence": EVIDENCE_STATEMENT,
+            }
+        aggregated[str(family)] = summary
+    return aggregated
+
+
 def initialization_seed_spread(records: Mapping[int, float]) -> dict[str, Any]:
     """Summarise donor-level scores across initialization seeds.
 
