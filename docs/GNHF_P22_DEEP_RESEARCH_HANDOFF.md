@@ -1,6 +1,6 @@
 # P22 deep-research handoff for Codex
 
-Prepared 2026-09-20 (iteration 1; updated through iteration 4). Worktree
+Prepared 2026-09-20 (iteration 1; updated through iteration 5). Worktree
 `p22-deep-research-pr-3ad124`. Base commit `8217719713c271349d1e54eda679672b82133a56`
 verified equal to the expected base. Documentation/research only: no payload
 download, object inspection, install, container launch, training, author contact,
@@ -35,18 +35,14 @@ What is already established (carried forward, not re-derived here):
 - Provider-level `no_overlap_evidence` stands (18 UCLA / 8 NIH donors; no genetic
   crosswalk); region is confounded with provider.
 
-Iterations 1–3 (details and sources in §3 and the progress log): recovered the full
-object-provenance chain (both GEO objects map to author stages B04/C03; the selected
-object is pre-`F01`, so `peaks_by_cluster` is absent); showed the deposited ATAC
-assay is a naive per-library peak merge, not a common measured space (Signac warns
-this "can result in inaccuracies"); measured 3 of 46 GEO per-library peak spaces
-(exact intersections 3/0/0/0, overlap 17–76%); corrected the 4 GiB-vs-256 MiB
-factor to 16× and the `create_args`/`run_owned` characterizations; reproduced the
-46→37→30 library/specimen progression with two exclusion layers and named
-`B02filter_stats.csv` as the minimal missing artifact; and resolved the external
-cohort to 26 donors/13 libraries with 113,801 = RNA non-`Unk` (stated-QC replay
-113,242), release `nCount_ATAC` ≠ QC stage, `Unk` an annotation class, and
-obstetric GW ≠ post-conception weeks.
+Iterations 1–3 (sources in §3 and the progress log): recovered the object-provenance
+chain (both GEO objects map to author stages B04/C03; the selected object is
+pre-`F01`, so `peaks_by_cluster` is absent); showed the deposited ATAC assay is a
+naive per-library peak merge, not a common measured space; measured 3 of 46 GEO
+peak spaces (exact intersections 3/0/0/0); corrected the 4 GiB-vs-256 MiB factor to
+16×; reproduced the 46→37→30 progression; and resolved the external cohort to 26
+donors/13 libraries (113,801 = RNA non-`Unk`; release `nCount_ATAC` ≠ QC stage;
+GW ≠ PCW).
 
 What iteration 4 adds (all `OBSERVED_NOW` unless noted) — priority 5 is now
 resolved to a decision, and the primary-contrast arms are checked against the
@@ -74,6 +70,22 @@ frozen estimand:
     peak selection, provider×region, age scale and a framework that cannot
     diagnose cross-attention. Proceed only after a prospective amendment and the
     Q22 fix; no novelty-from-complexity or attention-as-causal claims.
+
+What iteration 5 adds (all `OBSERVED_NOW`) — a third, already-local artifact is
+characterized and the priority-4 reader path narrows:
+
+19. **The local CELLxGENE complete-dataset H5AD is the final B02 cohort, RNA-only
+    (Q28–Q31, §3.10).** `data/real/f16c25da-…h5ad` holds 248,998 cells whose 37
+    `library` and 30 `sample` categories are set-equal to the pinned `B02` final
+    cohort, with per-cell retained barcodes joinable to library and donor and
+    raw-scale integer RNA counts in `raw/X`. It contains no ATAC matrix (var is
+    35,477 genes only), so it does not close the paired gate, but it makes the
+    development cohort's retained-barcode/library/donor join a zero-download,
+    zero-install Python read (anndata/h5py already in `.venv-p22`).
+20. **Priority-4 consequence:** the RNA, donor-join and cell-membership side needs
+    no R reader and no install; only the measured ATAC counts still need the R
+    object or fragments. The next priority-4 check is therefore the ATAC-side
+    `.rda`/class fixture, not the generic reader question.
 
 ## 2. Question / claim table
 
@@ -109,6 +121,10 @@ Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
 | Q25 | A simpler control could explain an apparent cross-attention gain | All-donor peak selection, region×provider, age scale, composition (§3.9) | None at design level | SUPPORTED | Each control must be reported before any advantage claim |
 | Q26 | Cells, not donors, are the effective replication unit | S55/S56; frozen `split_unit="donor"` (`estimand.py:59`) | None | SUPPORTED | Aggregate to donor; report donor-level intervals only |
 | Q27 | DECAT (S60) can diagnose the cross-attention model directly | S60: "cannot be directly applied to early-fusion architectures where modalities attend to each other" | Framework limitation | REJECTED | Use cross-cohort stability as a principle, not DECAT scoring, for this model |
+| Q28 | The local CELLxGENE H5AD is the final B02 cohort | 37 `library`/30 `sample` set-equal to pinned B02 (§3.10) | None | SUPPORTED | Third public confirmation; retained-barcode/donor join is local |
+| Q29 | The local H5AD supplies ATAC measured counts | var = 35,477 genes only; no Peaks/ATAC layer (§3.10) | None | REJECTED | ATAC still needs the GEO MEX peak matrices or a fragment recount |
+| Q30 | H5AD `raw/X` is the exact cellranger-arc raw matrix | integer/raw-scale but row sums ≠ `nCount_RNA` (median −4) (§3.10) | Not proven | UNVERIFIED | Treat as raw-scale, not as the authoritative raw matrix |
+| Q31 | The selected exc-lin object's cell membership is enumerable without the 7.6 GiB object | `cells_in_excitatory_lineage_subset` = 215,680, all 30 donors, PCW10–20 (§3.10) | Exact equivalence to C03 is UNKNOWN | INFERENCE | Candidate barcode set; verify if the object is ever inspected |
 
 Carried forward without change: C1–C23 of the earlier dossier remain in force
 except C5 (now quantified), C13/C14 budget arithmetic (corrected), and the
@@ -295,48 +311,20 @@ Reproducible reconciliation (46 libraries → 37 retained libraries → 30 speci
 Reproduce (metadata only; no expression values, no download):
 
 ```bash
-# run from the original checkout root; metadata lives in P22/data/multiome
+# run from the original checkout root; metadata lives in P22/data/multiome.
+# SOFT parser: collect per-^SAMPLE the _atac "Library name" and sample id/name/
+# group/in final_analysis; build `soft[library] = (...)` for the 46 ATAC samples.
 python3 - <<'PY'
-import gzip, csv
+import csv
 base = '/Users/anuragdani/Github/niw-eb1a/P22/data/multiome'
-soft = {}
-cur = None
-def ch(s, p):
-    for x in s.get('c', []):
-        if x.lower().startswith(p.lower() + ':'):
-            return x.split(':', 1)[1].strip()
-def desc(s, p):
-    for x in s.get('d', []):
-        if x.lower().startswith(p.lower() + ':'):
-            return x.split(':', 1)[1].strip()
-def flush(s):
-    if not s:
-        return
-    lib = desc(s, 'Library name')
-    if lib and lib.endswith('_atac'):
-        soft[lib[:-5]] = (ch(s, 'sample id'), ch(s, 'name'), ch(s, 'group'),
-                          ch(s, 'in final_analysis'))
-with gzip.open(base + '/GSE305146_family.soft.gz', 'rt') as fh:
-    for line in fh:
-        line = line.rstrip('\n')
-        if line.startswith('^SAMPLE'):
-            flush(cur); cur = {'c': [], 'd': []}
-        elif cur is not None and line.startswith('!'):
-            k, _, v = line[1:].partition(' = ')
-            if k == 'Sample_characteristics_ch1': cur['c'].append(v)
-            elif k == 'Sample_description': cur['d'].append(v)
-        elif line.startswith('!Series') or line.startswith('^SERIES'):
-            flush(cur); cur = None
-flush(cur)
 A = list(csv.DictReader(open(base + '/Lattke_B02_gr_tab_filtered_non_cx_excl_227f51b.csv')))
 B = {r['library'].strip() for r in A}
-print('GEO libs', len(soft), 'B02 libs', len(B))
-print('dropped', sorted(set(soft) - B))
-print('final specimens', len({r['sample'] for r in A}),
-      'groups', sorted({r['group'] for r in A}))
+print('B02 libs', len(B), 'final specimens', len({r['sample'] for r in A}))
 print('final group counts',
       {g: len({r['sample'] for r in A if r['group'] == g}) for g in ('CON', 'DS')})
+assert len(B) == 37 and {r['group'] for r in A} == {'CON', 'DS'}
 PY
+# The 46-library SOFT set and the 9 dropped libraries are asserted in §3.7's table.
 ```
 
 Corrections and limits:
@@ -532,6 +520,68 @@ contract only after a specific prospective amendment (frozen common-region
 recount, §4 rank 1) and after fixing Q22. No claim of novelty-from-complexity or
 attention-as-causal-evidence.**
 
+### 3.10 Local CELLxGENE complete-dataset H5AD (`OBSERVED_NOW`)
+
+Source: local `data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad`
+(1,569,658,860 bytes; SHA-256 `08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb`),
+the CELLxGENE release named by `uns.citation` (doi 10.1038/s41591-026-04211-1,
+collection `0e9fd1d3…`), title "…complete dataset". Read with `anndata` 0.12.6 /
+`h5py` 3.16.0 already present in `.venv-p22` (no install, no download). Metadata
+and structure only; no donor-level analysis.
+
+Observed structure:
+
+- `obs`: 248,998 rows; `donor_id` 30 categories (15 CON / 15 DS), `sample` 30,
+  `library` 37. The 37-library and 30-sample sets are set-equal to the pinned
+  `B02` final cohort (`§3.7`): zero diff in either direction. `dev_PCW` ∈ 10–20.
+- `cell_id` = `{library}_{10x barcode}` (e.g. `B10C1Q_AAACAGCCAACTAGCC-1`), so
+  every retained barcode joins to library and donor with no external artifact.
+- `var`: 35,477 genes only (`feature_type` all gene classes); no `chr:start-end`
+  rows, no `Peaks`, no ATAC layer in `X`, `raw/X`, `layers` or `obsm`. The open
+  export is RNA-only.
+- `raw/X`: CSR, 360,876,411 integer entries, max 375 → raw-scale counts. Caveat:
+  per-cell row sums differ from `nCount_RNA` (median −4, max −90; 6.8% exact), so
+  `raw/X` is raw-scale but not proven to be the exact cellranger-arc raw matrix.
+- Per-cell ATAC QC columns present: `nCount_ATAC` (101–24,997), `nFeature_ATAC`
+  (18–11,250), `TSS.enrichment` (>1.102), `nucleosome_signal` (<2),
+  `percent.mt` (<2), `nCount_RNA` (501–29,972) — every row passes the B02 rule
+  by construction.
+- `cells_in_excitatory_lineage_subset` = 215,680 cells across all 30 donors and
+  PCW10–20; `cluster_name_subset` has 11 labels. Candidate cell membership for
+  the selected `exc_lin_PCW10_20` object; exact equivalence to the C03 object is
+  `UNKNOWN`.
+
+Consequences:
+
+- The development cohort's retained-barcode/library/donor join — named minimal
+  artifact (c) in `§6` — is already public and local, readable with zero install.
+  Only the ATAC measured counts are missing from it.
+- Priority-4 reader path: the RNA + metadata + cell-membership side needs no R
+  reader and no install; only the ATAC measured counts need the R object or
+  fragments.
+- Counterevidence to "only the 7.6/8.7 GiB objects can enumerate the final
+  cohort": the open H5AD already enumerates it exactly. It does **not** close the
+  paired gate — it has no ATAC matrix, so the only open ATAC routes remain the 46
+  GEO per-library peak matrices or a fragment recount.
+
+Reproduce (local metadata only):
+
+```bash
+cd /Users/anuragdani/Github/niw-eb1a/P22 && .venv-p22/bin/python - <<'PY'
+import h5py, csv
+p='data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad'
+with h5py.File(p,'r') as f:
+    o=f['obs']
+    libs={c.decode() for c in o['library']['categories'][:]}
+    smps={c.decode() for c in o['sample']['categories'][:]}
+    print(len(o['cell_id']), len(libs), len(smps),
+          list(f['X'].attrs['shape']), list(f['raw']['X'].attrs['shape']))
+B=list(csv.DictReader(open('data/multiome/Lattke_B02_gr_tab_filtered_non_cx_excl_227f51b.csv')))
+assert libs=={r['library'].strip() for r in B} and smps=={r['sample'].strip() for r in B}
+print('H5AD cohort == B02 final cohort')
+PY
+```
+
 ### 3.5 Resource/contract facts re-confirmed (`OBSERVED_NOW`)
 
 - `configs/development_object_source_contract.json` SHA-256
@@ -577,6 +627,7 @@ Ranked by what can actually be established for a donor-aware RNA+ATAC comparison
 | 4 | **GEO per-library MEX ATAC matrices** | Per-library measured counts on library-specific peaks | No common exact feature space (Q1); union leaves unmeasured coverage | Full 46-library intersection/overlap reconciliation (deferred check, §5) | Not a common measured matrix; cannot be zero-filled |
 | 5 | **Cross-cohort direct matrix comparison (GSE305146 vs NeMO)** | Nothing exact | Different peak-calling studies; different count stages; no shared intervals | None short of recount on a common frozen set | Rejected for confirmatory; exploratory only with explicit `peak_derived` labelling |
 | 6 | **Peak-to-gene summed score** | A derived exploratory signal | Pinned gene annotation/interval/overlap policy | Hand-calculated overlap examples + missingness per gene | Exploratory only; not exact fragment gene activity |
+| 7 | **Local CELLxGENE complete-dataset H5AD (RNA-only)** | Exact final-cohort retained barcodes, library/donor join, raw-scale RNA counts, per-cell ATAC QC metadata | No ATAC measured counts; `raw/X` not proven to be the exact raw matrix | Confirm no ATAC layer (done, §3.10) | Zero-download Python read for the RNA/join side; cannot supply paired ATAC |
 
 Counterevidence and strongest alternatives:
 
@@ -604,6 +655,11 @@ Counterevidence and strongest alternatives:
   (`B02…R:46-68`) but the per-library `fract_removed`/cell counts are not, so which
   of the two thresholds removed each of the 3 B02-QC specimens is `UNKNOWN`.
   Overturning evidence: `B02filter_stats.csv`.
+- **Could the open CELLxGENE H5AD make the R objects unnecessary?** For the RNA
+  side, the donor join and the retained barcodes, yes (`§3.10`); for the measured
+  ATAC counts, no — the export has no ATAC layer. Overturning evidence: an ATAC
+  assay or peak matrix inside the H5AD (none found) or an open ATAC export on the
+  same common regions.
 - **Could the paired comparison be scientifically vacuous?** Only if the
   incremental question were already answered by the completed RNA study or
   inseparable from a simpler control. The estimand differs (cross-attention−concat
@@ -625,12 +681,13 @@ Priorities 1 (§3.7), 3 (§3.8) and 5 (§3.9) now have supported dispositions.
 Priority 5 is `CONDITIONAL`: the primary contrast is implemented, refutable and
 worth running, but only under a prospective amendment and after the Q22 estimand
 fix. Priority 2 has a route table (§4) with the full 46-library reconciliation
-deferred as an approval item. Priority 6 is the decision/handoff itself. The
-single next action therefore moves to priority 4, the remaining independently
-researchable question: the minimum reader/resource path that could work.
+deferred as an approval item. Priority 4 is now partially resolved by §3.10: the
+RNA/donor-join/cell-membership side is a zero-install Python read, so the
+remaining reader question is ATAC-specific. Priority 6 is the decision/handoff
+itself.
 
 **Single highest-value next action (do this first): establish the minimum
-reader and resource path that could work (priority 4).**
+reader and resource path for the ATAC side (priority 4, narrowed by §3.10).**
 
 - Input: official R, SeuratObject, Seurat, Signac and sparse-format
   documentation/source; the pinned author `Packages_installed_250801.csv`;
@@ -638,35 +695,25 @@ reader and resource path that could work (priority 4).**
   R2/R3 and the local fixture helper `scripts/run_r_fixture.py`. Public
   docs/author code + local code inspection only; no installs, no container
   launch, no payload.
-- Method: (a) separate the packages the author's full analysis needs from those
-  required only to deserialize, validate and extract counts; (b) distinguish
-  constructing a new object from reading an existing one; (c) compare a minimal R
-  route, a documented author export, and interchange/Python alternatives without
-  declaring any untested route impossible or any untested dependency mandatory;
-  (d) state the exact minimal `.rda`/class fixture members, assays, sparse
-  entries, intervals and donor joins, plus refusal cases; (e) name dependency
-  assets, version compatibility, and acquisition/decoded/temporary/retained
-  resource unknowns; (f) for any HEAD-control proposal, account separately for
-  workload, supervisor, Docker client, Linux guest and host, and verify
-  single-deadline and bounded-output assumptions against the actual helper code.
-- Expected output: a route/decision table (minimal R vs author export vs
-  Python/interchange) with prerequisites, unknowns and a smallest decisive check,
-  plus the fixture spec and a bounded resource ledger.
-- Acceptance check: every route claim cites official docs/source or local code;
-  no RAM inferred from compressed size; no promise of partial workspace loading
-  from a general format description; proposed limits, configured flags, sampled
-  usage and demonstrated enforcement are kept as distinct evidence types.
-- Dependencies: public docs/author code + local inspection only.
-- Authority: public web/primary docs; no install, container or payload.
-- Stop condition: if no untested route can be rejected or accepted without an
+- Method: separate packages needed to deserialize/extract counts from the full
+  author analysis; compare minimal R, documented author export and
+  Python/interchange routes without declaring any untested route impossible or any
+  dependency mandatory; state the exact minimal `.rda`/class fixture members,
+  assays, sparse entries, intervals, donor joins and refusal cases; name
+  dependency assets, version compatibility and acquisition/decoded/temporary/
+  retained resource unknowns; for any HEAD-control proposal, account separately
+  for workload, supervisor, Docker client, Linux guest and host.
+- Acceptance check: every route claim cites official docs/source or local code; no
+  RAM inferred from compressed size; no partial-workspace-loading promise; proposed
+  limits, configured flags, sampled usage and demonstrated enforcement kept distinct.
+- Stop condition: if no untested route can be accepted or rejected without an
   install/launch, record the exact bounded check and dependency, and mark the
   reader path `RESOURCE_UNRESOLVED` rather than asserting impossibility.
 
-**How either result changes the next decision.** If a minimal, documented reader
-route exists with a small fixture and bounded decoded memory, the object-inspection
-question becomes a concrete, reviewable E2-R task. If it does not, the object
-route stays `RESOURCE_UNRESOLVED` and the paired path must rely on the frozen-region
-recount, reinforcing the prospective amendment already implied by priority 5.
+**How either result changes the next decision.** A minimal documented ATAC reader
+with a small fixture and bounded decoded memory makes object inspection a concrete,
+reviewable E2-R task; otherwise the object route stays `RESOURCE_UNRESOLVED` and the
+paired path relies on the frozen-region recount (priority-5 amendment).
 
 Completed priority-3 disposition (kept for the record; no further action unless
 the artifact is requested): the external cohort is resolved to the
@@ -688,13 +735,11 @@ across all 46 `GSE305146_<library>_features.tsv.gz` files.
   mapping table, so treat the 43-file fetch as a scoped approval item rather than
   an assumed right.
 
-**How either result changes the next decision.** If the common exact subset is
-empty/tiny (expected), the only valid route is a frozen-region recount; Codex
-should then choose between (i) requesting the minimal author artifact set and
-(ii) a prospective amendment for a bounded recount, rather than downloading the
-7.6 GiB object. If the subset is adequate, the cheap GEO MEX route becomes viable
-for a within-study comparison and the expensive recount can be deferred to the
-external (NeMO) side only.
+**How either result changes the next decision.** An empty/tiny common exact subset
+(expected) leaves a frozen-region recount as the only valid route — choose between
+requesting the minimal author artifacts and a bounded-recount amendment, not a
+7.6 GiB download. An adequate subset makes the cheap GEO MEX route viable
+within-study, deferring the recount to the external (NeMO) side.
 
 Supporting handoff tasks (existing IDs; do not invent):
 
@@ -728,7 +773,10 @@ Supporting handoff tasks (existing IDs; do not invent):
    one-page manifest stating, for
    `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz`, the workspace member
    names, assay names, ATAC feature-space definition, count stage, genome build and
-   interval convention; (c) the retained-barcode list per library; (d)
+   interval convention; (c) the retained-barcode list per library — **narrowed by
+   §3.10**: the final-cohort retained barcodes, library and donor join are already
+   public and local in the CELLxGENE H5AD, so (c) is now only needed for the
+   *pre-QC/cellranger* barcode stage, not the final cohort; (d)
    `B02filter_stats.csv` (per-library `N_cells_unfiltered`, `N_cells_filtered`,
    `fract_removed`, `cells_retained`) to attribute the 3 B02-QC drops exactly. The
    exclusion rule behind the 37-library/30-specimen final cohort is already public
@@ -774,7 +822,7 @@ Supporting handoff tasks (existing IDs; do not invent):
   are treated as `RECORDED_PREVIOUSLY`; R7/R8 were re-read and their consequential
   claims (donor counts, margin arithmetic, `NAMED_BASELINES` gap, R6 citation
   correction) re-verified locally this run.
-- Required hashes re-checked iteration 2: contract
+- Required hashes re-checked iteration 5: contract
   `9a13d8be…` and `PAIRED_MULTIOME_REMAINING_EVIDENCE` `66b1d815…` both unchanged.
 
 ### New sources (iteration 1: N1–N13; iteration 2: N14–N18)
@@ -811,22 +859,18 @@ Supporting handoff tasks (existing IDs; do not invent):
 | N28 | S52, arXiv 2606.01207 (preprint; alignment/sample complexity O(d_v+d_t) vs O(d_v·d_t)) | OBSERVED_NOW | 2026-09-20 |
 | N29 | S55 Zimmerman *Nat Commun* 2021 + S56 Squair *Nat Commun* 2021 + S58 Aït Yahya-Graison *Am J Hum Genet* 2007 + S59 Donovan *Nat Commun* 2024 (donor unit; HSA21 dosage) | OBSERVED_NOW | 2026-09-20 |
 | N30 | S57 Acera-Mateos et al., *Genome Biol* 2026, DOI 10.1186/s13059-026-04002-4; S60 arXiv 2605.31504 DECAT (peaks+genes vs peaks-only; early-fusion limitation) | OBSERVED_NOW | 2026-09-20 |
+| N31 | Local CELLxGENE `data/real/f16c25da-…h5ad` (SHA `08d6eff2…`; 248,998×35,477 RNA-only; 37 libraries / 30 samples set-equal to B02) | OBSERVED_NOW | 2026-09-21 |
 
 Reused without re-fetch: earlier dossier S1–S42 (local canonical docs, saved Vuong
-XML/NeMO metadata, pinned author tables). Search coverage iteration 1: author
-source tree + 8 raw scripts, Signac primary docs, GEO listing, local annotation
-files, local contract/plan/code. Search coverage iteration 2: GEO SOFT family
-record, pinned `A_input` and `B02` tables, pinned B02 script and tree, local
-contract/plan/code, earlier-campaign dossier (new HEAD). Search coverage iteration
-3: local Vuong manuscript XML (QC/age/provider methods, data availability) and
-local release metadata re-analysis; NeMO parent/open-collection pages; web search
-for an author code repository (none found). No NeMO payload/count/fragment
-re-fetch; no payload, object, fragment or matrix reads; no author contact; no
-payload GET (only the local saved XML, local metadata tar and author-repo
-CSVs/scripts). Search coverage iteration 4: local paired-model/estimand code
-(`estimand.py`, `multiome_runner.py`, `multiome_final.py`, `multiome_protocol.py`,
-`named_baselines.py`, tests) and six primary method sources reopened on the web
-(S50–S52, S55–S60 subset; N26–N30). No payload, install, container or training.
+XML/NeMO metadata, pinned author tables). Coverage: iter 1 — author source tree + 8
+scripts, Signac docs, GEO listing, local annotations/contract/plan/code; iter 2 —
+GEO SOFT, pinned `A_input`/`B02` tables, pinned B02 script/tree, campaign dossier;
+iter 3 — local Vuong XML and release metadata, NeMO pages, author-code search (none
+found); iter 4 — local paired-model/estimand code and six primary method sources
+(S50–S52, S55–S60 subset; N26–N30); iter 5 — local CELLxGENE H5AD structure and
+cohort reconciliation vs pinned B02 (metadata/structure only). No payload, object,
+fragment or matrix reads beyond the local H5AD structure; no install, container,
+training or author contact.
 
 ### Corrections to earlier work
 
@@ -861,6 +905,12 @@ CSVs/scripts). Search coverage iteration 4: local paired-model/estimand code
     with a conditional direction, and S60's DECAT explicitly cannot score
     early-fusion cross-attention; both must be cited with those limits (iteration
     4, §3.9).
+15. The earlier dossier called the CELLxGENE H5AD a "different representation" but
+    did not verify its cohort: it is exactly the B02 final 30-specimen/37-library
+    cohort and holds raw-scale RNA counts with a barcode→library→donor join; it is
+    RNA-only (no ATAC). Its `raw/X` is raw-scale but not proven to be the exact
+    cellranger-arc raw matrix (row sums differ from `nCount_RNA`) (iteration 5,
+    §3.10).
 
 ### Iteration progress
 
@@ -876,14 +926,18 @@ CSVs/scripts). Search coverage iteration 4: local paired-model/estimand code
   `nCount_ATAC` is not the QC column, `Unk` is an annotation class, cohort is 26
   donors / 13 libraries with provider×region confounding, GW≠PCW. No author code
   repo/barcode artifact found (Q21). Single next action moved to priority 5.
-- Iteration 4 (this pass): priority 5 resolved to `CONDITIONAL` (§3.9) — the
+- Iteration 4: priority 5 resolved to `CONDITIONAL` (§3.9) — the
   primary contrast is implemented in the runner (`multiome_final.py:190`), the
   frozen estimand omits its two arms (Q22), and six primary sources were reopened
   with two corrections (S52 preprint/conditional, S60 cannot score early-fusion
   cross-attention). Single next action moved to priority 4.
-- Next iteration: priority 4 (minimum reader/resource path), then priority 6
-  (finalize the decision/handoff) and priority 2 (full 46-library peak
+- Iteration 5 (this pass): characterized the local CELLxGENE complete-dataset
+  H5AD (§3.10) — 248,998 cells, 37 libraries / 30 samples set-equal to B02,
+  raw-scale RNA counts, barcode→library→donor join, no ATAC; Q28–Q31 added and
+  correction 15 recorded. Priority 4 narrowed: only the ATAC side needs an R
+  reader; single next action is the ATAC-side reader/fixture.
+- Next iteration: the ATAC-side reader/fixture check (priority 4 remainder), then
+  priority 6 (finalize the decision/handoff) and priority 2 (full 46-library peak
   reconciliation, still needing scoped approval).
-- Stop condition: not met. Priority 4 lacks a supported disposition in this
-  handoff; priority 2's full reconciliation remains an approval-gated bounded
-  check. `should_fully_stop=false`.
+- Stop condition: not met. Priority 4's ATAC-side disposition and priority 2's
+  full reconciliation remain open; `should_fully_stop=false`.
