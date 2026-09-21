@@ -1,0 +1,195 @@
+{
+  "record_type": "real_development_repeated_internal_comparison",
+  "generated_at": "2026-09-21T19:35:03+00:00",
+  "status": "INTERNAL_COMPARISON_EXECUTED_HONEST_NULL",
+  "claim_labels": {
+    "primary": "experimental result (internal development cohort only)",
+    "external": "not performed",
+    "biology": "not claimed"
+  },
+  "protocol_freeze": {
+    "path": "configs/final_internal_comparison_2026-09-21.json",
+    "sha256": "c5a6e1eb6bfdb59355346ab55e1c197cbc4a01082886565c950a153b61367705"
+  },
+  "inputs": {
+    "rna": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "n_genes": 35477
+    },
+    "atac_union": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/repeated_comparison_20260921/counts/counts.npz",
+      "sha256": "62755125eaad5245654819ac6114da39f1d87cbd395a102ea5f7413a62bd84d7",
+      "n_regions": 480
+    },
+    "n_cells_available": 248998,
+    "n_cells_sampled": 7680,
+    "cell_cap": 256,
+    "count_unit": "fragment_overlap_sum"
+  },
+  "region_sets": {
+    "tracked_file": "configs/repeated_region_sets_2026-09-21.json",
+    "tracked_sha256": "9d57bed9167663eaba8f3f4f0e46d3989e555ed464123a40d8b8439935ed55cc",
+    "tracked_union_bed": "configs/repeated_region_sets_union_2026-09-21.bed",
+    "tracked_union_bed_sha256": "7168c33cc20847494d30c19edc67083b8afcf2dc2ce6d0ec4881151348a5173e",
+    "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "n_union_regions": 480,
+    "per_fold_region_rule": "per outer fold: top-N exact intervals by that fold's training-library prevalence; ties broken by (chromosome, start, end)"
+  },
+  "splits": {
+    "method": "StratifiedGroupKFold",
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0,
+    "n_folds_run": 25,
+    "n_donors": 30,
+    "n_control": 15,
+    "n_positive": 15
+  },
+  "primary_comparison": {
+    "metric": "repeated_paired_donor_balanced_accuracy_delta",
+    "model": "cross_attention",
+    "reference": "token_concat",
+    "unit": "donor",
+    "level": 0.95,
+    "n_repeats": 5,
+    "n_replicates_requested": 1000,
+    "n_donors": 30,
+    "n_control": 15,
+    "n_positive": 15,
+    "practical_margin": 0.07,
+    "per_repeat_delta": {
+      "0": 0.09999999999999998,
+      "1": -0.06666666666666665,
+      "2": 0.0,
+      "3": 0.06666666666666665,
+      "4": 0.06666666666666665
+    },
+    "seed": 22,
+    "estimate": 0.033333333333333326,
+    "interval": [
+      -0.01333333333333333,
+      0.08055555555555556
+    ],
+    "n_valid": 1000,
+    "n_failed": 0,
+    "failure_reasons": [],
+    "advantage_demonstrated": false,
+    "not_applicable": null
+  },
+  "model_summaries": {
+    "rna_only": {
+      "model": "rna_only",
+      "per_repeat": {
+        "0": 0.5,
+        "1": 0.43333333333333335,
+        "2": 0.5,
+        "3": 0.4666666666666667,
+        "4": 0.33333333333333337
+      },
+      "mean": 0.44666666666666666,
+      "n_usable": 5
+    },
+    "atac_only": {
+      "model": "atac_only",
+      "per_repeat": {
+        "0": 0.4666666666666667,
+        "1": 0.33333333333333337,
+        "2": 0.43333333333333335,
+        "3": 0.3666666666666667,
+        "4": 0.4
+      },
+      "mean": 0.4,
+      "n_usable": 5
+    },
+    "rna_atac_concat": {
+      "model": "rna_atac_concat",
+      "per_repeat": {
+        "0": 0.6,
+        "1": 0.5666666666666667,
+        "2": 0.5666666666666667,
+        "3": 0.4666666666666667,
+        "4": 0.5
+      },
+      "mean": 0.5399999999999999,
+      "n_usable": 5
+    },
+    "gated_fusion": {
+      "model": "gated_fusion",
+      "per_repeat": {
+        "0": 0.5,
+        "1": 0.5333333333333333,
+        "2": 0.5333333333333333,
+        "3": 0.4666666666666667,
+        "4": 0.43333333333333335
+      },
+      "mean": 0.49333333333333335,
+      "n_usable": 5
+    },
+    "token_concat": {
+      "model": "token_concat",
+      "per_repeat": {
+        "0": 0.5,
+        "1": 0.5333333333333333,
+        "2": 0.5333333333333333,
+        "3": 0.5333333333333333,
+        "4": 0.3666666666666667
+      },
+      "mean": 0.4933333333333333,
+      "n_usable": 5
+    },
+    "cross_attention": {
+      "model": "cross_attention",
+      "per_repeat": {
+        "0": 0.6,
+        "1": 0.4666666666666667,
+        "2": 0.5333333333333333,
+        "3": 0.6,
+        "4": 0.43333333333333335
+      },
+      "mean": 0.5266666666666667,
+      "n_usable": 5
+    },
+    "majority_control": {
+      "model": "majority_control",
+      "per_repeat": {
+        "0": 0.3666666666666667,
+        "1": 0.30000000000000004,
+        "2": 0.43333333333333335,
+        "3": 0.3666666666666667,
+        "4": 0.36666666666666664
+      },
+      "mean": 0.3666666666666667,
+      "n_usable": 5
+    }
+  },
+  "resources": {
+    "elapsed_seconds": 43.415,
+    "peak_rss_gb": 1.1175,
+    "disk_free_gb": 17.399
+  },
+  "network": {
+    "union_quantify_bytes_fetched": 3295412224,
+    "union_regions_join_complete": 480
+  },
+  "artifacts": {
+    "run_json": {
+      "path": "reports/generated/real_paired_comparison_20260921/run/run.json",
+      "sha256": "b6c5db1305a8102ddb8f87680de45fe7490d5aeb157e94887641013533d64e87"
+    },
+    "per_fold_json": {
+      "path": "reports/generated/real_paired_comparison_20260921/run/per_fold.json",
+      "sha256": "4bf825617e8efb88c3c941b89e10a28ea08476e3233f77bed425060f18a74fba"
+    },
+    "counts_npz": {
+      "path": "reports/generated/repeated_comparison_20260921/counts/counts.npz",
+      "sha256": "62755125eaad5245654819ac6114da39f1d87cbd395a102ea5f7413a62bd84d7"
+    }
+  },
+  "limitations": [
+    "Internal development comparison only; external paired data were not accessed.",
+    "Raw-count standard scaling; the accepted normalization is not separately frozen.",
+    "No biological mechanism is claimed from attention or latent tokens.",
+    "Predictions must not be used to select outcome-favourable donors."
+  ]
+}

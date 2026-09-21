@@ -89,5 +89,26 @@
     "initialization_sensitivity": "cross-attention and token-concat donor balanced accuracy 0.625 at seeds 0,1,2 (spread 0.0); primary delta 0.0 at every seed",
     "final_estimate": "not produced (needs repeated donor splits and a stronger frozen region set)",
     "external_evaluation": "not launched"
+  },
+  "iteration_5_allocation_used": {
+    "purpose": "freeze per-fold training-only ATAC region sets for the 5x5 repeated donor split, quantify their 480-region union once, and execute the frozen internal comparison",
+    "geo_features_downloaded_bytes": 62062880,
+    "geo_features_files": 37,
+    "fragment_index_bytes": 0,
+    "fragment_region_query_bytes_fetched": 3295412224,
+    "n_regions_quantified": 480,
+    "counts_npz_retained_bytes": 19343345,
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0,
+    "comparison_compute": "CPU; 43.4 s, 1.12 GB peak RSS; 25 folds x 6 families + majority",
+    "note": "37 features files fetched to avoid a per-fold network recount; the fragment was queried only over the measured union."
+  },
+  "iteration_5_status": {
+    "region_sets": "per-fold training-only top-256 exact intervals for all 25 outer folds; union 480 regions, union_sha256 29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "development_atac_union_matrix": "real, 480 x 248,998, nnz 9,513,875, 480/480 complete joins, matrix_sha256 62755125eaad5245654819ac6114da39f1d87cbd395a102ea5f7413a62bd84d7",
+    "frozen_protocol": "configs/final_internal_comparison_2026-09-21.json (SHA-256 c5a6e1eb6bfdb59355346ab55e1c197cbc4a01082886565c950a153b61367705)",
+    "internal_comparison": "executed; cross-attention minus token-concat donor balanced accuracy +0.0333, 95% donor-bootstrap interval [-0.0133, 0.0806], margin 0.07, advantage false; all 30 donors tested per repeat",
+    "faithfulness_on_final_folds": "not yet run (pilot-fold interventions from iteration 4 remain the only faithfulness evidence)",
+    "final_estimate": "internal final produced; external evaluation still not launched (tar-packaged, per-file embargo)"
   }
 }

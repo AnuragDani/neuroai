@@ -1029,10 +1029,22 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   `reports/generated/real_paired_faithfulness_20260921/`. Code:
   `src/p22/eval/paired_faithfulness.py`, `scripts/run_real_paired_faithfulness.py`,
   `tests/test_paired_faithfulness.py`.
-- [ ] R4b: frozen internal comparison — re-freeze a stronger region set prospectively,
-  run repeated donor splits (all 30 donors tested) and the primary contrast with
-  donor-level uncertainty. Pilot R4a tested only 6 test donors, so the bootstrap
-  interval is degenerate.
+- [x] R4b: frozen internal comparison — `EXECUTED (honest null)`. Per-fold
+  training-only top-256 region sets for all 25 outer folds (union 480 regions,
+  `union_sha256 29ab6739…3f9e`), quantified once into a real 480 × 248,998 matrix
+  (nnz 9,513,875, 480/480 complete joins, 3.295 GB fetched). Frozen 5 × 5 donor
+  split tests all 30 donors per repeat. Primary cross-attention minus token-concat
+  donor balanced accuracy **+0.0333** (95% donor-bootstrap interval
+  **[-0.0133, 0.0806]**), margin 0.07, advantage false; interval no longer
+  degenerate. Evidence: `docs/repeated_internal_comparison_2026-09-21.json`,
+  `docs/REPEATED_INTERNAL_COMPARISON_2026-09-21.md`,
+  `configs/final_internal_comparison_2026-09-21.json`,
+  `configs/repeated_region_sets_2026-09-21.{json}`,
+  `reports/generated/real_paired_comparison_20260921/`. Code:
+  `scripts/freeze_repeated_region_sets.py`, `src/p22/eval/repeated_comparison.py`,
+  `scripts/run_real_paired_comparison.py`, matching tests.
+- [ ] R4c: repeat the held-out faithfulness interventions and initialization
+  sensitivity on the frozen final folds (iteration 4 evidence is pilot-fold only).
 - [ ] R5: external route decision — payloads are tar/tar.gz with per-file embargo;
   no bounded range join is possible; external paired counts MEX is the cheaper route
   but is not yet accessed.

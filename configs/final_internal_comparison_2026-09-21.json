@@ -1,0 +1,91 @@
+{
+  "record_type": "frozen_internal_comparison_protocol",
+  "frozen_at": "2026-09-21",
+  "status": "PROSPECTIVE_FREEZE_BEFORE_FINAL_INTERNAL_FIT",
+  "scope": "development_cohort_internal_only",
+  "external_evaluation": {
+    "planned": true,
+    "executed": false,
+    "note": "External paired counts remain tar-packaged under per-file embargo; no external outcomes were inspected to define this protocol."
+  },
+  "target": {
+    "rna": "local CELLxGENE H5AD data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad (X, raw counts)",
+    "atac": "open indexed CELLxGENE development fragment 46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+    "genome_build": "GRCh38",
+    "count_unit": "fragment_overlap_sum"
+  },
+  "cohort": {
+    "n_donors": 30,
+    "n_control": 15,
+    "n_ds": 15,
+    "n_cells_available": 248998,
+    "cells_per_donor_cap": 256,
+    "label_rule": "disease == 'complete trisomy 21'",
+    "exclusions": "none beyond the H5AD retained set; no donor is removed for outcome reasons"
+  },
+  "features": {
+    "atac": {
+      "rule": "per outer fold, top-256 exact intervals by that fold's training-library prevalence; ties broken by (chromosome, start, end)",
+      "region_sets_file": "reports/generated/repeated_comparison_20260921/region_sets.json",
+      "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+      "n_union_regions": 480,
+      "no_zero_fill": "counts are measured on the union once and subset per fold; unmeasured intervals are never zero-filled",
+      "discovery_uses_labels": false
+    },
+    "rna": {
+      "rule": "all genes; training-only variance selection to the feature budget inside each fold",
+      "feature_budget": 128
+    }
+  },
+  "donor_splits": {
+    "method": "StratifiedGroupKFold",
+    "unit": "donor",
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0,
+    "inner_validation": "one 3-fold donor split on each outer training set, base_seed = outer split_seed"
+  },
+  "training_rules": {
+    "families": [
+      "rna_only",
+      "atac_only",
+      "rna_atac_concat",
+      "gated_fusion",
+      "token_concat",
+      "cross_attention"
+    ],
+    "majority_control": true,
+    "max_epochs": 20,
+    "patience": 5,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "model_seed": 0,
+    "scaler_fit": "training donors only"
+  },
+  "primary_contrast": {
+    "model": "cross_attention",
+    "reference": "token_concat",
+    "metric": "donor_balanced_accuracy",
+    "donor_aggregation": "mean_predicted_probability",
+    "donor_threshold": 0.5,
+    "estimate": "mean across repeats of each repeat's donor-level delta (every repeat tests all 30 donors once)",
+    "practical_margin": 0.07,
+    "margin_rule": "practical_margin(15, 15); not lowered after seeing results",
+    "advantage_rule": "estimate >= margin AND lower 95% donor-bootstrap bound > 0"
+  },
+  "uncertainty": {
+    "method": "donor-cluster percentile bootstrap over the across-repeat mean",
+    "n_replicates": 1000,
+    "seed": 22,
+    "failed_replicates": "single-class donor draws counted, never redrawn"
+  },
+  "seed_dimensions": {
+    "split_seed": "controls donor assignment (5 repeats); not an initialization seed",
+    "model_seed": "controls initialization/optimization; separate sensitivity reported",
+    "bootstrap_seed": 22
+  },
+  "unresolved": [
+    "normalization is raw-count standard scaling; the accepted normalization is not separately frozen",
+    "external paired RNA+ATAC counts were not accessed"
+  ]
+}
