@@ -1,0 +1,33 @@
+{
+  "record_type": "corrected_atac_measurement_contract",
+  "declared_at": "2026-09-21",
+  "status": "PROSPECTIVE_DECLARATION_BEFORE_CORRECTED_ATAC_REGENERATION",
+  "supersedes_representation": "read_support_weighted_overlap (historical, preserved)",
+  "historical_result_preserved": "docs/repeated_internal_comparison_2026-09-21.json and configs/final_internal_comparison_2026-09-21.json are unchanged; their count_unit label was inaccurate",
+  "count_unit": "unique_fragment_overlap",
+  "count_rule": "one count per unique qualifying fragment record; column five (supporting read pairs including duplicates) is not summed",
+  "interval_rule": "a fragment record qualifies for region [beg, end) when fragment_start < end and fragment_end > beg; fragment_start >= fragment_end records are ignored",
+  "historical_count_mode_retained": "read_support (sums column five) is retained only to reproduce the old read-support-weighted representation and must never be relabelled as the corrected measurement",
+  "reader": {
+    "path": "scripts/query_fragment_regions.py",
+    "transport": "bounded HTTP range; HTTP 206 with consistent Content-Range, size-bounded read, unsafe redirect refused",
+    "stream_semantics": "decompressed BGZF members concatenated before line splitting so a record spanning two members is one record; bytes beyond the chunk end virtual offset are never parsed",
+    "refusal": "truncated or corrupt queries are refused before matrix assembly; unknown barcodes are refused unless an explicit drop contract reports the exclusions",
+    "empty_region": "a successfully queried region with zero overlapping fragments is a valid empty region, distinct from a failed query"
+  },
+  "independent_validation": {
+    "oracle": "pysam 0.24.1 (bundled HTSlib), isolated environment outside the shared venv",
+    "evidence": "reports/generated/reader_correction_20260921/reader_oracle_htslib.json",
+    "local_fixture": "record split across two BGZF members; per-barcode counts agree",
+    "remote_regions": [
+      "chr1:125181130-125182104",
+      "chr1:145996263-145997154",
+      "chr21:34790000-34792000"
+    ],
+    "agreement": "all local and remote cases agree on per-barcode fragment counts"
+  },
+  "open_before_corrected_run": [
+    "RNA raw/X representation must be selected and validated before regeneration",
+    "acceptance evidence must be consumed before any scientific-claim promotion"
+  ]
+}

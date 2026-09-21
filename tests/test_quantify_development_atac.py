@@ -49,6 +49,20 @@ def build_fixture(rows: list[str]):
     return blob, bytes(index)
 
 
+def make_index(chunks):
+    names = b"chr1\x00"
+    header = struct.pack("<8i", 1, 65536, 1, 2, 3, 35, 0, len(names))
+    index = bytearray(b"TBI\x01" + header + names)
+    index += struct.pack("<i", 1)
+    index += struct.pack("<I", 0)
+    index += struct.pack("<i", len(chunks))
+    for start, stop in chunks:
+        index += struct.pack("<QQ", start, stop)
+    index += struct.pack("<i", 1)
+    index += struct.pack("<Q", 0)
+    return bytes(index)
+
+
 def slice_transport(blob: bytes):
     def transport(_url, start, end):
         return blob[start : end + 1]
@@ -76,7 +90,8 @@ def test_quantify_regions_concurrent_matrix():
         workers=4,
     )
     assert matrix.shape == (1, 3)
-    assert matrix.toarray().tolist() == [[5, 1, 0]]
+    # One count per unique qualifying fragment record (bcA: 2 records, bcB: 1).
+    assert matrix.toarray().tolist() == [[2, 1, 0]]
     assert records[0]["join_complete"] is True
     assert records[0]["n_unknown"] == 0
 
@@ -93,10 +108,99 @@ def test_quantify_regions_marks_unknown_barcodes():
         "fixture",
         transport=slice_transport(blob),
         workers=1,
+        unknown_policy="drop",
     )
     assert records[0]["n_unknown"] == 1
+    assert records[0]["unknown_barcodes"] == ["bcZ"]
     assert records[0]["join_complete"] is False
     assert matrix.nnz == 0
+
+
+def test_quantify_regions_refuses_unknown_barcodes_by_default():
+    qfr = load("query_fragment_regions", "scripts/query_fragment_regions.py")
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    blob, index_raw = build_fixture(["chr1\t10\t20\tbcZ\t1"])
+    index = qfr.TabixIndex.from_bytes(index_raw)
+    try:
+        module.quantify_regions(
+            [("chr1", 0, 100)],
+            ["bcA"],
+            index,
+            "fixture",
+            transport=slice_transport(blob),
+            workers=1,
+        )
+    except module.IncompleteQueryError as error:
+        assert "retained population" in str(error)
+    else:
+        raise AssertionError("unknown barcodes must be refused by default")
+
+
+def test_quantify_regions_refuses_truncated_query():
+    """Review case: a short transfer allowance must not yield a usable matrix."""
+    qfr = load("query_fragment_regions", "scripts/query_fragment_regions.py")
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    line1 = b"chr1\t100\t200\tbcA\t1\n"
+    line2 = b"chr1\t101\t201\tbcA\t1\n"
+    block0, block1 = bgzf_block(line1), bgzf_block(line2)
+    blob = block0 + block1
+    index = qfr.TabixIndex.from_bytes(make_index([(0, (len(block0) << 16) | len(line2))]))
+    try:
+        module.quantify_regions(
+            [("chr1", 100, 200)],
+            ["bcA"],
+            index,
+            "fixture",
+            transport=slice_transport(blob),
+            window=len(block0),
+            max_bytes=len(block0),
+            workers=1,
+        )
+    except module.IncompleteQueryError as error:
+        assert "incomplete" in str(error)
+    else:
+        raise AssertionError("truncated query must be refused before matrix assembly")
+
+
+def test_quantify_regions_accepts_valid_empty_region():
+    qfr = load("query_fragment_regions", "scripts/query_fragment_regions.py")
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    blob, index_raw = build_fixture(["chr1\t100\t200\tbcA\t1"])
+    index = qfr.TabixIndex.from_bytes(index_raw)
+    records, _stats, matrix = module.quantify_regions(
+        [("chr1", 5000, 6000)],
+        ["bcA"],
+        index,
+        "fixture",
+        transport=slice_transport(blob),
+        workers=1,
+    )
+    assert records[0]["empty_region"] is True
+    assert records[0]["join_complete"] is True
+    assert records[0]["truncated"] is False
+    assert matrix.nnz == 0
+
+
+def test_quantify_regions_enforces_aggregate_budget():
+    qfr = load("query_fragment_regions", "scripts/query_fragment_regions.py")
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    rows = ["chr1\t10\t20\tbcA\t1", "chr1\t30\t40\tbcA\t1"]
+    blob, index_raw = build_fixture(rows)
+    index = qfr.TabixIndex.from_bytes(index_raw)
+    try:
+        module.quantify_regions(
+            [("chr1", 0, 100), ("chr1", 200, 300)],
+            ["bcA"],
+            index,
+            "fixture",
+            transport=slice_transport(blob),
+            workers=1,
+            total_max_bytes=16,
+        )
+    except module.TransferBudgetExceeded:
+        pass
+    else:
+        raise AssertionError("aggregate budget must be enforced")
 
 
 def test_quantify_regions_rejects_empty_and_bad_workers():

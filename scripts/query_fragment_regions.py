@@ -22,6 +22,7 @@ import io
 import json
 import re
 import struct
+import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -46,14 +47,62 @@ TABIX_MAX_COORD = 1 << 29
 
 Transport = Callable[[str, int, int], bytes]
 
+CONTENT_RANGE_RE = re.compile(r"bytes (\d+)-(\d+)/(\d+|\*)")
+
+
+class UnsafeRedirectError(ValueError):
+    """Raised when an HTTP redirect leaves the original https origin."""
+
+
+class _SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Follow redirects only to the same https host; refuse everything else."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        original = urllib.parse.urlsplit(req.full_url)
+        target = urllib.parse.urlsplit(newurl)
+        if target.scheme != "https" or target.netloc != original.netloc:
+            raise UnsafeRedirectError(f"unsafe redirect to {newurl!r}")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _urlopen(request: urllib.request.Request, timeout: float):
+    opener = urllib.request.build_opener(_SafeRedirectHandler())
+    return opener.open(request, timeout=timeout)
+
 
 def http_range(url: str, start: int, end: int, timeout: float = 120.0) -> bytes:
-    """Fetch the inclusive byte range ``start..end`` from ``url``."""
+    """Fetch exactly the inclusive byte range ``start..end`` from ``url``.
+
+    Bounded acquisition: the request must return HTTP 206 with a consistent
+    ``Content-Range`` and the body is read with an explicit size bound. An
+    ignored range, an oversized body, a short read or an unsafe redirect is
+    refused before the bytes are consumed.
+    """
     if start < 0 or end < start:
         raise ValueError("invalid byte range")
+    length = end - start + 1
     request = urllib.request.Request(url, headers={"Range": f"bytes={start}-{end}"})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read()
+    with _urlopen(request, timeout) as response:
+        status = getattr(response, "status", None)
+        if status is None:
+            status = response.getcode()
+        if status != 206:
+            raise ValueError(f"server did not honor byte range (HTTP {status})")
+        content_range = response.headers.get("Content-Range")
+        if content_range is not None:
+            match = CONTENT_RANGE_RE.fullmatch(content_range.strip())
+            if match is None:
+                raise ValueError(f"malformed Content-Range: {content_range!r}")
+            got_start, got_end = int(match.group(1)), int(match.group(2))
+            if got_start != start or got_end > end or got_end < got_start:
+                raise ValueError(f"inconsistent Content-Range: {content_range!r}")
+        content_length = response.headers.get("Content-Length")
+        if content_length is not None and int(content_length) > length:
+            raise ValueError("response body exceeds the requested byte range")
+        payload = response.read(length)
+        if len(payload) != length:
+            raise ValueError(f"short read: expected {length} bytes, got {len(payload)}")
+        return payload
 
 
 def reg2bins(beg: int, end: int) -> list[int]:
@@ -205,25 +254,52 @@ def parse_bgzf_members(blob: bytes, base_coffset: int) -> tuple[list[tuple[int, 
     return members, pos
 
 
+COUNT_MODES = ("fragment", "read_support")
+COUNT_UNIT_LABELS = {
+    "fragment": "unique_fragment_overlap",
+    "read_support": "read_support_weighted_overlap",
+}
+
+
+def parse_fragment_line(
+    line: bytes, name: str, beg: int, end: int, count_mode: str = "fragment"
+) -> tuple[str, int] | None:
+    """Parse one fragment TSV line; return (barcode, weight) if it overlaps.
+
+    ``count_mode="fragment"`` weights every unique qualifying fragment record as
+    one, matching the declared one-count-per-unique-fragment unit. The
+    historical ``count_mode="read_support"`` sums column five (supporting read
+    pairs including duplicates) and is retained only for reproducing the old
+    read-support-weighted representation.
+    """
+    if not line or line[0] == ord("#"):
+        return None
+    fields = line.split(b"\t")
+    if len(fields) != 5 or fields[0] != name.encode("ascii"):
+        return None
+    try:
+        start, stop = int(fields[1]), int(fields[2])
+        support = int(fields[4])
+    except ValueError:
+        return None
+    if start >= stop or not (start < end and stop > beg):
+        return None
+    weight = 1 if count_mode == "fragment" else support
+    return fields[3].decode("utf-8", "replace"), weight
+
+
 def parse_fragment_rows(
-    text: bytes, name: str, beg: int, end: int
+    text: bytes, name: str, beg: int, end: int, count_mode: str = "fragment"
 ) -> list[tuple[int, int, str, int]]:
-    """Parse fragment rows overlapping [beg, end); return (start, end, barcode, count)."""
+    """Parse complete fragment rows overlapping [beg, end); (start, end, barcode, weight)."""
     rows: list[tuple[int, int, str, int]] = []
     for line in text.split(b"\n"):
-        if not line or line[0] == ord("#"):
+        parsed = parse_fragment_line(line, name, beg, end, count_mode)
+        if parsed is None:
             continue
+        barcode, weight = parsed
         fields = line.split(b"\t")
-        if len(fields) != 5 or fields[0] != name.encode("ascii"):
-            continue
-        try:
-            start, stop, count = int(fields[1]), int(fields[2]), int(fields[4])
-        except ValueError:
-            continue
-        if start >= stop:
-            continue
-        if start < end and stop > beg:
-            rows.append((start, stop, fields[3].decode("utf-8", "replace"), count))
+        rows.append((int(fields[1]), int(fields[2]), barcode, weight))
     return rows
 
 
@@ -260,24 +336,38 @@ def query_region(
     transport: Transport = http_range,
     window: int = DEFAULT_WINDOW,
     max_bytes: int = DEFAULT_MAX_BYTES_PER_REGION,
+    count_mode: str = "fragment",
 ) -> QueryStats:
     """Query one region remotely and return row/byte statistics.
 
-    Each chunk is read as consecutive BGZF windows until the chunk's end
-    compressed offset is passed. ``max_bytes`` caps total transfer per region.
+    Each chunk is read as consecutive BGZF windows until its end virtual offset
+    is reached. Decompressed members are concatenated before line splitting so a
+    single TSV record that spans two BGZF members is not lost. Bytes beyond the
+    chunk's end virtual offset are never parsed, so a fetch window that extends
+    past a chunk cannot emit extra counts. ``max_bytes`` caps total transfer per
+    region; an incomplete read sets ``truncated`` and must be refused by callers.
     """
     if beg < 0 or end <= beg:
         raise ValueError("invalid region")
+    if count_mode not in COUNT_MODES:
+        raise ValueError(f"unknown count_mode: {count_mode!r}")
     stats = QueryStats(region=f"{name}:{beg}-{end}")
     chunks = index.query_chunks(name, beg, end)
     stats.chunks = len(chunks)
     counts: dict[str, int] = {}
     seen_rows = 0
     for chunk_start, chunk_stop in chunks:
+        if stats.truncated:
+            break
         start_coffset = chunk_start >> 16
+        start_uoffset = chunk_start & 0xFFFF
         stop_coffset = chunk_stop >> 16
+        stop_uoffset = chunk_stop & 0xFFFF
         position = start_coffset
+        pending = b""
         while position <= stop_coffset:
+            if position == stop_coffset and stop_uoffset == 0:
+                break
             if stats.bytes_fetched + window > max_bytes:
                 stats.truncated = True
                 break
@@ -288,16 +378,31 @@ def query_region(
             if not members:
                 break
             for coffset, data in members:
-                skip = (chunk_start & 0xFFFF) if coffset == start_coffset else 0
-                rows = parse_fragment_rows(data[skip:], name, beg, end)
-                for _start, _stop, barcode, count in rows:
-                    counts[barcode] = counts.get(barcode, 0) + count
+                if coffset < start_coffset or coffset > stop_coffset:
+                    continue
+                begin = start_uoffset if coffset == start_coffset else 0
+                limit = stop_uoffset if coffset == stop_coffset else len(data)
+                if begin >= limit:
+                    continue
+                pending += data[begin:limit]
+                complete, _, pending = pending.rpartition(b"\n")
+                for line in complete.split(b"\n"):
+                    parsed = parse_fragment_line(line, name, beg, end, count_mode)
+                    if parsed is None:
+                        continue
+                    barcode, weight = parsed
+                    counts[barcode] = counts.get(barcode, 0) + weight
                     seen_rows += 1
-            position += consumed
+            new_position = position + consumed
+            if new_position <= position:
+                break
+            position = new_position
             if position > stop_coffset:
                 break
-        if stats.truncated:
-            break
+        if pending:
+            # A record was cut by the chunk end or the transfer allowance: the
+            # query is incomplete and must not be treated as a usable count.
+            stats.truncated = True
     stats.rows = seen_rows
     stats.rows_by_barcode = counts
     stats.unique_barcodes = len(counts)
@@ -383,6 +488,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allowlist-path", default=None)
     parser.add_argument("--window", type=int, default=DEFAULT_WINDOW)
     parser.add_argument("--max-bytes-per-region", type=int, default=DEFAULT_MAX_BYTES_PER_REGION)
+    parser.add_argument("--count-mode", choices=COUNT_MODES, default="fragment")
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="keep truncated regions (default: refuse and do not save a matrix)",
+    )
+    parser.add_argument(
+        "--drop-unknown",
+        action="store_true",
+        help="drop barcodes outside the allowlist and report them (default: refuse)",
+    )
     parser.add_argument(
         "--counts-out",
         default=None,
@@ -411,6 +527,7 @@ def main(argv: list[str] | None = None) -> int:
     results = []
     stats_list = []
     total_bytes = 0
+    excluded: dict[str, int] = {}
     for name, beg, end in regions:
         stats = query_region(
             args.fragment_url,
@@ -420,16 +537,32 @@ def main(argv: list[str] | None = None) -> int:
             end,
             window=args.window,
             max_bytes=args.max_bytes_per_region,
+            count_mode=args.count_mode,
         )
         total_bytes += stats.bytes_fetched
         record = stats.to_dict()
         observed = set(stats.rows_by_barcode)
+        unknown = observed - allowlist
         record["allowlist_size"] = len(allowlist)
         record["n_in_allowlist"] = len(observed & allowlist)
-        record["n_unknown"] = len(observed - allowlist)
-        record["join_complete"] = bool(observed) and not (observed - allowlist)
+        record["n_unknown"] = len(unknown)
+        record["unknown_barcodes"] = sorted(unknown)
+        record["join_complete"] = (not stats.truncated) and not unknown
         results.append(record)
         stats_list.append(stats)
+        for barcode in unknown:
+            excluded[barcode] = excluded.get(barcode, 0) + stats.rows_by_barcode[barcode]
+    truncated = [record for record in results if record["truncated"]]
+    if truncated and not args.allow_partial:
+        raise SystemExit(
+            f"refusing to save a matrix: {len(truncated)} region(s) returned "
+            f"incomplete reads (pass --allow-partial to override)"
+        )
+    if excluded and not args.drop_unknown:
+        raise SystemExit(
+            f"refusing to save a matrix: {len(excluded)} barcode(s) outside the "
+            f"retained population (pass --drop-unknown to exclude them explicitly)"
+        )
     payload = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "fragment_url": args.fragment_url,
@@ -437,8 +570,13 @@ def main(argv: list[str] | None = None) -> int:
         "index_sha256": index_sha256,
         "index_header": index.header,
         "window_bytes": args.window,
+        "count_mode": args.count_mode,
+        "count_unit": COUNT_UNIT_LABELS[args.count_mode],
         "n_regions": len(regions),
         "total_bytes_fetched": total_bytes,
+        "n_truncated": len(truncated),
+        "n_excluded_barcodes": len(excluded),
+        "excluded_barcodes": excluded,
         "regions": results,
     }
     out_path = Path(args.out)
@@ -461,7 +599,8 @@ def main(argv: list[str] | None = None) -> int:
             "regions": [f"{name}:{beg}-{end}" for name, beg, end in regions],
             "n_cells": len(cells),
             "cells_sha256": hashlib.sha256("\n".join(cells).encode()).hexdigest(),
-            "count_unit": "fragment_overlap_sum",
+            "count_mode": args.count_mode,
+            "count_unit": COUNT_UNIT_LABELS[args.count_mode],
         }
         (counts_dir / "counts.json").write_text(json.dumps(sidecar, indent=2) + "\n")
         print(json.dumps({"counts_shape": sidecar["shape"], "nnz": sidecar["nnz"]}, indent=2))

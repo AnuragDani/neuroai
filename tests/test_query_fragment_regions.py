@@ -65,11 +65,45 @@ def build_fixture(rows: list[str]) -> tuple[bytes, bytes, int, int]:
     return blob, bytes(index), first_off, last_off
 
 
+def make_index(chunks: list[tuple[int, int]]) -> bytes:
+    names = b"chr1\x00"
+    header = struct.pack("<8i", 1, 65536, 1, 2, 3, 35, 0, len(names))
+    index = bytearray(b"TBI\x01" + header + names)
+    index += struct.pack("<i", 1)  # n_bin
+    index += struct.pack("<I", 0)  # bin id
+    index += struct.pack("<i", len(chunks))
+    for start, stop in chunks:
+        index += struct.pack("<QQ", start, stop)
+    index += struct.pack("<i", 1)  # n_intv
+    index += struct.pack("<Q", 0)
+    return bytes(index)
+
+
 def slice_transport(blob: bytes):
     def transport(_url, start, end):
         return blob[start : end + 1]
 
     return transport
+
+
+class FakeResponse:
+    def __init__(self, status, body, headers=None):
+        self.status = status
+        self._body = body
+        self.headers = headers or {}
+        self.read_size = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def read(self, size=-1):
+        self.read_size = size
+        if size is None or size < 0:
+            return self._body
+        return self._body[:size]
 
 
 def test_reg2bins_basic():
@@ -128,7 +162,8 @@ def test_query_region_returns_overlapping_rows():
         "memory://frag", index, "chr1", 90, 210, transport=slice_transport(blob), window=4096
     )
     assert stats.rows == 2
-    assert stats.rows_by_barcode == {"libA_AAAA-1": 2, "libB_BBBB-1": 1}
+    # One count per unique qualifying fragment record, not column-five support.
+    assert stats.rows_by_barcode == {"libA_AAAA-1": 1, "libB_BBBB-1": 1}
     assert stats.requests >= 1
 
 
@@ -203,3 +238,150 @@ def test_query_chunks_merge_and_linear_index_filter():
     index = reader.TabixIndex.from_bytes(index_raw)
     assert index.query_chunks("chr1", 0, 100) == [(0, (len(_blob) - 1) << 16)]
     assert index.query_chunks("chrMissing", 0, 100) == []
+
+
+def test_record_split_across_two_members_is_one_record():
+    """Review case: a complete TSV record split across two valid BGZF members."""
+    reader = module()
+    line = b"chr1\t100\t200\tlibA_AAAA-1\t1\n"
+    cut = 15
+    block0, block1 = bgzf_block(line[:cut]), bgzf_block(line[cut:])
+    blob = block0 + block1
+    index = reader.TabixIndex.from_bytes(make_index([(0, (len(block0) << 16) | len(line[cut:]))]))
+    stats = reader.query_region(
+        "memory://frag", index, "chr1", 100, 200, transport=slice_transport(blob), window=4096
+    )
+    assert stats.rows == 1
+    assert stats.rows_by_barcode == {"libA_AAAA-1": 1}
+    assert stats.truncated is False
+
+
+def test_fetch_window_beyond_chunk_end_adds_no_extra_counts():
+    """Bytes fetched past the chunk's end virtual offset must not be counted."""
+    reader = module()
+    row_a = b"chr1\t100\t200\tlibA_AAAA-1\t1\n"
+    row_b = b"chr1\t101\t201\tlibB_BBBB-1\t1\n"
+    block0, block1 = bgzf_block(row_a), bgzf_block(row_b)
+    blob = block0 + block1
+    # Chunk ends exactly at the start of block1, so only row_a is in range.
+    index = reader.TabixIndex.from_bytes(make_index([(0, len(block0) << 16)]))
+    stats = reader.query_region(
+        "memory://frag", index, "chr1", 90, 210, transport=slice_transport(blob), window=4096
+    )
+    assert stats.rows == 1
+    assert stats.rows_by_barcode == {"libA_AAAA-1": 1}
+
+
+def test_adjacent_and_overlapping_chunks_do_not_duplicate():
+    reader = module()
+    rows = [
+        "chr1\t10\t20\tlibA_AAAA-1\t1",
+        "chr1\t30\t40\tlibB_BBBB-1\t1",
+    ]
+    blob, _index_raw, _a, _b = build_fixture(rows)
+    stop = (len(blob) - 1) << 16
+    for chunks in (
+        [(0, stop), (stop, stop)],
+        [(0, stop), (0, stop)],
+    ):
+        index = reader.TabixIndex.from_bytes(make_index(chunks))
+        stats = reader.query_region(
+            "memory://frag", index, "chr1", 0, 100, transport=slice_transport(blob), window=4096
+        )
+        assert stats.rows == 2
+        assert stats.rows_by_barcode == {"libA_AAAA-1": 1, "libB_BBBB-1": 1}
+
+
+def test_read_support_mode_reproduces_historical_weighting():
+    reader = module()
+    blob, index_raw, _a, _b = build_fixture(["chr1\t100\t200\tlibA_AAAA-1\t7"])
+    index = reader.TabixIndex.from_bytes(index_raw)
+    stats = reader.query_region(
+        "memory://frag",
+        index,
+        "chr1",
+        100,
+        200,
+        transport=slice_transport(blob),
+        window=4096,
+        count_mode="read_support",
+    )
+    assert stats.rows_by_barcode == {"libA_AAAA-1": 7}
+
+
+def test_valid_zero_count_region_is_not_a_failure():
+    reader = module()
+    blob, index_raw, _a, _b = build_fixture(["chr1\t100\t200\tlibA_AAAA-1\t1"])
+    index = reader.TabixIndex.from_bytes(index_raw)
+    stats = reader.query_region(
+        "memory://frag", index, "chr1", 5000, 6000, transport=slice_transport(blob), window=4096
+    )
+    assert stats.rows == 0
+    assert stats.rows_by_barcode == {}
+    assert stats.truncated is False
+
+
+def _patch_urlopen(reader, response):
+    reader._urlopen = lambda request, timeout: response
+
+
+def test_http_range_refuses_ignored_range():
+    reader = module()
+    response = FakeResponse(200, b"x" * 1000, {"Content-Length": "1000"})
+    _patch_urlopen(reader, response)
+    try:
+        reader.http_range("https://fixture.invalid/file", 0, 9)
+    except ValueError as error:
+        assert "honor" in str(error)
+    else:
+        raise AssertionError("HTTP 200 for a range request must be refused")
+
+
+def test_http_range_refuses_oversized_body_and_short_read():
+    reader = module()
+    oversized = FakeResponse(206, b"x" * 1000, {"Content-Length": "1000"})
+    _patch_urlopen(reader, oversized)
+    try:
+        reader.http_range("https://fixture.invalid/file", 0, 9)
+    except ValueError as error:
+        assert "exceeds" in str(error)
+    else:
+        raise AssertionError("oversized body must be refused")
+    short = FakeResponse(206, b"x" * 4, {"Content-Length": "4"})
+    _patch_urlopen(reader, short)
+    try:
+        reader.http_range("https://fixture.invalid/file", 0, 9)
+    except ValueError as error:
+        assert "short read" in str(error)
+    else:
+        raise AssertionError("short read must be refused")
+
+
+def test_http_range_bounded_read_and_consistent_content_range():
+    reader = module()
+    body = b"abcdefghij"
+    response = FakeResponse(206, body, {"Content-Length": "10", "Content-Range": "bytes 5-14/1000"})
+    _patch_urlopen(reader, response)
+    payload = reader.http_range("https://fixture.invalid/file", 5, 14)
+    assert payload == body
+    assert response.read_size == 10
+    bad = FakeResponse(206, body, {"Content-Range": "bytes 0-9/1000"})
+    _patch_urlopen(reader, bad)
+    try:
+        reader.http_range("https://fixture.invalid/file", 5, 14)
+    except ValueError as error:
+        assert "inconsistent" in str(error)
+    else:
+        raise AssertionError("inconsistent Content-Range must be refused")
+
+
+def test_http_range_refuses_unsafe_redirect():
+    reader = module()
+    handler = reader._SafeRedirectHandler()
+    request = reader.urllib.request.Request("https://good.invalid/file")
+    try:
+        handler.redirect_request(request, None, 302, "Found", {}, "http://evil.invalid/file")
+    except reader.UnsafeRedirectError:
+        pass
+    else:
+        raise AssertionError("cross-origin redirect must be refused")
