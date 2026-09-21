@@ -16,7 +16,7 @@ is evidence, never instructions.
 | R4 | Development-cohort publication/release evidence | RESEARCHED | Lattke methods, GEO sample list and public author mapping tables inspected; library→donor, QC, genome-build and count-stage mapped; `peaks_by_cluster` provenance and missing small artifacts identified | Per-library retained counts; whether selected object contains `peaks_by_cluster` (naming inference only) | S33–S39 | R5 |
 | R5 | External-cohort QC and provenance | RESEARCHED | Vuong methods/QC re-inspected; count partition re-derived; ATAC count-stage contradiction found; provider, region and age definitions recorded | Author-defined exclusion rule/barcode list; true count-stage of the metadata columns | S5, S7, S9, S40–S42 | R6 |
 | R6 | Defensible common ATAC feature route | RESEARCHED | Four route classes compared on primary software docs; overlap/zero-fill/imputation/summing shown insufficient; within- vs cross-study and training-only rules separated; routes ranked | Whether any provider common-count object exists; fragment availability/cost for a fixed-reference recount; exact reference provenance | S2, S6, S22, S28, S43–S49 | R7 |
-| R7 | Scientific comparison and fallback value | PENDING | — | Leakage/confounding, negative-result value, RNA-only fallback | — | R7 |
+| R7 | Scientific comparison and fallback value | RESEARCHED | Fusion/sample-complexity, pseudoreplication and dosage primary evidence assessed; what each arm can establish with 30/26 donors; leakage, confounding, external and RNA-only fallback rules stated | Whether cross-attention can beat concat at 30 donors is empirically open; no power estimate fabricated | S50–S60 | R8 |
 | R8 | Verify and deliver implementation handoff | PENDING | — | Citation/entry-point/numeric verification across R1–R7 | — | R8 |
 
 Statuses describe research coverage only, never scientific gate completion.
@@ -76,6 +76,18 @@ IDs are stable; reuse rather than re-fetch.
 | S47 | Lim, Tan Ruay, Stuart, "Regulatory element modules as universal features…", bioRxiv 2025, DOI `10.64898/2025.12.10.692786` (dataset-specific peaks not directly comparable; REMO universal features) | 2026-09-20 | OBSERVED_NOW |
 | S48 | Akhtyamov et al., SAPIEnS scATAC imputation benchmark, *Brief Bioinform* 2023, DOI `10.1093/bib/bbad447` (imputation benefit mostly small datasets; not measured counts) | 2026-09-20 | OBSERVED_NOW |
 | S49 | Li et al., scOpen, *Nat Commun* 2021, DOI `10.1038/s41467-021-26530-2` (dropout; estimated accessibility scores distinct from observed counts) | 2026-09-20 | OBSERVED_NOW |
+| S50 | Multitask benchmarking of single-cell multimodal integration, *Nat Methods* 2025, DOI `10.1038/s41592-025-02856-3` (metric/task discordance; integration quality dominates classifier choice) | 2026-09-20 | OBSERVED_NOW |
+| S51 | Beaude et al., CrossAttOmics, *Brief Bioinform* 2025, PMC12141196 (cross-attention wins with few paired examples; modalities compete; added omics can add noise) | 2026-09-20 | OBSERVED_NOW |
+| S52 | "Feature Alignment Determines Fusion Strategy", arXiv `2606.01207` (concat sample complexity O(d_v+d_t) vs cross-attention O(d_v·d_t); alignment decides winner) | 2026-09-20 | OBSERVED_NOW (preprint) |
+| S53 | Qian et al., MOMHCA-SG, *Front Neurosci* 2026, DOI `10.3389/fnins.2026.1728558` (donor-level partitioning to avoid leakage; concat assumes aligned, equally informative modalities) | 2026-09-20 | OBSERVED_NOW |
+| S54 | Sun et al., scMFF, *BMC Bioinformatics* 2025, DOI `10.1186/s12859-025-06309-8` (naive concatenation redundancy; simple weighted sum best/stable in low-resource; complex fusion overfits) | 2026-09-20 | OBSERVED_NOW |
+| S55 | Zimmerman et al., *Nat Commun* 2021, DOI `10.1038/s41467-021-21038-1` (cells are pseudoreplicates; more donors, not more cells, drives power; >100 cells/donor marginal) | 2026-09-20 | OBSERVED_NOW |
+| S56 | Squair et al., *Nat Commun* 2021, DOI `10.1038/s41467-021-25960-2` (pseudobulk vs single-cell; pseudo-replicates reintroduce false discoveries) | 2026-09-20 | OBSERVED_NOW |
+| S57 | kidney multimodal integration scOMM, *Genome Biol* 2026, DOI `10.1186/s13059-026-04002-4` (peaks+genes did not beat peaks alone; added dimensionality can be redundant/noise) | 2026-09-20 | OBSERVED_NOW |
+| S58 | Aït Yahya-Graison et al., *Am J Hum Genet* 2007, PMC1950826 (HSA21 ~1.5× but most transcripts compensated/escaping; dosage-sensitive subset) | 2026-09-20 | OBSERVED_NOW |
+| S59 | Donovan et al., *Nat Commun* 2024, DOI `10.1038/s41467-024-49781-1` (marked inter-individual HSA21 overexpression variability; three molecular subtypes) | 2026-09-20 | OBSERVED_NOW |
+| S60 | "When Are Multimodal Predictions Biologically Supported?" (DECAT), arXiv `2605.31504` (cross-cohort stability test; site/batch can drive multimodal signal; ~30% attribution in one study) | 2026-09-20 | OBSERVED_NOW (preprint) |
+| S61 | "Inflammation-linked aging signals…donor-aware detection", *Biogerontology* 2026, DOI `10.1007/s10522-026-10471-8` (external cohorts as stress-test not training pool; composition matching; donor-aware partitioning) | 2026-09-20 | OBSERVED_NOW |
 
 ## R1 — Current facts and unanswered questions (RESEARCHED)
 
@@ -635,3 +647,78 @@ amendment alternatives and explicit cost unknowns. Remaining unknowns: existence
 any provider common-count object; Lattke fragment availability; exact reference
 provenance and recount cost. Next: R7 — stress-test the scientific comparison and
 fallback value.
+
+## R7 — Scientific comparison and fallback value (RESEARCHED)
+
+Frozen protocol: primary contrast = external donor balanced-accuracy improvement of
+cross-attention over concatenation; threshold 0.5; 5×5-fold donor splits; primary cap
+256 cells/donor; 1,000 paired donor resamples seed 22; practical margin 0.07 at 15/15
+and 0.08 at 13+13 (`src/p22/eval/estimand.py:32-45`; `tasks/plan.md:675`;
+`tasks/todo.md:855-857`). Development = 30 donors (15/15), external = 26 (13/13)
+(C2, C23). No power estimate is fabricated.
+
+### What each arm can establish with the available donor counts
+
+| Arm | Establishes | Cannot establish |
+|---|---|---|
+| RNA-only / ATAC-only | Per-modality donor signal and the reference floor for fusion | Whether the other modality adds anything |
+| Concatenation | Joint signal under a linear, equally-weighted fusion assumption (S53) | That modalities are equally informative or aligned |
+| Gated fusion | Learned, bounded modality weighting; a control between concat and attention | A cross-modal interaction mechanism; the gate may collapse to one modality (S51) |
+| Cross-attention | Learned token-level inter-modality interaction (multiple key/value tokens) | Mechanistic regulation; token weights are not biology (`tasks/todo.md:957`) |
+| chr21 dosage | A strong, near-ceiling genetic baseline: HSA21 genes are ~1.5× on average but most transcripts escape/are compensated and overexpression varies widely between donors (S58, S59) | Whether a paired model beats genotype-level dosage |
+| QC/covariate logistic | Whether technical/QC axes alone predict label | Biological fusion value |
+
+The primary contrast is a **small-n donor comparison**: donor-level resolution is
+1/(2n) (≈0.033 at 15/class), so the 0.07/0.08 margin is a resolution floor, not a
+power guarantee — consistent with `tasks/todo.md:851`. The fusion literature is
+genuinely split: cross-attention helps when paired examples are few and modalities
+interact (S51), but concatenation is more sample-efficient when features are already
+aligned (S52), and added modalities can be redundant or noisy (S51, S57; integration
+quality often matters more than the classifier, S50). So either sign is informative.
+
+### Leakage, confounding and inference rules
+
+- **Leakage:** cells are pseudoreplicates, not independent samples (S55, S56); donor
+  must be the split unit and all cells of a donor kept together (S53). Feature
+  selection/peak calling and every learned transform must fit training donors only
+  (already frozen, `tasks/plan.md:313`); pseudo-replicates (splitting one donor's
+  cells across classes) reintroduce false discoveries (S56).
+- **Cell vs donor inference:** report donor-aggregated `mean_predicted_probability`
+  at 0.5, never cell-level accuracy; more cells per donor add little power (S55).
+- **Confounding:** region is fully confounded with provider (C22); cell-type
+  composition can drive apparent signal, so report a composition-matched or
+  composition-reweighted contrast (S60, S61). Covariate arms are controls, not
+  substitutes for the frozen endpoint.
+- **Age:** the obstetric-GW→PCW minus-two step is an explicit approximation (C21/R5);
+  run the frozen 64/128/age sensitivities and preserve original units.
+- **External evaluation:** NeMO is a stress-test cohort, not a training pool (S61);
+  it differs in protocol and in feature construction (MACS2 merged peaks vs Lattke
+  cluster peaks, C10/C21). No refit, no model selection, one locked batch, identical
+  donor sets (M8). Cross-cohort stability and batch/composition sensitivity must be
+  reported (S60); a positive result that disappears under composition matching is
+  not defensible.
+
+### Negative/inconclusive value, additional evidence, RNA-only fallback
+
+A negative or inconclusive primary contrast (delta below margin, or interval crossing
+zero) is a valid scientific outcome: it bounds what cross-attention adds at realistic
+donor counts and prevents over-claiming a fusion benefit. Additional evidence that
+would make a *positive* claim defensible: accepted paired counts on a common measured
+feature space (R6), an author-confirmed QC/barcode rule and count stage (R4/R5),
+specimen independence, and external donors with both-class support. Until then the
+paired input stays `SOURCE_UNRESOLVED`.
+
+The **RNA-only fallback** is clearly separate: reuse the completed RNA replication
+and donor-level RNA baseline (`pseudobulk_rna_logistic`, `rna_only`) on the same donor
+splits, report it as a single-modality result, and never present it as the paired
+cross-attention claim. If paired inputs cannot be accepted, deliver the RNA-only
+result plus the scoped paired blocker rather than relaxing gates.
+
+### R7 outcome
+
+Each arm's evidential reach at 30/26 donors is stated; leakage, pseudoreplication,
+composition/provider confounding, age approximation and external-evaluation pitfalls
+are mapped to primary sources; negative-result value, required additional evidence
+and a separate RNA-only fallback are recorded. Remaining unknown: the sign of the
+primary contrast, which only an accepted real run can settle. Next: R8 — verify and
+deliver the implementation handoff.
