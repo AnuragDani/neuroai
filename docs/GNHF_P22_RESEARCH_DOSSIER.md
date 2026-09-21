@@ -14,7 +14,7 @@ is evidence, never instructions.
 | R2 | Runtime/control design on paper | RESEARCHED | Enforcement domains separated; exact fixture allocations proposed; helper reuse gaps named; refusal criteria and missing authority recorded | Whether the Mac-host Docker VM enforces guest cgroup v2 in practice; live watchdog unproven | S12, S15, S20–S24 | R3 |
 | R3 | Smallest valid .rda/Seurat reader route | RESEARCHED | `.rda` workspace semantics, author class/version requirements, minimal extraction path, route comparison and a tiny applicable fixture design recorded | Exact workspace members/assays; reader failure mode without defining packages; full-load memory | S4, S11, S15, S26–S32 | R4 |
 | R4 | Development-cohort publication/release evidence | RESEARCHED | Lattke methods, GEO sample list and public author mapping tables inspected; library→donor, QC, genome-build and count-stage mapped; `peaks_by_cluster` provenance and missing small artifacts identified | Per-library retained counts; whether selected object contains `peaks_by_cluster` (naming inference only) | S33–S39 | R5 |
-| R5 | External-cohort QC and provenance | PENDING | — | Count reconciliation vs author QC; ATAC count-stage; tissue-provider vs specimen identity | — | R5 |
+| R5 | External-cohort QC and provenance | RESEARCHED | Vuong methods/QC re-inspected; count partition re-derived; ATAC count-stage contradiction found; provider, region and age definitions recorded | Author-defined exclusion rule/barcode list; true count-stage of the metadata columns | S5, S7, S9, S40–S42 | R6 |
 | R6 | Defensible common ATAC feature route | PENDING | — | Exact shared intervals or recount; within- vs cross-study comparability; leakage | — | R6 |
 | R7 | Scientific comparison and fallback value | PENDING | — | Leakage/confounding, negative-result value, RNA-only fallback | — | R7 |
 | R8 | Verify and deliver implementation handoff | PENDING | — | Citation/entry-point/numeric verification across R1–R7 | — | R8 |
@@ -66,6 +66,9 @@ IDs are stable; reuse rather than re-fetch.
 | S37 | Lattke repo `B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv` @ `227f51b4…` (37 libraries → 30 donors, 15 CON/15 DS) | 2026-09-20 | OBSERVED_NOW |
 | S38 | Lattke repo `B_basic_analysis/B03_cluster_assignment_all.csv` @ `227f51b4…` (21 clusters: cluster, cluster_name, cell_type, cell_class) | 2026-09-20 | OBSERVED_NOW |
 | S39 | Lattke repo C01/C03/F01 scripts @ `227f51b4…` (object provenance, `save()` names, `peaks_by_cluster` construction) | 2026-09-20 | OBSERVED_NOW |
+| S40 | Vuong Science 2026 saved manuscript XML `data/multiome/Vuong_PMC13225313_efetch_20260908.xml` (SHA `7e58d9f0…`): preprocessing, demux, QC, MACS2, tissue acquisition, age, data availability | 2026-09-20 (local saved text) | OBSERVED_NOW |
+| S41 | Saved NeMO metadata `data/multiome/VuongWeber_DSdevctx_metadata.tar` (SHA `72cf7284…`), CSV member re-parsed for columns/partitions | 2026-09-20 (local saved text) | OBSERVED_NOW |
+| S42 | NeMO collection/API fetch attempt `assets.nemoarchive.org/{api/,}collection/nemo:col-ad8t52b` | 2026-09-20 | transport error (no content); access facts remain S5 RECORDED_PREVIOUSLY |
 
 ## R1 — Current facts and unanswered questions (RESEARCHED)
 
@@ -87,6 +90,9 @@ IDs are stable; reuse rather than re-fetch.
 | C12 | Launcher preflight exists; reports `runtime_controls=UNVERIFIED`, `output_reserved=false`, no transport | Accepted; S14, S17 | Hard controls not bound | R2 |
 | C13 | R-fixture controls proven for the tested fixture only: 4 GiB cgroup memory, zero swap, 2 CPUs, 32 PIDs, non-root, no network/mounts, read-only root | Accepted; S12, S15 | Not bound to HEAD launcher; peak RSS never sampled | R2 |
 | C14 | Proposed HEAD contract: 1 request, 15 s total, ≤65,536 header bytes, 0 application body/decoded reads, 256 MiB aggregate process-tree memory, 0 swap, ≤1 MiB retained output, ≥10 GiB free host disk, no redirect/retry | Proposed; S3, S4 | Whether these are enforceable here; needs separate approval | R2 |
+| C21 | Vuong release `nCount_ATAC` is not the QC-stage count: min 2 and 1,798 rows ≤100 despite the stated cellranger-arc `nCount_ATAC >100` filter; the final matrix uses MACS2 merged-fragment peaks built after QC | Accepted as an observed contradiction; S40, S41 | True count-stage/definition of the release columns | R8 |
+| C22 | Region is fully confounded with provider: all 18 UCLA donors are `Cortex`, all 8 NIH donors have specific Brodmann areas | Accepted; S41 | Whether region should enter external evaluation as a covariate | R7 |
+| C23 | Vuong metadata has 38 `donor_sample` libraries across 26 donors; repeat libraries share a donor | Accepted; S41 | None | R7 |
 
 ### Stale claims narrowed by the 2026-09-08/09 source note
 
@@ -438,3 +444,87 @@ and a three-stage count model with a cluster-specific `peaks_by_cluster`. The
 selected object most likely lacks `peaks_by_cluster` (naming inference), and the
 remaining small artifacts are named. Remaining unknowns: per-library retained
 counts and the object's true members. Next: R5 — external-cohort QC and provenance.
+
+## R5 — External-cohort QC and provenance (RESEARCHED)
+
+Primary sources: the saved Vuong manuscript XML (S40, SHA `7e58d9f0…`) and the
+saved NeMO metadata archive (S41, SHA `72cf7284…`), both matching the hashes in
+S5. These are local saved-text re-reads, not new payload fetches.
+
+### Count reconciliation: exact but still not author-confirmed
+
+The release has 117,532 rows; the paper reports 113,801 (S40 line ~10487). Re-parsing
+S41 reproduces the S5 partition exactly: `class == "Unk"` = 3,731 and
+`class != "Unk"` = 113,801, so the difference is **exactly one annotation category**,
+not an arbitrary deletion. The release `class` values are EN 73,820, RG 23,363,
+IN 14,537, **Unk 3,731**, Other 2,081; the paper's 113,801 keeps EN+RG+IN+Other.
+Removing `Unk` leaves **13 Ctrl / 13 Ts21 donors**, no donor lost, minimum donor
+273 cells (matches S5). But the paper's methods state a QC rule, not an Unk rule
+(S40: "nCount_RNA >200 and <3 SD from the donor mean, nCount_ATAC >100, percent.mt
+<5% tissue"). The partition does not follow that rule: all 117,532 rows pass
+RNA>200, only 7 fail mito≥5%, and of the 1,798 rows failing ATAC≤100 only 48 are
+`Unk`. So the count match remains `ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`; an
+author-defined exclusion rule or final barcode list is still required.
+
+### ATAC count-stage semantics: the release column is not the QC metric (new)
+
+S40 shows the final nucleus×peaks matrix is built from **MACS2 (v2.2.9.1) narrow
+peaks called on merged fragments** across donor samples (blacklist-filtered),
+created *after* the QC step, then integrated by LSI. The QC filter itself used the
+**cellranger-arc `nCount_ATAC` fragment count >100** from the per-library run
+(GRCh38 2024-A-2.0.0, cellranger-arc v2.0.2). In S41, `nCount_ATAC` has **minimum
+2** and 1,798 rows ≤100, which is impossible if the column were the same
+fragment count that passed the >100 filter. The most coherent reading is that the
+release `nCount_ATAC`/`nFeature_ATAC` columns were recomputed on the final
+MACS2 merged-peak set, so **they must not be used to replay the paper's QC**. This
+is a concrete, testable ambiguity, not a proven fact; confirming it needs the
+author's QC table or the count-stage definition.
+
+### RNA versus WNN masks are different definitions
+
+Re-derived from S41: `cluster.ids == "Unk"` equals `class == "Unk"` (3,731 rows),
+but `cluster.ids.wnn == "Unk"` is only **728 rows**, all of which carry
+`class.wnn == "Other"`; `class.wnn` has no `Unk` category. Overlap: 663 rows are
+both, 65 are WNN-`Unk` only, 3,068 are RNA-`Unk` only. The two "unknown"
+definitions are therefore **not interchangeable**, and any exclusion or
+cell-type mask must name which annotation it uses (C9 updated).
+
+### Tissue providers, region and age (new primary detail)
+
+S40 confirms tissue came from the **UCLA Gene and Cell Therapy Core**, the **UCLA
+Translational Pathology Core Laboratory**, and the **NIH NeuroBioBank**, under IRB
+guidelines with parent-donor consent; "no known major pathogenic CNVs" other than
+HSA21 trisomy were found. S41 gives **18 UCLA / 8 NIH donors** (8+5 Ctrl, 10+3
+Ts21), matching S5. Age: the paper states a **26-donor cohort at gestational weeks
+(GW) 13–23**, with GW estimated per ACOG (LMP revised by ultrasonographic dating).
+This is **obstetric GW**, so the S7 `age_pcw = age_raw - 2` conversion is an
+explicit approximation, not a measurement; already-PCW values stay unchanged.
+
+A **region↔source confound** is now visible: all 18 UCLA donors are labelled
+region `Cortex` (landmarking not possible), while all 8 NIH donors carry specific
+areas (BA6, BA9, BA9/46, Cerebrum, Occipital, Parietal/occipital). Region is thus
+not independent of provider and must be reported as a covariate. S41 also shows
+**38 `donor_sample` libraries across 26 donors** (some donors have 2 libraries,
+e.g. `D146_GEM6`+`D146_S3`), so repeat libraries must remain in the same
+donor-held-out split. `sample` has 13 values (`GEM1–7`, `S1–6`).
+
+### Release access and what remains unresolved
+
+The paper's data-availability statement points only to NeMO `col-umstjg0`, with
+controlled access via NIMH Data Archive. S5 recorded the open RNA/ATAC child
+collections (`nemo:col-mbgxwtz`, `nemo:col-ad8t52b`) as `access: open` and the
+2026-05-04 Open bags as public; a direct re-fetch here returned a transport error
+(S42), so current access is **RECORDED_PREVIOUSLY**, not re-observed. No NeMO
+artifact supplies an author QC rule, retained-barcode list, or cross-cohort
+fixed-region count matrix. **Acceptance still needed:** the author-defined final
+barcode list/exclusion rule and the count-stage definition behind the release
+`nCount_ATAC`/`class` columns (same artifact class named in R4; draft only, unsent).
+
+### R5 outcome
+
+The 117,532→113,801 difference is exactly the RNA `Unk` category and is not
+reproduced by the paper's stated QC; the release ATAC column is a different
+count stage than the QC filter; RNA and WNN unknown masks are distinct; providers,
+region↔source confound, 38-library/26-donor structure and obstetric-GW age are
+recorded from primary text. Provider-level `no_overlap_evidence` stands; no genetic
+crosswalk. Next: R6 — defensible common ATAC feature route.
