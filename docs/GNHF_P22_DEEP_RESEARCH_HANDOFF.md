@@ -1,6 +1,6 @@
 # P22 deep-research handoff for Codex
 
-Prepared 2026-09-20 (iteration 1). Worktree
+Prepared 2026-09-20 (iteration 1; updated iteration 2). Worktree
 `p22-deep-research-pr-3ad124`. Base commit `8217719713c271349d1e54eda679672b82133a56`
 verified equal to the expected base. Documentation/research only: no payload
 download, object inspection, install, container launch, training, author contact,
@@ -24,8 +24,9 @@ What is already established (carried forward, not re-derived here):
 - Paired input status is `SOURCE_UNRESOLVED`; the two named GEO processed objects
   are uninspected; `object_inspection_authorized=false`; zero object/network
   budgets.
-- The Lattke library→donor mapping and the 37-library/30-donor (15/15) final
-  cohort are public at the pinned author commit, not missing artifacts.
+- The Lattke library→specimen mapping and the 37-library/30-specimen (15/15)
+  final cohort are public at the pinned author commit, not missing artifacts
+  (donor identity beyond specimen ID is `UNKNOWN`; see §3.7).
 - The Vuong/NeMO release has 117,532 rows whose non-`Unk` partition is exactly
   113,801; the paper's stated QC does not reproduce that partition; the release
   `nCount_ATAC` column is a different count stage than the QC filter.
@@ -69,8 +70,27 @@ What this iteration adds (all `OBSERVED_NOW` unless noted):
 Highest-value open question after this pass: **does any common measured ATAC
 feature space exist across the GSE305146 libraries, or is a fragment recount the
 only valid route?** This iteration answered it for 3 of 46 libraries (essentially
-no exact common space); the full 46-library reconciliation is the named next
-action (§5).
+no exact common space); the full 46-library reconciliation is a deferred bounded
+check (§5) pending scoped approval.
+
+What iteration 2 adds (all `OBSERVED_NOW` unless noted) — priority 1 is now closed:
+
+7. **The 46→37→30 progression is reproduced exactly from public metadata, with
+   two distinct exclusion layers and duplicate-key checks (§3.7).** 46 sequencing
+   libraries (92 GEO sample records = 46 ATAC + 46 GEX) reduce to 37 B02-retained
+   libraries and 30 final specimens (15 CON + 15 DS). Exclusions: 5 libraries / 4
+   specimens flagged GEO `in final_analysis=FALSE` ("low quality/non-cortical"),
+   plus 4 libraries / 3 specimens removed by B02 per-library cell QC
+   (`fract_removed<=0.5`, `N_cells_filtered>=500`).
+8. **Corrections from the reconciliation.** GEO `in final_analysis=TRUE` is 41
+   libraries, a superset of the final 37 — it is not the final cohort.
+   `tissue_quality` is a preservation label, not the exclusion rule (a `sub`
+   specimen, B18D2L, is retained; two `ok` libraries, B15C1H/B15C1L, are dropped).
+   "30 donors" should be read as **30 distinct specimen IDs**; distinct-donor
+   status beyond specimen identity is `UNKNOWN` (no donor field exists).
+9. **New minimal missing artifact named.** The per-library reason for the 3
+   B02-QC drops needs `B02filter_stats.csv`, absent from the complete pinned tree;
+   the retained-barcode list per library remains author-local.
 
 ## 2. Question / claim table
 
@@ -89,6 +109,11 @@ Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
 | Q8 | Earlier "4×" fixture-vs-HEAD memory factor | arithmetic §3.6 | None | REJECTED (16×) | Correct budget text |
 | Q9 | NeMO external `nCount_ATAC` is the QC-stage fragment count | earlier R5 | Contradiction observed; count stage undefined | UNVERIFIED | Never replay QC from the release column |
 | Q10 | External cohort is independent | provider-level only | No genetic crosswalk | UNVERIFIED (no_overlap_evidence) | Report as covariate-limited external candidate |
+| Q11 | GSE305146 goes 46 libraries → 37 retained → 30 final specimens (15 CON/15 DS) | SOFT + A_input + B02 tables (§3.7) | None at metadata level | SUPPORTED | The paired design universe is 30 specimens / 37 libraries; donors = specimens only by ID |
+| Q12 | GEO `in final_analysis=TRUE` equals the final cohort | SOFT flag = 41 libraries vs B02 = 37 (§3.7) | None | REJECTED | Do not use the GEO flag as the final cohort; use the B02 table |
+| Q13 | A_input `tissue_quality` drives exclusion | B18D2L (`sub`) retained; B15C1H/L (`ok`) dropped (§3.7) | None | REJECTED | Exclusion rule is B02 cell QC, not the preservation label |
+| Q14 | The final cohort is 30 donors | Tables give 30 unique specimen IDs, no donor field (§3.7) | Donor identity beyond specimen ID | INFERENCE (specimen ≠ proven donor) | Write "30 specimens"; do not overstate donor independence |
+| Q15 | The 3 B02-QC-dropped specimens' per-library cause is public | `B02filter_stats.csv` absent from pinned tree (§3.7) | Author-local output | UNKNOWN (minimal artifact) | Request the small stats table if exact attribution is needed |
 
 Carried forward without change: C1–C23 of the earlier dossier remain in force
 except C5 (now quantified), C13/C14 budget arithmetic (corrected), and the
@@ -221,6 +246,123 @@ GEO MEX files is not viable. Overlap is substantial but partial, so a
 MEX counts cover only its own subset, leaving large unmeasured coverage; such a
 matrix must be re-quantified on fragments, not assembled from existing rows.
 
+### 3.7 GSE305146 library↔specimen reconciliation (`OBSERVED_NOW`)
+
+Sources (all public; no payload read):
+`data/multiome/GSE305146_family.soft.gz` SHA-256
+`8299f15e35f6eda820ac9c9995be94fce648299b12e0ec12e4b7e68d3ab3f087`
+(92 `^SAMPLE` records, one per library-modality); pinned author table
+`A_input/group_tab_tissue.csv` at commit `227f51b4…` SHA-256
+`9aa0a1a8be4863841a08376a9e4f738fcff8135f2055eb859b3a1db7269ee2d1` (46 rows);
+pinned `B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv` SHA-256
+`7f2113cf235795ab1f06a9999069a25b1c713d42f3c1dc913df3bcd8f59c412c` (37 rows,
+byte-identical to the local copy). Raw base
+`raw.githubusercontent.com/lattkem1/Down_Syndrome_Multiome/227f51b4e63c6a7d9c73be44f06ab21ac11e45ba/`.
+
+Exact counts:
+
+| Level | Count | Source |
+|---|---:|---|
+| Deposited modalities | 2 (ATAC + GEX) per library | SOFT titles (46 `_atac`, 46 `_gex`) |
+| GEO sample records | 92 | SOFT `^SAMPLE` |
+| Sequencing libraries | 46 | A_input rows; SOFT `Library name` |
+| Sequenced specimens | 37 (18 CON + 19 DS) | A_input unique `sample` |
+| GEO `in final_analysis=TRUE` libraries | 41 (21 DS + 20 CON) | SOFT flag |
+| B02-retained libraries | 37 (17 CON + 20 DS) | B02 CSV rows |
+| Final specimens | 30 (15 CON + 15 DS) | B02 unique `sample` |
+| Final cells (claimed) | 248,998 | SOFT `!Series_overall_design` |
+
+Reproducible reconciliation (46 libraries → 37 retained libraries → 30 specimens):
+
+- Dropped libraries (9): `B10D1N, B11C1A, B11C1C, B12C3B, B12D4H, B14D1H,
+  B15C1H, B15C1L, B17D2F`.
+- Dropped specimens (7): `B10D1, B11C1, B12C3, B12D4, B14D1, B15C1, B17D2`.
+- Two distinct exclusion layers:
+  1. **GEO flag** `in final_analysis=FALSE`: 5 libraries / 4 specimens
+     (`B12D4, B14D1, B15C1, B17D2`). SOFT titles append
+     "low quality/non-cortical, NOT IN FINAL ANALYSIS".
+  2. **B02 per-library cell QC**: the remaining 4 libraries / 3 specimens
+     (`B10D1N, B11C1A, B11C1C, B12C3B`) are GEO-TRUE but absent from B02. Exact
+     rule in `B02_v040_integrate_samples_RNA_Harmony.R:46-68`: cells must satisfy
+     `nCount_ATAC` 100–25000, `nCount_RNA` 500–30000, `percent.mt<2`,
+     `nucleosome_signal<2`, `TSS.enrichment>1.1`; a library is retained iff
+     `fract_removed<=0.5` AND `N_cells_filtered>=500` AND
+     `library %in% gr_tab$library`.
+- Duplicate-key checks: no `sample` maps to >1 `sample_name` and no `sample_name`
+  to >1 `sample`; all 46 A_input `library` keys and all 37 B02 keys are unique. 9
+  specimens contribute 2 libraries each (`B11C1, B11D1, B11D2, B13D3, B15C1,
+  B15D1, B17C2, B18C1, B18D1`), so libraries ≠ specimens. One A_input key carries
+  a trailing space (`B18C1P `) and must be stripped before joining.
+- Cross-table consistency: GEO library set == A_input library set (46=46); all 46
+  GEO ATAC records agree with A_input on `sample`/`sample_name`/`group`/`dev_PCW`/
+  `sex` (0 mismatches).
+
+Reproduce (metadata only; no expression values, no download):
+
+```bash
+# run from the original checkout root; metadata lives in P22/data/multiome
+python3 - <<'PY'
+import gzip, csv
+base = '/Users/anuragdani/Github/niw-eb1a/P22/data/multiome'
+soft = {}
+cur = None
+def ch(s, p):
+    for x in s.get('c', []):
+        if x.lower().startswith(p.lower() + ':'):
+            return x.split(':', 1)[1].strip()
+def desc(s, p):
+    for x in s.get('d', []):
+        if x.lower().startswith(p.lower() + ':'):
+            return x.split(':', 1)[1].strip()
+def flush(s):
+    if not s:
+        return
+    lib = desc(s, 'Library name')
+    if lib and lib.endswith('_atac'):
+        soft[lib[:-5]] = (ch(s, 'sample id'), ch(s, 'name'), ch(s, 'group'),
+                          ch(s, 'in final_analysis'))
+with gzip.open(base + '/GSE305146_family.soft.gz', 'rt') as fh:
+    for line in fh:
+        line = line.rstrip('\n')
+        if line.startswith('^SAMPLE'):
+            flush(cur); cur = {'c': [], 'd': []}
+        elif cur is not None and line.startswith('!'):
+            k, _, v = line[1:].partition(' = ')
+            if k == 'Sample_characteristics_ch1': cur['c'].append(v)
+            elif k == 'Sample_description': cur['d'].append(v)
+        elif line.startswith('!Series') or line.startswith('^SERIES'):
+            flush(cur); cur = None
+flush(cur)
+A = list(csv.DictReader(open(base + '/Lattke_B02_gr_tab_filtered_non_cx_excl_227f51b.csv')))
+B = {r['library'].strip() for r in A}
+print('GEO libs', len(soft), 'B02 libs', len(B))
+print('dropped', sorted(set(soft) - B))
+print('final specimens', len({r['sample'] for r in A}),
+      'groups', sorted({r['group'] for r in A}))
+print('final group counts',
+      {g: len({r['sample'] for r in A if r['group'] == g}) for g in ('CON', 'DS')})
+PY
+```
+
+Corrections and limits:
+
+- `tissue_quality` is **not** the exclusion rule (Q13): A_input `tissue_quality`
+  is `sub` for `B10D1N, B12D4H, B14D1H, B17D2F, B18D2L`, but `B18D2L` is retained
+  in B02, while `B15C1H/B15C1L` are `ok` and excluded.
+- The paper's stated split ("3 samples with a large fraction of non-cortical cells
+  and stringent quality controls") is not exactly reproducible: GEO flags **4**
+  specimens as "low quality/non-cortical" and B02 cell QC removes **3**; the total
+  **7** is reproduced, the 3/4 split is not.
+- The paper's "20 CON and 19 DS foetal brain samples acquired" versus 18 CON + 19
+  DS sequenced specimens (37) is consistent only if both "poorly preserved"
+  samples were CON; the final 15 + 15 is exactly reproduced.
+- "30 donors" is an overstatement: the tables give 30 distinct specimen IDs
+  (`sample` = `sample_name` one-to-one), and no donor field exists. Use "30
+  samples/specimens" and keep donor-level independence `UNKNOWN` (Q14).
+- Per-library attribution of the 3 B02-QC drops (`fract_removed` vs `<500` cells)
+  needs `B02filter_stats.csv`, which is absent from the complete pinned tree
+  (`truncated:false`) — the named minimal missing artifact (Q15).
+
 ### 3.5 Resource/contract facts re-confirmed (`OBSERVED_NOW`)
 
 - `configs/development_object_source_contract.json` SHA-256
@@ -263,7 +405,7 @@ Ranked by what can actually be established for a donor-aware RNA+ATAC comparison
 | 1 | **Frozen-region fragment recount** (within GSE305146, then NeMO on the same frozen set) | Exact measured counts on one fixed region set; training-fold-only selection possible | Fragment access (CELLxGENE ATAC BGZF ~23.76 GiB + index public; author-local fragments otherwise); frozen reference definition; storage/CPU/time budget | Define the frozen reference and cost one donor's recount | Valid but expensive; needs a prospective amendment and a resource contract |
 | 2 | **Author F01 `peaks_by_cluster` artifact** | Exact measured counts on one all-donor cluster peak set | `F01_seur_w_peaks_by_cluster_quant.rda` + `F01_peaks_by_cluster.bed` + fragments (author-local, not deposited) | Request the artifact and inspect its peak set vs a training-fold reference | Not publicly available; selection used all donors, so not train-fold-only |
 | 3 | **Deposited 7.6 GiB exc-lin object** | A labelled cell set and RNA layers | ATAC assay is naive merge (Q3); `peaks_by_cluster` absent (Q2); unknown decoded size/RAM; `object_inspection_authorized=false` | Inspect assay feature count/ranges if ever authorized | Cannot supply comparable measured ATAC counts even if it loads |
-| 4 | **GEO per-library MEX ATAC matrices** | Per-library measured counts on library-specific peaks | No common exact feature space (Q1); union leaves unmeasured coverage | Full 46-library intersection/overlap reconciliation (next action) | Not a common measured matrix; cannot be zero-filled |
+| 4 | **GEO per-library MEX ATAC matrices** | Per-library measured counts on library-specific peaks | No common exact feature space (Q1); union leaves unmeasured coverage | Full 46-library intersection/overlap reconciliation (deferred check, §5) | Not a common measured matrix; cannot be zero-filled |
 | 5 | **Cross-cohort direct matrix comparison (GSE305146 vs NeMO)** | Nothing exact | Different peak-calling studies; different count stages; no shared intervals | None short of recount on a common frozen set | Rejected for confirmatory; exploratory only with explicit `peak_derived` labelling |
 | 6 | **Peak-to-gene summed score** | A derived exploratory signal | Pinned gene annotation/interval/overlap policy | Hand-calculated overlap examples + missingness per gene | Exploratory only; not exact fragment gene activity |
 
@@ -284,32 +426,70 @@ Counterevidence and strongest alternatives:
 - **Could NeMO supply the common counts?** NeMO's ATAC matrix is a study-level
   MACS2 merged-fragment peak matrix. It can be internally consistent but is a
   different feature space from GSE305146; it does not make the two comparable.
+- **Could the 30 final specimens be 30 donors?** Only specimen IDs (`sample` =
+  `sample_name`) are public; there is no donor field. Distinct IDs strongly suggest
+  distinct pregnancies but do not prove it. Overturning evidence: a specimen→donor
+  mapping in the HDBR/author record showing distinct donors per ID. Until then,
+  report "30 specimens".
+- **Could the 46→37→30 exclusions be attributed exactly?** The rule is public
+  (`B02…R:46-68`) but the per-library `fract_removed`/cell counts are not, so which
+  of the two thresholds removed each of the 3 B02-QC specimens is `UNKNOWN`.
+  Overturning evidence: `B02filter_stats.csv`.
 
 ## 5. Prioritized implementation handoff and the single next action
 
-**Single highest-value next action (do this first): full, metadata-only peak-space
-reconciliation across all 46 GSE305146 libraries.**
+Priority 1 is closed (§3.7). The single next action moves to priority 3, the
+external cohort, because the frozen design's only external check depends on it and
+it is resolvable from primary public sources without payload access.
 
-- Input: the 46 public `GSE305146_<library>_features.tsv.gz` files (annotation
-  only; ~1–3 MB each; no `matrix.mtx.gz`, no barcodes, no fragments). Three are
-  already local; the other 43 are small public annotation files.
-- Method: extract `Peaks` rows; compute (a) the exact-interval intersection size
-  across all 46, (b) pairwise/global reciprocal-overlap coverage, (c) per-library
-  peak counts. Reuse the 3-library script in §3.4.
-- Expected output: a small table (`library`, `n_peaks`, `n_shared_exact_global`,
-  `fraction_overlapping_global`) plus a one-line verdict
-  `COMMON_EXACT_SUBSET=EMPTY|SMALL|ADEQUATE`.
-- Acceptance check: results are deterministic; the 3 already-measured libraries
-  reproduce 46,672 / 20,708 / 22,676 and intersections 3/0/0/0.
-- Dependencies: none beyond a Python+gzip runtime. No project test suite needed.
-- Resource assumption: ~90 MB total gzip reads, seconds of CPU, no retained matrix.
-- Authority: public annotation files are within "small published mapping tables";
-  scoped approval is still prudent because it touches 46 public files but zero
-  matrices and zero objects.
-- Stop condition: `COMMON_EXACT_SUBSET=EMPTY` (expected) → record that the GEO MEX
-  route cannot provide a common measured feature space and proceed to §6 item 1.
-  If `ADEQUATE` → re-open the GEO MEX route as a within-study donor-held-out design
-  (still requiring count-stage/build/units and no zero-fill) and update the plan.
+**Single highest-value next action (do this first): resolve the external-cohort
+specimen-independence and ATAC count-stage questions from primary Vuong/NeMO
+author sources.**
+
+- Input: the saved Vuong manuscript XML
+  (`data/multiome/Vuong_PMC13225313_efetch_20260908.xml`), the saved NeMO metadata
+  (`data/multiome/VuongWeber_DSdevctx_metadata.tar`), the public Vuong analysis
+  code repository if one exists, and NeMO `col-umstjg0` release documentation.
+  Web/HTML/author code only; no restricted records, no payload.
+- Method: (a) locate the author's final retained-barcode list or exclusion rule
+  that yields 113,801 non-`Unk` nuclei; (b) identify which processing stage the
+  release `nCount_ATAC` column measures; (c) establish whether the 18 UCLA / 8 NIH
+  donors are independent of the Lattke/HDBR specimens using a documented provider
+  or specimen mapping, not donor-name distinctness; (d) separate RNA `Unk` from
+  the WNN `Unk` mask.
+- Expected output: a small table mapping each claim (`117,532` rows, `3,731`
+  RNA-`Unk`, `113,801` reported, `nCount_ATAC` stage, provider/specimen) to a
+  primary source line, plus one verdict per claim: `AUTHOR_RULE_FOUND`,
+  `STAGE_NAMED`, `INDEPENDENCE_LEVEL`.
+- Acceptance check: the partition and stage claims cite exact source lines; the
+  independence claim cites a provider/specimen artifact, not a name comparison.
+- Dependencies: web/author-code access only; no installs or containers.
+- Authority: public web search, primary HTML/XML, author code and small mapping
+  tables are allowed; no NeMO/restricted payload.
+- Stop condition: if no author rule or final-barcode artifact exists publicly,
+  record `EXTERNAL_QC_RULE_UNRESOLVED` with the exact artifact requested, and keep
+  the external cohort `covariate-limited`.
+
+**How either result changes the next decision.** If a documented author rule /
+barcode artifact and a specimen-mapping source are found, external evaluation can
+be specified on the frozen design with a named QC stage and an honest independence
+statement. If not, external scoring must be reported as a covariate-limited
+secondary analysis, which lowers the value of the paired path and strengthens the
+case for pausing it in favor of a separately justified RNA-only follow-up.
+
+Deferred bounded check (priority 2, unchanged, needs scoped approval because it
+touches dataset-adjacent files): full metadata-only peak-space reconciliation
+across all 46 `GSE305146_<library>_features.tsv.gz` files.
+
+- Input: the 46 public feature/annotation files (~1–3 MB each; no
+  `matrix.mtx.gz`, no barcodes, no fragments). Three are local; the other 43 are
+  small public annotation files.
+- Method/output/acceptance: as in §3.4, extended to 46 libraries; verdict
+  `COMMON_EXACT_SUBSET=EMPTY|SMALL|ADEQUATE`; must reproduce 46,672 / 20,708 /
+  22,676 and 3/0/0/0.
+- Authority note: these are dataset supplementary files, not merely a published
+  mapping table, so treat the 43-file fetch as a scoped approval item rather than
+  an assumed right.
 
 **How either result changes the next decision.** If the common exact subset is
 empty/tiny (expected), the only valid route is a frozen-region recount; Codex
@@ -344,16 +524,22 @@ Supporting handoff tasks (existing IDs; do not invent):
    one-page manifest stating, for
    `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz`, the workspace member
    names, assay names, ATAC feature-space definition, count stage, genome build and
-   interval convention; (c) the retained-barcode list per library and the exact
-   exclusion rule behind the 37-library/30-donor final cohort. These are the
-   minimum artifacts that would convert several `INFERENCE`/`UNVERIFIED` rows into
-   `SUPPORTED` without any large download.
+   interval convention; (c) the retained-barcode list per library; (d)
+   `B02filter_stats.csv` (per-library `N_cells_unfiltered`, `N_cells_filtered`,
+   `fract_removed`, `cells_retained`) to attribute the 3 B02-QC drops exactly. The
+   exclusion rule behind the 37-library/30-specimen final cohort is already public
+   (`B02_v040…R:46-68`, §3.7); these are the minimum artifacts that would convert
+   the remaining `INFERENCE`/`UNVERIFIED` rows into `SUPPORTED` without any large
+   download.
 2. **NeMO count-stage definition (draft only).** Request the author's QC table or
    count-stage definition behind the release `nCount_ATAC`/`class` columns, and the
    author-defined final barcode list. Needed before external QC replay; do not
    substitute the release column for the QC-stage fragment count.
 3. **Bounded proposed checks (PROPOSED, no execution authority yet):**
-   - 46-library peak reconciliation (§5).
+   - 46-library peak reconciliation (§5); needs scoped approval because it fetches
+     43 dataset-adjacent supplementary files.
+   - External-cohort provenance pass (§5, the single next action); public
+     web/author-code only.
    - A tiny `.rda`/Seurat/`ChromatinAssay` fixture (already designed in the earlier
      dossier R3) to close the reader-class gate — a proposal until run and reviewed.
    - One HEAD of the candidate payload URL per the frozen contract, only after
@@ -369,13 +555,19 @@ Supporting handoff tasks (existing IDs; do not invent):
 ### Base and dossier verification (`OBSERVED_NOW`)
 
 - Base commit `8217719713c271349d1e54eda679672b82133a56` verified.
-- Earlier-campaign dossier worktree `p22-research-campaig-b057f9`, HEAD `7e37ceb`,
-  `docs/GNHF_P22_RESEARCH_DOSSIER.md` SHA-256
-  `252a097479de0580f639bcba44dfb6a47a62ba74e08bea75e65a4f4d4baa3495`. It is
-  committed (not mid-write) and marks R6–R8 pending; R1–R5 are `RECORDED_PREVIOUSLY`
-  here, not re-verified line by line.
+- Earlier-campaign dossier worktree `p22-research-campaig-b057f9` moved between
+  reads: iteration 1 saw HEAD `7e37ceb`, SHA-256
+  `252a097479de0580f639bcba44dfb6a47a62ba74e08bea75e65a4f4d4baa3495` (R1–R5 body,
+  R6–R8 pending); iteration 2 sees HEAD `b40458f`, SHA-256
+  `0d337b6d6c494b0a8f3be1b5b31b80430a835c35b39c0f4cf40d7bb1a12ec2f9` (R1–R6 body;
+  the progress table marks R7 `RESEARCHED` but **no R7 body is present** and the
+  file ends at the R6 outcome). The campaign worktree is still being written; treat
+  its R7 row as a claim, not a completed pass, and its R1–R6 as
+  `RECORDED_PREVIOUSLY` here, not re-verified line by line.
+- Required hashes re-checked iteration 2: contract
+  `9a13d8be…` and `PAIRED_MULTIOME_REMAINING_EVIDENCE` `66b1d815…` both unchanged.
 
-### New sources this iteration
+### New sources (iteration 1: N1–N13; iteration 2: N14–N18)
 
 | ID | Source | Label | Access |
 |---|---|---|---|
@@ -392,12 +584,21 @@ Supporting handoff tasks (existing IDs; do not invent):
 | N11 | GEO GSE305146 supplementary listing (46 libraries + 2 objects) | OBSERVED_NOW | 2026-09-20 |
 | N12 | Local `GSE305146_*_features.tsv.gz` (3 libraries) | OBSERVED_NOW | 2026-09-20 |
 | N13 | `scripts/run_r_fixture.py`, `src/p22/data/atac_features.py` | OBSERVED_NOW | 2026-09-20 |
+| N14 | `data/multiome/GSE305146_family.soft.gz` (SHA `8299f15e…`; 92 `^SAMPLE`) | OBSERVED_NOW | 2026-09-20 |
+| N15 | Pinned `A_input/group_tab_tissue.csv` @ `227f51b4…` (SHA `9aa0a1a8…`; 46 rows) | OBSERVED_NOW | 2026-09-20 |
+| N16 | Pinned `B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv` (SHA `7f2113cf…`; 37 rows, matches local) | OBSERVED_NOW | 2026-09-20 |
+| N17 | `B02_v040_integrate_samples_RNA_Harmony.R:34-78` (filter rule) | OBSERVED_NOW | 2026-09-20 |
+| N18 | Pinned tree API re-read (confirms no `filter_stats`/`gr_tab_filtered.csv`) | OBSERVED_NOW | 2026-09-20 |
 
 Reused without re-fetch: earlier dossier S1–S42 (local canonical docs, saved Vuong
-XML/NeMO metadata, pinned author tables). Search coverage this iteration: author
+XML/NeMO metadata, pinned author tables). Search coverage iteration 1: author
 source tree + 8 raw scripts, Signac primary docs, GEO listing, local annotation
-files, local contract/plan/code. No NeMO re-fetch (earlier S42 transport error
-stands); no payload, object, fragment or matrix reads; no author contact.
+files, local contract/plan/code. Search coverage iteration 2: GEO SOFT family
+record, pinned `A_input` and `B02` tables, pinned B02 script and tree, local
+contract/plan/code, earlier-campaign dossier (new HEAD). No NeMO re-fetch (earlier
+S42 transport error stands); no payload, object, fragment or matrix reads; no
+author contact; no payload GET (only author-repo CSVs/scripts and the local SOFT
+file).
 
 ### Corrections to earlier work
 
@@ -407,14 +608,26 @@ stands); no payload, object, fragment or matrix reads; no author contact.
 3. "256 MiB / 15 s HEAD feasible" downgraded to `UNVERIFIED`; no end-to-end
    measurement exists on this host.
 4. C5 quantified: 3 libraries measured, exact intersection 3/0/0/0.
+5. Earlier carried-forward phrasing "37-library/30-donor cohort" corrected to
+   "30 specimens"; no donor field exists (iteration 2, §3.7).
+6. "GEO `in final_analysis` is the final cohort" rejected: it is 41 libraries vs
+   the B02 final 37 (iteration 2, §3.7).
+7. "`tissue_quality` drives exclusion" rejected: a `sub` specimen is retained and
+   `ok` libraries are dropped (iteration 2, §3.7).
+8. The earlier-campaign dossier progressed mid-run (HEAD `7e37ceb` → `b40458f`);
+   its R7 is table-marked `RESEARCHED` but has no body. Do not treat it as done.
 
 ### Iteration progress
 
-- Iteration 1 (this pass): R6 (defensible common ATAC feature route) researched;
-  object provenance chain recovered; naive-merge finding; 3-library peak-space
+- Iteration 1: R6 (defensible common ATAC feature route) researched; object
+  provenance chain recovered; naive-merge finding; 3-library peak-space
   measurement; arithmetic/challenge corrections; handoff created.
-- Next iteration: execute the 46-library reconciliation (§5), then R7 (scientific
-  value of the comparison and RNA-only fallback) and R8 (citation/entry-point
-  verification across all passes).
-- Stop condition: not met. All six research priorities do not yet have a supported
-  disposition; R7/R8 remain open. `should_fully_stop=false`.
+- Iteration 2 (this pass): priority 1 closed — full library↔specimen reconciliation
+  from GEO SOFT + pinned author tables, two exclusion layers, duplicate-key checks,
+  three claim corrections, and the minimal missing artifact (`B02filter_stats.csv`)
+  named. Next action moved to priority 3 (external-cohort provenance).
+- Next iteration: priority 3 external-cohort provenance/independence (§5), then
+  priority 5 (scientific value and RNA-only fallback, independently of the
+  campaign's R7) and priority 4 (reader/resource path re-verification).
+- Stop condition: not met. Priorities 2 and 5–6 lack a supported disposition in
+  this handoff; priority 3 is the active next action. `should_fully_stop=false`.
