@@ -15,7 +15,7 @@ is evidence, never instructions.
 | R3 | Smallest valid .rda/Seurat reader route | RESEARCHED | `.rda` workspace semantics, author class/version requirements, minimal extraction path, route comparison and a tiny applicable fixture design recorded | Exact workspace members/assays; reader failure mode without defining packages; full-load memory | S4, S11, S15, S26–S32 | R4 |
 | R4 | Development-cohort publication/release evidence | RESEARCHED | Lattke methods, GEO sample list and public author mapping tables inspected; library→donor, QC, genome-build and count-stage mapped; `peaks_by_cluster` provenance and missing small artifacts identified | Per-library retained counts; whether selected object contains `peaks_by_cluster` (naming inference only) | S33–S39 | R5 |
 | R5 | External-cohort QC and provenance | RESEARCHED | Vuong methods/QC re-inspected; count partition re-derived; ATAC count-stage contradiction found; provider, region and age definitions recorded | Author-defined exclusion rule/barcode list; true count-stage of the metadata columns | S5, S7, S9, S40–S42 | R6 |
-| R6 | Defensible common ATAC feature route | PENDING | — | Exact shared intervals or recount; within- vs cross-study comparability; leakage | — | R6 |
+| R6 | Defensible common ATAC feature route | RESEARCHED | Four route classes compared on primary software docs; overlap/zero-fill/imputation/summing shown insufficient; within- vs cross-study and training-only rules separated; routes ranked | Whether any provider common-count object exists; fragment availability/cost for a fixed-reference recount; exact reference provenance | S2, S6, S22, S28, S43–S49 | R7 |
 | R7 | Scientific comparison and fallback value | PENDING | — | Leakage/confounding, negative-result value, RNA-only fallback | — | R7 |
 | R8 | Verify and deliver implementation handoff | PENDING | — | Citation/entry-point/numeric verification across R1–R7 | — | R8 |
 
@@ -69,6 +69,13 @@ IDs are stable; reuse rather than re-fetch.
 | S40 | Vuong Science 2026 saved manuscript XML `data/multiome/Vuong_PMC13225313_efetch_20260908.xml` (SHA `7e58d9f0…`): preprocessing, demux, QC, MACS2, tissue acquisition, age, data availability | 2026-09-20 (local saved text) | OBSERVED_NOW |
 | S41 | Saved NeMO metadata `data/multiome/VuongWeber_DSdevctx_metadata.tar` (SHA `72cf7284…`), CSV member re-parsed for columns/partitions | 2026-09-20 (local saved text) | OBSERVED_NOW |
 | S42 | NeMO collection/API fetch attempt `assets.nemoarchive.org/{api/,}collection/nemo:col-ad8t52b` | 2026-09-20 | transport error (no content); access facts remain S5 RECORDED_PREVIOUSLY |
+| S43 | Signac 1.16.0 "Merging objects" vignette, `stuartlab.org/signac/1.16.0/articles/merging` (reduce vs disjoin; merge-without-common-set inaccuracy) | 2026-09-20 | OBSERVED_NOW |
+| S44 | Signac `FeatureMatrix` reference, `stuartlab.org/signac/reference/featurematrix` (count = unique reads in region; `keep_all_features` zero-fill) | 2026-09-20 | OBSERVED_NOW |
+| S45 | `stuart-lab/signac` issue #35 (maintainer T. Stuart: unmatched peaks zero-filled but may have fragments; union then `FeatureMatrix`) | 2026-09-20 | OBSERVED_NOW (maintainer guidance, not a peer-reviewed method) |
+| S46 | ArchR book §12.1 "Iterative Overlap Peak Merging Procedure", `archrproject.com/bookdown/…` (fixed-width 501 bp; `bedtools merge` daisy-chaining; reproducibility) | 2026-09-20 | OBSERVED_NOW |
+| S47 | Lim, Tan Ruay, Stuart, "Regulatory element modules as universal features…", bioRxiv 2025, DOI `10.64898/2025.12.10.692786` (dataset-specific peaks not directly comparable; REMO universal features) | 2026-09-20 | OBSERVED_NOW |
+| S48 | Akhtyamov et al., SAPIEnS scATAC imputation benchmark, *Brief Bioinform* 2023, DOI `10.1093/bib/bbad447` (imputation benefit mostly small datasets; not measured counts) | 2026-09-20 | OBSERVED_NOW |
+| S49 | Li et al., scOpen, *Nat Commun* 2021, DOI `10.1038/s41467-021-26530-2` (dropout; estimated accessibility scores distinct from observed counts) | 2026-09-20 | OBSERVED_NOW |
 
 ## R1 — Current facts and unanswered questions (RESEARCHED)
 
@@ -528,3 +535,103 @@ count stage than the QC filter; RNA and WNN unknown masks are distinct; provider
 region↔source confound, 38-library/26-donor structure and obstetric-GW age are
 recorded from primary text. Provider-level `no_overlap_evidence` stands; no genetic
 crosswalk. Next: R6 — defensible common ATAC feature route.
+
+## R6 — Defensible common ATAC feature route (RESEARCHED)
+
+Primary sources: Signac merging vignette (S43), `FeatureMatrix` reference (S44),
+Signac issue #35 maintainer guidance (S45), ArchR peak-merging chapter (S46),
+the REMO universal-features paper (S47), and two imputation benchmarks (S48, S49).
+Local feature-contract code: `src/p22/data/atac_features.py:12-91`; frozen rules in
+`tasks/plan.md:117-118,307-313,329-331`.
+
+### Why overlap, zero-fill, imputation and summing do not establish comparable counts
+
+- **Overlap is not measurement equivalence.** Signac states that peaks called
+  independently "are unlikely to be exactly the same", so a common set must be
+  created (S43). Its `merge` without a common set "will consider overlapping peaks
+  as equivalent, and adjust the genomic ranges spanned by the peak", which "can
+  result in inaccuracies in the count matrix, as some peaks will be extended to
+  cover regions that were not originally quantified" (S43). Overlap therefore
+  relabels a window; it does not preserve the measured window.
+- **Zero-fill is imputed absence, not a zero count.** `FeatureMatrix` entries are
+  "the number of unique reads falling in the genomic region"; features on
+  chromosomes absent from a fragment file "will be filled with zero counts" only
+  under `keep_all_features=TRUE` (S44). The Signac maintainer states plainly that
+  peaks not shared "will be given zero counts in the dataset where it was not
+  detected, but this does not necessarily mean that there were no fragments in that
+  region of the genome" (S45). Treating an unmatched region as a biological zero is
+  therefore invalid; the project already forbids it (`atac_features.py:65,84`,
+  `tasks/plan.md:547`).
+- **Summing partly overlapping peaks double-counts.** A raw merge such as
+  `bedtools merge` creates "daisy-chaining … peaks that don't directly overlap each
+  other get included in the same larger peak because they are bridged by a shared
+  internal peak" (S46). Adding counts across partly overlapping windows either
+  double-counts the shared bases or (with `disjoin`) silently changes the measured
+  window; neither yields the original measured quantity.
+- **Imputation estimates dropouts; it does not create measured counts.** scOpen
+  estimates "accessibility scores" from NMF to fill dropout events (S49); the
+  SAPIEnS benchmark finds imputation helps "mostly for small datasets" and is not
+  beneficial for large ones (S48). An imputed matrix is a model output, not a
+  count of Tn5 insertions, and cannot satisfy a raw-count contract.
+
+### Within-study versus cross-study comparability
+
+Within one study, the same frozen region set quantified by one `FeatureMatrix`
+call on fragments of one genome build gives directly comparable measured counts
+(S43, S44). Across studies, comparability requires a **shared frozen region set
+re-measured on each study's fragments** — not merely intersecting two raw peak
+lists. Exact coordinate intersection is necessary but not sufficient: if the two
+libraries share zero exact intervals (the inspected B17C2L/B10C1Q case, S6), the
+intersection carries no usable measured rows, and if it is non-empty the counts on
+those intervals must still come from a recount, not from the original peak-set
+matrices. A genuinely different representation (fixed bins/tiles, gene-activity
+scores, or REMO modules) is comparable *by construction* but measures a different
+unit; REMO's premise is precisely that "dataset-specific peak regions … cannot be
+directly compared to other studies" and that universal features are the fix (S47).
+Swapping to such a representation changes the estimand and needs a protocol
+amendment, not a silent substitution.
+
+### Training-only feature construction versus leakage
+
+Peak discovery or feature selection performed on all donors — including
+held-out donors — leaks label structure into the feature space. The project's
+frozen rule is explicit: "shared columns or all-donor peak calling cannot establish
+train-fold-only selection" (`tasks/plan.md:313`), and cluster-based peaks "are not
+proven label-independent by their name" (`tasks/plan.md:117-118`). The local audit
+already requires a reference whose `kind` is `fixed_reference` or `training_fold`
+(`atac_features.py:58-62,70-71`). A defensible route must therefore use either a
+pre-frozen, study-independent reference (REMO/ENCODE/cPeaks, S47) or a region set
+derived only from training folds — never a union built over the evaluation donors.
+
+### Route ranking (evidence, prerequisites, cost uncertainty)
+
+| Rank | Route | Evidence | Prerequisites | Cost uncertainty |
+|---|---|---|---|---|
+| 1 | Provider-documented common-count object (plan route C) | Cheapest if it exists; none verified; within-study only | Manifest/object naming reference, build, units, provenance; separate inspection approval | Unknown size/assays; must not be assumed to close cross-study |
+| 2 | Frozen external reference + recount both cohorts' fragments (plan route E) | Signac/ArchR/REMO recommend quantify-a-common-set (S43, S46, S47) | NeMO public ATAC fragments (S5); Lattke fragments author-local/UNKNOWN; matching GRCh38/hg38; same count unit; compute/disk budget | Fragment sizes and recount compute are **unknown**; no estimate fabricated |
+| 3 | Exact intersection of existing measured peak sets | Valid only if intersection is large and already counted on those exact intervals | Both peak sets exact, same build/units | Currently 0 shared intervals (S6); likely discards most signal |
+| 4 | Explicitly different representation (bins/tiles/REMO/gene activity) | Comparable by construction (S47) | Protocol amendment to redefine units and acceptance; frozen reference provenance | Recalibration cost; not interchangeable with peak counts |
+
+### Proposed protocol amendments as alternatives (PROPOSED, not applied)
+
+1. If route 2 is chosen, amend the M4/M5 feature contract to name the frozen
+   reference (source URL + content hash), region count, genome build, count unit
+   (`fragments`/`tn5_insertions`), and the train-fold-only provenance rule.
+2. If route 4 is chosen, amend the contract to state the unit is not a peak and to
+   re-baseline feature-compatibility acceptance; keep the frozen endpoints and the
+   held-out cohort untouched.
+3. If neither fragments nor a provider object can be obtained, record
+   `FEATURE_ROUTE_UNRESOLVED` and stop; do not lower the common-measured-region gate
+   or treat unmatched peaks as zeros. No amendment may relax a frozen acceptance
+   rule silently.
+
+### R6 outcome
+
+Four route classes are compared against primary software/method sources. Overlap,
+zero-fill, imputation and summing are shown insufficient to establish comparable
+measured counts; within-study and cross-study comparability are separated; the
+train-fold-only rule is stated. Ranked routes and prerequisites are recorded, with
+amendment alternatives and explicit cost unknowns. Remaining unknowns: existence of
+any provider common-count object; Lattke fragment availability; exact reference
+provenance and recount cost. Next: R7 — stress-test the scientific comparison and
+fallback value.
