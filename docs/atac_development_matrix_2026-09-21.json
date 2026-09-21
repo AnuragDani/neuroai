@@ -1,0 +1,71 @@
+{
+  "cells": {
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "n": 248998
+  },
+  "cost": {
+    "bytes_per_region_max": 15204352,
+    "bytes_per_region_median": 6553600,
+    "bytes_per_region_min": 262144,
+    "requests_per_region_median": 25,
+    "total_bytes_fetched": 1779433472,
+    "whole_asset_bytes": 0,
+    "workers": 12
+  },
+  "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+  "generated_at": "2026-09-21T18:25:31+00:00",
+  "index_sha256": "fd656ed4b287276d102a3aaf800d75678c081afee6fd8c580c747eb76dae306f",
+  "join": {
+    "n_join_complete": 256,
+    "n_joining_any": 256,
+    "n_regions": 256,
+    "regions_with_unknown_barcodes": 0
+  },
+  "limitations": [
+    "Feature set is the top-256 exact training-fold intervals by prevalence; ties bias toward chr1 (193/256).",
+    "prevalence_max=6 of 28 training libraries: per-library exact peak calls rarely coincide.",
+    "Counts are fragment_overlap_sum; insertion-vs-fragment unit is not frozen for confirmatory use.",
+    "Pilot input only; the final feature protocol must be re-frozen prospectively before final fitting."
+  ],
+  "matrix": {
+    "count_unit": "fragment_overlap_sum",
+    "dtype": "int64",
+    "file": "reports/generated/development_region_set_20260921/counts/counts.npz",
+    "max": 4074,
+    "min": 1,
+    "nnz": 4879858,
+    "sha256": "b1b7e9e3df01519310f4e7a3f73577acc55e53db8effed113d06b6ceb285c307",
+    "shape": [
+      256,
+      248998
+    ]
+  },
+  "per_cell_nonzero_regions": {
+    "max": 134,
+    "median": 14,
+    "min": 0,
+    "n_cells_with_zero": 3967
+  },
+  "per_region_nonzero_cells": {
+    "max": 159410,
+    "median": 17066,
+    "min": 292
+  },
+  "record_type": "development_atac_count_matrix",
+  "region_set": {
+    "file": "configs/development_region_set_fold0_2026-09-21.json",
+    "fold": {
+      "fold": 0,
+      "n_test_donors": 6,
+      "n_train_donors": 24,
+      "repeat": 0,
+      "split_seed": 0
+    },
+    "n_selected": 256,
+    "n_train_libraries": 28,
+    "n_union_regions": 1440187,
+    "prevalence_max": 6,
+    "regions_sha256": "192d0b7aebdfe5b71a5d65fba0001ebe0c102c3675b48752fc3f7a662330456b"
+  },
+  "run": "p22-results-executio-debda8"
+}

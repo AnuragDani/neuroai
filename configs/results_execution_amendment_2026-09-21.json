@@ -42,10 +42,22 @@
     "whole_asset_bytes": 0,
     "external_asset_bytes": 0
   },
+  "iteration_3_allocation_used": {
+    "purpose": "freeze a training-fold-only region set and quantify it into a real development ATAC matrix, then run one real paired pilot",
+    "geo_features_downloaded_bytes": 49467305,
+    "geo_features_files": 30,
+    "fragment_index_bytes": 5339155,
+    "fragment_region_query_bytes_fetched": 1779433472,
+    "n_regions_quantified": 256,
+    "counts_npz_retained_bytes": 9916436,
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0,
+    "pilot_compute": "CPU; 9.2 s, 1.14 GB peak RSS"
+  },
   "future_bounded_allocations_proposed": {
     "development_region_set_quantification": {
-      "status": "MECHANISM_PROVEN",
-      "note": "Remote indexed region queries work and join the 248,998-cell allowlist. A frozen fixed-reference/training-fold region set is still required; measured ~5.5-20.7 MB per 100 kb region."
+      "status": "DONE_PILOT",
+      "note": "Frozen top-256 training-fold exact-interval region set quantified into a real 256 x 248,998 matrix (nnz 4,879,858) with 256/256 complete barcode joins; consumed by the real paired pilot."
     },
     "development_full_fragment_recount": {
       "status": "NOT_STARTED",
@@ -56,5 +68,12 @@
       "note": "External ATAC counts MEX and fragments are packaged in tar/tar.gz; per-file access is embargo while the collection is open. No bounded range join is possible; route requires a separate access and resource decision."
     }
   },
-  "scientific_acceptance_unchanged": true
+  "scientific_acceptance_unchanged": true,
+  "iteration_3_status": {
+    "region_set": "frozen (top-256 training-fold exact intervals; regions_sha256 192d0b7a…)",
+    "development_atac_matrix": "real, 256 x 248,998, nnz 4,879,858, 256/256 complete joins",
+    "real_paired_pilot": "executed; cross-attention minus token-concat donor balanced accuracy 0.0 (interval [0,0]); honest null",
+    "final_estimate": "not produced",
+    "external_evaluation": "not launched (tar-packaged, per-file embargo)"
+  }
 }

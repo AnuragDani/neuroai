@@ -1001,8 +1001,26 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   `docs/atac_region_query_validation_2026-09-21.json`,
   `reports/generated/atac_region_query_20260921/`. Code:
   `scripts/query_fragment_regions.py`, `tests/test_query_fragment_regions.py`.
-- [ ] R2b: freeze a modest fixed-reference (or training-fold) region set, quantify
-  it for the retained cells with the proven reader, and assemble the development
-  ATAC matrix for a real paired pilot (ingestion/splits/fit/artifacts/interventions).
-- [ ] R3: external route decision — payloads are tar/tar.gz with per-file embargo;
-  no bounded range join is possible.
+- [x] R2b: freeze a training-fold-only region set and assemble the development ATAC
+  matrix — `PASS`. Exact-interval union of the 28 training libraries of pilot fold
+  (repeat 0, fold 0; 24 train / 6 test donors) has 1,440,187 intervals; top-256 by
+  training-library prevalence frozen. Real matrix 256 × 248,998, nnz 4,879,858,
+  256/256 complete barcode joins, 1.779 GB fetched, no whole-asset read. Evidence:
+  `docs/DEVELOPMENT_PAIRED_INPUT_AND_PILOT_2026-09-21.md`,
+  `docs/atac_development_matrix_2026-09-21.json`,
+  `configs/development_region_set_fold0_2026-09-21.{json,bed}`. Code:
+  `scripts/freeze_development_region_set.py`, `scripts/quantify_development_atac.py`,
+  matching tests.
+- [x] R2c: real paired RNA+ATAC pilot — `EXECUTED (honest null)`. 7,680 cells
+  (256/donor, 30 donors), real RNA (35,477 genes) + real ATAC (256 regions),
+  one donor-isolated fold, six neural families. Cross-attention minus token-concat
+  donor balanced accuracy 0.0 (interval [0,0]); no advantage. Pilot only, not a
+  final estimate. Evidence: `docs/real_paired_pilot_2026-09-21.json`,
+  `reports/generated/real_paired_pilot_20260921/`. Code:
+  `scripts/run_real_paired_pilot.py`.
+- [ ] R4: frozen internal comparison — re-freeze a stronger region set prospectively,
+  run repeated donor splits and the primary contrast with uncertainty; then
+  faithfulness (clamping/permutation/branch) and initialization sensitivity.
+- [ ] R5: external route decision — payloads are tar/tar.gz with per-file embargo;
+  no bounded range join is possible; external paired counts MEX is the cheaper route
+  but is not yet accessed.

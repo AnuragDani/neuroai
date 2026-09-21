@@ -1,0 +1,100 @@
+{
+  "data_mode": "real_development_pilot",
+  "donor_balanced_accuracy": {
+    "atac_only": 0.5,
+    "cross_attention": 0.625,
+    "gated_fusion": 0.625,
+    "rna_atac_concat": 0.625,
+    "rna_only": 0.625,
+    "token_concat": 0.625
+  },
+  "feature_counts": {
+    "view_a": 35477,
+    "view_b": 256
+  },
+  "fold": {
+    "fold": 0,
+    "n_test_cells": 1536,
+    "n_train_cells": 6144,
+    "repeat": 0,
+    "split_seed": 0
+  },
+  "generated_at": "2026-09-21T18:30:44+00:00",
+  "inputs": {
+    "atac_matrix": {
+      "n_regions": 256,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/development_region_set_20260921/counts/counts.npz",
+      "sha256": "b1b7e9e3df01519310f4e7a3f73577acc55e53db8effed113d06b6ceb285c307"
+    },
+    "cell_cap": 256,
+    "h5ad": {
+      "n_genes": 35477,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb"
+    },
+    "n_cells_available": 248998,
+    "n_cells_sampled": 7680
+  },
+  "label": "PILOT \u2014 not a final estimate, not external validation",
+  "limitations": [
+    "Pilot only: one outer fold and one initialization seed.",
+    "Raw-count standard scaling; the accepted normalization is not frozen.",
+    "No final refit and no external evaluation.",
+    "Predictions must not be used to select outcome-favourable donors."
+  ],
+  "majority_control_donor_balanced_accuracy": 0.5,
+  "n_test_donors": 6,
+  "n_train_donors": 24,
+  "parameters": {
+    "atac_only": 4690,
+    "cross_attention": 13634,
+    "gated_fusion": 10468,
+    "rna_atac_concat": 9378,
+    "rna_only": 4690,
+    "token_concat": 12546
+  },
+  "primary_comparison": {
+    "advantage_demonstrated": false,
+    "detail": {
+      "n_cells": 6,
+      "n_donors": 6,
+      "seed": 22
+    },
+    "estimate": 0.0,
+    "failure_reasons": [
+      "only 1 class present in y_true"
+    ],
+    "interval": [
+      0.0,
+      0.0
+    ],
+    "level": 0.95,
+    "metric": "paired_donor_balanced_accuracy_delta",
+    "n_control": 4,
+    "n_failed": 90,
+    "n_positive": 2,
+    "n_replicates_requested": 1000,
+    "n_valid": 910,
+    "not_applicable": null,
+    "practical_margin": 0.5,
+    "unit": "donor"
+  },
+  "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+  "record_type": "real_development_paired_pilot",
+  "resources": {
+    "cells_per_donor_cap": 256,
+    "disk_free_gb": 17.939,
+    "elapsed_seconds": 9.231,
+    "input_bytes": null,
+    "name": "real_paired_pilot",
+    "notes": "Real development pilot on CPU; not a final or external estimate",
+    "peak_rss_gb": 1.1427
+  },
+  "run": "p22-results-executio-debda8",
+  "run_json_sha256": "0e9f506939f0f82faca8608336abc0a88940d42d42aff4027f375cf187db59a6",
+  "split_sizes": {
+    "test": 1536,
+    "train": 4096,
+    "val": 2048
+  }
+}
