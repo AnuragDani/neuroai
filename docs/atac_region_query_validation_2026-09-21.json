@@ -1,0 +1,151 @@
+{
+  "checks": {
+    "all_region_barcodes_in_allowlist": true,
+    "ground_truth_rows_match": true,
+    "index_is_tabix": true,
+    "index_parsed_all_refs": true,
+    "no_whole_asset_read": true,
+    "zero_unknown_barcodes": true
+  },
+  "counts_matrix": {
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "count_unit": "fragment_overlap_sum",
+    "matrix": "counts.npz",
+    "matrix_sha256": "bc5dc24b85fa957b5e9591ada89631ce8dadd78bd3a0bd5013cd984d432172ad",
+    "n_cells": 248998,
+    "nnz": 491403,
+    "regions": [
+      "chr21:33000000-33100000",
+      "chr21:45000000-45100000",
+      "chr1:1000000-1100000",
+      "chr22:20000000-20100000",
+      "chrX:10000000-10100000",
+      "GL000009.2:0-300000"
+    ],
+    "shape": [
+      6,
+      248998
+    ]
+  },
+  "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+  "generated_at": "2026-09-21T17:50:55+00:00",
+  "ground_truth_cross_check": {
+    "description": "Independent decode of a bounded 262,144-byte prefix (no index) vs the indexed whole-contig query.",
+    "indexed_contig_query": "GL000009.2:0-300000",
+    "indexed_contig_rows": 13270,
+    "match": true,
+    "prefix_contig_rows": {
+      "GL000009.2": 13270,
+      "GL000194.1": 7629
+    },
+    "prefix_decoded_bytes": 1078125,
+    "prefix_request_bytes": 262144,
+    "prefix_sha256": "bdb06b9f83c95683ea9b8ca87450f7af77bd552a28826176527de8a23133d9f3"
+  },
+  "index_header": {
+    "col_beg": 2,
+    "col_end": 3,
+    "col_seq": 1,
+    "format": 65536,
+    "l_nm": 298,
+    "meta": 35,
+    "n_ref": 39,
+    "skip": 0
+  },
+  "index_parsed": {
+    "col_beg": 2,
+    "col_end": 3,
+    "col_seq": 1,
+    "format": 65536,
+    "meta": 35,
+    "n_ref": 39,
+    "skip": 0
+  },
+  "index_sha256": "fd656ed4b287276d102a3aaf800d75678c081afee6fd8c580c747eb76dae306f",
+  "index_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz.tbi",
+  "mechanism": "remote BGZF random access via served .tbi (reg2bins + chunk merge + linear index + bounded window fetches)",
+  "record_type": "bounded_remote_tabix_region_query_validation",
+  "regions": [
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 5505024,
+      "chunks": 14,
+      "join_complete": true,
+      "n_in_allowlist": 82546,
+      "n_unknown": 0,
+      "region": "chr21:33000000-33100000",
+      "requests": 21,
+      "rows": 167973,
+      "truncated": false,
+      "unique_barcodes": 82546
+    },
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 9437184,
+      "chunks": 28,
+      "join_complete": true,
+      "n_in_allowlist": 85239,
+      "n_unknown": 0,
+      "region": "chr21:45000000-45100000",
+      "requests": 36,
+      "rows": 160708,
+      "truncated": false,
+      "unique_barcodes": 85239
+    },
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 20709376,
+      "chunks": 62,
+      "join_complete": true,
+      "n_in_allowlist": 145108,
+      "n_unknown": 0,
+      "region": "chr1:1000000-1100000",
+      "requests": 79,
+      "rows": 459976,
+      "truncated": false,
+      "unique_barcodes": 145108
+    },
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 13893632,
+      "chunks": 42,
+      "join_complete": true,
+      "n_in_allowlist": 114995,
+      "n_unknown": 0,
+      "region": "chr22:20000000-20100000",
+      "requests": 53,
+      "rows": 231480,
+      "truncated": false,
+      "unique_barcodes": 114995
+    },
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 8388608,
+      "chunks": 28,
+      "join_complete": true,
+      "n_in_allowlist": 53407,
+      "n_unknown": 0,
+      "region": "chrX:10000000-10100000",
+      "requests": 32,
+      "rows": 78893,
+      "truncated": false,
+      "unique_barcodes": 53407
+    },
+    {
+      "allowlist_size": 248998,
+      "bytes_fetched": 262144,
+      "chunks": 1,
+      "join_complete": true,
+      "n_in_allowlist": 10108,
+      "n_unknown": 0,
+      "region": "GL000009.2:0-300000",
+      "requests": 1,
+      "rows": 13270,
+      "truncated": false,
+      "unique_barcodes": 10108
+    }
+  ],
+  "run": "p22-results-executio-debda8",
+  "status": "PASS",
+  "total_bytes_fetched": 58195968
+}

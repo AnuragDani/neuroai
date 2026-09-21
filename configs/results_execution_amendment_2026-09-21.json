@@ -32,7 +32,21 @@
     "whole_asset_bytes": 0,
     "external_asset_bytes": 0
   },
+  "iteration_2_allocation_used": {
+    "purpose": "bounded remote tabix region queries on the development CELLxGENE ATAC fragment plus a prefix ground-truth cross-check",
+    "index_download_bytes": 5339155,
+    "prefix_cross_check_bytes": 262144,
+    "region_query_bytes_fetched": 58195968,
+    "n_regions_queried": 6,
+    "counts_npz_retained_bytes": "see reports/generated/atac_region_query_20260921/counts/counts.npz",
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0
+  },
   "future_bounded_allocations_proposed": {
+    "development_region_set_quantification": {
+      "status": "MECHANISM_PROVEN",
+      "note": "Remote indexed region queries work and join the 248,998-cell allowlist. A frozen fixed-reference/training-fold region set is still required; measured ~5.5-20.7 MB per 100 kb region."
+    },
     "development_full_fragment_recount": {
       "status": "NOT_STARTED",
       "note": "Requires its own finite transfer/decoded/temp/memory allocation before any whole-asset read; the removed ceilings do not authorize unbounded acquisition."

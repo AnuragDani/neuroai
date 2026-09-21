@@ -993,7 +993,16 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   index on the sampled block, `.tbi` is standard tabix. Evidence:
   `reports/generated/atac_fragment_join_20260921/dev_fragment_join.json`;
   `docs/ATAC_FRAGMENT_JOIN_VALIDATION_2026-09-21.md`.
-- [ ] R2: bounded development fragment quantification pilot on one retained library
-  over a training-fold-only region set, with a declared finite resource allocation.
+- [x] R2a: remote indexed region-query mechanism on the development fragment —
+  `PASS`. Whole-contig indexed query (`GL000009.2:0-300000` → 13,270 rows) matches
+  an independent bounded-prefix decode; six real 100 kb regions return 0 unknown
+  barcodes and a real 6 × 248,998 sparse counts matrix. No whole-asset read.
+  Evidence: `docs/ATAC_REGION_QUERY_VALIDATION_2026-09-21.md`,
+  `docs/atac_region_query_validation_2026-09-21.json`,
+  `reports/generated/atac_region_query_20260921/`. Code:
+  `scripts/query_fragment_regions.py`, `tests/test_query_fragment_regions.py`.
+- [ ] R2b: freeze a modest fixed-reference (or training-fold) region set, quantify
+  it for the retained cells with the proven reader, and assemble the development
+  ATAC matrix for a real paired pilot (ingestion/splits/fit/artifacts/interventions).
 - [ ] R3: external route decision — payloads are tar/tar.gz with per-file embargo;
   no bounded range join is possible.
