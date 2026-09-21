@@ -1,6 +1,6 @@
 # P22 deep-research handoff for Codex
 
-Prepared 2026-09-20 (iteration 1; updated through iteration 5). Worktree
+Prepared 2026-09-20 (iteration 1; updated through iteration 6). Worktree
 `p22-deep-research-pr-3ad124`. Base commit `8217719713c271349d1e54eda679672b82133a56`
 verified equal to the expected base. Documentation/research only: no payload
 download, object inspection, install, container launch, training, author contact,
@@ -16,7 +16,12 @@ smallest scientifically valid route to a donor-aware RNA+ATAC comparison is not 
 7.6 GiB processed object and not the GEO per-library peak matrices. It is a frozen
 common-region recount; whether that recount is affordable is undecided. The paired
 comparison is scientifically `CONDITIONAL` (§3.9): worth running and refutable, but
-only under a prospective amendment and after the estimand fix (Q22).**
+only under a prospective amendment and after the estimand fix (Q22). The GEO
+submission itself describes the two objects only as "Seurat objects with labelled
+cell clusters and sample metadata" (§3.11), so neither reachable object is expected
+to carry a common measured ATAC space. The single next action for Codex is the
+approval-gated 46-library peak reconciliation (§5); if it is not approved, request
+the F01 artifact pair (§6).**
 
 What is already established (carried forward, not re-derived here):
 
@@ -35,57 +40,43 @@ What is already established (carried forward, not re-derived here):
 - Provider-level `no_overlap_evidence` stands (18 UCLA / 8 NIH donors; no genetic
   crosswalk); region is confounded with provider.
 
-Iterations 1–3 (sources in §3 and the progress log): recovered the object-provenance
+Earlier iterations (full detail in §3 and §7): recovered the object-provenance
 chain (both GEO objects map to author stages B04/C03; the selected object is
 pre-`F01`, so `peaks_by_cluster` is absent); showed the deposited ATAC assay is a
-naive per-library peak merge, not a common measured space; measured 3 of 46 GEO
-peak spaces (exact intersections 3/0/0/0); corrected the 4 GiB-vs-256 MiB factor to
-16×; reproduced the 46→37→30 progression; and resolved the external cohort to 26
-donors/13 libraries (113,801 = RNA non-`Unk`; release `nCount_ATAC` ≠ QC stage;
-GW ≠ PCW).
+naive per-library peak merge; measured 3 of 46 GEO peak spaces (exact intersections
+3/0/0/0); corrected the 4 GiB-vs-256 MiB factor to 16×; reproduced the 46→37→30
+progression; resolved the external cohort to 26 donors/13 libraries (113,801 = RNA
+non-`Unk`; release `nCount_ATAC` ≠ QC stage; GW ≠ PCW); found the frozen estimand
+omits the primary-contrast arms (`NAMED_BASELINES`, Q22) and resolved priority 5 to
+`CONDITIONAL`; and characterized the local CELLxGENE H5AD as the final B02 cohort,
+RNA-only, with a barcode→library→donor join.
 
-What iteration 4 adds (all `OBSERVED_NOW` unless noted) — priority 5 is now
-resolved to a decision, and the primary-contrast arms are checked against the
-frozen estimand:
+What iteration 6 adds (all `OBSERVED_NOW` unless noted) — priority 4 is closed to a
+disposition and an authoritative provider statement is recovered:
 
-16. **The frozen primary contrast is implemented in the runner but missing from
-    the frozen estimand's declared baseline list (Q22).** `NEURAL_FAMILIES`
-    (`multiome_runner.py:112-119`) and `multiome_final.py:190`
-    (`paired_comparison(cross_attention, token_concat)`) implement the contrast,
-    but `estimand.NAMED_BASELINES` (`estimand.py:20-29`) omits both arms and drives
-    `baseline_table`/`FrozenEstimand.baselines`. This confirms the earlier
-    campaign's R8 prerequisite gap; the runner is unaffected, the M5 manifest/G6
-    report is.
-17. **Priority-5 primary sources were reopened and mostly upheld, with two
-    corrections** (full detail in §3.9): S52 is an unrefereed vision-language
-    preprint whose direction is conditional, and S60's DECAT explicitly cannot
-    score early-fusion cross-attention. Verified: integration quality dominates
-    classifier choice (S50); cross-attention helps with few paired examples (S51);
-    cells are pseudoreplicates (S55); HSA21 dosage is ~1.5× but mostly compensated
-    and variegated (S58, S59); peaks+genes did not beat peaks-only for prediction
-    (S57); external cross-cohort stability is a valid stress test (S60).
-18. **Priority-5 verdict: `CONDITIONAL`** — the incremental question is not
-    already answered by the completed RNA study, is refutable at the 0.07/0.08
-    margin, and has value as a negative result, but is confounded by all-donor
-    peak selection, provider×region, age scale and a framework that cannot
-    diagnose cross-attention. Proceed only after a prospective amendment and the
-    Q22 fix; no novelty-from-complexity or attention-as-causal claims.
-
-What iteration 5 adds (all `OBSERVED_NOW`) — a third, already-local artifact is
-characterized and the priority-4 reader path narrows:
-
-19. **The local CELLxGENE complete-dataset H5AD is the final B02 cohort, RNA-only
-    (Q28–Q31, §3.10).** `data/real/f16c25da-…h5ad` holds 248,998 cells whose 37
-    `library` and 30 `sample` categories are set-equal to the pinned `B02` final
-    cohort, with per-cell retained barcodes joinable to library and donor and
-    raw-scale integer RNA counts in `raw/X`. It contains no ATAC matrix (var is
-    35,477 genes only), so it does not close the paired gate, but it makes the
-    development cohort's retained-barcode/library/donor join a zero-download,
-    zero-install Python read (anndata/h5py already in `.venv-p22`).
-20. **Priority-4 consequence:** the RNA, donor-join and cell-membership side needs
-    no R reader and no install; only the measured ATAC counts still need the R
-    object or fragments. The next priority-4 check is therefore the ATAC-side
-    `.rda`/class fixture, not the generic reader question.
+21. **The GEO submission carries an explicit provider inventory of the two `.rda`
+    objects (Q32, §3.11).** The per-sample `!Sample_data_processing` says the `.rda`
+    files contain "the Seurat objects with labelled cell clusters and sample
+    metadata (for complete dataset and filtered excitatory lineage cells)". This
+    corroborates the object↔pipeline-stage mapping with a provider statement rather
+    than filename inference, and lists no cluster-peak assay.
+22. **A reader-version conflict is now recorded (Q33, §3.11).** The GEO text names
+    R 4.3.3 / Seurat v5.1.0 / Signac v1.13.0; the pinned package snapshot names
+    Seurat 5.3.0 / Signac 1.14.0. The exact serialization version of the deposited
+    object is `UNKNOWN` — a compatibility caveat for any reader.
+23. **Priority 4 is `RESOURCE_UNRESOLVED`, not "impossible" (Q34–Q36, §3.12).**
+    The minimal R reader genuinely needs the full Seurat/Signac/GenomicRanges class
+    stack (S4 class attributes name the defining package; R resolves it on load),
+    `pyreadr` cannot parse S4/lists, and the pure-Python `rdata` package *can* parse
+    S4 to `SimpleNamespace` but has no Matrix constructor, is untested on a Seurat
+    object and is not installed. The repo's existing E2-R fixture is a base-class
+    `.rds` written with `saveRDS`, not the contract's required `save()` workspace
+    with Seurat/`ChromatinAssay`; an exact minimal fixture spec is given.
+24. **Even a successful read cannot close the paired ATAC gate (Q37, §3.12).**
+    The deposited assay is a naive merge (Q3) and the selected object is pre-`F01`
+    (Q2), both re-verified from the pinned tree this pass. The reader is a bounded
+    E2-R verification task, not the critical path; the critical path is the
+    frozen-region recount (priority 2 rank 1) or the F01 artifact request.
 
 ## 2. Question / claim table
 
@@ -125,6 +116,12 @@ Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
 | Q29 | The local H5AD supplies ATAC measured counts | var = 35,477 genes only; no Peaks/ATAC layer (§3.10) | None | REJECTED | ATAC still needs the GEO MEX peak matrices or a fragment recount |
 | Q30 | H5AD `raw/X` is the exact cellranger-arc raw matrix | integer/raw-scale but row sums ≠ `nCount_RNA` (median −4) (§3.10) | Not proven | UNVERIFIED | Treat as raw-scale, not as the authoritative raw matrix |
 | Q31 | The selected exc-lin object's cell membership is enumerable without the 7.6 GiB object | `cells_in_excitatory_lineage_subset` = 215,680, all 30 donors, PCW10–20 (§3.10) | Exact equivalence to C03 is UNKNOWN | INFERENCE | Candidate barcode set; verify if the object is ever inspected |
+| Q32 | The two `.rda` objects are Seurat objects of labelled clusters + sample metadata for complete/exc-lin | GEO `!Sample_data_processing` line 321 (§3.11) | "Seurat object" content not enumerated further; `peaks_by_cluster` unmentioned | SUPPORTED (provider inventory) | Treat as B04/C03 labelled outputs; do not expect a cluster-peak assay |
+| Q33 | The deposited object's serialization versions are Seurat 5.3.0 / Signac 1.14.0 | GEO text: Seurat v5.1.0 / Signac v1.13.0; pinned CSV: 5.3.0 / 1.14.0 (§3.11) | Which version wrote the object | REJECTED (conflict) | Reader must tolerate both; exact version UNKNOWN |
+| Q34 | The minimal R reader needs only base R + Matrix | S4 class attr names defining package; R resolves it on load (R Internals §1.12.1; `?load`) | Exact failure mode without packages untested | REJECTED | Budget the full Seurat/Signac/GRanges class stack |
+| Q35 | `pyreadr` can read the object's S4/Seurat classes | librdata/JOSS: R lists and S4 unsupported (§3.12) | None | REJECTED | Do not plan on pyreadr/rpy2 |
+| Q36 | The repo's E2-R fixture meets the contract's required `.rda`/Seurat proof | `inspect_development_object.R` uses `saveRDS` of a base `list` (§3.12); contract `reader_proof` | None | REJECTED (gap) | Upgrade the fixture to a `save()` workspace with Seurat/ChromatinAssay |
+| Q37 | A successful reader closes the paired ATAC gate | Q2 + Q3 re-verified from pinned `B01`/`F01` this pass (§3.12) | Object uninspected | REJECTED | Reader is a bounded E2-R check; recount/artifact is the critical path |
 
 Carried forward without change: C1–C23 of the earlier dossier remain in force
 except C5 (now quantified), C13/C14 budget arithmetic (corrected), and the
@@ -582,6 +579,138 @@ print('H5AD cohort == B02 final cohort')
 PY
 ```
 
+### 3.11 GEO provider statement on the deposited objects (`OBSERVED_NOW`)
+
+Source: local `data/multiome/GSE305146_family.soft.gz` (SHA-256
+`8299f15e35f6eda820ac9c9995be94fce648299b12e0ec12e4b7e68d3ab3f087`; 4,890 lines);
+per-sample `!Sample_data_processing` lines 317–321 (repeated for all 92 samples) and
+`!Series_supplementary_file` lines 119–258.
+
+- **Provider inventory (line 321):** "Supplementary files format and content: rda
+  files containing the Seurat objects with labelled cell clusters and sample
+  metadata (for complete dataset and filtered excitatory lineage cells)". This is the
+  provider's own description of the two objects and corroborates Q4 with a statement
+  rather than filename/flow inference: complete dataset ↔ `B04` labelled complete,
+  filtered excitatory lineage ↔ `C03` labelled exc-lin. It lists **no cluster-peak
+  assay**, supporting (not proving) Q2.
+- **Version conflict (line 318):** the pipeline is "R v4.3.3 … Seurat … v5.1.0 …
+  Signac … (v1.13.0)", linking `github.com/lattkem1/Down_Syndrome_Multiome`. The
+  pinned `Packages_installed_250801.csv` records Seurat 5.3.0 / Signac 1.14.0. The
+  GEO text and the package snapshot disagree; the version that serialized the
+  deposited object is `UNKNOWN` (Q33). An S4 object written under 5.1.0/1.13.0 read
+  by a 5.3.0/1.14.0 stack is normally backward-compatible but is untested here.
+- **Scope:** 140 `!Series_supplementary_file` lines = 46 libraries × 3 files + 2
+  `.rda`; there is no `!Series_data_processing` and no other manifest. The string
+  `peaks_by_cluster` occurs 0 times in the SOFT; `seur_integr` occurs only on the two
+  Series supplementary lines. No authoritative object-member inventory exists beyond
+  line 321.
+
+### 3.12 Priority-4 ATAC-side reader and resource path (`OBSERVED_NOW`)
+
+**What the reader is for.** Even a perfect reader cannot close the paired gate: the
+deposited objects' ATAC assay is a naive merge (Q3) and the selected object is
+pre-`F01` (Q2). Both were re-verified from the pinned tree this pass:
+`B01_v041_load_from_cellranger_arc.R:132-172` builds each library's
+`CreateChromatinAssay(counts = counts$Peaks, …)` and `merge(seur_list[[1]],
+y = seur_list[-1], merge.data = TRUE)` with no `FeatureMatrix`; the correct pinned
+`F01_v045_seur_call_quant_peaks_by_cluster.R` loads
+`C03_seur_integr_labelled.rda`, calls `CallPeaks(group.by = "cluster_name")`,
+quantifies with `FeatureMatrix(fragments = Fragments(seur), …)`, adds
+`peaks_by_cluster`, and `save(seur, peaks, …seur_w_peaks_by_cluster_quant.rda)` — a
+different file. The pinned tree is complete (139 entries, `truncated:false`; PCW dirs
+are `_PCW11_13`/`_PCW16_20`, not `PCW10_20`). So the reader's only unique value is
+the E2-R assay-inventory check; RNA/labels/barcodes are already available from the
+local H5AD (§3.10). The reader is a bounded verification task, not the critical path.
+
+**Author class/version requirements (pinned `Packages_installed_250801.csv`).**
+R 4.3.3; Seurat 5.3.0; SeuratObject 5.1.0; Signac 1.14.0; Matrix 1.6-5;
+GenomicRanges 1.54.1; IRanges 2.36.0; S4Vectors 0.40.2; GenomeInfoDb 1.38.8;
+BiocGenerics 0.48.1; DelayedArray 0.28.0; HDF5Array 1.30.1; hdf5r 1.3.12;
+SummarizedExperiment 1.32.0; BPCells 0.1.0; chromVAR 1.24.0; EnsDb.Hsapiens.v86
+2.99.0; BSgenome.Hsapiens.UCSC.hg38 1.4.5; motifmatchr 1.24.0; TFBSTools 1.40.0.
+The pinned reader image proved only R 4.6.1 / Matrix 1.7.6 (contract `reader_proof`).
+
+**Signac class structure (official source).** `ChromatinAssay <- setClass(Class =
+"ChromatinAssay", contains = "Assay", slots = list(ranges = "GRanges", motifs =
+"ANY", fragments = "list", seqinfo = "ANY", annotation = "ANY", bias = "ANY",
+positionEnrichment = "list", links = "GRanges"))` (Signac `R/objects.R`).
+`GetAssayData.ChromatinAssay` dispatches `layer` to `methods::slot(object, layer)`,
+so ATAC counts are `@counts`. The author built the RNA assay with
+`CreateAssayObject` (v3 `Assay`), not `CreateAssay5Object`; `Assay5` is a different
+class with arbitrary `layers`. A reader must resolve `Seurat`/`Assay`,
+`Signac`/`ChromatinAssay` and the GRanges stack together.
+
+**`.rda` semantics (official).** `save()` writes one tagged pairlist of all workspace
+objects and `load()` deserializes all of them; there is no supported selective/partial
+read (`?load`, R 4.6.0; R Internals §1.8). Namespace references degrade to the global
+environment with a warning when a namespace is unavailable (`?load`), but S4 class
+attributes name the defining package (R Internals §1.12.1), and R resolves that
+package when constructing the object. An absent defining package therefore leaves
+slots/dispatch unreliable; the exact failure mode remains `UNVERIFIED` without
+execution, but the evidence requires the full defining stack, not just `Matrix`.
+
+**Route comparison (corrected).** (a) A minimal R reader with the full
+Seurat/SeuratObject/Signac + GRanges/S4Vectors/GenomeInfoDb/Matrix stack is the only
+route to exact measured ATAC counts/intervals, with full deserialization and no
+partial read. (b) No author sparse export exists: the complete pinned tree (139
+entries, `truncated:false`) has no count checkpoint and no `peaks_by_cluster` object.
+(c) `pyreadr` cannot parse R lists or S4 objects (librdata); `rpy2` needs an R
+install. (d) The pure-Python `rdata` package *can* parse S4 (default →
+`types.SimpleNamespace`), exposing `dgCMatrix` slots `i`/`p`/`x`/`Dim`/`Dimnames`,
+but it has no default Matrix constructor, is untested on a Seurat object, is not
+installed, and offers no selective read. Correction to dossier R3: it evaluated
+`pyreadr` as "Python-only unsupported" without separating the S4-capable pure-Python
+`rdata`; `rdata` is a genuine untested alternative that must not be promoted above
+the R route without a fixture run, nor declared impossible.
+
+**Repository fixture state (corrected).** `scripts/inspect_development_object.R`
+(SHA `aef9ccc1a8c19bf0ab53f848a5edcbb86bbb76195a3dbd288a0520dec67e36e7`) builds a
+plain `list(counts = dgCMatrix, regions = data.frame, cells = data.frame)` and writes
+it with `saveRDS(..., version = 3)` — an `.rds` of base classes, not a `save()`
+workspace and not a Seurat/`ChromatinAssay` object. `scripts/run_r_fixture.py:31`
+pins that SHA. The contract's `reader_proof` already records
+`tested_serialization = saveRDS/readRDS … not save/load of a .rda workspace`, so the
+E2-R required proof ("Applicable save/load .rda workspace and Seurat/ChromatinAssay
+extraction") is **not met**. Minimal upgrade spec (`PROPOSED`, ≤1 MiB): one
+`save(seur, file = …rda, version = 3)` workspace containing exactly one `Seurat`
+with a v3 `Assay` (3×4 `dgCMatrix` counts) and a `ChromatinAssay` (3×4 `dgCMatrix`,
+`ranges` a GRanges with `chr:start-end` names, `genome = "hg38"`), and `meta.data`
+with a `donor` column. Assert after `load(envir = new.env())`: exactly one member;
+expected assay names/classes; `LayerData(…, "counts")` exact nonzero entries/order;
+`granges` intervals/genome; donor metadata. Refusal cases: extra workspace member;
+non-`dgCMatrix` counts; missing defining package → `NOT_RUN`; corrupt/truncated
+workspace. Proposal until run and reviewed.
+
+**HEAD-control accounting (proposed limits vs actual code).** The contract's HEAD
+proposal caps process-tree memory 268435456 B, swap 0, wall 15 s, retained output
+1048576 B. By domain: **workload** = the in-container Python running
+`capture_development_head.capture_head` (plus threads); the 256 MiB cgroup
+`memory.max` covers this tree and its charged page/kernel memory, while `body_bytes`
+counts application reads only and excludes TLS/OS buffering
+(`capture_development_head.py:5-6,45`). **Supervisor** = the host launcher calling
+`capture_head`; `launcher_head_capture.preflight` is offline, reserves nothing
+(`output_reserved=false`) and enforces no memory/deadline — not covered.
+**Docker client** = the host `docker` CLI subprocess — not covered by the container
+cgroup. **Linux guest** = the Docker Desktop VM's own memory/swap/disk and the
+daemon, outside the container `memory.max`; "zero swap" is certifiable only for the
+container cgroup. **Host** = macOS RAM/swap/disk shared with the VM; Docker flags
+bound no host paging. Deadline/output: `capture_development_head` sets one absolute
+15 s deadline via `SIGALRM`, but its own docstring warns "Python signals can be
+delayed by C execution" and there is no external watchdog; the header loop is capped
+at 65,536 bytes and reads no body. `run_r_fixture.run_owned` (a different helper)
+uses `communicate(timeout = seconds)` and kills the container on timeout, and its R
+path has no byte-counting output reader. Proposed limits, configured flags, sampled
+usage and demonstrated enforcement stay distinct: only the R fixture has
+demonstrated cgroup enforcement (4 GiB normal / 128 MiB OOM), and none of the HEAD
+proposal is bound to a live launcher.
+
+**Priority-4 disposition: `RESOURCE_UNRESOLVED` (ATAC-side reader).** No untested
+route can be accepted or rejected without an install or fixture run; the minimal R
+route requires the full Seurat/Signac/Bioconductor stack, the pure-Python `rdata`
+route is untested, and the existing fixture does not meet the contract's required
+proof. The reader is a bounded E2-R verification task and cannot close the paired
+gate even if it succeeds (Q2/Q3).
+
 ### 3.5 Resource/contract facts re-confirmed (`OBSERVED_NOW`)
 
 - `configs/development_object_source_contract.json` SHA-256
@@ -623,7 +752,7 @@ Ranked by what can actually be established for a donor-aware RNA+ATAC comparison
 |---|---|---|---|---|---|
 | 1 | **Frozen-region fragment recount** (within GSE305146, then NeMO on the same frozen set) | Exact measured counts on one fixed region set; training-fold-only selection possible | Fragment access (CELLxGENE ATAC BGZF ~23.76 GiB + index public; author-local fragments otherwise); frozen reference definition; storage/CPU/time budget | Define the frozen reference and cost one donor's recount | Valid but expensive; needs a prospective amendment and a resource contract |
 | 2 | **Author F01 `peaks_by_cluster` artifact** | Exact measured counts on one all-donor cluster peak set | `F01_seur_w_peaks_by_cluster_quant.rda` + `F01_peaks_by_cluster.bed` + fragments (author-local, not deposited) | Request the artifact and inspect its peak set vs a training-fold reference | Not publicly available; selection used all donors, so not train-fold-only |
-| 3 | **Deposited 7.6 GiB exc-lin object** | A labelled cell set and RNA layers | ATAC assay is naive merge (Q3); `peaks_by_cluster` absent (Q2); unknown decoded size/RAM; `object_inspection_authorized=false` | Inspect assay feature count/ranges if ever authorized | Cannot supply comparable measured ATAC counts even if it loads |
+| 3 | **Deposited 7.6 GiB exc-lin object** | A labelled cell set and RNA layers | ATAC assay is naive merge (Q3); `peaks_by_cluster` absent (Q2); unknown decoded size/RAM; `object_inspection_authorized=false`; provider inventory lists only labelled clusters + metadata (§3.11) | Inspect assay feature count/ranges if ever authorized | Cannot supply comparable measured ATAC counts even if it loads |
 | 4 | **GEO per-library MEX ATAC matrices** | Per-library measured counts on library-specific peaks | No common exact feature space (Q1); union leaves unmeasured coverage | Full 46-library intersection/overlap reconciliation (deferred check, §5) | Not a common measured matrix; cannot be zero-filled |
 | 5 | **Cross-cohort direct matrix comparison (GSE305146 vs NeMO)** | Nothing exact | Different peak-calling studies; different count stages; no shared intervals | None short of recount on a common frozen set | Rejected for confirmatory; exploratory only with explicit `peak_derived` labelling |
 | 6 | **Peak-to-gene summed score** | A derived exploratory signal | Pinned gene annotation/interval/overlap policy | Hand-calculated overlap examples + missingness per gene | Exploratory only; not exact fragment gene activity |
@@ -674,46 +803,54 @@ Counterevidence and strongest alternatives:
   each other, which is exactly the cross-attention model. Only the cross-cohort
   stability principle transfers. Overturning evidence: a DECAT variant that
   supports early fusion.
+- **Could the object be read without the full R stack?** Not proven. `pyreadr`
+  cannot parse S4/lists (JOSS 2024); the pure-Python `rdata` package can parse S4
+  to `SimpleNamespace` but has no Matrix constructor and is untested on a Seurat
+  object. Overturning evidence: a `rdata` fixture run that extracts the `@counts`
+  `dgCMatrix` from a Seurat `.rda` with exact nonzero entries, or an official
+  Seurat/SeuratObject statement that a minimal subset of packages suffices.
+- **Could a successful reader still justify the download?** Only if it reveals a
+  common, measured ATAC feature space or a `peaks_by_cluster` assay. The provider
+  inventory (§3.11) and the pinned `B01`/`F01` code predict neither. Overturning
+  evidence: object inspection showing a common measured range set.
 
 ## 5. Prioritized implementation handoff and the single next action
 
-Priorities 1 (§3.7), 3 (§3.8) and 5 (§3.9) now have supported dispositions.
-Priority 5 is `CONDITIONAL`: the primary contrast is implemented, refutable and
-worth running, but only under a prospective amendment and after the Q22 estimand
-fix. Priority 2 has a route table (§4) with the full 46-library reconciliation
-deferred as an approval item. Priority 4 is now partially resolved by §3.10: the
-RNA/donor-join/cell-membership side is a zero-install Python read, so the
-remaining reader question is ATAC-specific. Priority 6 is the decision/handoff
-itself.
+All six priorities now have supported dispositions: priority 1 (§3.7), priority 3
+(§3.8), priority 5 (§3.9, `CONDITIONAL` — the primary contrast is implemented,
+refutable and worth running, but only under a prospective amendment and after the
+Q22 estimand fix), priority 4 (§3.12, `RESOURCE_UNRESOLVED`), priority 2 (§4 route
+table, with the full 46-library reconciliation below as the one remaining
+approval-gated check), and priority 6 (this handoff). The RNA/donor-join/
+cell-membership side is a zero-install Python read (§3.10), so only the ATAC side
+was reader-dependent.
 
-**Single highest-value next action (do this first): establish the minimum
-reader and resource path for the ATAC side (priority 4, narrowed by §3.10).**
+Completed priority-4 disposition (kept for the record; no further action unless a
+fixture/install is authorized): the ATAC-side reader is `RESOURCE_UNRESOLVED`
+(§3.12). The minimal R route needs the full Seurat/Signac/Bioconductor class stack;
+`pyreadr` cannot parse S4/lists; pure-Python `rdata` is untested/not installed; the
+existing E2-R fixture is a base `.rds`, not the contract's required `save()`
+workspace with Seurat/`ChromatinAssay`. The exact minimal fixture spec and the
+HEAD-control accounting (workload/supervisor/client/guest/host) are in §3.12. Even a
+successful read cannot close the paired gate (Q2/Q3).
 
-- Input: official R, SeuratObject, Seurat, Signac and sparse-format
-  documentation/source; the pinned author `Packages_installed_250801.csv`;
-  `configs/development_object_source_contract.json`; the earlier-campaign dossier
-  R2/R3 and the local fixture helper `scripts/run_r_fixture.py`. Public
-  docs/author code + local code inspection only; no installs, no container
-  launch, no payload.
-- Method: separate packages needed to deserialize/extract counts from the full
-  author analysis; compare minimal R, documented author export and
-  Python/interchange routes without declaring any untested route impossible or any
-  dependency mandatory; state the exact minimal `.rda`/class fixture members,
-  assays, sparse entries, intervals, donor joins and refusal cases; name
-  dependency assets, version compatibility and acquisition/decoded/temporary/
-  retained resource unknowns; for any HEAD-control proposal, account separately
-  for workload, supervisor, Docker client, Linux guest and host.
-- Acceptance check: every route claim cites official docs/source or local code; no
-  RAM inferred from compressed size; no partial-workspace-loading promise; proposed
-  limits, configured flags, sampled usage and demonstrated enforcement kept distinct.
-- Stop condition: if no untested route can be accepted or rejected without an
-  install/launch, record the exact bounded check and dependency, and mark the
-  reader path `RESOURCE_UNRESOLVED` rather than asserting impossibility.
+**Single highest-value next action (do this first): complete the 46-library
+peak-space reconciliation (priority 2's smallest decisive check).**
 
-**How either result changes the next decision.** A minimal documented ATAC reader
-with a small fixture and bounded decoded memory makes object inspection a concrete,
-reviewable E2-R task; otherwise the object route stays `RESOURCE_UNRESOLVED` and the
-paired path relies on the frozen-region recount (priority-5 amendment).
+- Input: the 46 public `GSE305146_<library>_features.tsv.gz` files (~1–3 MB each; no
+  `matrix.mtx.gz`, no barcodes, no fragments). Three are local; the other 43 are
+  small public annotation files.
+- Method/output/acceptance: as in §3.4, extended to all 46 libraries; verdict
+  `COMMON_EXACT_SUBSET=EMPTY|SMALL|ADEQUATE`; must reproduce 46,672 / 20,708 /
+  22,676 and 3/0/0/0 on the three local files.
+- Authority: these are dataset supplementary files, not merely a published mapping
+  table, so the 43-file fetch is a scoped approval item, not an assumed right. If
+  approval is not granted, the fallback is the F01 artifact request (§6 item 1a).
+- How either result changes the next decision: an empty/tiny common exact subset
+  (expected, given 3/0/0/0) leaves a frozen-region recount as the only valid route —
+  choose between requesting the minimal author artifacts and a bounded-recount
+  amendment, not a 7.6 GiB download. An adequate subset makes the cheap GEO MEX
+  route viable within-study, deferring the recount to the external (NeMO) side.
 
 Completed priority-3 disposition (kept for the record; no further action unless
 the artifact is requested): the external cohort is resolved to the
@@ -747,8 +884,10 @@ Supporting handoff tasks (existing IDs; do not invent):
   assay is a naive merge (`INFERENCE`), so E2-R must require, before any load, a
   documented assay-inventory check (assay names, `counts` layer type, feature
   count, whether `peaks_by_cluster` exists) and must not assume a comparable
-  measured ATAC matrix. Acceptance: a `<=1 MiB` applicable `.rda`/Seurat/
-  `ChromatinAssay` fixture passes and refuses unexpected classes.
+  measured ATAC matrix. Acceptance: a `<=1 MiB` applicable `save()` `.rda`
+  workspace with Seurat/`ChromatinAssay` (exact spec in §3.12) passes and refuses
+  unexpected classes. The current `scripts/inspect_development_object.R` fixture
+  (base `list` via `saveRDS`) does **not** meet this and must be upgraded first.
 - **E2-M1** (`tasks/plan.md`): runtime/control feasibility. Keep separate from the
   data question. The earlier "256 MiB / 15 s feasible" assertion is `UNVERIFIED`
   (Q7); require an end-to-end measurement before treating the HEAD contract as
@@ -773,7 +912,10 @@ Supporting handoff tasks (existing IDs; do not invent):
    one-page manifest stating, for
    `GSE305146_seur_integr_labelled_exc_lin_PCW10_20.rda.gz`, the workspace member
    names, assay names, ATAC feature-space definition, count stage, genome build and
-   interval convention; (c) the retained-barcode list per library — **narrowed by
+   interval convention — **partly answered by the GEO provider statement (§3.11,
+   "Seurat objects with labelled cell clusters and sample metadata"), which still
+   does not enumerate assays or the ATAC feature space**; (c) the retained-barcode
+   list per library — **narrowed by
    §3.10**: the final-cohort retained barcodes, library and donor join are already
    public and local in the CELLxGENE H5AD, so (c) is now only needed for the
    *pre-QC/cellranger* barcode stage, not the final cohort; (d)
@@ -791,17 +933,19 @@ Supporting handoff tasks (existing IDs; do not invent):
    substituted for the QC-stage fragment count (it fails the paper's own
    `nCount_ATAC`>100 filter for 1,798 rows, §3.8).
 3. **Bounded proposed checks (PROPOSED, no execution authority yet):**
-   - 46-library peak reconciliation (§5); needs scoped approval because it fetches
-     43 dataset-adjacent supplementary files.
-    - Scientific-value / RNA-only-fallback assessment: completed iteration 4
-      (§3.9, disposition `CONDITIONAL`); no further action unless the Q22 fix or
-      prospective amendment is reviewed.
-    - Minimum reader/resource path (priority 4, now the single next action, §5);
-      official docs/author code + local inspection only.
+   - 46-library peak reconciliation (§5, now the single next action); needs scoped
+     approval because it fetches 43 dataset-adjacent supplementary files.
+   - Scientific-value / RNA-only-fallback assessment: completed iteration 4
+     (§3.9, disposition `CONDITIONAL`); no further action unless the Q22 fix or
+     prospective amendment is reviewed.
+   - Minimum reader/resource path (priority 4): completed iteration 6 (§3.12,
+     disposition `RESOURCE_UNRESOLVED`); no further action unless a fixture or
+     package install is authorized.
    - External-cohort provenance pass: completed to the metadata/count-stage level
      (§3.8); re-open only to request the author QC rule/barcode artifact.
-   - A tiny `.rda`/Seurat/`ChromatinAssay` fixture (already designed in the earlier
-     dossier R3) to close the reader-class gate — a proposal until run and reviewed.
+   - A tiny `.rda`/Seurat/`ChromatinAssay` fixture (exact spec in §3.12, upgrading
+     the earlier dossier R3 design and the current base-`list` `.rds` fixture) to
+     close the reader-class gate — a proposal until run and reviewed.
    - One HEAD of the candidate payload URL per the frozen contract, only after
      E2-M1 controls are demonstrated. This resolves source identity only, not
      contents, memory or QC.
@@ -860,6 +1004,11 @@ Supporting handoff tasks (existing IDs; do not invent):
 | N29 | S55 Zimmerman *Nat Commun* 2021 + S56 Squair *Nat Commun* 2021 + S58 Aït Yahya-Graison *Am J Hum Genet* 2007 + S59 Donovan *Nat Commun* 2024 (donor unit; HSA21 dosage) | OBSERVED_NOW | 2026-09-20 |
 | N30 | S57 Acera-Mateos et al., *Genome Biol* 2026, DOI 10.1186/s13059-026-04002-4; S60 arXiv 2605.31504 DECAT (peaks+genes vs peaks-only; early-fusion limitation) | OBSERVED_NOW | 2026-09-20 |
 | N31 | Local CELLxGENE `data/real/f16c25da-…h5ad` (SHA `08d6eff2…`; 248,998×35,477 RNA-only; 37 libraries / 30 samples set-equal to B02) | OBSERVED_NOW | 2026-09-21 |
+| N32 | GEO SOFT `!Sample_data_processing` lines 317–321 + `!Series_supplementary_file` lines 119–258 (provider inventory of the two `.rda`; version text; 46×3+2 files) | OBSERVED_NOW | 2026-09-21 |
+| N33 | Pinned `Packages_installed_250801.csv` @ `227f51b4…` re-parsed (Seurat 5.3.0/SeuratObject 5.1.0/Signac 1.14.0/Matrix 1.6-5 + Bioc stack) | OBSERVED_NOW | 2026-09-21 |
+| N34 | R base `load` reference (R 4.6.0; whole-workspace load; namespace-ref degradation) + R Internals §1.8/§1.12.1 (S4 class attr names package) | OBSERVED_NOW | 2026-09-21 |
+| N35 | Signac `R/objects.R` `ChromatinAssay` class def + `GetAssayData.ChromatinAssay`; SeuratObject `Assay5` vs `Assay` docs | OBSERVED_NOW | 2026-09-21 |
+| N36 | `rdata` (JOSS 2024) docs/conversions (S4→`SimpleNamespace`; pyreadr/librdata cannot parse S4/lists); pinned `B01`/`F01` re-read; `inspect_development_object.R`/`run_r_fixture.py` fixture state | OBSERVED_NOW | 2026-09-21 |
 
 Reused without re-fetch: earlier dossier S1–S42 (local canonical docs, saved Vuong
 XML/NeMO metadata, pinned author tables). Coverage: iter 1 — author source tree + 8
@@ -868,9 +1017,11 @@ GEO SOFT, pinned `A_input`/`B02` tables, pinned B02 script/tree, campaign dossie
 iter 3 — local Vuong XML and release metadata, NeMO pages, author-code search (none
 found); iter 4 — local paired-model/estimand code and six primary method sources
 (S50–S52, S55–S60 subset; N26–N30); iter 5 — local CELLxGENE H5AD structure and
-cohort reconciliation vs pinned B02 (metadata/structure only). No payload, object,
-fragment or matrix reads beyond the local H5AD structure; no install, container,
-training or author contact.
+cohort reconciliation vs pinned B02 (metadata/structure only); iter 6 — GEO SOFT
+provider statement, pinned package CSV, R/Signac/SeuratObject/rdata docs, pinned
+`B01`/`F01` re-read, local fixture state. No payload, object, fragment or matrix
+reads beyond the local H5AD structure; no install, container, training or author
+contact.
 
 ### Corrections to earlier work
 
@@ -911,6 +1062,17 @@ training or author contact.
     RNA-only (no ATAC). Its `raw/X` is raw-scale but not proven to be the exact
     cellranger-arc raw matrix (row sums differ from `nCount_RNA`) (iteration 5,
     §3.10).
+16. The earlier dossier R3 recorded the reader class versions from the pinned
+    package snapshot (Seurat 5.3.0 / Signac 1.14.0) but did not note the GEO
+    submission's conflicting text (Seurat v5.1.0 / Signac v1.13.0); the version
+    that serialized the object is `UNKNOWN` (iteration 6, Q33, §3.11).
+17. The earlier dossier R3's route (d) conflated `pyreadr` (cannot parse S4/lists)
+    with the pure-Python `rdata` package (parses S4 to `SimpleNamespace`); they are
+    distinct routes with different evidence (iteration 6, §3.12).
+18. The existing E2-R fixture (`scripts/inspect_development_object.R`) is a base
+    `list` written with `saveRDS`, not the `save()` workspace with
+    Seurat/`ChromatinAssay` the contract requires; the earlier dossier's R3 fixture
+    design was never implemented (iteration 6, Q36, §3.12).
 
 ### Iteration progress
 
@@ -931,13 +1093,23 @@ training or author contact.
   frozen estimand omits its two arms (Q22), and six primary sources were reopened
   with two corrections (S52 preprint/conditional, S60 cannot score early-fusion
   cross-attention). Single next action moved to priority 4.
-- Iteration 5 (this pass): characterized the local CELLxGENE complete-dataset
+- Iteration 5: characterized the local CELLxGENE complete-dataset
   H5AD (§3.10) — 248,998 cells, 37 libraries / 30 samples set-equal to B02,
   raw-scale RNA counts, barcode→library→donor join, no ATAC; Q28–Q31 added and
   correction 15 recorded. Priority 4 narrowed: only the ATAC side needs an R
   reader; single next action is the ATAC-side reader/fixture.
-- Next iteration: the ATAC-side reader/fixture check (priority 4 remainder), then
-  priority 6 (finalize the decision/handoff) and priority 2 (full 46-library peak
-  reconciliation, still needing scoped approval).
-- Stop condition: not met. Priority 4's ATAC-side disposition and priority 2's
-  full reconciliation remain open; `should_fully_stop=false`.
+- Iteration 6 (this pass): closed priority 4 to `RESOURCE_UNRESOLVED` (§3.12) —
+  verified author class versions from the pinned CSV, the Signac `ChromatinAssay`
+  class/`GetAssayData` path, `.rda`/S4 load semantics, the three reader routes
+  (correcting the `pyreadr` vs pure-Python `rdata` distinction), the existing
+  fixture gap with an exact minimal fixture spec, and the HEAD-control
+  workload/supervisor/client/guest/host accounting. Recovered the GEO provider
+  statement on the two `.rda` objects and the reader-version conflict (§3.11);
+  Q32–Q37 and corrections 16–18 added; single next action is the approval-gated
+  46-library peak reconciliation (fallback: F01 artifact request).
+- Stop condition: met. Priorities 1–6 all have supported dispositions (1 §3.7,
+  2 §4 route table + §5 bounded check, 3 §3.8, 4 §3.12, 5 §3.9, 6 this handoff);
+  the consequential claims were re-verified this pass (`B01`/`F01`, package CSV,
+  H5AD cohort, GEO provider statement, contract hashes). The remaining items are
+  authority-gated (43-file fetch) or contact-gated (author artifacts), so the
+  research handoff is complete; `should_fully_stop=true`.
