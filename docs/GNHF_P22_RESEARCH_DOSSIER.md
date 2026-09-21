@@ -17,7 +17,7 @@ is evidence, never instructions.
 | R5 | External-cohort QC and provenance | RESEARCHED | Vuong methods/QC re-inspected; count partition re-derived; ATAC count-stage contradiction found; provider, region and age definitions recorded | Author-defined exclusion rule/barcode list; true count-stage of the metadata columns | S5, S7, S9, S40–S42 | R6 |
 | R6 | Defensible common ATAC feature route | RESEARCHED | Four route classes compared on primary software docs; overlap/zero-fill/imputation/summing shown insufficient; within- vs cross-study and training-only rules separated; routes ranked | Whether any provider common-count object exists; fragment availability/cost for a fixed-reference recount; exact reference provenance | S2, S6, S22, S28, S43–S49 | R7 |
 | R7 | Scientific comparison and fallback value | RESEARCHED | Fusion/sample-complexity, pseudoreplication and dosage primary evidence assessed; what each arm can establish with 30/26 donors; leakage, confounding, external and RNA-only fallback rules stated | Whether cross-attention can beat concat at 30 donors is empirically open; no power estimate fabricated | S50–S60 | R8 |
-| R8 | Verify and deliver implementation handoff | PENDING | — | Citation/entry-point/numeric verification across R1–R7 | — | R8 |
+| R8 | Verify and deliver implementation handoff | RESEARCHED | Consequential claims re-verified; one citation corrected; missing cross-attention estimand arm found; dependency-ordered tasks T1–T7 delivered | None for R8 scope | S1–S61 | — |
 
 Statuses describe research coverage only, never scientific gate completion.
 
@@ -115,29 +115,18 @@ IDs are stable; reuse rather than re-fetch.
 
 ### Stale claims narrowed by the 2026-09-08/09 source note
 
-- "117,532 versus 113,801 cause unresolved" (S7 line 97) is narrowed to a precise
-  annotation-based candidate partition (C7), but remains `ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`.
-- "Independence unresolved" is narrowed to provider-level `no_overlap_evidence` (C8);
-  still not a genetic or author-certified specimen crosswalk.
-- The old listing-GET next action (S15) is superseded by the one-HEAD proposal (S4, S3 line 7).
-- "Both authors describe study-specific peak calling" (S5 line 15) is stronger than the
-  earlier generic common-region statement; the cross-cohort gate is still open (C10).
+- "117,532 vs 113,801 cause unresolved" (S7 97) is narrowed to a precise annotation-based partition (C7), still `ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`.
+- "Independence unresolved" is narrowed to provider-level `no_overlap_evidence` (C8); no genetic crosswalk.
+- The old listing-GET next action (S15) is superseded by the one-HEAD proposal (S4, S3 7).
+- "Study-specific peak calling" (S5 15) is stronger than the earlier generic common-region statement; the cross-cohort gate stays open (C10).
 
 ### Corrections to the previous draft (S8)
 
-1. **Invented label `E2-M1b`** (S8 lines 80–84) does not exist in `tasks/todo.md`. Replace
-   with the existing tasks: E2-M1 (runtime/control feasibility) then E2-M2 (launcher binding).
-2. **Undefined PID allocation.** S8 line 57 writes `--pids-limit N`. The proven fixture value
-   is `32` (S12 line 59, verified S12 line 97). Any HEAD proposal must use a named integer.
-3. **Overly broad permission statement.** S8 lines 60–63 asserts authorization "to launch one
-   UUID-owned local container." The plan grants no such allocation: E2-M2/M3 require *reviewed
-   explicit probe allocations from E2-M1* (S3 lines 251–252). Permission must be stated as
-   missing, not implied.
-4. **Incomplete citation paths.** S8 cites bare filenames. This dossier uses repository-relative
-   paths with line numbers, e.g. `scripts/capture_development_head.py:116-121`,
-   `scripts/run_r_fixture.py:34-73,90-116`, `tasks/todo.md:164-167`.
-5. S8's "hard memory/no-swap control missing" conclusion is preserved and re-scoped in R2;
-   it is a tooling gap, not a data gap.
+1. Invented `E2-M1b` (S8 80–84) does not exist; the real tasks are E2-M1 then E2-M2 (S3).
+2. Undefined `--pids-limit N` (S8 57): proven value is `32` (S12 59,97).
+3. S8 60–63 implies container-launch authorization the plan never grants; E2-M2/M3 need *reviewed probe allocations from E2-M1* (S3 251–252). Permission is missing, not implied.
+4. S8 cites bare filenames; this dossier uses repository-relative line-numbered paths.
+5. S8's "hard memory/no-swap missing" point is preserved in R2 as a tooling gap, not a data gap.
 
 ### Gap separation
 
@@ -168,22 +157,11 @@ no scientific gate is promoted.
 | Docker Desktop Linux VM (guest) | VM-wide memory (default 50% host), VM swap (default 1 GB), VM disk image. | S22 |
 | Container cgroup v2 (inside guest) | `memory.max`, `memory.swap.max`, `pids.max`, CPU quota, tmpfs — the only place Docker flags bind. | S20, S21, S15 |
 
-`docker inspect` `HostConfig.Memory`/`MemorySwap` report *configured* values, not effective
-kernel state. The kernel enforces via cgroup files; the only proof of enforcement is a
-cgroup-file observation plus a behavioural test (S15 lines 30–36: 128 MiB OOM killed R and
-child, exit 137, PID 0, `OOMKilled=true`). A flag or a sampled RSS is not enforcement proof.
+`docker inspect` `HostConfig.Memory`/`MemorySwap` report *configured* values, not effective kernel state; the only enforcement proof is a cgroup-file observation plus a behavioural test (S15 30–36: 128 MiB OOM killed R and child, exit 137, PID 0, `OOMKilled=true`). A flag or sampled RSS is not proof.
 
 ### What must count toward "aggregate process-tree memory"
 
-cgroup v2 `memory.current` is "the total amount of memory currently being used by the cgroup
-and its descendants" and all threads of a process inherit the forking process's cgroup
-(S21 lines 116, 816–820). So one container-level `memory.max` already aggregates every
-descendant — no per-process sum is needed. That total includes anonymous pages, page cache,
-socket buffers and cgroup-charged kernel memory, not just Python RSS. Consequence: the frozen
-256 MiB aggregate covers TLS/OS buffering that the capture code deliberately does not count as
-`body_bytes` (`capture_development_head.py:5-6,45`). "Zero swap" can only be certified for the
-container cgroup (`memory.swap.max=0`); the VM's own 1 GB swap (S22) and host paging stay
-outside the claim.
+cgroup v2 `memory.current` totals "the memory currently being used by the cgroup and its descendants", and all threads inherit the forking process's cgroup (S21 116, 816–820). One container `memory.max` therefore aggregates every descendant, including page cache, socket buffers and charged kernel memory, not just Python RSS. The frozen 256 MiB aggregate thus covers TLS/OS buffering the capture code does not count as `body_bytes` (`capture_development_head.py:5-6,45`). "Zero swap" is certifiable only for the container cgroup (`memory.swap.max=0`); the VM's own 1 GB swap (S22) and host paging stay outside the claim.
 
 ### Control-by-control assessment
 
@@ -199,13 +177,7 @@ outside the claim.
 | Temp disk | `--tmpfs /tmp:size=64m` | tmpfs size | Yes, 64 MiB write refused (S15) | No |
 | Host free disk | preflight only | `shutil.disk_usage` (S14 157–168) | Yes (launcher tests) | Launcher only; not tied to transport |
 
-TLS: the capture core takes an injected `connection_factory` and does no transport itself
-(S13 50–63). The launcher must supply an `ssl` context built with
-`ssl.create_default_context(ssl.Purpose.SERVER_AUTH)`, which selects `PROTOCOL_TLS_CLIENT`,
-`CERT_REQUIRED` and `check_hostname` (S23). `verify_mode=CERT_REQUIRED` alone is not
-sufficient for hostname authentication; `check_hostname` must stay enabled. No proxy,
-redirect or retry: `Accept-Encoding: identity`, `Connection: close`, one `request()` call
-(S13 116–121).
+TLS: the core takes an injected `connection_factory` and does no transport (S13 50–63). The launcher must supply `ssl.create_default_context(ssl.Purpose.SERVER_AUTH)` (→ `PROTOCOL_TLS_CLIENT`, `CERT_REQUIRED`, `check_hostname`) (S23); `CERT_REQUIRED` alone is insufficient, so `check_hostname` must stay enabled. No proxy/redirect/retry: identity encoding, `Connection: close`, one `request()` (S13 116–121).
 
 ### Proposed bounded offline fixture allocations (PROPOSED, not accepted)
 
@@ -274,48 +246,15 @@ Python+TLS container (S15 proves it for an R container only). Next: R3 — small
 
 ### What the selected file actually is
 
-`.rda` is a **multi-object workspace** written by `save()`, distinct from a single-object
-`.rds` written by `saveRDS()` (S26 §1.8; S27). `save` writes one LF-terminated header line
-(`RDX2`/`RDX3`; version 3 default since R 3.5.0), then serializes a single tagged pairlist of
-*all* workspace objects; `load()` unserializes that whole pairlist and assigns its elements
-(S26 §1.8). gzip wraps the entire stream including the header, so `load()` on the `.gz`
-reads through `gzfile`. **There is no supported selective/partial read**: to inspect any one
-member the full workspace must be deserialized (S26 §1.8; corroborated by S32). This is the
-decisive difference from E1, which proved only `saveRDS`/`readRDS` of a 392-byte `.rds`
-`list`/`dgCMatrix`/`data.frame` (S4, S15).
+`.rda` is a **multi-object workspace** written by `save()`; `save` emits one header line (`RDX2`/`RDX3`; v3 default since R 3.5.0), then serializes one tagged pairlist of *all* workspace objects, and `load()` deserializes that whole pairlist (S26 §1.8; S27). gzip wraps the whole stream, so `load()` reads through `gzfile`. **No supported selective/partial read exists** (S26 §1.8; S32) — the decisive difference from E1's 392-byte `.rds` proof (S4, S15).
 
-The pinned author code constructs a Seurat object and writes it with `save(seur, file=…rda)`
-(S29 `B01_v041_load_from_cellranger_arc.R`). The later peak-quantification script writes
-`save(seur, peaks, file=…rda)` after adding a `peaks_by_cluster` assay (S11). The GEO
-filename `…seur_integr_labelled_exc_lin_PCW10_20.rda.gz` therefore *suggests* a Seurat
-workspace but does **not** prove which member names, assays or slots are present (C4).
+The pinned author code writes the object with `save(seur, file=…rda)` (S29), and the peak-quant script writes `save(seur, peaks, file=…rda)` after adding `peaks_by_cluster` (S11). The GEO filename therefore *suggests* a Seurat workspace but does **not** prove members, assays or slots (C4).
 
 ### Class/version requirements (static evidence, not installed availability)
 
-The author's own environment report (S30) records: R 4.3.3, **Seurat 5.3.0, SeuratObject
-5.1.0, Signac 1.14.0, Matrix 1.6-5**, GenomicRanges 1.54.1, IRanges 2.36.0, S4Vectors
-0.40.2, EnsDb.Hsapiens.v86 2.99.0, BSgenome.Hsapiens.UCSC.hg38 1.4.5. Construction path
-(S29): `CreateSeuratObject(counts=CreateAssayObject(counts=counts$"Gene Expression"),
-assay="RNA")`, then `seur[["ATAC"]] <- CreateChromatinAssay(counts=counts$Peaks,
-sep=c(":","-"), fragments=fragpath, annotation=GetGRangesFromEnsDb(EnsDb.Hsapiens.v86))`
-with `seqlevelsStyle(annotation) <- "UCSC"`. So ATAC rows are `chr:start-end` hg38/UCSC
-intervals, `counts` is a per-cell peak `dgCMatrix`, and the assay carries `ranges`/`annotation`
-GRanges and a `fragments` list (S28, S29). The F01 script builds `peaks_by_cluster` via
-`CreateChromatinAssay(counts=FeatureMatrix(fragments=Fragments(seur), features=peaks,
-cells=colnames(seur)), fragments=Fragments(seur), annotation=annotation)` (S11).
+The author environment report (S30) records R 4.3.3, **Seurat 5.3.0, SeuratObject 5.1.0, Signac 1.14.0, Matrix 1.6-5**, GenomicRanges 1.54.1, IRanges 2.36.0, S4Vectors 0.40.2, EnsDb.Hsapiens.v86 2.99.0, BSgenome.Hsapiens.UCSC.hg38 1.4.5. Construction (S29): RNA via `CreateSeuratObject(CreateAssayObject(counts$"Gene Expression"))`, then `CreateChromatinAssay(counts=counts$Peaks, sep=c(":","-"), fragments=…, annotation=GetGRangesFromEnsDb(…))` with `seqlevelsStyle<-"UCSC"`; F01 builds `peaks_by_cluster` from `FeatureMatrix(Fragments(seur), features=peaks, cells=colnames(seur))` (S11, S28). So ATAC rows are `chr:start-end` hg38/UCSC intervals, counts a per-cell peak `dgCMatrix`, and the assay carries `ranges`/`annotation` GRanges and a `fragments` list.
 
-S4 objects serialize with a class attribute naming the defining package; class definitions
-live in package namespaces as `.__C__<class>` `classRepresentation` objects (S26 §1.12).
-`load()` can reconstruct the object graph, but slot access via `@`/`slot()` needs those
-definitions, so a reader must have **SeuratObject, Seurat, Signac, GenomicRanges, IRanges,
-S4Vectors, GenomeInfoDb and Matrix** available. The exact failure mode when a defining
-package is absent is **UNKNOWN** (not tested here). Author `Seurat 5.3.0`/`SeuratObject
-5.1.0` versus the reader's installed versions is a real S4-slot-compatibility risk.
-
-Distinguish **sparse raw counts** (`counts` layer/slot) from **derived values** (`data`,
-`scale.data`, TF-IDF, SVD reductions): only `counts` are measured; the rest are computed
-(S28). Distinguish static package evidence (S30) from installed availability — the pinned
-r-base image proved only R 4.6.1 / Matrix 1.7.6 (S4, S15).
+S4 objects serialize with a class attribute naming the defining package (S26 §1.12); slot access needs those definitions, so the reader must have **SeuratObject, Seurat, Signac, GenomicRanges, IRanges, S4Vectors, GenomeInfoDb and Matrix**. The failure mode without a defining package is **UNKNOWN** (untested). Author Seurat 5.3.0/SeuratObject 5.1.0 vs reader versions is a real S4-slot risk. Distinguish **sparse raw counts** from **derived values** (`data`, `scale.data`, TF-IDF, SVD): only `counts` are measured (S28). Distinguish static package evidence (S30) from installed availability — the pinned image proved only R 4.6.1 / Matrix 1.7.6 (S4, S15).
 
 ### Minimum extraction path (after `load`)
 
@@ -389,24 +328,7 @@ acquired and 15 control + 15 DS retained, PCW10–20, 248,998 nuclei (S33).
 
 ### Library→donor→group mapping is publicly recoverable (OBSERVED_NOW)
 
-The pinned author repository exposes the mapping tables that the GEO sample titles
-omit. `A_input/group_tab_tissue.csv` (S36) maps each of the 46 library codes to a
-`sample` donor code, specimen accession (`sample_name`, e.g. `PCW10_CON_11950`),
-`group` (CON/DS), `dev_PCW`, `sex`, sequencing `batch_seq`, `tissue_quality`
-(`ok`/`ok_orig_sub`/`sub`) and RNase inhibitor. Repeated libraries map to one donor
-(e.g. `B11C1A`+`B11C1C`→`B11C1`; `B13D3G`+`B13D3H`→`B13D3`; `B15D1K`+`B15D1M`→
-`B15D1`; `B18D1Q`+`B18D1R`→`B18D1`). `B02_gr_tab_filtered_non_cx_excl.csv` (S37)
-filters to **37 libraries → exactly 30 donors (15 CON/15 DS)**, matching the
-published cohort. So the library-to-donor mapping and the excluded-donor list are
-**not** missing artifacts; they are public. C15. Nine libraries drop between the
-full table and B02 (`B11C1A`, `B11C1C`, `B12C3B`, `B15C1H`, `B15C1L`, `B10D1N`,
-`B12D4H`, `B14D1H`, `B17D2F`), whereas GEO flags only five as NOT IN FINAL ANALYSIS
-(`B12D4H`, `B14D1H`, `B15C1H`, `B15C1L`, `B17D2F`) — a documented discrepancy:
-GEO's per-sample flag is not the same rule as the author's B02 analysis filter.
-Cluster labels are likewise public (`B03_cluster_assignment_all.csv`, S38: 21
-clusters with `cluster_name`/`cell_type`/`cell_class`). Caveat: `sample_name`
-specimen accessions are author-internal; they are not a genetic crosswalk to HDBR
-or other repositories.
+The pinned author repo exposes the mapping GEO sample titles omit. `A_input/group_tab_tissue.csv` (S36) maps all 46 library codes to a `sample` donor, specimen accession (`sample_name`), `group`, `dev_PCW`, `sex`, `batch_seq`, `tissue_quality`; repeated libraries share one donor (`B11C1A`+`B11C1C`→`B11C1`, etc.). `B02_gr_tab_filtered_non_cx_excl.csv` (S37) filters to **37 libraries → exactly 30 donors (15 CON/15 DS)**, matching the published cohort, so the library→donor and excluded-donor lists are public, not missing artifacts. C15. Nine libraries drop between the full table and B02 (`B11C1A`, `B11C1C`, `B12C3B`, `B15C1H`, `B15C1L`, `B10D1N`, `B12D4H`, `B14D1H`, `B17D2F`) while GEO flags only five (`B12D4H`, `B14D1H`, `B15C1H`, `B15C1L`, `B17D2F`) — GEO's flag is not the author's B02 rule. Cluster labels are public (`B03_cluster_assignment_all.csv`, S38). Caveat: `sample_name` accessions are author-internal, not a genetic crosswalk to HDBR.
 
 ### Assay, genome build and count stage (OBSERVED_NOW)
 
@@ -558,33 +480,10 @@ Local feature-contract code: `src/p22/data/atac_features.py:12-91`; frozen rules
 
 ### Why overlap, zero-fill, imputation and summing do not establish comparable counts
 
-- **Overlap is not measurement equivalence.** Signac states that peaks called
-  independently "are unlikely to be exactly the same", so a common set must be
-  created (S43). Its `merge` without a common set "will consider overlapping peaks
-  as equivalent, and adjust the genomic ranges spanned by the peak", which "can
-  result in inaccuracies in the count matrix, as some peaks will be extended to
-  cover regions that were not originally quantified" (S43). Overlap therefore
-  relabels a window; it does not preserve the measured window.
-- **Zero-fill is imputed absence, not a zero count.** `FeatureMatrix` entries are
-  "the number of unique reads falling in the genomic region"; features on
-  chromosomes absent from a fragment file "will be filled with zero counts" only
-  under `keep_all_features=TRUE` (S44). The Signac maintainer states plainly that
-  peaks not shared "will be given zero counts in the dataset where it was not
-  detected, but this does not necessarily mean that there were no fragments in that
-  region of the genome" (S45). Treating an unmatched region as a biological zero is
-  therefore invalid; the project already forbids it (`atac_features.py:65,84`,
-  `tasks/plan.md:547`).
-- **Summing partly overlapping peaks double-counts.** A raw merge such as
-  `bedtools merge` creates "daisy-chaining … peaks that don't directly overlap each
-  other get included in the same larger peak because they are bridged by a shared
-  internal peak" (S46). Adding counts across partly overlapping windows either
-  double-counts the shared bases or (with `disjoin`) silently changes the measured
-  window; neither yields the original measured quantity.
-- **Imputation estimates dropouts; it does not create measured counts.** scOpen
-  estimates "accessibility scores" from NMF to fill dropout events (S49); the
-  SAPIEnS benchmark finds imputation helps "mostly for small datasets" and is not
-  beneficial for large ones (S48). An imputed matrix is a model output, not a
-  count of Tn5 insertions, and cannot satisfy a raw-count contract.
+- **Overlap is not measurement equivalence.** Independently called peaks "are unlikely to be exactly the same", so a common set is required (S43). Signac `merge` without one treats overlapping peaks as equivalent and adjusts their genomic ranges, which "can result in inaccuracies in the count matrix, as some peaks will be extended to cover regions that were not originally quantified" (S43). Overlap relabels a window; it does not preserve the measured window.
+- **Zero-fill is imputed absence, not a zero count.** `FeatureMatrix` entries count unique reads per region; features absent from a fragment file are zero only under `keep_all_features=TRUE` (S44), and the maintainer warns a zero "does not necessarily mean that there were no fragments in that region" (S45). The project already forbids it (`atac_features.py:65,84`; `tasks/plan.md:617`).
+- **Summing partly overlapping peaks double-counts.** `bedtools merge` "daisy-chains" non-overlapping peaks bridged by a shared internal one into one larger region (S46). Summing partly overlapping windows double-counts shared bases; `disjoin` silently changes the measured window; neither yields the original measured quantity.
+- **Imputation estimates dropouts; it does not create measured counts.** scOpen fills dropouts with NMF "accessibility scores" (S49); SAPIEnS finds imputation helps "mostly for small datasets" (S48). An imputed matrix is a model output, not a count of Tn5 insertions.
 
 ### Within-study versus cross-study comparability
 
@@ -678,25 +577,11 @@ quality often matters more than the classifier, S50). So either sign is informat
 
 ### Leakage, confounding and inference rules
 
-- **Leakage:** cells are pseudoreplicates, not independent samples (S55, S56); donor
-  must be the split unit and all cells of a donor kept together (S53). Feature
-  selection/peak calling and every learned transform must fit training donors only
-  (already frozen, `tasks/plan.md:313`); pseudo-replicates (splitting one donor's
-  cells across classes) reintroduce false discoveries (S56).
-- **Cell vs donor inference:** report donor-aggregated `mean_predicted_probability`
-  at 0.5, never cell-level accuracy; more cells per donor add little power (S55).
-- **Confounding:** region is fully confounded with provider (C22); cell-type
-  composition can drive apparent signal, so report a composition-matched or
-  composition-reweighted contrast (S60, S61). Covariate arms are controls, not
-  substitutes for the frozen endpoint.
-- **Age:** the obstetric-GW→PCW minus-two step is an explicit approximation (C21/R5);
-  run the frozen 64/128/age sensitivities and preserve original units.
-- **External evaluation:** NeMO is a stress-test cohort, not a training pool (S61);
-  it differs in protocol and in feature construction (MACS2 merged peaks vs Lattke
-  cluster peaks, C10/C21). No refit, no model selection, one locked batch, identical
-  donor sets (M8). Cross-cohort stability and batch/composition sensitivity must be
-  reported (S60); a positive result that disappears under composition matching is
-  not defensible.
+- **Leakage:** cells are pseudoreplicates, not independent samples (S55, S56); donor is the split unit, all a donor's cells stay together (S53), and feature selection/peak calling plus every learned transform fit training donors only (frozen, `tasks/plan.md:313`). Pseudo-replicates reintroduce false discoveries (S56).
+- **Cell vs donor inference:** report donor-aggregated `mean_predicted_probability` at 0.5, never cell-level accuracy; more cells per donor add little power (S55).
+- **Confounding:** region is fully confounded with provider (C22); composition can drive apparent signal, so report a composition-matched or -reweighted contrast (S60, S61). Covariate arms are controls, not substitutes for the endpoint.
+- **Age:** the obstetric-GW→PCW minus-two step is an explicit approximation (C21/R5); run the frozen 64/128/age sensitivities and preserve original units.
+- **External evaluation:** NeMO is a stress-test cohort, not a training pool (S61); it differs in protocol and feature construction (MACS2 merged peaks vs Lattke cluster peaks, C10/C21). No refit, no model selection, one locked batch, identical donor sets (M8); report cross-cohort stability and batch/composition sensitivity (S60).
 
 ### Negative/inconclusive value, additional evidence, RNA-only fallback
 
@@ -722,3 +607,31 @@ are mapped to primary sources; negative-result value, required additional eviden
 and a separate RNA-only fallback are recorded. Remaining unknown: the sign of the
 primary contrast, which only an accepted real run can settle. Next: R8 — verify and
 deliver the implementation handoff.
+
+## R8 — Verify and deliver the implementation handoff (RESEARCHED)
+
+### Verification
+
+Both pinned hashes re-ran and match `launcher_head_capture.py:16-37` (contract `9a13d8be…`, 6429 B; source note `66b1d815…`, 14597 B) — no drift. Reopened consequential sources: HEAD limits unchanged (`tasks/todo.md:164-167`; S4:43-53); `capture_head` at `capture_development_head.py:50` with 15.0 s/65,536 caps and injected `connection_factory` (`:22-23,62-63,113,116-121,125-136`); launcher `preflight` at `launcher_head_capture.py:105` pins capture `335d35c5…`+validator `c7614892…` and reports `runtime_controls=UNVERIFIED` (`:16-39,115-116`); `audit_peak_spaces` requires `fixed_reference`/`training_fold` with `zero_fill_allowed=false` (`atac_features.py:12,58-62,84`); margin math gives 0.07/0.08 (`estimand.py:32-45`).
+
+**Contradiction found:** `estimand.py:20-29` `NAMED_BASELINES` has `rna_atac_concat` and `gated_fusion` but **no `cross_attention` arm**; the primary contrast exists only as M7 (`tasks/todo.md:855-857,950-960`), so the estimand must be amended before M6c. **Correction:** R6 cited `tasks/plan.md:547` for the no-zero-fill rule; it is at `tasks/plan.md:617`. Still unconfirmed: C18 (`peaks_by_cluster` absence is naming inference); C21 (release ATAC count stage); NeMO access (RECORDED_PREVIOUSLY). No live-runtime or payload observation exists in R1–R8.
+
+### Prioritized dependency-ordered tasks
+
+| # | Task | Entry point | Expected artifact | Acceptance | Permission / stop |
+|---|---|---|---|---|---|
+| T1 | E2-M1 inventory + review R2 allocations | `tasks/todo.md:179-202` | inventory + accepted allocation | reviewer accepts exact numerics | owner E2-M-Review; unproven → blocker |
+| T2 | Prove cgroup v2 enforcement (Python+TLS) | `run_r_fixture.py:90-116,201-217` | control record | `memory.max=268435456`, `swap.max=0`, OOM at 64 MiB, `pids.max` `-EAGAIN`, watchdog kill | offline; absent → HEAD blocked |
+| T3 | **Highest value:** E2-M4 one HEAD | `capture_development_head.py:50`; `launcher_head_capture.py:105` | header record + SHA-256 | exactly 1 request, valid positive `Content-Length`, 0 body | owner one-HEAD approval; non-200/limit → `SOURCE_UNRESOLVED` |
+| T4 | Build R3 `.rda`/Seurat fixture + reader | new fixture; `run_r_fixture.py` | reader proof | one member; exact sparse counts; unexpected class refuses | install authorization; missing class → `RESOURCE_UNRESOLVED` |
+| T5 | Owner decision to send R4/R5 artifact request | `tasks/plan.md:436-438` | author response | QC/barcode rule + count stage + fragments | not authorized |
+| T6 | Freeze R6 route-2 reference; amend M4/M5 | `atac_features.py:56-62` | amendment | named reference+hash, unit, train-fold-only | protocol review; no fragments → `FEATURE_ROUTE_UNRESOLVED` |
+| T7 | Add cross-attention arm to frozen estimand | `estimand.py:20-29` | updated `NAMED_BASELINES` | contrast frozen before M6c | current scope (code review) |
+
+**Scope:** current scope is this dossier; T7 is a proposed code change. Decisions needed for T1–T6 (runtime/HEAD, install, author contact, amendment); no proposal authorizes itself.
+
+**Remaining unknowns:** object members/assays/versions; per-library retained counts; author QC rule; release `nCount_ATAC` stage; provider common-count object; Lattke fragments/cost; guest-cgroup enforcement; specimen independence; sign of the primary contrast.
+
+**Discarded:** selective `.rda` read (unsupported, S26); `pyreadr` (no S4, S31); `--memory-swap=0` (unset, S20); macOS `RLIMIT_AS` (failed, S15); overlap/zero-fill/imputation as common features (refuted, S43–S49); GEO/CELLxGENE/NeMO as independent studies (same cohort, S33–S35); protocol tuning on NeMO (prohibited, S61); author sparse export (absent, S5/S11).
+
+**Executive summary:** R1–R7 are researched; R8 verified the consequential claims, fixed one citation and surfaced one real prerequisite gap. The paired study remains blocked by (i) no accepted common measured ATAC route and (ii) unresolved runtime/authorization to observe even object metadata. The single highest-value action is the one-HEAD E2-M4 request once T2 proves enforcement: it replaces the rounded "7.6G" with an exact server-declared size and confirms or refuses the payload. RNA remains INCONCLUSIVE; paired input stays `SOURCE_UNRESOLVED`; no scientific gate is promoted.
