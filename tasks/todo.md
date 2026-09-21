@@ -1057,6 +1057,23 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   `reports/generated/real_paired_faithfulness_frozen_20260921/`. Code:
   `src/p22/eval/paired_faithfulness.py` (`aggregate_interventions`),
   `scripts/run_real_paired_faithfulness_frozen.py`, `tests/test_paired_faithfulness.py`.
-- [ ] R5: external route decision — payloads are tar/tar.gz with per-file embargo;
-  no bounded range join is possible; external paired counts MEX is the cheaper route
-  but is not yet accessed.
+- [x] R5a: normalization sensitivity on the frozen folds — `EXECUTED (null)`. Raw
+  standard scaler exactly reproduces the frozen primary (+0.0333, interval
+  [-0.0133, +0.0806]); log1p + standard scaler also +0.0333 (interval
+  [-0.0050, +0.0800]); advantage false in both. Raw-count standard scaling is
+  prospectively frozen as the operative normalization; the primary estimate is
+  unchanged. No new network. Evidence:
+  `docs/NORMALIZATION_SENSITIVITY_2026-09-21.md`,
+  `docs/real_paired_normalization_sensitivity_2026-09-21.json`,
+  `reports/generated/real_paired_normalization_20260921/`. Code:
+  `scripts/run_real_paired_normalization_sensitivity.py`,
+  `tests/test_real_paired_normalization.py`.
+- [ ] R5b: external route — `BLOCKED (evidenced)`. Direct HTTPS to
+  `data.nemoarchive.org`/`assets.nemoarchive.org` fails TLS on three attempts; the
+  read proxy times out; per-file `Access=embargo` conflicts with collection
+  `access=open`; no cross-cohort common measured feature set; controlled raw data
+  needs NIMH Data Archive approval (not authorized). No external outcome inspected.
+  Smallest unblock: a direct (non-mirror) network path or provider fix plus a
+  published common measured feature set or an embargo resolution.
+- [ ] R5c: finalize the professor-facing notebook and handoff with the real
+  execution status (remaining in-scope work).

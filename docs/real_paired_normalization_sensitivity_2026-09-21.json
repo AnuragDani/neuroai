@@ -1,0 +1,115 @@
+{
+  "record_type": "real_development_normalization_sensitivity",
+  "date": "2026-09-21",
+  "run": "p22-results-executio-debda8",
+  "script": "scripts/run_real_paired_normalization_sensitivity.py",
+  "scientific_claim_allowed": false,
+  "primary_endpoint": false,
+  "external_evaluation_performed": false,
+  "input_fingerprints": {
+    "h5ad": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "n_genes": 35477
+    },
+    "atac_matrix": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/repeated_comparison_20260921/counts/counts.npz",
+      "sha256": "62755125eaad5245654819ac6114da39f1d87cbd395a102ea5f7413a62bd84d7",
+      "n_regions": 480
+    },
+    "n_cells_available": 248998,
+    "n_cells_sampled": 7680,
+    "cell_cap": 256
+  },
+  "region_set_fingerprint": {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/repeated_comparison_20260921/region_sets.json",
+    "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "n_union_regions": 480
+  },
+  "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+  "generated_at": "2026-09-21T20:13:29+00:00",
+  "resources": {
+    "name": "real_paired_normalization_sensitivity",
+    "cells_per_donor_cap": 256,
+    "elapsed_seconds": 82.364,
+    "peak_rss_gb": 1.2104,
+    "disk_free_gb": 17.207,
+    "input_bytes": null,
+    "notes": "Normalization sensitivity on frozen folds; not a new primary endpoint"
+  },
+  "comparison": {
+    "primary_estimate": 0.033333333333333326,
+    "primary_interval": [
+      -0.01333333333333333,
+      0.08055555555555556
+    ],
+    "log1p_estimate": 0.033333333333333326,
+    "log1p_interval": [
+      -0.004999999999999982,
+      0.08000000000000002
+    ],
+    "estimate_difference": 0.0,
+    "primary_advantage_demonstrated": false,
+    "log1p_advantage_demonstrated": false
+  },
+  "variants": {
+    "raw_standard_scaler": {
+      "estimate": 0.033333333333333326,
+      "interval": [
+        -0.01333333333333333,
+        0.08055555555555556
+      ],
+      "per_repeat_delta": {
+        "0": 0.09999999999999998,
+        "1": -0.06666666666666665,
+        "2": 0.0,
+        "3": 0.06666666666666665,
+        "4": 0.06666666666666665
+      },
+      "n_valid": 1000,
+      "n_failed": 0,
+      "advantage_demonstrated": false,
+      "model_means": {
+        "rna_only": 0.44666666666666666,
+        "atac_only": 0.4,
+        "rna_atac_concat": 0.5399999999999999,
+        "gated_fusion": 0.49333333333333335,
+        "token_concat": 0.4933333333333333,
+        "cross_attention": 0.5266666666666667,
+        "majority_control": 0.3666666666666667
+      }
+    },
+    "log1p_standard_scaler": {
+      "estimate": 0.033333333333333326,
+      "interval": [
+        -0.004999999999999982,
+        0.08000000000000002
+      ],
+      "per_repeat_delta": {
+        "0": 0.06666666666666665,
+        "1": 0.09999999999999998,
+        "2": -0.06666666666666665,
+        "3": 0.033333333333333326,
+        "4": 0.033333333333333326
+      },
+      "n_valid": 1000,
+      "n_failed": 0,
+      "advantage_demonstrated": false,
+      "model_means": {
+        "rna_only": 0.4333333333333334,
+        "atac_only": 0.38666666666666666,
+        "rna_atac_concat": 0.48,
+        "gated_fusion": 0.5066666666666666,
+        "token_concat": 0.4533333333333333,
+        "cross_attention": 0.48666666666666664,
+        "majority_control": 0.3666666666666667
+      }
+    }
+  },
+  "run_json_sha256": "b7a178d4cb5ff67aa1a78eaa663493f9a395f68f7b15bc4c2a96ce01bb215c1c",
+  "limitations": [
+    "Normalization sensitivity only; the frozen raw-count primary estimate is unchanged.",
+    "Internal development folds only; external paired data were not accessed.",
+    "No biological mechanism is claimed from attention or latent tokens."
+  ]
+}

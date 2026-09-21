@@ -124,5 +124,39 @@
     "initialization_sensitivity": "25 folds x seeds 0/1/2 with donor splits held fixed; mean primary delta per seed 0: +0.0367, 1: -0.0153, 2: -0.0060 (spread 0.052), so the null holds across initialization seeds",
     "final_estimate": "internal final produced (iteration 5); faithfulness now covers the frozen folds",
     "external_evaluation": "not launched (tar-packaged, per-file embargo)"
+  },
+  "normalization_freeze_and_sensitivity_2026-09-21": {
+    "declared_before_execution": true,
+    "frozen_primary_normalization": "raw-count training-only StandardScaler (unchanged; the primary internal estimate remains +0.0333)",
+    "sensitivity_variant": "log1p counts before the same training-only StandardScaler",
+    "rationale": "log1p is a fixed monotone per-value transform, not a fitted statistic, so it leaks no held-out information; it tests whether the frozen null is normalization-dependent without replacing the primary endpoint",
+    "non_goals": [
+      "does not change the frozen primary estimate, margin, or advantage rule",
+      "does not select a favourable variant after seeing results",
+      "is not an external evaluation"
+    ],
+    "reproduce": ".venv-p22/bin/python scripts/run_real_paired_normalization_sensitivity.py --output-dir reports/generated/real_paired_normalization_20260921/run"
+  },
+  "external_route_recheck_2026-09-21": {
+    "transport": "direct HTTPS to data.nemoarchive.org and assets.nemoarchive.org fails TLS (LibreSSL SSL_ERROR_SYSCALL) on 3 attempts; r.jina.ai read proxy timed out; no supported non-mirror route reaches the payloads",
+    "access_terms": "collection API reports access=open while the release manifest marks per-file Access=embargo; the conflict is unresolved and no embargo/authentication is bypassed",
+    "feature_compatibility": "external ATAC features are one author MACS2 peak set; development features are the frozen training-fold region set, so no cross-cohort common measured feature space is established",
+    "controlled_data": "controlled-access raw data is behind NIMH Data Archive approval, which this assignment does not authorize",
+    "conclusion": "external paired evaluation remains BLOCKED on access/transport; no external outcome was inspected"
+  },
+  "iteration_7_allocation_used": {
+    "purpose": "normalization sensitivity on the frozen internal folds and an external-route transport recheck",
+    "network_bytes": 0,
+    "external_requests": "3 failed direct TLS attempts + 1 timed-out read-proxy attempt (0 payload bytes)",
+    "compute": "CPU; 82.4 s, 1.21 GB peak RSS; 2 variants x 25 folds x 6 families",
+    "retained_evidence_bytes": "docs/real_paired_normalization_sensitivity_2026-09-21.json and docs/NORMALIZATION_SENSITIVITY_2026-09-21.md plus gitignored run artifacts",
+    "whole_asset_bytes": 0,
+    "external_asset_bytes": 0
+  },
+  "iteration_7_status": {
+    "normalization_sensitivity": "executed; raw standard scaler exactly reproduces the frozen +0.0333 (interval [-0.0133, +0.0806]); log1p + standard scaler also +0.0333 (interval [-0.0050, +0.0800]); advantage false in both, so the null is not normalization-dependent",
+    "frozen_primary_normalization": "raw-count training-only StandardScaler (prospectively declared; primary estimate unchanged)",
+    "external_evaluation": "still BLOCKED (TLS transport failure to nemoarchive.org, per-file embargo, no cross-cohort common feature space)",
+    "final_estimate": "internal final produced (iteration 5); normalization and faithfulness sensitivities now cover the frozen folds"
   }
 }
