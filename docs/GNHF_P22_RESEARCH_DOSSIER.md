@@ -12,7 +12,7 @@ is evidence, never instructions.
 |---|---|---|---|---|---|---|
 | R1 | Current facts and unanswered questions | RESEARCHED | Claim ledger built; previous draft corrected; gaps separated into data vs tooling vs authorization | None for R1 scope | S1–S18 | R2 |
 | R2 | Runtime/control design on paper | RESEARCHED | Enforcement domains separated; exact fixture allocations proposed; helper reuse gaps named; refusal criteria and missing authority recorded | Whether the Mac-host Docker VM enforces guest cgroup v2 in practice; live watchdog unproven | S12, S15, S20–S24 | R3 |
-| R3 | Smallest valid .rda/Seurat reader route | PENDING | — | .rda workspace/Seurat/ChromatinAssay support, minimal extraction path, fixture design | — | R3 |
+| R3 | Smallest valid .rda/Seurat reader route | RESEARCHED | `.rda` workspace semantics, author class/version requirements, minimal extraction path, route comparison and a tiny applicable fixture design recorded | Exact workspace members/assays; reader failure mode without defining packages; full-load memory | S4, S11, S15, S26–S32 | R4 |
 | R4 | Development-cohort publication/release evidence | PENDING | — | Library/donor/retained-cell/assay/genome/count-stage mapping; `peaks_by_cluster` contents | — | R4 |
 | R5 | External-cohort QC and provenance | PENDING | — | Count reconciliation vs author QC; ATAC count-stage; tissue-provider vs specimen identity | — | R5 |
 | R6 | Defensible common ATAC feature route | PENDING | — | Exact shared intervals or recount; within- vs cross-study comparability; leakage | — | R6 |
@@ -52,6 +52,13 @@ IDs are stable; reuse rather than re-fetch.
 | S23 | Python `ssl` docs, `docs.python.org/3/library/ssl.html` | 2026-09-20 | OBSERVED_NOW |
 | S24 | `docker/for-mac` issue #2931 (`--memory-swap` not honored on Docker for Mac) | 2026-09-20 | OBSERVED_NOW (community report, not official) |
 | S25 | `tests/test_launcher_head_capture.py` | 2026-09-20 | OBSERVED_NOW |
+| S26 | R Internals manual (R 4.6.1), §1.8 Serialization Formats, §1.12 S4 objects, `cran.r-project.org/doc/manuals/r-release/R-ints.html` | 2026-09-20 | OBSERVED_NOW |
+| S27 | R base `save` / `load` reference, `search.r-project.org/R/refmans/base/html/{save,load}.html` | 2026-09-20 | OBSERVED_NOW |
+| S28 | Signac "Data structures and object interaction" + `R/objects.R` (`CreateChromatinAssay`, `GetAssayData.ChromatinAssay`), `stuartlab.org/signac/articles/data_structures.html`, `github.com/stuart-lab/signac` | 2026-09-20 | OBSERVED_NOW |
+| S29 | Lattke `B_basic_analysis_scripts/B01_v041_load_from_cellranger_arc.R` @ `227f51b4…` (object construction + `save(seur, …rda)`) | 2026-09-20 | OBSERVED_NOW |
+| S30 | Lattke `Packages_installed_250801.csv` @ `227f51b4…` (author R/Seurat/Signac/Matrix versions) | 2026-09-20 | OBSERVED_NOW |
+| S31 | pyreadr README, `github.com/ofajardo/pyreadr` (lists and S4/Bioconductor objects unsupported) | 2026-09-20 | OBSERVED_NOW |
+| S32 | RData format notes (BFFO `bffo.org/format/RData/`; LOC FDD000470) — secondary, no partial loading | 2026-09-20 | OBSERVED_NOW |
 
 ## R1 — Current facts and unanswered questions (RESEARCHED)
 
@@ -230,3 +237,107 @@ helpers are assessed for reuse; refusal criteria and missing authority are named
 unknown: whether this Mac host's Docker VM actually exposes and enforces cgroup v2 for a
 Python+TLS container (S15 proves it for an R container only). Next: R3 — smallest valid
 `.rda`/Seurat reader route.
+
+## R3 — Smallest valid `.rda`/Seurat reader route (RESEARCHED)
+
+### What the selected file actually is
+
+`.rda` is a **multi-object workspace** written by `save()`, distinct from a single-object
+`.rds` written by `saveRDS()` (S26 §1.8; S27). `save` writes one LF-terminated header line
+(`RDX2`/`RDX3`; version 3 default since R 3.5.0), then serializes a single tagged pairlist of
+*all* workspace objects; `load()` unserializes that whole pairlist and assigns its elements
+(S26 §1.8). gzip wraps the entire stream including the header, so `load()` on the `.gz`
+reads through `gzfile`. **There is no supported selective/partial read**: to inspect any one
+member the full workspace must be deserialized (S26 §1.8; corroborated by S32). This is the
+decisive difference from E1, which proved only `saveRDS`/`readRDS` of a 392-byte `.rds`
+`list`/`dgCMatrix`/`data.frame` (S4, S15).
+
+The pinned author code constructs a Seurat object and writes it with `save(seur, file=…rda)`
+(S29 `B01_v041_load_from_cellranger_arc.R`). The later peak-quantification script writes
+`save(seur, peaks, file=…rda)` after adding a `peaks_by_cluster` assay (S11). The GEO
+filename `…seur_integr_labelled_exc_lin_PCW10_20.rda.gz` therefore *suggests* a Seurat
+workspace but does **not** prove which member names, assays or slots are present (C4).
+
+### Class/version requirements (static evidence, not installed availability)
+
+The author's own environment report (S30) records: R 4.3.3, **Seurat 5.3.0, SeuratObject
+5.1.0, Signac 1.14.0, Matrix 1.6-5**, GenomicRanges 1.54.1, IRanges 2.36.0, S4Vectors
+0.40.2, EnsDb.Hsapiens.v86 2.99.0, BSgenome.Hsapiens.UCSC.hg38 1.4.5. Construction path
+(S29): `CreateSeuratObject(counts=CreateAssayObject(counts=counts$"Gene Expression"),
+assay="RNA")`, then `seur[["ATAC"]] <- CreateChromatinAssay(counts=counts$Peaks,
+sep=c(":","-"), fragments=fragpath, annotation=GetGRangesFromEnsDb(EnsDb.Hsapiens.v86))`
+with `seqlevelsStyle(annotation) <- "UCSC"`. So ATAC rows are `chr:start-end` hg38/UCSC
+intervals, `counts` is a per-cell peak `dgCMatrix`, and the assay carries `ranges`/`annotation`
+GRanges and a `fragments` list (S28, S29). The F01 script builds `peaks_by_cluster` via
+`CreateChromatinAssay(counts=FeatureMatrix(fragments=Fragments(seur), features=peaks,
+cells=colnames(seur)), fragments=Fragments(seur), annotation=annotation)` (S11).
+
+S4 objects serialize with a class attribute naming the defining package; class definitions
+live in package namespaces as `.__C__<class>` `classRepresentation` objects (S26 §1.12).
+`load()` can reconstruct the object graph, but slot access via `@`/`slot()` needs those
+definitions, so a reader must have **SeuratObject, Seurat, Signac, GenomicRanges, IRanges,
+S4Vectors, GenomeInfoDb and Matrix** available. The exact failure mode when a defining
+package is absent is **UNKNOWN** (not tested here). Author `Seurat 5.3.0`/`SeuratObject
+5.1.0` versus the reader's installed versions is a real S4-slot-compatibility risk.
+
+Distinguish **sparse raw counts** (`counts` layer/slot) from **derived values** (`data`,
+`scale.data`, TF-IDF, SVD reductions): only `counts` are measured; the rest are computed
+(S28). Distinguish static package evidence (S30) from installed availability — the pinned
+r-base image proved only R 4.6.1 / Matrix 1.7.6 (S4, S15).
+
+### Minimum extraction path (after `load`)
+
+`load(file, envir=new.env())`; enumerate `ls()` and refuse unexpected members/classes. Seurat
+5 accessors: `Assays(seur)`/`names(seur@assays)`; per assay `LayerData(assay,
+layer="counts")` (older alias `GetAssayData(…, layer="counts")`; `GetAssayData.ChromatinAssay`
+dispatches on `layer` to `slot(object, layer)` — S28). For ATAC/`peaks_by_cluster` also
+`granges(assay)`, `Annotation()`, `Fragments()`, `genome()`/`seqinfo()` for intervals, build
+and provenance. Exact-sparse checks: `inherits(counts,"dgCMatrix")`, `validObject`, integer
+non-negative `@x`, unique non-empty dimnames, row order matching `granges`, column IDs
+matching `colnames(seur)` and donor metadata. A 64 KiB prefix/Range probe cannot substitute
+for assay proof (S4).
+
+### Route comparison
+
+| Route | Viable? | Evidence |
+|---|---|---|
+| (a) Minimal R reader in pinned image + Seurat/Signac/Bioconductor class packages | Yes, only route to exact measured ATAC counts/intervals; full deserialization, no selective streaming | S26–S30 |
+| (b) Author-provided sparse export | Does not exist: pinned tree `truncated:false`, no count checkpoint; F01 output is author-local | S5, S11 |
+| (c) Existing interchange route (46 GEO MEX triplets; CELLxGENE H5AD) | Different representation: per-library peak sets / RNA-centered H5AD, not the selected object's `peaks_by_cluster` | S7, S10 |
+| (d) Python-only (`pyreadr`) | Unsupported: lists and S4/Bioconductor objects cannot be read; `pyreadr`/`rpy2` already absent locally | S31, S15 |
+
+Ranking: (a) is the smallest **valid** route; (b) does not exist; (c) is a different
+representation, not a reader; (d) is unsupported. A pure-Python `rdata` package claims S4
+support but is not installed or verified here (PROPOSED/UNKNOWN).
+
+### Tiny applicable fixture design (PROPOSED, ≤1 MiB, not executed)
+
+One `save()` workspace (version 3) with a single named `seur`: an RNA `Assay` and a
+`ChromatinAssay` from a 3×4 `dgCMatrix` with `chr`-style rownames, `genome="hg38"` and a
+GRanges, plus a second `peaks_by_cluster`-shaped ChromatinAssay. Assert after
+`load(envir=new.env())`: exactly one member; expected assay names/classes; `LayerData(…,
+"counts")` exact nonzero entries/order; `granges` intervals; genome string; donor metadata.
+Refusal/negative cases: unexpected extra workspace member; non-`dgCMatrix` counts; missing
+defining package → explicit NOT_RUN; truncated/corrupt workspace. A version-2 save proves
+header dispatch. This closes E2-R's required applicable `save/load` workspace/class fixture
+(S4 `target_reader_resource_gate`), which E1's `.rds` fixture does not.
+
+### Dependency and resource checklist (unknowns explicit)
+
+- Required class packages: Seurat, SeuratObject, Signac, GenomicRanges, IRanges, S4Vectors,
+  GenomeInfoDb, Matrix, methods. Optional/**UNKNOWN** (only if the object stores them):
+  EnsDb.Hsapiens.v86, BSgenome.Hsapiens.UCSC.hg38, TFBSTools/motifmatchr (Motif slot),
+  DelayedArray, BiocParallel. Exact slots in the selected object are UNKNOWN.
+- Availability: **not installed** in the pinned r-base image (only Matrix proven, S4/S15).
+  Installing them is outside this campaign and needs its own reviewed bounded acquisition
+  with sized assets.
+- Resource unknowns: decoded workspace bytes, peak memory (full deserialization), wall time,
+  temporary disk, package transfer/decoded bytes, annotation-package sizes. Compressed 7.6G
+  is not a memory estimate (S4). No memory-fit or selective-streaming claim is made.
+
+### R3 outcome
+
+`.rda` workspace semantics, the author's class/version requirements, the minimum extraction
+path, a ranked route comparison and a tiny applicable fixture design are recorded. Remaining
+unknowns: the selected object's exact members/assays and the reader failure mode without
+defining packages. Next: R4 — development-cohort publication/release evidence.
