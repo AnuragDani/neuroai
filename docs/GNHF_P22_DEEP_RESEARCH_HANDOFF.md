@@ -1,6 +1,6 @@
 # P22 deep-research handoff for Codex
 
-Prepared 2026-09-20 (iteration 1; updated iteration 2 and 3). Worktree
+Prepared 2026-09-20 (iteration 1; updated through iteration 4). Worktree
 `p22-deep-research-pr-3ad124`. Base commit `8217719713c271349d1e54eda679672b82133a56`
 verified equal to the expected base. Documentation/research only: no payload
 download, object inspection, install, container launch, training, author contact,
@@ -14,7 +14,9 @@ Evidence labels: `OBSERVED_NOW` (re-observed this run), `RECORDED_PREVIOUSLY`
 **Decision: do not start the paired path on either currently reachable object. The
 smallest scientifically valid route to a donor-aware RNA+ATAC comparison is not the
 7.6 GiB processed object and not the GEO per-library peak matrices. It is a frozen
-common-region recount; whether that recount is affordable is undecided.**
+common-region recount; whether that recount is affordable is undecided. The paired
+comparison is scientifically `CONDITIONAL` (§3.9): worth running and refutable, but
+only under a prospective amendment and after the estimand fix (Q22).**
 
 What is already established (carried forward, not re-derived here):
 
@@ -33,100 +35,45 @@ What is already established (carried forward, not re-derived here):
 - Provider-level `no_overlap_evidence` stands (18 UCLA / 8 NIH donors; no genetic
   crosswalk); region is confounded with provider.
 
-What this iteration adds (all `OBSERVED_NOW` unless noted):
+Iterations 1–3 (details and sources in §3 and the progress log): recovered the full
+object-provenance chain (both GEO objects map to author stages B04/C03; the selected
+object is pre-`F01`, so `peaks_by_cluster` is absent); showed the deposited ATAC
+assay is a naive per-library peak merge, not a common measured space (Signac warns
+this "can result in inaccuracies"); measured 3 of 46 GEO per-library peak spaces
+(exact intersections 3/0/0/0, overlap 17–76%); corrected the 4 GiB-vs-256 MiB
+factor to 16× and the `create_args`/`run_owned` characterizations; reproduced the
+46→37→30 library/specimen progression with two exclusion layers and named
+`B02filter_stats.csv` as the minimal missing artifact; and resolved the external
+cohort to 26 donors/13 libraries with 113,801 = RNA non-`Unk` (stated-QC replay
+113,242), release `nCount_ATAC` ≠ QC stage, `Unk` an annotation class, and
+obstetric GW ≠ post-conception weeks.
 
-1. **Full object-provenance chain recovered from the pinned author commit.** The
-   two GEO processed objects map, by exact script save-names and load flow, to
-   author pipeline outputs: `..._complete_dataset` → `B04_seur_integr_labelled.rda`;
-   `..._exc_lin_PCW10_20` → `C03_seur_integr_labelled.rda` (the exc-lin C03).
-2. **The deposited ATAC assay is a naive per-library peak *merge*, not a common
-   measured feature space.** `B01` builds each library's ATAC assay from that
-   library's own cellranger-arc `counts$Peaks` and then calls
-   `merge(..., merge.data = TRUE)` with no common peak set. Signac's own merging
-   article states this path "can result in inaccuracies in the count matrix, as
-   some peaks will be extended to cover regions that were not originally
-   quantified." So the selected object cannot close the comparable-measured-count
-   gate even if it loads cleanly.
-3. **The selected object is pre-`peaks_by_cluster`.** `F01` loads exactly
-   `C_subsetting_exc_lin_from_all_non_cx_excl/C03_seur_integr_labelled.rda` and
-   writes a *different* file (`F01_seur_w_peaks_by_cluster_quant.rda`). This
-   strengthens the earlier naming inference into a flow-supported `INFERENCE`.
-4. **Direct measurement of GEO per-library peak spaces (3 libraries).** Exact
-   interval intersection is essentially empty (B10C1Q∩B10D1N = 3, B10C1Q∩B17C2L = 0,
-   B10D1N∩B17C2L = 0, all-three = 0), while interval *overlap* is substantial
-   (17–76% of peaks overlap ≥1 bp). The per-library matrices therefore cannot
-   supply a shared exact-interval feature space, and a union would leave large
-   unmeasured coverage per library.
-5. **Arithmetic correction to the earlier campaign.** The earlier dossier states
-   the 4 GiB R-fixture allocation is "four times the 256 MiB HEAD cap." It is
-   **16×** (4 GiB = 4,096 MiB; 4,096/256 = 16). Any budget text derived from that
-   factor must be corrected.
-6. **Two more mandatory-challenge corrections.** `scripts/run_r_fixture.py:create_args`
-   is **not** R-hardcoded: it takes `command[0]` as `--entrypoint` and appends
-   `command[1:]`; R commands come from the caller. And `run_owned` *does* impose a
-   single attached-run deadline (`communicate(..., timeout=seconds)`), with
-   separate 10 s timeouts only for `create`/`inspect`/`kill`.
+What iteration 4 adds (all `OBSERVED_NOW` unless noted) — priority 5 is now
+resolved to a decision, and the primary-contrast arms are checked against the
+frozen estimand:
 
-Highest-value open question after this pass: **does any common measured ATAC
-feature space exist across the GSE305146 libraries, or is a fragment recount the
-only valid route?** This iteration answered it for 3 of 46 libraries (essentially
-no exact common space); the full 46-library reconciliation is a deferred bounded
-check (§5) pending scoped approval.
-
-What iteration 2 adds (all `OBSERVED_NOW` unless noted) — priority 1 is now closed:
-
-7. **The 46→37→30 progression is reproduced exactly from public metadata, with
-   two distinct exclusion layers and duplicate-key checks (§3.7).** 46 sequencing
-   libraries (92 GEO sample records = 46 ATAC + 46 GEX) reduce to 37 B02-retained
-   libraries and 30 final specimens (15 CON + 15 DS). Exclusions: 5 libraries / 4
-   specimens flagged GEO `in final_analysis=FALSE` ("low quality/non-cortical"),
-   plus 4 libraries / 3 specimens removed by B02 per-library cell QC
-   (`fract_removed<=0.5`, `N_cells_filtered>=500`).
-8. **Corrections from the reconciliation.** GEO `in final_analysis=TRUE` is 41
-   libraries, a superset of the final 37 — it is not the final cohort.
-   `tissue_quality` is a preservation label, not the exclusion rule (a `sub`
-   specimen, B18D2L, is retained; two `ok` libraries, B15C1H/B15C1L, are dropped).
-   "30 donors" should be read as **30 distinct specimen IDs**; distinct-donor
-   status beyond specimen identity is `UNKNOWN` (no donor field exists).
-9. **New minimal missing artifact named.** The per-library reason for the 3
-   B02-QC drops needs `B02filter_stats.csv`, absent from the complete pinned tree;
-   the retained-barcode list per library remains author-local.
-
-What iteration 3 adds (all `OBSERVED_NOW` unless noted) — priority 3 is now
-resolved to the metadata/count-stage level, with one author artifact still
-`UNKNOWN`:
-
-10. **The reported 113,801 exactly equals the RNA non-`Unk` count; the stated QC
-    replay does not.** Applying the manuscript's own thresholds (`nCount_RNA`>200
-    and <donor-mean+3 s.d.; `nCount_ATAC`>100; `percent.mt`<5) to the release
-    columns yields **113,242** cells, a 559-cell gap from 113,801. The only exact
-    match is `class != "Unk"` = 113,801. The word `Unk` never appears in the
-    manuscript, so no author statement connects the annotation to the reported
-    count (§3.8).
-11. **`Unk` is a cell-type annotation class, not a QC failure.** 3,474 of 3,731
-    `Unk` cells (93.1%) pass all stated QC thresholds, and `Unk` cells have
-    *higher* median `nCount_ATAC` (12,411 vs 6,957) and `nCount_RNA` (5,216 vs
-    3,309) than non-`Unk`. The low-quality cells are spread across both classes
-    (4,033 QC-failing non-`Unk` + 257 `Unk`). This rejects "`Unk` = QC-dropped".
-12. **The release metadata is not filtered to the paper's final QC set.**
-    1,798 rows have `nCount_ATAC`<=100 and 2,530 rows exceed donor+3 s.d.
-    `nCount_RNA`, so either the release `nCount_ATAC` column is a later count
-    stage or the release retains pre-QC cells. Either way, QC must not be replayed
-    from the release column (Q9 strengthened).
-13. **External cohort structure is now exact: 26 donors (13 Ctrl + 13 Ts21)
-    across 13 sequencing libraries (GEM1–7, S1–6), 38 donor-library pairs.**
-    Effective replication is 26 donors, not cells or libraries. Region is
-    confounded with provider: all 18 UCLA donors are `region=Cortex`; the 8 NIH
-    donors span BA9/BA6/occipital/parietal-occipital/cerebrum (§3.8).
-14. **Age scales differ.** Vuong reports obstetric *gestational weeks* (GW 13–23,
-    ACOG/LMP-based); Lattke reports *post-conception weeks* (`dev_PCW` 10–20). PCW
-    ≈ GW−2, so the ranges overlap after conversion; raw GW vs PCW is a ~2-week
-    misalignment and must not be compared directly.
-15. **No public Vuong author-code repository or retained-barcode artifact was
-    found.** The manuscript's data-availability statement names only NeMO
-    `col-umstjg0` (controlled, GRU + not-for-profit + local IRB); the open child
-    collections `col-mbgxwtz` (RNA) and `col-ad8t52b` (ATAC) are the only open
-    processed releases. Scope: manuscript XML + web search (N19–N22).
+16. **The frozen primary contrast is implemented in the runner but missing from
+    the frozen estimand's declared baseline list (Q22).** `NEURAL_FAMILIES`
+    (`multiome_runner.py:112-119`) and `multiome_final.py:190`
+    (`paired_comparison(cross_attention, token_concat)`) implement the contrast,
+    but `estimand.NAMED_BASELINES` (`estimand.py:20-29`) omits both arms and drives
+    `baseline_table`/`FrozenEstimand.baselines`. This confirms the earlier
+    campaign's R8 prerequisite gap; the runner is unaffected, the M5 manifest/G6
+    report is.
+17. **Priority-5 primary sources were reopened and mostly upheld, with two
+    corrections** (full detail in §3.9): S52 is an unrefereed vision-language
+    preprint whose direction is conditional, and S60's DECAT explicitly cannot
+    score early-fusion cross-attention. Verified: integration quality dominates
+    classifier choice (S50); cross-attention helps with few paired examples (S51);
+    cells are pseudoreplicates (S55); HSA21 dosage is ~1.5× but mostly compensated
+    and variegated (S58, S59); peaks+genes did not beat peaks-only for prediction
+    (S57); external cross-cohort stability is a valid stress test (S60).
+18. **Priority-5 verdict: `CONDITIONAL`** — the incremental question is not
+    already answered by the completed RNA study, is refutable at the 0.07/0.08
+    margin, and has value as a negative result, but is confounded by all-donor
+    peak selection, provider×region, age scale and a framework that cannot
+    diagnose cross-attention. Proceed only after a prospective amendment and the
+    Q22 fix; no novelty-from-complexity or attention-as-causal claims.
 
 ## 2. Question / claim table
 
@@ -156,6 +103,12 @@ Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
 | Q13 | A_input `tissue_quality` drives exclusion | B18D2L (`sub`) retained; B15C1H/L (`ok`) dropped (§3.7) | None | REJECTED | Exclusion rule is B02 cell QC, not the preservation label |
 | Q14 | The final cohort is 30 donors | Tables give 30 unique specimen IDs, no donor field (§3.7) | Donor identity beyond specimen ID | INFERENCE (specimen ≠ proven donor) | Write "30 specimens"; do not overstate donor independence |
 | Q15 | The 3 B02-QC-dropped specimens' per-library cause is public | `B02filter_stats.csv` absent from pinned tree (§3.7) | Author-local output | UNKNOWN (minimal artifact) | Request the small stats table if exact attribution is needed |
+| Q22 | The frozen estimand names the primary-contrast arms (`cross_attention`, `token_concat`) | `estimand.py:20-29` omits both; runner implements both (§3.9) | Manifest/G6-report omission, not a runner blocker | REJECTED (gap) | Amend `NAMED_BASELINES`/M5 before M6c freezes the report |
+| Q23 | The paired comparison adds an increment not already answered by the RNA study | Different estimand (cross-attention−concat vs RNA donor association); RNA result INCONCLUSIVE (§3.9) | Not empirically settled | CONDITIONAL | Proceed only under a prospective amendment; negative result is valid |
+| Q24 | Concat vs cross-attention outcome is determined by donor count alone | S52: alignment and sample complexity both matter; S51: cross-attention helps with few pairs | Preprint + vision-language domain | UNVERIFIED (both signs open) | Report both signs; do not pre-commit to cross-attention winning |
+| Q25 | A simpler control could explain an apparent cross-attention gain | All-donor peak selection, region×provider, age scale, composition (§3.9) | None at design level | SUPPORTED | Each control must be reported before any advantage claim |
+| Q26 | Cells, not donors, are the effective replication unit | S55/S56; frozen `split_unit="donor"` (`estimand.py:59`) | None | SUPPORTED | Aggregate to donor; report donor-level intervals only |
+| Q27 | DECAT (S60) can diagnose the cross-attention model directly | S60: "cannot be directly applied to early-fusion architectures where modalities attend to each other" | Framework limitation | REJECTED | Use cross-cohort stability as a principle, not DECAT scoring, for this model |
 
 Carried forward without change: C1–C23 of the earlier dossier remain in force
 except C5 (now quantified), C13/C14 budget arithmetic (corrected), and the
@@ -497,6 +450,88 @@ print('external cohort counts/QC/structure checks passed')
 PY
 ```
 
+### 3.9 Scientific value of the paired comparison (priority 5) (`OBSERVED_NOW`)
+
+Frozen design (local, re-verified this pass): primary contrast = `cross_attention`
+minus matched token-concat **external donor balanced accuracy**
+(`tasks/todo.md:855`; `src/p22/eval/multiome_protocol.py:59-65` `paired_comparison`);
+5 repeated 5-fold donor splits, 256-cell primary cap, threshold 0.5, 1,000 paired
+donor resamples seed 22, and count-derived margin `practical_margin(15,15)=0.07`,
+`(13,13)=0.08` (`src/p22/eval/estimand.py:32-45`; `tasks/todo.md:850-857`). The
+margin is a donor-resolution floor (1/(2·15)≈0.033), not a power guarantee.
+
+Local implementation state (`OBSERVED_NOW`):
+
+- `NEURAL_FAMILIES = (rna_only, atac_only, rna_atac_concat, gated_fusion,
+  token_concat, cross_attention)` (`multiome_runner.py:112-119`); `run_paired_fold`
+  trains all six on donor-isolated folds (`:152-168`).
+- `multiome_final.py:190` computes `paired_comparison(tables["cross_attention"],
+  tables["token_concat"])`; `multiome_final._synthetic_only` refuses real
+  orchestration (`:33-38`).
+- **Gap (Q22):** `estimand.NAMED_BASELINES` (`estimand.py:20-29`) omits
+  `cross_attention` and `token_concat`, and `named_baselines.BASELINE_ORDER`
+  (`named_baselines.py:21`) drives `baseline_table` (`:226`) and
+  `FrozenEstimand.baselines` (`estimand.py:66`). So the frozen estimand manifest
+  and the G6 baseline table cannot name the primary-contrast arms, even though M5
+  requires freezing "the complete baseline list". The runner is unaffected; the
+  contract is. Fix is a small `estimand.py` tuple edit before M6c.
+
+Incremental question per arm, and the simpler control that could explain an
+apparent gain (each claim checked against the primary source named):
+
+| Arm | Incremental question it answers | Simpler control that could explain an apparent gain | Refuting result |
+|---|---|---|---|
+| RNA-only (`pseudobulk_rna_logistic`, `rna_only`) | Per-modality donor signal floor | None — it is the floor | Already INCONCLUSIVE in the completed RNA study; a paired win over this is not novel |
+| ATAC-only (`atac_only`) | Whether accessibility alone predicts | Peak selection on all donors leaks labels; region×provider | ATAC-only matching the fusion removes the fusion's claimed increment |
+| Concatenation (`rna_atac_concat`, `token_concat`) | Joint signal under equal-weight linear fusion | Feature alignment (S52): if RNA/ATAC are pre-aligned, concat's lower sample complexity dominates | Cross-attention ≤ concat at the frozen margin |
+| Gated fusion (`gated_fusion`) | Learned bounded modality weighting | Gate collapse to one modality | Gate collapsing to one view explains the gain without interaction |
+| Cross-attention (`cross_attention`) | Learned token-level inter-modality interaction | All-donor peak selection, composition/region×provider, age scale | delta < margin or paired interval crossing zero |
+| chr21 dosage (`chr21_dosage`) | Strong genetic baseline (~1.5× HSA21, S58; variegated, S59) | None — it is a near-ceiling control | A paired model that does not beat dosage adds no useful increment |
+| QC/covariate (`qc_covariate_logistic`) | Whether technical axes alone predict | Any QC/covariate imbalance between conditions | Covariate-only reaching the fusion's accuracy |
+
+Primary-source dispositions (`OBSERVED_NOW`, reopened this pass; N25–N30):
+
+- S50 (*Nat Methods* 2025, DOI 10.1038/s41592-025-02856-3): integration quality
+  dominates classifier choice; hold the encoder/classifier fixed
+  (`paired_model`, `multiome_runner.py:122-142` does).
+- S51 (CrossAttOmics, *Brief Bioinform* 2025, DOI 10.1093/bioinformatics/btaf302):
+  cross-attention resists small training sets below ~300–600 pairs — evidence
+  *for* cross-attention at 30 donors, not a guaranteed concat win.
+- S52 (arXiv 2606.01207, **preprint**, Flickr8k vision-language): concat needs
+  `O(d_v+d_t)` samples vs cross-attention `O(d_v·d_t)`; alignment decides. RNA/ATAC
+  are not pre-aligned, but 30 donors is far below the tested 2,048–16,384 scale;
+  domain transfer `UNVERIFIED`.
+- S55/S56 (*Nat Commun* 2021): cells are pseudoreplicates; donors are the unit;
+  >100 cells/individual gives marginal gain. Design already donor-split
+  (`estimand.py:54-59`).
+- S58 (*Am J Hum Genet* 2007, PMC1950826) / S59 (*Nat Commun* 2024,
+  DOI 10.1038/s41467-024-49781-1): HSA21 ~1.5× but mostly compensated and
+  variegated, with three molecular subtypes; dosage is a near-ceiling control and
+  donor heterogeneity is itself a confounder at n=30.
+- S57 (*Genome Biol* 2026, DOI 10.1186/s13059-026-04002-4): peaks+genes did not
+  beat peaks-only for cell-type prediction accuracy — direct counterevidence to a
+  guaranteed multimodal gain.
+- S60 (arXiv 2605.31504, **preprint**, DECAT): cross-cohort stability is a valid
+  stress test, but DECAT "cannot be directly applied to early-fusion architectures
+  where modalities attend to each other", so it cannot score the cross-attention
+  model; only the stability principle transfers. M8 already forbids NeMO refitting.
+
+Leakage/confounding rules carried and confirmed: donor-disjoint splits, all of a
+donor's cells together; feature selection and every learned transform fit on
+training donors only (`tasks/plan.md:313`; `atac_features.py:58-62,84`); peak
+selection on all donors leaks (`§3.3`); region is fully confounded with provider
+(18 UCLA all Cortex vs 8 NIH spanning areas, `§3.8`); GW→PCW ≈ −2 is an explicit
+approximation. A negative/inconclusive paired result is a valid, publishable
+bound on what cross-attention adds at realistic donor counts and prevents
+over-claiming a fusion benefit; it does not invalidate the accepted RNA result.
+The RNA-only follow-up, if chosen, is a separate prospective study and must not be
+presented as the paired cross-attention claim.
+
+**Priority-5 disposition: `CONDITIONAL` — proceed under the existing scientific
+contract only after a specific prospective amendment (frozen common-region
+recount, §4 rank 1) and after fixing Q22. No claim of novelty-from-complexity or
+attention-as-causal-evidence.**
+
 ### 3.5 Resource/contract facts re-confirmed (`OBSERVED_NOW`)
 
 - `configs/development_object_source_contract.json` SHA-256
@@ -569,91 +604,75 @@ Counterevidence and strongest alternatives:
   (`B02…R:46-68`) but the per-library `fract_removed`/cell counts are not, so which
   of the two thresholds removed each of the 3 B02-QC specimens is `UNKNOWN`.
   Overturning evidence: `B02filter_stats.csv`.
+- **Could the paired comparison be scientifically vacuous?** Only if the
+  incremental question were already answered by the completed RNA study or
+  inseparable from a simpler control. The estimand differs (cross-attention−concat
+  vs RNA donor association) and the controls are separable (§3.9), so the question
+  is refutable and worth asking. Counterevidence to a *positive* claim: S57
+  (peaks+genes did not beat peaks-only for prediction), S52 (alignment can favor
+  concat), and the project's own all-donor peak selection. Overturning evidence for
+  a positive claim: an accepted paired delta ≥ margin with all simpler controls
+  reported and no interval crossing zero.
+- **Could DECAT (S60) certify a shared-biology paired result?** No — S60 states
+  DECAT cannot be applied to early-fusion architectures where modalities attend to
+  each other, which is exactly the cross-attention model. Only the cross-cohort
+  stability principle transfers. Overturning evidence: a DECAT variant that
+  supports early fusion.
 
 ## 5. Prioritized implementation handoff and the single next action
 
-Priority 1 is closed (§3.7). Priority 3 is now resolved to the metadata/count-stage
-level (§3.8): the external cohort is 26 donors / 13 libraries, the reported 113,801
-is the RNA non-`Unk` count (not the stated-QC replay), the release `nCount_ATAC` is
-not the QC-stage count, `Unk` is an annotation class, and independence is
-provider-level only. The one remaining priority-3 unknown is an author QC rule /
-retained-barcode artifact (Q21). The single next action therefore moves to
-priority 5, because whether the paired comparison is scientifically worth
-implementing now gates every remaining route.
+Priorities 1 (§3.7), 3 (§3.8) and 5 (§3.9) now have supported dispositions.
+Priority 5 is `CONDITIONAL`: the primary contrast is implemented, refutable and
+worth running, but only under a prospective amendment and after the Q22 estimand
+fix. Priority 2 has a route table (§4) with the full 46-library reconciliation
+deferred as an approval item. Priority 6 is the decision/handoff itself. The
+single next action therefore moves to priority 4, the remaining independently
+researchable question: the minimum reader/resource path that could work.
 
-**Single highest-value next action (do this first): determine whether the frozen
-donor-aware RNA+ATAC comparison is worth implementing, and identify the simpler
-controls that could explain any apparent gain (priority 5).**
+**Single highest-value next action (do this first): establish the minimum
+reader and resource path that could work (priority 4).**
 
-- Input: primary method papers already in the local evidence set (the frozen
-  donor-aware design in `tasks/plan.md`/`tasks/todo.md` E2–E4, the paired-model
-  code and tests, the completed RNA result), plus primary methods for the
-  competing models (RNA-only, ATAC-only, concatenation, gated fusion,
-  cross-attention). Public HTML/PDF only; no installs or training.
-- Method: (a) state the incremental estimand each model answers on the frozen
-  design and which are already answered by the completed RNA study; (b) enumerate
-  leakage/confounding controls (all-donor peak selection, region×provider
-  confounding, age scale, donor-level aggregation, training-fold transformations)
-  and, for each, the simpler control that could produce an apparent improvement;
-  (c) state what result would refute the cross-attention advantage, and the value
-  of a negative/inconclusive paired result; (d) if RNA-only is preferable,
-  describe it as a separate prospective study without repeating the accepted
-  result.
-- Expected output: a short decision table mapping each model/route to
-  `incremental_question`, `simpler_control_that_explains_it`, `refuting_result`,
-  and `worth_implementing` (`YES`/`CONDITIONAL`/`NO`), with a one-paragraph
-  verdict on whether the paired path should proceed, proceed-with-amendment, or
-  pause for a separately justified alternative.
-- Acceptance check: every claim cites a primary method paper or the frozen design
-  text; no invented power numbers, no novelty-from-complexity, no attention-as-
-  causal language.
-- Dependencies: local canonical docs + web/primary papers only.
-- Authority: public web/primary HTML; no payload, training or protocol change.
-- Stop condition: if the incremental question is already answered by the completed
-  RNA study or cannot be separated from a simpler control, record
-  `PAIRED_PATH_PAUSE` with the specific alternative and stop the paired route.
+- Input: official R, SeuratObject, Seurat, Signac and sparse-format
+  documentation/source; the pinned author `Packages_installed_250801.csv`;
+  `configs/development_object_source_contract.json`; the earlier-campaign dossier
+  R2/R3 and the local fixture helper `scripts/run_r_fixture.py`. Public
+  docs/author code + local code inspection only; no installs, no container
+  launch, no payload.
+- Method: (a) separate the packages the author's full analysis needs from those
+  required only to deserialize, validate and extract counts; (b) distinguish
+  constructing a new object from reading an existing one; (c) compare a minimal R
+  route, a documented author export, and interchange/Python alternatives without
+  declaring any untested route impossible or any untested dependency mandatory;
+  (d) state the exact minimal `.rda`/class fixture members, assays, sparse
+  entries, intervals and donor joins, plus refusal cases; (e) name dependency
+  assets, version compatibility, and acquisition/decoded/temporary/retained
+  resource unknowns; (f) for any HEAD-control proposal, account separately for
+  workload, supervisor, Docker client, Linux guest and host, and verify
+  single-deadline and bounded-output assumptions against the actual helper code.
+- Expected output: a route/decision table (minimal R vs author export vs
+  Python/interchange) with prerequisites, unknowns and a smallest decisive check,
+  plus the fixture spec and a bounded resource ledger.
+- Acceptance check: every route claim cites official docs/source or local code;
+  no RAM inferred from compressed size; no promise of partial workspace loading
+  from a general format description; proposed limits, configured flags, sampled
+  usage and demonstrated enforcement are kept as distinct evidence types.
+- Dependencies: public docs/author code + local inspection only.
+- Authority: public web/primary docs; no install, container or payload.
+- Stop condition: if no untested route can be rejected or accepted without an
+  install/launch, record the exact bounded check and dependency, and mark the
+  reader path `RESOURCE_UNRESOLVED` rather than asserting impossibility.
 
-**How either result changes the next decision.** If the paired comparison adds an
-identifiable, refutable increment over RNA-only/ATAC-only and the simpler controls
-do not explain it, proceed only after a specific prospective amendment (frozen
-common-region recount) and keep the external check covariate-limited. If it does
-not, pause the paired path and recommend the separately justified RNA-only
-follow-up, preserving the accepted RNA result.
+**How either result changes the next decision.** If a minimal, documented reader
+route exists with a small fixture and bounded decoded memory, the object-inspection
+question becomes a concrete, reviewable E2-R task. If it does not, the object
+route stays `RESOURCE_UNRESOLVED` and the paired path must rely on the frozen-region
+recount, reinforcing the prospective amendment already implied by priority 5.
 
 Completed priority-3 disposition (kept for the record; no further action unless
-the artifact is requested): resolve the external-cohort specimen-independence and
-ATAC count-stage questions from primary Vuong/NeMO author sources.
-
-- Input: the saved Vuong manuscript XML
-  (`data/multiome/Vuong_PMC13225313_efetch_20260908.xml`), the saved NeMO metadata
-  (`data/multiome/VuongWeber_DSdevctx_metadata.tar`), the public Vuong analysis
-  code repository if one exists, and NeMO `col-umstjg0` release documentation.
-  Web/HTML/author code only; no restricted records, no payload.
-- Method: (a) locate the author's final retained-barcode list or exclusion rule
-  that yields 113,801 non-`Unk` nuclei; (b) identify which processing stage the
-  release `nCount_ATAC` column measures; (c) establish whether the 18 UCLA / 8 NIH
-  donors are independent of the Lattke/HDBR specimens using a documented provider
-  or specimen mapping, not donor-name distinctness; (d) separate RNA `Unk` from
-  the WNN `Unk` mask.
-- Expected output: a small table mapping each claim (`117,532` rows, `3,731`
-  RNA-`Unk`, `113,801` reported, `nCount_ATAC` stage, provider/specimen) to a
-  primary source line, plus one verdict per claim: `AUTHOR_RULE_FOUND`,
-  `STAGE_NAMED`, `INDEPENDENCE_LEVEL`.
-- Acceptance check: the partition and stage claims cite exact source lines; the
-  independence claim cites a provider/specimen artifact, not a name comparison.
-- Dependencies: web/author-code access only; no installs or containers.
-- Authority: public web search, primary HTML/XML, author code and small mapping
-  tables are allowed; no NeMO/restricted payload.
-- Stop condition: if no author rule or final-barcode artifact exists publicly,
-  record `EXTERNAL_QC_RULE_UNRESOLVED` with the exact artifact requested, and keep
-  the external cohort `covariate-limited`.
-
-**How either result changes the next decision.** If a documented author rule /
-barcode artifact and a specimen-mapping source are found, external evaluation can
-be specified on the frozen design with a named QC stage and an honest independence
-statement. If not, external scoring must be reported as a covariate-limited
-secondary analysis, which lowers the value of the paired path and strengthens the
-case for pausing it in favor of a separately justified RNA-only follow-up.
+the artifact is requested): the external cohort is resolved to the
+metadata/count-stage level (§3.8); the one remaining unknown is an author QC
+rule/retained-barcode artifact, requested in §6 item 2. Verdict:
+`EXTERNAL_QC_RULE_UNRESOLVED`; keep the external cohort `covariate-limited`.
 
 Deferred bounded check (priority 2, unchanged, needs scoped approval because it
 touches dataset-adjacent files): full metadata-only peak-space reconciliation
@@ -693,6 +712,13 @@ Supporting handoff tasks (existing IDs; do not invent):
   authority): correct any budget text derived from the "4×" factor to 16×, and add
   the `peaks_by_cluster`-absent and naive-merge findings to the `not_proven`/scope
   notes. Do not edit without owner approval.
+- **M5 estimand fix** (`src/p22/eval/estimand.py:20-29`): add `token_concat` and
+  `cross_attention` to `NAMED_BASELINES` (or explicitly document that it is the
+  cheap-control list only) so the frozen manifest and `baseline_table` name the
+  primary-contrast arms. Entry point: `estimand.py`; expected output: updated
+  tuple; acceptance: `tests/test_multiome_protocol.py` and
+  `tests/test_professor_gates.py:99` still pass and the manifest lists both arms;
+  authority: code review (this is a code change, not executed here).
 
 ## 6. Remaining evidence / approval requests and bounded proposed checks
 
@@ -719,8 +745,11 @@ Supporting handoff tasks (existing IDs; do not invent):
 3. **Bounded proposed checks (PROPOSED, no execution authority yet):**
    - 46-library peak reconciliation (§5); needs scoped approval because it fetches
      43 dataset-adjacent supplementary files.
-   - Scientific-value / RNA-only-fallback assessment (§5, the single next action);
-     public primary papers + local frozen design only.
+    - Scientific-value / RNA-only-fallback assessment: completed iteration 4
+      (§3.9, disposition `CONDITIONAL`); no further action unless the Q22 fix or
+      prospective amendment is reviewed.
+    - Minimum reader/resource path (priority 4, now the single next action, §5);
+      official docs/author code + local inspection only.
    - External-cohort provenance pass: completed to the metadata/count-stage level
      (§3.8); re-open only to request the author QC rule/barcode artifact.
    - A tiny `.rda`/Seurat/`ChromatinAssay` fixture (already designed in the earlier
@@ -738,15 +767,13 @@ Supporting handoff tasks (existing IDs; do not invent):
 ### Base and dossier verification (`OBSERVED_NOW`)
 
 - Base commit `8217719713c271349d1e54eda679672b82133a56` verified.
-- Earlier-campaign dossier worktree `p22-research-campaig-b057f9` moved between
-  reads: iteration 1 saw HEAD `7e37ceb`, SHA-256
-  `252a097479de0580f639bcba44dfb6a47a62ba74e08bea75e65a4f4d4baa3495` (R1–R5 body,
-  R6–R8 pending); iteration 2 sees HEAD `b40458f`, SHA-256
-  `0d337b6d6c494b0a8f3be1b5b31b80430a835c35b39c0f4cf40d7bb1a12ec2f9` (R1–R6 body;
-  the progress table marks R7 `RESEARCHED` but **no R7 body is present** and the
-  file ends at the R6 outcome). The campaign worktree is still being written; treat
-  its R7 row as a claim, not a completed pass, and its R1–R6 as
-  `RECORDED_PREVIOUSLY` here, not re-verified line by line.
+- Earlier-campaign dossier worktree `p22-research-campaig-b057f9` is now complete:
+  iteration 4 reads HEAD `b64ba07`, SHA-256
+  `c0d6206f81edea661d7ca22c66de138a8103cbeb4ec55e7fabb7fe673db37487`, with R1–R8
+  bodies present (the earlier iterations saw `7e37ceb` and `b40458f`). Its R1–R6
+  are treated as `RECORDED_PREVIOUSLY`; R7/R8 were re-read and their consequential
+  claims (donor counts, margin arithmetic, `NAMED_BASELINES` gap, R6 citation
+  correction) re-verified locally this run.
 - Required hashes re-checked iteration 2: contract
   `9a13d8be…` and `PAIRED_MULTIOME_REMAINING_EVIDENCE` `66b1d815…` both unchanged.
 
@@ -778,6 +805,12 @@ Supporting handoff tasks (existing IDs; do not invent):
 | N22 | Web search for a Vuong/de la Torre-Ubieta analysis code repo (none found) | OBSERVED_NOW | 2026-09-20 |
 | N23 | Local release metadata re-analysis (§3.8; 117,532×22; QC replay 113,242) | OBSERVED_NOW | 2026-09-20 |
 | N24 | Manuscript QC/age/provider methods (XML, `S21` QC section; sample acquisition) | OBSERVED_NOW | 2026-09-20 |
+| N25 | `src/p22/eval/estimand.py`, `multiome_runner.py`, `multiome_final.py`, `multiome_protocol.py`, `named_baselines.py` (primary-contrast implementation + Q22 gap) | OBSERVED_NOW | 2026-09-20 |
+| N26 | S50, Liu et al., *Nat Methods* 2025, DOI 10.1038/s41592-025-02856-3 (integration quality dominates classifier) | OBSERVED_NOW | 2026-09-20 |
+| N27 | S51, Beaude et al., CrossAttOmics, *Brief Bioinform* 2025, DOI 10.1093/bioinformatics/btaf302 (cross-attention with few paired examples) | OBSERVED_NOW | 2026-09-20 |
+| N28 | S52, arXiv 2606.01207 (preprint; alignment/sample complexity O(d_v+d_t) vs O(d_v·d_t)) | OBSERVED_NOW | 2026-09-20 |
+| N29 | S55 Zimmerman *Nat Commun* 2021 + S56 Squair *Nat Commun* 2021 + S58 Aït Yahya-Graison *Am J Hum Genet* 2007 + S59 Donovan *Nat Commun* 2024 (donor unit; HSA21 dosage) | OBSERVED_NOW | 2026-09-20 |
+| N30 | S57 Acera-Mateos et al., *Genome Biol* 2026, DOI 10.1186/s13059-026-04002-4; S60 arXiv 2605.31504 DECAT (peaks+genes vs peaks-only; early-fusion limitation) | OBSERVED_NOW | 2026-09-20 |
 
 Reused without re-fetch: earlier dossier S1–S42 (local canonical docs, saved Vuong
 XML/NeMO metadata, pinned author tables). Search coverage iteration 1: author
@@ -790,7 +823,10 @@ local release metadata re-analysis; NeMO parent/open-collection pages; web searc
 for an author code repository (none found). No NeMO payload/count/fragment
 re-fetch; no payload, object, fragment or matrix reads; no author contact; no
 payload GET (only the local saved XML, local metadata tar and author-repo
-CSVs/scripts).
+CSVs/scripts). Search coverage iteration 4: local paired-model/estimand code
+(`estimand.py`, `multiome_runner.py`, `multiome_final.py`, `multiome_protocol.py`,
+`named_baselines.py`, tests) and six primary method sources reopened on the web
+(S50–S52, S55–S60 subset; N26–N30). No payload, install, container or training.
 
 ### Corrections to earlier work
 
@@ -806,8 +842,9 @@ CSVs/scripts).
    the B02 final 37 (iteration 2, §3.7).
 7. "`tissue_quality` drives exclusion" rejected: a `sub` specimen is retained and
    `ok` libraries are dropped (iteration 2, §3.7).
-8. The earlier-campaign dossier progressed mid-run (HEAD `7e37ceb` → `b40458f`);
-   its R7 is table-marked `RESEARCHED` but has no body. Do not treat it as done.
+8. The earlier-campaign dossier progressed mid-run (`7e37ceb` → `b40458f` →
+   `b64ba07`); by iteration 4 it is complete with R1–R8 bodies (SHA `c0d6206f…`),
+   so the earlier "R7 has no body" caveat no longer applies.
 9. The NeMO `nCount_ATAC` column is **not** the QC-stage fragment count: 1,798
    release rows have `nCount_ATAC`<=100 (Q9 `UNVERIFIED` → `REJECTED`, iteration 3).
 10. The paper's stated QC replay gives **113,242**, not 113,801; the 113,801 is
@@ -816,6 +853,14 @@ CSVs/scripts).
     and have higher counts than non-`Unk` (iteration 3, §3.8).
 12. Vuong reports obstetric *gestational weeks*, not post-conception weeks; Lattke
     `dev_PCW` needs a ≈2-week conversion before any age join (iteration 3, §3.8).
+13. The frozen estimand's `NAMED_BASELINES` omits `cross_attention`/`token_concat`
+    even though the runner implements the primary contrast; the earlier campaign's
+    R8 finding is confirmed as a real M5/M6c gap, not a runner blocker (iteration
+    4, Q22, §3.9).
+14. The earlier dossier's S52 citation is an unrefereed vision-language preprint
+    with a conditional direction, and S60's DECAT explicitly cannot score
+    early-fusion cross-attention; both must be cited with those limits (iteration
+    4, §3.9).
 
 ### Iteration progress
 
@@ -826,13 +871,19 @@ CSVs/scripts).
   from GEO SOFT + pinned author tables, two exclusion layers, duplicate-key checks,
   three claim corrections, and the minimal missing artifact (`B02filter_stats.csv`)
   named. Next action moved to priority 3 (external-cohort provenance).
-- Iteration 3 (this pass): priority 3 resolved to the metadata/count-stage level
+- Iteration 3: priority 3 resolved to the metadata/count-stage level
   (§3.8) — 113,801 = RNA non-`Unk` (stated-QC replay 113,242), release
   `nCount_ATAC` is not the QC column, `Unk` is an annotation class, cohort is 26
   donors / 13 libraries with provider×region confounding, GW≠PCW. No author code
   repo/barcode artifact found (Q21). Single next action moved to priority 5.
-- Next iteration: priority 5 (scientific value and RNA-only fallback), then
-  priority 4 (reader/resource path re-verification) and priority 2 (full 46-library
-  peak reconciliation, still needing scoped approval).
-- Stop condition: not met. Priorities 2, 4, 5 and 6 lack a supported disposition in
-  this handoff; priority 5 is the active next action. `should_fully_stop=false`.
+- Iteration 4 (this pass): priority 5 resolved to `CONDITIONAL` (§3.9) — the
+  primary contrast is implemented in the runner (`multiome_final.py:190`), the
+  frozen estimand omits its two arms (Q22), and six primary sources were reopened
+  with two corrections (S52 preprint/conditional, S60 cannot score early-fusion
+  cross-attention). Single next action moved to priority 4.
+- Next iteration: priority 4 (minimum reader/resource path), then priority 6
+  (finalize the decision/handoff) and priority 2 (full 46-library peak
+  reconciliation, still needing scoped approval).
+- Stop condition: not met. Priority 4 lacks a supported disposition in this
+  handoff; priority 2's full reconciliation remains an approval-gated bounded
+  check. `should_fully_stop=false`.
