@@ -1,6 +1,6 @@
 # P22 deep-research handoff for Codex
 
-Prepared 2026-09-20 (iteration 1; updated iteration 2). Worktree
+Prepared 2026-09-20 (iteration 1; updated iteration 2 and 3). Worktree
 `p22-deep-research-pr-3ad124`. Base commit `8217719713c271349d1e54eda679672b82133a56`
 verified equal to the expected base. Documentation/research only: no payload
 download, object inspection, install, container launch, training, author contact,
@@ -92,6 +92,42 @@ What iteration 2 adds (all `OBSERVED_NOW` unless noted) — priority 1 is now cl
    B02-QC drops needs `B02filter_stats.csv`, absent from the complete pinned tree;
    the retained-barcode list per library remains author-local.
 
+What iteration 3 adds (all `OBSERVED_NOW` unless noted) — priority 3 is now
+resolved to the metadata/count-stage level, with one author artifact still
+`UNKNOWN`:
+
+10. **The reported 113,801 exactly equals the RNA non-`Unk` count; the stated QC
+    replay does not.** Applying the manuscript's own thresholds (`nCount_RNA`>200
+    and <donor-mean+3 s.d.; `nCount_ATAC`>100; `percent.mt`<5) to the release
+    columns yields **113,242** cells, a 559-cell gap from 113,801. The only exact
+    match is `class != "Unk"` = 113,801. The word `Unk` never appears in the
+    manuscript, so no author statement connects the annotation to the reported
+    count (§3.8).
+11. **`Unk` is a cell-type annotation class, not a QC failure.** 3,474 of 3,731
+    `Unk` cells (93.1%) pass all stated QC thresholds, and `Unk` cells have
+    *higher* median `nCount_ATAC` (12,411 vs 6,957) and `nCount_RNA` (5,216 vs
+    3,309) than non-`Unk`. The low-quality cells are spread across both classes
+    (4,033 QC-failing non-`Unk` + 257 `Unk`). This rejects "`Unk` = QC-dropped".
+12. **The release metadata is not filtered to the paper's final QC set.**
+    1,798 rows have `nCount_ATAC`<=100 and 2,530 rows exceed donor+3 s.d.
+    `nCount_RNA`, so either the release `nCount_ATAC` column is a later count
+    stage or the release retains pre-QC cells. Either way, QC must not be replayed
+    from the release column (Q9 strengthened).
+13. **External cohort structure is now exact: 26 donors (13 Ctrl + 13 Ts21)
+    across 13 sequencing libraries (GEM1–7, S1–6), 38 donor-library pairs.**
+    Effective replication is 26 donors, not cells or libraries. Region is
+    confounded with provider: all 18 UCLA donors are `region=Cortex`; the 8 NIH
+    donors span BA9/BA6/occipital/parietal-occipital/cerebrum (§3.8).
+14. **Age scales differ.** Vuong reports obstetric *gestational weeks* (GW 13–23,
+    ACOG/LMP-based); Lattke reports *post-conception weeks* (`dev_PCW` 10–20). PCW
+    ≈ GW−2, so the ranges overlap after conversion; raw GW vs PCW is a ~2-week
+    misalignment and must not be compared directly.
+15. **No public Vuong author-code repository or retained-barcode artifact was
+    found.** The manuscript's data-availability statement names only NeMO
+    `col-umstjg0` (controlled, GRU + not-for-profit + local IRB); the open child
+    collections `col-mbgxwtz` (RNA) and `col-ad8t52b` (ATAC) are the only open
+    processed releases. Scope: manuscript XML + web search (N19–N22).
+
 ## 2. Question / claim table
 
 Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
@@ -107,8 +143,14 @@ Status vocabulary: `SUPPORTED` (source-backed, scope stated), `INFERENCE`
 | Q6 | The 7.6 GiB object's compressed size bounds nothing about memory/assays | contract `forbidden_shortcuts`; §3.5 | Exact decoded size/RAM unknown | SUPPORTED | No download decision may rest on the rounded listing |
 | Q7 | 256 MiB / 15 s HEAD feasibility is established | earlier dossier asserted it from interpreter footprint | No end-to-end measurement on this host | UNVERIFIED | Do not treat the HEAD contract as proven feasible |
 | Q8 | Earlier "4×" fixture-vs-HEAD memory factor | arithmetic §3.6 | None | REJECTED (16×) | Correct budget text |
-| Q9 | NeMO external `nCount_ATAC` is the QC-stage fragment count | earlier R5 | Contradiction observed; count stage undefined | UNVERIFIED | Never replay QC from the release column |
+| Q9 | NeMO external `nCount_ATAC` is the QC-stage fragment count | 1,798 rows <=100 (§3.8) | Count stage undefined; release not final-QC-filtered | REJECTED (not the QC column) | Never replay QC from the release column; re-filter explicitly |
 | Q10 | External cohort is independent | provider-level only | No genetic crosswalk | UNVERIFIED (no_overlap_evidence) | Report as covariate-limited external candidate |
+| Q16 | Reported 113,801 is the RNA non-`Unk` count | exact match (§3.8) | No author statement names `Unk` | SUPPORTED (count identity), rule UNKNOWN | Use non-`Unk` as the candidate mask, labelled annotation-derived |
+| Q17 | The stated QC replay reproduces 113,801 | replay = 113,242 (§3.8) | 559-cell gap | REJECTED | Do not claim the 113,801 set is the QC-pass set |
+| Q18 | `Unk` cells are the QC-dropped cells | 93.1% of `Unk` pass QC; higher counts (§3.8) | None | REJECTED | `Unk` is a cell-type annotation, not a QC artifact |
+| Q19 | External cohort effective replication | 26 donors / 13 libraries (§3.8) | Donor identity beyond ID | SUPPORTED | Power/aggregation is donor-level (26), not cell-level |
+| Q20 | Vuong `gw` and Lattke `dev_PCW` are the same scale | manuscript: GW 13–23 obstetric; Lattke PCW 10–20 (§3.8) | ACOG/LMP vs conception | REJECTED (≈2-week offset) | Convert GW→PCW before any age covariate join |
+| Q21 | A public Vuong author code repo / barcode list exists | none found (N19–N22) | Search scope | UNKNOWN | Request the author QC rule/barcode list; keep external QC `EXTERNAL_QC_RULE_UNRESOLVED` |
 | Q11 | GSE305146 goes 46 libraries → 37 retained → 30 final specimens (15 CON/15 DS) | SOFT + A_input + B02 tables (§3.7) | None at metadata level | SUPPORTED | The paired design universe is 30 specimens / 37 libraries; donors = specimens only by ID |
 | Q12 | GEO `in final_analysis=TRUE` equals the final cohort | SOFT flag = 41 libraries vs B02 = 37 (§3.7) | None | REJECTED | Do not use the GEO flag as the final cohort; use the B02 table |
 | Q13 | A_input `tissue_quality` drives exclusion | B18D2L (`sub`) retained; B15C1H/L (`ok`) dropped (§3.7) | None | REJECTED | Exclusion rule is B02 cell QC, not the preservation label |
@@ -363,6 +405,98 @@ Corrections and limits:
   needs `B02filter_stats.csv`, which is absent from the complete pinned tree
   (`truncated:false`) — the named minimal missing artifact (Q15).
 
+### 3.8 External cohort: counts, QC stage, structure, independence (`OBSERVED_NOW`)
+
+Sources: local saved manuscript XML
+`data/multiome/Vuong_PMC13225313_efetch_20260908.xml` (SHA-256 `7e58d9f0…`, per
+§7); local saved release metadata
+`data/multiome/VuongWeber_DSdevctx_metadata.tar` SHA-256
+`72cf7284663aeaee76ed3bab16ce0b414faf82847a883e946e7c2afab21b1526`, member
+`VuongWeber_2025_DSdevctx_metadata_20260128.csv.gz` (117,532 rows × 22 cols); NeMO
+collection pages (N19). No payload/count/fragment download.
+
+**Count partition and QC replay.** The metadata has 117,532 rows; `class == "Unk"`
+is exactly `cluster.ids == "Unk"` = 3,731; non-`Unk` = **113,801**, the paper's
+reported retained-nuclei figure. The manuscript states the QC filters
+(`nCount_RNA`>200 and <donor-mean+3 s.d.; ATAC fragment `nCount_ATAC`>100;
+`percent.mt`<5 tissue) but never states an `Unk` exclusion ("Unk" occurs 0 times in
+the XML). Replaying those thresholds on the release columns:
+
+| Filter | Rows failing | Rows passing |
+|---|---:|---:|
+| `nCount_RNA`>200 | 0 | 117,532 |
+| `nCount_RNA`<donor+3 s.d. | 2,530 | 115,002 |
+| `nCount_ATAC`>100 | 1,798 | 115,734 |
+| `percent.mt`<5 | 7 | 117,525 |
+| All four | 4,290 | **113,242** |
+
+So the stated-QC replay gives 113,242, not 113,801 (559 gap), and the release
+retains 4,290 cells that fail at least one stated threshold. This is decisive:
+the release `nCount_ATAC` is **not** the QC-stage fragment count (or the release
+is pre-QC), and the release metadata is a **superset** of the paper's final set.
+Q9 is therefore `REJECTED`, not merely `UNVERIFIED`. The exact `Unk` partition
+remains the only exact match, but without an author statement it is a candidate
+annotation-derived mask, not a verified author exclusion rule
+(`ANNOTATION_COUNT_MATCH_QC_UNVERIFIED`).
+
+**`Unk` is an annotation class, not a QC artifact.** 3,474/3,731 `Unk` cells
+(93.1%) pass all four stated thresholds. Median `nCount_ATAC` is 12,411 (`Unk`)
+vs 6,957 (non-`Unk`); median `nCount_RNA` 5,216 vs 3,309; median `nFeature_ATAC`
+5,698 vs 3,311. QC-failing cells are distributed across both classes (4,033
+non-`Unk`, 257 `Unk`). Strongest alternative explanation: the authors applied an
+*additional* unpublished QC stage that happens to retain exactly these cells —
+overturning evidence would be an author rule/barcode list; the count coincidence
+alone does not prove it.
+
+**Cohort structure.** 26 donors (13 Ctrl + 13 Ts21), `hsa21_status` exactly
+Disomic/Trisomic = Ctrl/Ts21 (so it adds no independent karyotype information);
+13 sequencing libraries (`GEM1`–`GEM7`, `S1`–`S6`); 38 donor-library pairs (1–2
+libraries per donor; 1–4 donors per library, i.e. multiplexed). Effective
+replication is **26 donors**. Donors: 18 UCLA (`D96`–`D420`, 8 Ctrl/10 Ts21), 8
+NIH (`NIH908`–`NIH1883`, 5 Ctrl/3 Ts21). `region` is confounded with provider —
+all 18 UCLA donors are `Cortex`, the 8 NIH donors span `BA9`, `BA6`, `BA9/46`,
+`Occipital`, `Parietal/occipital`, `Cerebrum`. RNA `Unk` (3,731) and WNN
+`cluster.ids.wnn == "Unk"` (728; 663 overlap, 65 do not) are not interchangeable;
+`class.wnn` has no `Unk` category (4 classes only). Smallest donor retains 281
+cells / 273 non-`Unk` (`D98`).
+
+**Age scale.** Manuscript: "gestational weeks (GW) 13 to 23"; for UCLA tissue
+"gestational age was estimated following the guidelines of the American College
+of Obstetricians & Gynecologists … age based on the date of last menstrual period
+was revised using ultrasonographic dating" — i.e. obstetric gestational age, not
+post-conception. Lattke's `dev_PCW` is 10–20 post-conception weeks. PCW ≈ GW−2;
+the two ranges overlap after conversion (Vuong ≈ PCW 11–21), but raw GW and PCW
+must not be joined directly.
+
+**Independence.** Provider-level separation stands: Vuong tissue from UCLA cores
+and NIH NeuroBioBank; Lattke fresh-frozen multiome from HDBR (project 200585).
+No genetic crosswalk or author-certified specimen mapping was found. Supported
+degree of independence is `no_overlap_evidence` (documented distinct providers +
+distinct donor IDs), not genetically verified non-overlap.
+
+Reproduce (metadata only; no expression/ATAC matrices):
+
+```bash
+cd /Users/anuragdani/Github/niw-eb1a/P22 && .venv-p22/bin/python - <<'PY'
+import tarfile, hashlib, pandas as pd
+p='data/multiome/VuongWeber_DSdevctx_metadata.tar'
+m=('VuongWeber_2025_DSdevctx_metadata_20260128/'
+   'VuongWeber_2025_DSdevctx_metadata_20260128.csv.gz')
+with tarfile.open(p) as a:
+    df=pd.read_csv(a.extractfile(m), compression='gzip')
+unk=df['class'].eq('Unk')
+hi=df.groupby('donor')['nCount_RNA'].transform(lambda s: s.mean()+3*s.std())
+passall=(df['nCount_RNA']>200)&(df['nCount_RNA']<hi)&(df['nCount_ATAC']>100)&(df['percent.mt']<5)
+assert (len(df), int(unk.sum()), int((~unk).sum()), int(passall.sum())) == (117532,3731,113801,113242)
+assert round((passall&unk).sum()/unk.sum(),4)==0.9311
+assert df.drop_duplicates('donor').condition.value_counts().to_dict()=={'Ctrl':13,'Ts21':13}
+assert df['donor'].nunique()==26 and df['sample'].nunique()==13 and df['donor_sample'].nunique()==38
+assert hashlib.sha256('\n'.join(sorted(df.loc[~unk,'Unnamed: 0'])).encode()).hexdigest() \
+       =='0de060f67ab7d355e90766ab81168929260b3ce43d663b27d53f82c47f5ff9d6'
+print('external cohort counts/QC/structure checks passed')
+PY
+```
+
 ### 3.5 Resource/contract facts re-confirmed (`OBSERVED_NOW`)
 
 - `configs/development_object_source_contract.json` SHA-256
@@ -438,13 +572,57 @@ Counterevidence and strongest alternatives:
 
 ## 5. Prioritized implementation handoff and the single next action
 
-Priority 1 is closed (§3.7). The single next action moves to priority 3, the
-external cohort, because the frozen design's only external check depends on it and
-it is resolvable from primary public sources without payload access.
+Priority 1 is closed (§3.7). Priority 3 is now resolved to the metadata/count-stage
+level (§3.8): the external cohort is 26 donors / 13 libraries, the reported 113,801
+is the RNA non-`Unk` count (not the stated-QC replay), the release `nCount_ATAC` is
+not the QC-stage count, `Unk` is an annotation class, and independence is
+provider-level only. The one remaining priority-3 unknown is an author QC rule /
+retained-barcode artifact (Q21). The single next action therefore moves to
+priority 5, because whether the paired comparison is scientifically worth
+implementing now gates every remaining route.
 
-**Single highest-value next action (do this first): resolve the external-cohort
-specimen-independence and ATAC count-stage questions from primary Vuong/NeMO
-author sources.**
+**Single highest-value next action (do this first): determine whether the frozen
+donor-aware RNA+ATAC comparison is worth implementing, and identify the simpler
+controls that could explain any apparent gain (priority 5).**
+
+- Input: primary method papers already in the local evidence set (the frozen
+  donor-aware design in `tasks/plan.md`/`tasks/todo.md` E2–E4, the paired-model
+  code and tests, the completed RNA result), plus primary methods for the
+  competing models (RNA-only, ATAC-only, concatenation, gated fusion,
+  cross-attention). Public HTML/PDF only; no installs or training.
+- Method: (a) state the incremental estimand each model answers on the frozen
+  design and which are already answered by the completed RNA study; (b) enumerate
+  leakage/confounding controls (all-donor peak selection, region×provider
+  confounding, age scale, donor-level aggregation, training-fold transformations)
+  and, for each, the simpler control that could produce an apparent improvement;
+  (c) state what result would refute the cross-attention advantage, and the value
+  of a negative/inconclusive paired result; (d) if RNA-only is preferable,
+  describe it as a separate prospective study without repeating the accepted
+  result.
+- Expected output: a short decision table mapping each model/route to
+  `incremental_question`, `simpler_control_that_explains_it`, `refuting_result`,
+  and `worth_implementing` (`YES`/`CONDITIONAL`/`NO`), with a one-paragraph
+  verdict on whether the paired path should proceed, proceed-with-amendment, or
+  pause for a separately justified alternative.
+- Acceptance check: every claim cites a primary method paper or the frozen design
+  text; no invented power numbers, no novelty-from-complexity, no attention-as-
+  causal language.
+- Dependencies: local canonical docs + web/primary papers only.
+- Authority: public web/primary HTML; no payload, training or protocol change.
+- Stop condition: if the incremental question is already answered by the completed
+  RNA study or cannot be separated from a simpler control, record
+  `PAIRED_PATH_PAUSE` with the specific alternative and stop the paired route.
+
+**How either result changes the next decision.** If the paired comparison adds an
+identifiable, refutable increment over RNA-only/ATAC-only and the simpler controls
+do not explain it, proceed only after a specific prospective amendment (frozen
+common-region recount) and keep the external check covariate-limited. If it does
+not, pause the paired path and recommend the separately justified RNA-only
+follow-up, preserving the accepted RNA result.
+
+Completed priority-3 disposition (kept for the record; no further action unless
+the artifact is requested): resolve the external-cohort specimen-independence and
+ATAC count-stage questions from primary Vuong/NeMO author sources.
 
 - Input: the saved Vuong manuscript XML
   (`data/multiome/Vuong_PMC13225313_efetch_20260908.xml`), the saved NeMO metadata
@@ -532,14 +710,19 @@ Supporting handoff tasks (existing IDs; do not invent):
    the remaining `INFERENCE`/`UNVERIFIED` rows into `SUPPORTED` without any large
    download.
 2. **NeMO count-stage definition (draft only).** Request the author's QC table or
-   count-stage definition behind the release `nCount_ATAC`/`class` columns, and the
-   author-defined final barcode list. Needed before external QC replay; do not
-   substitute the release column for the QC-stage fragment count.
+   count-stage definition behind the release `nCount_ATAC`/`class` columns, the
+   author rule connecting 117,532 release rows to the reported 113,801 (the
+   `Unk` partition matches exactly but is unstated), and the author-defined final
+   barcode list. Needed before external QC replay; the release column cannot be
+   substituted for the QC-stage fragment count (it fails the paper's own
+   `nCount_ATAC`>100 filter for 1,798 rows, §3.8).
 3. **Bounded proposed checks (PROPOSED, no execution authority yet):**
    - 46-library peak reconciliation (§5); needs scoped approval because it fetches
      43 dataset-adjacent supplementary files.
-   - External-cohort provenance pass (§5, the single next action); public
-     web/author-code only.
+   - Scientific-value / RNA-only-fallback assessment (§5, the single next action);
+     public primary papers + local frozen design only.
+   - External-cohort provenance pass: completed to the metadata/count-stage level
+     (§3.8); re-open only to request the author QC rule/barcode artifact.
    - A tiny `.rda`/Seurat/`ChromatinAssay` fixture (already designed in the earlier
      dossier R3) to close the reader-class gate — a proposal until run and reviewed.
    - One HEAD of the candidate payload URL per the frozen contract, only after
@@ -589,16 +772,25 @@ Supporting handoff tasks (existing IDs; do not invent):
 | N16 | Pinned `B_basic_analysis/B02_gr_tab_filtered_non_cx_excl.csv` (SHA `7f2113cf…`; 37 rows, matches local) | OBSERVED_NOW | 2026-09-20 |
 | N17 | `B02_v040_integrate_samples_RNA_Harmony.R:34-78` (filter rule) | OBSERVED_NOW | 2026-09-20 |
 | N18 | Pinned tree API re-read (confirms no `filter_stats`/`gr_tab_filtered.csv`) | OBSERVED_NOW | 2026-09-20 |
+| N19 | NeMO `col-umstjg0` parent page (controlled, GRU + not-for-profit + local IRB; 127 files/760 GB) | OBSERVED_NOW | 2026-09-20 |
+| N20 | NeMO open children `col-mbgxwtz` (RNA) / `col-ad8t52b` (ATAC) | OBSERVED_NOW | 2026-09-20 |
+| N21 | Manuscript data-availability statement (NeMO `col-umstjg0`; no code repo named) | OBSERVED_NOW | 2026-09-20 |
+| N22 | Web search for a Vuong/de la Torre-Ubieta analysis code repo (none found) | OBSERVED_NOW | 2026-09-20 |
+| N23 | Local release metadata re-analysis (§3.8; 117,532×22; QC replay 113,242) | OBSERVED_NOW | 2026-09-20 |
+| N24 | Manuscript QC/age/provider methods (XML, `S21` QC section; sample acquisition) | OBSERVED_NOW | 2026-09-20 |
 
 Reused without re-fetch: earlier dossier S1–S42 (local canonical docs, saved Vuong
 XML/NeMO metadata, pinned author tables). Search coverage iteration 1: author
 source tree + 8 raw scripts, Signac primary docs, GEO listing, local annotation
 files, local contract/plan/code. Search coverage iteration 2: GEO SOFT family
 record, pinned `A_input` and `B02` tables, pinned B02 script and tree, local
-contract/plan/code, earlier-campaign dossier (new HEAD). No NeMO re-fetch (earlier
-S42 transport error stands); no payload, object, fragment or matrix reads; no
-author contact; no payload GET (only author-repo CSVs/scripts and the local SOFT
-file).
+contract/plan/code, earlier-campaign dossier (new HEAD). Search coverage iteration
+3: local Vuong manuscript XML (QC/age/provider methods, data availability) and
+local release metadata re-analysis; NeMO parent/open-collection pages; web search
+for an author code repository (none found). No NeMO payload/count/fragment
+re-fetch; no payload, object, fragment or matrix reads; no author contact; no
+payload GET (only the local saved XML, local metadata tar and author-repo
+CSVs/scripts).
 
 ### Corrections to earlier work
 
@@ -616,18 +808,31 @@ file).
    `ok` libraries are dropped (iteration 2, §3.7).
 8. The earlier-campaign dossier progressed mid-run (HEAD `7e37ceb` → `b40458f`);
    its R7 is table-marked `RESEARCHED` but has no body. Do not treat it as done.
+9. The NeMO `nCount_ATAC` column is **not** the QC-stage fragment count: 1,798
+   release rows have `nCount_ATAC`<=100 (Q9 `UNVERIFIED` → `REJECTED`, iteration 3).
+10. The paper's stated QC replay gives **113,242**, not 113,801; the 113,801 is
+    exactly the RNA non-`Unk` count (iteration 3, §3.8). Do not equate them.
+11. `Unk` is a cell-type annotation class, not the QC-dropped set: 93.1% pass QC
+    and have higher counts than non-`Unk` (iteration 3, §3.8).
+12. Vuong reports obstetric *gestational weeks*, not post-conception weeks; Lattke
+    `dev_PCW` needs a ≈2-week conversion before any age join (iteration 3, §3.8).
 
 ### Iteration progress
 
 - Iteration 1: R6 (defensible common ATAC feature route) researched; object
   provenance chain recovered; naive-merge finding; 3-library peak-space
   measurement; arithmetic/challenge corrections; handoff created.
-- Iteration 2 (this pass): priority 1 closed — full library↔specimen reconciliation
+- Iteration 2: priority 1 closed — full library↔specimen reconciliation
   from GEO SOFT + pinned author tables, two exclusion layers, duplicate-key checks,
   three claim corrections, and the minimal missing artifact (`B02filter_stats.csv`)
   named. Next action moved to priority 3 (external-cohort provenance).
-- Next iteration: priority 3 external-cohort provenance/independence (§5), then
-  priority 5 (scientific value and RNA-only fallback, independently of the
-  campaign's R7) and priority 4 (reader/resource path re-verification).
-- Stop condition: not met. Priorities 2 and 5–6 lack a supported disposition in
-  this handoff; priority 3 is the active next action. `should_fully_stop=false`.
+- Iteration 3 (this pass): priority 3 resolved to the metadata/count-stage level
+  (§3.8) — 113,801 = RNA non-`Unk` (stated-QC replay 113,242), release
+  `nCount_ATAC` is not the QC column, `Unk` is an annotation class, cohort is 26
+  donors / 13 libraries with provider×region confounding, GW≠PCW. No author code
+  repo/barcode artifact found (Q21). Single next action moved to priority 5.
+- Next iteration: priority 5 (scientific value and RNA-only fallback), then
+  priority 4 (reader/resource path re-verification) and priority 2 (full 46-library
+  peak reconciliation, still needing scoped approval).
+- Stop condition: not met. Priorities 2, 4, 5 and 6 lack a supported disposition in
+  this handoff; priority 5 is the active next action. `should_fully_stop=false`.
