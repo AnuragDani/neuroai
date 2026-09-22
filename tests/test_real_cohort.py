@@ -15,6 +15,7 @@ import pytest
 from p22.data.real_cohort import (
     CHR21_LABELS,
     CONTROL_CONDITION,
+    DEFAULT_RNA_MATRIX_KEY,
     POSITIVE_CONDITION,
     QcThresholds,
     audit_donor_suffix,
@@ -25,6 +26,7 @@ from p22.data.real_cohort import (
     donor_pseudobulk,
     load_cell_matrix,
     mito_gene_mask,
+    read_matrix_axis,
     run_cohort_qc,
     sample_capped_cells,
     sample_nested_capped_cells,
@@ -292,3 +294,117 @@ def test_covariate_frame_only_uses_observed_columns(fixture_h5ad: Path):
     assert "percent.mt" in frame.columns
     assert any(name.startswith("batch_seq_") for name in frame.columns)
     assert not any(name.startswith("dataset_folder") for name in frame.columns)
+
+
+@pytest.fixture
+def divergent_axis_h5ad(tmp_path: Path) -> dict[str, object]:
+    """A fixture whose ``X`` and ``raw/X`` differ in values *and* gene order.
+
+    Processed ``X`` is noninteger and follows ``var``. Raw counts are integers and
+    follow a reordered ``raw/var`` with a different identifier scheme, so a loader
+    that defaults to ``X`` or attaches processed labels to raw columns cannot pass
+    unnoticed.
+    """
+    anndata = pytest.importorskip("anndata")
+    from scipy import sparse
+
+    rng = np.random.default_rng(7)
+    n_cells, n_genes = 8, 6
+    raw_counts = rng.poisson(4.0, size=(n_cells, n_genes)).astype(np.float32)
+    processed = (rng.random((n_cells, n_genes)) + 0.25).astype(np.float32)
+    var = _var_frame(n_genes, 0)
+    raw_order = np.array([4, 1, 5, 0, 3, 2])
+    raw_var = var.iloc[raw_order].copy()
+    raw_var.index = [f"RAW{index:011d}" for index in range(n_genes)]
+    obs = pd.DataFrame(
+        {
+            "donor_id": pd.Categorical(["d0"] * n_cells),
+            "disease": pd.Categorical([CONTROL_CONDITION] * n_cells),
+        },
+        index=[f"cell{index}" for index in range(n_cells)],
+    )
+    adata = anndata.AnnData(X=sparse.csr_matrix(processed), obs=obs, var=var)
+    adata.raw = anndata.AnnData(
+        X=sparse.csr_matrix(raw_counts[:, raw_order]), obs=obs, var=raw_var
+    )
+    path = tmp_path / "divergent.h5ad"
+    adata.write_h5ad(path)
+    return {
+        "path": path,
+        "raw": raw_counts[:, raw_order],
+        "processed": processed,
+        "raw_var": list(raw_var.index),
+        "var": list(var.index),
+        "n_cells": n_cells,
+    }
+
+
+def test_default_rna_matrix_is_raw_counts(divergent_axis_h5ad: dict[str, object]):
+    path = divergent_axis_h5ad["path"]
+    matrix = load_cell_matrix(path, np.arange(divergent_axis_h5ad["n_cells"]))
+    assert DEFAULT_RNA_MATRIX_KEY == "raw/X"
+    assert np.all(matrix.data == np.floor(matrix.data))
+    assert np.allclose(matrix.toarray(), divergent_axis_h5ad["raw"])
+
+
+def test_wrong_default_processed_block_cannot_pass_as_raw(divergent_axis_h5ad: dict[str, object]):
+    path = divergent_axis_h5ad["path"]
+    rows = np.arange(divergent_axis_h5ad["n_cells"])
+    with pytest.raises(ValueError, match="non-integer"):
+        load_cell_matrix(path, rows, matrix_key="X")
+    explicit = load_cell_matrix(path, rows, matrix_key="X", validate_counts=False)
+    assert np.allclose(explicit.toarray(), divergent_axis_h5ad["processed"])
+
+
+def test_raw_matrix_columns_follow_raw_axis_not_processed_axis(
+    divergent_axis_h5ad: dict[str, object],
+):
+    path = divergent_axis_h5ad["path"]
+    raw_axis = read_matrix_axis(path, DEFAULT_RNA_MATRIX_KEY)
+    assert raw_axis["axis_key"] == "raw/var"
+    assert raw_axis["n_genes"] == len(divergent_axis_h5ad["raw_var"])
+    assert raw_axis["gene_ids"] == divergent_axis_h5ad["raw_var"]
+    processed_axis = read_matrix_axis(path, "X")
+    assert processed_axis["axis_key"] == "var"
+    assert processed_axis["gene_ids"] == divergent_axis_h5ad["var"]
+
+
+def test_load_cell_matrix_rejects_negative_raw_counts(tmp_path: Path):
+    anndata = pytest.importorskip("anndata")
+    from scipy import sparse
+
+    counts = np.array([[1.0, -2.0], [3.0, 4.0]], dtype=np.float32)
+    obs = pd.DataFrame(
+        {
+            "donor_id": pd.Categorical(["d0", "d0"]),
+            "disease": pd.Categorical([CONTROL_CONDITION] * 2),
+        },
+        index=["c0", "c1"],
+    )
+    var = _var_frame(2, 0)
+    adata = anndata.AnnData(X=sparse.csr_matrix(counts), obs=obs, var=var)
+    adata.raw = anndata.AnnData(X=sparse.csr_matrix(counts), obs=obs, var=var)
+    path = tmp_path / "negative.h5ad"
+    adata.write_h5ad(path)
+    with pytest.raises(ValueError, match="negative"):
+        load_cell_matrix(path, np.arange(2))
+
+
+def test_load_cell_matrix_refuses_missing_raw_block(tmp_path: Path):
+    anndata = pytest.importorskip("anndata")
+    from scipy import sparse
+
+    counts = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
+    obs = pd.DataFrame(
+        {
+            "donor_id": pd.Categorical(["d0", "d0"]),
+            "disease": pd.Categorical([CONTROL_CONDITION] * 2),
+        },
+        index=["c0", "c1"],
+    )
+    var = _var_frame(2, 0)
+    adata = anndata.AnnData(X=sparse.csr_matrix(counts), obs=obs, var=var)
+    path = tmp_path / "no_raw.h5ad"
+    adata.write_h5ad(path)
+    with pytest.raises(KeyError):
+        load_cell_matrix(path, np.arange(2))

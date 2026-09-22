@@ -1150,17 +1150,97 @@ def sample_nested_capped_cells(
     }
 
 
+# The RNA view consumes the raw count block. ``X`` is the author-processed
+# (log-normalized) matrix and must never be presented as raw counts.
+DEFAULT_RNA_MATRIX_KEY = "raw/X"
+# A matrix block and the axis its columns follow. The raw block's columns follow
+# ``raw/var``; attaching processed ``var`` labels to raw columns is a defect.
+AXIS_KEY_FOR_MATRIX = {"raw/X": "raw/var", "X": "var"}
+
+
+def _as_text(value: Any) -> str:
+    if isinstance(value, bytes):
+        return value.decode("utf-8")
+    return str(value)
+
+
+def _read_index_column(group, name: str = "_index") -> list[str] | None:
+    """Read an AnnData index column, decoding a categorical or string dataset."""
+    import h5py
+
+    if name not in group:
+        return None
+    dataset = group[name]
+    if isinstance(dataset, h5py.Group):
+        categories = np.asarray(dataset["categories"][:])
+        codes = np.asarray(dataset["codes"][:])
+        return [_as_text(value) for value in categories[codes]]
+    return [_as_text(value) for value in np.asarray(dataset[:])]
+
+
+def read_matrix_axis(path: str | Path, matrix_key: str = DEFAULT_RNA_MATRIX_KEY) -> dict[str, Any]:
+    """Return the ordered axis identifiers for a matrix block.
+
+    ``raw/X`` columns follow ``raw/var`` and ``X`` columns follow ``var``. The
+    returned ``axis_key`` names the block actually read so a caller cannot attach
+    processed gene labels to raw columns.
+    """
+    import h5py
+
+    axis_key = AXIS_KEY_FOR_MATRIX.get(matrix_key)
+    with h5py.File(Path(path), "r") as handle:
+        if matrix_key not in handle:
+            raise KeyError(f"matrix block {matrix_key!r} is absent from {path}")
+        group = handle[matrix_key]
+        shape = tuple(int(value) for value in group.attrs["shape"])
+        gene_ids: list[str] | None = None
+        axis_source = "unresolved"
+        if axis_key and axis_key in handle:
+            gene_ids = _read_index_column(handle[axis_key])
+            axis_source = axis_key
+    return {
+        "matrix_key": matrix_key,
+        "axis_key": axis_source,
+        "n_cells": shape[0],
+        "n_genes": shape[1],
+        "gene_ids": gene_ids,
+    }
+
+
+def _assert_raw_count_semantics(values: np.ndarray, matrix_key: str) -> None:
+    """Refuse a consumed block that is not finite, nonnegative integer counts."""
+    if not np.all(np.isfinite(values)):
+        raise ValueError(f"{matrix_key} contains non-finite values; not a raw count matrix")
+    if np.any(values < 0):
+        raise ValueError(f"{matrix_key} contains negative values; not a raw count matrix")
+    if not np.all(values == np.floor(values)):
+        raise ValueError(
+            f"{matrix_key} contains non-integer values; the raw count representation "
+            "is required (pass an explicit processed key with validate_counts=False "
+            "to consume a normalized block)"
+        )
+
+
 def load_cell_matrix(
     path: str | Path,
     row_positions: np.ndarray,
-    matrix_key: str = "X",
+    matrix_key: str = DEFAULT_RNA_MATRIX_KEY,
+    *,
+    validate_counts: bool = True,
 ):
-    """Gather the given rows from a CSR block into an in-memory sparse matrix."""
+    """Gather the given rows from a CSR block into an in-memory sparse matrix.
+
+    Defaults to the raw count block ``raw/X``. When ``validate_counts`` is set,
+    the values actually consumed must be finite, nonnegative integers, so a
+    processed (e.g. log-normalized) block cannot be silently consumed as counts.
+    """
     import h5py
     from scipy import sparse
 
     rows = np.sort(np.asarray(row_positions, dtype=np.int64))
     with h5py.File(Path(path), "r") as handle:
+        if matrix_key not in handle:
+            raise KeyError(f"matrix block {matrix_key!r} is absent from {path}")
         group = handle[matrix_key]
         n_genes = int(group.attrs["shape"][1])
         indptr = np.asarray(group["indptr"][:])
@@ -1169,10 +1249,13 @@ def load_cell_matrix(
         blocks: list[Any] = []
         for start, stop in _row_runs(rows):
             low, high = int(indptr[start]), int(indptr[stop])
+            values = np.asarray(data[low:high], dtype=np.float32)
+            if validate_counts:
+                _assert_raw_count_semantics(values, matrix_key)
             blocks.append(
                 sparse.csr_matrix(
                     (
-                        np.asarray(data[low:high], dtype=np.float32),
+                        values,
                         np.asarray(indices[low:high]),
                         indptr[start : stop + 1] - low,
                     ),

@@ -3,7 +3,8 @@
 This is the missing real orchestration for the paired study. It consumes the two
 accepted development views on the same 248,998 cells:
 
-* RNA: the local CELLxGENE H5AD ``X`` (cells x genes, raw counts);
+* RNA: the local CELLxGENE H5AD ``raw/X`` (cells x genes, integer raw counts),
+  with columns following ``raw/var`` (not the processed ``X``/``var`` axis);
 * ATAC: the frozen training-fold region matrix recovered by bounded remote
   fragment queries (``scripts/quantify_development_atac.py``).
 
@@ -38,7 +39,12 @@ from p22.data.group_splits import (  # noqa: E402
     iter_repeated_stratified_group_folds,
     validate_group_folds,
 )
-from p22.data.real_cohort import load_cell_matrix, sample_nested_capped_cells  # noqa: E402
+from p22.data.real_cohort import (  # noqa: E402
+    DEFAULT_RNA_MATRIX_KEY,
+    load_cell_matrix,
+    read_matrix_axis,
+    sample_nested_capped_cells,
+)
 from p22.data.resources import environment_record, measure_stage  # noqa: E402
 from p22.eval.multiome_protocol import MultiomeProtocol, paired_comparison  # noqa: E402
 from p22.eval.multiome_runner import run_paired_fold  # noqa: E402
@@ -74,14 +80,28 @@ def load_development_inputs(h5ad_path, atac_path, protocol):
         protocol.sampling_seed,
     )[protocol.cell_cap]
     metadata = obs.iloc[rows].reset_index(drop=True)
-    rna = load_cell_matrix(h5ad_path, rows)
+    axis = read_matrix_axis(h5ad_path, DEFAULT_RNA_MATRIX_KEY)
+    if axis["n_cells"] != n_cells:
+        raise ValueError("raw RNA block cells do not match the H5AD obs axis")
+    rna = load_cell_matrix(h5ad_path, rows, matrix_key=DEFAULT_RNA_MATRIX_KEY)
+    if rna.shape[1] != axis["n_genes"]:
+        raise ValueError("raw RNA block columns do not match the declared raw axis")
     atac_matrix = sparse.load_npz(atac_path)
     if atac_matrix.shape[1] != n_cells:
         raise ValueError("ATAC matrix cells do not match the H5AD cell count")
     atac = atac_matrix[:, rows].transpose().tocsr()
     views = {VIEW_A: sparse.csr_matrix(rna), VIEW_B: atac}
+    gene_ids = axis["gene_ids"] or []
+    gene_axis_sha256 = hashlib.sha256("\n".join(gene_ids).encode()).hexdigest()
     fingerprints = {
         "h5ad": {"path": str(h5ad_path), "sha256": _sha256(h5ad_path), "n_genes": int(n_genes)},
+        "rna_representation": {
+            "matrix_key": DEFAULT_RNA_MATRIX_KEY,
+            "axis_key": axis["axis_key"],
+            "n_genes": int(axis["n_genes"]),
+            "gene_axis_sha256": gene_axis_sha256,
+            "integer_counts_validated": True,
+        },
         "atac_matrix": {
             "path": str(atac_path),
             "sha256": _sha256(atac_path),

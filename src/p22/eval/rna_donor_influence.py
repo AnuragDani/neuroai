@@ -18,7 +18,13 @@ from p22.data.census import sha256_file
 from p22.data.real_cohort import DonorPseudobulk
 from p22.eval.external_validation import MIN_SHARED_GENES, DiscoveryEffects, fit_discovery_effects
 
-CONFIG_SHA256 = "d51a69cc997fe3a80615ea76bdf9d9504a5334c05fe09eb8fe77a623d266cf58"
+# Amended 2026-09-21 for the P22 RNA-input repair: the config's
+# ``source_code_sha256`` pin for ``src/p22/data/real_cohort.py`` was refreshed
+# after ``load_cell_matrix`` defaulted to ``raw/X``. The prior frozen value was
+# d51a69cc997fe3a80615ea76bdf9d9504a5334c05fe09eb8fe77a623d266cf58; the old pin
+# is preserved in the config's ``source_code_amendments``. The scientific
+# parameters (gene rules, model, rho tolerance) are unchanged.
+CONFIG_SHA256 = "78018cfd50cbe25d695db120b75c990a0dea76551f2fbe24166b0b185b8d1900"
 
 
 def canonical_hash(value: object) -> str:

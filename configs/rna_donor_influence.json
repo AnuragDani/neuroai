@@ -1,8 +1,16 @@
 {
   "description": "Frozen RNA donor-influence diagnostic; POST_HOC_EXPLORATORY only",
   "schema_version": 1,
+  "source_code_amendments": [
+    {
+      "path": "src/p22/data/real_cohort.py",
+      "previous_sha256": "dbefc37baceb14f8cb8b895c9f7504e57fa8fa330d95f61cdcb19b099dd188b8",
+      "corrected_sha256": "da73269a7772ecfba1b2fef87624b39736a6caa9db02e6bb9b51a10b404e9dea",
+      "reason": "P22 RNA-input repair: load_cell_matrix now defaults to raw/X and validates integer-count semantics, and read_matrix_axis resolves the raw/var axis. donor_pseudobulk, the only function this diagnostic calls, is unchanged, so the diagnostic outputs reproduce; the pinned hash is amended prospectively rather than leaving the guard stale."
+    }
+  ],
   "source_code_sha256": {
-    "src/p22/data/real_cohort.py": "dbefc37baceb14f8cb8b895c9f7504e57fa8fa330d95f61cdcb19b099dd188b8",
+    "src/p22/data/real_cohort.py": "da73269a7772ecfba1b2fef87624b39736a6caa9db02e6bb9b51a10b404e9dea",
     "src/p22/eval/external_validation.py": "a8110d71b539eeef4ce6b245e31e03e8655e7b87c7e31a2dd7fbeed7a1706303",
     "src/p22/eval/real_pipeline.py": "6f8cf226f79665e11b8e8dc7664d0497fc8e5b3ed447f507c309ca7b44a81d19",
     "src/p22/data/census.py": "096c3d5f5e0d848c6eb37d40865b064c136db1945e0d6edaa7a8251c928d310e"
