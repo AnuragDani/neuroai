@@ -8,8 +8,10 @@ regenerated with the fixed reader and the declared `unique_fragment_overlap` uni
 measured-artifact manifest exists, the shared acceptance gate returns `ACCEPTED`, and
 the corrected internal comparison, faithfulness and normalization sensitivity have been
 rerun. The old exploratory result is preserved unchanged and remains superseded for
-scientific acceptance. The study is not COMPLETE: the canonical notebook handoff is not
-yet updated and external paired evaluation remains separately gated.
+scientific acceptance. The canonical notebook now exposes the corrected workflow and a
+safe-mode executed copy has been saved, and an unsent professor update has been drafted.
+The study is not COMPLETE: external paired evaluation remains separately gated, so the
+overall study is labelled PARTIAL.
 
 Worktree: `/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8`.
 
@@ -42,12 +44,18 @@ exploratory estimate:
   negative, within-donor permutation ≈0, and uniform routing is measured only for the
   gated family (drop 0.051). This is model dependence under a stated manipulation, not
   causal biology.
-- Initialization sensitivity (corrected, donor splits fixed): per-seed primary delta mean
-  seed 0 +0.0083333, seed 1 +0.0126667, seed 2 −0.0033333 (spread 0.016) — the null
-  holds across initialization seeds.
+- Initialization sensitivity (corrected, donor splits fixed, five specified seeds
+  0–4): per-seed primary delta mean seed 0 +0.0083333, seed 1 +0.0126667,
+  seed 2 −0.0033333, seed 3 −0.009, seed 4 0.0 (spread 0.0216667) — the null
+  holds across initialization seeds. Seeds 0–2 reproduce the earlier three-seed
+  corrected record exactly; the three-seed record's initialization scope is
+  superseded by `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json`
+  while its interventions are unchanged and preserved.
 - Machine-readable records:
   `docs/repeated_internal_comparison_corrected_2026-09-21.json`,
-  `docs/real_paired_faithfulness_frozen_corrected_2026-09-21.json`,
+  `docs/real_paired_faithfulness_frozen_corrected_2026-09-21.json` (three-seed
+  scope) and its five-seed supersession
+  `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json`,
   `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`; the
   measured-artifact manifest is `configs/real_paired_input_manifest_2026-09-21.json`.
 
@@ -88,6 +96,14 @@ env $PY scripts/run_real_paired_normalization_sensitivity.py \
   --atac-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz \
   --region-sets reports/generated/repeated_comparison_20260921/region_sets.json \
   --output-dir reports/generated/real_paired_normalization_corrected_20260921/run
+
+# 4. five specified initialization seeds (donor splits held fixed; ~105 s)
+env $PY scripts/run_real_paired_faithfulness_frozen.py \
+  --atac-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz \
+  --region-sets reports/generated/repeated_comparison_20260921/region_sets.json \
+  --acceptance-manifest configs/real_paired_input_manifest_2026-09-21.json \
+  --init-seeds 0 1 2 3 4 \
+  --output-dir reports/generated/real_paired_faithfulness_frozen_corrected5_20260921/run
 ```
 
 ### Wiring defect found while executing
@@ -298,7 +314,84 @@ claimed.
    corrected comparison (+0.0066667, [−0.025, +0.0350074]), faithfulness and
    initialization sensitivity, and the corrected normalization sensitivity all
    executed on the corrected inputs.
-6. **Remaining:** update the canonical `P22_down_syndrome_all_in_one.ipynb` to
-   expose the corrected real workflow and save an executed copy; write the unsent
-   professor update. External evaluation remains separately gated and is not
-   claimed.
+6. ~~Update the canonical notebook and write the unsent professor update.~~
+   **Done:** see "Canonical notebook and professor update" below. External
+   evaluation remains separately gated and is not claimed, so the overall study
+   stays **PARTIAL**.
+7. **Residual in-scope item:** the acceptance gate's `fold_provenance` check
+   verifies outer train/test donor isolation and that the region-set donor lists
+   match the fold split. It does not yet assert inner-validation donor provenance
+   (that each family's early-stopping/selection `val` donors are a subset of the
+   fold's training donors and never the held-out test donors). The per-fold records
+   carry `selection_split='val'` / `selection_unit='donor'`, so this can be added as
+   a narrow check; until then the outer-only check must not be described as a
+   complete nested-validation proof. This is the highest-value remaining executable
+   step. External evaluation stays blocked.
+
+## Canonical notebook and professor update
+
+The existing canonical notebook `P22_down_syndrome_all_in_one.ipynb` was
+regenerated from `scripts/rewrite_canonical_notebook.py`; no competing notebook
+was created. The regeneration re-embeds the current `src/p22` tree, so the
+corrected `raw/X` loader, the `real_paired_acceptance` gate and the new
+`src/p22/eval/measurement_correction.py` reader are all present in the standalone
+notebook.
+
+- **Safe mode remains the default** (`NOTEBOOK_MODE="simulation"`); real mode
+  still requires `P22_RUN_REAL_DATA=1`, `P22_RUN_MODEL=1` and the approval
+  attestation.
+- A new section, **"Corrected real paired workflow — measurement correction"**,
+  declares the corrected RNA representation and ATAC unit, and calls the shared
+  `summarize_measurement_correction` reader. In safe mode it prints the declared
+  contract plus the saved corrected result and acceptance status; the bounded
+  remote ATAC regeneration is not executed.
+- **Executed copy** (safe mode, kernel `p22`):
+  `MOM/2026-09-21/P22_down_syndrome_all_in_one.corrected.executed.ipynb`
+  (also written under `reports/generated/notebooks_corrected_20260921/`). All 13
+  code cells executed with no error output; the corrected cell printed
+  `status=CORRECTED_RESULT_PRESENT`, estimate `+0.0066667`, interval
+  `[-0.025, +0.0350074]`, margin `0.07`, advantage `false`, acceptance `ACCEPTED`.
+  The real-data model-fitting and remote ATAC regeneration cells are intentionally
+  not executed in the safe-mode copy; they require the gated real mode.
+  Canonical notebook SHA-256 `ebc8ec71358406dcec8e46962a860a59e23064912a8bd09c8e5c04f3a413b177`;
+  executed copy SHA-256 `fc60998a045489124bf0c99ea36a0357a7b55fd530aa95f241a029da74cd4deb`.
+- **Unsent professor update**: `docs/professor_update_2026-09-21/` (`one_pager.md`
+  and the unsent `email.md`), separating the completed corrected internal work
+  from the blocked external and absent biological validation.
+
+Replay:
+
+```
+PYTHONDONTWRITEBYTECODE=1 /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python \
+  scripts/rewrite_canonical_notebook.py
+PYTHONDONTWRITEBYTECODE=1 /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m jupyter nbconvert \
+  --to notebook --execute P22_down_syndrome_all_in_one.ipynb \
+  --output-dir reports/generated/notebooks_corrected_20260921 \
+  --output P22_down_syndrome_all_in_one.corrected.executed.ipynb \
+  --ExecutePreprocessor.kernel_name=p22 --ExecutePreprocessor.timeout=900
+```
+
+## Professor direction-to-evidence
+
+| Direction | Where it is satisfied | Evidence | Boundary |
+|---|---|---|---|
+| Mathematically specific methods and verification against primary sources (2026-07-02) | corrected count unit declared before regeneration; interval rule stated; reader checked against the 10x fragment spec and HTSlib | `configs/atac_measurement_contract_2026-09-21.json`; `docs/atac_fragment_format_and_provenance_2026-09-21.json`; `reports/generated/reader_correction_20260921/reader_oracle_htslib.json` | count unit is one per unique fragment record; no insertion-count claim |
+| Fair supervision and matched controls (2026-07-02, 2026-07-21) | six families share transforms, splits and selection; matched token-concat control is the primary reference | `docs/repeated_internal_comparison_corrected_2026-09-21.json` | null is honest; not an architecture-failure proof |
+| Independent modalities and concatenation controls (2026-07-21) | RNA-only / ATAC-only / concat / gated / token-concat / cross-attention all evaluated on the same folds | `docs/repeated_internal_comparison_corrected_2026-09-21.json`; `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json` | RNA-view dominance is model dependence, not biology |
+| Donor-aware evaluation, interventions, seed variation (2026-07-21) | donor-held-out folds, donor-aggregated estimand, donor-bootstrap interval, held-out interventions, five initialization seeds | comparison, faithfulness and corrected5 records above; per-fold donor predictions in the source run dirs | intervention effects are manipulation evidence only |
+| Clear claim boundaries and canonical notebook (`PROFESSOR_RECOMMENDATIONS_EXECUTION_PLAN.md`) | safe-mode default, corrected workflow exposed, executed copy saved, acceptance gate owns promotion | `P22_down_syndrome_all_in_one.ipynb`; `MOM/2026-09-21/P22_down_syndrome_all_in_one.corrected.executed.ipynb` | real mode remains gated |
+
+Tasic remains engineering evidence only. The completed separate RNA replication
+remains **INCONCLUSIVE**. There is no attention-as-mechanism claim and no
+fabricated biological validation.
+
+## External status
+
+External paired evaluation remains **BLOCKED** and is not claimed: prior workers
+reported NeMO transport failure, contradictory access declarations and no
+established common measurement space. No external outcome was used, no access
+control or embargo was bypassed, and the blocked route was not repeatedly probed
+this iteration. If new evidence later resolves access, matching counts, QC,
+features and independence must be validated and the development selection locked
+before any external outcome is used. Because external validation is blocked, the
+overall study is labelled **PARTIAL**, not complete end-to-end.

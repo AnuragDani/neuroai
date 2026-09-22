@@ -39,12 +39,15 @@ def test_external_cell_insertion_is_idempotent_and_preserves_hand_cells(tmp_path
     module.main()
     first = module.NB_PATH.read_bytes()
     updated = json.loads(first)
-    assert len(updated["cells"]) == 23
-    assert updated["cells"][20]["id"] == "ext-rna1"
+    assert len(updated["cells"]) == 25
+    assert updated["cells"][20]["id"] == "measurement-correction-md"
+    assert updated["cells"][21]["id"] == "measurement-correction-code"
+    assert updated["cells"][22]["id"] == "ext-rna1"
     for index in (2, 3, 5):
         assert updated["cells"][index] == original["cells"][index]
-    assert "".join(updated["cells"][21]["source"]) == module.CELL20
-    assert "".join(updated["cells"][22]["source"]) == module.CELL21
+    assert "".join(updated["cells"][23]["source"]) == module.CELL20
+    assert "".join(updated["cells"][24]["source"]) == module.CELL21
+    assert "".join(updated["cells"][21]["source"]) == module.CELL_MEASUREMENT_CODE
     for cell in updated["cells"]:
         if cell["cell_type"] == "code":
             compile("".join(cell["source"]), cell["id"], "exec")
@@ -53,6 +56,7 @@ def test_external_cell_insertion_is_idempotent_and_preserves_hand_cells(tmp_path
     assert "openpyxl==3.1.5" in module.CELL1
     assert '"external_rna_replication": external_rna_record' in module.CELL21
     assert "## External RNA direction replication" in module.CELL21
+    assert "Corrected real paired workflow" in module.CELL_MEASUREMENT_MD
 
 
 def test_external_cell_rejects_unexpected_layout(tmp_path):

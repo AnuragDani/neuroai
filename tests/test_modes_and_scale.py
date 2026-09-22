@@ -123,5 +123,7 @@ def test_canonical_notebook_exposes_fair_same_cap_result():
     assert "same_cap_summary" in code
     assert "same_cap_sensitivity.png" in code
     assert "git clone" not in code
+    assert "Corrected real paired workflow" in markdown
+    assert "summarize_measurement_correction" in code
     assert notebook["cells"][1]["metadata"]["jupyter"]["source_hidden"] is True
     assert notebook["cells"][1]["metadata"]["collapsed"] is True

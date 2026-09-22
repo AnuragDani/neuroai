@@ -896,6 +896,61 @@ if external_rna_result.get("reason"):
 print(external_rna_limits)
 """
 
+CELL_MEASUREMENT_MD = """## Corrected real paired workflow — measurement correction
+
+Two input defects were independently reproduced and repaired before the internal
+paired comparison was rerun:
+
+- **RNA input.** The loader now consumes the integer `raw/X` block with the
+  `raw/var` gene axis; the processed `X` block (non-integer, and previously
+  mislabelled as raw counts) is refused.
+- **ATAC unit.** The overlap unit is `unique_fragment_overlap`: one count per
+  unique qualifying fragment record. Column five (supporting read pairs
+  including duplicates) is no longer summed, and the bounded BGZF/tabix reader
+  was validated against HTSlib.
+
+The corrected run is bound to a measured-artifact manifest and must pass the
+shared acceptance gate before it may set `scientific_claim_allowed`. Safe mode
+displays only the declared contract and the saved corrected result; the bounded
+remote ATAC regeneration is a separate authorized step and is not executed here.
+The historical read-support-weighted estimate is preserved as exploratory and
+superseded for scientific acceptance.
+"""
+
+CELL_MEASUREMENT_CODE = r"""from p22.eval.measurement_correction import summarize_measurement_correction
+
+measurement_correction = summarize_measurement_correction(PROJECT_ROOT)
+print(json.dumps(measurement_correction, indent=2, default=str))
+if measurement_correction["status"] == "CORRECTED_RESULT_PRESENT":
+    corrected = measurement_correction["corrected_result"]
+    print(
+        "CORRECTED cross_attention - token_concat:",
+        corrected["estimate"],
+        corrected["interval"],
+        "margin",
+        corrected["practical_margin"],
+        "advantage",
+        corrected["advantage_demonstrated"],
+    )
+    print("ACCEPTANCE:", measurement_correction["acceptance"]["status"])
+    if measurement_correction["historical_result"] is not None:
+        print(
+            "Historical exploratory estimate:",
+            measurement_correction["historical_result"]["estimate"],
+            measurement_correction["historical_result"]["interval"],
+            "(superseded)",
+        )
+else:
+    print(
+        "Corrected artifacts absent in this checkout; declared contract only:",
+        measurement_correction["declared_contract"],
+    )
+EVIDENCE_BUCKETS["verified_real" if measurement_correction["status"] == "CORRECTED_RESULT_PRESENT"
+                else "blocked_or_unknown"].append(
+    "Measurement correction: " + measurement_correction["status"]
+)
+"""
+
 CELL20 = """## G9 / R6 — Evidence package + handoff
 
 Writes `manifest.json`, `metrics.csv`, `interventions.csv`, `validation.csv`, `figures/`, `SUMMARY.md`. Never overwrites source notebook.
@@ -1092,24 +1147,41 @@ def set_source(cell, text: str) -> None:
         cell.setdefault("metadata", {}).pop("execution", None)
 
 
+EXT_ID = "ext-rna1"
+MEASUREMENT_MD_ID = "measurement-correction-md"
+MEASUREMENT_CODE_ID = "measurement-correction-code"
+G9_MD_ID = "17a60a06"
+G9_CODE_ID = "8f1a8a82"
+INSERTED_IDS = (MEASUREMENT_MD_ID, MEASUREMENT_CODE_ID, EXT_ID)
+BASE_CELL_COUNT = 20
+
+
+def _new_cell(cell_id: str, cell_type: str) -> dict:
+    cell = {"cell_type": cell_type, "id": cell_id, "metadata": {}, "source": []}
+    if cell_type == "code":
+        cell["outputs"] = []
+        cell["execution_count"] = None
+    return cell
+
+
 def main() -> None:
     nb = json.loads(NB_PATH.read_text())
-    if len(nb["cells"]) == 22:
-        assert all(cell.get("id") != "ext-rna1" for cell in nb["cells"])
-        nb["cells"].insert(
-            20,
-            {
-                "cell_type": "code",
-                "id": "ext-rna1",
-                "metadata": {},
-                "outputs": [],
-                "execution_count": None,
-                "source": [],
-            },
-        )
-    assert len(nb["cells"]) == 23, len(nb["cells"])
-    assert nb["cells"][20].get("id") == "ext-rna1"
-    assert sum(cell.get("id") == "ext-rna1" for cell in nb["cells"]) == 1
+    by_id = {cell.get("id"): cell for cell in nb["cells"]}
+    assert G9_MD_ID in by_id and G9_CODE_ID in by_id, "G9 cells missing"
+    assert sum(cell.get("id") == EXT_ID for cell in nb["cells"]) <= 1
+    g9_md = by_id[G9_MD_ID]
+    g9_code = by_id[G9_CODE_ID]
+    ext = by_id.get(EXT_ID) or _new_cell(EXT_ID, "code")
+    base = [
+        cell
+        for cell in nb["cells"]
+        if cell.get("id") not in {*INSERTED_IDS, G9_MD_ID, G9_CODE_ID}
+    ]
+    assert len(base) == BASE_CELL_COUNT, len(base)
+    corrected_md = _new_cell(MEASUREMENT_MD_ID, "markdown")
+    corrected_code = _new_cell(MEASUREMENT_CODE_ID, "code")
+    nb["cells"] = [*base, corrected_md, corrected_code, ext, g9_md, g9_code]
+    assert len(nb["cells"]) == BASE_CELL_COUNT + 5, len(nb["cells"])
     updates = {
         0: CELL0,
         1: CELL1,
@@ -1128,12 +1200,14 @@ def main() -> None:
         17: CELL17,
         18: CELL18,
         19: CELL19,
-        20: CELL_EXTERNAL,
-        21: CELL20,
-        22: CELL21,
     }
     for index, text in updates.items():
-        set_source(nb["cells"][index], text)
+        set_source(base[index], text)
+    set_source(corrected_md, CELL_MEASUREMENT_MD)
+    set_source(corrected_code, CELL_MEASUREMENT_CODE)
+    set_source(ext, CELL_EXTERNAL)
+    set_source(g9_md, CELL20)
+    set_source(g9_code, CELL21)
     nb["cells"][1].setdefault("metadata", {}).setdefault("jupyter", {})["source_hidden"] = True
     nb["cells"][1]["metadata"]["collapsed"] = True
     # Prefer p22 kernel
