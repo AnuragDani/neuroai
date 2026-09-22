@@ -64,6 +64,12 @@ def requirements():
             "n_repeats": 5,
             "n_folds": 5,
             "split_seed": 0,
+            "inner_validation": {
+                "selection_split": "val",
+                "selection_unit": "donor",
+                "require_subset_of_train": True,
+                "require_disjoint_from_test": True,
+            },
         },
     }
 
@@ -83,6 +89,9 @@ def evidence():
                     "region_set_train_donors": train,
                     "region_set_test_donors": test,
                     "n_regions": 256,
+                    "val_donors": train[:6],
+                    "selection_split": "val",
+                    "selection_unit": "donor",
                 }
             )
     return {
@@ -243,6 +252,49 @@ def test_overlapping_train_test_donors_refused():
     assert "fold_provenance" in decision.blocking
 
 
+def test_inner_validation_donor_from_test_set_refused():
+    ev = evidence()
+    entry = ev["folds"][0]
+    entry["val_donors"] = entry["val_donors"][:-1] + [entry["test_donors"][0]]
+    decision = decide(ev)
+    assert decision.status == REFUSED
+    assert "inner_validation" in decision.blocking
+
+
+def test_inner_validation_donor_not_in_training_refused():
+    ev = evidence()
+    ev["folds"][2]["val_donors"] = ["not_a_training_donor"]
+    decision = decide(ev)
+    assert decision.status == REFUSED
+    assert "inner_validation" in decision.blocking
+
+
+def test_absent_inner_validation_donors_refused():
+    ev = evidence()
+    ev["folds"][1]["val_donors"] = []
+    decision = decide(ev)
+    assert decision.status == REFUSED
+    assert "inner_validation" in decision.blocking
+
+
+def test_undeclared_inner_validation_requirement_refused():
+    req = requirements()
+    del req["protocol"]["inner_validation"]
+    decision = evaluate_input_acceptance(
+        req, manifest(), evidence(), n_folds_run=25, expected_n_folds=25
+    )
+    assert decision.status == REFUSED
+    assert "inner_validation" in decision.blocking
+
+
+def test_wrong_selection_unit_refused():
+    ev = evidence()
+    ev["folds"][4]["selection_unit"] = "cell"
+    decision = decide(ev)
+    assert decision.status == REFUSED
+    assert "inner_validation" in decision.blocking
+
+
 def test_protocol_margin_and_family_mismatch_refused():
     ev = evidence()
     ev["protocol"]["practical_margin"] = 0.05
@@ -321,9 +373,19 @@ def test_build_evidence_from_real_structures(tmp_path):
             "cells_sha256": CELLS_SHA,
         },
         regions_file=regions_file,
+        inner_validation={
+            (0, 0): {
+                "val_donors": ["B"],
+                "selection_split": "val",
+                "selection_unit": "donor",
+            }
+        },
     )
     assert built["region_sets"]["union_decodes_from_regions_file"] is True
     assert built["folds"][0]["region_set_train_donors"] == ["A", "B"]
+    assert built["folds"][0]["val_donors"] == ["B"]
+    assert built["folds"][0]["selection_split"] == "val"
+    assert built["folds"][0]["selection_unit"] == "donor"
     assert (
         built["atac"]["regions_file_sha256"]
         == hashlib.sha256(regions_file.read_bytes()).hexdigest()

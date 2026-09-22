@@ -85,6 +85,20 @@ def _indices(metadata, outer):
     }
 
 
+def _inner_validation_map(metadata, folds):
+    """Inner-validation donor record per outer fold, from the executable split."""
+    mapping = {}
+    for outer in folds:
+        indices = _indices(metadata, outer)
+        val_donors = sorted(set(metadata.iloc[indices["val"]].donor_id.astype(str)))
+        mapping[(outer.repeat, outer.fold)] = {
+            "val_donors": val_donors,
+            "selection_split": "val",
+            "selection_unit": "donor",
+        }
+    return mapping
+
+
 def _predictions(record, model):
     if model == "majority_control":
         return pd.DataFrame(record["majority_control"]["predictions"])
@@ -143,6 +157,7 @@ def _acceptance_decision(
         population=_population_evidence(metadata),
         atac_sidecar=atac_sidecar,
         regions_file=regions_file if regions_file else regions_path,
+        inner_validation=_inner_validation_map(metadata, folds),
     )
     requirements = load_requirements(req_path)
     manifest = load_manifest(man_path)

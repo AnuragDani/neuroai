@@ -1,0 +1,31 @@
+{
+  "atac_matrix": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+  "blocking_checks": [],
+  "declaration": "configs/real_paired_acceptance_2026-09-21.json protocol.inner_validation (prospective, declared before the corrected run)",
+  "declared_at": "2026-09-21",
+  "final_internal_estimate": true,
+  "fold_provenance": {
+    "detail": "all folds training-only and donor-matched",
+    "status": "PASS"
+  },
+  "inner_validation": {
+    "detail": "all folds inner validation training-only and test-disjoint",
+    "status": "PASS"
+  },
+  "interpretation": [
+    "The outer fold_provenance check confirms no held-out test donor entered feature discovery.",
+    "The inner_validation check additionally confirms each fold's early-stopping/selection donors (selection_split='val', selection_unit='donor') are non-empty, drawn only from that fold's training donors, and disjoint from the held-out test donors.",
+    "Both checks PASS on the corrected real inputs, so nested-validation provenance is now asserted rather than inferred from the outer-only check.",
+    "This remains internal development evidence; external validation is separately gated."
+  ],
+  "manifest": "configs/real_paired_input_manifest_2026-09-21.json",
+  "manifest_sha256": "07ab1469baa086237634cb83736a9723a4bfba43c2e20af900436783cfbc7cbb",
+  "record_type": "real_paired_inner_validation_evidence",
+  "region_sets": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/repeated_comparison_20260921/region_sets.json",
+  "requirements": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/configs/real_paired_acceptance_2026-09-21.json",
+  "requirements_sha256": "085e719ccd2b1964d48ce67a0bf6ebde7e59fe7f12bc15680b4e538b8a03d0f0",
+  "scientific_claim_allowed": true,
+  "scope": "inner-validation donor provenance for the corrected real paired internal run",
+  "source_decision": "reports/generated/acceptance_binding_20260921/decision_with_inner_validation.json",
+  "status": "ACCEPTED"
+}

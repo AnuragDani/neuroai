@@ -51,7 +51,13 @@
     "uncertainty_seed": 22,
     "n_repeats": 5,
     "n_folds": 5,
-    "split_seed": 0
+    "split_seed": 0,
+    "inner_validation": {
+      "selection_split": "val",
+      "selection_unit": "donor",
+      "require_subset_of_train": true,
+      "require_disjoint_from_test": true
+    }
   },
   "manifest": {
     "required": true,

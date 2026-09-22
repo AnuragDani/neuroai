@@ -183,6 +183,9 @@ def evaluate_input_acceptance(
     checks["fold_provenance"] = _fold_provenance_check(
         folds, regions_req.get("top_n"), expected_n_folds
     )
+    checks["inner_validation"] = _inner_validation_check(
+        folds, protocol_req.get("inner_validation")
+    )
 
     # Artifact checks require the measured manifest; without it there is nothing to
     # bind the consumed arrays to and the run stays exploratory.
@@ -270,6 +273,56 @@ def _fold_provenance_check(
     return _result("fold_provenance", not problems, detail)
 
 
+def _inner_validation_check(
+    folds: list[dict[str, Any]], requirement: Any
+) -> dict[str, str]:
+    """Assert nested-validation provenance for every outer fold.
+
+    The outer check confirms the held-out test donors never entered feature
+    discovery. This check additionally confirms that each fold's inner validation
+    donors (used for early stopping / model selection) come only from that fold's
+    training pool and are disjoint from the held-out test donors, so an outer-only
+    check is not misdescribed as a complete nested-validation proof.
+    """
+    if not isinstance(requirement, dict):
+        return _result(
+            "inner_validation",
+            False,
+            "requirements do not declare inner-validation provenance",
+        )
+    want_split = requirement.get("selection_split")
+    want_unit = requirement.get("selection_unit")
+    problems = []
+    for entry in folds:
+        label = f"{entry.get('repeat')}.{entry.get('fold')}"
+        train = {str(value) for value in entry.get("train_donors", ())}
+        test = {str(value) for value in entry.get("test_donors", ())}
+        val = [str(value) for value in entry.get("val_donors", ())]
+        val_set = set(val)
+        if entry.get("selection_split") != want_split:
+            problems.append(
+                f"{label}: selection_split={entry.get('selection_split')!r} "
+                f"expected {want_split!r}"
+            )
+        if entry.get("selection_unit") != want_unit:
+            problems.append(
+                f"{label}: selection_unit={entry.get('selection_unit')!r} "
+                f"expected {want_unit!r}"
+            )
+        if not val_set:
+            problems.append(f"{label}: inner validation donors are absent")
+        if val_set - train:
+            problems.append(f"{label}: inner validation donors are not training donors")
+        if val_set & test:
+            problems.append(f"{label}: inner validation donors overlap held-out test donors")
+    detail = (
+        "all folds inner validation training-only and test-disjoint"
+        if not problems
+        else "; ".join(problems[:4])
+    )
+    return _result("inner_validation", not problems, detail)
+
+
 @dataclass(frozen=True)
 class AcceptanceDecision:
     """One shared acceptance outcome with per-check evidence."""
@@ -307,6 +360,7 @@ def build_evidence(
     population: dict[str, Any],
     atac_sidecar: dict[str, Any],
     regions_file: str | Path,
+    inner_validation: dict[Any, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Assemble the evidence bundle consumed by :func:`evaluate_input_acceptance`.
 
@@ -314,16 +368,23 @@ def build_evidence(
     frozen per-fold region record whose entries carry their own train/test donor
     lists, so feature-discovery provenance is checked against the real split.
     ``protocol_evidence`` and ``population`` are built by the caller from the
-    executable protocol and the consumed metadata.
+    executable protocol and the consumed metadata. ``inner_validation`` maps a
+    ``(repeat, fold)`` key to that fold's inner-validation donor record (the donors
+    used for early stopping / model selection), so nested-validation provenance is
+    bound to the same executable split.
     """
     rna = fingerprints["rna_representation"]
     atac_fp = fingerprints["atac_matrix"]
+    inner_by_key = {
+        (int(key[0]), int(key[1])): value for key, value in (inner_validation or {}).items()
+    }
     region_by_key = {
         (int(entry["repeat"]), int(entry["fold"])): entry for entry in region_sets["per_fold"]
     }
     fold_evidence = []
     for fold in folds:
         entry = region_by_key.get((int(fold.repeat), int(fold.fold)), {})
+        inner = inner_by_key.get((int(fold.repeat), int(fold.fold)), {})
         fold_evidence.append(
             {
                 "repeat": int(fold.repeat),
@@ -333,6 +394,9 @@ def build_evidence(
                 "region_set_train_donors": list(entry.get("train_donors", ())),
                 "region_set_test_donors": list(entry.get("test_donors", ())),
                 "n_regions": len(entry.get("regions", ())),
+                "val_donors": list(inner.get("val_donors", ())),
+                "selection_split": inner.get("selection_split"),
+                "selection_unit": inner.get("selection_unit"),
             }
         )
     regions_file = Path(regions_file)

@@ -27,7 +27,7 @@ exploratory estimate:
 | Cross-attention − token-concat donor balanced accuracy | +0.0333333 | **+0.0066667** |
 | 95% donor-bootstrap interval | [−0.0133333, +0.0805556] | **[−0.025, +0.0350074]** |
 | Practical margin / advantage | 0.07 / false | 0.07 / **false** |
-| Acceptance | auto-promoted | **ACCEPTED** (10/10 checks, no blockers) |
+| Acceptance | auto-promoted | **ACCEPTED** (11/11 checks, no blockers) |
 
 - Corrected ATAC matrix: 480 × 248,998, nnz 9,513,875,
   `matrix_sha256 81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f`,
@@ -79,7 +79,9 @@ env $PY scripts/build_real_paired_input_manifest.py \
   --atac-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz
 env $PY scripts/check_real_paired_acceptance.py \
   --atac-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz \
-  --manifest configs/real_paired_input_manifest_2026-09-21.json
+  --manifest configs/real_paired_input_manifest_2026-09-21.json \
+  --out reports/generated/acceptance_binding_20260921/decision_with_inner_validation.json
+# prints status ACCEPTED; inner_validation PASS; 11/11 checks, no blockers
 
 # 3. rerun the frozen comparison and sensitivities on the corrected inputs
 env $PY scripts/run_real_paired_comparison.py \
@@ -144,7 +146,8 @@ is preserved only as history. The corrected unit is declared prospectively in
 | #3g aggregate transfer accounting | `test_quantify_regions_enforces_aggregate_budget` | `_BudgetedTransport` caps aggregate bytes across concurrent workers | corrected run declared `--total-max-bytes 6442450944` and fetched 3,295,412,224 bytes with 8 workers | none observed on the corrected run |
 | #1 RNA `X` vs `raw/X` | `tests/test_real_cohort.py::test_default_rna_matrix_is_raw_counts`, `test_wrong_default_processed_block_cannot_pass_as_raw`, `test_raw_matrix_columns_follow_raw_axis_not_processed_axis`, `test_load_cell_matrix_rejects_negative_raw_counts`, `test_load_cell_matrix_refuses_missing_raw_block`, and the axis-hardening tests `test_read_matrix_axis_refuses_{undeclared_matrix_key,absent_axis_block,empty_identifiers,dimension_mismatch,duplicate_identifiers,missing_index_dataset}` | `load_cell_matrix` defaults to `DEFAULT_RNA_MATRIX_KEY="raw/X"` and rejects non-finite/negative/noninteger consumed values; `read_matrix_axis` resolves `raw/var` for raw columns and refuses absent, unresolved, empty, dimension-mismatched or duplicate identifiers; `run_real_paired_pilot.load_development_inputs` records the raw axis key, cell/column counts and gene-axis hash and refuses an empty axis | real `raw/X` sample `(55, 35477)` all-integer, `X` refused as non-integer; new tests pass | Resolved: the corrected matrix and comparison now consume `raw/X`; the old pilot/comparison results are preserved only as history |
 | #4 chromosome-1 feature bias | report-level correction (no code test; the bias is a property of the retained rule) | corrected prose in `MOM/2026-09-21/GNHF_P22_RESULTS_AND_PROFESSOR_HANDOFF.md` §2 to state the chr1 tie-break bias persists (163–219/256 per fold; union 308 chr1 / 110 chr10 / 1 chr21) and is retained for the measurement-correction comparison | audit: 163–219 of 256 regions per fold on chr1 | The biased feature set is retained by design so input correctness is not confounded with outcome-driven feature redesign; its limited coverage bounds any architecture conclusion |
-| #5 automatic scientific promotion | `tests/test_real_paired_acceptance.py` (14 tests: accepted fixture, missing manifest, old processed-`X`/read-support unit, hash/cell/region mismatch, held-out donor in feature discovery, overlapping train/test donors, protocol margin/family mismatch, non-prospective requirements); `tests/test_build_real_paired_input_manifest.py` (5 tests) | shared `src/p22/eval/real_paired_acceptance.py` gate; `run_real_paired_comparison.py` and `run_real_paired_faithfulness_frozen.py` derive `scientific_claim_allowed`/`final_internal_estimate` from the decision instead of hardcoding `True`; `scripts/build_real_paired_input_manifest.py` emits the measured manifest; both entry points now pass `list(folds.values())` to `build_evidence` | historical inputs `REFUSED` (`atac_unit`, `manifest_present` and the three manifest-bound checks fail); corrected inputs **`ACCEPTED`** (10/10 checks, no blockers) after the manifest was generated | Resolved for the internal corrected run; external validation is still a separate gate |
+| #5 automatic scientific promotion | `tests/test_real_paired_acceptance.py` (19 tests: accepted fixture, missing manifest, old processed-`X`/read-support unit, hash/cell/region mismatch, held-out donor in feature discovery, overlapping train/test donors, protocol margin/family mismatch, non-prospective requirements, and the five inner-validation cases); `tests/test_build_real_paired_input_manifest.py` (5 tests) | shared `src/p22/eval/real_paired_acceptance.py` gate; `run_real_paired_comparison.py` and `run_real_paired_faithfulness_frozen.py` derive `scientific_claim_allowed`/`final_internal_estimate` from the decision instead of hardcoding `True`; `scripts/build_real_paired_input_manifest.py` emits the measured manifest; both entry points now pass `list(folds.values())` to `build_evidence` | historical inputs `REFUSED` (`atac_unit`, `manifest_present` and the three manifest-bound checks fail); corrected inputs **`ACCEPTED`** (11/11 checks, no blockers) after the manifest was generated | Resolved for the internal corrected run; external validation is still a separate gate |
+| #6 outer-only check misdescribed as nested validation | `tests/test_real_paired_acceptance.py::test_inner_validation_donor_from_test_set_refused`, `test_inner_validation_donor_not_in_training_refused`, `test_absent_inner_validation_donors_refused`, `test_undeclared_inner_validation_requirement_refused`, `test_wrong_selection_unit_refused` | new `inner_validation` check in `real_paired_acceptance.py`; `build_evidence` now binds each fold's inner `val_donors`/`selection_split`/`selection_unit` from the executable split via `_inner_validation_map`; `protocol.inner_validation` declared prospectively in `configs/real_paired_acceptance_2026-09-21.json` | corrected real inputs: `inner_validation` **PASS** ("all folds inner validation training-only and test-disjoint"), 11/11 checks, `ACCEPTED`; recorded in `docs/real_paired_inner_validation_2026-09-21.json` | Inner validation is verified to be a training-only, test-disjoint donor subset; the feature rule itself is unchanged and its chr1 bias still bounds any architecture conclusion |
 
 ## Acceptance binding (finding #5)
 
@@ -176,7 +179,8 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
 #   cell_identity, atac_artifact
 # PASS: rna_representation (raw/X, raw/var, integer), region_identity,
 #   population (30 donors 15/15), protocol_match (6 families, margin 0.07),
-#   fold_provenance (25/25 training-only donor-matched)
+#   fold_provenance (25/25 training-only donor-matched),
+#   inner_validation (25/25 validation donors training-only, test-disjoint)
 ```
 
 The old 480-region sidecar declares `count_unit=fragment_overlap_sum` and no
@@ -185,6 +189,19 @@ The old 480-region sidecar declares `count_unit=fragment_overlap_sum` and no
 donor lists match the executable donor split (no held-out donor entered feature
 discovery). Machine-readable evidence:
 `docs/real_paired_acceptance_binding_2026-09-21.json`.
+
+**Nested-validation provenance (finding #6).** The outer `fold_provenance` check is
+now paired with an `inner_validation` check, so an outer-only check is not described
+as a complete nested-validation proof. `configs/real_paired_acceptance_2026-09-21.json`
+declares `protocol.inner_validation` (`selection_split='val'`,
+`selection_unit='donor'`, subset-of-train and disjoint-from-test required)
+prospectively. `build_evidence` binds each fold's inner `val_donors` from the same
+executable split the trainer consumes (`_inner_validation_map` calls `_indices`), and
+`_inner_validation_check` refuses the claim when a fold's validation donors are
+absent, not training donors, or overlap the held-out test donors. On the corrected
+real inputs the check reports **PASS** ("all folds inner validation training-only and
+test-disjoint"); the full decision is `ACCEPTED` 11/11 and is recorded in
+`docs/real_paired_inner_validation_2026-09-21.json`.
 
 ## Caller audit for the RNA default change
 
@@ -255,7 +272,7 @@ Result: local and remote cases all agree on per-barcode fragment counts
 ```
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
   /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/ -q
-# 1000 passed, 19 warnings in 70.03s
+# 1009 passed, 19 warnings in 63.21s
 
 ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.py \
   scripts/validate_reader_against_htslib.py scripts/run_real_paired_pilot.py \
@@ -271,7 +288,8 @@ ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.p
 The RNA repair added 11 tests (5 raw-count/axis tests plus 6 axis-hardening tests),
 taking the suite from 969 to 980; the acceptance gate added 14 more (994); the
 measured-manifest builder added 5 more and the fragment-mode unit test added 1
-(1000). `donor_pseudobulk` (the only function the
+(1000); the measurement-correction reader added 4 (1004); the inner-validation check
+added 5 (1009). `donor_pseudobulk` (the only function the
 frozen RNA donor-influence diagnostic calls) is unchanged, so its pinned source hash
 in `configs/rna_donor_influence.json` was amended prospectively with a recorded
 `source_code_amendments` entry and matching `CONFIG_SHA256`; no diagnostic replay is
@@ -318,15 +336,15 @@ claimed.
    **Done:** see "Canonical notebook and professor update" below. External
    evaluation remains separately gated and is not claimed, so the overall study
    stays **PARTIAL**.
-7. **Residual in-scope item:** the acceptance gate's `fold_provenance` check
-   verifies outer train/test donor isolation and that the region-set donor lists
-   match the fold split. It does not yet assert inner-validation donor provenance
-   (that each family's early-stopping/selection `val` donors are a subset of the
-   fold's training donors and never the held-out test donors). The per-fold records
-   carry `selection_split='val'` / `selection_unit='donor'`, so this can be added as
-   a narrow check; until then the outer-only check must not be described as a
-   complete nested-validation proof. This is the highest-value remaining executable
-   step. External evaluation stays blocked.
+7. ~~Assert inner-validation donor provenance so an outer-only check is not
+   described as a complete nested-validation proof.~~ **Done (finding #6):** the
+   shared gate now has an `inner_validation` check bound to the executable split;
+   corrected real inputs PASS 11/11 and are `ACCEPTED`. See
+   `docs/real_paired_inner_validation_2026-09-21.json`.
+
+All in-scope executable repair items from the review are now complete. The overall
+study remains **PARTIAL** only because external paired evaluation is separately
+gated and blocked.
 
 ## Canonical notebook and professor update
 
@@ -353,8 +371,11 @@ notebook.
   `[-0.025, +0.0350074]`, margin `0.07`, advantage `false`, acceptance `ACCEPTED`.
   The real-data model-fitting and remote ATAC regeneration cells are intentionally
   not executed in the safe-mode copy; they require the gated real mode.
-  Canonical notebook SHA-256 `ebc8ec71358406dcec8e46962a860a59e23064912a8bd09c8e5c04f3a413b177`;
-  executed copy SHA-256 `fc60998a045489124bf0c99ea36a0357a7b55fd530aa95f241a029da74cd4deb`.
+  Canonical notebook SHA-256 `9fdd9638e197338fbae7d5467a2d5f19cbe72b1550a445b5be31e9bcd8318e93`;
+  executed copy SHA-256 `55b3c6a30a8c54f8a09ea2017cefacd93f7a3ca0be9a375c311dbc912430b568`
+  (regenerated after the inner-validation gate change; 13 code cells, zero errors, the
+  corrected cell still prints `+0.0066667`, interval `[-0.025, +0.0350074]`, margin
+  `0.07`, advantage `false`, acceptance `ACCEPTED`).
 - **Unsent professor update**: `docs/professor_update_2026-09-21/` (`one_pager.md`
   and the unsent `email.md`), separating the completed corrected internal work
   from the blocked external and absent biological validation.
