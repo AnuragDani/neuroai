@@ -1,0 +1,31 @@
+{
+  "record_type": "atac_fragment_format_and_provenance",
+  "generated_at": "2026-09-22T01:10:57+00:00",
+  "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+  "index_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz.tbi",
+  "cellxgene_dataset_id": "46b43994-2af5-4359-bf75-3314a0d3a7a5",
+  "spec_reference": "https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/outputs/fragments-file",
+  "sample_prefix_bytes": 65536,
+  "sample_rows_parsed": 5127,
+  "column_count_observed": [
+    5
+  ],
+  "columns": [
+    "chrom",
+    "chromStart",
+    "chromEnd",
+    "barcode",
+    "readSupport"
+  ],
+  "column_five_all_integer": true,
+  "column_five_interpretation": "supporting read pairs including duplicates (10x readSupport); NOT the number of unique fragments",
+  "declared_count_unit": "unique_fragment_overlap",
+  "declared_rule": "one count per unique qualifying fragment record; column five is not summed",
+  "sample_rows": [
+    "GL000009.2\t767\t847\tB10C1Q_TACAACATCCTACCTA-1\t2",
+    "GL000009.2\t778\t825\tB18C1S_CACCTCAGTGTTGCAA-1\t1",
+    "GL000009.2\t779\t825\tB13D2D_GGTACTTAGCAGCTCA-1\t1",
+    "GL000009.2\t779\t866\tB11D2G_CATGCAAGTGTTTCAC-1\t3",
+    "GL000009.2\t1019\t1383\tB10C1Q_TATGGCCCATCTAGCA-1\t1"
+  ]
+}

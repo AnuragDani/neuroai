@@ -158,5 +158,42 @@
     "frozen_primary_normalization": "raw-count training-only StandardScaler (prospectively declared; primary estimate unchanged)",
     "external_evaluation": "still BLOCKED (TLS transport failure to nemoarchive.org, per-file embargo, no cross-cohort common feature space)",
     "final_estimate": "internal final produced (iteration 5); normalization and faithfulness sensitivities now cover the frozen folds"
+  },
+  "corrected_measurement_execution_2026-09-21": {
+    "record_type": "corrected_measurement_run",
+    "note": "This section supersedes the exploratory input semantics above for scientific acceptance. The historical entries are preserved unchanged.",
+    "declared_contract": "configs/atac_measurement_contract_2026-09-21.json (unique_fragment_overlap, fragment count mode, bounded reader) and configs/real_paired_acceptance_2026-09-21.json (raw/X + raw/var, fragment unit, frozen 480-region union, 30 donors 15/15, six families, 0.07 margin, donor bootstrap)",
+    "allocation_used": {
+      "purpose": "regenerate the 480-region union ATAC matrix with the corrected reader and count unit, then rerun the frozen internal comparison, faithfulness and normalization sensitivity",
+      "fragment_region_query_bytes_fetched": 3295412224,
+      "n_regions_quantified": 480,
+      "workers": 8,
+      "count_mode": "fragment",
+      "count_unit": "unique_fragment_overlap",
+      "total_max_bytes_declared": 6442450944,
+      "corrected_matrix_npz_bytes": 16154128,
+      "corrected_matrix_nnz": 9513875,
+      "comparison_compute": "CPU; 39.9 s, 1.27 GB peak RSS; 25 folds x 6 families + majority",
+      "faithfulness_compute": "CPU; 69.7 s; 25 folds x (4 intervention families + 2 primary families x 2 extra init seeds)",
+      "normalization_compute": "CPU; 79.7 s; 2 variants x 25 folds x 6 families",
+      "disk_free_gb_after": 19.753,
+      "whole_asset_bytes": 0,
+      "external_asset_bytes": 0
+    },
+    "artifacts": {
+      "corrected_atac_matrix": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz (matrix_sha256 81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f, 480 x 248998, nnz 9513875)",
+      "input_manifest": "configs/real_paired_input_manifest_2026-09-21.json (manifest_sha256 07ab1469baa086237634cb83736a9723a4bfba43c2e20af900436783cfbc7cbb)",
+      "acceptance_decision": "ACCEPTED, no blocking checks (reports/generated/acceptance_binding_corrected_20260921/decision.json)",
+      "primary_comparison": "reports/generated/real_paired_comparison_corrected_20260921/run/run.json",
+      "faithfulness": "reports/generated/real_paired_faithfulness_frozen_corrected_20260921/run/run.json",
+      "normalization_sensitivity": "reports/generated/real_paired_normalization_corrected_20260921/run/run.json"
+    },
+    "status": {
+      "corrected_primary": "cross-attention minus token-concat donor balanced accuracy +0.00667, 95% donor-bootstrap interval [-0.025, +0.035], margin 0.07, advantage false; ACCEPTED as the final internal estimate",
+      "normalization_sensitivity": "raw +0.00667 [-0.025, +0.035]; log1p +0.01333 [-0.0267, +0.0543]; advantage false in both",
+      "faithfulness": "RNA-view interventions dominate (clamp/ablate view A drops ~0.08-0.14), ATAC-view near zero or slightly negative, within-donor permutation ~0, uniform route measured only for the gated family",
+      "initialization_sensitivity": "per-seed primary delta mean 0: +0.0083, 1: +0.0127, 2: -0.0033 (spread 0.016); null holds across initialization seeds",
+      "external_evaluation": "still BLOCKED (unchanged: nemoarchive TLS transport failure, per-file embargo, no common feature space)"
+    }
   }
 }

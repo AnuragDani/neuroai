@@ -292,6 +292,16 @@ def test_adjacent_and_overlapping_chunks_do_not_duplicate():
         assert stats.rows_by_barcode == {"libA_AAAA-1": 1, "libB_BBBB-1": 1}
 
 
+def test_parse_fragment_line_fragment_mode_weights_one():
+    reader = module()
+    line = b"chr1\t100\t200\tlibA_AAAA-1\t7"
+    assert reader.parse_fragment_line(line, "chr1", 100, 200, "fragment") == ("libA_AAAA-1", 1)
+    assert reader.parse_fragment_line(line, "chr1", 100, 200, "read_support") == ("libA_AAAA-1", 7)
+    # non-overlapping and inverted records are ignored in both modes
+    assert reader.parse_fragment_line(line, "chr1", 500, 600, "fragment") is None
+    assert reader.parse_fragment_line(b"chr1\t200\t100\tlibA_AAAA-1\t7", "chr1", 100, 200) is None
+
+
 def test_read_support_mode_reproduces_historical_weighting():
     reader = module()
     blob, index_raw, _a, _b = build_fixture(["chr1\t100\t200\tlibA_AAAA-1\t7"])

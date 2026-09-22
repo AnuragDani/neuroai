@@ -1,0 +1,356 @@
+{
+  "record_type": "corrected_normalization_sensitivity",
+  "status": "CORRECTED_MEASUREMENT_EXECUTED",
+  "supersedes_exploratory": "docs/real_paired_normalization_sensitivity_2026-09-21.json",
+  "source_run_dir": "reports/generated/real_paired_normalization_corrected_20260921/run",
+  "note": "Raw-count vs log1p sensitivity on the corrected raw/X block. Sensitivity only; the frozen primary estimate is the corrected comparison.",
+  "run": {
+    "data_mode": "real_development_normalization_sensitivity",
+    "scientific_claim_allowed": false,
+    "pilot": false,
+    "primary_endpoint": false,
+    "external_evaluation_performed": false,
+    "input_fingerprints": {
+      "h5ad": {
+        "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+        "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+        "n_genes": 35477
+      },
+      "genome_build": "GRCh38",
+      "ordered_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+      "rna_representation": {
+        "matrix_key": "raw/X",
+        "axis_key": "raw/var",
+        "n_cells": 248998,
+        "n_genes": 35477,
+        "gene_axis_sha256": "feccc1c746332549d7d63a7a58a26727552e2b04d67d468e734fadfc0c5c2fb3",
+        "gene_axis_n": 35477,
+        "integer_counts_validated": true
+      },
+      "atac_matrix": {
+        "path": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+        "sha256": "81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f",
+        "n_regions": 480
+      },
+      "n_cells_available": 248998,
+      "n_cells_sampled": 7680,
+      "cell_cap": 256
+    },
+    "region_set_fingerprint": {
+      "path": "reports/generated/repeated_comparison_20260921/region_sets.json",
+      "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+      "n_union_regions": 480
+    },
+    "variants": {
+      "raw_standard_scaler": {
+        "variant": "raw_standard_scaler",
+        "n_folds_run": 25,
+        "n_repeats": 5,
+        "primary_comparison": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": 0.0,
+            "1": 0.09999999999999998,
+            "2": 0.0,
+            "3": 0.0,
+            "4": -0.06666666666666665
+          },
+          "seed": 22,
+          "estimate": 0.006666666666666665,
+          "interval": [
+            -0.025,
+            0.035007352941176476
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "model_summaries": {
+          "rna_only": {
+            "model": "rna_only",
+            "per_repeat": {
+              "0": 0.6333333333333333,
+              "1": 0.3666666666666667,
+              "2": 0.6,
+              "3": 0.5333333333333333,
+              "4": 0.4
+            },
+            "mean": 0.5066666666666666,
+            "n_usable": 5
+          },
+          "atac_only": {
+            "model": "atac_only",
+            "per_repeat": {
+              "0": 0.4666666666666667,
+              "1": 0.33333333333333337,
+              "2": 0.4666666666666667,
+              "3": 0.3666666666666667,
+              "4": 0.4
+            },
+            "mean": 0.4066666666666666,
+            "n_usable": 5
+          },
+          "rna_atac_concat": {
+            "model": "rna_atac_concat",
+            "per_repeat": {
+              "0": 0.6,
+              "1": 0.5,
+              "2": 0.6666666666666666,
+              "3": 0.5,
+              "4": 0.43333333333333335
+            },
+            "mean": 0.54,
+            "n_usable": 5
+          },
+          "gated_fusion": {
+            "model": "gated_fusion",
+            "per_repeat": {
+              "0": 0.6666666666666667,
+              "1": 0.43333333333333335,
+              "2": 0.6,
+              "3": 0.5,
+              "4": 0.43333333333333335
+            },
+            "mean": 0.5266666666666667,
+            "n_usable": 5
+          },
+          "token_concat": {
+            "model": "token_concat",
+            "per_repeat": {
+              "0": 0.6000000000000001,
+              "1": 0.4,
+              "2": 0.6333333333333333,
+              "3": 0.4666666666666667,
+              "4": 0.4666666666666667
+            },
+            "mean": 0.5133333333333334,
+            "n_usable": 5
+          },
+          "cross_attention": {
+            "model": "cross_attention",
+            "per_repeat": {
+              "0": 0.6000000000000001,
+              "1": 0.5,
+              "2": 0.6333333333333333,
+              "3": 0.4666666666666667,
+              "4": 0.4
+            },
+            "mean": 0.52,
+            "n_usable": 5
+          },
+          "majority_control": {
+            "model": "majority_control",
+            "per_repeat": {
+              "0": 0.3666666666666667,
+              "1": 0.30000000000000004,
+              "2": 0.43333333333333335,
+              "3": 0.3666666666666667,
+              "4": 0.36666666666666664
+            },
+            "mean": 0.3666666666666667,
+            "n_usable": 5
+          }
+        }
+      },
+      "log1p_standard_scaler": {
+        "variant": "log1p_standard_scaler",
+        "n_folds_run": 25,
+        "n_repeats": 5,
+        "primary_comparison": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": 0.06666666666666676,
+            "1": 0.0,
+            "2": 0.0,
+            "3": -0.033333333333333326,
+            "4": 0.033333333333333326
+          },
+          "seed": 22,
+          "estimate": 0.013333333333333353,
+          "interval": [
+            -0.026678733031674194,
+            0.054316176470588215
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "model_summaries": {
+          "rna_only": {
+            "model": "rna_only",
+            "per_repeat": {
+              "0": 0.5666666666666667,
+              "1": 0.4,
+              "2": 0.5,
+              "3": 0.5,
+              "4": 0.3666666666666667
+            },
+            "mean": 0.4666666666666667,
+            "n_usable": 5
+          },
+          "atac_only": {
+            "model": "atac_only",
+            "per_repeat": {
+              "0": 0.4666666666666667,
+              "1": 0.3,
+              "2": 0.5,
+              "3": 0.3666666666666667,
+              "4": 0.4
+            },
+            "mean": 0.4066666666666666,
+            "n_usable": 5
+          },
+          "rna_atac_concat": {
+            "model": "rna_atac_concat",
+            "per_repeat": {
+              "0": 0.5666666666666667,
+              "1": 0.43333333333333335,
+              "2": 0.5333333333333333,
+              "3": 0.4666666666666667,
+              "4": 0.43333333333333335
+            },
+            "mean": 0.4866666666666667,
+            "n_usable": 5
+          },
+          "gated_fusion": {
+            "model": "gated_fusion",
+            "per_repeat": {
+              "0": 0.6333333333333333,
+              "1": 0.5333333333333333,
+              "2": 0.5,
+              "3": 0.43333333333333335,
+              "4": 0.5
+            },
+            "mean": 0.5199999999999999,
+            "n_usable": 5
+          },
+          "token_concat": {
+            "model": "token_concat",
+            "per_repeat": {
+              "0": 0.5333333333333333,
+              "1": 0.5,
+              "2": 0.5,
+              "3": 0.4666666666666667,
+              "4": 0.3666666666666667
+            },
+            "mean": 0.47333333333333333,
+            "n_usable": 5
+          },
+          "cross_attention": {
+            "model": "cross_attention",
+            "per_repeat": {
+              "0": 0.6000000000000001,
+              "1": 0.5,
+              "2": 0.5,
+              "3": 0.43333333333333335,
+              "4": 0.4
+            },
+            "mean": 0.48666666666666664,
+            "n_usable": 5
+          },
+          "majority_control": {
+            "model": "majority_control",
+            "per_repeat": {
+              "0": 0.3666666666666667,
+              "1": 0.30000000000000004,
+              "2": 0.43333333333333335,
+              "3": 0.3666666666666667,
+              "4": 0.36666666666666664
+            },
+            "mean": 0.3666666666666667,
+            "n_usable": 5
+          }
+        }
+      }
+    },
+    "comparison": {
+      "primary_estimate": 0.006666666666666665,
+      "primary_interval": [
+        -0.025,
+        0.035007352941176476
+      ],
+      "log1p_estimate": 0.013333333333333353,
+      "log1p_interval": [
+        -0.026678733031674194,
+        0.054316176470588215
+      ],
+      "estimate_difference": 0.006666666666666688,
+      "primary_advantage_demonstrated": false,
+      "log1p_advantage_demonstrated": false
+    },
+    "limitations": [
+      "Normalization sensitivity only; the frozen raw-count primary estimate is unchanged.",
+      "Internal development folds only; external paired data were not accessed.",
+      "No biological mechanism is claimed from attention or latent tokens."
+    ],
+    "generated_at": "2026-09-22T01:06:02+00:00",
+    "protocol": {
+      "n_tokens": 4,
+      "embed_dim": 16,
+      "hidden_dim": 32,
+      "n_heads": 2,
+      "dropout": 0.1,
+      "feature_budget": 128,
+      "cell_cap": 256,
+      "max_epochs": 20,
+      "patience": 5,
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_seed": 0,
+      "model_seed": 0,
+      "sampling_seed": 22
+    },
+    "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+    "environment": {
+      "python": "3.11.16",
+      "platform": "macOS-26.5.2-arm64-arm-64bit",
+      "machine": "arm64",
+      "cpu_count": 16,
+      "ram_total_gb": 137.439,
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.2",
+        "scipy": "1.17.1",
+        "sklearn": "1.7.2",
+        "torch": "2.8.0",
+        "anndata": "0.12.6",
+        "h5py": "3.16.0"
+      }
+    },
+    "resources": {
+      "name": "real_paired_normalization_sensitivity",
+      "cells_per_donor_cap": 256,
+      "elapsed_seconds": 78.801,
+      "peak_rss_gb": 1.2936,
+      "disk_free_gb": 19.683,
+      "input_bytes": null,
+      "notes": "Normalization sensitivity on frozen folds; not a new primary endpoint"
+    }
+  }
+}

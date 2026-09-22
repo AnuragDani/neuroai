@@ -1,0 +1,698 @@
+{
+  "record_type": "corrected_frozen_faithfulness_and_initialization_sensitivity",
+  "status": "CORRECTED_MEASUREMENT_EXECUTED",
+  "supersedes_exploratory": "docs/real_paired_faithfulness_frozen_2026-09-21.json",
+  "source_run_dir": "reports/generated/real_paired_faithfulness_frozen_corrected_20260921/run",
+  "note": "Held-out interventions and initialization-seed sensitivity on the corrected inputs. Model dependence under a stated manipulation, not causal biology.",
+  "run": {
+    "data_mode": "real_development_frozen_fold_faithfulness",
+    "scientific_claim_allowed": true,
+    "pilot": false,
+    "final_internal_estimate": false,
+    "external_evaluation_performed": false,
+    "acceptance": {
+      "status": "ACCEPTED",
+      "scientific_claim_allowed": true,
+      "final_internal_estimate": true,
+      "blocking_checks": [],
+      "checks": {
+        "rna_representation": {
+          "status": "PASS",
+          "detail": "matrix_key='raw/X' axis_key='raw/var' integer_counts_validated=True"
+        },
+        "atac_unit": {
+          "status": "PASS",
+          "detail": "count_unit='unique_fragment_overlap' count_mode='fragment' unknown_policy='error'"
+        },
+        "region_identity": {
+          "status": "PASS",
+          "detail": "union_sha256=29ab67391139... n_union_regions=480"
+        },
+        "population": {
+          "status": "PASS",
+          "detail": "n_donors=30 15/15"
+        },
+        "protocol_match": {
+          "status": "PASS",
+          "detail": "families=6 margin=0.07 seeds(repeat/fold/split)=5/5/0"
+        },
+        "fold_provenance": {
+          "status": "PASS",
+          "detail": "all folds training-only and donor-matched"
+        },
+        "manifest_present": {
+          "status": "PASS",
+          "detail": "manifest supplied"
+        },
+        "rna_artifact": {
+          "status": "PASS",
+          "detail": "h5ad_sha256=08d6eff265db... n_cells=248998 n_genes=35477"
+        },
+        "atac_artifact": {
+          "status": "PASS",
+          "detail": "matrix_sha256=81dfdf7c615d... n_regions=480"
+        },
+        "cell_identity": {
+          "status": "PASS",
+          "detail": "ordered h5ad cells and ATAC matrix columns must agree"
+        }
+      },
+      "requirements_sha256": "28a51e7c8b0e0e81adf65ee9d4123e066e9d8f07fe1c2513b406e892b5dd9abe",
+      "manifest_sha256": "07ab1469baa086237634cb83736a9723a4bfba43c2e20af900436783cfbc7cbb"
+    },
+    "n_folds_run": 25,
+    "input_fingerprints": {
+      "h5ad": {
+        "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+        "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+        "n_genes": 35477
+      },
+      "genome_build": "GRCh38",
+      "ordered_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+      "rna_representation": {
+        "matrix_key": "raw/X",
+        "axis_key": "raw/var",
+        "n_cells": 248998,
+        "n_genes": 35477,
+        "gene_axis_sha256": "feccc1c746332549d7d63a7a58a26727552e2b04d67d468e734fadfc0c5c2fb3",
+        "gene_axis_n": 35477,
+        "integer_counts_validated": true
+      },
+      "atac_matrix": {
+        "path": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+        "sha256": "81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f",
+        "n_regions": 480
+      },
+      "n_cells_available": 248998,
+      "n_cells_sampled": 7680,
+      "cell_cap": 256
+    },
+    "region_set_fingerprint": {
+      "path": "reports/generated/repeated_comparison_20260921/region_sets.json",
+      "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+      "n_union_regions": 480
+    },
+    "interventions": {
+      "rna_atac_concat": {
+        "clamp_view_a": {
+          "intervention": "clamp_view_a",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.48900000000000005,
+          "donor_balanced_accuracy_drop_mean": 0.133,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.625,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "clamp_view_b": {
+          "intervention": "clamp_view_b",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.6126666666666666,
+          "donor_balanced_accuracy_drop_mean": 0.00933333333333333,
+          "donor_balanced_accuracy_drop_min": -0.375,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_a_within_donor": {
+          "intervention": "permute_view_a_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.618,
+          "donor_balanced_accuracy_drop_mean": 0.0040000000000000036,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.10000000000000009,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_b_within_donor": {
+          "intervention": "permute_view_b_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.622,
+          "donor_balanced_accuracy_drop_mean": 0.0,
+          "donor_balanced_accuracy_drop_min": -0.10000000000000009,
+          "donor_balanced_accuracy_drop_max": 0.10000000000000009,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_a_embedding": {
+          "intervention": "ablate_view_a_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.503,
+          "donor_balanced_accuracy_drop_mean": 0.11899999999999998,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.5,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_b_embedding": {
+          "intervention": "ablate_view_b_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.622,
+          "donor_balanced_accuracy_after_mean": 0.6303333333333333,
+          "donor_balanced_accuracy_drop_mean": -0.008333333333333338,
+          "donor_balanced_accuracy_drop_min": -0.375,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "fixed_uniform_route": {
+          "intervention": "fixed_uniform_route",
+          "n_folds": 25,
+          "n_folds_measured": 0,
+          "n_folds_not_applicable": 25,
+          "donor_balanced_accuracy_before_mean": null,
+          "donor_balanced_accuracy_after_mean": null,
+          "donor_balanced_accuracy_drop_mean": null,
+          "donor_balanced_accuracy_drop_min": null,
+          "donor_balanced_accuracy_drop_max": null,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        }
+      },
+      "gated_fusion": {
+        "clamp_view_a": {
+          "intervention": "clamp_view_a",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.49999999999999994,
+          "donor_balanced_accuracy_drop_mean": 0.11333333333333334,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.5,
+          "routing_shift_mean": 0.05965554930269718,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "clamp_view_b": {
+          "intervention": "clamp_view_b",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.6106666666666666,
+          "donor_balanced_accuracy_drop_mean": 0.002666666666666662,
+          "donor_balanced_accuracy_drop_min": -0.4,
+          "donor_balanced_accuracy_drop_max": 0.16666666666666663,
+          "routing_shift_mean": 0.05826782487332821,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_a_within_donor": {
+          "intervention": "permute_view_a_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_drop_mean": 4.440892098500626e-18,
+          "donor_balanced_accuracy_drop_min": -0.09999999999999998,
+          "donor_balanced_accuracy_drop_max": 0.10000000000000009,
+          "routing_shift_mean": 0.06558138720691203,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_b_within_donor": {
+          "intervention": "permute_view_b_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_drop_mean": 0.0,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.0,
+          "routing_shift_mean": 0.055948145873844626,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_a_embedding": {
+          "intervention": "ablate_view_a_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.4743333333333334,
+          "donor_balanced_accuracy_drop_mean": 0.139,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.7000000000000001,
+          "routing_shift_mean": 0.07299942426383495,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_b_embedding": {
+          "intervention": "ablate_view_b_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.6363333333333333,
+          "donor_balanced_accuracy_drop_mean": -0.023,
+          "donor_balanced_accuracy_drop_min": -0.5,
+          "donor_balanced_accuracy_drop_max": 0.3,
+          "routing_shift_mean": 0.06640940263867379,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "fixed_uniform_route": {
+          "intervention": "fixed_uniform_route",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.6133333333333333,
+          "donor_balanced_accuracy_after_mean": 0.5619999999999999,
+          "donor_balanced_accuracy_drop_mean": 0.05133333333333335,
+          "donor_balanced_accuracy_drop_min": -0.16666666666666663,
+          "donor_balanced_accuracy_drop_max": 0.5,
+          "routing_shift_mean": 0.1900818808376789,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        }
+      },
+      "token_concat": {
+        "clamp_view_a": {
+          "intervention": "clamp_view_a",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.514,
+          "donor_balanced_accuracy_drop_mean": 0.08266666666666665,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "clamp_view_b": {
+          "intervention": "clamp_view_b",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.6163333333333333,
+          "donor_balanced_accuracy_drop_mean": -0.019666666666666673,
+          "donor_balanced_accuracy_drop_min": -0.375,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_a_within_donor": {
+          "intervention": "permute_view_a_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_drop_mean": 0.0,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.0,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_b_within_donor": {
+          "intervention": "permute_view_b_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_drop_mean": 0.0,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.0,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_a_embedding": {
+          "intervention": "ablate_view_a_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.484,
+          "donor_balanced_accuracy_drop_mean": 0.11266666666666664,
+          "donor_balanced_accuracy_drop_min": -0.125,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_b_embedding": {
+          "intervention": "ablate_view_b_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.5966666666666667,
+          "donor_balanced_accuracy_after_mean": 0.6213333333333333,
+          "donor_balanced_accuracy_drop_mean": -0.024666666666666674,
+          "donor_balanced_accuracy_drop_min": -0.375,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "fixed_uniform_route": {
+          "intervention": "fixed_uniform_route",
+          "n_folds": 25,
+          "n_folds_measured": 0,
+          "n_folds_not_applicable": 25,
+          "donor_balanced_accuracy_before_mean": null,
+          "donor_balanced_accuracy_after_mean": null,
+          "donor_balanced_accuracy_drop_mean": null,
+          "donor_balanced_accuracy_drop_min": null,
+          "donor_balanced_accuracy_drop_max": null,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        }
+      },
+      "cross_attention": {
+        "clamp_view_a": {
+          "intervention": "clamp_view_a",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.491,
+          "donor_balanced_accuracy_drop_mean": 0.11399999999999999,
+          "donor_balanced_accuracy_drop_min": -0.25,
+          "donor_balanced_accuracy_drop_max": 0.5,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "clamp_view_b": {
+          "intervention": "clamp_view_b",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.5993333333333333,
+          "donor_balanced_accuracy_drop_mean": 0.005666666666666669,
+          "donor_balanced_accuracy_drop_min": -0.33333333333333326,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_a_within_donor": {
+          "intervention": "permute_view_a_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.6,
+          "donor_balanced_accuracy_drop_mean": 0.005,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.125,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "permute_view_b_within_donor": {
+          "intervention": "permute_view_b_within_donor",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.605,
+          "donor_balanced_accuracy_drop_mean": 0.0,
+          "donor_balanced_accuracy_drop_min": 0.0,
+          "donor_balanced_accuracy_drop_max": 0.0,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_a_embedding": {
+          "intervention": "ablate_view_a_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.499,
+          "donor_balanced_accuracy_drop_mean": 0.10599999999999998,
+          "donor_balanced_accuracy_drop_min": -0.375,
+          "donor_balanced_accuracy_drop_max": 0.5,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "ablate_view_b_embedding": {
+          "intervention": "ablate_view_b_embedding",
+          "n_folds": 25,
+          "n_folds_measured": 25,
+          "n_folds_not_applicable": 0,
+          "donor_balanced_accuracy_before_mean": 0.605,
+          "donor_balanced_accuracy_after_mean": 0.6083333333333334,
+          "donor_balanced_accuracy_drop_mean": -0.003333333333333335,
+          "donor_balanced_accuracy_drop_min": -0.33333333333333326,
+          "donor_balanced_accuracy_drop_max": 0.4,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        },
+        "fixed_uniform_route": {
+          "intervention": "fixed_uniform_route",
+          "n_folds": 25,
+          "n_folds_measured": 0,
+          "n_folds_not_applicable": 25,
+          "donor_balanced_accuracy_before_mean": null,
+          "donor_balanced_accuracy_after_mean": null,
+          "donor_balanced_accuracy_drop_mean": null,
+          "donor_balanced_accuracy_drop_min": null,
+          "donor_balanced_accuracy_drop_max": null,
+          "routing_shift_mean": null,
+          "evidence": "held-out donor-level intervention evidence under the stated manipulation; a routing weight is not an explanation and this is not a causal biological claim"
+        }
+      }
+    },
+    "initialization_sensitivity": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "families": [
+        "cross_attention",
+        "token_concat"
+      ],
+      "per_seed": {
+        "0": {
+          "n_folds": 25,
+          "cross_attention_mean": 0.605,
+          "token_concat_mean": 0.5966666666666667,
+          "delta_mean": 0.008333333333333335,
+          "delta_min": -0.16666666666666663,
+          "delta_max": 0.25,
+          "delta_spread": 0.41666666666666663,
+          "delta_per_fold": {
+            "0.0": 0.0,
+            "0.1": 0.0,
+            "0.2": 0.0,
+            "0.3": 0.0,
+            "0.4": 0.0,
+            "1.0": 0.09999999999999998,
+            "1.1": 0.0,
+            "1.2": 0.0,
+            "1.3": 0.0,
+            "1.4": 0.25,
+            "2.0": 0.0,
+            "2.1": 0.0,
+            "2.2": 0.0,
+            "2.3": 0.0,
+            "2.4": 0.0,
+            "3.0": 0.0,
+            "3.1": 0.0,
+            "3.2": 0.0,
+            "3.3": 0.0,
+            "3.4": 0.125,
+            "4.0": 0.0,
+            "4.1": 0.0,
+            "4.2": -0.09999999999999998,
+            "4.3": 0.0,
+            "4.4": -0.16666666666666663
+          }
+        },
+        "1": {
+          "n_folds": 25,
+          "cross_attention_mean": 0.6546666666666667,
+          "token_concat_mean": 0.642,
+          "delta_mean": 0.01266666666666667,
+          "delta_min": -0.125,
+          "delta_max": 0.25,
+          "delta_spread": 0.375,
+          "delta_per_fold": {
+            "0.0": 0.0,
+            "0.1": 0.0,
+            "0.2": -0.125,
+            "0.3": 0.0,
+            "0.4": 0.0,
+            "1.0": 0.0,
+            "1.1": 0.0,
+            "1.2": 0.0,
+            "1.3": -0.09999999999999998,
+            "1.4": 0.0,
+            "2.0": 0.0,
+            "2.1": 0.125,
+            "2.2": 0.16666666666666674,
+            "2.3": 0.0,
+            "2.4": 0.0,
+            "3.0": 0.0,
+            "3.1": 0.0,
+            "3.2": 0.0,
+            "3.3": 0.0,
+            "3.4": 0.0,
+            "4.0": 0.0,
+            "4.1": 0.0,
+            "4.2": 0.0,
+            "4.3": 0.25,
+            "4.4": 0.0
+          }
+        },
+        "2": {
+          "n_folds": 25,
+          "cross_attention_mean": 0.6356666666666666,
+          "token_concat_mean": 0.6389999999999999,
+          "delta_mean": -0.003333333333333335,
+          "delta_min": -0.25,
+          "delta_max": 0.16666666666666663,
+          "delta_spread": 0.41666666666666663,
+          "delta_per_fold": {
+            "0.0": 0.0,
+            "0.1": 0.0,
+            "0.2": 0.0,
+            "0.3": 0.0,
+            "0.4": 0.0,
+            "1.0": 0.0,
+            "1.1": 0.0,
+            "1.2": 0.0,
+            "1.3": 0.0,
+            "1.4": -0.25,
+            "2.0": 0.0,
+            "2.1": 0.0,
+            "2.2": 0.0,
+            "2.3": 0.0,
+            "2.4": 0.0,
+            "3.0": 0.0,
+            "3.1": 0.0,
+            "3.2": 0.0,
+            "3.3": 0.0,
+            "3.4": 0.0,
+            "4.0": 0.0,
+            "4.1": 0.0,
+            "4.2": 0.0,
+            "4.3": 0.0,
+            "4.4": 0.16666666666666663
+          }
+        }
+      },
+      "delta_mean_spread_across_seeds": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "scores": {
+          "0": 0.008333333333333335,
+          "1": 0.01266666666666667,
+          "2": -0.003333333333333335
+        },
+        "min": -0.003333333333333335,
+        "max": 0.01266666666666667,
+        "mean": 0.0058888888888888906,
+        "spread": 0.016000000000000004,
+        "n_seeds": 3,
+        "evidence": "initialization-seed sensitivity with the donor split held fixed"
+      },
+      "cross_attention_mean_spread_across_seeds": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "scores": {
+          "0": 0.605,
+          "1": 0.6546666666666667,
+          "2": 0.6356666666666666
+        },
+        "min": 0.605,
+        "max": 0.6546666666666667,
+        "mean": 0.6317777777777778,
+        "spread": 0.04966666666666675,
+        "n_seeds": 3,
+        "evidence": "initialization-seed sensitivity with the donor split held fixed"
+      },
+      "token_concat_mean_spread_across_seeds": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "scores": {
+          "0": 0.5966666666666667,
+          "1": 0.642,
+          "2": 0.6389999999999999
+        },
+        "min": 0.5966666666666667,
+        "max": 0.642,
+        "mean": 0.6258888888888888,
+        "spread": 0.04533333333333334,
+        "n_seeds": 3,
+        "evidence": "initialization-seed sensitivity with the donor split held fixed"
+      },
+      "note": "per_seed.delta_mean is the mean across folds of that fold's cross-attention minus token-concat donor balanced accuracy; the spread across seeds is initialization sensitivity with the donor splits held fixed"
+    },
+    "limitations": [
+      "Internal development folds only; external paired data were not accessed.",
+      "Interventions are held-out manipulation evidence, not causal biology.",
+      "Raw-count standard scaling; the accepted normalization is not separately frozen.",
+      "A zero seed spread is not a stability guarantee beyond the seeds actually run.",
+      "Predictions must not be used to select outcome-favourable donors."
+    ],
+    "generated_at": "2026-09-22T01:04:29+00:00",
+    "protocol": {
+      "n_tokens": 4,
+      "embed_dim": 16,
+      "hidden_dim": 32,
+      "n_heads": 2,
+      "dropout": 0.1,
+      "feature_budget": 128,
+      "cell_cap": 256,
+      "max_epochs": 20,
+      "patience": 5,
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_seed": 0,
+      "model_seed": 0,
+      "sampling_seed": 22
+    },
+    "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+    "environment": {
+      "python": "3.11.16",
+      "platform": "macOS-26.5.2-arm64-arm-64bit",
+      "machine": "arm64",
+      "cpu_count": 16,
+      "ram_total_gb": 137.439,
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.2",
+        "scipy": "1.17.1",
+        "sklearn": "1.7.2",
+        "torch": "2.8.0",
+        "anndata": "0.12.6",
+        "h5py": "3.16.0"
+      }
+    },
+    "resources": {
+      "name": "real_paired_frozen_faithfulness",
+      "cells_per_donor_cap": 256,
+      "elapsed_seconds": 68.461,
+      "peak_rss_gb": 1.2626,
+      "disk_free_gb": 19.697,
+      "input_bytes": null,
+      "notes": "Frozen-fold faithfulness and initialization sensitivity on CPU; not external"
+    }
+  }
+}

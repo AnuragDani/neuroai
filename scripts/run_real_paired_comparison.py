@@ -169,7 +169,7 @@ def comparison_run(protocol, h5ad_path, atac_path, regions_path, output_dir, req
         protocol,
         fingerprints,
         region_sets,
-        folds,
+        list(folds.values()),
         metadata,
         atac_path,
         regions_path,

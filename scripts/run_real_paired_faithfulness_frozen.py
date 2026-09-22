@@ -101,7 +101,7 @@ def faithfulness_frozen_run(
         protocol,
         fingerprints,
         region_sets,
-        folds,
+        list(folds.values()),
         metadata,
         atac_path,
         regions_path,
