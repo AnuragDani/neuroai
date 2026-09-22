@@ -21,8 +21,9 @@ Two independently reproduced input defects were repaired before rerunning:
 The corrected reader agrees with HTSlib (pysam 0.24.1) on local fixtures
 (including a record split across two BGZF members and a true zero-count region)
 and on real remote regions. A shared acceptance gate now replaces the automatic
-scientific-claim promotion; the corrected run is `ACCEPTED` (10/10 checks) and the
-historical inputs are `REFUSED`.
+scientific-claim promotion; the corrected run is `ACCEPTED` (11/11 checks) and the
+historical inputs are `REFUSED`. The exploratory pilot was rerun on the corrected
+inputs and remains an explicit pilot (donor-level delta 0.0, no claim promotion).
 
 ## Corrected internal result (null)
 
@@ -59,6 +60,7 @@ reproduces the primary interval exactly).
   `MOM/2026-09-21/P22_down_syndrome_all_in_one.corrected.executed.ipynb`.
 - Corrected result records: `docs/repeated_internal_comparison_corrected_2026-09-21.json`,
   `docs/real_paired_faithfulness_frozen_corrected_2026-09-21.json`,
-  `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`.
+  `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`,
+  `docs/real_paired_pilot_corrected_2026-09-21.json`.
 
 This is a corrected internal result, not a new external experiment.

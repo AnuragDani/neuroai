@@ -1,0 +1,42 @@
+{
+  "record_type": "independent_reader_agreement_htslib",
+  "generated_at": "2026-09-21T14:19:00+00:00",
+  "run": "p22-results-executio-debda8",
+  "purpose": "Durable tracked record of the independent HTSlib/pysam agreement check for the corrected custom BGZF/tabix fragment reader. The raw machine-readable output lives in the gitignored working copy reports/generated/reader_correction_20260921/reader_oracle_htslib.json and is reproduced here so the independent validation survives without the ignored directory.",
+  "oracle": {
+    "implementation": "pysam (bundled HTSlib)",
+    "pysam_version": "0.24.1",
+    "is_independent": true,
+    "note": "pysam opens the remote bgzf and its .tbi directly and is not a wrapper around the custom parser, so it is a genuine second path rather than a re-decode with the same code."
+  },
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts <pysam-venv>/bin/python scripts/validate_reader_against_htslib.py --fragment-url https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz --index-url https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz.tbi --region chr1:125181130-125182104 --region chr1:145996263-145997154 --region chr21:34790000-34792000 --out reports/generated/reader_correction_20260921/reader_oracle_htslib.json",
+  "environment_note": "The isolated pysam virtual environment was created outside the shared .venv-p22 and was removed after use; the shared environment was not mutated. Re-running the command requires recreating that isolated pysam environment.",
+  "all_agree": true,
+  "local_fixture": {
+    "fixture": "local_split_member",
+    "covers": [
+      "a record split across two BGZF members",
+      "adjacent regions",
+      "a true zero-count region"
+    ],
+    "cases": [
+      {"region": "chr1:50-300", "agree": true, "custom": {"libA_AAAA-1": 1, "libB_BBBB-1": 1}, "htslib": {"libA_AAAA-1": 1, "libB_BBBB-1": 1}},
+      {"region": "chr1:400-500", "agree": true, "custom": {"libA_CCCC-1": 1}, "htslib": {"libA_CCCC-1": 1}},
+      {"region": "chr1:0-5000", "agree": true, "custom": {"libA_AAAA-1": 2, "libA_CCCC-1": 1, "libB_BBBB-1": 1}, "htslib": {"libA_AAAA-1": 2, "libA_CCCC-1": 1, "libB_BBBB-1": 1}},
+      {"region": "chr1:700-800", "agree": true, "custom": {}, "htslib": {}}
+    ]
+  },
+  "remote_regions": {
+    "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+    "index_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz.tbi",
+    "cases": [
+      {"region": "chr1:125181130-125182104", "agree": true, "custom_rows": 312, "htslib_rows": 312},
+      {"region": "chr1:145996263-145997154", "agree": true, "custom_rows": 29393, "htslib_rows": 29393},
+      {"region": "chr21:34790000-34792000", "agree": true, "custom_rows": 1090, "htslib_rows": 1090}
+    ]
+  },
+  "limitations": [
+    "Agreement is on per-barcode fragment counts for four local and three remote regions; it is not an exhaustive sweep of the asset.",
+    "The remote case reads bounded windows, not the full 25.5 GB fragment file."
+  ]
+}

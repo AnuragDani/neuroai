@@ -6,9 +6,9 @@ seven GNHF execution commits (`GNHF_P22_RESULTS_REVIEW.md`, reviewed HEAD
 `fe881ea754c9da71588fd10fb6b33deeef52fc38`). The corrected ATAC matrix has now been
 regenerated with the fixed reader and the declared `unique_fragment_overlap` unit, the
 measured-artifact manifest exists, the shared acceptance gate returns `ACCEPTED`, and
-the corrected internal comparison, faithfulness and normalization sensitivity have been
-rerun. The old exploratory result is preserved unchanged and remains superseded for
-scientific acceptance. The canonical notebook now exposes the corrected workflow and a
+the corrected pilot, internal comparison, faithfulness and normalization sensitivity
+have been rerun. The old exploratory result is preserved unchanged and remains
+superseded for scientific acceptance. The canonical notebook now exposes the corrected workflow and a
 safe-mode executed copy has been saved, and an unsent professor update has been drafted.
 The study is not COMPLETE: external paired evaluation remains separately gated, so the
 overall study is labelled PARTIAL.
@@ -39,6 +39,16 @@ exploratory estimate:
 - Normalization sensitivity (corrected): raw +0.0066667 [−0.025, +0.0350074]; log1p
   +0.0133333 [−0.0266787, +0.0543162]; advantage false in both — the corrected null is
   not normalization-dependent.
+- Corrected pilot (explicitly exploratory; one outer fold, one initialization seed,
+  `scientific_claim_allowed=false`): cross-attention − token-concat donor balanced
+  accuracy **0.0** on the corrected 256-region repeat-0/fold-0 subset (cross-attention
+  0.625, token-concat 0.625, RNA-only 0.625, ATAC-only 0.5, RNA+ATAC concat 0.625,
+  gated 0.625; majority control 0.5), practical margin 0.5, advantage false. The
+  pilot's 256 × 248,998 counts equal the corrected union matrix rows for that fold's
+  region order (nnz 4,879,858, region hash `192d0b7a…`), verified equal. Record:
+  `docs/real_paired_pilot_corrected_2026-09-21.json`. This is the same executable
+  pilot rerun on the corrected inputs; the historical pilot record
+  `docs/real_paired_pilot_2026-09-21.json` is preserved unchanged.
 - Faithfulness (corrected, 25 folds): RNA-view interventions dominate (view-A clamp /
   ablation drops ≈0.08–0.14), ATAC-view interventions are near zero or slightly
   negative, within-donor permutation ≈0, and uniform routing is measured only for the
@@ -67,7 +77,8 @@ exploratory estimate:
   `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json` (five seeds,
   per-fold descriptive estimand) and the primary-estimand supersession
   `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json`,
-  `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`; the
+  `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`;
+  the corrected pilot is `docs/real_paired_pilot_corrected_2026-09-21.json`; the
   measured-artifact manifest is `configs/real_paired_input_manifest_2026-09-21.json`.
 
 ### Exact replay of the corrected run
@@ -118,6 +129,29 @@ env $PY scripts/run_real_paired_faithfulness_frozen.py \
   --acceptance-manifest configs/real_paired_input_manifest_2026-09-21.json \
   --init-seeds 0 1 2 3 4 \
   --output-dir reports/generated/real_paired_faithfulness_frozen_corrected5_primary_20260921/run
+
+# 5. corrected pilot: subset the corrected union matrix to the repeat-0/fold-0 region
+#    order (no network), then run the exploratory pilot (~5 s)
+env $PY - <<'PYEOF'
+import json
+from scipy import sparse
+union = sparse.load_npz(
+    "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz"
+)
+region_sets = json.load(
+    open("reports/generated/repeated_comparison_20260921/region_sets.json")
+)
+fold0 = region_sets["per_fold"][0]
+idx = [region_sets["union_regions"].index(r) for r in fold0["regions"]]
+sparse.save_npz(
+    "reports/generated/real_paired_pilot_corrected_20260921/counts/counts.npz",
+    union[idx, :],
+)
+PYEOF
+env $PY scripts/run_real_paired_pilot.py \
+  --atac-matrix reports/generated/real_paired_pilot_corrected_20260921/counts/counts.npz \
+  --output-dir reports/generated/real_paired_pilot_corrected_20260921/run
+# pilot stays exploratory: scientific_claim_allowed=false, final_estimate=false
 ```
 
 ### Wiring defect found while executing
@@ -279,7 +313,12 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
 ```
 
 Result: local and remote cases all agree on per-barcode fragment counts
-(`all_agree: true`). Remote rows: 312, 29,393 and 1,090 for the three regions.
+(`all_agree: true`). Remote rows: 312, 29,393 and 1,090 for the three regions. The
+independent agreement is preserved in a tracked record,
+`docs/reader_oracle_htslib_2026-09-21.json`, because the raw working copy under
+`reports/generated/` is gitignored; the record names the pysam version, the exact
+command, the four local cases (including the split-member record and the true
+zero-count region `chr1:700-800`) and the three remote regions.
 
 ## Tests actually run
 
@@ -354,8 +393,10 @@ claimed.
 5. ~~Rerun the corrected pilot and fixed internal comparison, then interventions
    and initialization sensitivity, with one donor-level estimand.~~ **Done:** the
    corrected comparison (+0.0066667, [−0.025, +0.0350074]), faithfulness and
-   initialization sensitivity, and the corrected normalization sensitivity all
-   executed on the corrected inputs.
+   initialization sensitivity, the corrected normalization sensitivity and the
+   corrected exploratory pilot (delta 0.0, `scientific_claim_allowed=false`) all
+   executed on the corrected inputs; the pilot record is
+   `docs/real_paired_pilot_corrected_2026-09-21.json`.
 6. ~~Update the canonical notebook and write the unsent professor update.~~
    **Done:** see "Canonical notebook and professor update" below. External
    evaluation remains separately gated and is not claimed, so the overall study

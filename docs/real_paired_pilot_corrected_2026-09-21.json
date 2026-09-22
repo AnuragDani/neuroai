@@ -1,0 +1,124 @@
+{
+  "data_mode": "real_development_pilot",
+  "label": "PILOT \u2014 not a final estimate, not external validation",
+  "record_type": "real_development_paired_pilot_corrected",
+  "generated_at": "2026-09-22T02:58:05+00:00",
+  "run": "p22-results-executio-debda8",
+  "run_json_sha256": "238931b3e8d261c3d0106a022075ffa60a1ded1d7ba708ff64af1ea13468673a",
+  "supersedes": {
+    "path": "docs/real_paired_pilot_2026-09-21.json",
+    "reason": "The historical pilot was measured on processed H5AD X and read-support-weighted ATAC overlap. This record is the same executable pilot rerun on the corrected raw/X RNA block and unique_fragment_overlap ATAC unit; the historical values are preserved there."
+  },
+  "scientific_claim_allowed": false,
+  "pilot": true,
+  "final_estimate": false,
+  "external_evaluation_performed": false,
+  "n_folds_run": 1,
+  "inputs": {
+    "h5ad": {
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "n_genes": 35477
+    },
+    "genome_build": "GRCh38",
+    "ordered_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "rna_representation": {
+      "matrix_key": "raw/X",
+      "axis_key": "raw/var",
+      "n_cells": 248998,
+      "n_genes": 35477,
+      "gene_axis_sha256": "feccc1c746332549d7d63a7a58a26727552e2b04d67d468e734fadfc0c5c2fb3",
+      "gene_axis_n": 35477,
+      "integer_counts_validated": true
+    },
+    "atac_matrix": {
+      "path": "reports/generated/real_paired_pilot_corrected_20260921/counts/counts.npz",
+      "sha256": "def566cc417270a162385950dfee5c787fda4d3966d8150da1eef551d0c4578d",
+      "n_regions": 256,
+      "count_unit": "unique_fragment_overlap",
+      "count_mode": "fragment",
+      "source_union_matrix": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+      "source_union_matrix_sha256": "81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f",
+      "regions_sha256": "192d0b7aebdfe5b71a5d65fba0001ebe0c102c3675b48752fc3f7a662330456b"
+    },
+    "n_cells_available": 248998,
+    "n_cells_sampled": 7680,
+    "cell_cap": 256
+  },
+  "input_verification": {
+    "checked": "pilot 256x248998 counts equal the corrected union matrix rows for the repeat-0/fold-0 region order",
+    "equal": true,
+    "pilot_nnz": 4879858,
+    "subset_nnz": 4879858,
+    "union_nnz": 9513875,
+    "region_sha_matches_fold": true
+  },
+  "fold": {
+    "repeat": 0,
+    "fold": 0,
+    "split_seed": 0,
+    "n_train_cells": 6144,
+    "n_test_cells": 1536
+  },
+  "n_train_donors": 24,
+  "n_test_donors": 6,
+  "split_sizes": {
+    "train": 4096,
+    "val": 2048,
+    "test": 1536
+  },
+  "feature_counts": {
+    "view_a": 35477,
+    "view_b": 256
+  },
+  "donor_balanced_accuracy": {
+    "rna_only": 0.625,
+    "atac_only": 0.5,
+    "rna_atac_concat": 0.625,
+    "gated_fusion": 0.625,
+    "token_concat": 0.625,
+    "cross_attention": 0.625
+  },
+  "majority_control_donor_balanced_accuracy": 0.5,
+  "parameters": {
+    "rna_only": 4690,
+    "atac_only": 4690,
+    "rna_atac_concat": 9378,
+    "gated_fusion": 10468,
+    "token_concat": 12546,
+    "cross_attention": 13634
+  },
+  "primary_comparison": {
+    "metric": "paired_donor_balanced_accuracy_delta",
+    "estimate": 0.0,
+    "interval": [0.0, 0.0],
+    "level": 0.95,
+    "unit": "donor",
+    "n_replicates_requested": 1000,
+    "n_valid": 910,
+    "n_failed": 90,
+    "failure_reasons": ["only 1 class present in y_true"],
+    "n_control": 4,
+    "n_positive": 2,
+    "not_applicable": null,
+    "practical_margin": 0.5,
+    "advantage_demonstrated": false,
+    "detail": {"n_donors": 6, "n_cells": 6, "seed": 22}
+  },
+  "protocol_sha256": "e66ff82f9ff0f228da8cee02497b962be3af795330e04519f35b509605441d5e",
+  "resources": {
+    "name": "real_paired_pilot",
+    "cells_per_donor_cap": 256,
+    "elapsed_seconds": 5.245,
+    "peak_rss_gb": 1.2046,
+    "disk_free_gb": 19.237,
+    "input_bytes": null,
+    "notes": "Real development pilot on CPU; not a final or external estimate"
+  },
+  "limitations": [
+    "Pilot only: one outer fold and one initialization seed; a six-donor held-out fold cannot support a stable interval.",
+    "The accepted normalization is raw-count standard scaling; no final refit and no external evaluation.",
+    "The pilot is explicitly exploratory and sets scientific_claim_allowed=false; it is not promoted by having run.",
+    "Predictions must not be used to select outcome-favourable donors."
+  ]
+}
