@@ -408,3 +408,72 @@ def test_load_cell_matrix_refuses_missing_raw_block(tmp_path: Path):
     adata.write_h5ad(path)
     with pytest.raises(KeyError):
         load_cell_matrix(path, np.arange(2))
+
+
+def _write_synthetic_h5ad(path: Path, gene_ids: list[str], *, n_cells: int = 2, n_genes=None):
+    """Write a minimal CSR ``raw/X`` block plus a ``raw/var`` index dataset.
+
+    ``n_genes`` lets a test declare a matrix wider than its identifier list so the
+    mismatch path can be exercised without anndata rewriting the axis.
+    """
+    import h5py
+
+    width = len(gene_ids) if n_genes is None else n_genes
+    values = np.ones(n_cells, dtype=np.float32)
+    indices = np.zeros(n_cells, dtype=np.int64)
+    indptr = np.arange(n_cells + 1, dtype=np.int64)
+    with h5py.File(path, "w") as handle:
+        block = handle.create_group("raw/X")
+        block.attrs["encoding-type"] = "csr_matrix"
+        block.attrs["shape"] = np.array([n_cells, width], dtype=np.int64)
+        block.create_dataset("data", data=values)
+        block.create_dataset("indices", data=indices)
+        block.create_dataset("indptr", data=indptr)
+        var = handle.create_group("raw/var")
+        var.attrs["_index"] = "_index"
+        var.create_dataset("_index", data=gene_ids, dtype=h5py.string_dtype("utf-8"))
+    return path
+
+
+def test_read_matrix_axis_refuses_undeclared_matrix_key(tmp_path: Path):
+    path = _write_synthetic_h5ad(tmp_path / "undeclared.h5ad", ["g0", "g1"])
+    with pytest.raises(ValueError, match="no declared axis mapping"):
+        read_matrix_axis(path, "layers/normalized")
+
+
+def test_read_matrix_axis_refuses_absent_axis_block(tmp_path: Path):
+    import h5py
+
+    path = _write_synthetic_h5ad(tmp_path / "absent_axis.h5ad", ["g0", "g1"])
+    with h5py.File(path, "a") as handle:
+        del handle["raw/var"]
+    with pytest.raises(KeyError, match="raw/var"):
+        read_matrix_axis(path, "raw/X")
+
+
+def test_read_matrix_axis_refuses_empty_identifiers(tmp_path: Path):
+    path = _write_synthetic_h5ad(tmp_path / "empty_ids.h5ad", [], n_genes=2)
+    with pytest.raises(ValueError, match="empty"):
+        read_matrix_axis(path, "raw/X")
+
+
+def test_read_matrix_axis_refuses_dimension_mismatch(tmp_path: Path):
+    path = _write_synthetic_h5ad(tmp_path / "mismatch.h5ad", ["g0"], n_genes=2)
+    with pytest.raises(ValueError, match="identifiers"):
+        read_matrix_axis(path, "raw/X")
+
+
+def test_read_matrix_axis_refuses_duplicate_identifiers(tmp_path: Path):
+    path = _write_synthetic_h5ad(tmp_path / "dupes.h5ad", ["g0", "g0"])
+    with pytest.raises(ValueError, match="duplicate"):
+        read_matrix_axis(path, "raw/X")
+
+
+def test_read_matrix_axis_refuses_missing_index_dataset(tmp_path: Path):
+    import h5py
+
+    path = _write_synthetic_h5ad(tmp_path / "no_index.h5ad", ["g0", "g1"])
+    with h5py.File(path, "a") as handle:
+        del handle["raw/var/_index"]
+    with pytest.raises(KeyError, match="_index"):
+        read_matrix_axis(path, "raw/X")

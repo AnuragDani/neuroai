@@ -1,0 +1,58 @@
+{
+  "artifact": "rna_raw_input_correction",
+  "date": "2026-09-21",
+  "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+  "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+  "matrix_key": "raw/X",
+  "axis_key": "raw/var",
+  "n_cells": 248998,
+  "n_genes": 35477,
+  "gene_axis_sha256": "feccc1c746332549d7d63a7a58a26727552e2b04d67d468e734fadfc0c5c2fb3",
+  "gene_axis_n": 35477,
+  "consumed_sample": {
+    "rows": [
+      0,
+      37,
+      74,
+      111,
+      148
+    ],
+    "n_rows": 55,
+    "all_integer": true,
+    "min": 0.0,
+    "max": 446.0
+  },
+  "processed_X_refused": "ValueError: non-integer values",
+  "derive_qc_agreement": {
+    "n_genes": {
+      "column": "nFeature_RNA",
+      "present": true,
+      "derived": true,
+      "identical": false,
+      "correlation": 0.9999958841442317,
+      "median_difference": -4.0,
+      "max_abs_difference": 55.0
+    },
+    "total_counts": {
+      "column": "nCount_RNA",
+      "present": true,
+      "derived": true,
+      "identical": false,
+      "correlation": 0.9999990657758969,
+      "median_difference": -4.0,
+      "max_abs_difference": 90.0
+    },
+    "pct_mito": {
+      "column": "percent.mt",
+      "present": true,
+      "derived": true,
+      "identical": false,
+      "correlation": 0.9999986288165316,
+      "median_difference": 0.00024318977435638933,
+      "max_abs_difference": 0.019518048773435215
+    }
+  },
+  "elapsed_seconds": 8.8,
+  "limitation": "Author QC columns were computed on the pre-filter gene set; raw/X holds counts over the retained 35,477 features, so agreement is near-exact but not identical.",
+  "replay": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -c \"import numpy as np; from p22.data.real_cohort import read_matrix_axis,load_cell_matrix; p='/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad'; print(read_matrix_axis(p)['axis_key']); print(load_cell_matrix(p,np.arange(55)).shape)\""
+}

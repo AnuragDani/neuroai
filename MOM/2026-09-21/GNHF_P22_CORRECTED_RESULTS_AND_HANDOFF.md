@@ -16,7 +16,7 @@ Worktree: `/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-exec
 |---|---|---|
 | ATAC overlap unit | read-support-weighted overlap (sum of column five, i.e. supporting read pairs including duplicates) | `unique_fragment_overlap`: one count per unique qualifying fragment record |
 | ATAC reader | per-member line parsing; records split across BGZF members dropped; chunk-end virtual offset not enforced; unbounded `response.read()` | members concatenated before line splitting; chunk end virtual offset enforced; HTTP range verified and size-bounded; truncated/corrupt queries refused before matrix assembly |
-| RNA representation | H5AD `X` labelled "raw counts" (actually noninteger processed values) | **not yet repaired** — `raw/X` selection and axis validation still pending |
+| RNA representation | H5AD `X` labelled "raw counts" (actually noninteger processed values) | H5AD `raw/X` integer counts; columns follow the `raw/var` gene axis; axis identifiers validated (present, non-empty, dimension-matched, unique) |
 
 The historical ATAC unit label `fragment_overlap_sum` in
 `configs/final_internal_comparison_2026-09-21.json` and the old
@@ -36,9 +36,54 @@ is preserved only as history. The corrected unit is declared prospectively in
 | #3e zero-count region vs failure | `test_valid_zero_count_region_is_not_a_failure`, `test_quantify_regions_accepts_valid_empty_region` | `empty_region` flag; `join_complete = not truncated and no unknown barcodes` | tests pass; HTSlib oracle agrees on an empty region | none observed offline |
 | #3f unknown barcodes / retained population | `test_quantify_regions_refuses_unknown_barcodes_by_default`, `test_quantify_regions_marks_unknown_barcodes` | unknown barcodes refused by default; explicit `unknown_policy="drop"` reports exclusions per region | tests pass | The real development run joined all observed barcodes; re-verify on regeneration |
 | #3g aggregate transfer accounting | `test_quantify_regions_enforces_aggregate_budget` | `_BudgetedTransport` caps aggregate bytes across concurrent workers | test passes | Real-run byte allocation must be set before regeneration |
-| #1 RNA `X` vs `raw/X` | pending | pending | audit: 100,000/100,000 `X` nonzeros noninteger; 0/100,000 `raw/X` nonzeros noninteger | Not yet repaired |
-| #4 chromosome-1 feature bias | pending | pending (report correction) | audit: 163–219 of 256 regions per fold on chr1 | Not yet corrected in prose |
+| #1 RNA `X` vs `raw/X` | `tests/test_real_cohort.py::test_default_rna_matrix_is_raw_counts`, `test_wrong_default_processed_block_cannot_pass_as_raw`, `test_raw_matrix_columns_follow_raw_axis_not_processed_axis`, `test_load_cell_matrix_rejects_negative_raw_counts`, `test_load_cell_matrix_refuses_missing_raw_block`, and the axis-hardening tests `test_read_matrix_axis_refuses_{undeclared_matrix_key,absent_axis_block,empty_identifiers,dimension_mismatch,duplicate_identifiers,missing_index_dataset}` | `load_cell_matrix` defaults to `DEFAULT_RNA_MATRIX_KEY="raw/X"` and rejects non-finite/negative/noninteger consumed values; `read_matrix_axis` resolves `raw/var` for raw columns and refuses absent, unresolved, empty, dimension-mismatched or duplicate identifiers; `run_real_paired_pilot.load_development_inputs` records the raw axis key, cell/column counts and gene-axis hash and refuses an empty axis | real `raw/X` sample `(55, 35477)` all-integer, `X` refused as non-integer; new tests pass | The corrected matrices/pilot have not been regenerated yet; old pilot/comparison results still describe processed `X` |
+| #4 chromosome-1 feature bias | report-level correction (no code test; the bias is a property of the retained rule) | corrected prose in `MOM/2026-09-21/GNHF_P22_RESULTS_AND_PROFESSOR_HANDOFF.md` §2 to state the chr1 tie-break bias persists (163–219/256 per fold; union 308 chr1 / 110 chr10 / 1 chr21) and is retained for the measurement-correction comparison | audit: 163–219 of 256 regions per fold on chr1 | The biased feature set is retained by design so input correctness is not confounded with outcome-driven feature redesign; its limited coverage bounds any architecture conclusion |
 | Acceptance binding | pending | pending | `run_real_paired_comparison.py` still auto-promotes | Not yet repaired |
+
+## Caller audit for the RNA default change
+
+Changing `load_cell_matrix`'s default from `X` to `raw/X` was traced through every
+production caller:
+
+- `scripts/run_real_paired_pilot.py:load_development_inputs` — the paired input path;
+  now selects `raw/X` explicitly and records the resolved axis. Fixed.
+- `scripts/run_real_paired_comparison.py` — reuses `load_development_inputs`, so it
+  inherits the corrected RNA view with no separate loader.
+- `src/p22/eval/real_pipeline.py` (`_cap_load`, `run_real_model_comparison`,
+  `run_real_interventions`) — the canonical-notebook path (C24–C31). These call
+  `load_cell_matrix` without a key, so they now consume `raw/X`. This is the correct
+  choice for this path: the surrounding QC (`derive_cell_qc`, `run_cohort_qc`) and
+  `donor_pseudobulk` already stream `raw/X`, so the cell-level model is now
+  consistent with the rest of the pipeline instead of mixing processed and raw
+  representations. No processed-`X` workflow uses this loader; an explicit
+  `matrix_key="X", validate_counts=False` call remains available where a processed
+  block is genuinely intended.
+- `src/p22/eval/rna_donor_influence.py` uses `donor_pseudobulk` only, which is
+  unchanged; the pinned hash was amended prospectively, no replay claimed.
+- Tests cover the corrected default, the refusal of a processed block, and the axis
+  hardening.
+
+## RNA input evidence on the real development H5AD
+
+`read_matrix_axis` resolves `raw/var` for the `raw/X` block (248,998 x 35,477) and an
+independent `derive_cell_qc` pass over `raw/X` reproduces the author per-cell QC
+columns to within a small residual, which supports row-order alignment rather than
+only matching dimensions:
+
+| Column | identical | correlation | max abs difference |
+|---|---|---|---|
+| `nFeature_RNA` | no | 0.999996 | 55 |
+| `nCount_RNA` | no | 0.999999 | 90 |
+| `percent.mt` | no | 0.999999 | 0.0195 |
+
+The small residual (median `-4` counts) is a source-provenance detail: the author QC
+columns were computed on the pre-filter gene set while `raw/X` holds counts over the
+retained 35,477 features. It is recorded as a limitation, not treated as identity.
+A 55-row sample of `raw/X` is all-integer (min 0, max 446); the same call on `X`
+raises `non-integer`. Evidence:
+`docs/rna_input_correction_2026-09-21.json` (machine-readable, includes the H5AD and
+raw-gene-axis hashes); the ignored working copy is at
+`reports/generated/rna_input_correction_20260921/derive_qc_agreement.json`.
 
 ## Independent reader validation
 
@@ -64,13 +109,22 @@ Result: local and remote cases all agree on per-barcode fragment counts
 ```
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
   /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/ -q
-# 969 passed, 19 warnings in 91.68s
+# 980 passed, 19 warnings in 103.42s
 
 ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.py \
-  scripts/validate_reader_against_htslib.py tests/test_query_fragment_regions.py \
-  tests/test_quantify_development_atac.py
+  scripts/validate_reader_against_htslib.py scripts/run_real_paired_pilot.py \
+  src/p22/data/real_cohort.py src/p22/eval/rna_donor_influence.py \
+  tests/test_query_fragment_regions.py tests/test_quantify_development_atac.py \
+  tests/test_real_cohort.py
 # All checks passed
 ```
+
+The RNA repair added the 11 tests above (5 raw-count/axis tests plus 6 axis-hardening
+tests), taking the suite from 969 to 980. `donor_pseudobulk` (the only function the
+frozen RNA donor-influence diagnostic calls) is unchanged, so its pinned source hash
+in `configs/rna_donor_influence.json` was amended prospectively with a recorded
+`source_code_amendments` entry and matching `CONFIG_SHA256`; no diagnostic replay is
+claimed.
 
 ## Superseded claims
 
@@ -83,9 +137,11 @@ ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.p
 
 ## Remaining incomplete work
 
-1. RNA `raw/X` selection, raw gene axis and integer-count validation (finding #1).
-2. Chromosome-1 feature-bias correction in the report (finding #4); retain the old
-   feature rule for the measurement-correction comparison.
+1. ~~RNA `raw/X` selection, raw gene axis and integer-count validation (finding #1).~~
+   Repaired; corrected matrices and the corrected pilot/comparison still need to run.
+2. ~~Chromosome-1 feature-bias correction in the report (finding #4).~~ Report
+   corrected; the old feature rule is retained for the measurement-correction
+   comparison as required.
 3. Bind `scientific_claim_allowed`/`final_internal_estimate` to a validated
    acceptance record instead of auto-promotion.
 4. Regenerate corrected ATAC matrices in a new output directory after RNA and

@@ -107,9 +107,14 @@ comparison:
   internal comparison**: per-fold training-only region sets and a 480-region union
   quantified once (`scripts/freeze_repeated_region_sets.py`,
   `src/p22/eval/repeated_comparison.py`, `scripts/run_real_paired_comparison.py`).
-  It also fixes the pilot's two weaknesses the handoff named: the chr1 tie-break
-  bias (each fold now uses only its own training libraries) and the degenerate
-  6-donor interval (all 30 donors tested per repeat).
+  It also addresses one of the pilot's two weaknesses the handoff named: the
+  degenerate 6-donor interval (all 30 donors tested per repeat). The chromosome-1
+  tie-break bias was **not** fixed: per-fold discovery protects outer-test
+  provenance but leaves 163–219 of 256 regions per fold on chromosome 1, and the
+  480-region union is 308 chr1 / 110 chr10 / 1 chr21. This feature set is retained
+  as the historical exploratory representation for the measurement-correction
+  comparison and limits what it can say about multimodal disease signal
+  (see `GNHF_P22_CORRECTED_RESULTS_AND_HANDOFF.md`, review finding #4).
 - Iteration 6 repeats the pilot-fold **faithfulness + initialization-seed** evidence
   on the frozen folds (`scripts/run_real_paired_faithfulness_frozen.py` and the new
   `aggregate_interventions` in `src/p22/eval/paired_faithfulness.py`), reusing the

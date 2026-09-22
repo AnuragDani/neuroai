@@ -1184,23 +1184,53 @@ def read_matrix_axis(path: str | Path, matrix_key: str = DEFAULT_RNA_MATRIX_KEY)
     ``raw/X`` columns follow ``raw/var`` and ``X`` columns follow ``var``. The
     returned ``axis_key`` names the block actually read so a caller cannot attach
     processed gene labels to raw columns.
+
+    Absent, malformed or mismatched identifiers are refused rather than reported
+    as an unresolved/empty axis: an empty gene-ID hash is not acceptance evidence.
     """
     import h5py
 
-    axis_key = AXIS_KEY_FOR_MATRIX.get(matrix_key)
+    if matrix_key not in AXIS_KEY_FOR_MATRIX:
+        raise ValueError(f"matrix key {matrix_key!r} has no declared axis mapping")
+    axis_key = AXIS_KEY_FOR_MATRIX[matrix_key]
     with h5py.File(Path(path), "r") as handle:
         if matrix_key not in handle:
             raise KeyError(f"matrix block {matrix_key!r} is absent from {path}")
         group = handle[matrix_key]
+        if "shape" not in group.attrs:
+            raise ValueError(f"matrix block {matrix_key!r} has no declared shape in {path}")
         shape = tuple(int(value) for value in group.attrs["shape"])
-        gene_ids: list[str] | None = None
-        axis_source = "unresolved"
-        if axis_key and axis_key in handle:
-            gene_ids = _read_index_column(handle[axis_key])
-            axis_source = axis_key
+        if len(shape) != 2:
+            raise ValueError(f"matrix block {matrix_key!r} is not two-dimensional in {path}")
+        if axis_key not in handle:
+            raise KeyError(
+                f"axis block {axis_key!r} required for matrix {matrix_key!r} is absent from {path}"
+            )
+        gene_ids = _read_index_column(handle[axis_key])
+    if gene_ids is None:
+        raise KeyError(f"axis block {axis_key!r} has no _index identifiers in {path}")
+    if not gene_ids:
+        raise ValueError(f"axis block {axis_key!r} identifier list is empty in {path}")
+    if len(gene_ids) != shape[1]:
+        raise ValueError(
+            f"axis block {axis_key!r} has {len(gene_ids)} identifiers but matrix "
+            f"{matrix_key!r} has {shape[1]} columns"
+        )
+    blank = [value for value in gene_ids if not str(value).strip()]
+    if blank:
+        raise ValueError(f"axis block {axis_key!r} contains blank identifiers in {path}")
+    counts: dict[str, int] = {}
+    for value in gene_ids:
+        counts[value] = counts.get(value, 0) + 1
+    duplicates = sorted(value for value, count in counts.items() if count > 1)
+    if duplicates:
+        raise ValueError(
+            f"axis block {axis_key!r} contains duplicate identifiers "
+            f"(e.g. {duplicates[:3]}) in {path}"
+        )
     return {
         "matrix_key": matrix_key,
-        "axis_key": axis_source,
+        "axis_key": axis_key,
         "n_cells": shape[0],
         "n_genes": shape[1],
         "gene_ids": gene_ids,

@@ -91,15 +91,19 @@ def load_development_inputs(h5ad_path, atac_path, protocol):
         raise ValueError("ATAC matrix cells do not match the H5AD cell count")
     atac = atac_matrix[:, rows].transpose().tocsr()
     views = {VIEW_A: sparse.csr_matrix(rna), VIEW_B: atac}
-    gene_ids = axis["gene_ids"] or []
+    gene_ids = axis["gene_ids"]
+    if not gene_ids or len(gene_ids) != rna.shape[1]:
+        raise ValueError("raw RNA gene axis identifiers do not match the loaded matrix columns")
     gene_axis_sha256 = hashlib.sha256("\n".join(gene_ids).encode()).hexdigest()
     fingerprints = {
         "h5ad": {"path": str(h5ad_path), "sha256": _sha256(h5ad_path), "n_genes": int(n_genes)},
         "rna_representation": {
             "matrix_key": DEFAULT_RNA_MATRIX_KEY,
             "axis_key": axis["axis_key"],
+            "n_cells": int(axis["n_cells"]),
             "n_genes": int(axis["n_genes"]),
             "gene_axis_sha256": gene_axis_sha256,
+            "gene_axis_n": int(len(gene_ids)),
             "integer_counts_validated": True,
         },
         "atac_matrix": {
