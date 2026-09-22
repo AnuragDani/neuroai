@@ -1,6 +1,7 @@
 """Offline tests for the frozen training-fold development region set."""
 
 import gzip
+import hashlib
 import importlib.util
 import json
 import sys
@@ -99,6 +100,94 @@ def test_deterministic_selection(tmp_path):
     second = reader.build_region_set(tmp_path, ["LIB2", "LIB1"], top_n=3)
     assert first["regions"] == second["regions"]
     assert first["regions_sha256"] == second["regions_sha256"]
+
+
+def test_historical_mode_is_default_and_unchanged(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500), ("chr2", 500, 900)])
+    write_features(tmp_path, "LIB2", [("chr1", 1000, 1500), ("chr2", 500, 900)])
+    default = reader.build_region_set(tmp_path, ["LIB1", "LIB2"], top_n=2)
+    explicit = reader.build_region_set(
+        tmp_path, ["LIB1", "LIB2"], top_n=2, tie_break="historical"
+    )
+    assert default["regions"] == explicit["regions"]
+    assert default["tie_break"] == "historical"
+    assert default["tie_break_salt"] is None
+    assert default["selection_rule"] == (
+        "top-N exact intervals by training-library prevalence; "
+        "ties broken by (chromosome, start, end)"
+    )
+
+
+def test_sha256_tiebreak_orders_by_hash_within_equal_prevalence(tmp_path):
+    reader = module()
+    peaks = [("chr1", 1000 + i * 7, 1500 + i * 7) for i in range(8)]
+    write_features(tmp_path, "LIB1", peaks)
+    record = reader.build_region_set(tmp_path, ["LIB1"], top_n=5, tie_break="sha256")
+    assert record["tie_break"] == "sha256"
+    assert record["tie_break_salt"] == "p22-atac-tiebreak-v1"
+    digests = [
+        hashlib.sha256(("p22-atac-tiebreak-v1\n" + region).encode("utf-8")).hexdigest()
+        for region in record["regions"]
+    ]
+    assert digests == sorted(digests)
+
+
+def test_sha256_tiebreak_preserves_prevalence_priority(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500), ("chr2", 100, 200), ("chr3", 100, 200)])
+    write_features(tmp_path, "LIB2", [("chr1", 1000, 1500), ("chr2", 100, 200)])
+    write_features(tmp_path, "LIB3", [("chr1", 1000, 1500)])
+    record = reader.build_region_set(
+        tmp_path, ["LIB1", "LIB2", "LIB3"], top_n=3, tie_break="sha256"
+    )
+    # prevalence-3 region must outrank every prevalence-1 region under any tie-break
+    assert record["regions"][0] == "chr1:1000-1500"
+
+
+def test_sha256_tiebreak_deterministic_and_differs_from_historical(tmp_path):
+    reader = module()
+    peaks = [("chr1", 1000 + i * 7, 1500 + i * 7) for i in range(8)]
+    write_features(tmp_path, "LIB1", peaks)
+    historical = reader.build_region_set(
+        tmp_path, ["LIB1"], top_n=4, tie_break="historical"
+    )
+    new = reader.build_region_set(tmp_path, ["LIB1"], top_n=4, tie_break="sha256")
+    again = reader.build_region_set(tmp_path, ["LIB1"], top_n=4, tie_break="sha256")
+    assert historical["regions"] != new["regions"]
+    assert new["regions"] == again["regions"]
+    assert new["regions_sha256"] == again["regions_sha256"]
+    assert set(new["regions"]).issubset(set(historical["regions"] + new["regions"]))
+
+
+def test_sha256_tiebreak_deterministic_under_shuffled_library_order(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500), ("chr2", 100, 200), ("chr3", 300, 400)])
+    write_features(tmp_path, "LIB2", [("chr1", 1000, 1500), ("chr4", 100, 200)])
+    first = reader.build_region_set(tmp_path, ["LIB1", "LIB2"], top_n=3, tie_break="sha256")
+    second = reader.build_region_set(tmp_path, ["LIB2", "LIB1"], top_n=3, tie_break="sha256")
+    assert first["regions"] == second["regions"]
+    assert first["regions_sha256"] == second["regions_sha256"]
+
+
+def test_sha256_salt_changes_tiebreak(tmp_path):
+    reader = module()
+    peaks = [("chr1", 1000 + i * 7, 1500 + i * 7) for i in range(8)]
+    write_features(tmp_path, "LIB1", peaks)
+    salt_a = reader.build_region_set(
+        tmp_path, ["LIB1"], top_n=4, tie_break="sha256", tie_break_salt="salt-a"
+    )
+    salt_b = reader.build_region_set(
+        tmp_path, ["LIB1"], top_n=4, tie_break="sha256", tie_break_salt="salt-b"
+    )
+    assert salt_a["regions"] != salt_b["regions"]
+
+
+def test_unknown_tiebreak_refused(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500)])
+    with pytest.raises(ValueError, match="tie_break"):
+        reader.build_region_set(tmp_path, ["LIB1"], top_n=1, tie_break="bogus")
 
 
 def test_write_regions_file_round_trip(tmp_path):

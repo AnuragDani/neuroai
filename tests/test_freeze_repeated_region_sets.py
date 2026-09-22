@@ -69,6 +69,36 @@ def test_fold_records_carry_split_metadata(tmp_path):
     assert entry["n_train_donors"] == 3
 
 
+def test_repeated_sha256_tiebreak_passthrough(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500), ("chr1", 2000, 2500)])
+    write_features(tmp_path, "LIB2", [("chr1", 1000, 1500), ("chr2", 500, 900)])
+    record = reader.build_repeated_region_sets(
+        tmp_path,
+        [fold(0, 0, ["LIB1"])],
+        top_n=2,
+        tie_break="sha256",
+        count_unit="unique_fragment_overlap",
+    )
+    assert record["tie_break"] == "sha256"
+    assert record["tie_break_salt"] == "p22-atac-tiebreak-v1"
+    assert record["count_unit"] == "unique_fragment_overlap"
+    assert "sha256" in record["selection_rule"]
+
+
+def test_repeated_historical_default_unchanged(tmp_path):
+    reader = module()
+    write_features(tmp_path, "LIB1", [("chr1", 1000, 1500), ("chr1", 2000, 2500)])
+    record = reader.build_repeated_region_sets(tmp_path, [fold(0, 0, ["LIB1"])], top_n=2)
+    assert record["tie_break"] == "historical"
+    assert record["tie_break_salt"] is None
+    assert record["count_unit"] == "fragment_overlap_sum"
+    assert record["selection_rule"] == (
+        "per outer fold: top-N exact intervals by that fold's training-library "
+        "prevalence; ties broken by (chromosome, start, end)"
+    )
+
+
 def test_empty_folds_refused(tmp_path):
     reader = module()
     with pytest.raises(ValueError, match="at least one fold"):

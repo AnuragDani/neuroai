@@ -27,6 +27,11 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from freeze_development_region_set import (  # noqa: E402
+    DEFAULT_TIE_BREAK,
+    DEFAULT_TIE_BREAK_SALT,
+    TIE_BREAK_CHOICES,
+    TIE_BREAK_SHA256,
+    _selection_rule,
     _sort_key,
     build_region_set,
     write_regions_file,
@@ -88,15 +93,31 @@ def derive_all_fold_libraries(
     return records
 
 
-def build_repeated_region_sets(features_dir: str | Path, folds: list[dict], *, top_n: int) -> dict:
+def build_repeated_region_sets(
+    features_dir: str | Path,
+    folds: list[dict],
+    *,
+    top_n: int,
+    tie_break: str = DEFAULT_TIE_BREAK,
+    tie_break_salt: str = DEFAULT_TIE_BREAK_SALT,
+    count_unit: str = "fragment_overlap_sum",
+) -> dict:
     """Build each fold's training-only region set and their union."""
     if not folds:
         raise ValueError("at least one fold is required")
+    if tie_break not in TIE_BREAK_CHOICES:
+        raise ValueError(f"tie_break must be one of {TIE_BREAK_CHOICES}")
     per_fold: list[dict] = []
     union: dict[str, int] = {}
     library_provenance: dict[str, dict] = {}
     for fold in folds:
-        record = build_region_set(features_dir, fold["train_libraries"], top_n=top_n)
+        record = build_region_set(
+            features_dir,
+            fold["train_libraries"],
+            top_n=top_n,
+            tie_break=tie_break,
+            tie_break_salt=tie_break_salt,
+        )
         regions = record["regions"]
         per_fold.append(
             {
@@ -115,12 +136,16 @@ def build_repeated_region_sets(features_dir: str | Path, folds: list[dict], *, t
     return {
         "record_type": "frozen_repeated_development_region_sets",
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "selection_rule": (
-            "per outer fold: top-N exact intervals by that fold's training-library "
-            "prevalence; ties broken by (chromosome, start, end)"
+        "selection_rule": "per outer fold: "
+        + _selection_rule(
+            tie_break,
+            tie_break_salt,
+            prevalence_subject="that fold's training-library",
         ),
+        "tie_break": tie_break,
+        "tie_break_salt": tie_break_salt if tie_break == TIE_BREAK_SHA256 else None,
         "interval_convention": "chr:start-end 0-based half-open (cellranger-arc)",
-        "count_unit": "fragment_overlap_sum",
+        "count_unit": count_unit,
         "top_n": top_n,
         "n_folds": len(per_fold),
         "per_fold": per_fold,
@@ -144,6 +169,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--n-folds", type=int, default=5)
     parser.add_argument("--split-seed", type=int, default=0)
     parser.add_argument("--top-n", type=int, default=256)
+    parser.add_argument(
+        "--tie-break",
+        choices=TIE_BREAK_CHOICES,
+        default=DEFAULT_TIE_BREAK,
+        help="tie-break inside equal training-library prevalence",
+    )
+    parser.add_argument("--tie-break-salt", default=DEFAULT_TIE_BREAK_SALT)
+    parser.add_argument("--count-unit", default="fragment_overlap_sum")
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--union-bed", required=True, type=Path)
     return parser
@@ -157,7 +190,14 @@ def main(argv: list[str] | None = None) -> int:
         n_folds=args.n_folds,
         split_seed=args.split_seed,
     )
-    record = build_repeated_region_sets(args.features_dir, folds, top_n=args.top_n)
+    record = build_repeated_region_sets(
+        args.features_dir,
+        folds,
+        top_n=args.top_n,
+        tie_break=args.tie_break,
+        tie_break_salt=args.tie_break_salt,
+        count_unit=args.count_unit,
+    )
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n")
     write_regions_file({"regions": record["union_regions"]}, args.union_bed)
@@ -167,6 +207,7 @@ def main(argv: list[str] | None = None) -> int:
                 "n_folds": record["n_folds"],
                 "n_union_regions": record["n_union_regions"],
                 "union_sha256": record["union_sha256"],
+                "tie_break": record["tie_break"],
             },
             indent=2,
         )

@@ -1,0 +1,102 @@
+{
+  "record_type": "atac_representation_tiebreak_sensitivity_amendment",
+  "declared_at_utc": "2026-09-22T04:28:55Z",
+  "declared_at_local": "2026-09-21T21:28:55-07:00",
+  "status": "PROSPECTIVE_DECLARATION_BEFORE_NEW_SELECTION_AND_FIT",
+  "scope": "one_atac_region_selection_tie_break_change_on_the_frozen_development_repeated_splits",
+  "starting_commit": "5e2165f619b149a2d05d9e0e4fc439c3bd0cfb81",
+  "question": "Does the corrected internal null (cross-attention minus matched token concatenation donor balanced accuracy) persist when the arbitrary chromosome-name lexicographic tie-break inside prevalence ties is replaced by a fixed sha256 ordering, holding the candidate construction, prevalence definition, region budget, splits, normalization, model families and primary statistic fixed?",
+  "prospective_relative_to": "This amendment is prospective only for this new sensitivity. The historical prevalence-then-lexicographic rule and its already-known outcomes are historical and are preserved unchanged.",
+  "selection_change": {
+    "only_factor_changed": "the tie-break applied within equal training-library prevalence",
+    "historical_rule": "top-256 exact intervals by training-library prevalence; ties broken by (chromosome, start, end)",
+    "new_rule": "top-256 exact intervals by training-library prevalence; ties broken by the fixed sha256 ordering below, then the region string",
+    "salt": "p22-atac-tiebreak-v1",
+    "python_key": "(-training_library_prevalence[region], hashlib.sha256((salt + \"\\n\" + region).encode(\"utf-8\")).hexdigest(), region)",
+    "region_definition": "existing canonical chrom:start-end string, 0-based half-open (cellranger-arc)",
+    "unchanged": [
+      "training-library candidate intervals",
+      "prevalence definition (number of that fold's training libraries containing the exact interval)",
+      "region budget top_n=256",
+      "chromosome filter (none; noncanonical contigs retained if the historical rule included them)",
+      "candidate construction (exact-interval union of training-library Peaks rows; no merge or projection)",
+      "outer folds and donor splits (5 repeats x 5 donor-held-out folds, split_seed=0)",
+      "no disease-label or held-out-donor information enters selection"
+    ],
+    "explicitly_not_done": [
+      "no salt search or selection among salts after seeing performance",
+      "no chromosome-21 enrichment or chromosome balancing using disease effects",
+      "no claim that the hash-tied set is genome-wide coverage or a validated regulatory panel"
+    ]
+  },
+  "discovery_scope": {
+    "declared": "historical outer-training discovery scope for direct comparability",
+    "includes": "the outer-training donors' libraries, whose per-library peak lists also cover inner-validation donors' unlabelled peaks",
+    "not": "strictly inner-training-only discovery",
+    "variance_selection_scaling_fitting": "RNA/ATAC variance selection, scaling and any label-dependent fitting remain on inner-training donors only, unchanged from the corrected protocol",
+    "stricter_protocol": "If a stricter inner-training-only discovery is required for a later confirmatory analysis it must be specified as a separate experiment; it is not silently bundled here."
+  },
+  "inputs_and_hashes": {
+    "features_dir": "reports/generated/repeated_comparison_20260921/features/ (37 cached GSE305146 per-library features files; per-file sha256 in configs/repeated_region_sets_2026-09-21.json library_provenance)",
+    "historical_region_sets_record": "reports/generated/repeated_comparison_20260921/region_sets.json",
+    "historical_region_sets_sha256": "9d57bed9167663eaba8f3f4f0e46d3989e555ed464123a40d8b8439935ed55cc",
+    "historical_union_bed_sha256": "7168c33cc20847494d30c19edc67083b8afcf2dc2ce6d0ec4881151348a5173e",
+    "historical_union_semantic_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "corrected_atac_matrix_sha256": "81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f",
+    "acceptance_requirements_sha256": "2b1299dbeeb666734acf1f5a8ce306affc4670dc9662faec82e4a446b5eecbbf",
+    "fragment_index": "reports/generated/development_region_set_20260921/fragment.tbi",
+    "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+    "genome_build": "GRCh38",
+    "count_unit": "unique_fragment_overlap (one count per unique qualifying fragment record)"
+  },
+  "unchanged_execution_protocol": {
+    "source": "saved corrected run (docs/repeated_internal_comparison_corrected_2026-09-21.json), not stale historical labels",
+    "cohort": "30 development donors, 15 control / 15 complete trisomy 21",
+    "sampling_seed": 22,
+    "cell_cap": 256,
+    "feature_budget": 128,
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0,
+    "primary_model_seed": 0,
+    "max_epochs": 20,
+    "patience": 5,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "families": [
+      "rna_only",
+      "atac_only",
+      "rna_atac_concat",
+      "gated_fusion",
+      "token_concat",
+      "cross_attention"
+    ],
+    "majority_control": true,
+    "primary_contrast": "cross_attention minus token_concat donor balanced accuracy",
+    "primary_statistic": "pool held-out donor predictions within each repeat, compute donor balanced-accuracy contrast, average repeats, donor-cluster bootstrap 1000 draws seed 22",
+    "donor_threshold": 0.5,
+    "practical_margin": 0.07,
+    "invalid_bootstrap_draws": "single-class draws remain failures, not redraws"
+  },
+  "planned_diagnostics": [
+    "deterministic per-fold region sets, ordered union BED, region/union hashes",
+    "per-fold and union chromosome distributions for historical vs hash-tie sets",
+    "overlap of hash-tie regions with the historical per-fold regions and union",
+    "training-library prevalence summaries for both sets",
+    "regression checks: deterministic ranking under shuffled input order; no outer-test library in discovery; preserved prevalence priority; historical-mode byte reproduction",
+    "measured nonzero support and count distributions by donor and author cell type for historical and new panels",
+    "six-family comparison plus majority control and the missing simple linear controls on both representations"
+  ],
+  "success_and_stop_criteria": {
+    "selection_valid_if": "the hash-tie rule is deterministic, retains prevalence priority, uses no held-out or label information, and the historical rule reproduces its saved artifacts exactly",
+    "experiment_completes_when": "the corrected protocol is executed once on the hash-tie representation with the six families, majority control, simple linear controls, five initialization seeds and interventions, and the primary contrast and interval are reported side by side with the historical corrected null",
+    "positive_result": "exploratory and requires independent confirmation; it does not establish a cross-attention advantage",
+    "null_result": "acceptable and completes the experiment when execution is valid",
+    "stop_rule": "do not modify features or models to escape a null; do not choose among salts or rerun for a desired result"
+  },
+  "claim_boundaries": [
+    "removing lexicographic preference within prevalence ties is not genome-wide coverage or a validated regulatory panel",
+    "the hash-tie set is not an outcome-driven improvement and was not selected using disease effects",
+    "external validation remains separately gated and is not affected by this local representation experiment"
+  ]
+}
