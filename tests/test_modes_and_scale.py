@@ -125,5 +125,8 @@ def test_canonical_notebook_exposes_fair_same_cap_result():
     assert "git clone" not in code
     assert "Corrected real paired workflow" in markdown
     assert "summarize_measurement_correction" in code
+    assert "ATAC representation sensitivity and cell-state feasibility" in markdown
+    assert "summarize_atac_tiebreak_sensitivity" in code
+    assert "p22-atac-tiebreak-v1" in markdown
     assert notebook["cells"][1]["metadata"]["jupyter"]["source_hidden"] is True
     assert notebook["cells"][1]["metadata"]["collapsed"] is True

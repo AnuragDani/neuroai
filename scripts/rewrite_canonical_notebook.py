@@ -951,6 +951,69 @@ EVIDENCE_BUCKETS["verified_real" if measurement_correction["status"] == "CORRECT
 )
 """
 
+CELL_SENSITIVITY_MD = """## ATAC representation sensitivity and cell-state feasibility
+
+The retained 256-region ATAC rule ranked training-library prevalence and broke
+ties lexicographically, which put 193/256 regions on chromosome 1 in one fold. A
+prospective amendment (`configs/atac_tiebreak_sensitivity_2026-09-21.json`)
+changed **only** the tie-break inside equal prevalence to
+`sha256("p22-atac-tiebreak-v1" + "\\n" + region)`, keeping the candidate
+construction, prevalence definition, region budget and donor folds fixed. The salt
+was fixed before any selection ran; no salt was searched.
+
+This section reads the tracked records through the shared
+`summarize_atac_tiebreak_sensitivity` reader. Safe mode displays the declared
+sensitivity and the saved comparison / linear-control / cell-state records only;
+the bounded remote ATAC measurement and the model fits are separate authorized
+steps and are **not** executed here. The cell-state tables are model-free and
+descriptive: author cell-type labels are context, not independent truth, and
+region-overlap sums are not total assay fragments.
+"""
+
+CELL_SENSITIVITY_CODE = r"""from p22.eval.atac_tiebreak_sensitivity import summarize_atac_tiebreak_sensitivity
+
+atac_sensitivity = summarize_atac_tiebreak_sensitivity(PROJECT_ROOT)
+print(json.dumps(atac_sensitivity, indent=2, default=str))
+if atac_sensitivity["status"] == "TIEBREAK_RESULT_PRESENT":
+    historical = atac_sensitivity["comparison"]["historical_corrected"]["primary"]
+    tiebreak = atac_sensitivity["comparison"]["tiebreak"]["primary"]
+    print(
+        "HISTORICAL corrected cross_attention - token_concat:",
+        historical["estimate"],
+        historical["interval"],
+        "advantage",
+        historical["advantage_demonstrated"],
+    )
+    print(
+        "SHA256 tie-break cross_attention - token_concat:",
+        tiebreak["estimate"],
+        tiebreak["interval"],
+        "advantage",
+        tiebreak["advantage_demonstrated"],
+    )
+    for condition, means in (atac_sensitivity["linear_controls"] or {}).items():
+        print("LINEAR", condition, means["model_means"], "converged", means["all_converged"])
+    cellstate = atac_sensitivity["cellstate"] or {}
+    print(
+        "CELLSTATE cells:",
+        cellstate.get("n_accepted_cells"),
+        "donors:",
+        cellstate.get("n_donors"),
+        "model_fitted:",
+        cellstate.get("model_fitted"),
+    )
+    print("PROGRAM coverage:", cellstate.get("program_coverage"))
+else:
+    print(
+        "Tie-break records absent in this checkout; declared sensitivity only:",
+        atac_sensitivity["declared_sensitivity"],
+    )
+EVIDENCE_BUCKETS["verified_real" if atac_sensitivity["status"] == "TIEBREAK_RESULT_PRESENT"
+                else "blocked_or_unknown"].append(
+    "ATAC tie-break sensitivity: " + atac_sensitivity["status"]
+)
+"""
+
 CELL20 = """## G9 / R6 — Evidence package + handoff
 
 Writes `manifest.json`, `metrics.csv`, `interventions.csv`, `validation.csv`, `figures/`, `SUMMARY.md`. Never overwrites source notebook.
@@ -1150,9 +1213,17 @@ def set_source(cell, text: str) -> None:
 EXT_ID = "ext-rna1"
 MEASUREMENT_MD_ID = "measurement-correction-md"
 MEASUREMENT_CODE_ID = "measurement-correction-code"
+SENSITIVITY_MD_ID = "atac-tiebreak-sensitivity-md"
+SENSITIVITY_CODE_ID = "atac-tiebreak-sensitivity-code"
 G9_MD_ID = "17a60a06"
 G9_CODE_ID = "8f1a8a82"
-INSERTED_IDS = (MEASUREMENT_MD_ID, MEASUREMENT_CODE_ID, EXT_ID)
+INSERTED_IDS = (
+    MEASUREMENT_MD_ID,
+    MEASUREMENT_CODE_ID,
+    EXT_ID,
+    SENSITIVITY_MD_ID,
+    SENSITIVITY_CODE_ID,
+)
 BASE_CELL_COUNT = 20
 
 
@@ -1180,8 +1251,19 @@ def main() -> None:
     assert len(base) == BASE_CELL_COUNT, len(base)
     corrected_md = _new_cell(MEASUREMENT_MD_ID, "markdown")
     corrected_code = _new_cell(MEASUREMENT_CODE_ID, "code")
-    nb["cells"] = [*base, corrected_md, corrected_code, ext, g9_md, g9_code]
-    assert len(nb["cells"]) == BASE_CELL_COUNT + 5, len(nb["cells"])
+    sensitivity_md = _new_cell(SENSITIVITY_MD_ID, "markdown")
+    sensitivity_code = _new_cell(SENSITIVITY_CODE_ID, "code")
+    nb["cells"] = [
+        *base,
+        corrected_md,
+        corrected_code,
+        ext,
+        sensitivity_md,
+        sensitivity_code,
+        g9_md,
+        g9_code,
+    ]
+    assert len(nb["cells"]) == BASE_CELL_COUNT + 7, len(nb["cells"])
     updates = {
         0: CELL0,
         1: CELL1,
@@ -1205,6 +1287,8 @@ def main() -> None:
         set_source(base[index], text)
     set_source(corrected_md, CELL_MEASUREMENT_MD)
     set_source(corrected_code, CELL_MEASUREMENT_CODE)
+    set_source(sensitivity_md, CELL_SENSITIVITY_MD)
+    set_source(sensitivity_code, CELL_SENSITIVITY_CODE)
     set_source(ext, CELL_EXTERNAL)
     set_source(g9_md, CELL20)
     set_source(g9_code, CELL21)

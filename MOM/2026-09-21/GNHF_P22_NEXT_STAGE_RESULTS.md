@@ -1,10 +1,11 @@
 # P22 next-stage results: ATAC representation sensitivity and cell-state feasibility
 
-Status: **IN PROGRESS — Phases 1–4 (representation sensitivity selection,
-measurement, comparison, simple linear controls and cell-state feasibility)
-executed and validated; Phase 5 reconciled from the fresh access note; external
-evaluation still gated.** This is the main worktree handoff for the
-`p22-test-atac-repres-14ef45` run. Starting checkpoint
+Status: **ASSIGNMENT_COMPLETE / STUDY_PARTIAL — Phases 1–4 (representation
+sensitivity selection, measurement, comparison, simple linear controls and
+cell-state feasibility) executed and validated; Phase 5 reconciled from the fresh
+access note; canonical notebook and professor package updated; external evaluation
+and biological validation still NOT PERFORMED.** This is the main worktree handoff
+for the `p22-test-atac-repres-14ef45` run. Starting checkpoint
 `5e2165f619b149a2d05d9e0e4fc439c3bd0cfb81`. It preserves every earlier corrected
 null and the historical artifacts; nothing here overwrites a prior result.
 
@@ -412,3 +413,60 @@ cohort, never three independent replications.
 per-file `Access` field still `embargo` while the child collection is declared Open,
 and what is the author's final retained-barcode/QC rule and `nCount_ATAC` measurement
 stage for `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`?
+
+## Canonical notebook and professor package (DONE)
+
+The existing canonical notebook `P22_down_syndrome_all_in_one.ipynb` was regenerated
+from `scripts/rewrite_canonical_notebook.py`; no competing notebook was created. The
+regeneration re-embeds the current `src/p22` tree, so the new shared reader
+`src/p22/eval/atac_tiebreak_sensitivity.py` is present in the standalone notebook.
+
+- A new section, **"ATAC representation sensitivity and cell-state feasibility"**,
+  declares the prospective amendment (salt `p22-atac-tiebreak-v1`, unchanged region
+  budget and folds) and calls the shared `summarize_atac_tiebreak_sensitivity`
+  reader. Safe mode prints the declared sensitivity plus the saved historical vs
+  tie-break comparison, the linear-control means and convergence, and the model-free
+  cell-state summary; the bounded remote ATAC measurement and the model fits are
+  **not** executed.
+- **Safe mode remains the default**; real mode still requires `P22_RUN_REAL_DATA=1`,
+  `P22_RUN_MODEL=1` and the approval attestation.
+- **Executed copy** (safe mode, kernel `p22`, 14 code cells, zero errors):
+  `MOM/2026-09-21/P22_down_syndrome_all_in_one.corrected.executed.ipynb`
+  (also under `reports/generated/notebooks_corrected_20260921/`). The new cell prints
+  historical corrected `+0.0066667 [-0.025, +0.0350074] advantage False`, tie-break
+  `-0.0200 [-0.0533333, +0.0113165] advantage False`, both linear-control conditions
+  `converged True`, and `CELLSTATE cells: 248998 donors: 30 model_fitted: False`.
+  Canonical notebook SHA-256 `f9821ba1…`; executed copy SHA-256 `366dfc29…`.
+- **Unsent professor package** updated: `docs/professor_update_2026-09-21/`
+  (`one_pager.md`, `email.md`, `README.md`). The one-pager now states the
+  representation-sensitivity and linear-control results and names the **biological
+  objective still missing from the classifier work**: a within-excitatory-lineage
+  maturation/regulatory program question, which the current panels cannot answer
+  because only 1 of 13 prespecified program loci (TLE4) has an overlapping measured
+  ATAC region.
+
+Replay:
+
+```
+PYTHONDONTWRITEBYTECODE=1 <python> scripts/rewrite_canonical_notebook.py
+PYTHONDONTWRITEBYTECODE=1 <python> -m jupyter nbconvert --to notebook --execute \
+  P22_down_syndrome_all_in_one.ipynb \
+  --output-dir reports/generated/notebooks_corrected_20260921 \
+  --output P22_down_syndrome_all_in_one.corrected.executed.ipynb \
+  --ExecutePreprocessor.kernel_name=p22 --ExecutePreprocessor.timeout=900
+```
+
+4 new offline tests in `tests/test_atac_tiebreak_sensitivity.py` and an extended
+notebook-exposure assertion in `tests/test_modes_and_scale.py`; ruff clean.
+
+## Final status
+
+**ASSIGNMENT_COMPLETE / STUDY_PARTIAL.** The prespecified representation sensitivity
+(Phases 1–3) and the missing simple linear controls executed validly on both
+representations, the model-free cell-state feasibility work (Phase 4) is delivered,
+and the external route is reconciled with separated statuses (Phase 5). External
+paired evaluation and independent biological validation remain **NOT PERFORMED**:
+the ~19 GB NeMO Vuong fragment asset is infeasible on this host (18 GiB free vs
+10 GiB reserve), and the compatible-region/QC/specimen gates are unresolved. A null
+result is acceptable and completes the experiment because execution is valid; no
+feature or model was modified to escape it, and no historical result was overwritten.
