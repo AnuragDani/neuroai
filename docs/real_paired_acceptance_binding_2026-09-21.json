@@ -1,0 +1,73 @@
+{
+  "decision_source": "reports/generated/acceptance_binding_20260921/decision.json",
+  "interpretation": [
+    "The historical 480-region matrix declares count_unit 'fragment_overlap_sum' (read-support weighted) and its sidecar has no count_mode, so the atac_unit check fails and the run cannot be promoted.",
+    "The corrected RNA loader now reports raw/X with raw/var and validated integer counts, so the rna_representation check passes.",
+    "All 25 frozen folds pass fold_provenance: the region-set train/test donors match the executable donor split, so no held-out donor entered that fold's feature discovery.",
+    "Ordered cell and region identities (rna cells vs atac cells, union.bed order vs region_sets union order) pass against the measured artifacts.",
+    "Without a measured artifact manifest the rna/atac artifact and cell-identity checks are not evaluable, so scientific_claim_allowed and final_internal_estimate are false."
+  ],
+  "observed": {
+    "blocking_checks": [
+      "atac_unit",
+      "manifest_present",
+      "rna_artifact",
+      "cell_identity",
+      "atac_artifact"
+    ],
+    "checks": {
+      "atac_artifact": {
+        "detail": "not evaluable without a manifest",
+        "status": "FAIL"
+      },
+      "atac_unit": {
+        "detail": "count_unit='fragment_overlap_sum' count_mode=None unknown_policy=None",
+        "status": "FAIL"
+      },
+      "cell_identity": {
+        "detail": "not evaluable without a manifest",
+        "status": "FAIL"
+      },
+      "fold_provenance": {
+        "detail": "all folds training-only and donor-matched",
+        "status": "PASS"
+      },
+      "manifest_present": {
+        "detail": "no measured artifact manifest was supplied",
+        "status": "FAIL"
+      },
+      "population": {
+        "detail": "n_donors=30 15/15",
+        "status": "PASS"
+      },
+      "protocol_match": {
+        "detail": "families=6 margin=0.07 seeds(repeat/fold/split)=5/5/0",
+        "status": "PASS"
+      },
+      "region_identity": {
+        "detail": "union_sha256=29ab67391139... n_union_regions=480",
+        "status": "PASS"
+      },
+      "rna_artifact": {
+        "detail": "not evaluable without a manifest",
+        "status": "FAIL"
+      },
+      "rna_representation": {
+        "detail": "matrix_key='raw/X' axis_key='raw/var' integer_counts_validated=True",
+        "status": "PASS"
+      }
+    },
+    "final_internal_estimate": false,
+    "manifest_sha256": null,
+    "requirements_sha256": "28a51e7c8b0e0e81adf65ee9d4123e066e9d8f07fe1c2513b406e892b5dd9abe",
+    "scientific_claim_allowed": false,
+    "status": "REFUSED"
+  },
+  "purpose": "Executable evidence that the real-paired entry points consume a shared acceptance gate and refuse automatic scientific promotion for the historical inputs.",
+  "record_type": "real_paired_acceptance_binding_evidence",
+  "recorded_at": "2026-09-21",
+  "replay": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts <REPO>/.venv-p22/bin/python scripts/check_real_paired_acceptance.py --out reports/generated/acceptance_binding_20260921/decision.json",
+  "required_next": "After the corrected ATAC matrices are regenerated in a new output directory, generate the measured manifest (configs/real_paired_input_manifest_2026-09-21.json) and rerun this check; only then can a corrected comparison set scientific_claim_allowed.",
+  "requirements": "configs/real_paired_acceptance_2026-09-21.json",
+  "requirements_file_sha256": "5c5d7eb74e2dbf8b2712ae9f8e6c115047821006c8568ff81cf39e1ad7162828"
+}

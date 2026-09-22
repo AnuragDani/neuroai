@@ -1,0 +1,61 @@
+{
+  "record_type": "real_paired_acceptance_requirements",
+  "declared_at": "2026-09-21",
+  "status": "PROSPECTIVE_DECLARATION_BEFORE_CORRECTED_REAL_RUN",
+  "scope": "real_development_paired_entry_points",
+  "rationale": "A real-data run must not promote itself to a scientific claim. This record is consumed by p22.eval.real_paired_acceptance and binds the declared representation, count unit, ordered identities, per-fold donor provenance and protocol settings to the executable configuration before any corrected run is promoted.",
+  "preserved_historical_result": "docs/repeated_internal_comparison_2026-09-21.json is unchanged; the old inputs violate this contract and are preserved only as exploratory history.",
+  "rna": {
+    "matrix_key": "raw/X",
+    "axis_key": "raw/var",
+    "genome_build": "GRCh38",
+    "require_integer_counts": true
+  },
+  "atac": {
+    "count_unit": "unique_fragment_overlap",
+    "count_mode": "fragment",
+    "unknown_policy": "error",
+    "interval_rule": "a fragment record qualifies for region [beg, end) when fragment_start < end and fragment_end > beg; fragment_start >= fragment_end records are ignored",
+    "require_complete_join": true,
+    "reader_contract": "configs/atac_measurement_contract_2026-09-21.json"
+  },
+  "regions": {
+    "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "n_union_regions": 480,
+    "top_n": 256,
+    "selection_uses_labels": false,
+    "rule": "per outer fold, top-256 exact intervals by that fold's training-library prevalence; ties broken by (chromosome, start, end)"
+  },
+  "population": {
+    "n_donors": 30,
+    "n_control": 15,
+    "n_positive": 15,
+    "label_rule": "disease == 'complete trisomy 21'",
+    "retained_population": "H5AD retained set; unknown barcodes are refused, never silently dropped"
+  },
+  "protocol": {
+    "families": [
+      "rna_only",
+      "atac_only",
+      "rna_atac_concat",
+      "gated_fusion",
+      "token_concat",
+      "cross_attention"
+    ],
+    "majority_control": true,
+    "donor_aggregation": "mean_predicted_probability",
+    "donor_threshold": 0.5,
+    "practical_margin": 0.07,
+    "margin_rule": "practical_margin(15, 15); not lowered after seeing results",
+    "uncertainty_method": "donor_cluster_percentile_bootstrap",
+    "uncertainty_seed": 22,
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0
+  },
+  "manifest": {
+    "required": true,
+    "path_hint": "configs/real_paired_input_manifest_2026-09-21.json",
+    "note": "generated after the corrected ATAC matrices are measured; until it exists no real run may set scientific_claim_allowed"
+  }
+}

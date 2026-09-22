@@ -63,6 +63,9 @@ def load_development_inputs(h5ad_path, atac_path, protocol):
     backed = ad.read_h5ad(h5ad_path, backed="r")
     try:
         obs = backed.obs[["library", "donor_id", "disease"]].copy()
+        ordered_cells_sha256 = hashlib.sha256(
+            "\n".join(backed.obs.index.astype(str).tolist()).encode()
+        ).hexdigest()
         n_cells = backed.n_obs
         n_genes = backed.n_vars
     finally:
@@ -97,6 +100,8 @@ def load_development_inputs(h5ad_path, atac_path, protocol):
     gene_axis_sha256 = hashlib.sha256("\n".join(gene_ids).encode()).hexdigest()
     fingerprints = {
         "h5ad": {"path": str(h5ad_path), "sha256": _sha256(h5ad_path), "n_genes": int(n_genes)},
+        "genome_build": "GRCh38",
+        "ordered_cells_sha256": ordered_cells_sha256,
         "rna_representation": {
             "matrix_key": DEFAULT_RNA_MATRIX_KEY,
             "axis_key": axis["axis_key"],

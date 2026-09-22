@@ -40,7 +40,7 @@ from p22.eval.paired_faithfulness import (  # noqa: E402
 )
 from p22.models.fusion import VIEW_A, VIEW_B  # noqa: E402
 from p22.training.loop import predict, train_model  # noqa: E402
-from run_real_paired_comparison import _fold_map, _indices  # noqa: E402
+from run_real_paired_comparison import _acceptance_decision, _fold_map, _indices  # noqa: E402
 from run_real_paired_pilot import DEFAULT_H5AD, load_development_inputs  # noqa: E402
 
 INTERVENTION_FAMILIES = ("rna_atac_concat", "gated_fusion", "token_concat", "cross_attention")
@@ -79,7 +79,14 @@ def _donor_score(model, family, transformed, rows, labels, donors):
 
 
 def faithfulness_frozen_run(
-    protocol, h5ad_path, atac_path, regions_path, output_dir, init_seeds=DEFAULT_INIT_SEEDS
+    protocol,
+    h5ad_path,
+    atac_path,
+    regions_path,
+    output_dir,
+    init_seeds=DEFAULT_INIT_SEEDS,
+    req_path=None,
+    man_path=None,
 ):
     views, metadata, fingerprints = load_development_inputs(h5ad_path, atac_path, protocol)
     region_sets = json.loads(Path(regions_path).read_text())
@@ -90,6 +97,17 @@ def faithfulness_frozen_run(
     folds = _fold_map(metadata, protocol)
     if len(region_sets["per_fold"]) != len(folds):
         raise ValueError("region-set fold count does not match the split plan")
+    acceptance = _acceptance_decision(
+        protocol,
+        fingerprints,
+        region_sets,
+        folds,
+        metadata,
+        atac_path,
+        regions_path,
+        req_path,
+        man_path,
+    )
 
     labels = metadata.label.to_numpy()
     donors = metadata.donor_id.astype(str).to_numpy()
@@ -184,10 +202,11 @@ def faithfulness_frozen_run(
     delta_means = {seed: seed_summary[seed]["delta_mean"] for seed in seeds}
     return {
         "data_mode": "real_development_frozen_fold_faithfulness",
-        "scientific_claim_allowed": True,
-        "pilot": False,
+        "scientific_claim_allowed": acceptance.scientific_claim_allowed,
+        "pilot": not acceptance.scientific_claim_allowed,
         "final_internal_estimate": False,
         "external_evaluation_performed": False,
+        "acceptance": acceptance.to_dict(),
         "n_folds_run": len(per_fold),
         "input_fingerprints": fingerprints,
         "region_set_fingerprint": {
@@ -231,6 +250,12 @@ def main(argv=None):
     parser.add_argument("--atac-matrix", default=str(ROOT / DEFAULT_ATAC))
     parser.add_argument("--region-sets", default=str(ROOT / DEFAULT_REGIONS))
     parser.add_argument("--init-seeds", type=int, nargs="+", default=list(DEFAULT_INIT_SEEDS))
+    parser.add_argument(
+        "--acceptance-requirements",
+        type=Path,
+        default=ROOT / "configs/real_paired_acceptance_2026-09-21.json",
+    )
+    parser.add_argument("--acceptance-manifest", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.output_dir.exists():
@@ -249,6 +274,8 @@ def main(argv=None):
             args.region_sets,
             args.output_dir,
             tuple(args.init_seeds),
+            args.acceptance_requirements,
+            args.acceptance_manifest,
         ),
         cells_per_donor_cap=protocol.cell_cap,
         disk_path=args.output_dir,

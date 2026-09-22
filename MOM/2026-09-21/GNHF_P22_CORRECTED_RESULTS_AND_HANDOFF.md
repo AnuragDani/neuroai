@@ -38,7 +38,47 @@ is preserved only as history. The corrected unit is declared prospectively in
 | #3g aggregate transfer accounting | `test_quantify_regions_enforces_aggregate_budget` | `_BudgetedTransport` caps aggregate bytes across concurrent workers | test passes | Real-run byte allocation must be set before regeneration |
 | #1 RNA `X` vs `raw/X` | `tests/test_real_cohort.py::test_default_rna_matrix_is_raw_counts`, `test_wrong_default_processed_block_cannot_pass_as_raw`, `test_raw_matrix_columns_follow_raw_axis_not_processed_axis`, `test_load_cell_matrix_rejects_negative_raw_counts`, `test_load_cell_matrix_refuses_missing_raw_block`, and the axis-hardening tests `test_read_matrix_axis_refuses_{undeclared_matrix_key,absent_axis_block,empty_identifiers,dimension_mismatch,duplicate_identifiers,missing_index_dataset}` | `load_cell_matrix` defaults to `DEFAULT_RNA_MATRIX_KEY="raw/X"` and rejects non-finite/negative/noninteger consumed values; `read_matrix_axis` resolves `raw/var` for raw columns and refuses absent, unresolved, empty, dimension-mismatched or duplicate identifiers; `run_real_paired_pilot.load_development_inputs` records the raw axis key, cell/column counts and gene-axis hash and refuses an empty axis | real `raw/X` sample `(55, 35477)` all-integer, `X` refused as non-integer; new tests pass | The corrected matrices/pilot have not been regenerated yet; old pilot/comparison results still describe processed `X` |
 | #4 chromosome-1 feature bias | report-level correction (no code test; the bias is a property of the retained rule) | corrected prose in `MOM/2026-09-21/GNHF_P22_RESULTS_AND_PROFESSOR_HANDOFF.md` §2 to state the chr1 tie-break bias persists (163–219/256 per fold; union 308 chr1 / 110 chr10 / 1 chr21) and is retained for the measurement-correction comparison | audit: 163–219 of 256 regions per fold on chr1 | The biased feature set is retained by design so input correctness is not confounded with outcome-driven feature redesign; its limited coverage bounds any architecture conclusion |
-| Acceptance binding | pending | pending | `run_real_paired_comparison.py` still auto-promotes | Not yet repaired |
+| #5 automatic scientific promotion | `tests/test_real_paired_acceptance.py` (14 tests: accepted fixture, missing manifest, old processed-`X`/read-support unit, hash/cell/region mismatch, held-out donor in feature discovery, overlapping train/test donors, protocol margin/family mismatch, non-prospective requirements) | shared `src/p22/eval/real_paired_acceptance.py` gate; `run_real_paired_comparison.py` and `run_real_paired_faithfulness_frozen.py` derive `scientific_claim_allowed`/`final_internal_estimate` from the decision instead of hardcoding `True` | real decision on the current artifacts is `REFUSED` (`atac_unit`, `manifest_present` and the three manifest-bound checks fail); see below | A corrected run stays exploratory until a measured artifact manifest is generated and matches; that regeneration is the next executable step |
+
+## Acceptance binding (finding #5)
+
+The promotion flag was the review's structural blocker: the comparison and
+frozen-faithfulness entry points set `scientific_claim_allowed=True` themselves. A
+shared gate now owns that decision:
+
+- `configs/real_paired_acceptance_2026-09-21.json` — prospective requirements
+  (raw/`X` + `raw/var`, `unique_fragment_overlap`/`fragment`/`error`, the frozen
+  union hash and 480 regions, 30 donors 15/15, the six families, 0.07 margin, the
+  donor-bootstrap uncertainty rule and the split seeds).
+- `src/p22/eval/real_paired_acceptance.py` — `evaluate_input_acceptance` checks
+  representation, count unit, region/cell identities, per-fold donor provenance,
+  population and protocol, and refuses promotion whenever any check fails or the
+  measured manifest is absent. `build_evidence` assembles the bundle from the
+  artifacts actually consumed (h5ad/ATAC hashes, ordered-cell hashes, union
+  decode, per-fold region-set donor lists).
+- `scripts/check_real_paired_acceptance.py` — replayable inspection that prints
+  the decision for the current artifacts.
+
+Real-data result on the historical inputs (the expected refusal):
+
+```
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
+  /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python \
+  scripts/check_real_paired_acceptance.py \
+  --out reports/generated/acceptance_binding_20260921/decision.json
+# status REFUSED; blocking = atac_unit, manifest_present, rna_artifact,
+#   cell_identity, atac_artifact
+# PASS: rna_representation (raw/X, raw/var, integer), region_identity,
+#   population (30 donors 15/15), protocol_match (6 families, margin 0.07),
+#   fold_provenance (25/25 training-only donor-matched)
+```
+
+The old 480-region sidecar declares `count_unit=fragment_overlap_sum` and no
+`count_mode`, so `atac_unit` fails: the historical matrices cannot be promoted.
+`fold_provenance` passes on all 25 real folds, confirming the region-set train/test
+donor lists match the executable donor split (no held-out donor entered feature
+discovery). Machine-readable evidence:
+`docs/real_paired_acceptance_binding_2026-09-21.json`.
 
 ## Caller audit for the RNA default change
 
@@ -109,18 +149,22 @@ Result: local and remote cases all agree on per-barcode fragment counts
 ```
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
   /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/ -q
-# 980 passed, 19 warnings in 103.42s
+# 994 passed, 19 warnings in 121.18s
 
 ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.py \
   scripts/validate_reader_against_htslib.py scripts/run_real_paired_pilot.py \
-  src/p22/data/real_cohort.py src/p22/eval/rna_donor_influence.py \
+  scripts/run_real_paired_comparison.py scripts/run_real_paired_faithfulness_frozen.py \
+  scripts/check_real_paired_acceptance.py \
+  src/p22/data/real_cohort.py src/p22/eval/real_paired_acceptance.py \
+  src/p22/eval/rna_donor_influence.py \
   tests/test_query_fragment_regions.py tests/test_quantify_development_atac.py \
-  tests/test_real_cohort.py
+  tests/test_real_cohort.py tests/test_real_paired_acceptance.py
 # All checks passed
 ```
 
-The RNA repair added the 11 tests above (5 raw-count/axis tests plus 6 axis-hardening
-tests), taking the suite from 969 to 980. `donor_pseudobulk` (the only function the
+The RNA repair added 11 tests (5 raw-count/axis tests plus 6 axis-hardening tests),
+taking the suite from 969 to 980; the acceptance gate added 14 more, taking it to
+994. `donor_pseudobulk` (the only function the
 frozen RNA donor-influence diagnostic calls) is unchanged, so its pinned source hash
 in `configs/rna_donor_influence.json` was amended prospectively with a recorded
 `source_code_amendments` entry and matching `CONFIG_SHA256`; no diagnostic replay is
@@ -142,10 +186,15 @@ claimed.
 2. ~~Chromosome-1 feature-bias correction in the report (finding #4).~~ Report
    corrected; the old feature rule is retained for the measurement-correction
    comparison as required.
-3. Bind `scientific_claim_allowed`/`final_internal_estimate` to a validated
-   acceptance record instead of auto-promotion.
+3. ~~Bind `scientific_claim_allowed`/`final_internal_estimate` to a validated
+   acceptance record instead of auto-promotion.~~ Repaired (finding #5): shared
+   gate + prospective requirements + real refusal evidence. A measured artifact
+   manifest must still be generated after regeneration before a corrected run can
+   promote.
 4. Regenerate corrected ATAC matrices in a new output directory after RNA and
-   reader/unit checks pass; record hashes, bytes, axes and reader version.
+   reader/unit checks pass; record hashes, bytes, axes and reader version, then
+   emit `configs/real_paired_input_manifest_2026-09-21.json` so the acceptance
+   gate can bind the corrected arrays.
 5. Rerun the corrected pilot and fixed internal comparison, then interventions and
    initialization sensitivity, with one donor-level estimand.
 6. Update the canonical notebook and prepare the professor update. External
