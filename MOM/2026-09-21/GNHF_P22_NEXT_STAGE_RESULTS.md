@@ -1,8 +1,9 @@
 # P22 next-stage results: ATAC representation sensitivity and cell-state feasibility
 
-Status: **IN PROGRESS — Phases 1–3 (representation sensitivity selection,
-measurement, comparison and simple linear controls) executed and validated;
-Phases 4–5 pending.** This is the main worktree handoff for the
+Status: **IN PROGRESS — Phases 1–4 (representation sensitivity selection,
+measurement, comparison, simple linear controls and cell-state feasibility)
+executed and validated; Phase 5 reconciled from the fresh access note; external
+evaluation still gated.** This is the main worktree handoff for the
 `p22-test-atac-repres-14ef45` run. Starting checkpoint
 `5e2165f619b149a2d05d9e0e4fc439c3bd0cfb81`. It preserves every earlier corrected
 null and the historical artifacts; nothing here overwrites a prior result.
@@ -278,11 +279,136 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts <python> scripts/run_real_paire
   --reference-run <comparison run dir> --output-dir <new dir>
 ```
 
-## Phase 4 — cell-state feasibility (PENDING)
+## Phase 4 — cell-state feasibility (DONE, model-free)
 
-Not started.
+`scripts/assess_cellstate_feasibility.py` (new, read-only, fits no model and does
+not alter the matched sample) produced
+`reports/generated/cellstate_feasibility_20260921/cellstate_feasibility.json`,
+compact tracked evidence `docs/cellstate_feasibility_2026-09-21.json` and full CSV
+tables under `reports/generated/cellstate_feasibility_20260921/csv/`. Inputs: the
+accepted H5AD `f16c25da…h5ad`, the corrected historical 480-region matrix
+(`repeated_comparison_corrected_20260921`, SHA-256 `81dfdf7c…`), and the measured
+465-region tie-break matrix (`atac_tiebreak_measured_20260921`, SHA-256
+`5f13c089…`); 248,998 accepted cells, 30 donors, seed 22 / cap 256.
 
-## Phase 5 — external route reconciliation (PENDING)
+### Donor-invariant metadata (verified, not assumed)
 
-Not started. The fresh access note separates open-child declarations from the
-unresolved manifest `Access=embargo` field and intermittent TLS transport failures.
+`disease`, `dev_PCW`, `sex`, `tissue_quality` and `development_stage` are
+donor-invariant across all 30 donors. **`batch_seq` and `library` are not**: 7 of 30
+donors each carry two sequencing batches/libraries (`PCW11_DS_15405`, `PCW11_DS_17720`,
+`PCW13_DS_12740`, `PCW15_DS_15744`, `PCW17_CON_14310`, `PCW18_CON_16419`,
+`PCW18_DS_16485`). This corrects the earlier assumption that batch is a donor-level
+field; any donor-level model must aggregate within donor and treat the 7 mixed-batch
+donors as a sensitivity rather than entering batch as a donor covariate. No column
+used here has missing values.
+
+### Donor-by-cell-type support (full accepted cells and historical capped sample)
+
+| Cell type | Full | Capped | | Cell type | Full | Capped |
+|---|---:|---:|---|---|---:|---:|
+| NEU_CUX2 | 80,672 | 2,614 | | NEU_TLE4 | 26,777 | 780 |
+| RG | 43,531 | 1,294 | | NEU_SST | 13,891 | 434 |
+| IPC | 21,748 | 721 | | RG_prol | 10,079 | 249 |
+| NEU_RORB | 21,204 | 662 | | IPC_prol | 9,335 | 260 |
+| NEU_CALB2 | 10,451 | 307 | | NEU_RELN | 3,768 | 124 |
+| AST | 2,334 | 84 | | NEU_low | 1,856 | 45 |
+| OPC | 1,580 | 46 | | MIC | 885 | 27 |
+| VASC | 887 | 33 | | | | |
+
+Every stratum is present in the capped sample, so no donor or cell type is silently
+dropped; the rarest capped strata are MIC (27), VASC (33), NEU_low (45) and OPC (46).
+The full per-donor × per-cell-type table with disease, `dev_PCW`, batch, library and
+fractions is in `support_full.csv` / `support_capped.csv`. The author
+`cells_in_excitatory_lineage_subset` flag covers 215,680/248,998 cells (86.6%) full
+and 6,664/7,680 (86.8%) capped; `cell_class` counts are NEU_exc 128,653, RG 53,610,
+IPC 31,083, NEU_inh 28,110, AST 2,334, NEU_low 1,856, OPC 1,580, MIC 885, VASC 887.
+
+### Measured ATAC support (region-overlap sums, not author fragments)
+
+Both panels have **0 completely-zero regions** across all accepted cells.
+
+| Panel | Capped nonzero regions (mean / median) | Capped overlap sum (mean / median) | All-zero cells |
+|---|---|---|---|
+| historical 480 | 40.53 / 30 | 64.17 / 38 | 0.43% |
+| sha256 tie-break 465 | 40.94 / 30 | 65.04 / 39 | 0.27% |
+
+Per-cell-type means are similar across the panels (capped nonzero-region mean 27.4
+for NEU_low to 59.1 for RG_prol; tie-break 29.1–59.1). VASC cells show a much higher
+overlap sum (mean ~156–160) than other types, and author `nCount_ATAC` also varies
+~2.4× across cell types (NEU_low 2,067 to RG_prol 4,963; VASC `nCount_RNA` 6,092),
+consistent with a technical depth/accessibility difference rather than a cell-state
+program. Notably the region-overlap coverage is much flatter across cell types than
+`nCount_ATAC`, so panel coverage is not simply depth-proportional. Feature-level
+coverage by cell type and per-region nonzero fractions are in the CSVs; the panel is
+broadly covered and is **not** driven by a single narrow population. Region-overlap
+sums are not total assay fragments and must not be substituted for `nCount_ATAC` or
+other author QC. Author QC means per cell type (capped) are in
+`docs/cellstate_feasibility_2026-09-21.json` (`qc_by_celltype_capped`).
+
+### Deterministic donor-aware stratified sampling proposal
+
+`donor_aware_celltype_stratified_v1` allocates the same 256-cell cap within each
+donor across author cell types by largest-remainder proportional to donor-level
+availability, reserving one cell per present stratum and taking lowest-index cells;
+no RNG, no disease outcome. Measured support under the proposal is essentially
+unchanged (historical nonzero mean 41.03, tie-break 41.39) while rare strata gain
+cells (NEU_low 45→64, OPC 46→59, MIC 27→36, VASC 33→36, AST 84→83). This is a
+separately named future sensitivity; it does not alter the frozen matched sample.
+
+### Future estimand and biological validation status
+
+`docs/cellstate_next_study_2026-09-21.json` records the proposed within-excitatory-
+lineage maturation/program estimand (donor unit, exact `dev_PCW` covariate,
+mixed-batch sensitivity, prespecified RORB/FOXP1/TLE4 program, falsification
+criterion). Audit result: all 13 program genes are present on the RNA axis, but the
+measured panels cover only **1 of 13** program loci (TLE4 `chr9:79571205-79572111`,
+shared by both panels; RORB and FOXP1 have none). The current panels are therefore
+**not** a targeted regulatory panel for this question; a within-lineage ATAC program
+test needs a locus-targeted region set or the author peak-by-cell matrix / a bounded
+gene-proximal fragment recount, which is outside this assignment. Independent
+biological validation remains **NOT_PERFORMED / GATED**: the Lattke paper is the same
+cohort (annotation support only), GSE280175 is RNA-only, and NeMO Vuong remains
+permission/QC-gated.
+
+### Replay (Phase 4)
+
+```
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts <python> scripts/assess_cellstate_feasibility.py \
+  --h5ad /Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad \
+  --historical-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz \
+  --historical-region-sets reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_historical_reproduction.json \
+  --tiebreak-matrix reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz \
+  --tiebreak-region-sets reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json \
+  --out reports/generated/cellstate_feasibility_20260921/cellstate_feasibility.json \
+  --csv-dir reports/generated/cellstate_feasibility_20260921/csv \
+  --tracked-evidence docs/cellstate_feasibility_2026-09-21.json
+```
+
+6 new offline tests in `tests/test_assess_cellstate_feasibility.py`; ruff clean.
+
+## Phase 5 — external route reconciliation (statuses separated)
+
+Read fresh from `VAULT/MOM/2026-09-21/GNHF_P22_EXTERNAL_ACCESS_CHECK.md` (checked
+2026-09-21 PDT / 2026-09-22 UTC). The blanket "all external measurements embargoed"
+assertion is not supported. Statuses are kept separate and none is silently promoted:
+
+| Gate | Status | Evidence |
+|---|---|---|
+| Permission / declaration | **MIXED** | ATAC child API `access: open`, RNA child page open processed; historical ATAC manifest field `Access=embargo` remains unreconciled (today's manifest reads failed TLS) |
+| Transport | **INTERMITTENT FAILURE** | TLS failures on direct manifest/API reads; no new unchanged probes attempted |
+| Release / QC identity | **UNRESOLVED** | 117,532 metadata rows − 3,731 RNA `Unk` = 113,801 paper count is a count match, not proven author QC replay; `nCount_ATAC` stage unverified |
+| Paired cell axes | **UNVERIFIED** | no barcode crosswalk or paired-axis check |
+| Compatible measured regions | **NOT ESTABLISHED** | different peak boundaries; zero-filling absent peaks is prohibited; exact common intervals required |
+| Specimen independence | **NO_OVERLAP_EVIDENCE only** | UCLA/NIH vs UK HDBR provenance separation, not certified identity |
+| Evaluation readiness | **NOT READY** | no fitting, threshold choice or model selection may use NeMO |
+
+The ~19 GB packaged Vuong fragment asset is **not feasible** on this host now: the
+recheck shows 18 GiB free against a 10 GiB reserve, so a bounded acquisition cannot
+complete and was not attempted. GSE305146/GSE305153/CELLxGENE remain the development
+cohort, never three independent replications.
+
+**Unsent clarification question (do not send):** For the ATAC manifest
+`col-ad8t52b-Vuong_delaTorre_Human_snMultiome_Analysis_ATAC-Open-manifest.tsv`, is the
+per-file `Access` field still `embargo` while the child collection is declared Open,
+and what is the author's final retained-barcode/QC rule and `nCount_ATAC` measurement
+stage for `VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz`?

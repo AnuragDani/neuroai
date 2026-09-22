@@ -1,0 +1,60 @@
+{
+  "record_type": "cellstate_next_study_direction",
+  "authored": "2026-09-21",
+  "outcome_used_for_selection": false,
+  "model_fitted": false,
+  "status": "PROPOSED_NOT_EXECUTED",
+  "sampling_proposal_name": "donor_aware_celltype_stratified_v1",
+  "biological_objective": "Move from donor disease classification to a donor-aware cell-state/regulatory description with uncertainty, within the excitatory lineage.",
+  "future_estimand": {
+    "question": "Within author-defined excitatory-lineage cell types, does complete trisomy 21 associate with a prespecified RORB/FOXP1 and TLE4 subtype maturation/regulatory program at the donor level, in RNA expression and in matched ATAC accessibility, after exact developmental age adjustment?",
+    "unit_of_analysis": "donor (30 donors; 15 DS / 15 control)",
+    "aggregation": "per donor and author_cell_type stratum, aggregate the program score across that donor's cells (pseudobulk RNA module and mean ATAC accessibility at program loci); fit a donor-level linear model of program score on DS status with exact dev_PCW as a covariate",
+    "primary_contrast": "donor-level DS-minus-control program-score difference within each prespecified excitatory-lineage stratum, pooled with donor-cluster bootstrap uncertainty",
+    "age_handling": "dev_PCW is donor-invariant (observed 10-20, no donor with two values) and is entered as an exact covariate; no silent age binning",
+    "batch_handling": "batch_seq and library are NOT donor-invariant in 7 of 30 donors (two sequencing batches/libraries per donor). Aggregate within donor and report the 7 mixed-batch donors as a prespecified sensitivity; do not treat batch as a donor-level covariate",
+    "required_rna_coverage": [
+      "RORB", "FOXP1", "TLE4", "BCL11B", "CUX2", "NEUROD2", "NEUROD6",
+      "SOX9", "PAX6", "EOMES", "FEZF2", "TCF7L2", "RORA"
+    ],
+    "required_atac_coverage": "measured ATAC intervals overlapping the gene bodies/promoters of the same prespecified program genes",
+    "falsification_criterion": "The maturation-program hypothesis is not supported if the donor-level DS-minus-control program contrast 95% donor-bootstrap interval includes zero after exact dev_PCW adjustment, or if the contrast is explained by a shift in author cell-type composition (e.g. reduced NEU_RORB proportion) rather than within-subtype program change.",
+    "source_defined_hypothesis": "Lattke et al. 2026 Nat Med (this development cohort; not independent) reports a subtype-specific reduction of RORB/FOXP1-expressing (NEU_RORB) and TLE4-expressing (NEU_TLE4) excitatory neurons and a scMEGA excitatory-lineage regulatory network including FEZF2, FOXP1, RORA, TCF7L2 and Chr21 TFs BACH1/PKNOX1/GABPA."
+  },
+  "support_audit": {
+    "author_cell_types": [
+      "AST", "IPC", "IPC_prol", "MIC", "NEU_CALB2", "NEU_CUX2", "NEU_RELN",
+      "NEU_RORB", "NEU_SST", "NEU_TLE4", "NEU_low", "OPC", "RG", "RG_prol", "VASC"
+    ],
+    "excitatory_lineage_strata": [
+      "RG", "RG_prol", "IPC", "IPC_prol", "NEU_CUX2", "NEU_RORB", "NEU_TLE4", "NEU_low", "AST"
+    ],
+    "rna_feature_coverage": "SUPPORTED: all 13 prespecified program genes are present in the raw/var gene axis",
+    "atac_feature_coverage": "NOT_SUPPORTED by the current measured panels: 1 of 13 program genes (TLE4) has any overlapping measured region (chr9:79571205-79572111), and it is shared by both the 480-region historical and 465-region tie-break panels; RORB and FOXP1 have none",
+    "interpretation": "The historical and tie-break region panels were selected by training-library prevalence without regard to this program, so they are not a targeted regulatory panel for the maturation hypothesis. A within-lineage ATAC program question requires a locus-targeted region set or the author peak-by-cell matrix / a bounded fragment recount on gene-proximal windows; that acquisition is outside this assignment.",
+    "annotation_note": "author_cell_type labels are descriptive context, not independent truth; they are not to be treated as ground-truth classes for a new classifier."
+  },
+  "validation_resources": {
+    "annotation_support": {
+      "status": "SAME_COHORT_NOT_INDEPENDENT",
+      "resource": "Lattke et al. 2026 Nat Med, doi:10.1038/s41591-026-04211-1",
+      "note": "Motivates the hypothesis and supplies annotations but analyzes the same development cohort; cannot be independent validation or a novelty claim."
+    },
+    "orthogonal_assay_support": {
+      "status": "NOT_PERFORMED",
+      "missing": "no independent orthogonal ATAC/accessibility assay or author QC replay has been acquired"
+    },
+    "independent_cohort_replication": {
+      "status": "GATED",
+      "rna_only_candidate": "GSE280175 (10 snRNA samples, 5 DS / 5 control, PCW 13-19) could test the RNA program direction only; it cannot validate ATAC or paired routing.",
+      "paired_candidate": "NeMO Vuong et al. (DOI 10.1126/science.aea1259; parent nemo:col-umstjg0; RNA nemo:col-mbgxwtz; ATAC nemo:col-ad8t52b) remains the reserved paired external candidate with unresolved per-file declaration, QC/barcode stage and compatible measured-region gates.",
+      "missing_action": "obtain a versioned author retained-barcode/QC rule and an exact measured-interval contract; resolve the ATAC manifest Access field; then a bounded recount can be scoped"
+    }
+  },
+  "claim_boundaries": [
+    "This is a proposed future estimand. No model was fitted and no disease effect was estimated.",
+    "Author cell-type annotations are descriptive context, not independent truth.",
+    "The RNA program is testable now; the ATAC program is not supported by the current measured panels.",
+    "No novel mechanism, disease claim, or independent validation is asserted."
+  ]
+}

@@ -1,0 +1,1418 @@
+{
+  "atac_panels": {
+    "historical_corrected": {
+      "capped_by_celltype": [
+        {
+          "author_cell_type": "AST",
+          "n_cells": 84,
+          "nonzero_mean": 34.714285714285715,
+          "nonzero_median": 24.5,
+          "overlap_mean": 60.083333333333336,
+          "overlap_median": 33.0
+        },
+        {
+          "author_cell_type": "IPC",
+          "n_cells": 721,
+          "nonzero_mean": 43.499306518724,
+          "nonzero_median": 34.0,
+          "overlap_mean": 59.20943134535368,
+          "overlap_median": 40.0
+        },
+        {
+          "author_cell_type": "IPC_prol",
+          "n_cells": 260,
+          "nonzero_mean": 45.29615384615385,
+          "nonzero_median": 36.5,
+          "overlap_mean": 65.12307692307692,
+          "overlap_median": 46.5
+        },
+        {
+          "author_cell_type": "MIC",
+          "n_cells": 27,
+          "nonzero_mean": 44.148148148148145,
+          "nonzero_median": 31.0,
+          "overlap_mean": 74.37037037037037,
+          "overlap_median": 36.0
+        },
+        {
+          "author_cell_type": "NEU_CALB2",
+          "n_cells": 307,
+          "nonzero_mean": 38.5700325732899,
+          "nonzero_median": 28.0,
+          "overlap_mean": 59.159609120521175,
+          "overlap_median": 36.0
+        },
+        {
+          "author_cell_type": "NEU_CUX2",
+          "n_cells": 2614,
+          "nonzero_mean": 35.84353481254782,
+          "nonzero_median": 27.0,
+          "overlap_mean": 51.54858454475899,
+          "overlap_median": 33.0
+        },
+        {
+          "author_cell_type": "NEU_RELN",
+          "n_cells": 124,
+          "nonzero_mean": 36.806451612903224,
+          "nonzero_median": 27.0,
+          "overlap_mean": 74.66129032258064,
+          "overlap_median": 33.0
+        },
+        {
+          "author_cell_type": "NEU_RORB",
+          "n_cells": 662,
+          "nonzero_mean": 33.92749244712991,
+          "nonzero_median": 22.0,
+          "overlap_mean": 62.7416918429003,
+          "overlap_median": 34.0
+        },
+        {
+          "author_cell_type": "NEU_SST",
+          "n_cells": 434,
+          "nonzero_mean": 37.64976958525346,
+          "nonzero_median": 27.0,
+          "overlap_mean": 70.24884792626727,
+          "overlap_median": 35.0
+        },
+        {
+          "author_cell_type": "NEU_TLE4",
+          "n_cells": 780,
+          "nonzero_mean": 40.13717948717949,
+          "nonzero_median": 26.0,
+          "overlap_mean": 83.06538461538462,
+          "overlap_median": 38.0
+        },
+        {
+          "author_cell_type": "NEU_low",
+          "n_cells": 45,
+          "nonzero_mean": 27.377777777777776,
+          "nonzero_median": 20.0,
+          "overlap_mean": 41.55555555555556,
+          "overlap_median": 27.0
+        },
+        {
+          "author_cell_type": "OPC",
+          "n_cells": 46,
+          "nonzero_mean": 31.82608695652174,
+          "nonzero_median": 28.0,
+          "overlap_mean": 70.17391304347827,
+          "overlap_median": 37.5
+        },
+        {
+          "author_cell_type": "RG",
+          "n_cells": 1294,
+          "nonzero_mean": 50.27125193199382,
+          "nonzero_median": 38.0,
+          "overlap_mean": 73.26043276661515,
+          "overlap_median": 48.0
+        },
+        {
+          "author_cell_type": "RG_prol",
+          "n_cells": 249,
+          "nonzero_mean": 58.47791164658634,
+          "nonzero_median": 47.0,
+          "overlap_mean": 88.73493975903614,
+          "overlap_median": 63.0
+        },
+        {
+          "author_cell_type": "VASC",
+          "n_cells": 33,
+          "nonzero_mean": 46.09090909090909,
+          "nonzero_median": 33.0,
+          "overlap_mean": 156.06060606060606,
+          "overlap_median": 100.0
+        }
+      ],
+      "capped_nonzero_regions": {
+        "max": 229.0,
+        "mean": 40.53177083333333,
+        "median": 30.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 14.0,
+        "q75": 53.0
+      },
+      "capped_overlap_sum": {
+        "max": 1821.0,
+        "mean": 64.166796875,
+        "median": 38.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 18.0,
+        "q75": 74.0
+      },
+      "capped_zero_fraction": 0.004296875,
+      "chrom_region_counts": {
+        "GL000194.1": 1,
+        "GL000195.1": 1,
+        "GL000205.2": 2,
+        "GL000218.1": 1,
+        "GL000219.1": 1,
+        "KI270728.1": 1,
+        "chr1": 308,
+        "chr10": 110,
+        "chr11": 6,
+        "chr12": 3,
+        "chr15": 1,
+        "chr16": 3,
+        "chr17": 17,
+        "chr18": 1,
+        "chr19": 5,
+        "chr21": 1,
+        "chr22": 1,
+        "chr3": 5,
+        "chr4": 2,
+        "chr6": 3,
+        "chr7": 1,
+        "chr8": 2,
+        "chr9": 4
+      },
+      "coverage_by_celltype": {
+        "AST": {
+          "n_cells": 2334,
+          "nonzero_fraction_mean": 0.0748723578977435,
+          "regions_with_any_nonzero": 477
+        },
+        "IPC": {
+          "n_cells": 21748,
+          "nonzero_fraction_mean": 0.08152521687818037,
+          "regions_with_any_nonzero": 480
+        },
+        "IPC_prol": {
+          "n_cells": 9335,
+          "nonzero_fraction_mean": 0.09453111051597929,
+          "regions_with_any_nonzero": 480
+        },
+        "MIC": {
+          "n_cells": 885,
+          "nonzero_fraction_mean": 0.08495998116760829,
+          "regions_with_any_nonzero": 473
+        },
+        "NEU_CALB2": {
+          "n_cells": 10451,
+          "nonzero_fraction_mean": 0.07686006921187766,
+          "regions_with_any_nonzero": 480
+        },
+        "NEU_CUX2": {
+          "n_cells": 80672,
+          "nonzero_fraction_mean": 0.07005719663162766,
+          "regions_with_any_nonzero": 480
+        },
+        "NEU_RELN": {
+          "n_cells": 3768,
+          "nonzero_fraction_mean": 0.06896563163481953,
+          "regions_with_any_nonzero": 478
+        },
+        "NEU_RORB": {
+          "n_cells": 21204,
+          "nonzero_fraction_mean": 0.06934786282462428,
+          "regions_with_any_nonzero": 480
+        },
+        "NEU_SST": {
+          "n_cells": 13891,
+          "nonzero_fraction_mean": 0.07438104408129964,
+          "regions_with_any_nonzero": 480
+        },
+        "NEU_TLE4": {
+          "n_cells": 26777,
+          "nonzero_fraction_mean": 0.07779180826828995,
+          "regions_with_any_nonzero": 480
+        },
+        "NEU_low": {
+          "n_cells": 1856,
+          "nonzero_fraction_mean": 0.07232960668103448,
+          "regions_with_any_nonzero": 479
+        },
+        "OPC": {
+          "n_cells": 1580,
+          "nonzero_fraction_mean": 0.07304456751054852,
+          "regions_with_any_nonzero": 479
+        },
+        "RG": {
+          "n_cells": 43531,
+          "nonzero_fraction_mean": 0.09587731539975343,
+          "regions_with_any_nonzero": 480
+        },
+        "RG_prol": {
+          "n_cells": 10079,
+          "nonzero_fraction_mean": 0.10947059893507954,
+          "regions_with_any_nonzero": 480
+        },
+        "VASC": {
+          "n_cells": 887,
+          "nonzero_fraction_mean": 0.09812570462232244,
+          "regions_with_any_nonzero": 479
+        }
+      },
+      "n_regions": 480,
+      "panel_zero_regions": 0,
+      "total_nnz": 9513875
+    },
+    "sha256_tiebreak": {
+      "capped_by_celltype": [
+        {
+          "author_cell_type": "AST",
+          "n_cells": 84,
+          "nonzero_mean": 33.583333333333336,
+          "nonzero_median": 23.0,
+          "overlap_mean": 59.13095238095238,
+          "overlap_median": 29.5
+        },
+        {
+          "author_cell_type": "IPC",
+          "n_cells": 721,
+          "nonzero_mean": 44.173370319001386,
+          "nonzero_median": 35.0,
+          "overlap_mean": 60.22330097087379,
+          "overlap_median": 40.0
+        },
+        {
+          "author_cell_type": "IPC_prol",
+          "n_cells": 260,
+          "nonzero_mean": 46.16538461538462,
+          "nonzero_median": 39.5,
+          "overlap_mean": 65.93461538461538,
+          "overlap_median": 48.0
+        },
+        {
+          "author_cell_type": "MIC",
+          "n_cells": 27,
+          "nonzero_mean": 45.851851851851855,
+          "nonzero_median": 37.0,
+          "overlap_mean": 74.44444444444444,
+          "overlap_median": 41.0
+        },
+        {
+          "author_cell_type": "NEU_CALB2",
+          "n_cells": 307,
+          "nonzero_mean": 39.648208469055376,
+          "nonzero_median": 29.0,
+          "overlap_mean": 60.78175895765472,
+          "overlap_median": 37.0
+        },
+        {
+          "author_cell_type": "NEU_CUX2",
+          "n_cells": 2614,
+          "nonzero_mean": 36.32861514919664,
+          "nonzero_median": 27.0,
+          "overlap_mean": 52.582631981637334,
+          "overlap_median": 34.0
+        },
+        {
+          "author_cell_type": "NEU_RELN",
+          "n_cells": 124,
+          "nonzero_mean": 36.153225806451616,
+          "nonzero_median": 25.0,
+          "overlap_mean": 74.50806451612904,
+          "overlap_median": 35.0
+        },
+        {
+          "author_cell_type": "NEU_RORB",
+          "n_cells": 662,
+          "nonzero_mean": 34.22205438066465,
+          "nonzero_median": 21.0,
+          "overlap_mean": 63.28247734138973,
+          "overlap_median": 35.0
+        },
+        {
+          "author_cell_type": "NEU_SST",
+          "n_cells": 434,
+          "nonzero_mean": 38.675115207373274,
+          "nonzero_median": 28.0,
+          "overlap_mean": 72.09447004608295,
+          "overlap_median": 37.0
+        },
+        {
+          "author_cell_type": "NEU_TLE4",
+          "n_cells": 780,
+          "nonzero_mean": 40.14230769230769,
+          "nonzero_median": 26.0,
+          "overlap_mean": 83.74230769230769,
+          "overlap_median": 38.0
+        },
+        {
+          "author_cell_type": "NEU_low",
+          "n_cells": 45,
+          "nonzero_mean": 29.066666666666666,
+          "nonzero_median": 23.0,
+          "overlap_mean": 43.044444444444444,
+          "overlap_median": 29.0
+        },
+        {
+          "author_cell_type": "OPC",
+          "n_cells": 46,
+          "nonzero_mean": 33.15217391304348,
+          "nonzero_median": 30.0,
+          "overlap_mean": 72.26086956521739,
+          "overlap_median": 36.0
+        },
+        {
+          "author_cell_type": "RG",
+          "n_cells": 1294,
+          "nonzero_mean": 50.21792890262751,
+          "nonzero_median": 39.0,
+          "overlap_mean": 73.6112828438949,
+          "overlap_median": 49.0
+        },
+        {
+          "author_cell_type": "RG_prol",
+          "n_cells": 249,
+          "nonzero_mean": 59.12048192771084,
+          "nonzero_median": 50.0,
+          "overlap_mean": 89.79116465863454,
+          "overlap_median": 66.0
+        },
+        {
+          "author_cell_type": "VASC",
+          "n_cells": 33,
+          "nonzero_mean": 49.09090909090909,
+          "nonzero_median": 38.0,
+          "overlap_mean": 159.9090909090909,
+          "overlap_median": 99.0
+        }
+      ],
+      "capped_nonzero_regions": {
+        "max": 224.0,
+        "mean": 40.9421875,
+        "median": 30.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 15.0,
+        "q75": 54.0
+      },
+      "capped_overlap_sum": {
+        "max": 1830.0,
+        "mean": 65.04440104166666,
+        "median": 39.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 19.0,
+        "q75": 75.0
+      },
+      "capped_zero_fraction": 0.002734375,
+      "chrom_region_counts": {
+        "chr1": 37,
+        "chr10": 17,
+        "chr11": 25,
+        "chr12": 23,
+        "chr13": 8,
+        "chr14": 19,
+        "chr15": 12,
+        "chr16": 28,
+        "chr17": 50,
+        "chr18": 10,
+        "chr19": 42,
+        "chr2": 19,
+        "chr20": 8,
+        "chr21": 6,
+        "chr22": 7,
+        "chr3": 25,
+        "chr4": 19,
+        "chr5": 22,
+        "chr6": 26,
+        "chr7": 30,
+        "chr8": 11,
+        "chr9": 11,
+        "chrX": 9,
+        "chrY": 1
+      },
+      "coverage_by_celltype": {
+        "AST": {
+          "n_cells": 2334,
+          "nonzero_fraction_mean": 0.07821728354110807,
+          "regions_with_any_nonzero": 462
+        },
+        "IPC": {
+          "n_cells": 21748,
+          "nonzero_fraction_mean": 0.08559353375220759,
+          "regions_with_any_nonzero": 465
+        },
+        "IPC_prol": {
+          "n_cells": 9335,
+          "nonzero_fraction_mean": 0.09845615126331128,
+          "regions_with_any_nonzero": 465
+        },
+        "MIC": {
+          "n_cells": 885,
+          "nonzero_fraction_mean": 0.08973209404045927,
+          "regions_with_any_nonzero": 460
+        },
+        "NEU_CALB2": {
+          "n_cells": 10451,
+          "nonzero_fraction_mean": 0.08104611072871558,
+          "regions_with_any_nonzero": 465
+        },
+        "NEU_CUX2": {
+          "n_cells": 80672,
+          "nonzero_fraction_mean": 0.07328430431685669,
+          "regions_with_any_nonzero": 465
+        },
+        "NEU_RELN": {
+          "n_cells": 3768,
+          "nonzero_fraction_mean": 0.07197395155582952,
+          "regions_with_any_nonzero": 463
+        },
+        "NEU_RORB": {
+          "n_cells": 21204,
+          "nonzero_fraction_mean": 0.07172424354909705,
+          "regions_with_any_nonzero": 465
+        },
+        "NEU_SST": {
+          "n_cells": 13891,
+          "nonzero_fraction_mean": 0.07853077299992337,
+          "regions_with_any_nonzero": 465
+        },
+        "NEU_TLE4": {
+          "n_cells": 26777,
+          "nonzero_fraction_mean": 0.07990094211008404,
+          "regions_with_any_nonzero": 465
+        },
+        "NEU_low": {
+          "n_cells": 1856,
+          "nonzero_fraction_mean": 0.07544493882091212,
+          "regions_with_any_nonzero": 464
+        },
+        "OPC": {
+          "n_cells": 1580,
+          "nonzero_fraction_mean": 0.07646794610044916,
+          "regions_with_any_nonzero": 464
+        },
+        "RG": {
+          "n_cells": 43531,
+          "nonzero_fraction_mean": 0.09981945878144434,
+          "regions_with_any_nonzero": 465
+        },
+        "RG_prol": {
+          "n_cells": 10079,
+          "nonzero_fraction_mean": 0.11504149477194678,
+          "regions_with_any_nonzero": 465
+        },
+        "VASC": {
+          "n_cells": 887,
+          "nonzero_fraction_mean": 0.1019699118691736,
+          "regions_with_any_nonzero": 464
+        }
+      },
+      "n_regions": 465,
+      "panel_zero_regions": 0,
+      "total_nnz": 9616203
+    }
+  },
+  "cell_cap": 256,
+  "cell_class_counts_full": {
+    "AST": 2334,
+    "IPC": 31083,
+    "MIC": 885,
+    "NEU_exc": 128653,
+    "NEU_inh": 28110,
+    "NEU_low": 1856,
+    "OPC": 1580,
+    "RG": 53610,
+    "VASC": 887
+  },
+  "celltype_counts_capped": {
+    "AST": 84,
+    "IPC": 721,
+    "IPC_prol": 260,
+    "MIC": 27,
+    "NEU_CALB2": 307,
+    "NEU_CUX2": 2614,
+    "NEU_RELN": 124,
+    "NEU_RORB": 662,
+    "NEU_SST": 434,
+    "NEU_TLE4": 780,
+    "NEU_low": 45,
+    "OPC": 46,
+    "RG": 1294,
+    "RG_prol": 249,
+    "VASC": 33
+  },
+  "celltype_counts_full": {
+    "AST": 2334,
+    "IPC": 21748,
+    "IPC_prol": 9335,
+    "MIC": 885,
+    "NEU_CALB2": 10451,
+    "NEU_CUX2": 80672,
+    "NEU_RELN": 3768,
+    "NEU_RORB": 21204,
+    "NEU_SST": 13891,
+    "NEU_TLE4": 26777,
+    "NEU_low": 1856,
+    "OPC": 1580,
+    "RG": 43531,
+    "RG_prol": 10079,
+    "VASC": 887
+  },
+  "claim_boundaries": [
+    "Descriptive only; author cell-type labels are context, not independent truth.",
+    "Region-overlap sums are not total assay fragments or author ATAC QC.",
+    "The stratified proposal is a separately named future sensitivity; it does not alter the frozen matched sample and no model was fitted on it.",
+    "No biological mechanism or disease effect is claimed from these tables."
+  ],
+  "donor_invariance": {
+    "batch_seq": {
+      "donor_invariant": false,
+      "max_unique_per_donor": 2,
+      "n_varying_donors": 7,
+      "varying": [
+        {
+          "donor_id": "PCW11_DS_15405",
+          "values": [
+            "E21",
+            "E27"
+          ]
+        },
+        {
+          "donor_id": "PCW11_DS_17720",
+          "values": [
+            "E22",
+            "E27"
+          ]
+        },
+        {
+          "donor_id": "PCW13_DS_12740",
+          "values": [
+            "E23",
+            "E29"
+          ]
+        },
+        {
+          "donor_id": "PCW15_DS_15744",
+          "values": [
+            "E24",
+            "E28"
+          ]
+        },
+        {
+          "donor_id": "PCW17_CON_14310",
+          "values": [
+            "E18",
+            "E29"
+          ]
+        },
+        {
+          "donor_id": "PCW18_CON_16419",
+          "values": [
+            "E22",
+            "E28"
+          ]
+        },
+        {
+          "donor_id": "PCW18_DS_16485",
+          "values": [
+            "E22",
+            "E28"
+          ]
+        }
+      ]
+    },
+    "dev_PCW": {
+      "donor_invariant": true,
+      "max_unique_per_donor": 1,
+      "n_varying_donors": 0,
+      "varying": []
+    },
+    "development_stage": {
+      "donor_invariant": true,
+      "max_unique_per_donor": 1,
+      "n_varying_donors": 0,
+      "varying": []
+    },
+    "disease": {
+      "donor_invariant": true,
+      "max_unique_per_donor": 1,
+      "n_varying_donors": 0,
+      "varying": []
+    },
+    "library": {
+      "donor_invariant": false,
+      "max_unique_per_donor": 2,
+      "n_varying_donors": 7,
+      "per_donor": {
+        "PCW10_CON_11950": [
+          "B10C1Q"
+        ],
+        "PCW11_CON_17833": [
+          "B11C2H"
+        ],
+        "PCW11_DS_15405": [
+          "B11D1B",
+          "B11D1E"
+        ],
+        "PCW11_DS_17720": [
+          "B11D2F",
+          "B11D2G"
+        ],
+        "PCW12_CON_12152": [
+          "B12C1A"
+        ],
+        "PCW12_CON_14427": [
+          "B12C2G"
+        ],
+        "PCW12_CON_15569": [
+          "B12C4E"
+        ],
+        "PCW12_DS_12941": [
+          "B12D1F"
+        ],
+        "PCW12_DS_15186": [
+          "B12D3C"
+        ],
+        "PCW12_DS_15931": [
+          "B12D2D"
+        ],
+        "PCW13_CON_11928": [
+          "B13C2C"
+        ],
+        "PCW13_CON_15044": [
+          "B13C1"
+        ],
+        "PCW13_DS_12740": [
+          "B13D3G",
+          "B13D3H"
+        ],
+        "PCW13_DS_14239": [
+          "B13D1"
+        ],
+        "PCW13_DS_15848": [
+          "B13D4F"
+        ],
+        "PCW13_DS_16427": [
+          "B13D2D"
+        ],
+        "PCW14_CON_15077": [
+          "B14C1G"
+        ],
+        "PCW15_DS_15744": [
+          "B15D1K",
+          "B15D1M"
+        ],
+        "PCW16_CON_14940": [
+          "B16C1H"
+        ],
+        "PCW16_DS_15877": [
+          "B16D1L"
+        ],
+        "PCW17_CON_14310": [
+          "B17C2L",
+          "B17C2M"
+        ],
+        "PCW17_CON_14559": [
+          "B17C1J"
+        ],
+        "PCW17_DS_16070": [
+          "B17D1K"
+        ],
+        "PCW18_CON_16419": [
+          "B18C1P",
+          "B18C1S"
+        ],
+        "PCW18_CON_18189": [
+          "B18C2M"
+        ],
+        "PCW18_DS_16485": [
+          "B18D1Q",
+          "B18D1R"
+        ],
+        "PCW18_DS_16545": [
+          "B18D2L"
+        ],
+        "PCW20_CON_15167": [
+          "B20C1M"
+        ],
+        "PCW20_CON_17916": [
+          "B20C2E"
+        ],
+        "PCW20_DS_15619_13": [
+          "B20D1B"
+        ]
+      }
+    },
+    "sex": {
+      "donor_invariant": true,
+      "max_unique_per_donor": 1,
+      "n_varying_donors": 0,
+      "varying": []
+    },
+    "tissue_quality": {
+      "donor_invariant": true,
+      "max_unique_per_donor": 1,
+      "n_varying_donors": 0,
+      "varying": []
+    }
+  },
+  "excitatory_lineage_subset_counts_capped": {
+    "False": 1016,
+    "True": 6664
+  },
+  "excitatory_lineage_subset_counts_full": {
+    "False": 33318,
+    "True": 215680
+  },
+  "generated_at": "2026-09-22T06:05:29+00:00",
+  "inputs": {
+    "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "historical_matrix": "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+    "historical_matrix_sidecar": {
+      "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+      "count_unit": "unique_fragment_overlap",
+      "matrix_sha256": "81dfdf7c615dd2252792103a4917d87d949ffb46d3affe3aa0f20d3dd31ecf3f",
+      "nnz": 9513875,
+      "shape": [
+        480,
+        248998
+      ]
+    },
+    "historical_region_sets": "reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_historical_reproduction.json",
+    "tiebreak_matrix": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "tiebreak_matrix_sidecar": {
+      "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+      "count_unit": "unique_fragment_overlap",
+      "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+      "nnz": 9616203,
+      "shape": [
+        465,
+        248998
+      ]
+    },
+    "tiebreak_region_sets": "reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json"
+  },
+  "missingness": {
+    "TSS.enrichment": 0,
+    "author_cell_type": 0,
+    "batch_seq": 0,
+    "cell_class": 0,
+    "cells_in_excitatory_lineage_subset": 0,
+    "dev_PCW": 0,
+    "development_stage": 0,
+    "disease": 0,
+    "donor_id": 0,
+    "library": 0,
+    "nCount_ATAC": 0,
+    "nCount_RNA": 0,
+    "nFeature_ATAC": 0,
+    "nFeature_RNA": 0,
+    "nucleosome_signal": 0,
+    "percent.mt": 0,
+    "sex": 0,
+    "tissue_quality": 0
+  },
+  "model_fitted": false,
+  "n_accepted_cells": 248998,
+  "n_capped_cells": 7680,
+  "n_donors": 30,
+  "outcome_used_for_selection": false,
+  "program_feature_coverage": {
+    "panels": {
+      "historical_corrected": {
+        "genes": {
+          "BCL11B": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "CUX2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "EOMES": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "FEZF2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "FOXP1": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "NEUROD2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "NEUROD6": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "PAX6": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "RORA": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "RORB": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "SOX9": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "TCF7L2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "TLE4": {
+            "atac_regions_overlapping_locus": 1,
+            "overlapping_regions": [
+              "chr9:79571205-79572111"
+            ],
+            "rna_feature_present": true
+          }
+        },
+        "genes_with_any_overlapping_region": 1,
+        "n_regions": 480
+      },
+      "sha256_tiebreak": {
+        "genes": {
+          "BCL11B": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "CUX2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "EOMES": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "FEZF2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "FOXP1": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "NEUROD2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "NEUROD6": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "PAX6": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "RORA": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "RORB": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "SOX9": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "TCF7L2": {
+            "atac_regions_overlapping_locus": 0,
+            "overlapping_regions": [],
+            "rna_feature_present": true
+          },
+          "TLE4": {
+            "atac_regions_overlapping_locus": 1,
+            "overlapping_regions": [
+              "chr9:79571205-79572111"
+            ],
+            "rna_feature_present": true
+          }
+        },
+        "genes_with_any_overlapping_region": 1,
+        "n_regions": 465
+      }
+    },
+    "program": {
+      "name": "excitatory_subtype_maturation",
+      "predicted_regulators": [
+        "FEZF2",
+        "TCF7L2",
+        "RORA"
+      ],
+      "progenitor_markers": [
+        "SOX9",
+        "PAX6",
+        "EOMES"
+      ],
+      "source": "Lattke et al. 2026 Nat Med, doi:10.1038/s41591-026-04211-1 (same cohort)",
+      "subtype_markers": [
+        "RORB",
+        "FOXP1",
+        "TLE4",
+        "BCL11B",
+        "CUX2",
+        "NEUROD2",
+        "NEUROD6"
+      ]
+    }
+  },
+  "proposal": {
+    "historical_corrected": {
+      "by_celltype": [
+        {
+          "author_cell_type": "AST",
+          "n_cells": 83,
+          "nonzero_mean": 37.12048192771084,
+          "nonzero_median": 26.0,
+          "overlap_mean": 62.46987951807229
+        },
+        {
+          "author_cell_type": "IPC",
+          "n_cells": 660,
+          "nonzero_mean": 41.945454545454545,
+          "nonzero_median": 34.0,
+          "overlap_mean": 59.2
+        },
+        {
+          "author_cell_type": "IPC_prol",
+          "n_cells": 282,
+          "nonzero_mean": 49.797872340425535,
+          "nonzero_median": 39.5,
+          "overlap_mean": 71.93617021276596
+        },
+        {
+          "author_cell_type": "MIC",
+          "n_cells": 36,
+          "nonzero_mean": 41.861111111111114,
+          "nonzero_median": 25.5,
+          "overlap_mean": 77.41666666666667
+        },
+        {
+          "author_cell_type": "NEU_CALB2",
+          "n_cells": 315,
+          "nonzero_mean": 36.34603174603175,
+          "nonzero_median": 26.0,
+          "overlap_mean": 54.39365079365079
+        },
+        {
+          "author_cell_type": "NEU_CUX2",
+          "n_cells": 2638,
+          "nonzero_mean": 36.78847611827142,
+          "nonzero_median": 26.0,
+          "overlap_mean": 55.57619408642911
+        },
+        {
+          "author_cell_type": "NEU_RELN",
+          "n_cells": 124,
+          "nonzero_mean": 27.516129032258064,
+          "nonzero_median": 21.5,
+          "overlap_mean": 48.37096774193548
+        },
+        {
+          "author_cell_type": "NEU_RORB",
+          "n_cells": 643,
+          "nonzero_mean": 35.516329704510106,
+          "nonzero_median": 22.0,
+          "overlap_mean": 76.13219284603421
+        },
+        {
+          "author_cell_type": "NEU_SST",
+          "n_cells": 418,
+          "nonzero_mean": 36.251196172248804,
+          "nonzero_median": 27.0,
+          "overlap_mean": 67.10526315789474
+        },
+        {
+          "author_cell_type": "NEU_TLE4",
+          "n_cells": 760,
+          "nonzero_mean": 39.622368421052634,
+          "nonzero_median": 26.5,
+          "overlap_mean": 76.22368421052632
+        },
+        {
+          "author_cell_type": "NEU_low",
+          "n_cells": 64,
+          "nonzero_mean": 42.296875,
+          "nonzero_median": 26.5,
+          "overlap_mean": 65.6875
+        },
+        {
+          "author_cell_type": "OPC",
+          "n_cells": 59,
+          "nonzero_mean": 45.69491525423729,
+          "nonzero_median": 39.0,
+          "overlap_mean": 83.0677966101695
+        },
+        {
+          "author_cell_type": "RG",
+          "n_cells": 1268,
+          "nonzero_mean": 50.64905362776025,
+          "nonzero_median": 38.0,
+          "overlap_mean": 75.72634069400631
+        },
+        {
+          "author_cell_type": "RG_prol",
+          "n_cells": 294,
+          "nonzero_mean": 59.46938775510204,
+          "nonzero_median": 51.0,
+          "overlap_mean": 99.12925170068027
+        },
+        {
+          "author_cell_type": "VASC",
+          "n_cells": 36,
+          "nonzero_mean": 46.888888888888886,
+          "nonzero_median": 34.5,
+          "overlap_mean": 120.25
+        }
+      ],
+      "cap_per_donor": 256,
+      "description": "Within each donor allocate the cell cap across author cell types by deterministic largest remainder proportional to donor-level availability, reserving one cell per present stratum; take the lowest-index cells of each stratum. No random seed and no disease outcome is used.",
+      "n_cells": 7680,
+      "n_cells_expected": 7680,
+      "name": "donor_aware_celltype_stratified_v1",
+      "nonzero_regions": {
+        "max": 230.0,
+        "mean": 41.031901041666664,
+        "median": 29.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 14.0,
+        "q75": 54.0
+      },
+      "overlap_sum": {
+        "max": 1646.0,
+        "mean": 66.48489583333334,
+        "median": 39.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 18.0,
+        "q75": 80.0
+      },
+      "zero_cells": 34,
+      "zero_fraction": 0.004427083333333333
+    },
+    "sha256_tiebreak": {
+      "by_celltype": [
+        {
+          "author_cell_type": "AST",
+          "n_cells": 83,
+          "nonzero_mean": 36.602409638554214,
+          "nonzero_median": 27.0,
+          "overlap_mean": 63.10843373493976
+        },
+        {
+          "author_cell_type": "IPC",
+          "n_cells": 660,
+          "nonzero_mean": 43.00151515151515,
+          "nonzero_median": 34.0,
+          "overlap_mean": 60.97575757575758
+        },
+        {
+          "author_cell_type": "IPC_prol",
+          "n_cells": 282,
+          "nonzero_mean": 49.851063829787236,
+          "nonzero_median": 39.5,
+          "overlap_mean": 72.90425531914893
+        },
+        {
+          "author_cell_type": "MIC",
+          "n_cells": 36,
+          "nonzero_mean": 42.30555555555556,
+          "nonzero_median": 29.0,
+          "overlap_mean": 77.66666666666667
+        },
+        {
+          "author_cell_type": "NEU_CALB2",
+          "n_cells": 315,
+          "nonzero_mean": 37.111111111111114,
+          "nonzero_median": 25.0,
+          "overlap_mean": 56.05396825396826
+        },
+        {
+          "author_cell_type": "NEU_CUX2",
+          "n_cells": 2638,
+          "nonzero_mean": 37.051933282789996,
+          "nonzero_median": 27.0,
+          "overlap_mean": 56.23843821076573
+        },
+        {
+          "author_cell_type": "NEU_RELN",
+          "n_cells": 124,
+          "nonzero_mean": 29.177419354838708,
+          "nonzero_median": 21.5,
+          "overlap_mean": 50.87096774193548
+        },
+        {
+          "author_cell_type": "NEU_RORB",
+          "n_cells": 643,
+          "nonzero_mean": 35.50699844479005,
+          "nonzero_median": 22.0,
+          "overlap_mean": 76.48989113530327
+        },
+        {
+          "author_cell_type": "NEU_SST",
+          "n_cells": 418,
+          "nonzero_mean": 37.17942583732057,
+          "nonzero_median": 27.0,
+          "overlap_mean": 68.90430622009569
+        },
+        {
+          "author_cell_type": "NEU_TLE4",
+          "n_cells": 760,
+          "nonzero_mean": 39.15657894736842,
+          "nonzero_median": 26.5,
+          "overlap_mean": 75.70657894736843
+        },
+        {
+          "author_cell_type": "NEU_low",
+          "n_cells": 64,
+          "nonzero_mean": 40.828125,
+          "nonzero_median": 24.0,
+          "overlap_mean": 64.640625
+        },
+        {
+          "author_cell_type": "OPC",
+          "n_cells": 59,
+          "nonzero_mean": 46.57627118644068,
+          "nonzero_median": 38.0,
+          "overlap_mean": 84.7457627118644
+        },
+        {
+          "author_cell_type": "RG",
+          "n_cells": 1268,
+          "nonzero_mean": 51.16167192429022,
+          "nonzero_median": 39.0,
+          "overlap_mean": 77.03706624605678
+        },
+        {
+          "author_cell_type": "RG_prol",
+          "n_cells": 294,
+          "nonzero_mean": 60.744897959183675,
+          "nonzero_median": 53.5,
+          "overlap_mean": 101.74149659863946
+        },
+        {
+          "author_cell_type": "VASC",
+          "n_cells": 36,
+          "nonzero_mean": 44.916666666666664,
+          "nonzero_median": 30.5,
+          "overlap_mean": 117.52777777777777
+        }
+      ],
+      "cap_per_donor": 256,
+      "description": "Within each donor allocate the cell cap across author cell types by deterministic largest remainder proportional to donor-level availability, reserving one cell per present stratum; take the lowest-index cells of each stratum. No random seed and no disease outcome is used.",
+      "n_cells": 7680,
+      "n_cells_expected": 7680,
+      "name": "donor_aware_celltype_stratified_v1",
+      "nonzero_regions": {
+        "max": 222.0,
+        "mean": 41.3921875,
+        "median": 30.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 15.0,
+        "q75": 54.0
+      },
+      "overlap_sum": {
+        "max": 1642.0,
+        "mean": 67.4015625,
+        "median": 40.0,
+        "min": 0.0,
+        "n": 7680,
+        "q25": 18.0,
+        "q75": 80.0
+      },
+      "zero_cells": 17,
+      "zero_fraction": 0.0022135416666666666
+    }
+  },
+  "qc_by_celltype_capped": [
+    {
+      "TSS.enrichment": 3.4317153576800954,
+      "author_cell_type": "AST",
+      "nCount_ATAC": 2297.2261904761904,
+      "nCount_RNA": 3000.785714285714,
+      "nFeature_ATAC": 1108.6785714285713,
+      "nFeature_RNA": 1747.7142857142858,
+      "n_cells": 84,
+      "nucleosome_signal": 0.7258763046851284,
+      "percent.mt": 0.22859970526849016
+    },
+    {
+      "TSS.enrichment": 4.394535095464905,
+      "author_cell_type": "IPC",
+      "nCount_ATAC": 3874.3384188626906,
+      "nCount_RNA": 1873.7794729542302,
+      "nFeature_ATAC": 1814.253814147018,
+      "nFeature_RNA": 1159.4687933425798,
+      "n_cells": 721,
+      "nucleosome_signal": 0.7374556386308441,
+      "percent.mt": 0.22833811862716327
+    },
+    {
+      "TSS.enrichment": 4.142883474075092,
+      "author_cell_type": "IPC_prol",
+      "nCount_ATAC": 3895.380769230769,
+      "nCount_RNA": 2448.5730769230768,
+      "nFeature_ATAC": 1840.5692307692307,
+      "nFeature_RNA": 1493.626923076923,
+      "n_cells": 260,
+      "nucleosome_signal": 0.6839002775222766,
+      "percent.mt": 0.22292002896545335
+    },
+    {
+      "TSS.enrichment": 3.757293016862004,
+      "author_cell_type": "MIC",
+      "nCount_ATAC": 3212.814814814815,
+      "nCount_RNA": 2235.3333333333335,
+      "nFeature_ATAC": 1491.2592592592594,
+      "nFeature_RNA": 1354.6666666666667,
+      "n_cells": 27,
+      "nucleosome_signal": 0.7319123748758747,
+      "percent.mt": 0.31386823570799366
+    },
+    {
+      "TSS.enrichment": 4.6541589252559845,
+      "author_cell_type": "NEU_CALB2",
+      "nCount_ATAC": 2803.390879478827,
+      "nCount_RNA": 2045.1205211726385,
+      "nFeature_ATAC": 1309.9511400651465,
+      "nFeature_RNA": 1176.3550488599349,
+      "n_cells": 307,
+      "nucleosome_signal": 0.7697462156110805,
+      "percent.mt": 0.1785067138463683
+    },
+    {
+      "TSS.enrichment": 4.355504811885149,
+      "author_cell_type": "NEU_CUX2",
+      "nCount_ATAC": 2958.460596786534,
+      "nCount_RNA": 1981.6117061973987,
+      "nFeature_ATAC": 1412.836648814078,
+      "nFeature_RNA": 1190.7425401683245,
+      "n_cells": 2614,
+      "nucleosome_signal": 0.788547604034765,
+      "percent.mt": 0.18386336779858092
+    },
+    {
+      "TSS.enrichment": 3.6090556894875605,
+      "author_cell_type": "NEU_RELN",
+      "nCount_ATAC": 2648.4435483870966,
+      "nCount_RNA": 5052.629032258064,
+      "nFeature_ATAC": 1274.6693548387098,
+      "nFeature_RNA": 2323.7096774193546,
+      "n_cells": 124,
+      "nucleosome_signal": 0.7868088147473452,
+      "percent.mt": 0.2413280982409201
+    },
+    {
+      "TSS.enrichment": 3.0487856617181817,
+      "author_cell_type": "NEU_RORB",
+      "nCount_ATAC": 2922.2205438066467,
+      "nCount_RNA": 3752.666163141994,
+      "nFeature_ATAC": 1415.225075528701,
+      "nFeature_RNA": 1850.2764350453172,
+      "n_cells": 662,
+      "nucleosome_signal": 0.8449489344382504,
+      "percent.mt": 0.3260453857180544
+    },
+    {
+      "TSS.enrichment": 4.500725848245348,
+      "author_cell_type": "NEU_SST",
+      "nCount_ATAC": 2791.3963133640555,
+      "nCount_RNA": 2185.5115207373274,
+      "nFeature_ATAC": 1302.467741935484,
+      "nFeature_RNA": 1227.9078341013824,
+      "n_cells": 434,
+      "nucleosome_signal": 0.7697175616059547,
+      "percent.mt": 0.20117015825050383
+    },
+    {
+      "TSS.enrichment": 3.3049044690655363,
+      "author_cell_type": "NEU_TLE4",
+      "nCount_ATAC": 3485.35641025641,
+      "nCount_RNA": 4268.2692307692305,
+      "nFeature_ATAC": 1684.6294871794871,
+      "nFeature_RNA": 2059.7128205128206,
+      "n_cells": 780,
+      "nucleosome_signal": 0.8384957400736706,
+      "percent.mt": 0.33376499106231905
+    },
+    {
+      "TSS.enrichment": 3.607924178316155,
+      "author_cell_type": "NEU_low",
+      "nCount_ATAC": 2067.1555555555556,
+      "nCount_RNA": 2982.0444444444443,
+      "nFeature_ATAC": 1027.6444444444444,
+      "nFeature_RNA": 1576.2,
+      "n_cells": 45,
+      "nucleosome_signal": 0.7558301344933975,
+      "percent.mt": 0.17078394865241958
+    },
+    {
+      "TSS.enrichment": 3.8563579649410813,
+      "author_cell_type": "OPC",
+      "nCount_ATAC": 2273.6304347826085,
+      "nCount_RNA": 3182.413043478261,
+      "nFeature_ATAC": 1123.0652173913043,
+      "nFeature_RNA": 1712.695652173913,
+      "n_cells": 46,
+      "nucleosome_signal": 0.7441285302978784,
+      "percent.mt": 0.23514398336962788
+    },
+    {
+      "TSS.enrichment": 4.155254503621314,
+      "author_cell_type": "RG",
+      "nCount_ATAC": 4512.453632148377,
+      "nCount_RNA": 2623.9884080370944,
+      "nFeature_ATAC": 2094.680061823802,
+      "nFeature_RNA": 1565.2279752704792,
+      "n_cells": 1294,
+      "nucleosome_signal": 0.7618354834079509,
+      "percent.mt": 0.19678377348342116
+    },
+    {
+      "TSS.enrichment": 4.19954904907459,
+      "author_cell_type": "RG_prol",
+      "nCount_ATAC": 4963.349397590361,
+      "nCount_RNA": 3511.746987951807,
+      "nFeature_ATAC": 2278.7670682730923,
+      "nFeature_RNA": 1952.0441767068273,
+      "n_cells": 249,
+      "nucleosome_signal": 0.7825290377125685,
+      "percent.mt": 0.27919927440198977
+    },
+    {
+      "TSS.enrichment": 3.3613949498860105,
+      "author_cell_type": "VASC",
+      "nCount_ATAC": 3621.848484848485,
+      "nCount_RNA": 6091.666666666667,
+      "nFeature_ATAC": 1752.8484848484848,
+      "nFeature_RNA": 2854.4848484848485,
+      "n_cells": 33,
+      "nucleosome_signal": 0.6424823668137902,
+      "percent.mt": 1.0720395084181573
+    }
+  ],
+  "record_type": "cellstate_feasibility_tracked_evidence",
+  "sampling_seed": 22
+}
