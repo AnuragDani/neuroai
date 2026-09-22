@@ -42,20 +42,31 @@ exploratory estimate:
 - Faithfulness (corrected, 25 folds): RNA-view interventions dominate (view-A clamp /
   ablation drops ≈0.08–0.14), ATAC-view interventions are near zero or slightly
   negative, within-donor permutation ≈0, and uniform routing is measured only for the
-  gated family (drop 0.051). This is model dependence under a stated manipulation, not
-  causal biology.
+  gated family (drop 0.051). The near-zero permutation donor effect is paired with a
+  direct numerical check: the manipulation flips ≈12–31% of held-out cell labels
+  (view A 0.30–0.31, view B 0.13) and shifts confidence, so it is a genuine
+  aggregation effect, not a no-op or floating-point artefact. This is model
+  dependence under a stated manipulation, not causal biology.
 - Initialization sensitivity (corrected, donor splits fixed, five specified seeds
-  0–4): per-seed primary delta mean seed 0 +0.0083333, seed 1 +0.0126667,
-  seed 2 −0.0033333, seed 3 −0.009, seed 4 0.0 (spread 0.0216667) — the null
-  holds across initialization seeds. Seeds 0–2 reproduce the earlier three-seed
-  corrected record exactly; the three-seed record's initialization scope is
-  superseded by `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json`
-  while its interventions are unchanged and preserved.
+  0–4, **primary pooled-donor estimand**): per-seed delta seed 0 +0.0066667, seed 1
+  +0.0066667, seed 2 −0.0066667, seed 3 −0.0066667, seed 4 0.0 (spread 0.0133333);
+  advantage false for every seed. Seed 0 reproduces the primary corrected estimate
+  +0.0066667 and interval [−0.025, +0.0350074] **exactly**, so the initialization
+  summary now shares the declared aggregation and uncertainty of the primary
+  contrast instead of the different per-fold mean-of-balanced-accuracies estimand
+  (whose descriptive values are +0.0083333/+0.0126667/−0.0033333/−0.009/0.0, spread
+  0.0216667, retained only as `per_fold_descriptive`). Donor-level predictions are
+  stored in the source run's `donor_predictions.json`. Machine-readable record:
+  `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json`; the
+  earlier five-seed record's initialization scope is superseded by it while its
+  interventions are unchanged and preserved.
 - Machine-readable records:
   `docs/repeated_internal_comparison_corrected_2026-09-21.json`,
   `docs/real_paired_faithfulness_frozen_corrected_2026-09-21.json` (three-seed
   scope) and its five-seed supersession
-  `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json`,
+  `docs/real_paired_faithfulness_frozen_corrected5_2026-09-21.json` (five seeds,
+  per-fold descriptive estimand) and the primary-estimand supersession
+  `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json`,
   `docs/real_paired_normalization_sensitivity_corrected_2026-09-21.json`; the
   measured-artifact manifest is `configs/real_paired_input_manifest_2026-09-21.json`.
 
@@ -99,13 +110,14 @@ env $PY scripts/run_real_paired_normalization_sensitivity.py \
   --region-sets reports/generated/repeated_comparison_20260921/region_sets.json \
   --output-dir reports/generated/real_paired_normalization_corrected_20260921/run
 
-# 4. five specified initialization seeds (donor splits held fixed; ~105 s)
+# 4. five specified initialization seeds on the primary estimand
+#    (donor splits held fixed; ~105 s; writes donor_predictions.json)
 env $PY scripts/run_real_paired_faithfulness_frozen.py \
   --atac-matrix reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz \
   --region-sets reports/generated/repeated_comparison_20260921/region_sets.json \
   --acceptance-manifest configs/real_paired_input_manifest_2026-09-21.json \
   --init-seeds 0 1 2 3 4 \
-  --output-dir reports/generated/real_paired_faithfulness_frozen_corrected5_20260921/run
+  --output-dir reports/generated/real_paired_faithfulness_frozen_corrected5_primary_20260921/run
 ```
 
 ### Wiring defect found while executing
@@ -148,6 +160,8 @@ is preserved only as history. The corrected unit is declared prospectively in
 | #4 chromosome-1 feature bias | report-level correction (no code test; the bias is a property of the retained rule) | corrected prose in `MOM/2026-09-21/GNHF_P22_RESULTS_AND_PROFESSOR_HANDOFF.md` §2 to state the chr1 tie-break bias persists (163–219/256 per fold; union 308 chr1 / 110 chr10 / 1 chr21) and is retained for the measurement-correction comparison | audit: 163–219 of 256 regions per fold on chr1 | The biased feature set is retained by design so input correctness is not confounded with outcome-driven feature redesign; its limited coverage bounds any architecture conclusion |
 | #5 automatic scientific promotion | `tests/test_real_paired_acceptance.py` (19 tests: accepted fixture, missing manifest, old processed-`X`/read-support unit, hash/cell/region mismatch, held-out donor in feature discovery, overlapping train/test donors, protocol margin/family mismatch, non-prospective requirements, and the five inner-validation cases); `tests/test_build_real_paired_input_manifest.py` (5 tests) | shared `src/p22/eval/real_paired_acceptance.py` gate; `run_real_paired_comparison.py` and `run_real_paired_faithfulness_frozen.py` derive `scientific_claim_allowed`/`final_internal_estimate` from the decision instead of hardcoding `True`; `scripts/build_real_paired_input_manifest.py` emits the measured manifest; both entry points now pass `list(folds.values())` to `build_evidence` | historical inputs `REFUSED` (`atac_unit`, `manifest_present` and the three manifest-bound checks fail); corrected inputs **`ACCEPTED`** (11/11 checks, no blockers) after the manifest was generated | Resolved for the internal corrected run; external validation is still a separate gate |
 | #6 outer-only check misdescribed as nested validation | `tests/test_real_paired_acceptance.py::test_inner_validation_donor_from_test_set_refused`, `test_inner_validation_donor_not_in_training_refused`, `test_absent_inner_validation_donors_refused`, `test_undeclared_inner_validation_requirement_refused`, `test_wrong_selection_unit_refused` | new `inner_validation` check in `real_paired_acceptance.py`; `build_evidence` now binds each fold's inner `val_donors`/`selection_split`/`selection_unit` from the executable split via `_inner_validation_map`; `protocol.inner_validation` declared prospectively in `configs/real_paired_acceptance_2026-09-21.json` | corrected real inputs: `inner_validation` **PASS** ("all folds inner validation training-only and test-disjoint"), 11/11 checks, `ACCEPTED`; recorded in `docs/real_paired_inner_validation_2026-09-21.json` | Inner validation is verified to be a training-only, test-disjoint donor subset; the feature rule itself is unchanged and its chr1 bias still bounds any architecture conclusion |
+| #7 seed sensitivity used a different estimand | `tests/test_repeated_comparison.py::test_initialization_primary_sensitivity_uses_pooled_donor_estimand`, `test_initialization_primary_sensitivity_spread_over_seed_estimates`, `test_initialization_primary_sensitivity_refuses_empty` | new `initialization_primary_sensitivity` in `src/p22/eval/repeated_comparison.py` applies the declared pooled-donor estimand (pool donors across a repeat's folds, average each repeat's delta, resample donors) per seed; `run_real_paired_faithfulness_frozen.py` now stores donor-level predictions and reports `primary_estimand` per seed, retaining the old per-fold mean only as `per_fold_descriptive` | five-seed rerun: seed 0 estimate **+0.0066667** with interval **[−0.025, +0.0350074]**, exactly the primary corrected contrast; spread across seeds 0.0133333; `ACCEPTED`; record `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json` | Initialization sensitivity is now in the primary estimand; a near-zero spread is not a stability guarantee beyond the five seeds run |
+| #8 near-zero permutation effect without a numerical check | `tests/test_paired_faithfulness.py::test_aggregate_interventions_means_over_measured_folds`, `test_aggregate_interventions_manipulation_check_absent_is_none` | `aggregate_interventions` now surfaces each manipulation's direct per-fold numerical check (`cell_flip_rate_mean`, `mean_confidence_drop_mean`) that `run_donor_interventions` already computed instead of discarding it | corrected rerun: within-donor permutation flips **≈12–31%** of held-out cell labels (view A: 0.30–0.31; view B: 0.13) while the donor-level metric drop is ≈0, so the near-zero donor effect is a real aggregation effect, not a no-op or floating-point artefact | Intervention effects remain manipulation/model-dependence evidence, not causal biology |
 
 ## Acceptance binding (finding #5)
 
@@ -272,16 +286,18 @@ Result: local and remote cases all agree on per-barcode fragment counts
 ```
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts \
   /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/ -q
-# 1009 passed, 19 warnings in 63.21s
+# 1013 passed, 19 warnings in 57.83s
 
 ruff check scripts/query_fragment_regions.py scripts/quantify_development_atac.py \
   scripts/validate_reader_against_htslib.py scripts/run_real_paired_pilot.py \
   scripts/run_real_paired_comparison.py scripts/run_real_paired_faithfulness_frozen.py \
   scripts/check_real_paired_acceptance.py \
   src/p22/data/real_cohort.py src/p22/eval/real_paired_acceptance.py \
+  src/p22/eval/repeated_comparison.py src/p22/eval/paired_faithfulness.py \
   src/p22/eval/rna_donor_influence.py \
   tests/test_query_fragment_regions.py tests/test_quantify_development_atac.py \
-  tests/test_real_cohort.py tests/test_real_paired_acceptance.py
+  tests/test_real_cohort.py tests/test_real_paired_acceptance.py \
+  tests/test_repeated_comparison.py tests/test_paired_faithfulness.py
 # All checks passed
 ```
 
@@ -289,7 +305,9 @@ The RNA repair added 11 tests (5 raw-count/axis tests plus 6 axis-hardening test
 taking the suite from 969 to 980; the acceptance gate added 14 more (994); the
 measured-manifest builder added 5 more and the fragment-mode unit test added 1
 (1000); the measurement-correction reader added 4 (1004); the inner-validation check
-added 5 (1009). `donor_pseudobulk` (the only function the
+added 5 (1009); the primary-estimand initialization sensitivity added 3 and the
+intervention manipulation check added 1 (1013).
+`donor_pseudobulk` (the only function the
 frozen RNA donor-influence diagnostic calls) is unchanged, so its pinned source hash
 in `configs/rna_donor_influence.json` was amended prospectively with a recorded
 `source_code_amendments` entry and matching `CONFIG_SHA256`; no diagnostic replay is
@@ -310,6 +328,12 @@ claimed.
 - The corrected internal estimate (+0.0066667, 95% [−0.025, +0.0350074], margin
   0.07, advantage false) supersedes the old +0.0333333 for scientific acceptance.
   The old value and its artifacts remain preserved and reproducible.
+- The earlier initialization-sensitivity claim (per-seed delta means
+  +0.0083333/+0.0126667/−0.0033333/−0.009/0.0, spread 0.0216667) was computed with a
+  mean of per-fold balanced accuracies, a different estimand from the primary
+  pooled-donor contrast. It is retained only as `per_fold_descriptive`; the
+  seed-sensitivity claim is now the primary-estimand record
+  `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json`.
 
 ## Remaining incomplete work
 
@@ -341,6 +365,17 @@ claimed.
    shared gate now has an `inner_validation` check bound to the executable split;
    corrected real inputs PASS 11/11 and are `ACCEPTED`. See
    `docs/real_paired_inner_validation_2026-09-21.json`.
+8. ~~Reuse the primary pooled-donor estimand for the initialization-seed
+   sensitivity instead of the per-fold balanced-accuracy mean.~~ **Done (finding
+   #7):** `initialization_primary_sensitivity` now applies the declared aggregation
+   and uncertainty per seed, donor-level predictions are stored, and seed 0 exactly
+   reproduces the primary corrected contrast. See
+   `docs/real_paired_faithfulness_frozen_corrected5_primary_2026-09-21.json`.
+9. ~~Pair the near-zero permutation effect with a direct numerical check and narrow
+   its interpretation.~~ **Done (finding #8):** `aggregate_interventions` now
+   surfaces the per-fold `cell_flip_rate_mean`/`mean_confidence_drop_mean`; the
+   corrected rerun shows the permutation flips ≈12–31% of held-out cells while the
+   donor metric barely moves, so the effect is real aggregation, not float noise.
 
 All in-scope executable repair items from the review are now complete. The overall
 study remains **PARTIAL** only because external paired evaluation is separately
@@ -371,11 +406,12 @@ notebook.
   `[-0.025, +0.0350074]`, margin `0.07`, advantage `false`, acceptance `ACCEPTED`.
   The real-data model-fitting and remote ATAC regeneration cells are intentionally
   not executed in the safe-mode copy; they require the gated real mode.
-  Canonical notebook SHA-256 `9fdd9638e197338fbae7d5467a2d5f19cbe72b1550a445b5be31e9bcd8318e93`;
-  executed copy SHA-256 `55b3c6a30a8c54f8a09ea2017cefacd93f7a3ca0be9a375c311dbc912430b568`
-  (regenerated after the inner-validation gate change; 13 code cells, zero errors, the
-  corrected cell still prints `+0.0066667`, interval `[-0.025, +0.0350074]`, margin
-  `0.07`, advantage `false`, acceptance `ACCEPTED`).
+  Canonical notebook SHA-256 `0d3c6c8738cf3eaeebf17d487068a3b94a6b8eccacbb1d0e7ae7a7dd257d6411`;
+  executed copy SHA-256 `12fe98def69fef06712ee1c6945015df2a3ddd63d4812f212d7a7db494cdcf00`
+  (regenerated after the primary-estimand initialization and manipulation-check
+  changes; 13 code cells, zero errors, the corrected cell still prints `+0.0066667`,
+  interval `[-0.025, +0.0350074]`, margin `0.07`, advantage `false`, acceptance
+  `ACCEPTED`).
 - **Unsent professor update**: `docs/professor_update_2026-09-21/` (`one_pager.md`
   and the unsent `email.md`), separating the completed corrected internal work
   from the blocked external and absent biological validation.

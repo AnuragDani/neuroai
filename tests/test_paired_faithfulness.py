@@ -203,13 +203,15 @@ def test_initialization_seed_spread_rejects_empty_and_nonfinite():
         initialization_seed_spread({0: float("nan")})
 
 
-def _measured_row(name, before, after, drop, routing=None):
+def _measured_row(name, before, after, drop, routing=None, flip=0.0, confidence=0.0):
     return {
         "intervention": name,
         "status": "measured",
         "donor_balanced_accuracy_before": before,
         "donor_balanced_accuracy_after": after,
         "donor_balanced_accuracy_drop": drop,
+        "cell_flip_rate": flip,
+        "mean_confidence_drop": confidence,
         "routing_shift": routing,
     }
 
@@ -232,8 +234,18 @@ def _table(rows_by_name):
 def test_aggregate_interventions_means_over_measured_folds():
     clamp = CLAMP_VIEW_A
     tables = [
-        _table({name: _measured_row(name, 0.6, 0.4, 0.2) for name in INTERVENTIONS}),
-        _table({name: _measured_row(name, 0.4, 0.2, 0.2) for name in INTERVENTIONS}),
+        _table(
+            {
+                name: _measured_row(name, 0.6, 0.4, 0.2, flip=0.1, confidence=0.05)
+                for name in INTERVENTIONS
+            }
+        ),
+        _table(
+            {
+                name: _measured_row(name, 0.4, 0.2, 0.2, flip=0.3, confidence=0.15)
+                for name in INTERVENTIONS
+            }
+        ),
     ]
     summary = aggregate_interventions({"concat": tables})["concat"][clamp]
     assert summary["n_folds"] == 2
@@ -244,6 +256,26 @@ def test_aggregate_interventions_means_over_measured_folds():
     assert summary["donor_balanced_accuracy_drop_mean"] == pytest.approx(0.2)
     assert summary["donor_balanced_accuracy_drop_min"] == pytest.approx(0.2)
     assert summary["donor_balanced_accuracy_drop_max"] == pytest.approx(0.2)
+    assert summary["cell_flip_rate_mean"] == pytest.approx(0.2)
+    assert summary["mean_confidence_drop_mean"] == pytest.approx(0.1)
+
+
+def test_aggregate_interventions_manipulation_check_absent_is_none():
+    bare = {
+        "intervention": CLAMP_VIEW_A,
+        "status": "measured",
+        "donor_balanced_accuracy_before": 0.5,
+        "donor_balanced_accuracy_after": 0.4,
+        "donor_balanced_accuracy_drop": 0.1,
+        "routing_shift": None,
+    }
+    tables = [
+        _table({name: (bare if name == CLAMP_VIEW_A else _measured_row(name, 0.5, 0.4, 0.1))
+                for name in INTERVENTIONS})
+    ]
+    summary = aggregate_interventions({"concat": tables})["concat"][CLAMP_VIEW_A]
+    assert summary["cell_flip_rate_mean"] is None
+    assert summary["mean_confidence_drop_mean"] is None
 
 
 def test_aggregate_interventions_refusal_is_not_a_zero_effect():

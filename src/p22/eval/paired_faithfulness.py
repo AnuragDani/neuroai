@@ -228,6 +228,12 @@ def aggregate_interventions(
                 "donor_balanced_accuracy_drop_max": (
                     float(max(finite_drops)) if finite_drops else None
                 ),
+                "cell_flip_rate_mean": _mean_or_none(
+                    [row.get("cell_flip_rate") for row in measured]
+                ),
+                "mean_confidence_drop_mean": _mean_or_none(
+                    [row.get("mean_confidence_drop") for row in measured]
+                ),
                 "routing_shift_mean": _mean_or_none([row.get("routing_shift") for row in measured]),
                 "evidence": EVIDENCE_STATEMENT,
             }

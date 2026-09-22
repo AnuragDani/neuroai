@@ -27,8 +27,10 @@ for _path in (ROOT / "src", ROOT / "scripts"):
         sys.path.insert(0, str(_path))
 
 import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
 import torch  # noqa: E402
 
+from p22.data.group_splits import aggregate_donor_probabilities  # noqa: E402
 from p22.data.resources import environment_record, measure_stage  # noqa: E402
 from p22.eval.multiome_protocol import MultiomeProtocol  # noqa: E402
 from p22.eval.multiome_runner import model_inputs, paired_model, prepare_paired_fold  # noqa: E402
@@ -38,6 +40,7 @@ from p22.eval.paired_faithfulness import (  # noqa: E402
     initialization_seed_spread,
     run_donor_interventions,
 )
+from p22.eval.repeated_comparison import initialization_primary_sensitivity  # noqa: E402
 from p22.models.fusion import VIEW_A, VIEW_B  # noqa: E402
 from p22.training.loop import predict, train_model  # noqa: E402
 from run_real_paired_comparison import _acceptance_decision, _fold_map, _indices  # noqa: E402
@@ -78,6 +81,21 @@ def _donor_score(model, family, transformed, rows, labels, donors):
     return donor_balanced_accuracy(probabilities[:, 1], donors[rows], labels[rows])["value"]
 
 
+def _donor_predictions(model, family, transformed, rows, labels, donors):
+    """Donor-level prediction table for one family on one held-out fold.
+
+    Columns match the primary comparison (`donor_id`, `label`, `probability`), so the
+    initialization sensitivity can reuse the declared pooled-donor estimand instead
+    of a mean of per-fold balanced accuracies.
+    """
+    inputs = model_inputs(family, transformed)
+    _, probabilities = predict(model, {key: value[rows] for key, value in inputs.items()})
+    table = aggregate_donor_probabilities(probabilities[:, 1], donors[rows])
+    truth = pd.Series(labels[rows], index=donors[rows]).groupby(level=0).first()
+    table["label"] = table.donor_id.map(truth).astype(int)
+    return table
+
+
 def faithfulness_frozen_run(
     protocol,
     h5ad_path,
@@ -115,6 +133,7 @@ def faithfulness_frozen_run(
 
     fold_tables: dict[str, list] = {family: [] for family in INTERVENTION_FAMILIES}
     seed_records: dict[int, list] = {seed: [] for seed in seeds}
+    seed_tables: dict[int, dict[int, dict[str, list]]] = {seed: {} for seed in seeds}
     per_fold = []
     for entry in region_sets["per_fold"]:
         key = (entry["repeat"], entry["fold"])
@@ -156,6 +175,9 @@ def faithfulness_frozen_run(
                     else _fit(family, transformed, seed_protocol, labels, donors, indices)
                 )
                 scores[family] = _donor_score(model, family, transformed, test, labels, donors)
+                seed_tables[seed].setdefault(outer.repeat, {}).setdefault(family, []).append(
+                    _donor_predictions(model, family, transformed, test, labels, donors)
+                )
             seed_records[seed].append(
                 {
                     "repeat": outer.repeat,
@@ -199,6 +221,30 @@ def faithfulness_frozen_run(
             },
         }
 
+    seed_repeats: dict[int, list] = {}
+    for seed in seeds:
+        repeats = []
+        for repeat in sorted(seed_tables[seed]):
+            entry = {"repeat": int(repeat)}
+            for family in PRIMARY_FAMILIES:
+                entry[family] = pd.concat(
+                    seed_tables[seed][repeat][family], ignore_index=True
+                )
+            repeats.append(entry)
+        seed_repeats[seed] = repeats
+    primary_sensitivity = initialization_primary_sensitivity(seed_repeats)
+
+    donor_predictions = {
+        str(seed): {
+            str(repeat): {
+                family: pd.concat(frames, ignore_index=True).to_dict(orient="records")
+                for family, frames in families.items()
+            }
+            for repeat, families in sorted(seed_tables[seed].items())
+        }
+        for seed in seeds
+    }
+
     delta_means = {seed: seed_summary[seed]["delta_mean"] for seed in seeds}
     return {
         "data_mode": "real_development_frozen_fold_faithfulness",
@@ -215,11 +261,13 @@ def faithfulness_frozen_run(
             "n_union_regions": region_sets["n_union_regions"],
         },
         "per_fold": per_fold,
+        "donor_predictions": donor_predictions,
         "interventions": interventions,
         "initialization_sensitivity": {
             "seeds": seeds,
             "families": list(PRIMARY_FAMILIES),
-            "per_seed": seed_summary,
+            "primary_estimand": primary_sensitivity,
+            "per_fold_descriptive": seed_summary,
             "delta_mean_spread_across_seeds": initialization_seed_spread(delta_means),
             "cross_attention_mean_spread_across_seeds": initialization_seed_spread(
                 {seed: seed_summary[seed]["cross_attention_mean"] for seed in seeds}
@@ -228,9 +276,14 @@ def faithfulness_frozen_run(
                 {seed: seed_summary[seed]["token_concat_mean"] for seed in seeds}
             ),
             "note": (
-                "per_seed.delta_mean is the mean across folds of that fold's cross-attention "
-                "minus token-concat donor balanced accuracy; the spread across seeds is "
-                "initialization sensitivity with the donor splits held fixed"
+                "The initialization-sensitivity claim uses the same pooled donor-level "
+                "estimand as the primary contrast: donor predictions are pooled across "
+                "each repeat's held-out folds, each repeat's cross-attention minus "
+                "token-concat donor balanced accuracy is averaged across repeats, and "
+                "donors are resampled for the interval (primary_estimand). "
+                "per_fold_descriptive.delta_mean is the mean across folds of per-fold "
+                "balanced accuracies, which is a different estimand retained only for "
+                "description and must not be used as the seed-sensitivity claim."
             ),
         },
         "limitations": [
@@ -292,9 +345,14 @@ def main(argv=None):
     (args.output_dir / "per_fold.json").write_text(
         json.dumps(per_fold, indent=2, default=str) + "\n"
     )
+    donor_predictions = report.pop("donor_predictions")
+    (args.output_dir / "donor_predictions.json").write_text(
+        json.dumps(donor_predictions, indent=2, default=str) + "\n"
+    )
     (args.output_dir / "run.json").write_text(json.dumps(report, indent=2, default=str) + "\n")
 
     sensitivity = report["initialization_sensitivity"]
+    primary = sensitivity["primary_estimand"]
     lines = [
         "# Frozen-fold faithfulness and initialization sensitivity",
         "",
@@ -302,7 +360,11 @@ def main(argv=None):
         "",
         f"- Folds: {report['n_folds_run']} (5 repeats x 5 donor-isolated folds).",
         f"- Init seeds: {sensitivity['seeds']} (donor splits held fixed).",
-        f"- Primary delta (cross-attention minus token-concat) mean per seed: "
+        f"- Primary estimand delta (pooled donor, cross-attention minus token-concat) "
+        f"per seed: {primary['estimate_spread']['scores']} "
+        f"(spread {primary['estimate_spread']['spread']}, "
+        f"margin {primary['per_seed'][sensitivity['seeds'][0]]['practical_margin']}).",
+        f"- Descriptive per-fold balanced-accuracy mean per seed (different estimand): "
         f"{sensitivity['delta_mean_spread_across_seeds']['scores']} "
         f"(spread {sensitivity['delta_mean_spread_across_seeds']['spread']}).",
         "",
@@ -320,7 +382,8 @@ def main(argv=None):
         [
             "",
             "See run.json for the full per-family intervention table and per-seed records;",
-            "per_fold.json lists each fold's training-only region hash.",
+            "per_fold.json lists each fold's training-only region hash;",
+            "donor_predictions.json stores donor-level probabilities per seed/repeat/family.",
         ]
     )
     (args.output_dir / "SUMMARY.md").write_text("\n".join(lines) + "\n")

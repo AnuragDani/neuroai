@@ -36,7 +36,9 @@ The corrected matrix has identical sparsity but 5,601,677 of 9,513,875 stored
 counts differ from the historical read-support-weighted matrix, so the correction
 is a real measurement change, not a relabel. Normalization sensitivity (raw vs
 log1p) stays null, and the null holds across the five specified initialization
-seeds 0-4 (per-seed deltas +0.008, +0.013, -0.003, -0.009, 0.0; spread 0.022).
+seeds 0-4 measured on the same pooled-donor estimand as the primary contrast
+(per-seed deltas +0.0067, +0.0067, -0.0067, -0.0067, 0.0; spread 0.013; seed 0
+reproduces the primary interval exactly).
 
 ## What remains unresolved (external and biological)
 

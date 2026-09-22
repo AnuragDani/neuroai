@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from p22.eval.repeated_comparison import (
+    initialization_primary_sensitivity,
     repeated_model_accuracy,
     repeated_primary_contrast,
 )
@@ -122,3 +123,87 @@ def test_invalid_level_and_replicates_refused():
         repeated_primary_contrast(repeats, n_replicates=0)
     with pytest.raises(ValueError, match="level"):
         repeated_primary_contrast(repeats, level=1.0)
+
+
+def _uneven_class_repeat(seed: int, cross_flip: bool = False):
+    """One pooled repeat whose pooled delta differs from the per-fold delta mean.
+
+    The donors split into two held-out folds with different class balances:
+      fold A: d0=0, d1=1, d2=1
+      fold B: d3=0, d4=0, d5=1
+    Pooled across a repeat the donor balanced-accuracy delta is +1/6; averaged
+    per fold it is 0.0, because each fold is individually degenerate.
+    """
+    labels = [0, 1, 1, 0, 0, 1]
+    donors = [f"d{i}" for i in range(6)]
+    cross = [0.9, 0.9, 0.9, 0.1, 0.1, 0.1]  # predicts A correctly, B negatively
+    token = [0.1] * 6  # always predicts class 0
+    if cross_flip:
+        cross = [1.0 - value for value in cross]
+    return repeat_entry(seed, cross, token, labels, donors)
+
+
+def test_initialization_primary_sensitivity_uses_pooled_donor_estimand():
+    repeats = [_uneven_class_repeat(0)]
+    pooled = repeated_primary_contrast(repeats, n_replicates=40, seed=7)
+    result = initialization_primary_sensitivity({0: repeats}, n_replicates=40, seed=7)
+    summary = result["per_seed"][0]
+    assert summary["estimate"] == pooled["estimate"]
+    assert abs(summary["estimate"] - 1.0 / 6.0) < 1e-12
+    assert summary["n_donors"] == 6
+    assert summary["practical_margin"] == pooled["practical_margin"]
+
+    per_fold_deltas = [
+        repeated_primary_contrast(
+            [
+                repeat_entry(
+                    0,
+                    [0.9, 0.9, 0.9],
+                    [0.1, 0.1, 0.1],
+                    [0, 1, 1],
+                    ["d0", "d1", "d2"],
+                )
+            ],
+            n_replicates=5,
+            seed=7,
+        )["estimate"],
+        repeated_primary_contrast(
+            [
+                repeat_entry(
+                    0,
+                    [0.1, 0.1, 0.1],
+                    [0.1, 0.1, 0.1],
+                    [0, 0, 1],
+                    ["d3", "d4", "d5"],
+                )
+            ],
+            n_replicates=5,
+            seed=7,
+        )["estimate"],
+    ]
+    assert summary["estimate"] != pytest.approx(sum(float(v) for v in per_fold_deltas) / 2)
+    assert float(sum(per_fold_deltas) / 2) == 0.0
+
+
+def test_initialization_primary_sensitivity_spread_over_seed_estimates():
+    seed_repeats = {
+        0: [_uneven_class_repeat(0)],
+        1: [_uneven_class_repeat(0, cross_flip=True)],
+    }
+    result = initialization_primary_sensitivity(seed_repeats, n_replicates=40, seed=7)
+    assert result["n_seeds"] == 2
+    assert set(result["per_seed"]) == {0, 1}
+    scores = result["estimate_spread"]["scores"]
+    assert set(scores) == {0, 1}
+    assert result["estimate_spread"]["spread"] == pytest.approx(
+        max(scores.values()) - min(scores.values())
+    )
+    assert result["advantage_by_seed"] == {0: False, 1: False}
+    assert scores[0] != pytest.approx(scores[1])
+
+
+def test_initialization_primary_sensitivity_refuses_empty():
+    with pytest.raises(ValueError, match="at least one initialization seed"):
+        initialization_primary_sensitivity({})
+    with pytest.raises(ValueError, match="no repeats"):
+        initialization_primary_sensitivity({0: []})

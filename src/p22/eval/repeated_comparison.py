@@ -14,7 +14,7 @@ land on a single-class donor draw are counted as failed, never silently redrawn.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 import numpy as np
@@ -179,6 +179,57 @@ def repeated_primary_contrast(
         "failure_reasons": sorted(set(reasons)),
         "advantage_demonstrated": bool(estimate >= margin and lower is not None and lower > 0),
         "not_applicable": not_applicable,
+    }
+
+
+def initialization_primary_sensitivity(
+    seed_repeats: Mapping[int, Sequence[dict]],
+    *,
+    model: str = PRIMARY_MODEL,
+    reference: str = PRIMARY_REFERENCE,
+    n_replicates: int = 1000,
+    level: float = 0.95,
+    seed: int = 22,
+) -> dict[str, Any]:
+    """Initialization sensitivity on the primary donor-level estimand.
+
+    Each initialization seed is summarised with the *same* estimand as the primary
+    contrast: pool donor predictions across a repeat's held-out folds, form each
+    repeat's donor balanced-accuracy delta, average repeats, and resample donors for
+    the interval. The per-seed spread is therefore in the same units as the primary
+    estimate; it must not be computed from a mean of per-fold balanced accuracies,
+    which is a different estimand. The donor split is held fixed: only the model
+    initialization/optimization seed changes.
+    """
+    if not seed_repeats:
+        raise ValueError("at least one initialization seed is required")
+    per_seed: dict[int, dict[str, Any]] = {}
+    for init_seed, repeats in sorted(seed_repeats.items()):
+        if not repeats:
+            raise ValueError(f"initialization seed {init_seed} has no repeats")
+        per_seed[int(init_seed)] = repeated_primary_contrast(
+            repeats,
+            model=model,
+            reference=reference,
+            n_replicates=n_replicates,
+            level=level,
+            seed=seed,
+        )
+    from p22.eval.paired_faithfulness import initialization_seed_spread
+
+    estimates = {init_seed: summary["estimate"] for init_seed, summary in per_seed.items()}
+    return {
+        "estimand": "repeated_paired_donor_balanced_accuracy_delta",
+        "model": model,
+        "reference": reference,
+        "unit": "donor",
+        "per_seed": per_seed,
+        "estimate_spread": initialization_seed_spread(estimates),
+        "advantage_by_seed": {
+            init_seed: summary["advantage_demonstrated"]
+            for init_seed, summary in per_seed.items()
+        },
+        "n_seeds": len(per_seed),
     }
 
 
