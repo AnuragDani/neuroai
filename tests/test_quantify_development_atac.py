@@ -229,6 +229,72 @@ def test_quantify_regions_rejects_empty_and_bad_workers():
         raise AssertionError("zero workers must be refused")
 
 
+def test_retrying_transport_recovers_from_transient_faults():
+    import urllib.error
+
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    calls = {"n": 0}
+
+    def flaky(_url, start, end):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise urllib.error.URLError("temporary DNS failure")
+        return b"x" * (end - start + 1)
+
+    transport = module._RetryingTransport(flaky, retries=4, backoff=0, sleep=lambda _s: None)
+    assert transport("u", 0, 3) == b"xxxx"
+    assert calls["n"] == 3
+
+
+def test_retrying_transport_exhausts_and_propagates():
+    import urllib.error
+
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    calls = {"n": 0}
+
+    def always_fail(_url, _start, _end):
+        calls["n"] += 1
+        raise urllib.error.URLError("still down")
+
+    transport = module._RetryingTransport(always_fail, retries=2, backoff=0, sleep=lambda _s: None)
+    try:
+        transport("u", 0, 3)
+    except urllib.error.URLError:
+        pass
+    else:
+        raise AssertionError("exhausted retries must propagate the transport fault")
+    assert calls["n"] == 3
+
+
+def test_retrying_transport_does_not_retry_validation_errors():
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    calls = {"n": 0}
+
+    def bad_range(_url, _start, _end):
+        calls["n"] += 1
+        raise ValueError("server did not honor byte range")
+
+    transport = module._RetryingTransport(bad_range, retries=4, backoff=0, sleep=lambda _s: None)
+    try:
+        transport("u", 0, 3)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("validation errors must propagate immediately")
+    assert calls["n"] == 1
+
+
+def test_retrying_transport_validates_configuration():
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    for kwargs in ({"retries": -1}, {"backoff": -0.5}):
+        try:
+            module._RetryingTransport(lambda *_: b"", **kwargs)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"invalid retry configuration must be refused: {kwargs}")
+
+
 def test_main_refuses_existing_output(tmp_path, monkeypatch):
     module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
     regions = tmp_path / "regions.bed"

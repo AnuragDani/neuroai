@@ -1,0 +1,67 @@
+{
+  "record_type": "atac_tiebreak_measurement_contract",
+  "declared_at_utc": "2026-09-22T04:45:00Z",
+  "declared_at_local": "2026-09-21T21:45:00-07:00",
+  "status": "PROSPECTIVE_BOUNDED_ACQUISITION_BEFORE_NEW_UNION_MEASUREMENT",
+  "scope": "measure the sha256-tie-break 465-region union once from the same public indexed development ATAC fragment",
+  "starting_commit": "5e2165f619b149a2d05d9e0e4fc439c3bd0cfb81",
+  "protocol_amendment": "configs/atac_tiebreak_sensitivity_2026-09-21.json",
+  "source": {
+    "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+    "fragment_content_length_bytes": 25514837002,
+    "index_path": "reports/generated/development_region_set_20260921/fragment.tbi",
+    "genome_build": "GRCh38",
+    "count_mode": "fragment",
+    "count_unit": "unique_fragment_overlap",
+    "unknown_policy": "error",
+    "interval_rule": "a fragment record qualifies for region [beg, end) when fragment_start < end and fragment_end > beg; fragment_start >= fragment_end records are ignored",
+    "reader_contract": "configs/atac_measurement_contract_2026-09-21.json"
+  },
+  "region_set": {
+    "path": "reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json",
+    "union_bed": "reports/generated/atac_tiebreak_sensitivity_20260921/union_sha256.bed",
+    "union_bed_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+    "union_semantic_sha256": "4de10446c033a6bc187791770aab056e31c0998a0cbe68200f0d8d58fcbf850f",
+    "n_union_regions": 465,
+    "tie_break": "sha256",
+    "tie_break_salt": "p22-atac-tiebreak-v1"
+  },
+  "headroom_observed": {
+    "measured_at_local": "2026-09-21T21:45:00-07:00",
+    "disk_free_gb_decimal": 19.09,
+    "disk_free_gib": 17.78,
+    "reserve_required_gib": 10.0,
+    "host_memory_gb": 137.44,
+    "rechecked_not_reused": true
+  },
+  "budgets": {
+    "aggregate_transfer_bytes_max": 4000000000,
+    "aggregate_transfer_note": "finite cap; local tabix-chunk estimate is 3,171,155,968 bytes (3.171 GB); historical 480-region actual was 3,295,412,224 bytes against a 3,284,402,176-byte estimate (0.3% low), so the cap is ~26% above the estimate",
+    "temporary_disk_bytes_max": 1048576,
+    "temporary_disk_note": "one 256 KiB BGZF window is held in memory per worker; no fragment bytes are written to disk",
+    "retained_disk_bytes_max": 100000000,
+    "retained_disk_note": "sparse counts.npz (~16 MB) plus JSON sidecars in a fresh output directory",
+    "memory_bytes_max": 4000000000,
+    "per_operation_timeout_seconds": 120,
+    "workers": 8
+  },
+  "cost_estimate_method": "sum over union regions of merged tabix chunk byte spans, rounded up to 262144-byte windows, from the local .tbi; validated against the historical corrected 480-region acquisition",
+  "reuse_decision": {
+    "considered": "reuse historical corrected counts for the exact identical intervals",
+    "decision": "not applied",
+    "reason": "the historical matrix is keyed by the historical 480-region union order and no per-region reuse mechanism exists in the measurement tool; a single clean pass over the 465-region union avoids mixing two matrix assemblies and keeps one recorded measurement contract",
+    "overlap_with_historical_union": 105
+  },
+  "outputs": {
+    "counts_dir": "reports/generated/atac_tiebreak_measured_20260921/counts",
+    "quantify_json": "reports/generated/atac_tiebreak_measured_20260921/quantify.json"
+  },
+  "stop_rule": "if the aggregate transfer cap or a per-region 32 MiB cap would be exceeded, stop that acquisition with an exact cost/blocker record; do not accept partial counts, do not delete user artifacts, and continue independent baseline and feasibility work",
+  "preserved_artifacts": [
+    "configs/real_paired_acceptance_2026-09-21.json",
+    "configs/real_paired_input_manifest_2026-09-21.json",
+    "reports/generated/repeated_comparison_corrected_20260921/counts/counts.npz",
+    "configs/development_object_source_contract.json",
+    "docs/PAIRED_MULTIOME_REMAINING_EVIDENCE_2026-09-08.md"
+  ]
+}

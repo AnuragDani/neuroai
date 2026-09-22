@@ -1,0 +1,627 @@
+{
+  "record_type": "atac_tiebreak_measured_and_comparison_evidence",
+  "generated_at_local": "2026-09-21",
+  "scope": "Phase 2 measurement + Phase 3 comparison/controls for the sha256 tie-break ATAC representation sensitivity",
+  "starting_commit": "5e2165f619b149a2d05d9e0e4fc439c3bd0cfb81",
+  "protocol_amendment": {
+    "path": "configs/atac_tiebreak_sensitivity_2026-09-21.json",
+    "sha256": "560f5e68826f631091051f90851d9dff8d2f7d6217a8c9b9d7adfb4e593be5ac"
+  },
+  "measurement_contract": {
+    "path": "configs/atac_tiebreak_measurement_contract_2026-09-21.json",
+    "sha256": "65b352aa1755dfd435effec0b89e198823a343f50b26596575c0e30bdc0df8c4"
+  },
+  "region_set": {
+    "path": "reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json",
+    "sha256": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+    "union_bed": "reports/generated/atac_tiebreak_sensitivity_20260921/union_sha256.bed",
+    "union_bed_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+    "union_semantic_sha256": "4de10446c033a6bc187791770aab056e31c0998a0cbe68200f0d8d58fcbf850f",
+    "n_union_regions": 465,
+    "tie_break": "sha256",
+    "tie_break_salt": "p22-atac-tiebreak-v1"
+  },
+  "measurement": {
+    "counts_npz": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+    "shape": [
+      465,
+      248998
+    ],
+    "nnz": 9616203,
+    "count_unit": "unique_fragment_overlap",
+    "count_mode": "fragment",
+    "unknown_policy": "error",
+    "n_join_complete": 465,
+    "n_empty_regions": 0,
+    "n_truncated": 0,
+    "total_bytes_fetched": 3182166016,
+    "estimated_bytes": 3171155968,
+    "fragment_url": "https://datasets.cellxgene.cziscience.com/46b43994-2af5-4359-bf75-3314a0d3a7a5-fragment.tsv.bgz",
+    "index_sha256": "fd656ed4b287276d102a3aaf800d75678c081afee6fd8c580c747eb76dae306f",
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "transport_retries": 6
+  },
+  "acceptance": {
+    "requirements": {
+      "path": "configs/atac_tiebreak_acceptance_requirements_2026-09-21.json",
+      "sha256": "75b726672159439f720f45b0461ec6254b9c1b46766ce716827f2621a4ea3ecb"
+    },
+    "manifest": {
+      "path": "configs/atac_tiebreak_input_manifest_2026-09-21.json",
+      "sha256": "190b69bc70009de9fe995364c1236fbfb9a434e315c884b00137574ea8bf1ce2"
+    },
+    "decision": {
+      "blocking_checks": [],
+      "checks": {
+        "atac_artifact": {
+          "detail": "matrix_sha256=5f13c089c0b5... n_regions=465",
+          "status": "PASS"
+        },
+        "atac_unit": {
+          "detail": "count_unit='unique_fragment_overlap' count_mode='fragment' unknown_policy='error'",
+          "status": "PASS"
+        },
+        "cell_identity": {
+          "detail": "ordered h5ad cells and ATAC matrix columns must agree",
+          "status": "PASS"
+        },
+        "fold_provenance": {
+          "detail": "all folds training-only and donor-matched",
+          "status": "PASS"
+        },
+        "inner_validation": {
+          "detail": "all folds inner validation training-only and test-disjoint",
+          "status": "PASS"
+        },
+        "manifest_present": {
+          "detail": "manifest supplied",
+          "status": "PASS"
+        },
+        "population": {
+          "detail": "n_donors=30 15/15",
+          "status": "PASS"
+        },
+        "protocol_match": {
+          "detail": "families=6 margin=0.07 seeds(repeat/fold/split)=5/5/0",
+          "status": "PASS"
+        },
+        "region_identity": {
+          "detail": "union_sha256=4de10446c033... n_union_regions=465",
+          "status": "PASS"
+        },
+        "rna_artifact": {
+          "detail": "h5ad_sha256=08d6eff265db... n_cells=248998 n_genes=35477",
+          "status": "PASS"
+        },
+        "rna_representation": {
+          "detail": "matrix_key='raw/X' axis_key='raw/var' integer_counts_validated=True",
+          "status": "PASS"
+        }
+      },
+      "final_internal_estimate": true,
+      "manifest_sha256": "6bd1e417300f8eae90f1c95c496651c5babe1023a2714783c3153e666d585d66",
+      "requirements_sha256": "c411fef49020f891c575045bdb4855dab8768ec11e5493696f8a1bef3d8b8ac7",
+      "scientific_claim_allowed": true,
+      "status": "ACCEPTED"
+    }
+  },
+  "historical_corrected_reference": {
+    "path": "reports/generated/real_paired_comparison_corrected_20260921/run/run.json",
+    "union_sha256": "29ab67391139dff11b63a5de3980ae43e077aa5492d2a77591a9e3322bfd3f9e",
+    "n_union_regions": 480,
+    "primary": {
+      "estimate": 0.006666666666666665,
+      "interval": [
+        -0.025,
+        0.035007352941176476
+      ],
+      "practical_margin": 0.07,
+      "advantage_demonstrated": false,
+      "per_repeat_delta": {
+        "0": 0.0,
+        "1": 0.09999999999999998,
+        "2": 0.0,
+        "3": 0.0,
+        "4": -0.06666666666666665
+      },
+      "n_valid": 1000,
+      "n_failed": 0,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15
+    }
+  },
+  "tiebreak_comparison": {
+    "path": "reports/generated/atac_tiebreak_comparison_20260921/run/run.json",
+    "acceptance_status": "ACCEPTED",
+    "primary": {
+      "estimate": -0.020000000000000007,
+      "interval": [
+        -0.05333333333333332,
+        0.01131649310441878
+      ],
+      "practical_margin": 0.07,
+      "advantage_demonstrated": false,
+      "per_repeat_delta": {
+        "0": 0.0,
+        "1": 0.06666666666666665,
+        "2": 0.0,
+        "3": -0.033333333333333326,
+        "4": -0.13333333333333336
+      },
+      "n_valid": 1000,
+      "n_failed": 0,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15
+    },
+    "model_summaries": {
+      "rna_only": {
+        "mean": 0.5066666666666666,
+        "per_repeat": {
+          "0": 0.6333333333333333,
+          "1": 0.3666666666666667,
+          "2": 0.6,
+          "3": 0.5333333333333333,
+          "4": 0.4
+        }
+      },
+      "atac_only": {
+        "mean": 0.39333333333333337,
+        "per_repeat": {
+          "0": 0.43333333333333335,
+          "1": 0.33333333333333337,
+          "2": 0.5,
+          "3": 0.3666666666666667,
+          "4": 0.33333333333333337
+        }
+      },
+      "rna_atac_concat": {
+        "mean": 0.5133333333333333,
+        "per_repeat": {
+          "0": 0.6333333333333333,
+          "1": 0.43333333333333335,
+          "2": 0.6333333333333333,
+          "3": 0.4666666666666667,
+          "4": 0.4
+        }
+      },
+      "gated_fusion": {
+        "mean": 0.5199999999999999,
+        "per_repeat": {
+          "0": 0.6333333333333333,
+          "1": 0.4,
+          "2": 0.6333333333333333,
+          "3": 0.5,
+          "4": 0.43333333333333335
+        }
+      },
+      "token_concat": {
+        "mean": 0.5333333333333334,
+        "per_repeat": {
+          "0": 0.6666666666666667,
+          "1": 0.4,
+          "2": 0.6333333333333333,
+          "3": 0.5,
+          "4": 0.4666666666666667
+        }
+      },
+      "cross_attention": {
+        "mean": 0.5133333333333334,
+        "per_repeat": {
+          "0": 0.6666666666666667,
+          "1": 0.4666666666666667,
+          "2": 0.6333333333333333,
+          "3": 0.4666666666666667,
+          "4": 0.3333333333333333
+        }
+      },
+      "majority_control": {
+        "mean": 0.3666666666666667,
+        "per_repeat": {
+          "0": 0.3666666666666667,
+          "1": 0.30000000000000004,
+          "2": 0.43333333333333335,
+          "3": 0.3666666666666667,
+          "4": 0.36666666666666664
+        }
+      }
+    }
+  },
+  "tiebreak_five_seed_sensitivity": {
+    "path": "reports/generated/atac_tiebreak_faithfulness_20260921/run/run.json",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "primary_estimand": {
+      "estimand": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "cross_attention",
+      "reference": "token_concat",
+      "unit": "donor",
+      "per_seed": {
+        "0": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": 0.0,
+            "1": 0.06666666666666665,
+            "2": 0.0,
+            "3": -0.033333333333333326,
+            "4": -0.13333333333333336
+          },
+          "seed": 22,
+          "estimate": -0.020000000000000007,
+          "interval": [
+            -0.05333333333333332,
+            0.01131649310441878
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "1": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": -0.033333333333333326,
+            "1": -0.06666666666666665,
+            "2": 0.0,
+            "3": 0.033333333333333326,
+            "4": 0.06666666666666665
+          },
+          "seed": 22,
+          "estimate": 0.0,
+          "interval": [
+            -0.0389411764705882,
+            0.04821428571428571
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "2": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": 0.0,
+            "1": 0.09999999999999998,
+            "2": 0.0,
+            "3": 0.033333333333333326,
+            "4": 0.06666666666666671
+          },
+          "seed": 22,
+          "estimate": 0.04,
+          "interval": [
+            0.008033685064935061,
+            0.07500282805429864
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "3": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": -0.033333333333333326,
+            "1": -0.09999999999999998,
+            "2": 0.06666666666666665,
+            "3": 0.0,
+            "4": 0.0
+          },
+          "seed": 22,
+          "estimate": -0.01333333333333333,
+          "interval": [
+            -0.040000000000000015,
+            0.011961722488038284
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        },
+        "4": {
+          "metric": "repeated_paired_donor_balanced_accuracy_delta",
+          "model": "cross_attention",
+          "reference": "token_concat",
+          "unit": "donor",
+          "level": 0.95,
+          "n_repeats": 5,
+          "n_replicates_requested": 1000,
+          "n_donors": 30,
+          "n_control": 15,
+          "n_positive": 15,
+          "practical_margin": 0.07,
+          "per_repeat_delta": {
+            "0": 0.033333333333333326,
+            "1": 0.033333333333333326,
+            "2": 0.0,
+            "3": -0.033333333333333326,
+            "4": 0.0
+          },
+          "seed": 22,
+          "estimate": 0.006666666666666665,
+          "interval": [
+            -0.013898809523809489,
+            0.028592436974789907
+          ],
+          "n_valid": 1000,
+          "n_failed": 0,
+          "failure_reasons": [],
+          "advantage_demonstrated": false,
+          "not_applicable": null
+        }
+      },
+      "estimate_spread": {
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "scores": {
+          "0": -0.020000000000000007,
+          "1": 0.0,
+          "2": 0.04,
+          "3": -0.01333333333333333,
+          "4": 0.006666666666666665
+        },
+        "min": -0.020000000000000007,
+        "max": 0.04,
+        "mean": 0.0026666666666666657,
+        "spread": 0.06000000000000001,
+        "n_seeds": 5,
+        "evidence": "initialization-seed sensitivity with the donor split held fixed"
+      },
+      "advantage_by_seed": {
+        "0": false,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": false
+      },
+      "n_seeds": 5
+    },
+    "intervention_drop_summary": {
+      "rna_atac_concat": {
+        "clamp_view_a": 0.135,
+        "clamp_view_b": -0.01733333333333334,
+        "permute_view_a_within_donor": -0.009,
+        "permute_view_b_within_donor": -0.003999999999999999,
+        "ablate_view_a_embedding": 0.107,
+        "ablate_view_b_embedding": 0.009666666666666667,
+        "fixed_uniform_route": null
+      },
+      "gated_fusion": {
+        "clamp_view_a": 0.11166666666666666,
+        "clamp_view_b": 0.008333333333333326,
+        "permute_view_a_within_donor": 0.0,
+        "permute_view_b_within_donor": 0.0,
+        "ablate_view_a_embedding": 0.12133333333333331,
+        "ablate_view_b_embedding": -0.014333333333333344,
+        "fixed_uniform_route": 0.03066666666666667
+      },
+      "token_concat": {
+        "clamp_view_a": 0.08733333333333332,
+        "clamp_view_b": 0.028999999999999998,
+        "permute_view_a_within_donor": 0.0,
+        "permute_view_b_within_donor": 0.0040000000000000036,
+        "ablate_view_a_embedding": 0.15633333333333332,
+        "ablate_view_b_embedding": 0.024,
+        "fixed_uniform_route": null
+      },
+      "cross_attention": {
+        "clamp_view_a": 0.09099999999999998,
+        "clamp_view_b": 0.024999999999999994,
+        "permute_view_a_within_donor": 0.01,
+        "permute_view_b_within_donor": -0.005,
+        "ablate_view_a_embedding": 0.115,
+        "ablate_view_b_embedding": 0.01333333333333333,
+        "fixed_uniform_route": null
+      }
+    }
+  },
+  "linear_controls": {
+    "historical_corrected": {
+      "path": "reports/generated/atac_linear_controls_historical_20260921/run/run.json",
+      "acceptance_status": "ACCEPTED",
+      "model_means": {
+        "logreg_rna": 0.62,
+        "logreg_atac": 0.42000000000000004,
+        "logreg_concat": 0.6199999999999999
+      },
+      "per_repeat": {
+        "logreg_rna": {
+          "0": 0.7,
+          "1": 0.5666666666666667,
+          "2": 0.7,
+          "3": 0.6666666666666666,
+          "4": 0.4666666666666667
+        },
+        "logreg_atac": {
+          "0": 0.4666666666666667,
+          "1": 0.33333333333333337,
+          "2": 0.4666666666666667,
+          "3": 0.4666666666666667,
+          "4": 0.3666666666666667
+        },
+        "logreg_concat": {
+          "0": 0.6666666666666667,
+          "1": 0.6333333333333333,
+          "2": 0.7,
+          "3": 0.5666666666666667,
+          "4": 0.5333333333333333
+        }
+      },
+      "secondary_contrasts_vs_token_concat": {
+        "logreg_rna": {
+          "estimate": 0.10666666666666662,
+          "interval": [
+            0.013333333333333395,
+            0.2100178571428571
+          ],
+          "advantage_demonstrated": true,
+          "n_valid": 1000,
+          "n_failed": 0
+        },
+        "logreg_atac": {
+          "estimate": -0.09333333333333334,
+          "interval": [
+            -0.17897368421052628,
+            -0.010508693609022571
+          ],
+          "advantage_demonstrated": false,
+          "n_valid": 1000,
+          "n_failed": 0
+        },
+        "logreg_concat": {
+          "estimate": 0.10666666666666665,
+          "interval": [
+            0.041173844537815134,
+            0.1768038704716336
+          ],
+          "advantage_demonstrated": true,
+          "n_valid": 1000,
+          "n_failed": 0
+        }
+      },
+      "frozen_regularisation": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "random_state": 0
+      },
+      "all_converged": true,
+      "n_extension_used": 0
+    },
+    "tiebreak": {
+      "path": "reports/generated/atac_linear_controls_tiebreak_20260921/run/run.json",
+      "acceptance_status": "ACCEPTED",
+      "model_means": {
+        "logreg_rna": 0.62,
+        "logreg_atac": 0.4066666666666666,
+        "logreg_concat": 0.6133333333333333
+      },
+      "per_repeat": {
+        "logreg_rna": {
+          "0": 0.7,
+          "1": 0.5666666666666667,
+          "2": 0.7,
+          "3": 0.6666666666666666,
+          "4": 0.4666666666666667
+        },
+        "logreg_atac": {
+          "0": 0.4666666666666667,
+          "1": 0.3666666666666667,
+          "2": 0.4666666666666667,
+          "3": 0.43333333333333335,
+          "4": 0.3
+        },
+        "logreg_concat": {
+          "0": 0.6666666666666667,
+          "1": 0.6,
+          "2": 0.7,
+          "3": 0.5666666666666667,
+          "4": 0.5333333333333333
+        }
+      },
+      "secondary_contrasts_vs_token_concat": {
+        "logreg_rna": {
+          "estimate": 0.08666666666666663,
+          "interval": [
+            -0.013392963943950793,
+            0.1966665764575981
+          ],
+          "advantage_demonstrated": false,
+          "n_valid": 1000,
+          "n_failed": 0
+        },
+        "logreg_atac": {
+          "estimate": -0.12666666666666665,
+          "interval": [
+            -0.21579156223893067,
+            -0.041146402939166105
+          ],
+          "advantage_demonstrated": false,
+          "n_valid": 1000,
+          "n_failed": 0
+        },
+        "logreg_concat": {
+          "estimate": 0.07999999999999999,
+          "interval": [
+            0.0076307814992025375,
+            0.15895535714285713
+          ],
+          "advantage_demonstrated": true,
+          "n_valid": 1000,
+          "n_failed": 0
+        }
+      },
+      "frozen_regularisation": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "random_state": 0
+      },
+      "all_converged": true,
+      "n_extension_used": 0
+    }
+  },
+  "claim_boundaries": [
+    "Both representations give a null primary contrast; the sha256 sensitivity is exploratory and no cross-attention advantage is demonstrated in either.",
+    "The tie-break change removes lexicographic preference within prevalence ties; it is not genome-wide coverage or a validated regulatory panel.",
+    "Linear controls are secondary; they do not replace the declared cross-attention minus token-concat primary reference.",
+    "External paired data were not accessed; no biological mechanism is claimed."
+  ]
+}

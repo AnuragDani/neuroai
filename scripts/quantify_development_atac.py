@@ -16,9 +16,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import sys
 import threading
+import time
+import urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
@@ -37,6 +40,50 @@ class IncompleteQueryError(ValueError):
 
 class TransferBudgetExceeded(RuntimeError):
     """Raised when aggregate acquisition would exceed the declared byte budget."""
+
+
+# Transport-level failures only. A malformed Content-Range or an ignored range
+# raises ValueError inside http_range and is a real contract violation, not a
+# transient fault, so it is deliberately not retried.
+_TRANSIENT_TRANSPORT_ERRORS = (
+    urllib.error.URLError,
+    http.client.HTTPException,
+    TimeoutError,
+    ConnectionError,
+    OSError,
+)
+
+
+class _RetryingTransport:
+    """Bounded retry with exponential backoff for transient network faults.
+
+    A long remote acquisition can hit a momentary DNS or connection failure. Each
+    byte-range window is retried a fixed number of times before the failure is
+    propagated, so one transient fault cannot discard a completed acquisition.
+    Validation errors from the underlying transport (ValueError) are not retried.
+    """
+
+    def __init__(self, inner, retries: int = 4, backoff: float = 1.0, sleep=time.sleep):
+        if type(retries) is not int or retries < 0:
+            raise ValueError("retries must be a non-negative integer")
+        if backoff < 0:
+            raise ValueError("backoff must be non-negative")
+        self._inner = inner
+        self._retries = retries
+        self._backoff = float(backoff)
+        self._sleep = sleep
+
+    def __call__(self, url: str, start: int, end: int) -> bytes:
+        last: Exception | None = None
+        for attempt in range(self._retries + 1):
+            try:
+                return self._inner(url, start, end)
+            except _TRANSIENT_TRANSPORT_ERRORS as error:
+                last = error
+                if attempt < self._retries:
+                    self._sleep(self._backoff * (2**attempt))
+        assert last is not None
+        raise last
 
 
 class _BudgetedTransport:
@@ -162,6 +209,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--max-bytes-per-region", type=int, default=qfr.DEFAULT_MAX_BYTES_PER_REGION
     )
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument(
+        "--transport-retries",
+        type=int,
+        default=4,
+        help="bounded retries per byte-range window for transient network faults",
+    )
     parser.add_argument("--count-mode", choices=qfr.COUNT_MODES, default="fragment")
     parser.add_argument("--unknown-policy", choices=("error", "drop"), default="error")
     parser.add_argument("--total-max-bytes", type=int, default=None)
@@ -177,11 +230,15 @@ def main(argv: list[str] | None = None) -> int:
     regions = qfr.read_regions_file(str(args.regions_file))
     index = qfr.TabixIndex.from_path(args.index_path)
     cells = qfr.load_ordered_cells(args.obs_h5ad, args.allowlist_path)
+    transport = qfr.http_range
+    if args.transport_retries > 0:
+        transport = _RetryingTransport(transport, retries=args.transport_retries)
     records, _stats, matrix = quantify_regions(
         regions,
         cells,
         index,
         args.fragment_url,
+        transport=transport,
         window=args.window,
         max_bytes=args.max_bytes_per_region,
         workers=args.workers,
@@ -216,6 +273,7 @@ def main(argv: list[str] | None = None) -> int:
         "index_header": index.header,
         "window_bytes": args.window,
         "workers": args.workers,
+        "transport_retries": args.transport_retries,
         "count_mode": args.count_mode,
         "count_unit": qfr.COUNT_UNIT_LABELS[args.count_mode],
         "n_regions": len(regions),

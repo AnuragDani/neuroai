@@ -1,0 +1,33 @@
+{
+  "record_type": "real_paired_input_manifest",
+  "generated_at": "2026-09-22T05:21:03+00:00",
+  "scope": "corrected_development_paired_inputs",
+  "note": "Measured artifact manifest for the corrected run. Consumed by p22.eval.real_paired_acceptance; an ACCEPTED decision still requires the prospective requirements record and does not replace external validation.",
+  "rna": {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+    "matrix_key": "raw/X",
+    "axis_key": "raw/var",
+    "n_cells": 248998,
+    "n_genes": 35477,
+    "gene_axis_sha256": "feccc1c746332549d7d63a7a58a26727552e2b04d67d468e734fadfc0c5c2fb3",
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53"
+  },
+  "atac": {
+    "path": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+    "count_unit": "unique_fragment_overlap",
+    "count_mode": "fragment",
+    "unknown_policy": "error",
+    "n_regions": 465,
+    "n_cells": 248998,
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "regions_file_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23"
+  },
+  "region_sets": {
+    "path": "reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json",
+    "union_sha256": "4de10446c033a6bc187791770aab056e31c0998a0cbe68200f0d8d58fcbf850f",
+    "n_union_regions": 465,
+    "union_bed": "reports/generated/atac_tiebreak_sensitivity_20260921/union_sha256.bed"
+  }
+}
