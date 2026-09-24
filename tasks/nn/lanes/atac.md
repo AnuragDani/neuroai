@@ -1,2 +1,3 @@
 iter1 N18: fixed budget/retry composition to Retry(Budget(raw)); every attempt charged, exhausted budget non-retryable; added 3 regression tests; 15 passed, ruff clean.
 iter2 N19: recovered discarded builder+estimator+tests; fixed float tie-break (round z to 9dp) and reserve default 0.01->0.0; 30 passed, ruff clean; real build 548 genes / 3493593088 bytes, estimator validation 0.0.
+iter3 N20: preconditions ok (N18/N19 DONE, 14 GiB free, no quantify); launched bounded quantification pid 77658 -> reports/generated/nn_20260923/gene_activity/run.log, counts-out counts/, out quantify.json; status RUNNING.
