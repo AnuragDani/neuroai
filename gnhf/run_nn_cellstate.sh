@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -eu
+# Launch the P22-NN GNHF run (tasks/nn/plan.md) in the main P22 checkout, branch gnhf/p22-nn-cellstate.
+# Usage: bash run_nn_cellstate.sh [--check]
+#   --check  build the patched runtime, verify it, print the exact invocation, run nothing.
+WT="${P22_NN_WORKTREE:-/Users/anuragdani/Github/niw-eb1a/P22}"
+P27_TOOLS='/Users/anuragdani/Github/niw-eb1a/P27/gnhf'
+OPENCODE_BIN='/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/gnhf_runtime_20260921/node_modules/opencode-darwin-arm64/bin'
+MODEL='openrouter/deepseek/deepseek-v4.1-flash'
+
+test "$#" -eq 0 || { test "$#" -eq 1 && test "$1" = '--check'; } || {
+  printf '%s\n' 'Usage: bash run_nn_cellstate.sh [--check]' >&2; exit 1; }
+test -f "$WT/.git" -o -d "$WT/.git"
+test -f "$WT/tasks/nn/plan.md" -a -f "$WT/tasks/nn/todo.md"
+test -x "$OPENCODE_BIN/opencode"
+cd -- "$WT"
+test "$(git branch --show-current)" = 'gnhf/p22-nn-cellstate'
+
+# Stock GNHF throws "OpenCode produced no final answer" on DeepSeek output (6x in prior
+# P22 logs). Reuse the P27 compatibility builder; it only reads P27_WORKTREE as its target.
+P27_WORKTREE="$WT" python3 "$P27_TOOLS/runtime/prepare_gnhf.py"
+RUNTIME="$WT/.gnhf/p27-deepseek/gnhf-runtime/dist/cli.mjs"
+test -f "$RUNTIME"
+# ponytail: the replay fixture lives in the P27 worktree; replay there, then require byte-identical copies.
+P27_COPY='/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P27_ CompliantLLM/gnhf-deepseek-review/.gnhf/p27-deepseek/gnhf-runtime/dist/cli.mjs'
+if [ -f "$P27_COPY" ]; then
+  cmp -s "$RUNTIME" "$P27_COPY" || { echo 'Patched runtime differs from the replay-tested P27 copy' >&2; exit 1; }
+  node "$P27_TOOLS/runtime/test_gnhf_replay.mjs"
+else
+  echo 'WARN: P27 replay fixture absent; patched runtime built but not replay-tested.' >&2
+fi
+
+export PATH="$P27_TOOLS/runtime:$OPENCODE_BIN:$PATH"
+unset OPENCODE_CONFIG
+export XDG_CONFIG_HOME="$WT/.gnhf/p22-nn/config-home"
+export OPENCODE_CONFIG_DIR="$WT/.gnhf/p22-nn/config-dir"
+export OPENCODE_DISABLE_PROJECT_CONFIG=true
+export OPENCODE_ENABLE_EXA=false
+export GNHF_TELEMETRY=0
+AGENT_PROMPT='You execute tasks/nn/plan.md for P22. Each iteration: read the status table at the top of tasks/nn/todo.md, pick the first runnable TODO task, read only that task section with sed, implement it with tests, run focused pytest and ruff, update its status line and the Run log. Never ask the user; on failure record BLOCKED with evidence and move on. Never cat files over 200 lines, never print arrays or long logs, write code files in parts of at most 250 lines. Use no subagents. Final status contract, including after compaction: return only one JSON object with exactly these five keys and their shown types; no extra fields, fences, or prose. Set both booleans from the saved work, never infer success from this example: {"success":true,"summary":"Finished N1 sampler; N2 next.","key_changes_made":["Added src/p22/data/nn_sampling.py"],"key_learnings":["Seven donors span two libraries."],"should_fully_stop":false}'
+export OPENCODE_CONFIG_CONTENT="$(python3 - "$MODEL" "$AGENT_PROMPT" <<'EOF'
+import json, sys
+model, prompt = sys.argv[1], sys.argv[2]
+short = model.split('/', 1)[1]
+print(json.dumps({
+    "model": model, "small_model": model, "enabled_providers": ["openrouter"],
+    "autoupdate": False, "default_agent": "build",
+    "compaction": {"auto": True, "prune": True, "reserved": 16384},
+    "provider": {"openrouter": {"models": {short: {"limit": {"context": 65536, "output": 16384}}}}},
+    "agent": {"build": {"model": model, "steps": 60, "prompt": prompt}},
+    "permission": {"task": "deny"},
+}))
+EOF
+)"
+
+STOP_WHEN='Every task N0-N23 in tasks/nn/todo.md is DONE, BLOCKED:<reason> or NOT_NEEDED:<evidence>; docs/nn_v2/NN_V2_RESULTS_2026-09-23.md exists with the primary R3 cross-attention minus token-concat contrast and its CI; N23 verification passed. A BLOCKED Phase 5 does not prevent completion. Null results are valid; never tune toward a win.'
+CMD=(node "$RUNTIME" --current-branch --agent opencode --model "$MODEL"
+  --max-iterations 45 --max-tokens 120000000 --max-rate-limit-wait 0
+  --meteor-frequency 0 --prevent-sleep on --stop-when "$STOP_WHEN")
+
+if [ "${1:-}" = '--check' ]; then
+  printf 'Runtime ready. Would run in %s:\n' "$WT"
+  printf ' %q' "${CMD[@]}"; printf ' < tasks/nn/plan.md\n'
+  exit 0
+fi
+
+test -z "$(git status --porcelain)" || { echo 'Worktree has uncommitted changes; examine them first.' >&2; exit 1; }
+# ponytail: --max-tokens counts cached reads too; it is not a dollar cap. Provider key limit still applies.
+exec "${CMD[@]}" < tasks/nn/plan.md

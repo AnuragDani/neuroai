@@ -75,7 +75,7 @@ Sources: `VAULT/MOM/2026-07-02/MOM_07-02-2026_Transcript_and_Meeting_Notes.md`,
 
 | Alias | Path |
 |---|---|
-| `WT` (this worktree, branch `gnhf/p22-nn-cellstate`, base `ec562f4`) | `/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-nn-cellstate` |
+| `WT` (the main P22 checkout, branch `gnhf/p22-nn-cellstate`, base `ec562f4`; ALL code development happens here) | `/Users/anuragdani/Github/niw-eb1a/P22` |
 | `SRC_WT` (read-only inputs; ignored data lives here) | `/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8` |
 | `PY` | `/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python` with `PYTHONPATH=src:scripts`, `PYTHONDONTWRITEBYTECODE=1` |
 | H5AD | `/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad` (sha256 `08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb`) |
@@ -88,8 +88,10 @@ Sources: `VAULT/MOM/2026-07-02/MOM_07-02-2026_Transcript_and_Meeting_Notes.md`,
 | New tracked evidence | `WT/docs/nn_v2/` (compact JSON/MD only, each < 200 KB) |
 | Checklist to update | `WT/tasks/nn/todo.md` |
 
-Never write into `SRC_WT`, the main repo `/Users/anuragdani/Github/niw-eb1a/P22`, or the
-vault. Never modify `WT/tasks/plan.md`, `WT/tasks/todo.md` (historical plans) or this
+All new code, tests, configs and docs go under `WT` = `/Users/anuragdani/Github/niw-eb1a/P22`.
+Never write into `SRC_WT` (other GNHF worktree, read-only inputs) or the vault. Do not
+`git add` any path outside the files your task lists; 17 preserved untracked `docs/`
+drafts are excluded via `.git/info/exclude` and must stay untouched. Never modify `WT/tasks/plan.md`, `WT/tasks/todo.md` (historical plans) or this
 prompt file. Never delete or regenerate historical artifacts.
 
 ## 4. Scientific design (fixed; tasks implement it)
