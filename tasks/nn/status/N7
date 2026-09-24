@@ -1,1 +1,1 @@
-TODO
+DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired loss < shuffled, retrieval 1.0 identical / <0.02 shuffled (chance 1/256)

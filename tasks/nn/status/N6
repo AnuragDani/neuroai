@@ -1,1 +1,1 @@
-TODO
+DONE:src/p22/models/nuisance.py + tests/test_nn_nuisance.py (9 passed); `mil_loop._train_mil_epoch` meta["index"] added; synthetic planted-batch probe drop 0.231 (control 0.999→regularised 0.768, λ=3.0, 1500 ep, seeds 0/1), label probe 1.0
