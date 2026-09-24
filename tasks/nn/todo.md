@@ -12,7 +12,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | Task | Title | Deps | Size | Status |
 |---|---|---|---|---|
 | N0 | Startup snapshot + input manifest | — | XS | DONE:configs/nn_inputs_2026-09-23.json; all 4 sha256 inputs match; free=15GiB |
-| N1 | Stable donor×cell-type×library sampler | N0 | S | TODO |
+| N1 | Stable donor×cell-type×library sampler | N0 | S | DONE:src/p22/data/nn_sampling.py + tests/test_nn_sampling.py (7 passed) + docs/nn_v2/sampling_cap1000_seed22.json |
 | N2 | NN v2 data module + fold preprocessing | N1 | M | TODO |
 | N3 | Planted-signal generator | N2 | S | TODO |
 | N4 | Planted-signal benchmark run | N3 | M | TODO |
@@ -42,6 +42,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 `A-NEW-<n>` assumption here with a one-line rationale)
 
 - 2026-09-23T00:00Z N0 DONE. Manifest `configs/nn_inputs_2026-09-23.json`; H5AD, tie-break 465, historical 480, fragment.tbi all sha256 match plan §3; free disk 15 GiB, RAM 128 GiB; H5AD raw shape 248998×35477, all 13 required obs columns present, raw/var has seqnames/start/end. Next: N1.
+- 2026-09-23T18:58Z N1 DONE. New `src/p22/data/nn_sampling.py::sample_donor_stratified_cells(obs, cap, seed, strata=("author_cell_type","library"))` (hierarchical largest-remainder allocation, ≥1 per joint stratum when cap allows, sha256 tie-break, label-free). `tests/test_nn_sampling.py` 7 passed incl. real-obs check on all 7 two-library donors. Evidence `docs/nn_v2/sampling_cap1000_seed22.json` (cap1000 seed22: 30000 cells, 0 proportionality violations; cap256 reproduction block included). ruff clean. Next: N2.
 
 ---
 

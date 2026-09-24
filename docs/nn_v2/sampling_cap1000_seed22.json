@@ -1,0 +1,2709 @@
+{
+  "created_utc": "2026-09-24T01:56:54Z",
+  "git_head": "e1d12af185f537ad6e57ba36fed45ab827553517",
+  "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+  "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+  "primary": {
+    "cap": 1000,
+    "donors": {
+      "PCW10_CON_11950": {
+        "available": 18826,
+        "cell_type_available": {
+          "AST": 28,
+          "IPC": 1863,
+          "IPC_prol": 1033,
+          "MIC": 46,
+          "NEU_CALB2": 138,
+          "NEU_CUX2": 4449,
+          "NEU_RELN": 139,
+          "NEU_RORB": 90,
+          "NEU_SST": 379,
+          "NEU_TLE4": 1976,
+          "NEU_low": 319,
+          "OPC": 38,
+          "RG": 6424,
+          "RG_prol": 1771,
+          "VASC": 133
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 99,
+          "IPC_prol": 55,
+          "MIC": 3,
+          "NEU_CALB2": 8,
+          "NEU_CUX2": 234,
+          "NEU_RELN": 8,
+          "NEU_RORB": 6,
+          "NEU_SST": 21,
+          "NEU_TLE4": 104,
+          "NEU_low": 18,
+          "OPC": 3,
+          "RG": 337,
+          "RG_prol": 94,
+          "VASC": 8
+        },
+        "library_available": {
+          "B10C1Q": 18826
+        },
+        "library_selected": {
+          "B10C1Q": 1000
+        },
+        "selected": 1000
+      },
+      "PCW11_CON_17833": {
+        "available": 5227,
+        "cell_type_available": {
+          "AST": 5,
+          "IPC": 480,
+          "IPC_prol": 201,
+          "MIC": 10,
+          "NEU_CALB2": 22,
+          "NEU_CUX2": 1392,
+          "NEU_RELN": 42,
+          "NEU_RORB": 67,
+          "NEU_SST": 83,
+          "NEU_TLE4": 916,
+          "NEU_low": 16,
+          "OPC": 18,
+          "RG": 1638,
+          "RG_prol": 315,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 91,
+          "IPC_prol": 39,
+          "MIC": 3,
+          "NEU_CALB2": 5,
+          "NEU_CUX2": 263,
+          "NEU_RELN": 9,
+          "NEU_RORB": 14,
+          "NEU_SST": 17,
+          "NEU_TLE4": 174,
+          "NEU_low": 4,
+          "OPC": 4,
+          "RG": 310,
+          "RG_prol": 60,
+          "VASC": 5
+        },
+        "library_available": {
+          "B11C2H": 5227
+        },
+        "library_selected": {
+          "B11C2H": 1000
+        },
+        "selected": 1000
+      },
+      "PCW11_DS_15405": {
+        "available": 4289,
+        "cell_type_available": {
+          "AST": 93,
+          "IPC": 446,
+          "IPC_prol": 231,
+          "MIC": 16,
+          "NEU_CALB2": 66,
+          "NEU_CUX2": 1314,
+          "NEU_RELN": 276,
+          "NEU_RORB": 24,
+          "NEU_SST": 78,
+          "NEU_TLE4": 158,
+          "NEU_low": 9,
+          "OPC": 16,
+          "RG": 1256,
+          "RG_prol": 287,
+          "VASC": 19
+        },
+        "cell_type_selected": {
+          "AST": 23,
+          "IPC": 104,
+          "IPC_prol": 54,
+          "MIC": 6,
+          "NEU_CALB2": 17,
+          "NEU_CUX2": 300,
+          "NEU_RELN": 64,
+          "NEU_RORB": 7,
+          "NEU_SST": 20,
+          "NEU_TLE4": 37,
+          "NEU_low": 4,
+          "OPC": 5,
+          "RG": 286,
+          "RG_prol": 67,
+          "VASC": 6
+        },
+        "library_available": {
+          "B11D1B": 1040,
+          "B11D1E": 3249
+        },
+        "library_selected": {
+          "B11D1B": 243,
+          "B11D1E": 757
+        },
+        "selected": 1000
+      },
+      "PCW11_DS_17720": {
+        "available": 11644,
+        "cell_type_available": {
+          "AST": 43,
+          "IPC": 1367,
+          "IPC_prol": 729,
+          "MIC": 40,
+          "NEU_CALB2": 140,
+          "NEU_CUX2": 3582,
+          "NEU_RELN": 272,
+          "NEU_RORB": 15,
+          "NEU_SST": 281,
+          "NEU_TLE4": 667,
+          "NEU_low": 47,
+          "OPC": 67,
+          "RG": 3576,
+          "RG_prol": 784,
+          "VASC": 34
+        },
+        "cell_type_selected": {
+          "AST": 5,
+          "IPC": 116,
+          "IPC_prol": 62,
+          "MIC": 6,
+          "NEU_CALB2": 14,
+          "NEU_CUX2": 300,
+          "NEU_RELN": 25,
+          "NEU_RORB": 3,
+          "NEU_SST": 26,
+          "NEU_TLE4": 57,
+          "NEU_low": 6,
+          "OPC": 8,
+          "RG": 300,
+          "RG_prol": 67,
+          "VASC": 5
+        },
+        "library_available": {
+          "B11D2F": 6392,
+          "B11D2G": 5252
+        },
+        "library_selected": {
+          "B11D2F": 549,
+          "B11D2G": 451
+        },
+        "selected": 1000
+      },
+      "PCW12_CON_12152": {
+        "available": 6331,
+        "cell_type_available": {
+          "AST": 4,
+          "IPC": 140,
+          "IPC_prol": 57,
+          "MIC": 11,
+          "NEU_CALB2": 197,
+          "NEU_CUX2": 1614,
+          "NEU_RELN": 110,
+          "NEU_RORB": 1445,
+          "NEU_SST": 324,
+          "NEU_TLE4": 2063,
+          "NEU_low": 110,
+          "OPC": 26,
+          "RG": 159,
+          "RG_prol": 62,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 23,
+          "IPC_prol": 10,
+          "MIC": 3,
+          "NEU_CALB2": 32,
+          "NEU_CUX2": 252,
+          "NEU_RELN": 18,
+          "NEU_RORB": 226,
+          "NEU_SST": 51,
+          "NEU_TLE4": 322,
+          "NEU_low": 18,
+          "OPC": 5,
+          "RG": 26,
+          "RG_prol": 11,
+          "VASC": 2
+        },
+        "library_available": {
+          "B12C1A": 6331
+        },
+        "library_selected": {
+          "B12C1A": 1000
+        },
+        "selected": 1000
+      },
+      "PCW12_CON_14427": {
+        "available": 12279,
+        "cell_type_available": {
+          "AST": 99,
+          "IPC": 1415,
+          "IPC_prol": 666,
+          "MIC": 40,
+          "NEU_CALB2": 252,
+          "NEU_CUX2": 3814,
+          "NEU_RELN": 198,
+          "NEU_RORB": 54,
+          "NEU_SST": 342,
+          "NEU_TLE4": 1436,
+          "NEU_low": 21,
+          "OPC": 74,
+          "RG": 3212,
+          "RG_prol": 625,
+          "VASC": 31
+        },
+        "cell_type_selected": {
+          "AST": 9,
+          "IPC": 115,
+          "IPC_prol": 54,
+          "MIC": 4,
+          "NEU_CALB2": 21,
+          "NEU_CUX2": 307,
+          "NEU_RELN": 17,
+          "NEU_RORB": 5,
+          "NEU_SST": 28,
+          "NEU_TLE4": 116,
+          "NEU_low": 3,
+          "OPC": 7,
+          "RG": 259,
+          "RG_prol": 51,
+          "VASC": 4
+        },
+        "library_available": {
+          "B12C2G": 12279
+        },
+        "library_selected": {
+          "B12C2G": 1000
+        },
+        "selected": 1000
+      },
+      "PCW12_CON_15569": {
+        "available": 8135,
+        "cell_type_available": {
+          "AST": 23,
+          "IPC": 986,
+          "IPC_prol": 502,
+          "MIC": 21,
+          "NEU_CALB2": 61,
+          "NEU_CUX2": 2753,
+          "NEU_RELN": 14,
+          "NEU_RORB": 36,
+          "NEU_SST": 81,
+          "NEU_TLE4": 448,
+          "NEU_low": 23,
+          "OPC": 72,
+          "RG": 2530,
+          "RG_prol": 565,
+          "VASC": 20
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 120,
+          "IPC_prol": 62,
+          "MIC": 4,
+          "NEU_CALB2": 8,
+          "NEU_CUX2": 334,
+          "NEU_RELN": 3,
+          "NEU_RORB": 5,
+          "NEU_SST": 11,
+          "NEU_TLE4": 55,
+          "NEU_low": 4,
+          "OPC": 10,
+          "RG": 307,
+          "RG_prol": 69,
+          "VASC": 4
+        },
+        "library_available": {
+          "B12C4E": 8135
+        },
+        "library_selected": {
+          "B12C4E": 1000
+        },
+        "selected": 1000
+      },
+      "PCW12_DS_12941": {
+        "available": 14310,
+        "cell_type_available": {
+          "AST": 132,
+          "IPC": 1435,
+          "IPC_prol": 665,
+          "MIC": 50,
+          "NEU_CALB2": 134,
+          "NEU_CUX2": 3880,
+          "NEU_RELN": 41,
+          "NEU_RORB": 167,
+          "NEU_SST": 196,
+          "NEU_TLE4": 2803,
+          "NEU_low": 44,
+          "OPC": 71,
+          "RG": 3868,
+          "RG_prol": 773,
+          "VASC": 51
+        },
+        "cell_type_selected": {
+          "AST": 10,
+          "IPC": 100,
+          "IPC_prol": 47,
+          "MIC": 4,
+          "NEU_CALB2": 10,
+          "NEU_CUX2": 268,
+          "NEU_RELN": 4,
+          "NEU_RORB": 13,
+          "NEU_SST": 14,
+          "NEU_TLE4": 194,
+          "NEU_low": 4,
+          "OPC": 6,
+          "RG": 267,
+          "RG_prol": 54,
+          "VASC": 5
+        },
+        "library_available": {
+          "B12D1F": 14310
+        },
+        "library_selected": {
+          "B12D1F": 1000
+        },
+        "selected": 1000
+      },
+      "PCW12_DS_15186": {
+        "available": 7534,
+        "cell_type_available": {
+          "AST": 2,
+          "IPC": 611,
+          "IPC_prol": 187,
+          "MIC": 28,
+          "NEU_CALB2": 99,
+          "NEU_CUX2": 2557,
+          "NEU_RELN": 52,
+          "NEU_RORB": 657,
+          "NEU_SST": 124,
+          "NEU_TLE4": 1719,
+          "NEU_low": 32,
+          "OPC": 22,
+          "RG": 1242,
+          "RG_prol": 188,
+          "VASC": 14
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 81,
+          "IPC_prol": 25,
+          "MIC": 5,
+          "NEU_CALB2": 14,
+          "NEU_CUX2": 335,
+          "NEU_RELN": 8,
+          "NEU_RORB": 87,
+          "NEU_SST": 17,
+          "NEU_TLE4": 226,
+          "NEU_low": 5,
+          "OPC": 4,
+          "RG": 163,
+          "RG_prol": 26,
+          "VASC": 3
+        },
+        "library_available": {
+          "B12D3C": 7534
+        },
+        "library_selected": {
+          "B12D3C": 1000
+        },
+        "selected": 1000
+      },
+      "PCW12_DS_15931": {
+        "available": 6795,
+        "cell_type_available": {
+          "AST": 12,
+          "IPC": 576,
+          "IPC_prol": 327,
+          "MIC": 25,
+          "NEU_CALB2": 329,
+          "NEU_CUX2": 3166,
+          "NEU_RELN": 70,
+          "NEU_RORB": 137,
+          "NEU_SST": 430,
+          "NEU_TLE4": 372,
+          "NEU_low": 11,
+          "OPC": 49,
+          "RG": 1010,
+          "RG_prol": 259,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 84,
+          "IPC_prol": 48,
+          "MIC": 5,
+          "NEU_CALB2": 49,
+          "NEU_CUX2": 460,
+          "NEU_RELN": 11,
+          "NEU_RORB": 21,
+          "NEU_SST": 63,
+          "NEU_TLE4": 55,
+          "NEU_low": 3,
+          "OPC": 8,
+          "RG": 147,
+          "RG_prol": 39,
+          "VASC": 4
+        },
+        "library_available": {
+          "B12D2D": 6795
+        },
+        "library_selected": {
+          "B12D2D": 1000
+        },
+        "selected": 1000
+      },
+      "PCW13_CON_11928": {
+        "available": 4426,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 652,
+          "IPC_prol": 207,
+          "MIC": 10,
+          "NEU_CALB2": 176,
+          "NEU_CUX2": 1839,
+          "NEU_RELN": 37,
+          "NEU_RORB": 41,
+          "NEU_SST": 461,
+          "NEU_TLE4": 17,
+          "NEU_low": 22,
+          "OPC": 20,
+          "RG": 740,
+          "RG_prol": 182,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 146,
+          "IPC_prol": 47,
+          "MIC": 3,
+          "NEU_CALB2": 40,
+          "NEU_CUX2": 410,
+          "NEU_RELN": 9,
+          "NEU_RORB": 10,
+          "NEU_SST": 104,
+          "NEU_TLE4": 5,
+          "NEU_low": 6,
+          "OPC": 5,
+          "RG": 166,
+          "RG_prol": 42,
+          "VASC": 3
+        },
+        "library_available": {
+          "B13C2C": 4426
+        },
+        "library_selected": {
+          "B13C2C": 1000
+        },
+        "selected": 1000
+      },
+      "PCW13_CON_15044": {
+        "available": 6382,
+        "cell_type_available": {
+          "AST": 7,
+          "IPC": 683,
+          "IPC_prol": 312,
+          "MIC": 19,
+          "NEU_CALB2": 232,
+          "NEU_CUX2": 2661,
+          "NEU_RELN": 13,
+          "NEU_RORB": 184,
+          "NEU_SST": 226,
+          "NEU_TLE4": 551,
+          "NEU_low": 20,
+          "OPC": 32,
+          "RG": 1136,
+          "RG_prol": 291,
+          "VASC": 15
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 107,
+          "IPC_prol": 49,
+          "MIC": 4,
+          "NEU_CALB2": 37,
+          "NEU_CUX2": 412,
+          "NEU_RELN": 3,
+          "NEU_RORB": 29,
+          "NEU_SST": 36,
+          "NEU_TLE4": 86,
+          "NEU_low": 4,
+          "OPC": 6,
+          "RG": 176,
+          "RG_prol": 46,
+          "VASC": 3
+        },
+        "library_available": {
+          "B13C1": 6382
+        },
+        "library_selected": {
+          "B13C1": 1000
+        },
+        "selected": 1000
+      },
+      "PCW13_DS_12740": {
+        "available": 7413,
+        "cell_type_available": {
+          "AST": 22,
+          "IPC": 755,
+          "IPC_prol": 400,
+          "MIC": 12,
+          "NEU_CALB2": 376,
+          "NEU_CUX2": 2562,
+          "NEU_RELN": 95,
+          "NEU_RORB": 158,
+          "NEU_SST": 378,
+          "NEU_TLE4": 447,
+          "NEU_low": 34,
+          "OPC": 40,
+          "RG": 1720,
+          "RG_prol": 392,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 5,
+          "IPC": 101,
+          "IPC_prol": 54,
+          "MIC": 4,
+          "NEU_CALB2": 51,
+          "NEU_CUX2": 337,
+          "NEU_RELN": 14,
+          "NEU_RORB": 23,
+          "NEU_SST": 52,
+          "NEU_TLE4": 60,
+          "NEU_low": 7,
+          "OPC": 7,
+          "RG": 227,
+          "RG_prol": 53,
+          "VASC": 5
+        },
+        "library_available": {
+          "B13D3G": 2997,
+          "B13D3H": 4416
+        },
+        "library_selected": {
+          "B13D3G": 404,
+          "B13D3H": 596
+        },
+        "selected": 1000
+      },
+      "PCW13_DS_14239": {
+        "available": 8002,
+        "cell_type_available": {
+          "AST": 7,
+          "IPC": 956,
+          "IPC_prol": 403,
+          "MIC": 35,
+          "NEU_CALB2": 274,
+          "NEU_CUX2": 2687,
+          "NEU_RELN": 32,
+          "NEU_RORB": 73,
+          "NEU_SST": 295,
+          "NEU_TLE4": 1088,
+          "NEU_low": 70,
+          "OPC": 75,
+          "RG": 1623,
+          "RG_prol": 370,
+          "VASC": 14
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 119,
+          "IPC_prol": 50,
+          "MIC": 5,
+          "NEU_CALB2": 35,
+          "NEU_CUX2": 332,
+          "NEU_RELN": 5,
+          "NEU_RORB": 10,
+          "NEU_SST": 37,
+          "NEU_TLE4": 135,
+          "NEU_low": 10,
+          "OPC": 10,
+          "RG": 201,
+          "RG_prol": 46,
+          "VASC": 3
+        },
+        "library_available": {
+          "B13D1": 8002
+        },
+        "library_selected": {
+          "B13D1": 1000
+        },
+        "selected": 1000
+      },
+      "PCW13_DS_15848": {
+        "available": 4950,
+        "cell_type_available": {
+          "AST": 203,
+          "IPC": 619,
+          "IPC_prol": 293,
+          "MIC": 12,
+          "NEU_CALB2": 72,
+          "NEU_CUX2": 1315,
+          "NEU_RELN": 59,
+          "NEU_RORB": 18,
+          "NEU_SST": 47,
+          "NEU_TLE4": 61,
+          "NEU_low": 30,
+          "OPC": 18,
+          "RG": 1822,
+          "RG_prol": 366,
+          "VASC": 15
+        },
+        "cell_type_selected": {
+          "AST": 41,
+          "IPC": 124,
+          "IPC_prol": 59,
+          "MIC": 3,
+          "NEU_CALB2": 15,
+          "NEU_CUX2": 263,
+          "NEU_RELN": 13,
+          "NEU_RORB": 5,
+          "NEU_SST": 10,
+          "NEU_TLE4": 13,
+          "NEU_low": 7,
+          "OPC": 5,
+          "RG": 364,
+          "RG_prol": 74,
+          "VASC": 4
+        },
+        "library_available": {
+          "B13D4F": 4950
+        },
+        "library_selected": {
+          "B13D4F": 1000
+        },
+        "selected": 1000
+      },
+      "PCW13_DS_16427": {
+        "available": 5788,
+        "cell_type_available": {
+          "AST": 159,
+          "IPC": 562,
+          "IPC_prol": 194,
+          "MIC": 16,
+          "NEU_CALB2": 360,
+          "NEU_CUX2": 1342,
+          "NEU_RELN": 414,
+          "NEU_RORB": 159,
+          "NEU_SST": 512,
+          "NEU_TLE4": 451,
+          "NEU_low": 54,
+          "OPC": 52,
+          "RG": 1246,
+          "RG_prol": 245,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 28,
+          "IPC": 97,
+          "IPC_prol": 34,
+          "MIC": 4,
+          "NEU_CALB2": 62,
+          "NEU_CUX2": 229,
+          "NEU_RELN": 71,
+          "NEU_RORB": 28,
+          "NEU_SST": 88,
+          "NEU_TLE4": 78,
+          "NEU_low": 10,
+          "OPC": 10,
+          "RG": 213,
+          "RG_prol": 43,
+          "VASC": 5
+        },
+        "library_available": {
+          "B13D2D": 5788
+        },
+        "library_selected": {
+          "B13D2D": 1000
+        },
+        "selected": 1000
+      },
+      "PCW14_CON_15077": {
+        "available": 5011,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 384,
+          "IPC_prol": 79,
+          "MIC": 21,
+          "NEU_CALB2": 352,
+          "NEU_CUX2": 1579,
+          "NEU_RELN": 81,
+          "NEU_RORB": 1051,
+          "NEU_SST": 420,
+          "NEU_TLE4": 558,
+          "NEU_low": 24,
+          "OPC": 28,
+          "RG": 343,
+          "RG_prol": 62,
+          "VASC": 16
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 76,
+          "IPC_prol": 17,
+          "MIC": 5,
+          "NEU_CALB2": 70,
+          "NEU_CUX2": 311,
+          "NEU_RELN": 17,
+          "NEU_RORB": 208,
+          "NEU_SST": 84,
+          "NEU_TLE4": 111,
+          "NEU_low": 6,
+          "OPC": 6,
+          "RG": 68,
+          "RG_prol": 13,
+          "VASC": 4
+        },
+        "library_available": {
+          "B14C1G": 5011
+        },
+        "library_selected": {
+          "B14C1G": 1000
+        },
+        "selected": 1000
+      },
+      "PCW15_DS_15744": {
+        "available": 12468,
+        "cell_type_available": {
+          "AST": 135,
+          "IPC": 1176,
+          "IPC_prol": 595,
+          "MIC": 43,
+          "NEU_CALB2": 548,
+          "NEU_CUX2": 5179,
+          "NEU_RELN": 131,
+          "NEU_RORB": 423,
+          "NEU_SST": 518,
+          "NEU_TLE4": 834,
+          "NEU_low": 53,
+          "OPC": 100,
+          "RG": 2133,
+          "RG_prol": 541,
+          "VASC": 59
+        },
+        "cell_type_selected": {
+          "AST": 12,
+          "IPC": 93,
+          "IPC_prol": 48,
+          "MIC": 5,
+          "NEU_CALB2": 45,
+          "NEU_CUX2": 405,
+          "NEU_RELN": 12,
+          "NEU_RORB": 35,
+          "NEU_SST": 42,
+          "NEU_TLE4": 66,
+          "NEU_low": 7,
+          "OPC": 10,
+          "RG": 168,
+          "RG_prol": 45,
+          "VASC": 7
+        },
+        "library_available": {
+          "B15D1K": 3214,
+          "B15D1M": 9254
+        },
+        "library_selected": {
+          "B15D1K": 258,
+          "B15D1M": 742
+        },
+        "selected": 1000
+      },
+      "PCW16_CON_14940": {
+        "available": 13842,
+        "cell_type_available": {
+          "AST": 29,
+          "IPC": 1035,
+          "IPC_prol": 464,
+          "MIC": 45,
+          "NEU_CALB2": 543,
+          "NEU_CUX2": 4751,
+          "NEU_RELN": 100,
+          "NEU_RORB": 2623,
+          "NEU_SST": 459,
+          "NEU_TLE4": 1981,
+          "NEU_low": 78,
+          "OPC": 52,
+          "RG": 1237,
+          "RG_prol": 390,
+          "VASC": 55
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 75,
+          "IPC_prol": 34,
+          "MIC": 4,
+          "NEU_CALB2": 39,
+          "NEU_CUX2": 339,
+          "NEU_RELN": 8,
+          "NEU_RORB": 188,
+          "NEU_SST": 34,
+          "NEU_TLE4": 142,
+          "NEU_low": 6,
+          "OPC": 5,
+          "RG": 89,
+          "RG_prol": 29,
+          "VASC": 5
+        },
+        "library_available": {
+          "B16C1H": 13842
+        },
+        "library_selected": {
+          "B16C1H": 1000
+        },
+        "selected": 1000
+      },
+      "PCW16_DS_15877": {
+        "available": 10605,
+        "cell_type_available": {
+          "AST": 64,
+          "IPC": 366,
+          "IPC_prol": 173,
+          "MIC": 34,
+          "NEU_CALB2": 322,
+          "NEU_CUX2": 2927,
+          "NEU_RELN": 285,
+          "NEU_RORB": 2644,
+          "NEU_SST": 540,
+          "NEU_TLE4": 2308,
+          "NEU_low": 134,
+          "OPC": 81,
+          "RG": 572,
+          "RG_prol": 137,
+          "VASC": 18
+        },
+        "cell_type_selected": {
+          "AST": 7,
+          "IPC": 35,
+          "IPC_prol": 17,
+          "MIC": 4,
+          "NEU_CALB2": 31,
+          "NEU_CUX2": 273,
+          "NEU_RELN": 27,
+          "NEU_RORB": 247,
+          "NEU_SST": 51,
+          "NEU_TLE4": 215,
+          "NEU_low": 13,
+          "OPC": 9,
+          "RG": 54,
+          "RG_prol": 14,
+          "VASC": 3
+        },
+        "library_available": {
+          "B16D1L": 10605
+        },
+        "library_selected": {
+          "B16D1L": 1000
+        },
+        "selected": 1000
+      },
+      "PCW17_CON_14310": {
+        "available": 2450,
+        "cell_type_available": {
+          "AST": 30,
+          "IPC": 169,
+          "IPC_prol": 57,
+          "MIC": 5,
+          "NEU_CALB2": 132,
+          "NEU_CUX2": 1054,
+          "NEU_RELN": 20,
+          "NEU_RORB": 484,
+          "NEU_SST": 99,
+          "NEU_TLE4": 143,
+          "NEU_low": 18,
+          "OPC": 17,
+          "RG": 164,
+          "RG_prol": 54,
+          "VASC": 4
+        },
+        "cell_type_selected": {
+          "AST": 14,
+          "IPC": 68,
+          "IPC_prol": 24,
+          "MIC": 4,
+          "NEU_CALB2": 54,
+          "NEU_CUX2": 420,
+          "NEU_RELN": 10,
+          "NEU_RORB": 195,
+          "NEU_SST": 42,
+          "NEU_TLE4": 58,
+          "NEU_low": 9,
+          "OPC": 9,
+          "RG": 67,
+          "RG_prol": 23,
+          "VASC": 3
+        },
+        "library_available": {
+          "B17C2L": 550,
+          "B17C2M": 1900
+        },
+        "library_selected": {
+          "B17C2L": 225,
+          "B17C2M": 775
+        },
+        "selected": 1000
+      },
+      "PCW17_CON_14559": {
+        "available": 3306,
+        "cell_type_available": {
+          "AST": 21,
+          "IPC": 288,
+          "IPC_prol": 127,
+          "MIC": 15,
+          "NEU_CALB2": 113,
+          "NEU_CUX2": 1476,
+          "NEU_RELN": 20,
+          "NEU_RORB": 288,
+          "NEU_SST": 166,
+          "NEU_TLE4": 264,
+          "NEU_low": 13,
+          "OPC": 11,
+          "RG": 382,
+          "RG_prol": 114,
+          "VASC": 8
+        },
+        "cell_type_selected": {
+          "AST": 7,
+          "IPC": 87,
+          "IPC_prol": 39,
+          "MIC": 5,
+          "NEU_CALB2": 35,
+          "NEU_CUX2": 441,
+          "NEU_RELN": 7,
+          "NEU_RORB": 87,
+          "NEU_SST": 50,
+          "NEU_TLE4": 80,
+          "NEU_low": 5,
+          "OPC": 4,
+          "RG": 115,
+          "RG_prol": 35,
+          "VASC": 3
+        },
+        "library_available": {
+          "B17C1J": 3306
+        },
+        "library_selected": {
+          "B17C1J": 1000
+        },
+        "selected": 1000
+      },
+      "PCW17_DS_16070": {
+        "available": 6033,
+        "cell_type_available": {
+          "AST": 2,
+          "IPC": 413,
+          "IPC_prol": 155,
+          "MIC": 34,
+          "NEU_CALB2": 381,
+          "NEU_CUX2": 2510,
+          "NEU_RELN": 42,
+          "NEU_RORB": 542,
+          "NEU_SST": 468,
+          "NEU_TLE4": 797,
+          "NEU_low": 20,
+          "OPC": 30,
+          "RG": 502,
+          "RG_prol": 128,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 68,
+          "IPC_prol": 26,
+          "MIC": 7,
+          "NEU_CALB2": 63,
+          "NEU_CUX2": 411,
+          "NEU_RELN": 8,
+          "NEU_RORB": 90,
+          "NEU_SST": 77,
+          "NEU_TLE4": 131,
+          "NEU_low": 4,
+          "OPC": 6,
+          "RG": 83,
+          "RG_prol": 22,
+          "VASC": 3
+        },
+        "library_available": {
+          "B17D1K": 6033
+        },
+        "library_selected": {
+          "B17D1K": 1000
+        },
+        "selected": 1000
+      },
+      "PCW18_CON_16419": {
+        "available": 6504,
+        "cell_type_available": {
+          "AST": 58,
+          "IPC": 680,
+          "IPC_prol": 165,
+          "MIC": 28,
+          "NEU_CALB2": 386,
+          "NEU_CUX2": 2710,
+          "NEU_RELN": 59,
+          "NEU_RORB": 854,
+          "NEU_SST": 428,
+          "NEU_TLE4": 407,
+          "NEU_low": 22,
+          "OPC": 80,
+          "RG": 464,
+          "RG_prol": 145,
+          "VASC": 18
+        },
+        "cell_type_selected": {
+          "AST": 11,
+          "IPC": 103,
+          "IPC_prol": 27,
+          "MIC": 6,
+          "NEU_CALB2": 60,
+          "NEU_CUX2": 406,
+          "NEU_RELN": 10,
+          "NEU_RORB": 130,
+          "NEU_SST": 66,
+          "NEU_TLE4": 63,
+          "NEU_low": 6,
+          "OPC": 14,
+          "RG": 71,
+          "RG_prol": 23,
+          "VASC": 4
+        },
+        "library_available": {
+          "B18C1P": 2387,
+          "B18C1S": 4117
+        },
+        "library_selected": {
+          "B18C1P": 367,
+          "B18C1S": 633
+        },
+        "selected": 1000
+      },
+      "PCW18_CON_18189": {
+        "available": 11076,
+        "cell_type_available": {
+          "AST": 36,
+          "IPC": 859,
+          "IPC_prol": 249,
+          "MIC": 33,
+          "NEU_CALB2": 351,
+          "NEU_CUX2": 3712,
+          "NEU_RELN": 77,
+          "NEU_RORB": 2493,
+          "NEU_SST": 388,
+          "NEU_TLE4": 1330,
+          "NEU_low": 35,
+          "OPC": 40,
+          "RG": 1184,
+          "RG_prol": 255,
+          "VASC": 34
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 77,
+          "IPC_prol": 23,
+          "MIC": 4,
+          "NEU_CALB2": 32,
+          "NEU_CUX2": 331,
+          "NEU_RELN": 8,
+          "NEU_RORB": 223,
+          "NEU_SST": 36,
+          "NEU_TLE4": 119,
+          "NEU_low": 4,
+          "OPC": 5,
+          "RG": 106,
+          "RG_prol": 24,
+          "VASC": 4
+        },
+        "library_available": {
+          "B18C2M": 11076
+        },
+        "library_selected": {
+          "B18C2M": 1000
+        },
+        "selected": 1000
+      },
+      "PCW18_DS_16485": {
+        "available": 8854,
+        "cell_type_available": {
+          "AST": 56,
+          "IPC": 896,
+          "IPC_prol": 398,
+          "MIC": 37,
+          "NEU_CALB2": 266,
+          "NEU_CUX2": 4046,
+          "NEU_RELN": 61,
+          "NEU_RORB": 514,
+          "NEU_SST": 293,
+          "NEU_TLE4": 375,
+          "NEU_low": 57,
+          "OPC": 53,
+          "RG": 1384,
+          "RG_prol": 356,
+          "VASC": 62
+        },
+        "cell_type_selected": {
+          "AST": 9,
+          "IPC": 100,
+          "IPC_prol": 46,
+          "MIC": 6,
+          "NEU_CALB2": 30,
+          "NEU_CUX2": 445,
+          "NEU_RELN": 9,
+          "NEU_RORB": 59,
+          "NEU_SST": 34,
+          "NEU_TLE4": 43,
+          "NEU_low": 8,
+          "OPC": 8,
+          "RG": 154,
+          "RG_prol": 41,
+          "VASC": 8
+        },
+        "library_available": {
+          "B18D1Q": 6037,
+          "B18D1R": 2817
+        },
+        "library_selected": {
+          "B18D1Q": 681,
+          "B18D1R": 319
+        },
+        "selected": 1000
+      },
+      "PCW18_DS_16545": {
+        "available": 2190,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 132,
+          "IPC_prol": 55,
+          "MIC": 7,
+          "NEU_CALB2": 84,
+          "NEU_CUX2": 1049,
+          "NEU_RELN": 24,
+          "NEU_RORB": 185,
+          "NEU_SST": 122,
+          "NEU_TLE4": 183,
+          "NEU_low": 22,
+          "OPC": 28,
+          "RG": 205,
+          "RG_prol": 64,
+          "VASC": 17
+        },
+        "cell_type_selected": {
+          "AST": 7,
+          "IPC": 60,
+          "IPC_prol": 26,
+          "MIC": 4,
+          "NEU_CALB2": 39,
+          "NEU_CUX2": 473,
+          "NEU_RELN": 12,
+          "NEU_RORB": 84,
+          "NEU_SST": 56,
+          "NEU_TLE4": 83,
+          "NEU_low": 11,
+          "OPC": 13,
+          "RG": 93,
+          "RG_prol": 30,
+          "VASC": 9
+        },
+        "library_available": {
+          "B18D2L": 2190
+        },
+        "library_selected": {
+          "B18D2L": 1000
+        },
+        "selected": 1000
+      },
+      "PCW20_CON_15167": {
+        "available": 8765,
+        "cell_type_available": {
+          "AST": 148,
+          "IPC": 593,
+          "IPC_prol": 139,
+          "MIC": 56,
+          "NEU_CALB2": 810,
+          "NEU_CUX2": 2204,
+          "NEU_RELN": 212,
+          "NEU_RORB": 1761,
+          "NEU_SST": 1554,
+          "NEU_TLE4": 581,
+          "NEU_low": 49,
+          "OPC": 69,
+          "RG": 458,
+          "RG_prol": 102,
+          "VASC": 29
+        },
+        "cell_type_selected": {
+          "AST": 18,
+          "IPC": 68,
+          "IPC_prol": 17,
+          "MIC": 7,
+          "NEU_CALB2": 92,
+          "NEU_CUX2": 249,
+          "NEU_RELN": 25,
+          "NEU_RORB": 199,
+          "NEU_SST": 176,
+          "NEU_TLE4": 66,
+          "NEU_low": 6,
+          "OPC": 9,
+          "RG": 52,
+          "RG_prol": 12,
+          "VASC": 4
+        },
+        "library_available": {
+          "B20C1M": 8765
+        },
+        "library_selected": {
+          "B20C1M": 1000
+        },
+        "selected": 1000
+      },
+      "PCW20_CON_17916": {
+        "available": 13825,
+        "cell_type_available": {
+          "AST": 339,
+          "IPC": 70,
+          "IPC_prol": 72,
+          "MIC": 39,
+          "NEU_CALB2": 1560,
+          "NEU_CUX2": 2737,
+          "NEU_RELN": 718,
+          "NEU_RORB": 3964,
+          "NEU_SST": 1669,
+          "NEU_TLE4": 1797,
+          "NEU_low": 296,
+          "OPC": 148,
+          "RG": 293,
+          "RG_prol": 58,
+          "VASC": 65
+        },
+        "cell_type_selected": {
+          "AST": 25,
+          "IPC": 6,
+          "IPC_prol": 6,
+          "MIC": 4,
+          "NEU_CALB2": 112,
+          "NEU_CUX2": 196,
+          "NEU_RELN": 52,
+          "NEU_RORB": 283,
+          "NEU_SST": 120,
+          "NEU_TLE4": 129,
+          "NEU_low": 22,
+          "OPC": 12,
+          "RG": 22,
+          "RG_prol": 5,
+          "VASC": 6
+        },
+        "library_available": {
+          "B20C2E": 13825
+        },
+        "library_selected": {
+          "B20C2E": 1000
+        },
+        "selected": 1000
+      },
+      "PCW20_DS_15619_13": {
+        "available": 11738,
+        "cell_type_available": {
+          "AST": 538,
+          "IPC": 1141,
+          "IPC_prol": 200,
+          "MIC": 97,
+          "NEU_CALB2": 1675,
+          "NEU_CUX2": 3811,
+          "NEU_RELN": 74,
+          "NEU_RORB": 53,
+          "NEU_SST": 2530,
+          "NEU_TLE4": 46,
+          "NEU_low": 173,
+          "OPC": 153,
+          "RG": 1008,
+          "RG_prol": 198,
+          "VASC": 41
+        },
+        "cell_type_selected": {
+          "AST": 46,
+          "IPC": 97,
+          "IPC_prol": 18,
+          "MIC": 9,
+          "NEU_CALB2": 142,
+          "NEU_CUX2": 321,
+          "NEU_RELN": 7,
+          "NEU_RORB": 5,
+          "NEU_SST": 213,
+          "NEU_TLE4": 5,
+          "NEU_low": 15,
+          "OPC": 14,
+          "RG": 86,
+          "RG_prol": 18,
+          "VASC": 4
+        },
+        "library_available": {
+          "B20D1B": 11738
+        },
+        "library_selected": {
+          "B20D1B": 1000
+        },
+        "selected": 1000
+      }
+    },
+    "n_cells_available": 248998,
+    "n_cells_selected": 30000,
+    "n_donors": 30,
+    "proportionality_audit": {
+      "max_tolerance_cells": 2,
+      "passed": true,
+      "two_library_donors": 7,
+      "violations": []
+    },
+    "seed": 22
+  },
+  "reproduction": {
+    "cap": 256,
+    "donors": {
+      "PCW10_CON_11950": {
+        "available": 18826,
+        "cell_type_available": {
+          "AST": 28,
+          "IPC": 1863,
+          "IPC_prol": 1033,
+          "MIC": 46,
+          "NEU_CALB2": 138,
+          "NEU_CUX2": 4449,
+          "NEU_RELN": 139,
+          "NEU_RORB": 90,
+          "NEU_SST": 379,
+          "NEU_TLE4": 1976,
+          "NEU_low": 319,
+          "OPC": 38,
+          "RG": 6424,
+          "RG_prol": 1771,
+          "VASC": 133
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 25,
+          "IPC_prol": 14,
+          "MIC": 2,
+          "NEU_CALB2": 3,
+          "NEU_CUX2": 58,
+          "NEU_RELN": 3,
+          "NEU_RORB": 2,
+          "NEU_SST": 6,
+          "NEU_TLE4": 26,
+          "NEU_low": 5,
+          "OPC": 1,
+          "RG": 83,
+          "RG_prol": 24,
+          "VASC": 3
+        },
+        "library_available": {
+          "B10C1Q": 18826
+        },
+        "library_selected": {
+          "B10C1Q": 256
+        },
+        "selected": 256
+      },
+      "PCW11_CON_17833": {
+        "available": 5227,
+        "cell_type_available": {
+          "AST": 5,
+          "IPC": 480,
+          "IPC_prol": 201,
+          "MIC": 10,
+          "NEU_CALB2": 22,
+          "NEU_CUX2": 1392,
+          "NEU_RELN": 42,
+          "NEU_RORB": 67,
+          "NEU_SST": 83,
+          "NEU_TLE4": 916,
+          "NEU_low": 16,
+          "OPC": 18,
+          "RG": 1638,
+          "RG_prol": 315,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 23,
+          "IPC_prol": 10,
+          "MIC": 1,
+          "NEU_CALB2": 2,
+          "NEU_CUX2": 65,
+          "NEU_RELN": 3,
+          "NEU_RORB": 4,
+          "NEU_SST": 5,
+          "NEU_TLE4": 43,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 77,
+          "RG_prol": 16,
+          "VASC": 2
+        },
+        "library_available": {
+          "B11C2H": 5227
+        },
+        "library_selected": {
+          "B11C2H": 256
+        },
+        "selected": 256
+      },
+      "PCW11_DS_15405": {
+        "available": 4289,
+        "cell_type_available": {
+          "AST": 93,
+          "IPC": 446,
+          "IPC_prol": 231,
+          "MIC": 16,
+          "NEU_CALB2": 66,
+          "NEU_CUX2": 1314,
+          "NEU_RELN": 276,
+          "NEU_RORB": 24,
+          "NEU_SST": 78,
+          "NEU_TLE4": 158,
+          "NEU_low": 9,
+          "OPC": 16,
+          "RG": 1256,
+          "RG_prol": 287,
+          "VASC": 19
+        },
+        "cell_type_selected": {
+          "AST": 8,
+          "IPC": 26,
+          "IPC_prol": 14,
+          "MIC": 3,
+          "NEU_CALB2": 5,
+          "NEU_CUX2": 71,
+          "NEU_RELN": 16,
+          "NEU_RORB": 3,
+          "NEU_SST": 6,
+          "NEU_TLE4": 11,
+          "NEU_low": 2,
+          "OPC": 3,
+          "RG": 68,
+          "RG_prol": 17,
+          "VASC": 3
+        },
+        "library_available": {
+          "B11D1B": 1040,
+          "B11D1E": 3249
+        },
+        "library_selected": {
+          "B11D1B": 63,
+          "B11D1E": 193
+        },
+        "selected": 256
+      },
+      "PCW11_DS_17720": {
+        "available": 11644,
+        "cell_type_available": {
+          "AST": 43,
+          "IPC": 1367,
+          "IPC_prol": 729,
+          "MIC": 40,
+          "NEU_CALB2": 140,
+          "NEU_CUX2": 3582,
+          "NEU_RELN": 272,
+          "NEU_RORB": 15,
+          "NEU_SST": 281,
+          "NEU_TLE4": 667,
+          "NEU_low": 47,
+          "OPC": 67,
+          "RG": 3576,
+          "RG_prol": 784,
+          "VASC": 34
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 29,
+          "IPC_prol": 17,
+          "MIC": 2,
+          "NEU_CALB2": 5,
+          "NEU_CUX2": 71,
+          "NEU_RELN": 7,
+          "NEU_RORB": 2,
+          "NEU_SST": 7,
+          "NEU_TLE4": 15,
+          "NEU_low": 3,
+          "OPC": 4,
+          "RG": 71,
+          "RG_prol": 18,
+          "VASC": 2
+        },
+        "library_available": {
+          "B11D2F": 6392,
+          "B11D2G": 5252
+        },
+        "library_selected": {
+          "B11D2F": 140,
+          "B11D2G": 116
+        },
+        "selected": 256
+      },
+      "PCW12_CON_12152": {
+        "available": 6331,
+        "cell_type_available": {
+          "AST": 4,
+          "IPC": 140,
+          "IPC_prol": 57,
+          "MIC": 11,
+          "NEU_CALB2": 197,
+          "NEU_CUX2": 1614,
+          "NEU_RELN": 110,
+          "NEU_RORB": 1445,
+          "NEU_SST": 324,
+          "NEU_TLE4": 2063,
+          "NEU_low": 110,
+          "OPC": 26,
+          "RG": 159,
+          "RG_prol": 62,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 6,
+          "IPC_prol": 3,
+          "MIC": 2,
+          "NEU_CALB2": 9,
+          "NEU_CUX2": 63,
+          "NEU_RELN": 5,
+          "NEU_RORB": 56,
+          "NEU_SST": 13,
+          "NEU_TLE4": 80,
+          "NEU_low": 5,
+          "OPC": 2,
+          "RG": 7,
+          "RG_prol": 3,
+          "VASC": 1
+        },
+        "library_available": {
+          "B12C1A": 6331
+        },
+        "library_selected": {
+          "B12C1A": 256
+        },
+        "selected": 256
+      },
+      "PCW12_CON_14427": {
+        "available": 12279,
+        "cell_type_available": {
+          "AST": 99,
+          "IPC": 1415,
+          "IPC_prol": 666,
+          "MIC": 40,
+          "NEU_CALB2": 252,
+          "NEU_CUX2": 3814,
+          "NEU_RELN": 198,
+          "NEU_RORB": 54,
+          "NEU_SST": 342,
+          "NEU_TLE4": 1436,
+          "NEU_low": 21,
+          "OPC": 74,
+          "RG": 3212,
+          "RG_prol": 625,
+          "VASC": 31
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 29,
+          "IPC_prol": 14,
+          "MIC": 2,
+          "NEU_CALB2": 6,
+          "NEU_CUX2": 76,
+          "NEU_RELN": 5,
+          "NEU_RORB": 2,
+          "NEU_SST": 8,
+          "NEU_TLE4": 29,
+          "NEU_low": 1,
+          "OPC": 2,
+          "RG": 64,
+          "RG_prol": 13,
+          "VASC": 2
+        },
+        "library_available": {
+          "B12C2G": 12279
+        },
+        "library_selected": {
+          "B12C2G": 256
+        },
+        "selected": 256
+      },
+      "PCW12_CON_15569": {
+        "available": 8135,
+        "cell_type_available": {
+          "AST": 23,
+          "IPC": 986,
+          "IPC_prol": 502,
+          "MIC": 21,
+          "NEU_CALB2": 61,
+          "NEU_CUX2": 2753,
+          "NEU_RELN": 14,
+          "NEU_RORB": 36,
+          "NEU_SST": 81,
+          "NEU_TLE4": 448,
+          "NEU_low": 23,
+          "OPC": 72,
+          "RG": 2530,
+          "RG_prol": 565,
+          "VASC": 20
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 30,
+          "IPC_prol": 16,
+          "MIC": 2,
+          "NEU_CALB2": 3,
+          "NEU_CUX2": 82,
+          "NEU_RELN": 1,
+          "NEU_RORB": 2,
+          "NEU_SST": 3,
+          "NEU_TLE4": 14,
+          "NEU_low": 2,
+          "OPC": 3,
+          "RG": 76,
+          "RG_prol": 18,
+          "VASC": 2
+        },
+        "library_available": {
+          "B12C4E": 8135
+        },
+        "library_selected": {
+          "B12C4E": 256
+        },
+        "selected": 256
+      },
+      "PCW12_DS_12941": {
+        "available": 14310,
+        "cell_type_available": {
+          "AST": 132,
+          "IPC": 1435,
+          "IPC_prol": 665,
+          "MIC": 50,
+          "NEU_CALB2": 134,
+          "NEU_CUX2": 3880,
+          "NEU_RELN": 41,
+          "NEU_RORB": 167,
+          "NEU_SST": 196,
+          "NEU_TLE4": 2803,
+          "NEU_low": 44,
+          "OPC": 71,
+          "RG": 3868,
+          "RG_prol": 773,
+          "VASC": 51
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 25,
+          "IPC_prol": 12,
+          "MIC": 2,
+          "NEU_CALB2": 3,
+          "NEU_CUX2": 67,
+          "NEU_RELN": 2,
+          "NEU_RORB": 4,
+          "NEU_SST": 4,
+          "NEU_TLE4": 48,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 66,
+          "RG_prol": 14,
+          "VASC": 2
+        },
+        "library_available": {
+          "B12D1F": 14310
+        },
+        "library_selected": {
+          "B12D1F": 256
+        },
+        "selected": 256
+      },
+      "PCW12_DS_15186": {
+        "available": 7534,
+        "cell_type_available": {
+          "AST": 2,
+          "IPC": 611,
+          "IPC_prol": 187,
+          "MIC": 28,
+          "NEU_CALB2": 99,
+          "NEU_CUX2": 2557,
+          "NEU_RELN": 52,
+          "NEU_RORB": 657,
+          "NEU_SST": 124,
+          "NEU_TLE4": 1719,
+          "NEU_low": 32,
+          "OPC": 22,
+          "RG": 1242,
+          "RG_prol": 188,
+          "VASC": 14
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 20,
+          "IPC_prol": 7,
+          "MIC": 2,
+          "NEU_CALB2": 4,
+          "NEU_CUX2": 83,
+          "NEU_RELN": 3,
+          "NEU_RORB": 22,
+          "NEU_SST": 5,
+          "NEU_TLE4": 56,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 41,
+          "RG_prol": 7,
+          "VASC": 1
+        },
+        "library_available": {
+          "B12D3C": 7534
+        },
+        "library_selected": {
+          "B12D3C": 256
+        },
+        "selected": 256
+      },
+      "PCW12_DS_15931": {
+        "available": 6795,
+        "cell_type_available": {
+          "AST": 12,
+          "IPC": 576,
+          "IPC_prol": 327,
+          "MIC": 25,
+          "NEU_CALB2": 329,
+          "NEU_CUX2": 3166,
+          "NEU_RELN": 70,
+          "NEU_RORB": 137,
+          "NEU_SST": 430,
+          "NEU_TLE4": 372,
+          "NEU_low": 11,
+          "OPC": 49,
+          "RG": 1010,
+          "RG_prol": 259,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 21,
+          "IPC_prol": 13,
+          "MIC": 2,
+          "NEU_CALB2": 13,
+          "NEU_CUX2": 113,
+          "NEU_RELN": 4,
+          "NEU_RORB": 6,
+          "NEU_SST": 16,
+          "NEU_TLE4": 14,
+          "NEU_low": 1,
+          "OPC": 3,
+          "RG": 37,
+          "RG_prol": 10,
+          "VASC": 2
+        },
+        "library_available": {
+          "B12D2D": 6795
+        },
+        "library_selected": {
+          "B12D2D": 256
+        },
+        "selected": 256
+      },
+      "PCW13_CON_11928": {
+        "available": 4426,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 652,
+          "IPC_prol": 207,
+          "MIC": 10,
+          "NEU_CALB2": 176,
+          "NEU_CUX2": 1839,
+          "NEU_RELN": 37,
+          "NEU_RORB": 41,
+          "NEU_SST": 461,
+          "NEU_TLE4": 17,
+          "NEU_low": 22,
+          "OPC": 20,
+          "RG": 740,
+          "RG_prol": 182,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 37,
+          "IPC_prol": 12,
+          "MIC": 2,
+          "NEU_CALB2": 11,
+          "NEU_CUX2": 101,
+          "NEU_RELN": 3,
+          "NEU_RORB": 3,
+          "NEU_SST": 26,
+          "NEU_TLE4": 2,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 41,
+          "RG_prol": 11,
+          "VASC": 1
+        },
+        "library_available": {
+          "B13C2C": 4426
+        },
+        "library_selected": {
+          "B13C2C": 256
+        },
+        "selected": 256
+      },
+      "PCW13_CON_15044": {
+        "available": 6382,
+        "cell_type_available": {
+          "AST": 7,
+          "IPC": 683,
+          "IPC_prol": 312,
+          "MIC": 19,
+          "NEU_CALB2": 232,
+          "NEU_CUX2": 2661,
+          "NEU_RELN": 13,
+          "NEU_RORB": 184,
+          "NEU_SST": 226,
+          "NEU_TLE4": 551,
+          "NEU_low": 20,
+          "OPC": 32,
+          "RG": 1136,
+          "RG_prol": 291,
+          "VASC": 15
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 27,
+          "IPC_prol": 13,
+          "MIC": 2,
+          "NEU_CALB2": 10,
+          "NEU_CUX2": 101,
+          "NEU_RELN": 1,
+          "NEU_RORB": 8,
+          "NEU_SST": 9,
+          "NEU_TLE4": 22,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 44,
+          "RG_prol": 12,
+          "VASC": 2
+        },
+        "library_available": {
+          "B13C1": 6382
+        },
+        "library_selected": {
+          "B13C1": 256
+        },
+        "selected": 256
+      },
+      "PCW13_DS_12740": {
+        "available": 7413,
+        "cell_type_available": {
+          "AST": 22,
+          "IPC": 755,
+          "IPC_prol": 400,
+          "MIC": 12,
+          "NEU_CALB2": 376,
+          "NEU_CUX2": 2562,
+          "NEU_RELN": 95,
+          "NEU_RORB": 158,
+          "NEU_SST": 378,
+          "NEU_TLE4": 447,
+          "NEU_low": 34,
+          "OPC": 40,
+          "RG": 1720,
+          "RG_prol": 392,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 26,
+          "IPC_prol": 14,
+          "MIC": 2,
+          "NEU_CALB2": 13,
+          "NEU_CUX2": 80,
+          "NEU_RELN": 5,
+          "NEU_RORB": 7,
+          "NEU_SST": 14,
+          "NEU_TLE4": 16,
+          "NEU_low": 3,
+          "OPC": 3,
+          "RG": 55,
+          "RG_prol": 14,
+          "VASC": 2
+        },
+        "library_available": {
+          "B13D3G": 2997,
+          "B13D3H": 4416
+        },
+        "library_selected": {
+          "B13D3G": 104,
+          "B13D3H": 152
+        },
+        "selected": 256
+      },
+      "PCW13_DS_14239": {
+        "available": 8002,
+        "cell_type_available": {
+          "AST": 7,
+          "IPC": 956,
+          "IPC_prol": 403,
+          "MIC": 35,
+          "NEU_CALB2": 274,
+          "NEU_CUX2": 2687,
+          "NEU_RELN": 32,
+          "NEU_RORB": 73,
+          "NEU_SST": 295,
+          "NEU_TLE4": 1088,
+          "NEU_low": 70,
+          "OPC": 75,
+          "RG": 1623,
+          "RG_prol": 370,
+          "VASC": 14
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 30,
+          "IPC_prol": 13,
+          "MIC": 2,
+          "NEU_CALB2": 9,
+          "NEU_CUX2": 82,
+          "NEU_RELN": 2,
+          "NEU_RORB": 3,
+          "NEU_SST": 10,
+          "NEU_TLE4": 34,
+          "NEU_low": 3,
+          "OPC": 3,
+          "RG": 50,
+          "RG_prol": 12,
+          "VASC": 2
+        },
+        "library_available": {
+          "B13D1": 8002
+        },
+        "library_selected": {
+          "B13D1": 256
+        },
+        "selected": 256
+      },
+      "PCW13_DS_15848": {
+        "available": 4950,
+        "cell_type_available": {
+          "AST": 203,
+          "IPC": 619,
+          "IPC_prol": 293,
+          "MIC": 12,
+          "NEU_CALB2": 72,
+          "NEU_CUX2": 1315,
+          "NEU_RELN": 59,
+          "NEU_RORB": 18,
+          "NEU_SST": 47,
+          "NEU_TLE4": 61,
+          "NEU_low": 30,
+          "OPC": 18,
+          "RG": 1822,
+          "RG_prol": 366,
+          "VASC": 15
+        },
+        "cell_type_selected": {
+          "AST": 11,
+          "IPC": 31,
+          "IPC_prol": 15,
+          "MIC": 2,
+          "NEU_CALB2": 4,
+          "NEU_CUX2": 65,
+          "NEU_RELN": 4,
+          "NEU_RORB": 2,
+          "NEU_SST": 3,
+          "NEU_TLE4": 4,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 90,
+          "RG_prol": 19,
+          "VASC": 2
+        },
+        "library_available": {
+          "B13D4F": 4950
+        },
+        "library_selected": {
+          "B13D4F": 256
+        },
+        "selected": 256
+      },
+      "PCW13_DS_16427": {
+        "available": 5788,
+        "cell_type_available": {
+          "AST": 159,
+          "IPC": 562,
+          "IPC_prol": 194,
+          "MIC": 16,
+          "NEU_CALB2": 360,
+          "NEU_CUX2": 1342,
+          "NEU_RELN": 414,
+          "NEU_RORB": 159,
+          "NEU_SST": 512,
+          "NEU_TLE4": 451,
+          "NEU_low": 54,
+          "OPC": 52,
+          "RG": 1246,
+          "RG_prol": 245,
+          "VASC": 22
+        },
+        "cell_type_selected": {
+          "AST": 8,
+          "IPC": 24,
+          "IPC_prol": 9,
+          "MIC": 2,
+          "NEU_CALB2": 16,
+          "NEU_CUX2": 57,
+          "NEU_RELN": 18,
+          "NEU_RORB": 8,
+          "NEU_SST": 22,
+          "NEU_TLE4": 20,
+          "NEU_low": 3,
+          "OPC": 3,
+          "RG": 53,
+          "RG_prol": 11,
+          "VASC": 2
+        },
+        "library_available": {
+          "B13D2D": 5788
+        },
+        "library_selected": {
+          "B13D2D": 256
+        },
+        "selected": 256
+      },
+      "PCW14_CON_15077": {
+        "available": 5011,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 384,
+          "IPC_prol": 79,
+          "MIC": 21,
+          "NEU_CALB2": 352,
+          "NEU_CUX2": 1579,
+          "NEU_RELN": 81,
+          "NEU_RORB": 1051,
+          "NEU_SST": 420,
+          "NEU_TLE4": 558,
+          "NEU_low": 24,
+          "OPC": 28,
+          "RG": 343,
+          "RG_prol": 62,
+          "VASC": 16
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 19,
+          "IPC_prol": 5,
+          "MIC": 2,
+          "NEU_CALB2": 18,
+          "NEU_CUX2": 77,
+          "NEU_RELN": 5,
+          "NEU_RORB": 52,
+          "NEU_SST": 21,
+          "NEU_TLE4": 28,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 17,
+          "RG_prol": 4,
+          "VASC": 2
+        },
+        "library_available": {
+          "B14C1G": 5011
+        },
+        "library_selected": {
+          "B14C1G": 256
+        },
+        "selected": 256
+      },
+      "PCW15_DS_15744": {
+        "available": 12468,
+        "cell_type_available": {
+          "AST": 135,
+          "IPC": 1176,
+          "IPC_prol": 595,
+          "MIC": 43,
+          "NEU_CALB2": 548,
+          "NEU_CUX2": 5179,
+          "NEU_RELN": 131,
+          "NEU_RORB": 423,
+          "NEU_SST": 518,
+          "NEU_TLE4": 834,
+          "NEU_low": 53,
+          "OPC": 100,
+          "RG": 2133,
+          "RG_prol": 541,
+          "VASC": 59
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 24,
+          "IPC_prol": 13,
+          "MIC": 2,
+          "NEU_CALB2": 13,
+          "NEU_CUX2": 96,
+          "NEU_RELN": 4,
+          "NEU_RORB": 10,
+          "NEU_SST": 11,
+          "NEU_TLE4": 17,
+          "NEU_low": 3,
+          "OPC": 3,
+          "RG": 41,
+          "RG_prol": 12,
+          "VASC": 3
+        },
+        "library_available": {
+          "B15D1K": 3214,
+          "B15D1M": 9254
+        },
+        "library_selected": {
+          "B15D1K": 66,
+          "B15D1M": 190
+        },
+        "selected": 256
+      },
+      "PCW16_CON_14940": {
+        "available": 13842,
+        "cell_type_available": {
+          "AST": 29,
+          "IPC": 1035,
+          "IPC_prol": 464,
+          "MIC": 45,
+          "NEU_CALB2": 543,
+          "NEU_CUX2": 4751,
+          "NEU_RELN": 100,
+          "NEU_RORB": 2623,
+          "NEU_SST": 459,
+          "NEU_TLE4": 1981,
+          "NEU_low": 78,
+          "OPC": 52,
+          "RG": 1237,
+          "RG_prol": 390,
+          "VASC": 55
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 19,
+          "IPC_prol": 9,
+          "MIC": 2,
+          "NEU_CALB2": 10,
+          "NEU_CUX2": 84,
+          "NEU_RELN": 3,
+          "NEU_RORB": 47,
+          "NEU_SST": 9,
+          "NEU_TLE4": 35,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 23,
+          "RG_prol": 8,
+          "VASC": 2
+        },
+        "library_available": {
+          "B16C1H": 13842
+        },
+        "library_selected": {
+          "B16C1H": 256
+        },
+        "selected": 256
+      },
+      "PCW16_DS_15877": {
+        "available": 10605,
+        "cell_type_available": {
+          "AST": 64,
+          "IPC": 366,
+          "IPC_prol": 173,
+          "MIC": 34,
+          "NEU_CALB2": 322,
+          "NEU_CUX2": 2927,
+          "NEU_RELN": 285,
+          "NEU_RORB": 2644,
+          "NEU_SST": 540,
+          "NEU_TLE4": 2308,
+          "NEU_low": 134,
+          "OPC": 81,
+          "RG": 572,
+          "RG_prol": 137,
+          "VASC": 18
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 9,
+          "IPC_prol": 5,
+          "MIC": 2,
+          "NEU_CALB2": 8,
+          "NEU_CUX2": 68,
+          "NEU_RELN": 8,
+          "NEU_RORB": 61,
+          "NEU_SST": 13,
+          "NEU_TLE4": 53,
+          "NEU_low": 4,
+          "OPC": 3,
+          "RG": 14,
+          "RG_prol": 4,
+          "VASC": 1
+        },
+        "library_available": {
+          "B16D1L": 10605
+        },
+        "library_selected": {
+          "B16D1L": 256
+        },
+        "selected": 256
+      },
+      "PCW17_CON_14310": {
+        "available": 2450,
+        "cell_type_available": {
+          "AST": 30,
+          "IPC": 169,
+          "IPC_prol": 57,
+          "MIC": 5,
+          "NEU_CALB2": 132,
+          "NEU_CUX2": 1054,
+          "NEU_RELN": 20,
+          "NEU_RORB": 484,
+          "NEU_SST": 99,
+          "NEU_TLE4": 143,
+          "NEU_low": 18,
+          "OPC": 17,
+          "RG": 164,
+          "RG_prol": 54,
+          "VASC": 4
+        },
+        "cell_type_selected": {
+          "AST": 5,
+          "IPC": 17,
+          "IPC_prol": 7,
+          "MIC": 2,
+          "NEU_CALB2": 14,
+          "NEU_CUX2": 100,
+          "NEU_RELN": 4,
+          "NEU_RORB": 48,
+          "NEU_SST": 11,
+          "NEU_TLE4": 16,
+          "NEU_low": 4,
+          "OPC": 3,
+          "RG": 17,
+          "RG_prol": 7,
+          "VASC": 1
+        },
+        "library_available": {
+          "B17C2L": 550,
+          "B17C2M": 1900
+        },
+        "library_selected": {
+          "B17C2L": 58,
+          "B17C2M": 198
+        },
+        "selected": 256
+      },
+      "PCW17_CON_14559": {
+        "available": 3306,
+        "cell_type_available": {
+          "AST": 21,
+          "IPC": 288,
+          "IPC_prol": 127,
+          "MIC": 15,
+          "NEU_CALB2": 113,
+          "NEU_CUX2": 1476,
+          "NEU_RELN": 20,
+          "NEU_RORB": 288,
+          "NEU_SST": 166,
+          "NEU_TLE4": 264,
+          "NEU_low": 13,
+          "OPC": 11,
+          "RG": 382,
+          "RG_prol": 114,
+          "VASC": 8
+        },
+        "cell_type_selected": {
+          "AST": 3,
+          "IPC": 22,
+          "IPC_prol": 10,
+          "MIC": 2,
+          "NEU_CALB2": 9,
+          "NEU_CUX2": 109,
+          "NEU_RELN": 2,
+          "NEU_RORB": 22,
+          "NEU_SST": 13,
+          "NEU_TLE4": 20,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 29,
+          "RG_prol": 9,
+          "VASC": 2
+        },
+        "library_available": {
+          "B17C1J": 3306
+        },
+        "library_selected": {
+          "B17C1J": 256
+        },
+        "selected": 256
+      },
+      "PCW17_DS_16070": {
+        "available": 6033,
+        "cell_type_available": {
+          "AST": 2,
+          "IPC": 413,
+          "IPC_prol": 155,
+          "MIC": 34,
+          "NEU_CALB2": 381,
+          "NEU_CUX2": 2510,
+          "NEU_RELN": 42,
+          "NEU_RORB": 542,
+          "NEU_SST": 468,
+          "NEU_TLE4": 797,
+          "NEU_low": 20,
+          "OPC": 30,
+          "RG": 502,
+          "RG_prol": 128,
+          "VASC": 9
+        },
+        "cell_type_selected": {
+          "AST": 1,
+          "IPC": 18,
+          "IPC_prol": 7,
+          "MIC": 2,
+          "NEU_CALB2": 16,
+          "NEU_CUX2": 101,
+          "NEU_RELN": 3,
+          "NEU_RORB": 23,
+          "NEU_SST": 20,
+          "NEU_TLE4": 33,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 21,
+          "RG_prol": 6,
+          "VASC": 1
+        },
+        "library_available": {
+          "B17D1K": 6033
+        },
+        "library_selected": {
+          "B17D1K": 256
+        },
+        "selected": 256
+      },
+      "PCW18_CON_16419": {
+        "available": 6504,
+        "cell_type_available": {
+          "AST": 58,
+          "IPC": 680,
+          "IPC_prol": 165,
+          "MIC": 28,
+          "NEU_CALB2": 386,
+          "NEU_CUX2": 2710,
+          "NEU_RELN": 59,
+          "NEU_RORB": 854,
+          "NEU_SST": 428,
+          "NEU_TLE4": 407,
+          "NEU_low": 22,
+          "OPC": 80,
+          "RG": 464,
+          "RG_prol": 145,
+          "VASC": 18
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 25,
+          "IPC_prol": 8,
+          "MIC": 3,
+          "NEU_CALB2": 15,
+          "NEU_CUX2": 96,
+          "NEU_RELN": 4,
+          "NEU_RORB": 33,
+          "NEU_SST": 17,
+          "NEU_TLE4": 17,
+          "NEU_low": 3,
+          "OPC": 4,
+          "RG": 18,
+          "RG_prol": 7,
+          "VASC": 2
+        },
+        "library_available": {
+          "B18C1P": 2387,
+          "B18C1S": 4117
+        },
+        "library_selected": {
+          "B18C1P": 94,
+          "B18C1S": 162
+        },
+        "selected": 256
+      },
+      "PCW18_CON_18189": {
+        "available": 11076,
+        "cell_type_available": {
+          "AST": 36,
+          "IPC": 859,
+          "IPC_prol": 249,
+          "MIC": 33,
+          "NEU_CALB2": 351,
+          "NEU_CUX2": 3712,
+          "NEU_RELN": 77,
+          "NEU_RORB": 2493,
+          "NEU_SST": 388,
+          "NEU_TLE4": 1330,
+          "NEU_low": 35,
+          "OPC": 40,
+          "RG": 1184,
+          "RG_prol": 255,
+          "VASC": 34
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 20,
+          "IPC_prol": 6,
+          "MIC": 2,
+          "NEU_CALB2": 8,
+          "NEU_CUX2": 82,
+          "NEU_RELN": 3,
+          "NEU_RORB": 55,
+          "NEU_SST": 9,
+          "NEU_TLE4": 30,
+          "NEU_low": 2,
+          "OPC": 2,
+          "RG": 27,
+          "RG_prol": 6,
+          "VASC": 2
+        },
+        "library_available": {
+          "B18C2M": 11076
+        },
+        "library_selected": {
+          "B18C2M": 256
+        },
+        "selected": 256
+      },
+      "PCW18_DS_16485": {
+        "available": 8854,
+        "cell_type_available": {
+          "AST": 56,
+          "IPC": 896,
+          "IPC_prol": 398,
+          "MIC": 37,
+          "NEU_CALB2": 266,
+          "NEU_CUX2": 4046,
+          "NEU_RELN": 61,
+          "NEU_RORB": 514,
+          "NEU_SST": 293,
+          "NEU_TLE4": 375,
+          "NEU_low": 57,
+          "OPC": 53,
+          "RG": 1384,
+          "RG_prol": 356,
+          "VASC": 62
+        },
+        "cell_type_selected": {
+          "AST": 4,
+          "IPC": 24,
+          "IPC_prol": 12,
+          "MIC": 3,
+          "NEU_CALB2": 8,
+          "NEU_CUX2": 105,
+          "NEU_RELN": 3,
+          "NEU_RORB": 15,
+          "NEU_SST": 9,
+          "NEU_TLE4": 12,
+          "NEU_low": 4,
+          "OPC": 4,
+          "RG": 38,
+          "RG_prol": 11,
+          "VASC": 4
+        },
+        "library_available": {
+          "B18D1Q": 6037,
+          "B18D1R": 2817
+        },
+        "library_selected": {
+          "B18D1Q": 174,
+          "B18D1R": 82
+        },
+        "selected": 256
+      },
+      "PCW18_DS_16545": {
+        "available": 2190,
+        "cell_type_available": {
+          "AST": 13,
+          "IPC": 132,
+          "IPC_prol": 55,
+          "MIC": 7,
+          "NEU_CALB2": 84,
+          "NEU_CUX2": 1049,
+          "NEU_RELN": 24,
+          "NEU_RORB": 185,
+          "NEU_SST": 122,
+          "NEU_TLE4": 183,
+          "NEU_low": 22,
+          "OPC": 28,
+          "RG": 205,
+          "RG_prol": 64,
+          "VASC": 17
+        },
+        "cell_type_selected": {
+          "AST": 2,
+          "IPC": 16,
+          "IPC_prol": 7,
+          "MIC": 2,
+          "NEU_CALB2": 10,
+          "NEU_CUX2": 117,
+          "NEU_RELN": 4,
+          "NEU_RORB": 21,
+          "NEU_SST": 14,
+          "NEU_TLE4": 21,
+          "NEU_low": 3,
+          "OPC": 4,
+          "RG": 24,
+          "RG_prol": 8,
+          "VASC": 3
+        },
+        "library_available": {
+          "B18D2L": 2190
+        },
+        "library_selected": {
+          "B18D2L": 256
+        },
+        "selected": 256
+      },
+      "PCW20_CON_15167": {
+        "available": 8765,
+        "cell_type_available": {
+          "AST": 148,
+          "IPC": 593,
+          "IPC_prol": 139,
+          "MIC": 56,
+          "NEU_CALB2": 810,
+          "NEU_CUX2": 2204,
+          "NEU_RELN": 212,
+          "NEU_RORB": 1761,
+          "NEU_SST": 1554,
+          "NEU_TLE4": 581,
+          "NEU_low": 49,
+          "OPC": 69,
+          "RG": 458,
+          "RG_prol": 102,
+          "VASC": 29
+        },
+        "cell_type_selected": {
+          "AST": 5,
+          "IPC": 17,
+          "IPC_prol": 5,
+          "MIC": 2,
+          "NEU_CALB2": 23,
+          "NEU_CUX2": 62,
+          "NEU_RELN": 7,
+          "NEU_RORB": 49,
+          "NEU_SST": 44,
+          "NEU_TLE4": 17,
+          "NEU_low": 2,
+          "OPC": 3,
+          "RG": 14,
+          "RG_prol": 4,
+          "VASC": 2
+        },
+        "library_available": {
+          "B20C1M": 8765
+        },
+        "library_selected": {
+          "B20C1M": 256
+        },
+        "selected": 256
+      },
+      "PCW20_CON_17916": {
+        "available": 13825,
+        "cell_type_available": {
+          "AST": 339,
+          "IPC": 70,
+          "IPC_prol": 72,
+          "MIC": 39,
+          "NEU_CALB2": 1560,
+          "NEU_CUX2": 2737,
+          "NEU_RELN": 718,
+          "NEU_RORB": 3964,
+          "NEU_SST": 1669,
+          "NEU_TLE4": 1797,
+          "NEU_low": 296,
+          "OPC": 148,
+          "RG": 293,
+          "RG_prol": 58,
+          "VASC": 65
+        },
+        "cell_type_selected": {
+          "AST": 7,
+          "IPC": 2,
+          "IPC_prol": 2,
+          "MIC": 2,
+          "NEU_CALB2": 28,
+          "NEU_CUX2": 49,
+          "NEU_RELN": 14,
+          "NEU_RORB": 70,
+          "NEU_SST": 30,
+          "NEU_TLE4": 32,
+          "NEU_low": 6,
+          "OPC": 4,
+          "RG": 6,
+          "RG_prol": 2,
+          "VASC": 2
+        },
+        "library_available": {
+          "B20C2E": 13825
+        },
+        "library_selected": {
+          "B20C2E": 256
+        },
+        "selected": 256
+      },
+      "PCW20_DS_15619_13": {
+        "available": 11738,
+        "cell_type_available": {
+          "AST": 538,
+          "IPC": 1141,
+          "IPC_prol": 200,
+          "MIC": 97,
+          "NEU_CALB2": 1675,
+          "NEU_CUX2": 3811,
+          "NEU_RELN": 74,
+          "NEU_RORB": 53,
+          "NEU_SST": 2530,
+          "NEU_TLE4": 46,
+          "NEU_low": 173,
+          "OPC": 153,
+          "RG": 1008,
+          "RG_prol": 198,
+          "VASC": 41
+        },
+        "cell_type_selected": {
+          "AST": 12,
+          "IPC": 24,
+          "IPC_prol": 5,
+          "MIC": 3,
+          "NEU_CALB2": 35,
+          "NEU_CUX2": 79,
+          "NEU_RELN": 3,
+          "NEU_RORB": 2,
+          "NEU_SST": 53,
+          "NEU_TLE4": 2,
+          "NEU_low": 5,
+          "OPC": 4,
+          "RG": 22,
+          "RG_prol": 5,
+          "VASC": 2
+        },
+        "library_available": {
+          "B20D1B": 11738
+        },
+        "library_selected": {
+          "B20D1B": 256
+        },
+        "selected": 256
+      }
+    },
+    "n_cells_available": 248998,
+    "n_cells_selected": 7680,
+    "n_donors": 30,
+    "proportionality_audit": {
+      "max_tolerance_cells": 2,
+      "passed": true,
+      "two_library_donors": 7,
+      "violations": []
+    },
+    "seed": 22
+  },
+  "sampler": "p22.data.nn_sampling.sample_donor_stratified_cells",
+  "strata": [
+    "author_cell_type",
+    "library"
+  ]
+}
