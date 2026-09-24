@@ -4,14 +4,18 @@ Only synthetic tensors are used; no real data is read and no model is fit to
 convergence here.
 """
 
+import inspect
+
 import numpy as np
 import pytest
 import torch
+from sklearn.metrics import roc_auc_score
 
 from p22.models.baselines import BaselineMLP
 from p22.models.cross_attention import TokenConcatFusionModel
 from p22.models.mil import GatedAttentionPool, MILWrapper
 from p22.training.bags import MIN_PARTIAL_BAG, make_bags
+from p22.training.mil_loop import predict_mil, train_mil
 
 
 def test_attention_sums_to_one_and_has_right_shape():
@@ -91,3 +95,73 @@ def test_make_bags_rejects_bad_inputs():
         make_bags(np.array([1, 2]), bag_size=0)
     with pytest.raises(ValueError):
         make_bags(np.array([1, 2]), seed=-1)
+
+
+def _partial_signal_donors(
+    n_donors: int = 12,
+    cells_per_donor: int = 40,
+    n_features: int = 8,
+    signal_fraction: float = 0.1,
+    seed: int = 0,
+    prefix: str = "d",
+    shift: float = 4.0,
+) -> tuple[dict[str, np.ndarray], np.ndarray, np.ndarray]:
+    """Build donors where only ``signal_fraction`` of positive-donor cells carry signal."""
+    rng = np.random.default_rng(seed)
+    n_signal = max(1, int(round(cells_per_donor * signal_fraction)))
+    matrices, donors, labels = [], [], []
+    for index in range(n_donors):
+        label = index % 2
+        matrix = rng.standard_normal((cells_per_donor, n_features)).astype(np.float32)
+        if label == 1:
+            rows = rng.choice(cells_per_donor, size=n_signal, replace=False)
+            matrix[rows, 0] += shift
+            matrix[rows, 1] -= shift
+        matrices.append(matrix)
+        donors.extend([f"{prefix}{index:02d}"] * cells_per_donor)
+        labels.extend([label] * cells_per_donor)
+    return {"rna": np.concatenate(matrices)}, np.array(donors), np.array(labels)
+
+
+def test_synthetic_partial_signal_reaches_donor_auroc():
+    train = _partial_signal_donors(seed=0)
+    val = _partial_signal_donors(seed=100, prefix="v")
+    model = MILWrapper(BaselineMLP(n_features=8, n_classes=2, embed_dim=8), dim=8)
+    record = train_mil(
+        model, train[0], train[1], train[2], val[0], val[1], val[2],
+        cfg={"seed": 0, "max_epochs": 30, "patience": 6},
+    )
+    assert record.epochs_run <= 30
+    assert record.selection_metric == "negative_donor_log_loss"
+    assert record.selection_unit == "donor"
+    scored = predict_mil(record.model, val[0], val[1])
+    positive = set(val[1][val[2] == 1].tolist())
+    targets = np.array([int(donor in positive) for donor in scored["donor_ids"]])
+    assert len(targets) == 12 and targets.sum() == 6
+    assert roc_auc_score(targets, scored["donor_probabilities"]) >= 0.9
+
+
+def test_predict_mil_shapes_and_per_donor_attention():
+    train = _partial_signal_donors(seed=1)
+    val = _partial_signal_donors(seed=101, prefix="v")
+    model = MILWrapper(BaselineMLP(n_features=8, n_classes=2, embed_dim=8), dim=8)
+    record = train_mil(
+        model, train[0], train[1], train[2], val[0], val[1], val[2],
+        cfg={"seed": 0, "max_epochs": 2},
+    )
+    scored = predict_mil(record.model, val[0], val[1])
+    n_cells = len(val[1])
+    assert len(scored["donor_ids"]) == 12
+    assert scored["donor_probabilities"].shape == (12,)
+    assert scored["donor_logits"].shape == (12,)
+    assert scored["cell_logits"].shape == (n_cells,)
+    assert scored["attention"].shape == (n_cells,)
+    for donor in scored["donor_ids"]:
+        rows = val[1] == donor
+        assert scored["attention"][rows].sum() == pytest.approx(1.0, abs=1e-5)
+
+
+def test_train_mil_signature_has_no_test_arrays():
+    parameters = set(inspect.signature(train_mil).parameters)
+    assert not any("test" in name.lower() for name in parameters)
+    assert {"train_arrays", "val_arrays", "donors", "val_donors"} <= parameters
