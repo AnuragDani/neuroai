@@ -23,8 +23,8 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N6 | Conditional GRL nuisance adversary | N5 | S | DONE:src/p22/models/nuisance.py + tests/test_nn_nuisance.py (9 passed); `mil_loop._train_mil_epoch` meta["index"] added; synthetic planted-batch probe drop 0.23 |
 | N7 | Cross-modal InfoNCE pairing loss | N5 | S | DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired lo |
 | N8 | Program/module-token fusion models | N2 | M | DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention  |
-| N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | TODO |
-| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | TODO |
+| N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | DONE:docs/nn_v2/PROTOCOL_FREEZE.md + configs/nn_protocol_v2_2026-09-23.json (protocol_sha256=80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161) + |
+| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | BLOCKED:lane_stalled:no commit in 3 attempts |
 | N11 | chr21-excluded sensitivity | N10 | S | TODO |
 | N12 | Init-seed and sampling-seed sensitivity | N10 | S | TODO |
 | N13 | Held-out faithfulness interventions | N10 | M | TODO |
