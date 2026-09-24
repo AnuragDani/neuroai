@@ -7,11 +7,11 @@ set -eu
 # left, and keeps every attempt's output in a durable log (a discarded worktree
 # takes gnhf.log with it; these logs live outside that).
 #
-# Usage: bash run_nn_batch.sh [max_attempts]   (default 6)
+# Usage: bash run_nn_batch.sh [max_attempts]   (default 12)
 # Review after it finishes: git log, then reports/generated/nn_runs/<stamp>/.
 
 WT="${P22_NN_WORKTREE:-/Users/anuragdani/Github/niw-eb1a/P22}"
-MAX_ATTEMPTS="${1:-6}"
+MAX_ATTEMPTS="${1:-12}"
 cd -- "$WT"
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -22,7 +22,9 @@ remaining() { grep -cE '^\|[[:space:]]*N[0-9]+[[:space:]]*\|.*\|[[:space:]]*TODO
 
 printf 'batch start %s  attempts<=%s  remaining=%s\n' "$STAMP" "$MAX_ATTEMPTS" "$(remaining)" | tee "$LOGDIR/batch.log"
 
-prev="$(remaining)"
+# Progress is measured in COMMITS, not in resolved tasks: with one step per
+# iteration a big task stays TODO for several attempts while real work lands.
+prev_commits="$(git rev-list --count HEAD)"
 stalls=0
 for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
   left="$(remaining)"
@@ -45,19 +47,19 @@ for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
   printf 'attempt %s exit=%s remaining %s -> %s  commits=%s\n' \
     "$attempt" "$rc" "$left" "$(remaining)" "$(git rev-list --count HEAD)" | tee -a "$LOGDIR/batch.log"
 
-  now="$(remaining)"
-  if [ "$now" -ge "$prev" ]; then
+  now_commits="$(git rev-list --count HEAD)"
+  if [ "$now_commits" -le "$prev_commits" ]; then
     stalls=$((stalls + 1))
-    # Two attempts with no task resolved means relaunching is burning tokens for
-    # nothing; stop and leave the logs for diagnosis.
-    if [ "$stalls" -ge 2 ]; then
-      printf 'no progress across 2 attempts; stopping. see %s\n' "$LOGDIR" | tee -a "$LOGDIR/batch.log"
+    # Three attempts that land no commit at all means every iteration is failing
+    # and its work is being discarded; relaunching just burns tokens.
+    if [ "$stalls" -ge 3 ]; then
+      printf 'no commit across 3 attempts; stopping. see %s\n' "$LOGDIR" | tee -a "$LOGDIR/batch.log"
       exit 3
     fi
   else
     stalls=0
   fi
-  prev="$now"
+  prev_commits="$now_commits"
 done
 
 printf '\nbatch done. remaining=%s  head=%s\n' "$(remaining)" "$(git log --oneline -1)" | tee -a "$LOGDIR/batch.log"

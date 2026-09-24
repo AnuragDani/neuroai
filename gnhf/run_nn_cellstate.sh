@@ -37,7 +37,7 @@ export OPENCODE_CONFIG_DIR="$WT/.gnhf/p22-nn/config-dir"
 export OPENCODE_DISABLE_PROJECT_CONFIG=true
 export OPENCODE_ENABLE_EXA=false
 export GNHF_TELEMETRY=0
-AGENT_PROMPT='You execute tasks/nn/plan.md for P22. Each iteration: read the status table at the top of tasks/nn/todo.md, pick the first runnable TODO task, read only that task section with sed, implement it with tests, run focused pytest and ruff, update its status line and the Run log. Never ask the user; on failure record BLOCKED with evidence and move on. Never cat files over 200 lines, never print arrays or long logs, write code files in parts of at most 250 lines. Use no subagents. Final status contract, including after compaction: return only one JSON object with exactly these five keys and their shown types; no extra fields, fences, or prose. Set both booleans from the saved work, never infer success from this example: {"success":true,"summary":"Finished N1 sampler; N2 next.","key_changes_made":["Added src/p22/data/nn_sampling.py"],"key_learnings":["Seven donors span two libraries."],"should_fully_stop":false}'
+AGENT_PROMPT='You execute tasks/nn/plan.md for P22. Each iteration: read the status table at the top of tasks/nn/todo.md, pick the first runnable TODO task, read only that task section with sed. ONE STEP PER ITERATION: do only the next unfinished numbered Step of that task, never the whole task. Finish that single Step, run focused pytest and ruff on what you touched, append one Run-log line naming the task and the Step you completed (for example "N2 Step 3/7 done: fold preprocessing writer, tests pass"), and leave the task status TODO until its last Step is done, then set DONE:<evidence>. A small committed step beats an ambitious lost one: the orchestrator DISCARDS the work of any iteration that fails, so keep each iteration small enough to finish. Before reading data, check size first; never print or dump an array, list, dataframe, dict of folds or any structure over 20 elements, print only its length and one element; never cat files over 200 lines, use sed ranges; write code files in parts of at most 250 lines. Never ask the user; if a Step cannot work, record BLOCKED:<reason> with evidence and move to the next task. Use no subagents. Final status contract, including after compaction: return only one JSON object with exactly these five keys and their shown types; no extra fields, fences, or prose. Set both booleans from the saved work, never infer success from this example: {"success":true,"summary":"Finished N1 sampler; N2 next.","key_changes_made":["Added src/p22/data/nn_sampling.py"],"key_learnings":["Seven donors span two libraries."],"should_fully_stop":false}'
 export OPENCODE_CONFIG_CONTENT="$(python3 - "$MODEL" "$AGENT_PROMPT" <<'EOF'
 import json, sys
 model, prompt = sys.argv[1], sys.argv[2]
@@ -47,7 +47,7 @@ print(json.dumps({
     "autoupdate": False, "default_agent": "build",
     "compaction": {"auto": True, "prune": True, "reserved": 16384},
     "provider": {"openrouter": {"models": {short: {"limit": {"context": 65536, "output": 16384}}}}},
-    "agent": {"build": {"model": model, "steps": 60, "prompt": prompt}},
+    "agent": {"build": {"model": model, "steps": 100, "prompt": prompt}},
     "permission": {"task": "deny"},
 }))
 EOF
@@ -55,7 +55,7 @@ EOF
 
 STOP_WHEN='Every task N0-N23 in tasks/nn/todo.md is DONE, BLOCKED:<reason> or NOT_NEEDED:<evidence>; docs/nn_v2/NN_V2_RESULTS_2026-09-23.md exists with the primary R3 cross-attention minus token-concat contrast and its CI; N23 verification passed. A BLOCKED Phase 5 does not prevent completion. Null results are valid; never tune toward a win.'
 CMD=(node "$RUNTIME" --current-branch --agent opencode --model "$MODEL"
-  --max-iterations 45 --max-tokens 120000000 --max-rate-limit-wait 0
+  --max-iterations 80 --max-tokens 120000000 --max-rate-limit-wait 900
   --meteor-frequency 0 --prevent-sleep on --stop-when "$STOP_WHEN")
 
 if [ "${1:-}" = '--check' ]; then
