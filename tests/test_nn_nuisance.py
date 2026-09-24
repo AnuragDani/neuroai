@@ -8,7 +8,10 @@ import math
 import numpy as np
 import pytest
 import torch
+from sklearn.linear_model import LogisticRegression
+from torch.nn import functional as F
 
+from p22.models.encoders import ViewEncoder
 from p22.models.nuisance import (
     ConditionalNuisanceAdversary,
     adversary_aux_loss,
@@ -113,3 +116,93 @@ def test_adversary_aux_loss_uses_bag_index_and_scales():
         adversary_aux_loss(adv, {"labels": np.zeros(2)}, lambda_adv=1.0)
     with pytest.raises(ValueError):
         adversary_aux_loss(adv, cell_meta, lambda_adv=-1.0)
+
+
+_PLANTED_EPOCHS = 1500
+_PLANTED_SEEDS = (0, 1)
+
+
+def _planted_batch_embeddings(seed: int, lambda_adv: float, epochs: int = _PLANTED_EPOCHS):
+    """Train a tiny encoder+head on synthetic cells with a planted batch direction.
+
+    Feature 0 carries the disease label and feature 1 the sequencing batch, so a
+    batch probe can recover the nuisance from embeddings unless the adversary
+    strips it.
+    """
+    rng = np.random.default_rng(seed)
+    torch.manual_seed(seed)
+    n_cells = 400
+    labels = np.array([i % 2 for i in range(n_cells)])
+    batch = np.array([(i // 2) % 2 for i in range(n_cells)])
+    features = rng.normal(0.0, 0.4, (n_cells, 6)).astype(np.float32)
+    features[:, 0] += np.where(labels == 1, 2.0, -2.0)  # disease signal
+    features[:, 1] += np.where(batch == 1, 3.0, -3.0)  # nuisance signal
+    x = torch.tensor(features)
+    y = torch.tensor(labels, dtype=torch.long)
+    b = torch.tensor(batch, dtype=torch.long)
+
+    encoder = ViewEncoder(6, embed_dim=4, hidden_dim=16, dropout=0.0)
+    head = torch.nn.Linear(4, 2)
+    adversary = ConditionalNuisanceAdversary(dim=4, n_library=2, n_batch=2, n_qc=5, hidden=32)
+    params = list(encoder.parameters()) + list(head.parameters())
+    if lambda_adv > 0.0:
+        params += list(adversary.parameters())
+    optimiser = torch.optim.Adam(params, lr=3e-3)
+
+    for epoch in range(epochs):
+        embeddings = encoder(x)
+        loss = F.cross_entropy(head(embeddings), y)
+        if lambda_adv > 0.0:
+            losses = adversary_losses(
+                adversary,
+                embeddings,
+                y,
+                y,  # library is perfectly correlated with the label in this toy setup
+                b,
+                torch.zeros(n_cells, 5),
+                gamma_schedule(epoch / (epochs - 1)),
+            )
+            loss = loss + lambda_adv * losses["total"]
+        optimiser.zero_grad()
+        loss.backward()
+        optimiser.step()
+
+    encoder.eval()
+    with torch.no_grad():
+        return encoder(x).numpy(), labels, batch
+
+
+def _within_label_batch_probe(embeddings, labels, batch) -> float:
+    """Mean linear batch-probe accuracy computed within each label class."""
+    scores = []
+    for value in (0, 1):
+        mask = labels == value
+        probe = LogisticRegression(max_iter=1000).fit(embeddings[mask], batch[mask])
+        scores.append(probe.score(embeddings[mask], batch[mask]))
+    return float(np.mean(scores))
+
+
+def test_adversary_strips_planted_batch_signal():
+    """GRL adversary removes a planted batch direction without erasing the label.
+
+    Plan N6 acceptance: post-training within-label batch-probe accuracy drops by
+    >= 10 points versus lambda_adv=0, while the label stays recoverable.
+    """
+    control, regularised, label_scores = [], [], []
+    for seed in _PLANTED_SEEDS:
+        c_emb, labels, batch = _planted_batch_embeddings(seed, 0.0)
+        a_emb, _, _ = _planted_batch_embeddings(seed, 3.0)
+        control.append(_within_label_batch_probe(c_emb, labels, batch))
+        regularised.append(_within_label_batch_probe(a_emb, labels, batch))
+        label_scores.append(
+            LogisticRegression(max_iter=1000).fit(a_emb, labels).score(a_emb, labels)
+        )
+
+    mean_control = float(np.mean(control))
+    mean_regularised = float(np.mean(regularised))
+    assert mean_control >= 0.80, f"planted batch not learned at lambda=0: {mean_control:.3f}"
+    assert mean_control - mean_regularised >= 0.10, (
+        f"batch probe only dropped {mean_control - mean_regularised:.3f}: "
+        f"control={mean_control:.3f} regularised={mean_regularised:.3f}"
+    )
+    assert min(label_scores) >= 0.90, f"label erased by adversary: {label_scores}"

@@ -120,6 +120,7 @@ def _train_mil_epoch(
                 "label": donor_to_label[donor],
                 "epoch": epoch,
                 "progress": epoch / max_epochs,
+                "index": np.asarray(bag, dtype=np.int64),
             }
             batch_out, meta = _bag_batch(model, tensors, bag, meta, device)
             loss = criterion(batch_out["logit_bag"].squeeze(0), label)
