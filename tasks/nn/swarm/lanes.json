@@ -1,0 +1,149 @@
+{
+  "integration_branch": "gnhf/p22-nn-cellstate",
+  "cpu_total": 16,
+  "stages": [
+    {
+      "id": "S1",
+      "goal": "Build every remaining model component and the paper tooling in parallel; measure the gene-activity ATAC panel.",
+      "gate_files": [],
+      "lanes": [
+        {
+          "name": "mil",
+          "tasks": ["N6", "N7"],
+          "workers": 2,
+          "attempts": 8,
+          "goal": "Professor D1 (loss refinements): conditional gradient-reversal nuisance adversary (N6) and RNA-ATAC InfoNCE pairing loss (N7), both pluggable into train_mil as aux losses.",
+          "owns": ["src/p22/models/nuisance.py", "src/p22/models/contrastive.py", "src/p22/training/mil_loop.py", "tests/test_nn_nuisance.py", "tests/test_nn_contrastive.py", "tests/test_nn_mil.py"],
+          "extra": ""
+        },
+        {
+          "name": "tokens",
+          "tasks": ["N8"],
+          "workers": 2,
+          "attempts": 8,
+          "goal": "Professor D3 (granular tokens): training-only NMF gene-program tokens and ATAC region-module tokens with a matched token-concat control.",
+          "owns": ["src/p22/models/program_tokens.py", "tests/test_nn_program_tokens.py"],
+          "extra": "Do not edit src/p22/models/mil.py or src/p22/training/*; the mil lane owns them. Your models must work inside MILWrapper as it exists on this branch."
+        },
+        {
+          "name": "atac",
+          "tasks": ["N18", "N19", "N20"],
+          "workers": 4,
+          "attempts": 10,
+          "goal": "Gene-activity ATAC panel (gene body +/- 2 kb) for gene-aligned cross-attention (Professor D3, D6). The only network step of the study, capped at 3.5e9 bytes.",
+          "owns": ["scripts/quantify_development_atac.py", "tests/test_quantify_development_atac.py", "scripts/build_gene_activity_bed.py", "scripts/estimate_fragment_transfer.py", "tests/test_nn_gene_activity.py", "configs/nn_gene_activity_2026-09-23.bed", "configs/nn_gene_activity_2026-09-23.json", "configs/nn_gene_activity_acceptance_requirements_2026-09-23.json", "configs/nn_gene_activity_input_manifest_2026-09-23.json", "docs/nn_v2/gene_activity_measurement.json"],
+          "extra": "N20 quantification uses --workers 8 (network threads, light CPU). Write counts to reports/generated/nn_20260923/gene_activity/. Never raise the 3.5e9 byte budget."
+        },
+        {
+          "name": "paper0",
+          "tasks": ["P1", "P2", "N28"],
+          "workers": 1,
+          "attempts": 8,
+          "goal": "Paper tooling and the result-independent sections: checker (P1), figure script with the planted-benchmark figure (P2), Introduction + Related work (N28).",
+          "owns": ["paper/check_paper.py", "paper/make_figures.py", "paper/draft.md", "paper/figures/", "tests/test_paper_tools.py"],
+          "extra": "P1 = decision_tree N31 checker features (1)-(5), stdlib only, parse citekeys from paper/refs_frozen.bib with regex @\\w+\\{([^,]+), (entries may be on one line). P2 = paper/make_figures.py with a --only planted mode that builds Fig 2 from docs/nn_v2/planted_benchmark.json (matplotlib Agg backend). N28: create paper/draft.md with a header comment, section headings (Abstract, Introduction, Related Work, Methods, Results, Discussion, Limitations, References) and write ONLY Introduction and Related Work. Framing must stay neutral (the question 'when does cross-modal attention help on paired single-cell RNA+ATAC?'); no result claims."
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "goal": "Freeze the NN-v2 protocol, then run the primary donor-held-out ladder on real DS data.",
+      "gate_files": ["configs/nn_protocol_v2_2026-09-23.json", "docs/nn_v2/ladder_summary.json"],
+      "lanes": [
+        {
+          "name": "ladder",
+          "tasks": ["N9", "N10"],
+          "workers": 14,
+          "attempts": 14,
+          "goal": "Professor D1 + D5: frozen, apple-to-apple ladder R0-R4 of cross-attention vs matched token-concat, plus linear, pseudobulk, chr21, latent and majority controls; primary contrast with donor-bootstrap CI.",
+          "owns": ["src/p22/eval/nn_factory.py", "configs/nn_protocol_v2_2026-09-23.json", "configs/nn_protocol_v2_amendment_*.json", "configs/nn_amendment_*.json", "docs/nn_v2/PROTOCOL_FREEZE.md", "docs/nn_v2/parameter_counts.json", "scripts/run_nn_v2_comparison.py", "scripts/summarize_nn_v2.py", "tests/test_nn_factory.py", "tests/test_nn_runner.py", "docs/nn_v2/ladder_summary.json", "docs/nn_v2/LADDER.md"],
+          "extra": "Save every fold model state_dict plus its fold preprocessing evidence (selected genes, regions, scaler/IDF/NMF parameters, grid point) under reports/generated/nn_20260923/ladder/models/<arm>/r<rep>_f<fold>.pt and .json; N13 and N15 in stage S3 reload them instead of refitting. Runner flags --arms, --repeats, --resume, --workers, --exclude-chr21, --model-seed, --sampling-seed must exist (S3 lanes use them). Use at most 14 worker processes, 1 torch thread each."
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "goal": "Robustness, faithfulness, per-cell export, gene-aligned rerun and Methods text in parallel, all from the frozen S2 outputs.",
+      "gate_files": [],
+      "lanes": [
+        {
+          "name": "robust",
+          "tasks": ["N11", "N12"],
+          "workers": 5,
+          "attempts": 10,
+          "goal": "Professor D13 + D9: chr21-excluded sensitivity and init/sampling-seed sensitivity with the same frozen estimand.",
+          "owns": ["scripts/run_nn_v2_comparison.py", "docs/nn_v2/chr21_excluded.json", "docs/nn_v2/seed_sensitivity.json", "docs/nn_v2/ROBUSTNESS.md"],
+          "extra": "Outputs under reports/generated/nn_20260923/chr21_excluded/ and .../seeds/. Write the reading into docs/nn_v2/ROBUSTNESS.md, not LADDER.md."
+        },
+        {
+          "name": "faith",
+          "tasks": ["N13", "N14"],
+          "workers": 5,
+          "attempts": 10,
+          "goal": "Professor D9 + D1: held-out interventions (branch ablation, within donor x cell-type ATAC permutation, attention knockout, uniform MIL pooling, gate clamp, no-op and planted positive control) and nuisance probes.",
+          "owns": ["scripts/run_nn_v2_faithfulness.py", "scripts/run_nn_v2_nuisance_probe.py", "tests/test_nn_faithfulness.py", "docs/nn_v2/faithfulness.json", "docs/nn_v2/FAITHFULNESS.md", "docs/nn_v2/nuisance_probe.json"],
+          "extra": "Reload fold models from reports/generated/nn_20260923/ladder/models/; refit only if a model file is missing (deterministic, recorded grid point)."
+        },
+        {
+          "name": "export",
+          "tasks": ["N15"],
+          "workers": 2,
+          "attempts": 8,
+          "goal": "Professor D2 input: out-of-fold per-cell DS-state scores and MIL attention for every sampled cell.",
+          "owns": ["scripts/export_nn_v2_cell_scores.py", "tests/test_nn_export.py", "docs/nn_v2/donor_celltype_scores.csv.gz"],
+          "extra": "Write the full table to reports/generated/nn_20260923/spectrum/cell_scores.csv.gz. Also export the same table for the chr21-excluded arms if their models exist; otherwise record NOT_NEEDED for that part."
+        },
+        {
+          "name": "geneact",
+          "tasks": ["N21"],
+          "workers": 4,
+          "attempts": 10,
+          "goal": "Professor D3 + D6: gene-aligned cross-attention (RNA gene g attends to ATAC gene-activity g and genomic neighbours) vs matched token-concat on the gene-activity panel. Secondary analysis.",
+          "owns": ["src/p22/models/gene_aligned.py", "tests/test_nn_gene_aligned.py", "scripts/run_nn_v2_gene_activity.py", "configs/nn_protocol_v2_amendment_gene_activity.json", "docs/nn_v2/gene_activity_results.json", "docs/nn_v2/GENE_ACTIVITY.md"],
+          "extra": "If tasks/nn/status/N20 is not DONE, write NOT_NEEDED:upstream N20 <status> to tasks/nn/status/N21 and stop. Do not edit scripts/run_nn_v2_comparison.py (robust lane owns it); import its functions instead."
+        },
+        {
+          "name": "paper1",
+          "tasks": ["N26"],
+          "workers": 1,
+          "attempts": 6,
+          "goal": "Methods section of paper/draft.md from the frozen protocol, inputs and amendments.",
+          "owns": ["paper/draft.md"],
+          "extra": "Edit ONLY the Methods section of paper/draft.md."
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "goal": "Cell-state spectrum, attention description, the results document and full verification.",
+      "gate_files": ["docs/nn_v2/NN_V2_RESULTS_2026-09-23.md"],
+      "lanes": [
+        {
+          "name": "interpret",
+          "tasks": ["N16", "N17", "N22", "N23"],
+          "workers": 8,
+          "attempts": 12,
+          "goal": "Professor D2 (cell-state spectrum), D9 (attention only where interventions show use), D11 (clear written conclusion); results doc and unsent professor note.",
+          "owns": ["scripts/analyze_nn_v2_spectrum.py", "scripts/describe_nn_v2_attention.py", "tests/test_nn_spectrum.py", "docs/nn_v2/spectrum.json", "docs/nn_v2/SPECTRUM.md", "docs/nn_v2/routing_attention.json", "docs/nn_v2/ROUTING_ATTENTION.md", "docs/nn_v2/NN_V2_RESULTS_2026-09-23.md", "docs/nn_v2/PROFESSOR_NOTE_UNSENT.md", "docs/nn_v2/FUTURE_WORK.md"],
+          "extra": ""
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "goal": "Rule-based framing and a complete, checked first draft paper.",
+      "gate_files": ["paper/draft.md", "paper/claims.csv", "paper/self_review.md"],
+      "lanes": [
+        {
+          "name": "paper",
+          "tasks": ["N24", "N25", "N27", "N29", "N30", "N31", "N32", "N33", "N34"],
+          "workers": 2,
+          "attempts": 16,
+          "goal": "First draft paper (DRAFT_V1) that traces every number to docs/nn_v2 evidence and cites only paper/refs_frozen.bib.",
+          "owns": ["paper/"],
+          "extra": "One section per iteration. Run python paper/check_paper.py after every section once N31 starts. N33 is the only write allowed outside the worktree."
+        }
+      ]
+    }
+  ]
+}
