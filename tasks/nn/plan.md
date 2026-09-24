@@ -247,11 +247,19 @@ Novelty language: "adapted combination of known techniques"; never "novel", "fir
     task's acceptance list. Mark each deliberate corner with `# ponytail: <ceiling>, <upgrade path>`.
     Each task leaves one runnable check (its listed test), not a suite.
 
+14. **Decision tree.** Before each task read `tasks/nn/decision_tree.md` section `G` and the
+    task's own section; follow its IF/ELSE branches exactly. They exist so you never stop
+    to ask: every failure has a named fallback.
+15. **Paper phase (N24–N34).** After N23, write a first draft paper from the evidence under
+    `paper/`. Cite only `paper/refs_frozen.bib`; take every number from `docs/nn_v2/`
+    JSON; framing is chosen by the N24 rule table, not by preference.
+
 ## 8. Completion
 
-Stop (`should_fully_stop=true`) only when every task N0–N23 in `tasks/nn/todo.md` is
+Stop (`should_fully_stop=true`) only when every task N0–N34 in `tasks/nn/todo.md` is
 `DONE`, `BLOCKED:<reason>` or `NOT_NEEDED:<evidence>`, `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md`
-exists with the primary contrast, and N23 passed. A BLOCKED Phase 5 does not prevent
+exists with the primary contrast, N23 passed, and `paper/draft.md` carries a
+`DRAFT_V1_COMPLETE` or `DRAFT_V1_PARTIAL` label (N34). A BLOCKED Phase 5 does not prevent
 completion. Final label must be one of `NN_ASSIGNMENT_COMPLETE` or
 `NN_ASSIGNMENT_PARTIAL_BLOCKED`; the study label stays `STUDY_PARTIAL` (no external
 validation). Return GNHF's required JSON result every iteration; `success=true` after a

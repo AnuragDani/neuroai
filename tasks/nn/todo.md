@@ -4,6 +4,9 @@ Companion to `tasks/nn/plan.md` (read its §0 assumptions, §4 design, §7 rules
 Paths `WT`, `SRC_WT`, `PY`, H5AD are defined in plan §3. Output root for ignored files:
 `reports/generated/nn_20260923/`. Tracked evidence: `docs/nn_v2/`.
 
+**Every task also has IF/ELSE rules in `tasks/nn/decision_tree.md` (section G + the task's
+section). Read them before starting the task; they override this file on conflict.**
+
 Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reason>:<evidence>`,
 `NOT_NEEDED:<evidence>`. Update only the status table and the Run log; never rewrite task text.
 
@@ -35,6 +38,17 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | TODO |
 | N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
 | N23 | Final verification | N22 | XS | TODO |
+| N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
+| N25 | Paper figures from evidence JSON | N24 | S | TODO |
+| N26 | Draft Methods | N24 | S | TODO |
+| N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
+| N28 | Draft Introduction + Related work | N24 | S | TODO |
+| N29 | Draft Discussion + Limitations | N27 | S | TODO |
+| N30 | Abstract + title | N29,N28 | XS | TODO |
+| N31 | Paper checker + fixes | N30 | S | TODO |
+| N32 | Adversarial self-review | N31 | S | TODO |
+| N33 | Copy draft to vault | N32 | XS | TODO |
+| N34 | Final paper verification | N33 | XS | TODO |
 
 ## Run log
 
@@ -711,3 +725,23 @@ claims beyond results). Do not send anything.
 - [ ] `git status --short` shows no stray large files (tracked additions < 200 KB each).
 - [ ] Status table complete; final label `NN_ASSIGNMENT_COMPLETE` or
       `NN_ASSIGNMENT_PARTIAL_BLOCKED` written at the top of `NN_V2_RESULTS_2026-09-23.md`.
+
+---
+
+## Paper phase N24–N34
+
+Full IF/ELSE, word limits and acceptance rules: `tasks/nn/decision_tree.md`, sections
+`N24:`–`N34:`. Shared constraints:
+- Draft source: `paper/draft.md` (markdown, pandoc citations `[@key]`), figures in
+  `paper/figures/`, ledger `paper/claims.csv`, checker `paper/check_paper.py`,
+  figure script `paper/make_figures.py`.
+- Cite ONLY keys in `paper/refs_frozen.bib` (18 verified entries). Never edit that file.
+- Numbers ONLY from `docs/nn_v2/*.json` and `configs/nn_*.json`; every number traced in
+  `paper/claims.csv`.
+- One section per iteration. Each iteration ends with `python paper/check_paper.py`
+  once it exists (N31 onward).
+- No new experiments in the paper phase (decision_tree G9).
+- Audience: advisor and reviewers. No immigration, career or funding language.
+
+**Acceptance (phase):** `paper/draft.md` complete with all sections; checker passes;
+`paper/self_review.md` exists; vault copy made (or BLOCKED with reason).
