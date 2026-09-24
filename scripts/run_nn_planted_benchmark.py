@@ -45,6 +45,7 @@ from p22.eval.metrics import balanced_accuracy  # noqa: E402
 from p22.eval.multiome_protocol import MultiomeProtocol  # noqa: E402
 from p22.eval.multiome_runner import model_inputs, paired_model  # noqa: E402
 from p22.eval.planted_signal import SCENARIOS, fake_donor_labels, plant  # noqa: E402
+from p22.models.fusion import VIEW_A, VIEW_B  # noqa: E402
 from p22.training.loop import predict, train_model  # noqa: E402
 from run_real_paired_comparison import _fold_map, _indices  # noqa: E402
 from run_real_paired_linear_controls import donor_cell_weights, fit_logistic  # noqa: E402
@@ -98,24 +99,43 @@ def donor_scores(labels: np.ndarray, probabilities: np.ndarray, donors: np.ndarr
 
 
 def regime_labels(records: list[dict]) -> dict:
-    """Classify each cell by the predeclared decision-tree rules."""
+    """Classify each cell by the predeclared decision-tree rules.
+
+    Only models whose fit succeeded (``status == "ok"``) enter a cell. If a
+    model is missing from a cell the rule falls through to the remaining
+    families rather than raising, so a partial run still produces a summary.
+    """
     frame = pd.DataFrame([r for r in records if r["status"] == "ok"])
     out = {}
+    if frame.empty:
+        return out
     for (scenario, delta), group in frame.groupby(["scenario", "delta"]):
         means = group.groupby("model")["donor_balanced_accuracy"].mean()
-        non_attention = means[list(("logreg_concat",) + NEURAL_MODELS[:-1])]
-        best_non = float(non_attention.max())
-        cross = float(means["cross_attention"])
-        if float(means["logreg_concat"]) >= float(means.max()) - 0.03:
+
+        def has(*names, _idx=means.index):
+            return [m for m in names if m in _idx]
+
+        present = has(*MODELS)
+        best = float(means[present].max()) if present else float("nan")
+        non_attention = has("logreg_concat", *NEURAL_MODELS[:-1])
+        best_non = float(means[non_attention].max()) if non_attention else float("nan")
+        cross = (
+            float(means["cross_attention"]) if "cross_attention" in means.index
+            else float("nan")
+        )
+        mlp_family = has("rna_atac_concat", "gated_fusion")
+
+        if "logreg_concat" in means.index and float(means["logreg_concat"]) >= best - 0.03:
             label = "LINEAR_SUFFICIENT"
-        elif cross - best_non >= 0.07:
+        elif non_attention and np.isfinite(cross) and cross - best_non >= 0.07:
             label = "CA_FAVOURED"
-        elif float(means[["rna_atac_concat", "gated_fusion"]].max()) >= float(means.max()) - 0.03:
+        elif mlp_family and float(means[mlp_family].max()) >= best - 0.03:
             label = "MLP_FAVOURED"
         else:
             label = "NONE_DETECT"
         out[f"{scenario}@{delta}"] = {
             "regime": label,
+            "n_models_scored": len(present),
             "mean_balanced_accuracy": {k: round(float(v), 4) for k, v in means.items()},
             "cross_attention_minus_best_non_attention": round(cross - best_non, 4),
         }
@@ -128,19 +148,30 @@ def acceptance_checks(records: list[dict]) -> dict:
     means = frame.groupby(["scenario", "delta", "model"])["donor_balanced_accuracy"].mean()
 
     def at(scenario, delta):
-        return means.xs((scenario, delta), level=["scenario", "delta"])
+        key = (scenario, delta)
+        if key not in means.index.droplevel("model").unique():
+            return None
+        return means.xs(key, level=["scenario", "delta"])
 
-    s0 = at("S0", 0.0)
-    s1 = at("S1", 1.0)
-    s5 = at("S5", 1.0)
-    return {
-        "s0_null_within_0p35_0p65": bool(float(s0.min()) >= 0.35 and float(s0.max()) <= 0.65),
-        "s0_range": [round(float(s0.min()), 4), round(float(s0.max()), 4)],
-        "s1_delta1_all_models_at_least_0p9": bool(s1.min() >= 0.9),
-        "s1_delta1_min": round(float(s1.min()), 4),
-        "s5_delta1_within_0p05_of_chance": bool((s5 - 0.5).abs().max() <= 0.05),
-        "s5_delta1_max_deviation": round(float((s5 - 0.5).abs().max()), 4),
-    }
+    s0, s1, s5 = at("S0", 0.0), at("S1", 1.0), at("S5", 1.0)
+    checks = {}
+    checks["s0_null_within_0p35_0p65"] = (
+        None if s0 is None else bool(float(s0.min()) >= 0.35 and float(s0.max()) <= 0.65)
+    )
+    checks["s0_range"] = None if s0 is None else [
+        round(float(s0.min()), 4), round(float(s0.max()), 4)
+    ]
+    checks["s1_delta1_all_models_at_least_0p9"] = (
+        None if s1 is None else bool(s1.min() >= 0.9)
+    )
+    checks["s1_delta1_min"] = None if s1 is None else round(float(s1.min()), 4)
+    checks["s5_delta1_within_0p05_of_chance"] = (
+        None if s5 is None else bool((s5 - 0.5).abs().max() <= 0.05)
+    )
+    checks["s5_delta1_max_deviation"] = (
+        None if s5 is None else round(float((s5 - 0.5).abs().max()), 4)
+    )
+    return checks
 
 
 def _load_job_inputs(job: dict):
@@ -154,14 +185,14 @@ def _load_job_inputs(job: dict):
 def _fit_and_score(name: str, views: dict, labels_all: np.ndarray, donors: np.ndarray,
                    positions: dict, protocol: MultiomeProtocol) -> dict:
     if name == "logreg_concat":
-        matrix = np.hstack([views["rna"], views["atac"]])
+        matrix = np.hstack([views[VIEW_A], views[VIEW_B]])
         weights = donor_cell_weights(donors[positions["train"]])
         estimator, _ = fit_logistic(
             matrix[positions["train"]], labels_all[positions["train"]], weights
         )
         probability = estimator.predict_proba(matrix[positions["test"]])[:, 1]
     else:
-        widths = [views["rna"].shape[1], views["atac"].shape[1]]
+        widths = [views[VIEW_A].shape[1], views[VIEW_B].shape[1]]
         model = paired_model(name, widths, protocol)
         selected = model_inputs(name, views)
         trained = train_model(
@@ -205,7 +236,7 @@ def run_fold(job: dict) -> dict:
     records: list[dict] = []
     for scenario, delta in delta_grid():
         planted, fake = plant(base, scenario, delta, PLANT_SEED)
-        views = {"rna": planted.rna, "atac": planted.atac}
+        views = {VIEW_A: planted.rna, VIEW_B: planted.atac}
         for name in MODELS:
             common = {"scenario": scenario, "delta": delta, "fold": job["fold"], "model": name}
             try:
@@ -274,6 +305,14 @@ def main(argv=None) -> int:
             records.extend(result["records"])
             print(f"fold {result['fold']} done: {len(result['records'])} records "
                   f"({result['n_train_donors']} train / {result['n_test_donors']} test donors)")
+
+    raw = pd.DataFrame(records).sort_values(["scenario", "delta", "fold", "model"])
+    args.out.mkdir(parents=True, exist_ok=True)
+    raw.to_csv(args.out / "results.csv.gz", index=False, compression="gzip")
+    bad = raw[raw["status"] != "ok"]
+    print(f"status: {len(raw) - len(bad)} ok / {len(bad)} non-ok of {len(raw)}")
+    for status, count in bad["status"].value_counts().items():
+        print(f"  {count}x {status}")
 
     summary = {
         "generated_at": datetime.now(UTC).isoformat(),

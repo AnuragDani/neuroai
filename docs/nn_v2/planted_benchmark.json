@@ -1,0 +1,241 @@
+{
+  "acceptance_checks": {
+    "s0_null_within_0p35_0p65": true,
+    "s0_range": [
+      0.375,
+      0.5
+    ],
+    "s1_delta1_all_models_at_least_0p9": true,
+    "s1_delta1_min": 1.0,
+    "s5_delta1_max_deviation": 0.5,
+    "s5_delta1_within_0p05_of_chance": false
+  },
+  "cap": 1000,
+  "delta_grid": [
+    "S0@0.0",
+    "S1@0.25",
+    "S1@0.5",
+    "S1@1.0",
+    "S2@0.25",
+    "S2@0.5",
+    "S2@1.0",
+    "S3@0.25",
+    "S3@0.5",
+    "S3@1.0",
+    "S4@0.25",
+    "S4@0.5",
+    "S4@1.0",
+    "S5@0.25",
+    "S5@0.5",
+    "S5@1.0"
+  ],
+  "generated_at": "2026-09-24T19:45:52.977531+00:00",
+  "n_records": 80,
+  "plant_seed": 0,
+  "protocol": {
+    "dropout": 0.2,
+    "embed_dim": 32,
+    "hidden_dim": 128,
+    "n_folds": 5,
+    "n_heads": 4,
+    "n_repeats": 1,
+    "n_tokens": 8
+  },
+  "protocol_sha256": "d6760c33e472ac4d0bcd88aec00b0abd18f4566f9f28d6da15dcae18110d2bf4",
+  "reading": "Planted synthetic signal only; no biological or clinical claim.",
+  "regime_labels": {
+    "S0@0.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 0.5,
+        "gated_fusion": 0.5,
+        "logreg_concat": 0.375,
+        "rna_atac_concat": 0.5,
+        "token_concat": 0.5
+      },
+      "n_models_scored": 5,
+      "regime": "MLP_FAVOURED"
+    },
+    "S1@0.25": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S1@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S1@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S2@0.25": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S2@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S2@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S3@0.25": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S3@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S3@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S4@0.25": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S4@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S4@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 1.0,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S5@0.25": {
+      "cross_attention_minus_best_non_attention": -0.375,
+      "mean_balanced_accuracy": {
+        "cross_attention": 0.5,
+        "gated_fusion": 0.875,
+        "logreg_concat": 0.375,
+        "rna_atac_concat": 0.5,
+        "token_concat": 0.5
+      },
+      "n_models_scored": 5,
+      "regime": "MLP_FAVOURED"
+    },
+    "S5@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 0.375,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "MLP_FAVOURED"
+    },
+    "S5@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "cross_attention": 1.0,
+        "gated_fusion": 1.0,
+        "logreg_concat": 0.375,
+        "rna_atac_concat": 1.0,
+        "token_concat": 1.0
+      },
+      "n_models_scored": 5,
+      "regime": "MLP_FAVOURED"
+    }
+  },
+  "task": "N4 planted-signal benchmark"
+}

@@ -18,7 +18,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N1 | Stable donor×cell-type×library sampler | N0 | S | DONE:src/p22/data/nn_sampling.py + tests/test_nn_sampling.py (7 passed) + docs/nn_v2/sampling_cap1000_seed22.json |
 | N2 | NN v2 data module + fold preprocessing | N1 | M | DONE:src/p22/data/nn_inputs.py + src/p22/data/nn_fold.py + tests/test_nn_inputs.py (4 passed) + docs/nn_v2/fold_prep_smoke.json (RSS 4.15GiB, region sha256 match) |
 | N3 | Planted-signal generator | N2 | S | DONE:src/p22/eval/planted_signal.py + tests/test_nn_planted.py (5 passed) + real-fold check (S5 donor rna-mean |Δ|=4.6e-8, S1/S5 atac untouched) |
-| N4 | Planted-signal benchmark run | N3 | M | TODO |
+| N4 | Planted-signal benchmark run | N3 | M | RUNNING:37613:reports/generated/nn_20260923/planted/run.log |
 | N5 | Gated-attention MIL head + bag training loop | N2 | M | TODO |
 | N6 | Conditional GRL nuisance adversary | N5 | S | TODO |
 | N7 | Cross-modal InfoNCE pairing loss | N5 | S | TODO |
@@ -51,6 +51,8 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N34 | Final paper verification | N33 | XS | TODO |
 
 ## Run log
+
+- 2026-09-24T19:50Z N4: batch session was killed by the user mid-iteration. Full benchmark `scripts/run_nn_planted_benchmark.py --cap 1000 --workers 5` left running as PID 37613 (log reports/generated/nn_20260923/planted/run.log). Current docs/nn_v2/PLANTED_BENCHMARK.md + planted_benchmark.json are a 1-fold SMOKE (SD=nan), not the result. Next: per decision_tree G1, if PID alive do N5; when it exits, verify outputs cover 16 scenario×delta cells × 5 models × 5 folds, regenerate the docs, run tests, mark N4 DONE. Do not start a second benchmark.
 
 (append one line per iteration: date-time UTC, task, outcome, evidence path; record any
 `A-NEW-<n>` assumption here with a one-line rationale)
