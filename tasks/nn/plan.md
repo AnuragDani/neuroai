@@ -236,6 +236,17 @@ Novelty language: "adapted combination of known techniques"; never "novel", "fir
 12. **Tests:** `PY -m pytest -q tests/test_nn_*.py` after each task; full
     `PY -m pytest -q -x` once at N23 only. Lint: `/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/ruff check <files>`.
 
+13. **Reuse before writing (ponytail).** Before adding any function, `grep -rn` `src/`
+    and `scripts/` for an existing one and reuse it: `set_all_seeds`, `train_model`,
+    `_train_epoch`, `predict`, `aggregate_donor_probabilities`,
+    `iter_repeated_stratified_group_folds`, `fit_train_only`, `load_cell_matrix`,
+    `repeated_primary_contrast`, `initialization_primary_sensitivity`,
+    `measure_stage`, the `real_interventions` pattern, the existing model classes.
+    Stdlib or installed packages before custom code. No base classes/registries/config
+    layers with one user; a plain dict of arm → builder is enough. Fewest files that meet the
+    task's acceptance list. Mark each deliberate corner with `# ponytail: <ceiling>, <upgrade path>`.
+    Each task leaves one runnable check (its listed test), not a suite.
+
 ## 8. Completion
 
 Stop (`should_fully_stop=true`) only when every task N0–N23 in `tasks/nn/todo.md` is
