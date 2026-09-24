@@ -1,1 +1,1 @@
-RUNNING:77658:reports/generated/nn_20260923/gene_activity/run.log
+DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sha256 ok; configs/nn_gene_activity_input_manifest_2026-09-23.json built; decision.json ACCEPTED 11/11 checks PASS, scientific_claim_allowed=true
