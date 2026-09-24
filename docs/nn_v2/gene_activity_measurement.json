@@ -1,0 +1,53 @@
+{
+  "record_type": "nn_gene_activity_measurement",
+  "date": "2026-09-23",
+  "task": "N20",
+  "measurement": {
+    "modality": "atac",
+    "regions_file": "configs/nn_gene_activity_2026-09-23.bed",
+    "regions_file_sha256": "946fd00023079d5f39ac8cb14d77a74ac25ec1167a1b24adc45f40ffb3635282",
+    "n_regions": 548,
+    "panel_rule": "chr21 genes with RNA detection in >=1% of cells plus descending label-free normalized-dispersion selection until the transfer estimate reaches the 3.5e9 byte budget or 1500 genes; gene body +/-2000bp flank, clipped at 0, canonical chr1-22/X, BED zero-based half-open",
+    "selection_uses_labels": false,
+    "count_mode": "fragment",
+    "count_unit": "unique_fragment_overlap",
+    "unknown_policy": "error",
+    "counts_npz": "reports/generated/nn_20260923/gene_activity/counts/counts.npz",
+    "counts_npz_sha256": "8cce7bd7c5e424c430db11101501417770886936dc58d34c270b388ead633deb",
+    "shape": [548, 248998],
+    "nnz": 18722983,
+    "cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "counts_json": "reports/generated/nn_20260923/gene_activity/counts/counts.json",
+    "quantify_json": "reports/generated/nn_20260923/gene_activity/quantify.json",
+    "region_sets": "reports/generated/nn_20260923/gene_activity/region_sets.json",
+    "decision_json": "reports/generated/nn_20260923/gene_activity/decision.json"
+  },
+  "acquisition": {
+    "total_bytes_fetched": 2066087936,
+    "budget_bytes": 3500000000,
+    "window_bytes": 131072,
+    "read_window_deviation": {
+      "planned_window_bytes": 262144,
+      "reason": "at window=262144 the actual transfer estimate (3493593088) left only 0.18% headroom and the run exceeded the 3.5e9 byte budget on per-chunk window rounding and transport retries; at window=131072 the offline estimate is 2027028480 (~42% headroom)",
+      "counts_invariance": "the fragment reader filters parsed records by chunk coffset/uoffset, so record counts are independent of the read window; only transfer cost changes",
+      "budget_unchanged": true,
+      "panel_unchanged": true
+    },
+    "n_regions": 548,
+    "n_join_complete": 548,
+    "n_truncated": 0,
+    "n_unknown_barcodes": 0
+  },
+  "acceptance": {
+    "requirements": "configs/nn_gene_activity_acceptance_requirements_2026-09-23.json",
+    "requirements_sha256": "c55a37ec12358afc49d1357d19427862940c81e889adcae6975a1d29dcb83998",
+    "manifest": "configs/nn_gene_activity_input_manifest_2026-09-23.json",
+    "manifest_sha256": "ecaeb3698b6cad9e1f6d60976d44fe7082a301098c0e0b00ffc2ee5c560b48bb",
+    "status": "ACCEPTED",
+    "n_checks": 11,
+    "n_checks_passed": 11,
+    "scientific_claim_allowed": true,
+    "checker": "scripts/check_real_paired_acceptance.py"
+  },
+  "notes": "Fixed label-free panel; no cell-type deconvolution. All 548 regions yielded complete joins against the fragment index; 2 regions had no overlapping fragments (empty). The acceptance decision is a real-paired input-integrity decision only; it makes no biological claim about the panel."
+}

@@ -124,6 +124,9 @@ def quantify_regions(
     count_mode: str = "fragment",
     unknown_policy: str = "error",
     total_max_bytes: int | None = None,
+    transport_retries: int = 0,
+    transport_backoff: float = 1.0,
+    sleep=time.sleep,
     allow_partial: bool = False,
 ) -> tuple[list[dict], list[dict], object]:
     """Query all regions, concurrently, returning (records, stats, matrix).
@@ -133,6 +136,12 @@ def quantify_regions(
     ``unknown_policy="drop"`` to exclude them explicitly with the exclusions
     reported per region. A successful query with zero overlapping fragments is a
     valid empty region, not a failure.
+
+    ``total_max_bytes`` is charged for *every* attempt: the budget wraps the raw
+    transport and the bounded-retry wrapper wraps the budget, so a failed attempt
+    and its retry are each charged against the one shared cap. Budget exhaustion
+    raises :class:`TransferBudgetExceeded`, which is not a transient transport
+    error and therefore is never retried.
     """
     if not regions:
         raise ValueError("at least one region is required")
@@ -141,10 +150,17 @@ def quantify_regions(
     if unknown_policy not in ("error", "drop"):
         raise ValueError("unknown_policy must be 'error' or 'drop'")
 
-    budget = None
+    # Composition order matters: budget is inner so every network attempt is
+    # charged; retry is outer so a retried attempt cannot escape accounting.
     if total_max_bytes is not None:
-        budget = _BudgetedTransport(transport, int(total_max_bytes))
-        transport = budget
+        transport = _BudgetedTransport(transport, int(total_max_bytes))
+    if transport_retries > 0:
+        transport = _RetryingTransport(
+            transport,
+            retries=transport_retries,
+            backoff=transport_backoff,
+            sleep=sleep,
+        )
 
     def run(region):
         name, beg, end = region
@@ -230,21 +246,19 @@ def main(argv: list[str] | None = None) -> int:
     regions = qfr.read_regions_file(str(args.regions_file))
     index = qfr.TabixIndex.from_path(args.index_path)
     cells = qfr.load_ordered_cells(args.obs_h5ad, args.allowlist_path)
-    transport = qfr.http_range
-    if args.transport_retries > 0:
-        transport = _RetryingTransport(transport, retries=args.transport_retries)
     records, _stats, matrix = quantify_regions(
         regions,
         cells,
         index,
         args.fragment_url,
-        transport=transport,
+        transport=qfr.http_range,
         window=args.window,
         max_bytes=args.max_bytes_per_region,
         workers=args.workers,
         count_mode=args.count_mode,
         unknown_policy=args.unknown_policy,
         total_max_bytes=args.total_max_bytes,
+        transport_retries=args.transport_retries,
     )
     args.counts_out.mkdir(parents=True, exist_ok=False)
     from scipy import sparse

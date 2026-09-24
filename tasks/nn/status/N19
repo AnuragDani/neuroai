@@ -1,1 +1,1 @@
-TODO
+DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean

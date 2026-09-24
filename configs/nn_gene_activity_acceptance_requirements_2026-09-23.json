@@ -1,0 +1,68 @@
+{
+  "record_type": "real_paired_acceptance_requirements",
+  "declared_at": "2026-09-23",
+  "status": "PROSPECTIVE_DECLARATION_BEFORE_ACCEPTANCE_EVALUATION",
+  "scope": "gene_activity_atac_measurement_entry_point",
+  "rationale": "A real-data run must not promote itself to a scientific claim. This record is consumed by p22.eval.real_paired_acceptance and binds the declared representation, count unit, ordered identities, per-fold donor provenance and protocol settings for the N18/N19/N20 gene-activity panel entry point to the executable configuration. The panel identity (configs/nn_gene_activity_2026-09-23.bed, sha256 946fd00023079d5f39ac8cb14d77a74ac25ec1167a1b24adc45f40ffb3635282) and the count contract (configs/atac_measurement_contract_2026-09-21.json) were frozen before the quantification command was launched; only the JSON wrapping is written later.",
+  "declaration_timing": "the panel BED and count contract were committed before the N20 quantify command; this requirements record was written after the quantification was launched but before any acceptance evaluation, and it declares only pre-fixed choices.",
+  "preserved_historical_result": "docs/repeated_internal_comparison_2026-09-21.json is unchanged; this record does not revise it.",
+  "rna": {
+    "matrix_key": "raw/X",
+    "axis_key": "raw/var",
+    "genome_build": "GRCh38",
+    "require_integer_counts": true
+  },
+  "atac": {
+    "count_unit": "unique_fragment_overlap",
+    "count_mode": "fragment",
+    "unknown_policy": "error",
+    "interval_rule": "a fragment record qualifies for region [beg, end) when fragment_start < end and fragment_end > beg; fragment_start >= fragment_end records are ignored",
+    "require_complete_join": true,
+    "reader_contract": "configs/atac_measurement_contract_2026-09-21.json"
+  },
+  "regions": {
+    "union_sha256": "9fcfa007b981186b7f88507bf5afb14777b6d6ab0a13d5e90bed312fe2e6302b",
+    "n_union_regions": 548,
+    "top_n": 548,
+    "selection_uses_labels": false,
+    "rule": "fixed label-free gene-activity panel: all chr21 genes with RNA detection in >=1% of cells, ranked by normalized dispersion until the transfer estimate reaches the 3.5e9 byte budget; gene body +/-2000bp clipped at 0, canonical chr1-22/X, zero-based half-open; the identical 548-window list is used in every fold so no donor's fragment data enters feature definition"
+  },
+  "population": {
+    "n_donors": 30,
+    "n_control": 15,
+    "n_positive": 15,
+    "label_rule": "disease == 'complete trisomy 21'",
+    "retained_population": "H5AD retained set; unknown barcodes are refused, never silently dropped"
+  },
+  "protocol": {
+    "families": [
+      "rna_only",
+      "atac_only",
+      "rna_atac_concat",
+      "gated_fusion",
+      "token_concat",
+      "cross_attention"
+    ],
+    "majority_control": true,
+    "donor_aggregation": "mean_predicted_probability",
+    "donor_threshold": 0.5,
+    "practical_margin": 0.07,
+    "margin_rule": "practical_margin(15, 15); not lowered after seeing results",
+    "uncertainty_method": "donor_cluster_percentile_bootstrap",
+    "uncertainty_seed": 22,
+    "n_repeats": 5,
+    "n_folds": 5,
+    "split_seed": 0,
+    "inner_validation": {
+      "selection_split": "val",
+      "selection_unit": "donor",
+      "require_subset_of_train": true,
+      "require_disjoint_from_test": true
+    }
+  },
+  "manifest": {
+    "required": true,
+    "path_hint": "configs/nn_gene_activity_input_manifest_2026-09-23.json",
+    "note": "generated after the gene-activity ATAC matrix is measured; until it exists no real run may set scientific_claim_allowed"
+  }
+}
