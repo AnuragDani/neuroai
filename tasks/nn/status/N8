@@ -1,1 +1,1 @@
-TODO
+DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention rows sum to 1, concat control fewer params, both run in MILWrapper
