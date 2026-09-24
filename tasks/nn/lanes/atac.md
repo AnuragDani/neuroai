@@ -1,1 +1,2 @@
 iter1 N18: fixed budget/retry composition to Retry(Budget(raw)); every attempt charged, exhausted budget non-retryable; added 3 regression tests; 15 passed, ruff clean.
+iter2 N19: recovered discarded builder+estimator+tests; fixed float tie-break (round z to 9dp) and reserve default 0.01->0.0; 30 passed, ruff clean; real build 548 genes / 3493593088 bytes, estimator validation 0.0.
