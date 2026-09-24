@@ -295,6 +295,86 @@ def test_retrying_transport_validates_configuration():
             raise AssertionError(f"invalid retry configuration must be refused: {kwargs}")
 
 
+def test_budget_charges_every_retried_attempt():
+    """N18 regression: a failed attempt and its retry are both charged."""
+    import urllib.error
+
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    calls = {"n": 0}
+
+    def flaky(_url, start, end):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise urllib.error.URLError("temporary DNS failure")
+        return b"y" * (end - start + 1)
+
+    budget = module._BudgetedTransport(flaky, total_max_bytes=200)
+    transport = module._RetryingTransport(budget, retries=4, backoff=0, sleep=lambda _s: None)
+    assert transport("u", 0, 99) == b"y" * 100
+    assert calls["n"] == 2
+    # Under Budget(Retry(raw)) the retry would be free and this would read 100.
+    assert budget.used == 200
+
+
+def test_budget_exhaustion_is_not_retried_before_transfer():
+    """N18 regression: the retried attempt is refused before any transfer."""
+    import urllib.error
+
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    calls = {"n": 0}
+
+    def always_fail(_url, _start, _end):
+        calls["n"] += 1
+        raise urllib.error.URLError("still down")
+
+    budget = module._BudgetedTransport(always_fail, total_max_bytes=100)
+    transport = module._RetryingTransport(budget, retries=4, backoff=0, sleep=lambda _s: None)
+    try:
+        transport("u", 0, 99)
+    except module.TransferBudgetExceeded:
+        pass
+    else:
+        raise AssertionError("the retried attempt must be refused by the shared budget")
+    assert calls["n"] == 1  # the retry never reached the network
+    assert budget.used == 100
+
+
+def test_quantify_regions_charges_retries_against_the_budget():
+    """N18 integration: quantify_regions composes Retry(Budget(raw))."""
+    import urllib.error
+
+    qfr = load("query_fragment_regions", "scripts/query_fragment_regions.py")
+    module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
+    blob, index_raw = build_fixture(["chr1\t10\t20\tbcA\t1"])
+    index = qfr.TabixIndex.from_bytes(index_raw)
+    calls = {"n": 0}
+
+    def flaky(_url, start, end):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise urllib.error.URLError("temporary DNS failure")
+        return blob[start : end + 1]
+
+    try:
+        module.quantify_regions(
+            [("chr1", 0, 100)],
+            ["bcA"],
+            index,
+            "fixture",
+            transport=flaky,
+            window=len(blob),
+            max_bytes=len(blob),
+            workers=1,
+            total_max_bytes=len(blob),
+            transport_retries=1,
+        )
+    except module.TransferBudgetExceeded:
+        pass
+    else:
+        raise AssertionError("a retried fetch must be charged and refused at the cap")
+    assert calls["n"] == 1
+
+
 def test_main_refuses_existing_output(tmp_path, monkeypatch):
     module = load("quantify_development_atac", "scripts/quantify_development_atac.py")
     regions = tmp_path / "regions.bed"
