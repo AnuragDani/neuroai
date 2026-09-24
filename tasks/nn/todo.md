@@ -17,7 +17,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N0 | Startup snapshot + input manifest | — | XS | DONE:configs/nn_inputs_2026-09-23.json; all 4 sha256 inputs match; free=15GiB |
 | N1 | Stable donor×cell-type×library sampler | N0 | S | DONE:src/p22/data/nn_sampling.py + tests/test_nn_sampling.py (7 passed) + docs/nn_v2/sampling_cap1000_seed22.json |
 | N2 | NN v2 data module + fold preprocessing | N1 | M | DONE:src/p22/data/nn_inputs.py + src/p22/data/nn_fold.py + tests/test_nn_inputs.py (4 passed) + docs/nn_v2/fold_prep_smoke.json (RSS 4.15GiB, region sha256 match) |
-| N3 | Planted-signal generator | N2 | S | TODO |
+| N3 | Planted-signal generator | N2 | S | DONE:src/p22/eval/planted_signal.py + tests/test_nn_planted.py (5 passed) + real-fold check (S5 donor rna-mean |Δ|=4.6e-8, S1/S5 atac untouched) |
 | N4 | Planted-signal benchmark run | N3 | M | TODO |
 | N5 | Gated-attention MIL head + bag training loop | N2 | M | TODO |
 | N6 | Conditional GRL nuisance adversary | N5 | S | TODO |
@@ -58,6 +58,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 - 2026-09-23T00:00Z N0 DONE. Manifest `configs/nn_inputs_2026-09-23.json`; H5AD, tie-break 465, historical 480, fragment.tbi all sha256 match plan §3; free disk 15 GiB, RAM 128 GiB; H5AD raw shape 248998×35477, all 13 required obs columns present, raw/var has seqnames/start/end. Next: N1.
 - 2026-09-23T18:58Z N1 DONE. New `src/p22/data/nn_sampling.py::sample_donor_stratified_cells(obs, cap, seed, strata=("author_cell_type","library"))` (hierarchical largest-remainder allocation, ≥1 per joint stratum when cap allows, sha256 tie-break, label-free). `tests/test_nn_sampling.py` 7 passed incl. real-obs check on all 7 two-library donors. Evidence `docs/nn_v2/sampling_cap1000_seed22.json` (cap1000 seed22: 30000 cells, 0 proportionality violations; cap256 reproduction block included). ruff clean. Next: N2.
 - 2026-09-23T19:40Z N2 DONE. `src/p22/data/nn_inputs.py` (265 lines: loader, `NNInputs`/`FoldArrays`, gene/region tables, chr21 masks, `region_indices`, lazy `prepare_nn_fold` re-export) + `src/p22/data/nn_fold.py` (184 lines: `_rna_lognorm` A7, `_hvg_indices`, `_atac_tfidf` A8, `_qc_matrix`, `prepare_nn_fold`). `tests/test_nn_inputs.py` 4 passed (train-only fit invariance incl. IDF sha256 + rna/atac unchanged, chr21 exclusion, region-id mapping, train/holdout donor-overlap refusal); ruff clean. Real-data smoke repeat 0/fold 0 cap1000 seed22: 30000 cells, rna [30000,2000], atac [30000,256], qc [30000,5], 15000 positives, `region_set_sha256` matches union JSON, load 7.03s, prep 1.52s, peak RSS 4.153 GiB. Evidence `docs/nn_v2/fold_prep_smoke.json`. Next: N3.
+- 2026-09-24T00:00Z N3 DONE. `src/p22/eval/planted_signal.py` (`fake_donor_labels` sha256-rank alternating within disease group; `select_features` 20 RNA HVG cols + 20 ATAC region cols by hash rank; `plant` S0/S1/S2/S3/S4/S5, train-only median, S5 per-donor RNA re-centering, non-mutating). `tests/test_nn_planted.py` 5 passed (fake table [[2,2],[2,2]] balanced/independent, S0 identity, S5 donor marginal |Δ|<1e-5, S1 only positive-donor RNA cols, feature determinism); ruff clean. Real-fold check repeat0/fold0 cap1000 seed22: 30000 cells, 14000 fake-positive, S5 worst donor rna-mean |Δ|=4.6e-8, atac untouched, S1 rna diff 1.0. Next: N4.
 
 ---
 
