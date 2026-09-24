@@ -1,1 +1,1 @@
-TODO
+DONE:paper/check_paper.py implements N31 checks 1-5 (citations/numbers/forbidden/figures/word-counts); 12 tests pass in tests/test_paper_tools.py; ruff clean; parses 18 keys from paper/refs_frozen.bib
