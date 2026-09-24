@@ -1,0 +1,1 @@
+DONE:reports/generated/nn_20260923/planted/results.csv.gz (sha256 3c00bc865ebad7bc…, 400 records = 16 cells×5 models×5 folds, 0 non-ok) + docs/nn_v2/planted_benchmark.json (b60b1a5f81dd5e50…, regime_labels) + PLANTED_BENCHMARK.md; S0 0.50–0.5417, S1δ1 all=1.0, S5δ1 not near chance (max dev 0.5, no δ=2 run); CA−best non-attn <0.07 in every cell; tests/test_nn_planted*.py 9 passed

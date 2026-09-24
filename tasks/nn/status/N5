@@ -1,0 +1,1 @@
+DONE:src/p22/models/mil.py + src/p22/training/bags.py + src/p22/training/mil_loop.py + tests/test_nn_mil.py (10 passed); synthetic 12-donor 10%-signal val donor AUROC=1.0 in 30 epochs; train_mil signature has no test arrays

@@ -1,0 +1,1 @@
+DONE:src/p22/data/nn_inputs.py + src/p22/data/nn_fold.py + tests/test_nn_inputs.py (4 passed) + docs/nn_v2/fold_prep_smoke.json (RSS 4.15GiB, region sha256 match)
