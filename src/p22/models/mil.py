@@ -90,6 +90,47 @@ class MILWrapper(nn.Module):
             raise ValueError(f"single-view encoder reads exactly one view, got {sorted(views)}")
         return self.encoder.embed(next(iter(views.values())))
 
+    def forward_bag_full(
+        self, views: Mapping[str, torch.Tensor]
+    ) -> tuple[
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        dict[str, torch.Tensor] | None,
+    ]:
+        """Classify one bag and also return the embeddings used.
+
+        This is :meth:`forward_bag` plus the pooled-input embedding and, for a
+        fusion encoder, the per-branch embeddings. It encodes each view once so
+        auxiliary losses (for example the N7 pairing loss) need not re-encode.
+
+        Args:
+            views: this bag's per-view ``(n_cells, n_features)`` tensors.
+
+        Returns:
+            ``(logit_bag, attention, cell_logits, embeddings, branch_embeddings)``
+            where ``branch_embeddings`` is ``None`` for a single-view encoder.
+        """
+        if hasattr(self.encoder, "has_gate"):
+            missing = [name for name in (VIEW_A, VIEW_B) if name not in views]
+            if missing:
+                raise ValueError(f"fusion encoder needs view(s) {missing}")
+            output = self.encoder(views[VIEW_A], views[VIEW_B])
+            embeddings = output.fused_embedding
+            branches: dict[str, torch.Tensor] | None = output.branch_embeddings
+        else:
+            if len(views) != 1:
+                raise ValueError(
+                    f"single-view encoder reads exactly one view, got {sorted(views)}"
+                )
+            embeddings = self.encoder.embed(next(iter(views.values())))
+            branches = None
+        pooled, attention = self.pool(embeddings)
+        logit_bag = self.head(pooled)
+        cell_logits = self.head(embeddings).squeeze(-1)
+        return logit_bag, attention, cell_logits, embeddings, branches
+
     def forward_bag(
         self, views: Mapping[str, torch.Tensor]
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -102,8 +143,5 @@ class MILWrapper(nn.Module):
             ``(logit_bag, attention, cell_logits)`` with shapes ``(1,)``,
             ``(n_cells,)`` (summing to one), and ``(n_cells,)``.
         """
-        embeddings = self.embed(views)
-        pooled, attention = self.pool(embeddings)
-        logit_bag = self.head(pooled)
-        cell_logits = self.head(embeddings).squeeze(-1)
+        logit_bag, attention, cell_logits, _embeddings, _branches = self.forward_bag_full(views)
         return logit_bag, attention, cell_logits

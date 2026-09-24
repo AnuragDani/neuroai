@@ -79,13 +79,18 @@ def _bag_batch(
     """Forward one bag, returning the model outputs and a metadata dict."""
     index = torch.as_tensor(bag, dtype=torch.long, device=device)
     views = {name: tensor[index] for name, tensor in tensors.items()}
-    logit_bag, attention, cell_logits = model.forward_bag(views)
+    if hasattr(model, "forward_bag_full"):
+        logit_bag, attention, cell_logits, embeddings, branches = model.forward_bag_full(views)
+    else:
+        logit_bag, attention, cell_logits = model.forward_bag(views)
+        embeddings, branches = model.embed(views), None
     batch_out = {
         "views": views,
         "logit_bag": logit_bag,
         "attention": attention,
         "cell_logits": cell_logits,
-        "embeddings": model.embed(views),
+        "embeddings": embeddings,
+        "branch_embeddings": branches,
     }
     return batch_out, meta
 
@@ -213,13 +218,29 @@ def train_mil(
 
     seeds = set_all_seeds(int(options["seed"]))
     model = model.to(device)
-    optimiser = torch.optim.Adam(model.parameters(), lr=float(options["learning_rate"]))
+    # Auxiliary modules (e.g. the N7 pairing head) are optimised alongside the
+    # model. Dedup by id because a head attached to the model is already in
+    # model.parameters().
+    params = list(model.parameters())
+    seen = {id(p) for p in params}
+    aux_heads: list[nn.Module] = []
+    for aux in aux_losses:
+        head = getattr(aux, "head", None)
+        if isinstance(head, nn.Module):
+            head.to(device)
+            aux_heads.append(head)
+            for param in head.parameters():
+                if id(param) not in seen:
+                    seen.add(id(param))
+                    params.append(param)
+    optimiser = torch.optim.Adam(params, lr=float(options["learning_rate"]))
     criterion = nn.BCEWithLogitsLoss(reduction="none")
 
     history: list[EpochRecord] = []
     best_score = -float("inf")
     best_epoch = 0
     best_state = copy.deepcopy(model.state_dict())
+    best_aux_state = [copy.deepcopy(head.state_dict()) for head in aux_heads]
     epochs_without_improvement = 0
     stopped_early = False
 
@@ -240,6 +261,7 @@ def train_mil(
             best_score = val_score
             best_epoch = epoch
             best_state = copy.deepcopy(model.state_dict())
+            best_aux_state = [copy.deepcopy(head.state_dict()) for head in aux_heads]
             epochs_without_improvement = 0
         else:
             epochs_without_improvement += 1
@@ -248,6 +270,8 @@ def train_mil(
                 break
 
     model.load_state_dict(best_state)
+    for head, state in zip(aux_heads, best_aux_state, strict=True):
+        head.load_state_dict(state)
     model.eval()
     return TrainedModel(
         model=model,
