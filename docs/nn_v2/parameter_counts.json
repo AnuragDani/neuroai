@@ -1,0 +1,100 @@
+{
+  "record_type": "nn_parameter_counts",
+  "created_utc": "2026-09-24T22:04:51Z",
+  "git_head": "1306bc508f19bb519e74cde25fad7bf12e284148",
+  "widths": {
+    "n_features_a": 2000,
+    "n_features_b": 256,
+    "n_classes": 2,
+    "n_library": 37,
+    "n_batch": 12,
+    "k_rna": 16,
+    "k_atac": 8
+  },
+  "architecture": {
+    "n_tokens": 8,
+    "embed_dim": 32,
+    "hidden_dim": 128,
+    "dropout": 0.2,
+    "n_heads": 4,
+    "attn_dim": 64,
+    "gate_hidden_dim": 32,
+    "prog_dim": 32,
+    "prog_heads": 4,
+    "n_qc": 5,
+    "adv_hidden": 64,
+    "pairing_proj": 32,
+    "latent_width": 64,
+    "lambda_adv": 1.0,
+    "lambda_nce": 1.0
+  },
+  "training": {
+    "bag_size": 64,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "max_epochs": 30,
+    "patience": 6,
+    "seed": 0,
+    "device": "cpu"
+  },
+  "parameter_match_policy": {
+    "target": "R3_ca",
+    "arm": "R3_tc_parammatched",
+    "within_5pct_informational": true,
+    "accept_within_10pct": true
+  },
+  "counts": {
+    "R0_ca": {
+      "n_params": 359426
+    },
+    "R0_tc": {
+      "n_params": 355202
+    },
+    "R1_ca": {
+      "n_params": 367876
+    },
+    "R1_tc": {
+      "n_params": 363652
+    },
+    "R2_ca": {
+      "n_params": 384250
+    },
+    "R2_tc": {
+      "n_params": 380026
+    },
+    "R3_ca": {
+      "n_params": 384250
+    },
+    "R3_tc": {
+      "n_params": 380026
+    },
+    "R4_ca": {
+      "n_params": 29970
+    },
+    "R4_tc": {
+      "n_params": 25746
+    },
+    "R3_tc_parammatched": {
+      "n_params": 380026,
+      "match": {
+        "hidden_dim": 128,
+        "n_tokens": 8,
+        "n_params": 380026,
+        "target_params": 384250,
+        "relative_error": 0.010993,
+        "within_5pct": true
+      }
+    },
+    "R3_gated": {
+      "n_params": 314044
+    },
+    "latent_pca_lsi_head": {
+      "n_params": 16836
+    },
+    "logreg_rna": null,
+    "logreg_concat": null,
+    "pseudobulk_rna_logistic": null,
+    "chr21_dosage": null,
+    "majority": null
+  }
+}

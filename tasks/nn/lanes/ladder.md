@@ -1,0 +1,12 @@
+# Lane ladder log (N9, N10)
+
+- iter1 N9: recovered `src/p22/eval/nn_factory.py` + `tests/test_nn_factory.py` from the
+  iteration-1 SSE log; fixed tests to pass `CFG` for adversary arms and accept the 10%
+  parameter-match fallback. 29 passed, ruff clean.
+- iter2 N9: gathered frozen inputs (tie-break 465 region set at
+  `configs/atac_tiebreak_region_sets_2026-09-21.json`, A13 architecture defaults,
+  data cardinalities library=37 batch=12, n_hvg=2000, per-fold regions=256). Generated
+  `docs/nn_v2/parameter_counts.json` (18 arms; `R3_tc_parammatched` rel. err 1.10%),
+  `configs/nn_protocol_v2_2026-09-23.json` (protocol_sha256
+  `80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161`), and
+  `docs/nn_v2/PROTOCOL_FREEZE.md`. 29 passed, ruff clean. N9 DONE. Next: N10.

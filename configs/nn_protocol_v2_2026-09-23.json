@@ -1,0 +1,158 @@
+{
+  "record_type": "nn_protocol_v2",
+  "version": "2.0",
+  "task": "N9",
+  "created_utc": "2026-09-24T22:04:51Z",
+  "git_head_at_freeze": "1306bc508f19bb519e74cde25fad7bf12e284148",
+  "arms": [
+    "R0_ca",
+    "R0_tc",
+    "R1_ca",
+    "R1_tc",
+    "R2_ca",
+    "R2_tc",
+    "R3_ca",
+    "R3_tc",
+    "R4_ca",
+    "R4_tc",
+    "R3_tc_parammatched",
+    "R3_gated",
+    "latent_pca_lsi_head",
+    "logreg_rna",
+    "logreg_concat",
+    "pseudobulk_rna_logistic",
+    "chr21_dosage",
+    "majority"
+  ],
+  "primary_contrast": {
+    "arms": [
+      "R3_ca",
+      "R3_tc"
+    ],
+    "endpoint": "donor_balanced_accuracy",
+    "statistic": "difference_R3_ca_minus_R3_tc",
+    "margin": 0.07,
+    "bootstrap_draws": 1000,
+    "bootstrap_seed": 22
+  },
+  "secondary_endpoints": [
+    "donor_auroc",
+    "donor_log_loss",
+    "donor_brier"
+  ],
+  "splits": {
+    "schedule": "iter_repeated_stratified_group_folds",
+    "group": "donor",
+    "label": "donor_label",
+    "n_folds": 5,
+    "n_repeats": 5,
+    "split_seed": 0,
+    "inner_folds": 3,
+    "inner_selection_metric": "donor_log_loss"
+  },
+  "sampling": {
+    "function": "sample_donor_stratified_cells",
+    "cap_per_donor": 1000,
+    "seed": 22,
+    "strata": [
+      "author_cell_type",
+      "library"
+    ],
+    "reproduction_cap_per_donor": 256,
+    "artifact": "docs/nn_v2/sampling_cap1000_seed22.json",
+    "artifact_sha256": "e515b2eee03804b3836256ba3e8b7604fa6a8043e50c06c36b24988250423b2f"
+  },
+  "representation": {
+    "rna": {
+      "transform": "log1p(1e4*raw_count/cell_total_raw_count)",
+      "hvg": "per-fold training-cells-only label-free normalized dispersion",
+      "n_hvg": 2000,
+      "scale": "per-gene standard scaling fit on training cells"
+    },
+    "atac": {
+      "transform": "per-cell TF-IDF log1p(tf*idf)",
+      "idf_fit": "training cells only",
+      "region_set": "per-fold training-only tie-break region set",
+      "n_regions": 256,
+      "region_set_config": "configs/atac_tiebreak_region_sets_2026-09-21.json",
+      "region_set_config_sha256": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+      "n_union_regions": 465,
+      "tie_break_salt": "p22-atac-tiebreak-v1"
+    }
+  },
+  "architecture": {
+    "n_tokens": 8,
+    "embed_dim": 32,
+    "hidden_dim": 128,
+    "dropout": 0.2,
+    "n_heads": 4,
+    "attn_dim": 64,
+    "gate_hidden_dim": 32,
+    "prog_dim": 32,
+    "prog_heads": 4,
+    "n_qc": 5,
+    "adv_hidden": 64,
+    "pairing_proj": 32,
+    "latent_width": 64,
+    "lambda_adv": 1.0,
+    "lambda_nce": 1.0
+  },
+  "training": {
+    "optimizer": "Adam",
+    "bag_size": 64,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "max_epochs": 30,
+    "patience": 6,
+    "model_seed": 0,
+    "device": "cpu",
+    "torch_threads_per_worker": 1,
+    "max_workers": 14
+  },
+  "hyperparameter_grid": {
+    "R2": {
+      "lambda_adv": [
+        0.1,
+        1.0
+      ]
+    },
+    "R3": {
+      "lambda_adv": [
+        0.1,
+        1.0
+      ],
+      "lambda_nce": [
+        0.1,
+        1.0
+      ]
+    },
+    "selection": "inner_validation_donor_log_loss",
+    "carry_r2_winner_into_R3": false
+  },
+  "losses": {
+    "mil": "BCE over donor bags",
+    "adversary": {
+      "targets": [
+        "library_ce",
+        "batch_seq_ce",
+        "qc_mse_5_standardized"
+      ],
+      "hidden": 64,
+      "grl_gamma": "2/(1+exp(-10p))-1"
+    },
+    "infonce": {
+      "tau": 0.1,
+      "scope": "within_minibatch",
+      "projection_dim": 32
+    }
+  },
+  "rung_rejection_rules": {
+    "R1": "rejected if donor log-loss not lower than R0 for both CA and TC (mean over repeats)",
+    "R2": "rejected if held-out nuisance-probe accuracy (within disease) does not drop >=5 points vs R1, OR donor BA drops >0.05 vs R1",
+    "R3": "rejected if held-out pairing retrieval top-1 <= 2x chance, OR donor log-loss worse than R2",
+    "R4": "descriptive; rejected if donor BA < R2 - 0.05"
+  },
+  "cell_selection_metric_note": "Cell-level arms (R0) select on donor balanced accuracy via train_model; MIL arms select on inner-validation donor log-loss. Recorded for honesty.",
+  "no_real_label_nn_fit_at_freeze": true,
+  "protocol_sha256": "80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161"
+}
