@@ -16,13 +16,13 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 |---|---|---|---|---|
 | N0 | Startup snapshot + input manifest | — | XS | DONE:configs/nn_inputs_2026-09-23.json; all 4 sha256 inputs match; free=15GiB |
 | N1 | Stable donor×cell-type×library sampler | N0 | S | DONE:src/p22/data/nn_sampling.py + tests/test_nn_sampling.py (7 passed) + docs/nn_v2/sampling_cap1000_seed22.json |
-| N2 | NN v2 data module + fold preprocessing | N1 | M | DONE:src/p22/data/nn_inputs.py + src/p22/data/nn_fold.py + tests/test_nn_inputs.py (4 passed) + docs/nn_v2/fold_prep_smoke.json (RSS 4.15GiB, region sha256 match) |
-| N3 | Planted-signal generator | N2 | S | DONE:src/p22/eval/planted_signal.py + tests/test_nn_planted.py (5 passed) + real-fold check (S5 donor rna-mean |Δ|=4.6e-8, S1/S5 atac untouched) |
-| N4 | Planted-signal benchmark run | N3 | M | DONE:reports/generated/nn_20260923/planted/results.csv.gz (sha256 3c00bc865ebad7bc…, 400 records = 16 cells×5 models×5 folds, 0 non-ok) + docs/nn_v2/planted_benchmark.json (b60b1a5f81dd5e50…, regime_labels) + PLANTED_BENCHMARK.md; S0 0.50–0.5417, S1δ1 all=1.0, S5δ1 not near chance (max dev 0.5, no δ=2 run); CA−best non-attn <0.07 in every cell; tests/test_nn_planted*.py 9 passed |
-| N5 | Gated-attention MIL head + bag training loop | N2 | M | DONE:src/p22/models/mil.py + src/p22/training/bags.py + src/p22/training/mil_loop.py + tests/test_nn_mil.py (10 passed); synthetic 12-donor 10%-signal val donor AUROC=1.0 in 30 epochs; train_mil signature has no test arrays |
-| N6 | Conditional GRL nuisance adversary | N5 | S | DONE:src/p22/models/nuisance.py + tests/test_nn_nuisance.py (9 passed); `mil_loop._train_mil_epoch` meta["index"] added; synthetic planted-batch probe drop 0.231 (control 0.999→regularised 0.768, λ=3.0, 1500 ep, seeds 0/1), label probe 1.0 |
-| N7 | Cross-modal InfoNCE pairing loss | N5 | S | DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired loss < shuffled, retrieval 1.0 identical / <0.02 shuffled (chance 1/256) |
-| N8 | Program/module-token fusion models | N2 | M | TODO |
+| N2 | NN v2 data module + fold preprocessing | N1 | M | DONE:src/p22/data/nn_inputs.py + src/p22/data/nn_fold.py + tests/test_nn_inputs.py (4 passed) + docs/nn_v2/fold_prep_smoke.json (RSS 4.15GiB, region sha256 matc |
+| N3 | Planted-signal generator | N2 | S | DONE:src/p22/eval/planted_signal.py + tests/test_nn_planted.py (5 passed) + real-fold check (S5 donor rna-mean |Δ| =4.6e-8, S1/S5 atac untouched) |
+| N4 | Planted-signal benchmark run | N3 | M | DONE:reports/generated/nn_20260923/planted/results.csv.gz (sha256 3c00bc865ebad7bc…, 400 records = 16 cells×5 models×5 folds, 0 non-ok) + docs/nn_v2/planted_ben |
+| N5 | Gated-attention MIL head + bag training loop | N2 | M | DONE:src/p22/models/mil.py + src/p22/training/bags.py + src/p22/training/mil_loop.py + tests/test_nn_mil.py (10 passed); synthetic 12-donor 10%-signal val donor |
+| N6 | Conditional GRL nuisance adversary | N5 | S | DONE:src/p22/models/nuisance.py + tests/test_nn_nuisance.py (9 passed); `mil_loop._train_mil_epoch` meta["index"] added; synthetic planted-batch probe drop 0.23 |
+| N7 | Cross-modal InfoNCE pairing loss | N5 | S | DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired lo |
+| N8 | Program/module-token fusion models | N2 | M | DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention  |
 | N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | TODO |
 | N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | TODO |
 | N11 | chr21-excluded sensitivity | N10 | S | TODO |
@@ -32,9 +32,9 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N15 | Out-of-fold per-cell score export | N10 | S | TODO |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
 | N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
-| N18 | Fix retry-budget accounting defect | N0 | XS | TODO |
-| N19 | Gene-activity BED + transfer estimate | N18 | S | TODO |
-| N20 | Bounded gene-activity quantification | N19 | S | TODO |
+| N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
+| N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
+| N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | TODO |
 | N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
 | N23 | Final verification | N22 | XS | TODO |
@@ -42,7 +42,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N25 | Paper figures from evidence JSON | N24 | S | TODO |
 | N26 | Draft Methods | N24 | S | TODO |
 | N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
-| N28 | Draft Introduction + Related work | N24 | S | TODO |
+| N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
 | N29 | Draft Discussion + Limitations | N27 | S | TODO |
 | N30 | Abstract + title | N29,N28 | XS | TODO |
 | N31 | Paper checker + fixes | N30 | S | TODO |
