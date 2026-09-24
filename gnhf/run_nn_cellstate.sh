@@ -55,7 +55,7 @@ EOF
 
 STOP_WHEN='Every task N0-N23 in tasks/nn/todo.md is DONE, BLOCKED:<reason> or NOT_NEEDED:<evidence>; docs/nn_v2/NN_V2_RESULTS_2026-09-23.md exists with the primary R3 cross-attention minus token-concat contrast and its CI; N23 verification passed. A BLOCKED Phase 5 does not prevent completion. Null results are valid; never tune toward a win.'
 CMD=(node "$RUNTIME" --current-branch --agent opencode --model "$MODEL"
-  --max-iterations 80 --max-tokens 120000000 --max-rate-limit-wait 900
+  --max-iterations 80 --max-tokens 120000000 --max-rate-limit-wait 15m
   --meteor-frequency 0 --prevent-sleep on --stop-when "$STOP_WHEN")
 
 if [ "${1:-}" = '--check' ]; then
