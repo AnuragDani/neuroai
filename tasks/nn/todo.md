@@ -11,7 +11,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 | Task | Title | Deps | Size | Status |
 |---|---|---|---|---|
-| N0 | Startup snapshot + input manifest | — | XS | TODO |
+| N0 | Startup snapshot + input manifest | — | XS | DONE:configs/nn_inputs_2026-09-23.json; all 4 sha256 inputs match; free=15GiB |
 | N1 | Stable donor×cell-type×library sampler | N0 | S | TODO |
 | N2 | NN v2 data module + fold preprocessing | N1 | M | TODO |
 | N3 | Planted-signal generator | N2 | S | TODO |
@@ -40,6 +40,8 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 (append one line per iteration: date-time UTC, task, outcome, evidence path; record any
 `A-NEW-<n>` assumption here with a one-line rationale)
+
+- 2026-09-23T00:00Z N0 DONE. Manifest `configs/nn_inputs_2026-09-23.json`; H5AD, tie-break 465, historical 480, fragment.tbi all sha256 match plan §3; free disk 15 GiB, RAM 128 GiB; H5AD raw shape 248998×35477, all 13 required obs columns present, raw/var has seqnames/start/end. Next: N1.
 
 ---
 
