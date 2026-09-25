@@ -108,6 +108,31 @@ def worker_task(
             exclude_chr21=exclude_chr21
         )
         
+        if arm_name.startswith("R4_"):
+            from p22.data.nn_fold import _rna_lognorm, _atac_tfidf
+            from p22.models.program_tokens import fit_programs, program_activities, annotate_programs
+            
+            # Recreate unscaled non-negative matrices for NMF
+            id_to_idx = {gid: i for i, gid in enumerate(inputs.gene_ids)}
+            selected_cols = [id_to_idx[gid] for gid in fold_arrays.gene_ids]
+            
+            rna_norm = _rna_lognorm(inputs.rna, inputs.rna_totals)[:, selected_cols]
+            rna_dense = np.asarray(rna_norm.todense(), dtype=np.float32)
+            
+            atac_raw = inputs.atac[:, region_rows]
+            atac_tfidf, _ = _atac_tfidf(atac_raw, fold_arrays.train_position)
+            atac_dense = np.asarray(atac_tfidf.todense(), dtype=np.float32)
+            
+            rna_nmf = fit_programs(rna_dense[fold_arrays.train_position], k=16, seed=model_seed)
+            atac_nmf = fit_programs(atac_dense[fold_arrays.train_position], k=8, seed=model_seed)
+            
+            fold_arrays.rna = program_activities(rna_nmf, rna_dense).numpy()
+            fold_arrays.atac = program_activities(atac_nmf, atac_dense).numpy()
+            
+            fold_arrays.evidence["programs"] = annotate_programs(
+                rna_nmf, atac_nmf, fold_arrays.gene_ids, fold_arrays.region_ids
+            )
+
         fit_donors = set(fold_arrays.evidence["fit_donors"])
         outer_train_donors = set(inputs.metadata["donor_id"].iloc[train_rows].unique())
         assert fit_donors.issubset(outer_train_donors), "Leakage detected: fit_donors not subset of outer_train_donors"
