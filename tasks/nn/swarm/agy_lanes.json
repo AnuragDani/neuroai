@@ -249,7 +249,7 @@
           "owns": [
             "paper/"
           ],
-          "extra": "One section per iteration. Run python paper/check_paper.py after every section once N31 starts. N33 is the only write allowed outside the worktree. The existing draft was written before the ladder existed and says the real-data contrast is untested: rewrite framing (N24 rule table), Results, Discussion, Abstract and title from the new evidence. Keep Introduction/Related Work/Methods unless a fact changed.",
+          "extra": "One section per iteration. Run python paper/check_paper.py after every section once N31 starts. N33 is the only write allowed outside the worktree. The existing draft was written before the ladder existed and says the real-data contrast is untested: rewrite framing (N24 rule table), Results, Discussion, Abstract and title from the new evidence. Keep Introduction/Related Work/Methods unless a fact changed. N33: you cannot write outside the worktree; set N33 to DONE:driver-copy when N32 is DONE and the driver's N33 check copies the draft to the vault.",
           "workers": 2,
           "tasks": [
             "N24",
@@ -293,7 +293,7 @@
               "test -s paper/self_review.md"
             ],
             "N33": [
-              "test -s '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/draft.md'"
+              "mkdir -p '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn' && cp -R paper/draft.md paper/figures paper/claims.csv paper/self_review.md paper/refs_frozen.bib '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/' && test -s '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/draft.md'"
             ],
             "N34": [
               "PY paper/check_paper.py",
