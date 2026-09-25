@@ -1,0 +1,37 @@
+{
+  "task": "N13",
+  "title": "Held-out faithfulness interventions",
+  "status": "BLOCKED",
+  "blocked_reason": "N10_ladder_missing",
+  "decision": {
+    "tags": ["NOT_SHOWN_USED"],
+    "rule": "decision_tree.md N17: IF N13 tags missing (N13 BLOCKED) -> every readout NOT_SHOWN_USED",
+    "statement": "No routing, attention, pairing or MIL readout is shown as used by the model. The interventions were not run because the N10 real-data ladder produced no fold models."
+  },
+  "evidence": {
+    "n10_status": "BLOCKED:lane_stalled:no commit in 3 attempts",
+    "ladder_dir": "reports/generated/nn_20260923/ladder/ (absent)",
+    "saved_models": "no *.pt or *.pth file anywhere in the worktree",
+    "runner": "scripts/run_nn_v2_comparison.py (absent; only scripts/run_nn_planted_benchmark.py exists)",
+    "refit_path": "Spec allows refit at the recorded grid point, but the grid point is recorded only inside N10 fold JSONs (reports/generated/nn_20260923/ladder/folds/), which do not exist; N10 also owns the runner and is stalled.",
+    "commands": [
+      "ls -la reports/generated/nn_20260923/ladder -> No such file or directory",
+      "find . -name '*.pt' -o -name '*.pth' -> (empty)",
+      "ls scripts/ | grep -i run_nn -> run_nn_planted_benchmark.py"
+    ]
+  },
+  "interventions": {
+    "I1_atac_branch_ablation": {"applies_to": ["all fusion"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "I2_rna_branch_ablation": {"applies_to": ["all fusion"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "I3_pairing_permutation": {"applies_to": ["CA", "gated", "program-CA"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "I4_attention_knockout": {"applies_to": ["CA", "program-CA"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "I5_uniform_mil_pooling": {"applies_to": ["MIL arms"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "I6_gate_clamp": {"applies_to": ["gated"], "status": "N/A", "reason": "N10_ladder_missing"},
+    "NC_identity_noop": {"applies_to": ["all"], "status": "N/A", "reason": "N10_ladder_missing; no model available to demonstrate the exact-zero self-check"},
+    "PC_planted_positive_control": {"applies_to": ["N4 S5/S4 at delta=1.0"], "status": "N/A", "reason": "N4 saved results.csv.gz but no .pt model; no fitted planted model to intervene on"}
+  },
+  "acceptance": {
+    "nc_exact_zero": "NOT_MET (no model)",
+    "cells_filled_or_na": "MET (all cells N/A with reason)"
+  }
+}

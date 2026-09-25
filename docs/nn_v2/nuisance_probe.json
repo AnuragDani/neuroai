@@ -1,0 +1,21 @@
+{
+  "task": "N14",
+  "title": "Nuisance-probe diagnostics (R2 rejection rule)",
+  "status": "BLOCKED",
+  "blocked_reason": "N10_ladder_missing",
+  "r2_rejection_decision": "R2_UNEVALUATED",
+  "statement": "Held-out embedding probes need outer-train/outer-test cell embeddings from fitted R1, R2 and R3 fold models. No fitted ladder models exist, so no probe was fit and the R2 rejection rule could not be applied.",
+  "evidence": {
+    "n10_status": "BLOCKED:lane_stalled:no commit in 3 attempts",
+    "ladder_dir": "reports/generated/nn_20260923/ladder/ (absent)",
+    "saved_models": "no *.pt or *.pth file anywhere in the worktree",
+    "runner": "scripts/run_nn_v2_comparison.py (absent)"
+  },
+  "probes": {
+    "batch_seq_within_disease": {"status": "N/A", "reason": "N10_ladder_missing"},
+    "library_within_disease": {"status": "N/A", "reason": "N10_ladder_missing"},
+    "qc_linear_r2": {"status": "N/A", "reason": "N10_ladder_missing"},
+    "ds_signal_retention_donor_ba": {"status": "N/A", "reason": "N10_ladder_missing"}
+  },
+  "plan_section_4_2_rule": "R2 rejected if nuisance-probe accuracy drop < 5 points vs R1 OR donor BA drops > 0.05 vs R1."
+}
