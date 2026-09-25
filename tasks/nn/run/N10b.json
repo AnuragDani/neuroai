@@ -1,0 +1,5 @@
+{
+  "argv": ["scripts/nn_n10b_checks.py"],
+  "background": true,
+  "timeout_min": 60
+}
