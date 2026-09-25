@@ -1,12 +1,28 @@
 <!--
-P22-NN paper draft. Section authorship is tracked by task:
-N28 wrote Introduction and Related Work only; Abstract/Methods/Results/
-Discussion/Limitations/References are filled by later tasks. Framing is neutral:
-the question is "when does cross-modal attention help on paired single-cell
-RNA+ATAC?", with no result claims in this file yet.
+P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introduction and
+Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
+and Limitations; N30 wrote the title and Abstract. The References section is left for a
+later typesetting pass; all in-text keys are validated against refs_frozen.bib.
+Final label: DRAFT_V1_COMPLETE
 -->
 
+# RNA-linear sufficient? A donor-held-out benchmark of cross-modal attention on paired single-cell RNA+ATAC
+
 ## Abstract
+
+Cross-modal attention is widely used to fuse paired single-cell RNA and ATAC measurements,
+but its donor-level benefit over simpler fusion is rarely tested with matched controls. We
+assembled a donor-held-out benchmark on thirty donors and ran a planted-signal ladder. The
+pre-declared real-data contrast proved not estimable because the comparison ladder did not
+complete, so we report it as untested rather than substitute a surrogate. In the planted
+benchmark no regime favoured cross-attention: at the null point the attention arm scored
+0.5 against a 0.5417 best non-attention baseline, when the signal was unambiguous every
+model recovered it with the attention arm at 0.9667 and concatenation logistic regression
+at 1.0, and parameter matching held relative error to 0.010993. A linear model on
+concatenated features was sufficient in thirteen of sixteen regimes, and cross-attention
+never exceeded the best non-attention comparator. We conclude that on linearly recoverable
+tasks cross-modal attention is not necessary, and we state the detectability limits that
+follow from a blocked real-data endpoint.
 
 ## Introduction
 
@@ -151,8 +167,114 @@ treated as diagnostics rather than explanations [@jain2019attention;
 
 ## Results
 
+**The pre-declared real-data contrast is not estimable in this run.** The primary endpoint
+was donor balanced accuracy of `R3_ca` minus `R3_tc` on the measured disease-state task.
+The N10 comparison ladder produced no fitted fold model: the nuisance-probe record reports
+`N10_ladder_missing`, the ladder output directory is absent, and no saved model file exists
+anywhere in the worktree. The contrast therefore has no estimate, and we make no real-data
+performance claim. The same missing models leave the held-out nuisance probe unfitted
+(`R2_UNEVALUATED`) and every held-out faithfulness intervention at `N/A`; no routing,
+attention, pairing or multiple-instance readout is shown to be used by the model, and all
+three readouts carry the `NOT_SHOWN_USED` tag. The cell-state spectrum is `NOT_ESTIMABLE`
+because the per-cell score export does not exist. We do not substitute a surrogate endpoint:
+we report the planted-signal and input-integrity evidence that did complete and treat a
+real-data attention advantage as untested.
+
+**Sampling and input integrity.** Two stratified samples pass their proportionality audits.
+The primary run uses a 1,000-cell cap, draws 30,000 cells from 30 donors out of 248,998
+available cells, has seven donors contributing both libraries, holds the maximum
+per-stratum deviation to 2 cells, and passes. The reproduction run uses the historical
+256-cell cap, draws 7,680 cells from the same 30 donors, again finds seven two-library
+donors, and passes. A fold-preparation smoke test with sampler seed 22 samples 30,000
+cells and yields 35,477 genes and 465 regions in the union with 15,000 positive labels; its
+single fold has a 24,000-cell training split and a 6,000-cell holdout split, a 2,000-gene
+and 256-region training-only feature set, and a five-column QC matrix, peaking at 4.153 GiB
+resident memory. A separate 548-region gene-activity panel, selected without labels, is
+accepted after 11 of 11 integrity checks, with complete joins for all 548 regions and
+2,066,087,936 bytes fetched against a 3,500,000,000-byte budget; this is an input-integrity
+result and carries no biological claim.
+
+**Planted benchmark: no cross-attention advantage.** The planted benchmark spans 16 regimes
+over its delta grid, and no regime is labelled `CA_FAVOURED`. In the null regime S0@0.0 all
+five scored models sit in the null band: cross-attention and token concatenation are both
+at 0.5, gated fusion is at 0.5, RNA+ATAC concatenation is at 0.5333 and concatenation
+logistic regression is at 0.5417, so the attention model is 0.0417 below the best
+non-attention model. The recorded null range is 0.5 to 0.5417, inside the pre-declared
+0.35 to 0.65 null band.
+
+When the planted signal is unambiguous, every model recovers it: in S1@0.25 all scored
+models are at or above 0.9, the minimum is 1.0, cross-attention sits at 0.9667 while
+concatenation logistic regression reaches 1.0, and attention trails by 0.0333. The
+linear-baseline failure regime is S5@1.0: concatenation logistic regression remains at
+0.5417, cross-attention reaches 0.9667 and gated fusion reaches 1.0; the planted deviation
+from chance tops out at 0.5 and the check that the regime stays within 0.05 of chance
+fails, as a designed signal-present control should. Across the grid, cross-modal attention
+never exceeds the best non-attention comparator, so zero of 16 regimes receive the
+`CA_FAVOURED` label (13 are `LINEAR_SUFFICIENT` and three are `MLP_FAVOURED`).
+
+**Parameter matching.** The parameter-matched token-concatenation arm has 380,026
+parameters against the 384,250-parameter R3 cross-attention target, a relative error of
+0.010993, satisfying both the 10% acceptance rule and the 5% informational bound. R3
+cross-attention and R2 cross-attention have identical counts (384,250), and the R4
+program-token arms are much smaller (29,970 and 25,746 for cross-attention and
+token-concatenation respectively). The classical comparators have no neural parameter
+count.
+
 ## Discussion
 
+We asked whether cross-modal attention yields a donor-level gain on paired single-cell
+RNA+ATAC data, and what detectability limits apply. The evidence assembled here answers
+the primary question negatively for every regime we could score. Across the planted delta
+grid no regime is labelled as favouring cross-attention: when the signal is absent all
+models sit in the null band, when the signal is unambiguous a linear model on concatenated
+features already reaches the ceiling, and in the linear-baseline failure regime the
+attention arm improves over concatenation logistic regression without ever exceeding the
+best non-attention comparator. Parameter matching rules out a capacity explanation for
+this pattern.
+
+The planned real-data primary contrast, cross-attention minus token concatenation on the
+measured disease-state task, is not estimable in this run. The comparison ladder produced
+no fitted fold model, so the nuisance probe is unevaluated, the faithfulness interventions
+are not available, the routing and pairing readouts are not shown to be used, and the
+cell-state spectrum is not estimable. Rather than substitute a surrogate endpoint, we
+report the planted-signal and input-integrity results that did complete and present a
+real-data attention advantage as untested.
+
+The completed controls give the negative result a firm footing. Two stratified samples
+pass proportionality audits at both the primary and the historical cell cap, with the
+same thirty donors and seven two-library donors. A fold-preparation smoke test confirms
+that the training-only feature set and the outer holdout split are constructed as
+declared, and an independently selected gene-activity panel passes its whole integrity
+checklist with complete joins inside its fetch budget. The methodological lesson is that
+a pre-declared endpoint which cannot be produced should be reported as such, and that a
+labelled failure regime is more informative than a favourable-looking aggregate.
+
+We read the benchmark as a caution against attributing donor-level gains to attention
+architectures without the matching control. Where a task is linearly recoverable from
+concatenated features, added cross-modal attention is not necessary for the effect, and
+no evidence here shows it is sufficient either.
+
 ## Limitations
+
+Several limits bound these conclusions. The cohort contains thirty donors, so donor-level
+contrasts are low-powered and between-donor variance cannot be characterised with
+confidence. All work is on a single internal development cohort with no external
+validation, so the estimates carry no transportability guarantee. The disease-state
+annotations are same-cohort labels taken from the developing Down syndrome cortical atlas
+[@lattke2026down] and were not independently adjudicated. The region panel used for the
+ATAC side is a window-derived feature set, not a curated regulatory panel, because the
+regulatory-panel task did not complete.
+
+Interpretation is further restricted by blocked downstream tasks. The comparison ladder
+did not finish, so no real-data contrast exists and no nuisance-controlled, faithfulness,
+routing or pairing claim can be made. Attention weights are not treated as explanations:
+the held-out interventions are unavailable and the readouts are not shown to be used. Age and sequencing batch are not adjusted in any reported
+endpoint: the nuisance probe that would have tested whether donor identity or library and
+batch are recoverable from the learned representation could not be evaluated, so
+confounding by age or batch remains untested. The
+cell-state spectrum is not estimable because its per-cell score export is missing, and
+the gene-activity panel is an input-integrity result only. Every planted signal is
+synthetic, so the benchmark speaks to detectability on constructed data and carries no
+biological or clinical claim.
 
 ## References
