@@ -1,0 +1,32 @@
+{
+  "status": "NOT_SHOWN_USED",
+  "reason": "N13_BLOCKED",
+  "detail": "N13 (held-out faithfulness interventions) is BLOCKED on N10_ladder_missing, so no readout is shown to be used by the model. Per decision_tree N17 every readout is tagged NOT_SHOWN_USED.",
+  "tag_source": {
+    "file": "docs/nn_v2/faithfulness.json",
+    "n13_status": "BLOCKED:N10_ladder_missing"
+  },
+  "readouts": [
+    {
+      "id": "R3_gated_routing_weight",
+      "description": "Mean gated routing weight (RNA vs ATAC) per author cell type for R3_gated.",
+      "per_cell_type": null,
+      "n13_tag": "NOT_SHOWN_USED",
+      "reason": "model_absent:N10_ladder_missing"
+    },
+    {
+      "id": "ca_attention_entropy",
+      "description": "Cross-attention entropy per author cell type.",
+      "per_cell_type": null,
+      "n13_tag": "NOT_SHOWN_USED",
+      "reason": "model_absent:N10_ladder_missing"
+    },
+    {
+      "id": "R4_ca_program_module_attention",
+      "description": "Mean k_R x k_A program-module attention matrix per cell type with top genes/regions per token (N8 annotation).",
+      "per_cell_type": null,
+      "n13_tag": "NOT_SHOWN_USED",
+      "reason": "model_absent:N10_ladder_missing"
+    }
+  ]
+}
