@@ -18,3 +18,4 @@
 - 2026-09-24T18:36Z N10b RUN_REQUESTED: fixed run_nn_v2_comparison.py to output the correct fields for the acceptance check, and wrote run request N10b.json.
 - 2026-09-24T18:41Z N10b RUN_REQUESTED: wrote tasks/nn/run/N10b.json to trigger the driver. Did not use shell.
 - 2026-09-24T18:44Z N10b RUN_REQUESTED: fixed atac_historical_counts to atac_tiebreak_counts in scripts/run_nn_v2_comparison.py.
+- 2026-09-24T18:48Z N10b RUN_REQUESTED: recovered from accidental headless tool execution by writing run request N10b.json strictly as a file edit without invoking the shell.
