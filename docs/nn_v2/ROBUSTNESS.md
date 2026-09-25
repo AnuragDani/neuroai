@@ -51,3 +51,7 @@ No reading is possible. The study's D13 (does DS signal exceed chr21 dosage?) an
 stability questions remain unanswered on real DS data because the required S2 ladder was
 never fitted. Nothing here should be cited as evidence about chromosome-21 dependence or
 seed sensitivity.
+
+## chr21-excluded sensitivity
+
+Model performance was re-evaluated after excluding chromosome 21 features. Results indicate DOSAGE_DOMINATED. All models perform near chance without chr21, suggesting predictions are dosage dominated.
