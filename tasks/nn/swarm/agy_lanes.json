@@ -1,0 +1,308 @@
+{
+  "integration_branch": "gnhf/p22-nn-cellstate",
+  "models": [
+    "gemini-3.1-pro-high",
+    "gemini-3.8-flash-high"
+  ],
+  "rollup": {
+    "N10": [
+      "N10a",
+      "N10b",
+      "N10c",
+      "N10d"
+    ]
+  },
+  "stages": [
+    {
+      "id": "S2",
+      "hard": true,
+      "goal": "Primary donor-held-out ladder on real DS data (critical path).",
+      "gate": [
+        "PY gnhf/check_evidence.py docs/nn_v2/ladder_summary.json primary.estimate primary.ci outcome"
+      ],
+      "lanes": [
+        {
+          "goal": "Professor D1 + D5: frozen, apple-to-apple ladder R0-R4 of cross-attention vs matched token-concat, plus linear, pseudobulk, chr21, latent and majority controls; primary contrast with donor-bootstrap CI.",
+          "owns": [
+            "src/p22/eval/nn_factory.py",
+            "configs/nn_protocol_v2_2026-09-23.json",
+            "configs/nn_protocol_v2_amendment_*.json",
+            "configs/nn_amendment_*.json",
+            "docs/nn_v2/PROTOCOL_FREEZE.md",
+            "docs/nn_v2/parameter_counts.json",
+            "scripts/run_nn_v2_comparison.py",
+            "scripts/summarize_nn_v2.py",
+            "tests/test_nn_factory.py",
+            "tests/test_nn_runner.py",
+            "docs/nn_v2/ladder_summary.json",
+            "docs/nn_v2/LADDER.md",
+            "docs/nn_v2/ladder_timing.json",
+            "docs/nn_v2/ladder_run.json",
+            "configs/nn_protocol_v2_amendment_cap512.json",
+            "src/p22/eval/nn_factory.py"
+          ],
+          "extra": "Save every fold model state_dict plus its fold preprocessing evidence (selected genes, regions, scaler/IDF/NMF parameters, grid point) under reports/generated/nn_20260923/ladder/models/<arm>/r<rep>_f<fold>.pt and .json; N13 and N15 in stage S3 reload them instead of refitting. Runner flags --arms, --repeats, --resume, --workers, --exclude-chr21, --model-seed, --sampling-seed must exist (S3 lanes use them). Use at most 14 worker processes, 1 torch thread each.",
+          "workers": 14,
+          "tasks": [
+            "N10a",
+            "N10b",
+            "N10c",
+            "N10d"
+          ],
+          "critical": [
+            "N10a",
+            "N10b",
+            "N10c",
+            "N10d"
+          ],
+          "max_calls": 80,
+          "checks": {
+            "N10a": [
+              "PY -m pytest -q tests/test_nn_runner.py tests/test_nn_factory.py"
+            ],
+            "N10b": [
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_timing.json projected_hours reproduction cap"
+            ],
+            "N10c": [
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_run.json folds_expected folds_done --eq folds_expected folds_done"
+            ],
+            "N10d": [
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_summary.json primary.estimate primary.ci outcome rung_decisions per_arm"
+            ]
+          },
+          "name": "ladder"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "hard": false,
+      "goal": "Robustness, faithfulness, per-cell export, gene-aligned rerun from frozen S2 outputs.",
+      "gate": [],
+      "lanes": [
+        {
+          "goal": "Professor D13 + D9: chr21-excluded sensitivity and init/sampling-seed sensitivity with the same frozen estimand.",
+          "owns": [
+            "scripts/run_nn_v2_comparison.py",
+            "docs/nn_v2/chr21_excluded.json",
+            "docs/nn_v2/seed_sensitivity.json",
+            "docs/nn_v2/ROBUSTNESS.md"
+          ],
+          "extra": "Outputs under reports/generated/nn_20260923/chr21_excluded/ and .../seeds/. Write the reading into docs/nn_v2/ROBUSTNESS.md, not LADDER.md.",
+          "workers": 5,
+          "tasks": [
+            "N11",
+            "N12"
+          ],
+          "max_calls": 30,
+          "checks": {
+            "N11": [
+              "PY gnhf/check_evidence.py docs/nn_v2/chr21_excluded.json"
+            ],
+            "N12": [
+              "PY gnhf/check_evidence.py docs/nn_v2/seed_sensitivity.json"
+            ]
+          },
+          "name": "robust"
+        },
+        {
+          "goal": "Professor D9 + D1: held-out interventions (branch ablation, within donor x cell-type ATAC permutation, attention knockout, uniform MIL pooling, gate clamp, no-op and planted positive control) and nuisance probes.",
+          "owns": [
+            "scripts/run_nn_v2_faithfulness.py",
+            "scripts/run_nn_v2_nuisance_probe.py",
+            "tests/test_nn_faithfulness.py",
+            "docs/nn_v2/faithfulness.json",
+            "docs/nn_v2/FAITHFULNESS.md",
+            "docs/nn_v2/nuisance_probe.json"
+          ],
+          "extra": "Reload fold models from reports/generated/nn_20260923/ladder/models/; refit only if a model file is missing (deterministic, recorded grid point).",
+          "workers": 5,
+          "tasks": [
+            "N13",
+            "N14"
+          ],
+          "max_calls": 30,
+          "checks": {
+            "N13": [
+              "PY -m pytest -q tests/test_nn_faithfulness.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/faithfulness.json"
+            ],
+            "N14": [
+              "PY gnhf/check_evidence.py docs/nn_v2/nuisance_probe.json"
+            ]
+          },
+          "name": "faith"
+        },
+        {
+          "goal": "Professor D2 input: out-of-fold per-cell DS-state scores and MIL attention for every sampled cell.",
+          "owns": [
+            "scripts/export_nn_v2_cell_scores.py",
+            "tests/test_nn_export.py",
+            "docs/nn_v2/donor_celltype_scores.csv.gz"
+          ],
+          "extra": "Write the full table to reports/generated/nn_20260923/spectrum/cell_scores.csv.gz. Also export the same table for the chr21-excluded arms if their models exist; otherwise record NOT_NEEDED for that part.",
+          "workers": 2,
+          "tasks": [
+            "N15"
+          ],
+          "max_calls": 25,
+          "checks": {
+            "N15": [
+              "test -s reports/generated/nn_20260923/spectrum/cell_scores.csv.gz",
+              "test -s docs/nn_v2/donor_celltype_scores.csv.gz"
+            ]
+          },
+          "name": "export"
+        },
+        {
+          "goal": "Professor D3 + D6: gene-aligned cross-attention (RNA gene g attends to ATAC gene-activity g and genomic neighbours) vs matched token-concat on the gene-activity panel. Secondary analysis.",
+          "owns": [
+            "src/p22/models/gene_aligned.py",
+            "tests/test_nn_gene_aligned.py",
+            "scripts/run_nn_v2_gene_activity.py",
+            "configs/nn_protocol_v2_amendment_gene_activity.json",
+            "docs/nn_v2/gene_activity_results.json",
+            "docs/nn_v2/GENE_ACTIVITY.md"
+          ],
+          "extra": "If tasks/nn/status/N20 is not DONE, write NOT_NEEDED:upstream N20 <status> to tasks/nn/status/N21 and stop. Do not edit scripts/run_nn_v2_comparison.py (robust lane owns it); import its functions instead.",
+          "workers": 4,
+          "tasks": [
+            "N21"
+          ],
+          "max_calls": 30,
+          "checks": {
+            "N21": [
+              "PY -m pytest -q tests/test_nn_gene_aligned.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/gene_activity_results.json"
+            ]
+          },
+          "name": "geneact"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "hard": true,
+      "goal": "Cell-state spectrum, attention description, results document, full verification.",
+      "gate": [
+        "PY gnhf/check_evidence.py docs/nn_v2/NN_V2_RESULTS_2026-09-23.md --grep primary"
+      ],
+      "lanes": [
+        {
+          "goal": "Professor D2 (cell-state spectrum), D9 (attention only where interventions show use), D11 (clear written conclusion); results doc and unsent professor note.",
+          "owns": [
+            "scripts/analyze_nn_v2_spectrum.py",
+            "scripts/describe_nn_v2_attention.py",
+            "tests/test_nn_spectrum.py",
+            "docs/nn_v2/spectrum.json",
+            "docs/nn_v2/SPECTRUM.md",
+            "docs/nn_v2/routing_attention.json",
+            "docs/nn_v2/ROUTING_ATTENTION.md",
+            "docs/nn_v2/NN_V2_RESULTS_2026-09-23.md",
+            "docs/nn_v2/PROFESSOR_NOTE_UNSENT.md",
+            "docs/nn_v2/FUTURE_WORK.md"
+          ],
+          "extra": "",
+          "workers": 8,
+          "tasks": [
+            "N16",
+            "N17",
+            "N22",
+            "N23"
+          ],
+          "critical": [
+            "N22",
+            "N23"
+          ],
+          "max_calls": 40,
+          "checks": {
+            "N16": [
+              "PY -m pytest -q tests/test_nn_spectrum.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/spectrum.json"
+            ],
+            "N17": [
+              "PY gnhf/check_evidence.py docs/nn_v2/routing_attention.json"
+            ],
+            "N22": [
+              "PY gnhf/check_evidence.py docs/nn_v2/NN_V2_RESULTS_2026-09-23.md --grep primary",
+              "test -s docs/nn_v2/PROFESSOR_NOTE_UNSENT.md"
+            ],
+            "N23": [
+              "PY -m pytest -q"
+            ]
+          },
+          "name": "interpret"
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "hard": true,
+      "goal": "Rule-based framing and a complete, checked draft paper rebuilt on the real results.",
+      "gate": [
+        "PY paper/check_paper.py",
+        "grep -Eq 'DRAFT_V1_(COMPLETE|PARTIAL)' paper/draft.md"
+      ],
+      "lanes": [
+        {
+          "goal": "First draft paper (DRAFT_V1) that traces every number to docs/nn_v2 evidence and cites only paper/refs_frozen.bib.",
+          "owns": [
+            "paper/"
+          ],
+          "extra": "One section per iteration. Run python paper/check_paper.py after every section once N31 starts. N33 is the only write allowed outside the worktree. The existing draft was written before the ladder existed and says the real-data contrast is untested: rewrite framing (N24 rule table), Results, Discussion, Abstract and title from the new evidence. Keep Introduction/Related Work/Methods unless a fact changed.",
+          "workers": 2,
+          "tasks": [
+            "N24",
+            "N25",
+            "N27",
+            "N29",
+            "N30",
+            "N31",
+            "N32",
+            "N33",
+            "N34"
+          ],
+          "critical": [
+            "N24",
+            "N27",
+            "N30",
+            "N31",
+            "N34"
+          ],
+          "max_calls": 60,
+          "checks": {
+            "N24": [
+              "test -s paper/framing.md"
+            ],
+            "N25": [
+              "test -s paper/figures/fig3_ladder.png"
+            ],
+            "N27": [
+              "test -s paper/claims.csv"
+            ],
+            "N29": [
+              "grep -q '^## Limitations' paper/draft.md"
+            ],
+            "N30": [
+              "grep -q '^## Abstract' paper/draft.md"
+            ],
+            "N31": [
+              "PY paper/check_paper.py"
+            ],
+            "N32": [
+              "test -s paper/self_review.md"
+            ],
+            "N33": [
+              "test -s '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/draft.md'"
+            ],
+            "N34": [
+              "PY paper/check_paper.py",
+              "grep -Eq 'DRAFT_V1_(COMPLETE|PARTIAL)' paper/draft.md"
+            ]
+          },
+          "name": "paper"
+        }
+      ]
+    }
+  ]
+}
