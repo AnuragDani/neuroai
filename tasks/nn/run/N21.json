@@ -1,5 +1,0 @@
-{
-  "argv": ["-m", "pytest", "-q", "tests/test_nn_gene_aligned.py"],
-  "background": false,
-  "timeout_min": 5
-}
