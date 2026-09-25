@@ -35,7 +35,8 @@ def main(argv=None):
                 
             df = pd.DataFrame({
                 "donor_id": rec["donor_ids"],
-                "prediction": rec["donor_probabilities"]
+                "label": rec["donor_labels"],
+                "probability": rec["donor_probabilities"]
             })
             per_repeat[rep][arm].append(df)
             

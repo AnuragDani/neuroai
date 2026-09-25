@@ -108,6 +108,10 @@ def worker_task(
             exclude_chr21=exclude_chr21
         )
         
+        fit_donors = set(fold_arrays.evidence["fit_donors"])
+        outer_train_donors = set(inputs.metadata["donor_id"].iloc[train_rows].unique())
+        assert fit_donors.issubset(outer_train_donors), "Leakage detected: fit_donors not subset of outer_train_donors"
+        
         # Split train_rows into inner_train and inner_val for selection
         donors_train = inputs.metadata["donor_id"].iloc[train_rows].to_numpy()
         labels_train = (inputs.metadata["disease"].iloc[train_rows] == "complete trisomy 21").astype(int).to_numpy()
@@ -212,6 +216,11 @@ def worker_task(
             
         elapsed = time.time() - t0
         
+        donor_labels_dict = {}
+        for d, l in zip(test_data.donors, test_data.labels):
+            donor_labels_dict[d] = int(l)
+        donor_labels_list = [donor_labels_dict[d] for d in test_predictions["donor_ids"]]
+        
         # Save state_dict and evidence
         model_dir = out_dir / "models" / arm_name
         model_dir.mkdir(parents=True, exist_ok=True)
@@ -226,6 +235,7 @@ def worker_task(
             "fold": fold,
             "arm": arm_name,
             "donor_ids": test_predictions["donor_ids"],
+            "donor_labels": donor_labels_list,
             "donor_probabilities": test_predictions["donor_probabilities"].tolist(),
             "best_grid_point": cfg,
             "inner_val_log_loss": -trained.best_val_score if hasattr(trained, "best_val_score") else None,
