@@ -1,1 +1,1 @@
-BLOCKED:upstream N13:N13=BLOCKED:N10_ladder_missing -> decision_tree N17 fallback applied: all readouts NOT_SHOWN_USED (R3_gated routing weight, CA attention entropy, R4_ca k_R x k_A matrix); docs/nn_v2/routing_attention.json + ROUTING_ATTENTION.md written; no trained models so no descriptives computed; no script (would be unverifiable dead code)
+TODO

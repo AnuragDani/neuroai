@@ -756,3 +756,50 @@ Full IF/ELSE, word limits and acceptance rules: `tasks/nn/decision_tree.md`, sec
 
 **Acceptance (phase):** `paper/draft.md` complete with all sections; checker passes;
 `paper/self_review.md` exists; vault copy made (or BLOCKED with reason).
+
+---
+
+## N10 split (v3, agy driver). N10 is DONE when N10a–N10d are all DONE (driver roll-up).
+
+The GNHF/DeepSeek attempt at N10 lost its unsaved runner five times. In v3 the driver runs every
+command; you write code and request runs via `tasks/nn/run/<ID>.json` (see the lane preamble).
+
+## N10a: Ladder runner + summarizer code, synthetic end-to-end test
+
+**Files:** `scripts/run_nn_v2_comparison.py`, `scripts/summarize_nn_v2.py`, `tests/test_nn_runner.py`.
+Build on `src/p22/eval/nn_factory.py` (N9), `src/p22/data/nn_inputs.py` / `nn_fold.py`, the frozen
+`configs/nn_protocol_v2_2026-09-23.json`, and reuse `scripts/run_real_paired_comparison.py::_indices`
+fold logic. Runner flags: `--protocol`, `--out`, `--arms`, `--repeats`, `--folds`, `--resume`,
+`--workers`, `--exclude-chr21`, `--model-seed`, `--sampling-seed`, `--synthetic` (tiny generated
+inputs for tests). One JSON per (repeat, fold, arm) under `<out>/folds/`; state_dict + fold
+preprocessing evidence under `<out>/models/<arm>/r<rep>_f<fold>.pt|.json`; `<out>/run.json` with
+`folds_expected`, `folds_done`, `failures`. Summarizer writes `ladder_summary.json` (fields below)
+from any `<out>` directory.
+**Acceptance (driver-run):** `PY -m pytest -q tests/test_nn_runner.py tests/test_nn_factory.py`
+passes; the test runs the runner with `--synthetic` on 6 donors × 2 folds for every arm, checks
+leakage assertions, `--resume` skipping, and the summarizer output keys.
+
+## N10b: Smoke fold, reproduction check, timing probe
+
+Request one real run: repeat 0, fold 0, all arms, `--out reports/generated/nn_20260923/ladder_smoke`,
+`--workers 4`. Then request the historical reproduction (plan N10 "Before the full run" step 1).
+Write `docs/nn_v2/ladder_timing.json` with `smoke_seconds`, `projected_hours` (full 5×5 at 14
+workers), `reproduction` (`{"estimate": ..., "expected": -0.02, "abs_diff": ...}`), `cap` used.
+If `projected_hours` > 6, write `configs/nn_protocol_v2_amendment_cap512.json` first (decision tree N10).
+**Acceptance:** `check_evidence.py docs/nn_v2/ladder_timing.json projected_hours reproduction cap`.
+
+## N10c: Full ladder run (background)
+
+Request the full run in the background: `--out reports/generated/nn_20260923/ladder --workers 14
+--resume`. The driver starts it, waits, and reports its log. If it dies, request it again with
+`--resume` (never delete finished folds). When it ends, copy `<out>/run.json` to
+`docs/nn_v2/ladder_run.json`.
+**Acceptance:** `check_evidence.py docs/nn_v2/ladder_run.json folds_expected folds_done --eq folds_expected folds_done`.
+
+## N10d: Summary, primary contrast, outcome label
+
+Request `scripts/summarize_nn_v2.py --run reports/generated/nn_20260923/ladder --out docs/nn_v2`.
+`docs/nn_v2/ladder_summary.json` must contain `primary` (`model`, `reference`, `estimate`, `ci`,
+`margin`, `advantage`), `outcome` (decision tree N10 labels), `secondary`, `rung_decisions`,
+`per_arm`. Write `docs/nn_v2/LADDER.md` (≤ 60 lines, plain-language reading first).
+**Acceptance:** `check_evidence.py docs/nn_v2/ladder_summary.json primary.estimate primary.ci outcome rung_decisions per_arm`.

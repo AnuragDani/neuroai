@@ -1,1 +1,1 @@
-BLOCKED:upstream N10:ladder lane stalled (N10=BLOCKED:lane_stalled) and saved no fold models, so per-cell s_i/a_i cannot be computed; reports/generated/nn_20260923 has no ladder/ dir and no *.pt/*.npz, and N10's runner/summarizer were never written (commit 0f9fbbe); N15 gives no fallback for a BLOCKED dependency -> decision_tree G2. chr21-excluded arm part: NOT_NEEDED (no models exist).
+TODO
