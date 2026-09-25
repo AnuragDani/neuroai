@@ -21,3 +21,4 @@
 - 2026-09-24T18:48Z N10b RUN_REQUESTED: recovered from accidental headless tool execution by writing run request N10b.json strictly as a file edit without invoking the shell.
 - 2026-09-24T18:50Z N10b RUN_REQUESTED: Fixed n_folds=1 error in smoke test by changing to n_folds=5 in run_nn_v2_comparison.py and requested a background run.
 - 2026-09-24T18:54Z N10b RUN_REQUESTED: Fixed missing NMF program fitting for R4 arms in run_nn_v2_comparison.py and requested foreground run for N10b.
+- 2026-09-24T18:58Z N10b RUN_REQUESTED: Strictly used write_to_file for N10b.json without any shell commands to trigger the N10b driver run.
