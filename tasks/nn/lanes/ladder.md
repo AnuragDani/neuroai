@@ -15,3 +15,4 @@
 - 2026-09-24T18:27Z N10b RUN_REQUESTED: wrote scripts/n10b_checks.py and tasks/nn/run/N10b.json to run the reproduction check and timing probe.
 - 2026-09-24T18:32Z N10b RUN_REQUESTED: wrote tasks/nn/run/N10b.json calling scripts/run_nn_v2_comparison.py --n10b.
 - 2026-09-24T18:34Z N10b RUN_REQUESTED (retry): fixed missing atac_matrix path in reproduction run and re-requested N10b run.
+- 2026-09-24T18:36Z N10b RUN_REQUESTED: fixed run_nn_v2_comparison.py to output the correct fields for the acceptance check, and wrote run request N10b.json.

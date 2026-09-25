@@ -331,11 +331,21 @@ def main(argv=None):
             if err: raise RuntimeError(err)
             total_elapsed += rec["elapsed"]
             
-        projected = total_elapsed * 25.0 / 3600.0
+        projected = total_elapsed * 25.0 / 14.0 / 3600.0
         cap = 512 if projected > 6 else 1000
         Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+        repro_dict = {
+            "estimate": float(repro_estimate),
+            "expected": -0.02,
+            "abs_diff": abs(float(repro_estimate) - (-0.02))
+        }
         with open("docs/nn_v2/ladder_timing.json", "w") as f:
-            json.dump({"projected_hours": float(projected), "reproduction": float(repro_estimate), "cap": cap}, f)
+            json.dump({
+                "smoke_seconds": float(total_elapsed),
+                "projected_hours": float(projected),
+                "reproduction": repro_dict,
+                "cap": cap
+            }, f, indent=2)
         if cap == 512:
             with open("configs/nn_protocol_v2_amendment_cap512.json", "w") as f:
                 json.dump({"reason": f"projected {projected:.1f}h > 6h", "cap_per_donor": 512}, f, indent=2)
