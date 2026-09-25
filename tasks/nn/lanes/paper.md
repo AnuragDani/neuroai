@@ -10,3 +10,4 @@
 - iter 8 (N33): created vault dir papers/P22/paper-nn/ and copied draft.md, refs_frozen.bib, claims.csv, self_review.md + figures/ (4 files). Only intended files written; no other vault file touched. Next: N34.
 - iter 9 (N34): full tests/ suite 1171 passed; check_paper.py 5/5 PASS; all owned statuses resolved; draft header comment set to DRAFT_V1_COMPLETE and vault draft.md refreshed. Lane complete.
 - 2026-09-24T23:51Z N24 DONE: paper/framing.md
+- 2026-09-24T23:55Z N25 step: rewrote paper/make_figures.py to generate fig3_ladder and fig4_spectrum since ladder and spectrum evidence JSONs now exist; requested N25.json run to generate them.

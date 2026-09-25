@@ -3,13 +3,12 @@
 
 Builds:
 
-  * Fig 1 -- architecture / ladder schematic (no external source JSON);
-  * Fig 2 -- planted-signal benchmark from ``docs/nn_v2/planted_benchmark.json``
-    (scenario x model heatmap at delta = 1.0; accuracy vs delta for S4 and S5).
+  * Fig 1 -- architecture / ladder schematic
+  * Fig 2 -- planted-signal benchmark
+  * Fig 3 -- ladder forest plot
+  * Fig 4 -- spectrum (renumbered from 5)
 
-Figures 3-5 are skipped: their source evidence is absent or not estimable (see
-``SKIPPED_FIGURES``). Missing source JSON fails with a clear message and a
-non-zero exit code so the caller can skip/renumber.
+Fig 4 (faithfulness) is skipped because N13 is BLOCKED.
 
 Usage:
     python paper/make_figures.py --only all [--outdir paper/figures]
@@ -26,11 +25,13 @@ import matplotlib
 import numpy as np
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402  (must follow matplotlib.use)
+import matplotlib.pyplot as plt  # noqa: E402
 
 _HERE = Path(__file__).resolve().parent
 _REPO_ROOT = _HERE.parent
 DEFAULT_PLANTED = _REPO_ROOT / "docs" / "nn_v2" / "planted_benchmark.json"
+DEFAULT_LADDER = _REPO_ROOT / "docs" / "nn_v2" / "ladder_summary.json"
+DEFAULT_SPECTRUM = _REPO_ROOT / "docs" / "nn_v2" / "spectrum.json"
 DEFAULT_OUTDIR = _HERE / "figures"
 
 MODEL_ORDER = (
@@ -50,13 +51,9 @@ MODEL_LABELS = {
 SCENARIOS = ("S1", "S2", "S3", "S4", "S5")
 DELTAS = (0.25, 0.5, 1.0)
 
-# Figures whose evidence sources are absent / not estimable; recorded, renumbered.
 SKIPPED_FIGURES = (
-    "fig3_ladder (N10 BLOCKED: reports/generated/nn_20260923/ladder absent)",
-    "fig4_faithfulness (N13 BLOCKED: interventions N/A, no numeric delta)",
-    "fig5_spectrum (N16 NOT_ESTIMABLE: input_missing)",
+    "fig4_faithfulness (N13 BLOCKED: agy_call_cap)",
 )
-
 
 class MissingSourceError(FileNotFoundError):
     """Raised when a figure's source JSON is absent."""
@@ -74,9 +71,7 @@ def _ba(data: dict, scenario: str, delta: float, model: str) -> float:
 
 
 def _box(ax, x: float, y: float, w: float, h: float, text: str, *, fontsize: float = 8.5) -> None:
-    """Rounded FancyBboxPatch with centred wrapped-free text."""
     from matplotlib.patches import FancyBboxPatch
-
     patch = FancyBboxPatch(
         (x, y),
         w,
@@ -104,7 +99,7 @@ def _save(fig, outdir: Path, stem: str) -> list[Path]:
     written: list[Path] = []
     for ext in ("png", "pdf"):
         path = outdir / f"{stem}.{ext}"
-        fig.savefig(path, dpi=300)
+        fig.savefig(path, dpi=300, bbox_inches='tight')
         written.append(path)
     plt.close(fig)
     return written
@@ -146,7 +141,6 @@ def _draw_architecture(ax) -> None:
     ax.set_ylim(0, 10)
     ax.axis("off")
     ax.set_title("(b) Donor-level architecture (R3 shown)", fontsize=10)
-    # encoder columns
     _box(ax, 0.2, 7.6, 1.9, 1.0, "RNA counts", fontsize=8)
     _box(ax, 0.2, 5.9, 1.9, 1.0, "ATAC counts", fontsize=8)
     _box(ax, 2.6, 7.6, 1.9, 1.0, "RNA encoder\n(scaled dispersion)", fontsize=7.3)
@@ -157,7 +151,6 @@ def _draw_architecture(ax) -> None:
     _arrow(ax, 2.1, 6.4, 2.6, 6.4)
     _arrow(ax, 4.5, 8.1, 5.0, 8.1)
     _arrow(ax, 4.5, 6.4, 5.0, 6.4)
-    # fusion + head
     _box(ax, 7.2, 6.75, 2.5, 1.5, "cross-modal\nattention", fontsize=8.5)
     _arrow(ax, 6.7, 8.1, 7.2, 7.7)
     _arrow(ax, 6.7, 6.4, 7.2, 7.3)
@@ -165,7 +158,6 @@ def _draw_architecture(ax) -> None:
     _arrow(ax, 8.45, 6.75, 6.1, 5.1)
     _box(ax, 2.2, 2.3, 2.6, 1.0, "donor logit", fontsize=8.3)
     _arrow(ax, 6.1, 4.1, 4.8, 3.3)
-    # auxiliary branches
     _box(ax, 1.0, 0.3, 3.2, 1.0, "nuisance adversary (GRL)\nlibrary / batch / QC", fontsize=7.3)
     _arrow(ax, 5.4, 4.1, 2.6, 1.3, style="-[")
     _box(ax, 5.2, 0.3, 4.4, 1.0, "InfoNCE pairing loss\n(L2 projections, tau=0.1)", fontsize=7.3)
@@ -180,7 +172,6 @@ def _draw_architecture(ax) -> None:
 
 
 def build_fig1(outdir: Path) -> list[Path]:
-    """Architecture / ladder schematic (no external source JSON)."""
     fig, axes = plt.subplots(1, 2, figsize=(13.5, 6.0))
     _draw_ladder(axes[0])
     _draw_architecture(axes[1])
@@ -192,7 +183,7 @@ def _build_heatmap(ax, data: dict) -> None:
     rows = ["S0@0.0"] + [f"{s}@1.0" for s in SCENARIOS]
     labels = ["S0 (delta=0.0)"] + [f"{s} (delta=1.0)" for s in SCENARIOS]
     grid = np.array(
-        [[data["regime_labels"][r]["mean_balanced_accuracy"][m] for m in MODEL_ORDER] for r in rows]
+        [[data["regime_labels"][r]["mean_balanced_accuracy"].get(m, np.nan) for m in MODEL_ORDER] for r in rows]
     )
     im = ax.imshow(grid, cmap="viridis", vmin=0.4, vmax=1.0, aspect="auto")
     ax.set_xticks(range(len(MODEL_ORDER)))
@@ -202,8 +193,9 @@ def _build_heatmap(ax, data: dict) -> None:
     for i in range(grid.shape[0]):
         for j in range(grid.shape[1]):
             value = grid[i, j]
-            color = "white" if value < 0.8 else "black"
-            ax.text(j, i, f"{value:.3f}", ha="center", va="center", color=color, fontsize=8)
+            if not np.isnan(value):
+                color = "white" if value < 0.8 else "black"
+                ax.text(j, i, f"{value:.3f}", ha="center", va="center", color=color, fontsize=8)
     ax.set_title("Planted benchmark: balanced accuracy\n(scenario x model)")
     ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04, label="balanced accuracy")
 
@@ -213,7 +205,7 @@ def _build_delta_curve(ax, data: dict, scenario: str, show_legend: bool) -> None
         ys = [_ba(data, scenario, d, model) for d in DELTAS]
         lw = 2.4 if model == "cross_attention" else 1.2
         alpha = 1.0 if model == "cross_attention" else 0.75
-        ax.plot(DELTAS, ys, marker="o", linewidth=lw, alpha=alpha, label=MODEL_LABELS[model])
+        ax.plot(DELTAS, ys, marker="o", linewidth=lw, alpha=alpha, label=MODEL_LABELS.get(model, model))
     ax.set_xticks(DELTAS)
     ax.set_xticklabels([f"{d:g}" for d in DELTAS])
     ax.set_xlabel("planted delta")
@@ -232,13 +224,75 @@ def build_fig2(data: dict, outdir: Path) -> list[Path]:
     axes[1].set_ylabel("balanced accuracy")
     fig.suptitle("Planted synthetic signal only; no biological or clinical claim", fontsize=9)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
-
     return _save(fig, outdir, "fig2_planted")
+
+
+def build_fig3(data: dict, outdir: Path) -> list[Path]:
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    y_pos = []
+    labels = []
+    
+    # We only plot primary if that's all that is available.
+    if "primary" in data:
+        prim = data["primary"]
+        est = prim.get("estimate", 0.0)
+        ci = prim.get("ci", [0.0, 0.0])
+        labels.append(f"{prim.get('model', 'CA')} vs {prim.get('reference', 'TC')} (Primary)")
+        y_pos.append(0)
+        
+        err_low = est - ci[0]
+        err_high = ci[1] - est
+        ax.errorbar(est, 0, xerr=[[err_low], [err_high]], fmt='o', color='black', capsize=4)
+        
+    ax.axvline(0, color='gray', linestyle='--')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("Delta Balanced Accuracy")
+    ax.set_title("Ladder Forest Plot (CA - TC)")
+    
+    return _save(fig, outdir, "fig3_ladder")
+
+
+def build_fig4(data: dict, outdir: Path) -> list[Path]:
+    results = data.get("results", [])
+    fig, ax = plt.subplots(figsize=(6, 5))
+    
+    y_pos = np.arange(len(results))
+    labels = []
+    
+    for i, res in enumerate(results):
+        ct = res["author_cell_type"]
+        s = res["s"]
+        diff = s["diff"]
+        ci_low = s["ci_low"]
+        ci_high = s["ci_high"]
+        sig = s.get("significant", False)
+        
+        labels.append(ct)
+        color = 'red' if sig else 'black'
+        err_low = diff - ci_low
+        err_high = ci_high - diff
+        
+        ax.errorbar(diff, i, xerr=[[err_low], [err_high]], fmt='o', color=color, capsize=3)
+        if sig:
+            # Holm marker
+            ax.text(diff, i + 0.3, "*", color='red', ha='center', va='bottom', fontsize=12)
+            
+    ax.axvline(0, color='gray', linestyle='--')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("Donor Effect (DS - CON)")
+    ax.set_title("Cell-state Spectrum Effect by Cell Type")
+    ax.invert_yaxis()
+    
+    fig.tight_layout()
+    return _save(fig, outdir, "fig4_spectrum")
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build P22-NN paper figures.")
-    ap.add_argument("--only", choices=("schematic", "planted", "all"), default="all")
+    ap.add_argument("--only", choices=("schematic", "planted", "ladder", "spectrum", "all"), default="all")
     ap.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
     args = ap.parse_args(argv)
 
@@ -250,12 +304,22 @@ def main(argv: list[str] | None = None) -> int:
             data = load_source(DEFAULT_PLANTED)
             for path in build_fig2(data, args.outdir):
                 print(f"wrote {path}")
+        if args.only in ("ladder", "all"):
+            data = load_source(DEFAULT_LADDER)
+            for path in build_fig3(data, args.outdir):
+                print(f"wrote {path}")
+        if args.only in ("spectrum", "all"):
+            data = load_source(DEFAULT_SPECTRUM)
+            for path in build_fig4(data, args.outdir):
+                print(f"wrote {path}")
     except MissingSourceError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
+        
     if args.only == "all":
         for line in SKIPPED_FIGURES:
             print(f"skipped {line}")
+            
     return 0
 
 
