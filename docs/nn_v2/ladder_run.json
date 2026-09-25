@@ -1,5 +1,5 @@
 {
-  "folds_expected": 4,
-  "folds_done": 4,
+  "folds_expected": 50,
+  "folds_done": 50,
   "failures": []
 }

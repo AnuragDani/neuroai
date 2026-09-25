@@ -14,7 +14,8 @@ from scipy import sparse
 import pandas as pd
 
 from p22.data.group_splits import iter_repeated_stratified_group_folds
-from p22.data.nn_inputs import NNInputs, load_nn_inputs, region_indices, FoldArrays, prepare_nn_fold
+from p22.data.nn_inputs import NNInputs, load_nn_inputs, region_indices, FoldArrays, prepare_nn_fold as _bad_prepare_nn_fold
+from p22.data.nn_fold import _rna_lognorm, _hvg_indices, _atac_tfidf, _qc_matrix, QC_RAW_COLUMNS, NUISANCE_CATEGORICAL, LABEL_DISEASE, _array_sha256
 from p22.data.real_cohort import DEFAULT_RNA_MATRIX_KEY
 from p22.eval.nn_factory import build_arm, ArmData, ARM_NAMES
 from p22.models.fusion import VIEW_A, VIEW_B
@@ -22,6 +23,85 @@ from p22.training.loop import set_all_seeds, predict
 from p22.training.mil_loop import predict_mil
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+def prepare_nn_fold(
+    inputs: NNInputs,
+    train_rows: np.ndarray,
+    holdout_rows: np.ndarray,
+    region_rows: np.ndarray,
+    *,
+    n_hvg: int = 2000,
+    exclude_chr21: bool = False,
+) -> FoldArrays:
+    from sklearn.preprocessing import StandardScaler
+
+    train_rows = np.asarray(train_rows, dtype=np.int64)
+    holdout_rows = np.asarray(holdout_rows, dtype=np.int64)
+    region_rows = np.asarray(region_rows, dtype=np.int64)
+    rows = np.concatenate([train_rows, holdout_rows])
+    train_position = np.zeros(rows.size, dtype=bool)
+    train_position[: train_rows.size] = True
+
+    gene_keep = np.ones(inputs.gene_ids.size, dtype=bool)
+    if exclude_chr21:
+        gene_keep &= ~inputs.chr21_gene_mask()
+        region_rows = region_rows[~inputs.chr21_region_mask()[region_rows]]
+
+    train_donors = set(inputs.metadata["donor_id"].iloc[train_rows].astype(str))
+    holdout_donors = set(inputs.metadata["donor_id"].iloc[holdout_rows].astype(str))
+    if train_donors & holdout_donors:
+        raise ValueError("train and holdout rows share a donor")
+
+    rna_norm = _rna_lognorm(inputs.rna, inputs.rna_totals)[:, gene_keep]
+    hvg = _hvg_indices(rna_norm[train_position], n_hvg)
+    selected_cols = np.flatnonzero(gene_keep)[hvg]
+    rna_dense = np.asarray(rna_norm[:, hvg].todense(), dtype=np.float32)
+    rna_scaler = StandardScaler().fit(rna_dense[train_position])
+    rna = rna_scaler.transform(rna_dense).astype(np.float32)
+
+    atac_raw = inputs.atac[:, region_rows]
+    atac_tfidf, idf = _atac_tfidf(atac_raw, train_position)
+    atac_dense = np.asarray(atac_tfidf.todense(), dtype=np.float32)
+    atac_scaler = StandardScaler().fit(atac_dense[train_position])
+    atac = atac_scaler.transform(atac_dense).astype(np.float32)
+
+    qc_raw = _qc_matrix(inputs.metadata.iloc[rows], QC_RAW_COLUMNS)
+    qc_scaler = StandardScaler().fit(qc_raw[train_position])
+    qc = qc_scaler.transform(qc_raw).astype(np.float32)
+
+    nuisance_codes = {
+        column: pd.factorize(inputs.metadata[column].iloc[rows].astype(str))[0].astype(np.int64)
+        for column in NUISANCE_CATEGORICAL
+    }
+    label = (inputs.metadata["disease"].iloc[rows].astype(str) == LABEL_DISEASE).to_numpy(np.int64)
+    donor = inputs.metadata["donor_id"].iloc[rows].astype(str).to_numpy()
+
+    fit_donors = sorted(train_donors)
+
+    evidence = {
+        "n_train_rows": int(train_rows.size),
+        "n_holdout_rows": int(holdout_rows.size),
+        "n_hvg": int(selected_cols.size),
+        "n_regions": int(region_rows.size),
+        "exclude_chr21": bool(exclude_chr21),
+        "fit_donors": fit_donors,
+        "holdout_donors": sorted(holdout_donors),
+        "idf_sha256": _array_sha256(idf),
+        "qc_columns": list(QC_RAW_COLUMNS),
+        "nuisance_categorical": list(NUISANCE_CATEGORICAL),
+    }
+    return FoldArrays(
+        rna=rna,
+        atac=atac,
+        qc=qc,
+        label=label,
+        donor=donor,
+        nuisance_codes=nuisance_codes,
+        train_position=train_position,
+        gene_ids=inputs.gene_ids[selected_cols],
+        region_ids=tuple(inputs.regions[i] for i in region_rows),
+        evidence=evidence,
+    )
 
 
 def _inner_split(donors, labels, split_seed):
@@ -313,6 +393,8 @@ def main(argv=None):
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--exclude-chr21", action="store_true")
+    parser.add_argument("--summarize-chr21", action="store_true")
+    parser.add_argument("--seed-sensitivity", action="store_true")
     parser.add_argument("--model-seed", type=int, default=0)
     parser.add_argument("--sampling-seed", type=int, default=22)
     parser.add_argument("--synthetic", action="store_true")
@@ -321,6 +403,8 @@ def main(argv=None):
     
     args.out.mkdir(parents=True, exist_ok=True)
     
+
+        
     if args.n10b:
         import subprocess, shutil
         out_dir = Path("reports/generated/nn_20260923/reproduction")
@@ -477,7 +561,208 @@ def main(argv=None):
     with open("docs/nn_v2/ladder_run.json", "w") as f:
         json.dump(run_record, f, indent=2)
         
+    if args.summarize_chr21:
+        from p22.eval.repeated_comparison import repeated_primary_contrast, repeated_model_accuracy
+        
+        def load_repeats(folds_dir):
+            per_repeat = {}
+            arms = set()
+            for f in Path(folds_dir).glob("*.json"):
+                with open(f) as fp:
+                    rec = json.load(fp)
+                    rep = rec["repeat"]
+                    arm = rec["arm"]
+                    arms.add(arm)
+                    
+                    if rep not in per_repeat:
+                        per_repeat[rep] = {}
+                    if arm not in per_repeat[rep]:
+                        per_repeat[rep][arm] = []
+                        
+                    df = pd.DataFrame({
+                        "donor_id": rec["donor_ids"],
+                        "label": rec["donor_labels"],
+                        "probability": rec["donor_probabilities"]
+                    })
+                    per_repeat[rep][arm].append(df)
+                    
+            repeats = []
+            for rep in sorted(per_repeat.keys()):
+                entry = {"repeat": rep}
+                for arm in per_repeat[rep]:
+                    entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
+                repeats.append(entry)
+            return repeats, arms
+
+        ladder_dir = Path("reports/generated/nn_20260923/ladder/folds")
+        excluded_dir = Path("reports/generated/nn_20260923/chr21_excluded/folds")
+        
+        ladder_repeats, ladder_arms = load_repeats(ladder_dir)
+        excluded_repeats, excluded_arms = load_repeats(excluded_dir)
+        
+        arms_to_check = ["R3_ca", "R3_tc", "logreg_rna", "logreg_concat"]
+        
+        results = {}
+        
+        for arm in arms_to_check:
+            if arm not in excluded_arms or arm not in ladder_arms:
+                continue
+                
+            acc_ladder = repeated_model_accuracy(ladder_repeats, model=arm)
+            acc_excluded = repeated_model_accuracy(excluded_repeats, model=arm)
+            
+            joint_repeats = []
+            for l_rep, e_rep in zip(ladder_repeats, excluded_repeats):
+                joint = {"repeat": l_rep["repeat"]}
+                joint[f"{arm}_with"] = l_rep.get(arm, pd.DataFrame())
+                joint[f"{arm}_without"] = e_rep.get(arm, pd.DataFrame())
+                if not joint[f"{arm}_with"].empty and not joint[f"{arm}_without"].empty:
+                    joint_repeats.append(joint)
+                
+            diff_stats = repeated_primary_contrast(joint_repeats, model=f"{arm}_with", reference=f"{arm}_without")
+            
+            results[arm] = {
+                "ba_with_chr21": acc_ladder.get("mean", 0.0),
+                "ba_without_chr21": acc_excluded.get("mean", 0.0),
+                "paired_difference": diff_stats.get("estimate", 0.0),
+                "ci": diff_stats.get("interval", [0.0, 0.0])
+            }
+            
+        Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+        with open("docs/nn_v2/chr21_excluded.json", "w") as f:
+            json.dump(results, f, indent=2)
+            
+        # Write paragraph to ROBUSTNESS.md
+        with open("docs/nn_v2/ROBUSTNESS.md", "a") as f:
+            f.write("\n## chr21-excluded sensitivity\n\n")
+            f.write("Model performance was re-evaluated after excluding chromosome 21 features. ")
+            
+            all_below_55 = True
+            any_above_60 = False
+            arm_above_60 = None
+            for arm in arms_to_check:
+                if arm in results:
+                    ba = results[arm]["ba_without_chr21"]
+                    if ba > 0.55:
+                        all_below_55 = False
+                    if ba >= 0.60:
+                        any_above_60 = True
+                        arm_above_60 = arm
+            
+            if all_below_55:
+                label = "DOSAGE_DOMINATED"
+                desc = "All models perform near chance without chr21, suggesting predictions are dosage dominated."
+            elif any_above_60:
+                label = f"BEYOND_DOSAGE ({arm_above_60})"
+                desc = f"At least one arm ({arm_above_60}) maintains performance above 0.60 without chr21, showing signal beyond dosage."
+            else:
+                label = "PARTIAL_DOSAGE"
+                desc = "Models lose some performance but remain partially predictive without chr21."
+                
+            f.write(f"Results indicate {label}. {desc}\n")
+
+    if getattr(args, "seed_sensitivity", False):
+        import subprocess
+        
+        m_seeds = [0, 1, 2, 3, 4]
+        s_seeds = [23, 24]
+        runs = [(m, 22) for m in m_seeds] + [(0, s) for s in s_seeds]
+        
+        for m, s in runs:
+            out_dir = f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}"
+            cmd = [
+                sys.executable, __file__,
+                "--protocol", str(args.protocol),
+                "--out", out_dir,
+                "--arms", "R3_ca", "R3_tc",
+                "--model-seed", str(m),
+                "--sampling-seed", str(s),
+                "--resume",
+                "--workers", "5"
+            ]
+            logging.info(f"Running seed {m} / {s}")
+            subprocess.run(cmd, check=True)
+            
+        from p22.eval.repeated_comparison import repeated_primary_contrast
+        
+        def load_repeats_seed(folds_dir):
+            per_repeat = {}
+            for f in Path(folds_dir).glob("*.json"):
+                with open(f) as fp:
+                    rec = json.load(fp)
+                    rep = rec["repeat"]
+                    arm = rec["arm"]
+                    if rep not in per_repeat:
+                        per_repeat[rep] = {}
+                    if arm not in per_repeat[rep]:
+                        per_repeat[rep][arm] = []
+                    df = pd.DataFrame({
+                        "donor_id": rec["donor_ids"],
+                        "label": rec["donor_labels"],
+                        "probability": rec["donor_probabilities"]
+                    })
+                    per_repeat[rep][arm].append(df)
+            repeats = []
+            for rep in sorted(per_repeat.keys()):
+                entry = {"repeat": rep}
+                for arm in per_repeat[rep]:
+                    entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
+                repeats.append(entry)
+            return repeats
+
+        results = {}
+        model_seed_estimates = []
+        sampling_seed_estimates = []
+        
+        for m, s in runs:
+            out_dir = Path(f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}/folds")
+            repeats = load_repeats_seed(out_dir)
+            diff_stats = repeated_primary_contrast(repeats, model="R3_ca", reference="R3_tc")
+            est = diff_stats["estimate"]
+            results[f"m_{m}_s_{s}"] = {
+                "estimate": est,
+                "ci": diff_stats["interval"]
+            }
+            if s == 22:
+                model_seed_estimates.append(est)
+            if m == 0:
+                sampling_seed_estimates.append(est)
+                
+        model_spread = max(model_seed_estimates) - min(model_seed_estimates)
+        sampling_spread = max(sampling_seed_estimates) - min(sampling_seed_estimates)
+        
+        results["model_seed_spread"] = model_spread
+        results["sampling_seed_spread"] = sampling_spread
+        
+        with open("docs/nn_v2/ladder_summary.json") as f:
+            lsum = json.load(f)
+        outcome = lsum.get("outcome", "")
+        
+        with open("docs/nn_v2/seed_sensitivity.json", "w") as f:
+            json.dump(results, f, indent=2)
+            
+        with open("docs/nn_v2/ROBUSTNESS.md", "a") as f:
+            f.write("\n## Init-seed and sampling-seed sensitivity\n\n")
+            f.write(f"Model seed spread: {model_spread:.4f}. Sampling seed spread: {sampling_spread:.4f}. ")
+            
+            if outcome.startswith("A_"):
+                n_above = sum(1 for e in model_seed_estimates if e >= 0.07)
+                if n_above >= 4:
+                    f.write("Outcome A_ADVANTAGE is robust across init seeds. ")
+                else:
+                    f.write("Relabeled as A_FRAGILE. ")
+            else:
+                f.write("Report spread only (outcome B/C/D). ")
+                
+            if sampling_spread > 0.07:
+                f.write("SAMPLING_SENSITIVE.\n")
+            else:
+                f.write("\n")
+
+        return 0
+
     return 0 if not failures else 1
 
 if __name__ == "__main__":
     sys.exit(main())
+
