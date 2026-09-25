@@ -1,0 +1,32 @@
+{
+  "primary": {
+    "metric": "repeated_paired_donor_balanced_accuracy_delta",
+    "model": "R3_ca",
+    "reference": "R3_tc",
+    "unit": "donor",
+    "level": 0.95,
+    "n_repeats": 1,
+    "n_replicates_requested": 1000,
+    "n_donors": 24,
+    "n_control": 12,
+    "n_positive": 12,
+    "practical_margin": 0.09,
+    "per_repeat_delta": {
+      "0": 0.0
+    },
+    "seed": 22,
+    "estimate": 0.0,
+    "interval": [
+      0.0,
+      0.0
+    ],
+    "n_valid": 1000,
+    "n_failed": 0,
+    "failure_reasons": [],
+    "advantage_demonstrated": false,
+    "not_applicable": null
+  },
+  "outcome": "B_NULL",
+  "rung_decisions": {},
+  "per_arm": {}
+}
