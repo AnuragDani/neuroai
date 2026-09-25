@@ -39,8 +39,8 @@ def _make_synthetic_inputs(seed=42):
     n_genes = 300
     n_regions = 200
     
-    donors = np.repeat([f"D{i}" for i in range(6)], 100)
-    labels = np.repeat([0, 1, 0, 1, 0, 1], 100)
+    donors = np.repeat([f"D{i}" for i in range(24)], 25)
+    labels = np.repeat([0, 1] * 12, 25)
     disease = np.where(labels == 1, "complete trisomy 21", "control")
     
     metadata = pd.DataFrame({
