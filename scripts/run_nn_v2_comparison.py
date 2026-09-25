@@ -393,6 +393,7 @@ def main(argv=None):
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--exclude-chr21", action="store_true")
+    parser.add_argument("--summarize-chr21", action="store_true")
     parser.add_argument("--model-seed", type=int, default=0)
     parser.add_argument("--sampling-seed", type=int, default=22)
     parser.add_argument("--synthetic", action="store_true")
@@ -401,6 +402,108 @@ def main(argv=None):
     
     args.out.mkdir(parents=True, exist_ok=True)
     
+    if args.summarize_chr21:
+        from p22.eval.repeated_comparison import repeated_primary_contrast, repeated_model_accuracy
+        
+        def load_repeats(folds_dir):
+            per_repeat = {}
+            arms = set()
+            for f in Path(folds_dir).glob("*.json"):
+                with open(f) as fp:
+                    rec = json.load(fp)
+                    rep = rec["repeat"]
+                    arm = rec["arm"]
+                    arms.add(arm)
+                    
+                    if rep not in per_repeat:
+                        per_repeat[rep] = {}
+                    if arm not in per_repeat[rep]:
+                        per_repeat[rep][arm] = []
+                        
+                    df = pd.DataFrame({
+                        "donor_id": rec["donor_ids"],
+                        "label": rec["donor_labels"],
+                        "probability": rec["donor_probabilities"]
+                    })
+                    per_repeat[rep][arm].append(df)
+                    
+            repeats = []
+            for rep in sorted(per_repeat.keys()):
+                entry = {"repeat": rep}
+                for arm in per_repeat[rep]:
+                    entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
+                repeats.append(entry)
+            return repeats, arms
+
+        ladder_dir = Path("reports/generated/nn_20260923/ladder/folds")
+        excluded_dir = Path("reports/generated/nn_20260923/chr21_excluded/folds")
+        
+        ladder_repeats, ladder_arms = load_repeats(ladder_dir)
+        excluded_repeats, excluded_arms = load_repeats(excluded_dir)
+        
+        arms_to_check = ["R3_ca", "R3_tc", "logreg_rna", "logreg_concat"]
+        
+        results = {}
+        
+        for arm in arms_to_check:
+            if arm not in excluded_arms or arm not in ladder_arms:
+                continue
+                
+            acc_ladder = repeated_model_accuracy(ladder_repeats, model=arm)
+            acc_excluded = repeated_model_accuracy(excluded_repeats, model=arm)
+            
+            joint_repeats = []
+            for l_rep, e_rep in zip(ladder_repeats, excluded_repeats):
+                joint = {"repeat": l_rep["repeat"]}
+                joint[f"{arm}_with"] = l_rep.get(arm, pd.DataFrame())
+                joint[f"{arm}_without"] = e_rep.get(arm, pd.DataFrame())
+                if not joint[f"{arm}_with"].empty and not joint[f"{arm}_without"].empty:
+                    joint_repeats.append(joint)
+                
+            diff_stats = repeated_primary_contrast(joint_repeats, model=f"{arm}_with", reference=f"{arm}_without")
+            
+            results[arm] = {
+                "ba_with_chr21": acc_ladder.get("mean", 0.0),
+                "ba_without_chr21": acc_excluded.get("mean", 0.0),
+                "paired_difference": diff_stats.get("estimate", 0.0),
+                "ci": diff_stats.get("interval", [0.0, 0.0])
+            }
+            
+        Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+        with open("docs/nn_v2/chr21_excluded.json", "w") as f:
+            json.dump(results, f, indent=2)
+            
+        # Write paragraph to ROBUSTNESS.md
+        with open("docs/nn_v2/ROBUSTNESS.md", "a") as f:
+            f.write("\n## chr21-excluded sensitivity\n\n")
+            f.write("Model performance was re-evaluated after excluding chromosome 21 features. ")
+            
+            all_below_55 = True
+            any_above_60 = False
+            arm_above_60 = None
+            for arm in arms_to_check:
+                if arm in results:
+                    ba = results[arm]["ba_without_chr21"]
+                    if ba > 0.55:
+                        all_below_55 = False
+                    if ba >= 0.60:
+                        any_above_60 = True
+                        arm_above_60 = arm
+            
+            if all_below_55:
+                label = "DOSAGE_DOMINATED"
+                desc = "All models perform near chance without chr21, suggesting predictions are dosage dominated."
+            elif any_above_60:
+                label = f"BEYOND_DOSAGE ({arm_above_60})"
+                desc = f"At least one arm ({arm_above_60}) maintains performance above 0.60 without chr21, showing signal beyond dosage."
+            else:
+                label = "PARTIAL_DOSAGE"
+                desc = "Models lose some performance but remain partially predictive without chr21."
+                
+            f.write(f"Results indicate {label}. {desc}\n")
+            
+        return 0
+        
     if args.n10b:
         import subprocess, shutil
         out_dir = Path("reports/generated/nn_20260923/reproduction")
