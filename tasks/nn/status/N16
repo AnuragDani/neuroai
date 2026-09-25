@@ -1,1 +1,1 @@
-TODO
+BLOCKED:upstream N15:N15=BLOCKED:lane_stalled -> reports/generated/nn_20260923/spectrum/cell_scores.csv.gz absent; scripts/analyze_nn_v2_spectrum.py + tests/test_nn_spectrum.py (6 passed, ruff clean) written; docs/nn_v2/spectrum.json + SPECTRUM.md=NOT_ESTIMABLE(input_missing); chr21-excluded arm NOT_NEEDED
