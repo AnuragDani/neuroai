@@ -289,8 +289,8 @@ def main(argv=None):
             with open("configs/nn_inputs_2026-09-23.json") as f:
                 input_manifest = json.load(f)
             h5ad_path = input_manifest["inputs"]["h5ad"]["path"]
-            atac_path = input_manifest["inputs"]["atac_historical_counts"]["path"]
-            regions_path = str(Path(atac_path).parent.parent / "region_sets.json")
+            atac_path = input_manifest["inputs"]["atac_tiebreak_counts"]["path"]
+            regions_path = input_manifest["inputs"]["region_sets_sha256_json"]["path"]
             rpc.main([
                 "--output-dir", str(out_dir),
                 "--h5ad", h5ad_path,
