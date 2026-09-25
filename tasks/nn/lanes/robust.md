@@ -1,0 +1,8 @@
+# Lane `robust` log (tasks N11, N12)
+
+- iter3: Both N11 and N12 marked BLOCKED:upstream N10. Evidence: N10 status
+  BLOCKED:lane_stalled; docs/nn_v2/ladder_summary.json absent; reports/generated/nn_20260923/ladder/
+  absent; 0 fold files; scripts/run_nn_v2_comparison.py absent. No fallback in decision_tree
+  N11/N12. Wrote docs/nn_v2/ROBUSTNESS.md (named blocker + pre-registered design unchanged).
+  Both status lines start with BLOCKED → lane stop condition met. No python files touched;
+  pytest tests/test_nn_inputs.py + tests/test_nn_sampling.py pass (see below).
