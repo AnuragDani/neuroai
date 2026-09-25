@@ -21,3 +21,4 @@
   `src/p22/eval/nn_factory.py` + `src/p22/models/mil.py`.
 - iter2 N15: N10 is now DONE. Wrote `scripts/export_nn_v2_cell_scores.py` and `tests/test_nn_export.py`. Wrote `tasks/nn/run/N15.json` to execute the export script and compute cell scores. Status remains TODO pending run completion.
 - iter3 N15: Fixed KeyError 'cell_id' in scripts/export_nn_v2_cell_scores.py by using metadata.index instead of column access. Requesting re-run via tasks/nn/run/N15.json. Status remains TODO.
+- iter4 N15: The background run N15 ended with exit 0 and successfully exported 120,000 rows to reports/generated/nn_20260923/spectrum/cell_scores.csv.gz and 1800 rows to docs/nn_v2/donor_celltype_scores.csv.gz. Marked N15 as DONE.
