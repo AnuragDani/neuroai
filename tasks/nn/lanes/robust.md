@@ -7,3 +7,4 @@
   Both status lines start with BLOCKED → lane stop condition met. No python files touched;
   pytest tests/test_nn_inputs.py + tests/test_nn_sampling.py pass (see below).
 - iter4: Wrote tasks/nn/run/N11.json to request the chr21-excluded sensitivity run.
+- 2026-09-24T19:31Z N11: Wrote tasks/nn/run/N11.json to request background run for chr21_excluded sensitivity.
