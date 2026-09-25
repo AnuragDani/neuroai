@@ -30,8 +30,8 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N13 | Held-out faithfulness interventions | N10 | M | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/faith.md |
 | N14 | Nuisance-probe diagnostics | N10 | S | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/faith.md |
 | N15 | Out-of-fold per-cell score export | N10 | S | DONE:reports/generated/nn_20260923/spectrum/cell_scores.csv.gz |
-| N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
-| N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
+| N16 | Cell-state spectrum analysis | N15,N11 | M | DONE:docs/nn_v2/spectrum.json |
+| N17 | Routing/attention description by cell type | N15,N13 | S | BLOCKED:agy_call_cap:40 calls; see tasks/nn/lanes/interpret.md |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
