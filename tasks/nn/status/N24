@@ -1,1 +1,1 @@
-TODO
+DONE:paper/framing.md (58 lines) evaluates N24 table in order; F1 FALSE (N10 BLOCKED, N13 BLOCKED), F2 FALSE (planted_benchmark.json regime_labels: 0/15 CA_FAVOURED; N10 outcome absent), F3 FALSE (spectrum.json NOT_ESTIMABLE), F4 TRUE -> rigorous negative-result/benchmark paper; title set, headline "RNA-linear sufficient; stated detectability limits."; checker 5/5 PASS
