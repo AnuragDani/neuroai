@@ -142,6 +142,15 @@ def main(argv=None):
                     fold_rec = json.load(f)
                 cfg = fold_rec["best_grid_point"]
             
+            # predict_mil doesn't use the adversary aux_loss, so we can just mock cell_meta
+            # to satisfy the validation inside adversary_aux_loss.
+            cfg["cell_meta"] = {
+                "labels": np.zeros(1),
+                "library": np.zeros(1),
+                "batch": np.zeros(1),
+                "qc": np.zeros((1, 5))
+            }
+            
             model, aux, trainer = build_arm(arm_name, widths, cfg)
             model.load_state_dict(torch.load(model_path, map_location="cpu", weights_only=True))
             model.eval()
