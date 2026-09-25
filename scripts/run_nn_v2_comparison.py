@@ -133,6 +133,24 @@ def worker_task(
                 rna_nmf, atac_nmf, fold_arrays.gene_ids, fold_arrays.region_ids
             )
 
+        if arm_name == "latent_pca_lsi_head":
+            from sklearn.decomposition import PCA, TruncatedSVD
+            
+            rna_dense = np.asarray(fold_arrays.rna, dtype=np.float32)
+            atac_dense = np.asarray(fold_arrays.atac, dtype=np.float32)
+            
+            rna_pca = PCA(n_components=32, random_state=model_seed)
+            atac_svd = TruncatedSVD(n_components=32, random_state=model_seed)
+            
+            rna_pca.fit(rna_dense[fold_arrays.train_position])
+            atac_svd.fit(atac_dense[fold_arrays.train_position])
+            
+            fold_arrays.rna = np.concatenate([
+                rna_pca.transform(rna_dense), 
+                atac_svd.transform(atac_dense)
+            ], axis=1).astype(np.float32)
+            fold_arrays.atac = np.zeros((fold_arrays.atac.shape[0], 0), dtype=np.float32)
+
         fit_donors = set(fold_arrays.evidence["fit_donors"])
         outer_train_donors = set(inputs.metadata["donor_id"].iloc[train_rows].unique())
         assert fit_donors.issubset(outer_train_donors), "Leakage detected: fit_donors not subset of outer_train_donors"
@@ -152,7 +170,7 @@ def worker_task(
         
         def _make_arm_data(pos):
             views = {}
-            if arm_name.startswith("logreg_rna") or arm_name in {"pseudobulk_rna_logistic", "chr21_dosage", "majority"}:
+            if arm_name.startswith("logreg_rna") or arm_name in {"pseudobulk_rna_logistic", "chr21_dosage", "majority", "latent_pca_lsi_head"}:
                 views[VIEW_A] = fold_arrays.rna[pos]
             else:
                 views[VIEW_A] = fold_arrays.rna[pos]
@@ -453,6 +471,10 @@ def main(argv=None):
         "failures": failures
     }
     with open(args.out / "run.json", "w") as f:
+        json.dump(run_record, f, indent=2)
+        
+    Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+    with open("docs/nn_v2/ladder_run.json", "w") as f:
         json.dump(run_record, f, indent=2)
         
     return 0 if not failures else 1
