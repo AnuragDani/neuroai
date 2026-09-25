@@ -152,7 +152,7 @@ def main(argv=None):
             cell_logits = test_predictions["cell_logits"]
             attention = test_predictions["attention"]
             
-            test_cell_ids = metadata["cell_id"].iloc[split.test_index].to_numpy()
+            test_cell_ids = metadata.index[split.test_index].to_numpy()
             
             for i, cell_id in enumerate(test_cell_ids):
                 cell_scores[arm_name][cell_id]["s"].append(cell_logits[i])
