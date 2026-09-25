@@ -286,7 +286,17 @@ def main(argv=None):
         import run_real_paired_comparison as rpc
         rpc.ALL_FAMILIES = ("cross_attention", "token_concat")
         try:
-            rpc.main(["--output-dir", str(out_dir)])
+            with open("configs/nn_inputs_2026-09-23.json") as f:
+                input_manifest = json.load(f)
+            h5ad_path = input_manifest["inputs"]["h5ad"]["path"]
+            atac_path = input_manifest["inputs"]["atac_historical_counts"]["path"]
+            regions_path = str(Path(atac_path).parent.parent / "region_sets.json")
+            rpc.main([
+                "--output-dir", str(out_dir),
+                "--h5ad", h5ad_path,
+                "--atac-matrix", atac_path,
+                "--region-sets", regions_path
+            ])
         except SystemExit as e:
             if e.code != 0: raise RuntimeError("Reproduction run failed")
         with open(out_dir / "run.json") as f:
