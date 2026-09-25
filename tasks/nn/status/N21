@@ -1,1 +1,1 @@
-TODO
+BLOCKED:upstream N10:dep N10=BLOCKED:lane_stalled; scripts/run_nn_v2_comparison.py absent on all lanes (geneact/cellstate/ladder/robust/faith); docs/nn_v2/ladder_summary.json + trained R3_ca/R3_tc arms absent; accept needs N13 I1/I3/I4 but N13=TODO (also dep N10) => no fallback in N21 section per decision_tree G2
