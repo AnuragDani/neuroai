@@ -10,3 +10,18 @@
   `configs/nn_protocol_v2_2026-09-23.json` (protocol_sha256
   `80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161`), and
   `docs/nn_v2/PROTOCOL_FREEZE.md`. 29 passed, ruff clean. N9 DONE. Next: N10.
+- 2026-09-24T18:12Z N10a DONE: wrote scripts/run_nn_v2_comparison.py, scripts/summarize_nn_v2.py, tests/test_nn_runner.py
+- 2026-09-24T18:17Z N10a DONE (retry): fixed cell_meta passing in scripts/run_nn_v2_comparison.py to fix test failure.
+- 2026-09-24T18:27Z N10b RUN_REQUESTED: wrote scripts/n10b_checks.py and tasks/nn/run/N10b.json to run the reproduction check and timing probe.
+- 2026-09-24T18:32Z N10b RUN_REQUESTED: wrote tasks/nn/run/N10b.json calling scripts/run_nn_v2_comparison.py --n10b.
+- 2026-09-24T18:34Z N10b RUN_REQUESTED (retry): fixed missing atac_matrix path in reproduction run and re-requested N10b run.
+- 2026-09-24T18:36Z N10b RUN_REQUESTED: fixed run_nn_v2_comparison.py to output the correct fields for the acceptance check, and wrote run request N10b.json.
+- 2026-09-24T18:41Z N10b RUN_REQUESTED: wrote tasks/nn/run/N10b.json to trigger the driver. Did not use shell.
+- 2026-09-24T18:44Z N10b RUN_REQUESTED: fixed atac_historical_counts to atac_tiebreak_counts in scripts/run_nn_v2_comparison.py.
+- 2026-09-24T18:48Z N10b RUN_REQUESTED: recovered from accidental headless tool execution by writing run request N10b.json strictly as a file edit without invoking the shell.
+- 2026-09-24T18:50Z N10b RUN_REQUESTED: Fixed n_folds=1 error in smoke test by changing to n_folds=5 in run_nn_v2_comparison.py and requested a background run.
+- 2026-09-24T18:54Z N10b RUN_REQUESTED: Fixed missing NMF program fitting for R4 arms in run_nn_v2_comparison.py and requested foreground run for N10b.
+- 2026-09-24T18:58Z N10b RUN_REQUESTED: Strictly used write_to_file for N10b.json without any shell commands to trigger the N10b driver run.
+- 2026-09-24T19:02Z N10b RUN_REQUESTED: Fixed single-view error for latent_pca_lsi_head and wrote ladder_run.json code, requesting N10b run.
+- 2026-09-24T19:05Z N10b DONE: reproduction passed, projected 0.038h < 6h, cap 1000. Next: N10c full run.
+- 2026-09-24T19:16Z N10c DONE: ladder full run completed with 450 folds. Requested N10d summarize run.
