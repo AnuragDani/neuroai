@@ -1,1 +1,1 @@
-TODO
+DONE:paper/make_figures.py builds Fig1 fig1_schematic.{png,pdf} (ladder R0-R4 + donor architecture, --only schematic) and Fig2 fig2_planted.{png,pdf} (scenario x model BA heatmap delta=1.0 + S4/S5 BA-vs-delta); Fig3 skipped (N10 BLOCKED, ladder source absent), Fig4 skipped (N13 BLOCKED, interventions N/A no numeric delta), Fig5 skipped (N16 NOT_ESTIMABLE input_missing) via SKIPPED_FIGURES + renumber; `--only all` exit 0; ruff clean; tests/test_paper_tools.py 15 passed
