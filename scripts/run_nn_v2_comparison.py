@@ -145,7 +145,7 @@ def worker_task(
             cell_meta = {
                 "labels": fold_arrays.label[pos],
                 "library": fold_arrays.nuisance_codes["library"][pos],
-                "batch_seq": fold_arrays.nuisance_codes["batch_seq"][pos],
+                "batch": fold_arrays.nuisance_codes["batch_seq"][pos],
                 "qc": fold_arrays.qc[pos]
             }
             return ArmData(
@@ -169,7 +169,9 @@ def worker_task(
             "n_classes": 2
         }
         
-        model, aux, trainer = build_arm(arm_name, widths, cfg)
+        cfg_copy = dict(cfg)
+        cfg_copy["cell_meta"] = train_data.cell_meta
+        model, aux, trainer = build_arm(arm_name, widths, cfg_copy)
         
         import resource
         rss_before = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
