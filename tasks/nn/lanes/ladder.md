@@ -10,3 +10,4 @@
   `configs/nn_protocol_v2_2026-09-23.json` (protocol_sha256
   `80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161`), and
   `docs/nn_v2/PROTOCOL_FREEZE.md`. 29 passed, ruff clean. N9 DONE. Next: N10.
+- 2026-09-24T18:12Z N10a DONE: wrote scripts/run_nn_v2_comparison.py, scripts/summarize_nn_v2.py, tests/test_nn_runner.py
