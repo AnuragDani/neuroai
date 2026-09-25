@@ -324,7 +324,7 @@ def main(argv=None):
         splits = list(iter_repeated_stratified_group_folds(
             inputs.metadata["donor_id"].to_numpy(),
             (inputs.metadata["disease"] == "complete trisomy 21").astype(int).to_numpy(),
-            n_repeats=1, n_folds=1, base_seed=protocol["splits"]["split_seed"]
+            n_repeats=1, n_folds=5, base_seed=protocol["splits"]["split_seed"]
         ))
         split = splits[0]
         cfg = protocol["training"].copy()

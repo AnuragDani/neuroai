@@ -19,3 +19,4 @@
 - 2026-09-24T18:41Z N10b RUN_REQUESTED: wrote tasks/nn/run/N10b.json to trigger the driver. Did not use shell.
 - 2026-09-24T18:44Z N10b RUN_REQUESTED: fixed atac_historical_counts to atac_tiebreak_counts in scripts/run_nn_v2_comparison.py.
 - 2026-09-24T18:48Z N10b RUN_REQUESTED: recovered from accidental headless tool execution by writing run request N10b.json strictly as a file edit without invoking the shell.
+- 2026-09-24T18:50Z N10b RUN_REQUESTED: Fixed n_folds=1 error in smoke test by changing to n_folds=5 in run_nn_v2_comparison.py and requested a background run.
