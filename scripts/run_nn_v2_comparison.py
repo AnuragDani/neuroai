@@ -283,7 +283,7 @@ def main(argv=None):
         out_dir = Path("reports/generated/nn_20260923/reproduction")
         if out_dir.exists():
             shutil.rmtree(out_dir)
-        import scripts.run_real_paired_comparison as rpc
+        import run_real_paired_comparison as rpc
         rpc.ALL_FAMILIES = ("cross_attention", "token_concat")
         try:
             rpc.main(["--output-dir", str(out_dir)])
