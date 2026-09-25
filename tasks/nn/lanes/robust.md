@@ -6,3 +6,4 @@
   N11/N12. Wrote docs/nn_v2/ROBUSTNESS.md (named blocker + pre-registered design unchanged).
   Both status lines start with BLOCKED → lane stop condition met. No python files touched;
   pytest tests/test_nn_inputs.py + tests/test_nn_sampling.py pass (see below).
+- iter4: Wrote tasks/nn/run/N11.json to request the chr21-excluded sensitivity run.
