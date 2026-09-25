@@ -273,9 +273,63 @@ def main(argv=None):
     parser.add_argument("--model-seed", type=int, default=0)
     parser.add_argument("--sampling-seed", type=int, default=22)
     parser.add_argument("--synthetic", action="store_true")
+    parser.add_argument("--n10b", action="store_true")
     args = parser.parse_args(argv)
     
     args.out.mkdir(parents=True, exist_ok=True)
+    
+    if args.n10b:
+        import subprocess, shutil
+        out_dir = Path("reports/generated/nn_20260923/reproduction")
+        if out_dir.exists():
+            shutil.rmtree(out_dir)
+        import scripts.run_real_paired_comparison as rpc
+        rpc.ALL_FAMILIES = ("cross_attention", "token_concat")
+        try:
+            rpc.main(["--output-dir", str(out_dir)])
+        except SystemExit as e:
+            if e.code != 0: raise RuntimeError("Reproduction run failed")
+        with open(out_dir / "run.json") as f:
+            rep = json.load(f)
+        repro_estimate = rep["primary_comparison"]["estimate"]
+        
+        with open(args.protocol) as f:
+            protocol = json.load(f)
+        arms = protocol["arms"]
+        
+        with open("configs/nn_inputs_2026-09-23.json") as f:
+            input_manifest = json.load(f)
+        inputs = load_nn_inputs(
+            input_manifest["inputs"]["h5ad"]["path"],
+            input_manifest["inputs"]["atac_tiebreak_counts"]["path"],
+            protocol["sampling"]["cap_per_donor"], 
+            args.sampling_seed, 
+            union_bed=input_manifest["inputs"]["tracked_union_bed"]["path"]
+        )
+        splits = list(iter_repeated_stratified_group_folds(
+            inputs.metadata["donor_id"].to_numpy(),
+            (inputs.metadata["disease"] == "complete trisomy 21").astype(int).to_numpy(),
+            n_repeats=1, n_folds=1, base_seed=protocol["splits"]["split_seed"]
+        ))
+        split = splits[0]
+        cfg = protocol["training"].copy()
+        cfg["seed"] = args.model_seed
+        
+        total_elapsed = 0.0
+        for arm in arms:
+            rec, err = worker_task(args.out, arm, split.repeat, split.fold, split.train_index, split.test_index, inputs, protocol, False, args.model_seed, cfg)
+            if err: raise RuntimeError(err)
+            total_elapsed += rec["elapsed"]
+            
+        projected = total_elapsed * 25.0 / 3600.0
+        cap = 512 if projected > 6 else 1000
+        Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+        with open("docs/nn_v2/ladder_timing.json", "w") as f:
+            json.dump({"projected_hours": float(projected), "reproduction": float(repro_estimate), "cap": cap}, f)
+        if cap == 512:
+            with open("configs/nn_protocol_v2_amendment_cap512.json", "w") as f:
+                json.dump({"reason": f"projected {projected:.1f}h > 6h", "cap_per_donor": 512}, f, indent=2)
+        return 0
     
     with open(args.protocol) as f:
         protocol = json.load(f)
