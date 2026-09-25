@@ -38,17 +38,17 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | BLOCKED:upstream N10:dep N10=BLOCKED:lane_stalled; scripts/run_nn_v2_comparison.py absent on all lanes (geneact/cellstate/ladder/robust/faith); docs/nn_v2/ladde |
 | N22 | Results doc + unsent professor note | N10–N21 | M | DONE:wrote docs/nn_v2/NN_V2_RESULTS_2026-09-23.md (1435 words, 6 required sections + provenance table; label NN_ASSIGNMENT_PARTIAL_BLOCKED in first 10 lines) an |
 | N23 | Final verification | N22 | XS | DONE:pytest -q -x = 1171 passed in 62.90s; ruff check src tests scripts = All checks passed!; git status --short shows only lane-owned new/modified files, all < |
-| N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
-| N25 | Paper figures from evidence JSON | N24 | S | TODO |
+| N24 | Paper framing decision (rule-based) | N22 | XS | DONE:paper/framing.md (58 lines) evaluates N24 table in order; F1 FALSE (N10 BLOCKED, N13 BLOCKED), F2 FALSE (planted_benchmark.json regime_labels: 0/15 CA_FAVO |
+| N25 | Paper figures from evidence JSON | N24 | S | DONE:paper/make_figures.py builds Fig1 fig1_schematic.{png,pdf} (ladder R0-R4 + donor architecture, --only schematic) and Fig2 fig2_planted.{png,pdf} (scenario  |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
-| N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
+| N27 | Draft Results + claims ledger | N25,N26 | M | DONE:paper/claims.csv (+Results in paper/draft.md,211 lines);check_paper.py 5/5 PASS;ruff clean;tests/test_paper_tools.py 15 passed |
 | N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
-| N29 | Draft Discussion + Limitations | N27 | S | TODO |
-| N30 | Abstract + title | N29,N28 | XS | TODO |
-| N31 | Paper checker + fixes | N30 | S | TODO |
-| N32 | Adversarial self-review | N31 | S | TODO |
-| N33 | Copy draft to vault | N32 | XS | TODO |
-| N34 | Final paper verification | N33 | XS | TODO |
+| N29 | Draft Discussion + Limitations | N27 | S | DONE:paper/draft.md ##Discussion+##Limitations (combined <=700w);check_paper.py 5/5 PASS;ruff clean |
+| N30 | Abstract + title | N29,N28 | XS | DONE:paper/draft.md title+##Abstract (<=200w);check_paper.py 5/5 PASS |
+| N31 | Paper checker + fixes | N30 | S | DONE:paper/draft.md Abstract/title (<=200w);check_paper.py 5/5 PASS;ruff clean |
+| N32 | Adversarial self-review | N31 | S | DONE:paper/self_review.md (8 objections; batch/age confounding sentence added to Limitations);check_paper.py 5/5 PASS |
+| N33 | Copy draft to vault | N32 | XS | DONE:/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/ (draft.md, refs_frozen.bib, claims.csv, self_review.md, figures/ 4 fil |
+| N34 | Final paper verification | N33 | XS | DONE:1171 tests passed;check_paper.py 5/5 PASS;all statuses resolved;draft header label DRAFT_V1_COMPLETE |
 
 ## Run log
 
