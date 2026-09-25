@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """Figure builder for the P22-NN paper (decision-tree N25).
 
-Currently builds Fig 2 (planted-signal benchmark) from
-``docs/nn_v2/planted_benchmark.json``:
+Builds:
 
-  * scenario x model balanced-accuracy heatmap at delta = 1.0;
-  * balanced accuracy vs delta curves for scenarios S4 and S5.
+  * Fig 1 -- architecture / ladder schematic (no external source JSON);
+  * Fig 2 -- planted-signal benchmark from ``docs/nn_v2/planted_benchmark.json``
+    (scenario x model heatmap at delta = 1.0; accuracy vs delta for S4 and S5).
 
-Later N25 modes (Fig 1, 3, 4, 5) are added separately. Missing source JSON fails
-with a clear message and a non-zero exit code so the caller can skip/renumber.
+Figures 3-5 are skipped: their source evidence is absent or not estimable (see
+``SKIPPED_FIGURES``). Missing source JSON fails with a clear message and a
+non-zero exit code so the caller can skip/renumber.
 
 Usage:
-    python paper/make_figures.py --only planted [--outdir paper/figures]
+    python paper/make_figures.py --only all [--outdir paper/figures]
 """
 
 from __future__ import annotations
@@ -49,6 +50,13 @@ MODEL_LABELS = {
 SCENARIOS = ("S1", "S2", "S3", "S4", "S5")
 DELTAS = (0.25, 0.5, 1.0)
 
+# Figures whose evidence sources are absent / not estimable; recorded, renumbered.
+SKIPPED_FIGURES = (
+    "fig3_ladder (N10 BLOCKED: reports/generated/nn_20260923/ladder absent)",
+    "fig4_faithfulness (N13 BLOCKED: interventions N/A, no numeric delta)",
+    "fig5_spectrum (N16 NOT_ESTIMABLE: input_missing)",
+)
+
 
 class MissingSourceError(FileNotFoundError):
     """Raised when a figure's source JSON is absent."""
@@ -63,6 +71,121 @@ def load_source(path: Path) -> dict:
 
 def _ba(data: dict, scenario: str, delta: float, model: str) -> float:
     return data["regime_labels"][f"{scenario}@{delta}"]["mean_balanced_accuracy"][model]
+
+
+def _box(ax, x: float, y: float, w: float, h: float, text: str, *, fontsize: float = 8.5) -> None:
+    """Rounded FancyBboxPatch with centred wrapped-free text."""
+    from matplotlib.patches import FancyBboxPatch
+
+    patch = FancyBboxPatch(
+        (x, y),
+        w,
+        h,
+        boxstyle="round,pad=0.02,rounding_size=0.08",
+        linewidth=1.1,
+        edgecolor="black",
+        facecolor="#eef3fb",
+    )
+    ax.add_patch(patch)
+    ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=fontsize)
+
+
+def _arrow(ax, x0: float, y0: float, x1: float, y1: float, *, style: str = "-|>") -> None:
+    ax.annotate(
+        "",
+        xy=(x1, y1),
+        xytext=(x0, y0),
+        arrowprops=dict(arrowstyle=style, linewidth=1.1, color="black"),
+    )
+
+
+def _save(fig, outdir: Path, stem: str) -> list[Path]:
+    outdir.mkdir(parents=True, exist_ok=True)
+    written: list[Path] = []
+    for ext in ("png", "pdf"):
+        path = outdir / f"{stem}.{ext}"
+        fig.savefig(path, dpi=300)
+        written.append(path)
+    plt.close(fig)
+    return written
+
+
+def _draw_ladder(ax) -> None:
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+    ax.set_title("(a) Model ladder: one refinement per rung", fontsize=10)
+    rungs = [
+        ("R0", "cell-level cross-entropy\n(donor labels inherited)"),
+        ("R1", "gated-attention MIL\nover donor bags"),
+        ("R2", "R1 + conditional nuisance\nadversary (gradient reversal)"),
+        ("R3", "R2 + symmetric InfoNCE\npairing loss  (primary)"),
+        ("R4", "R3 + program/NMF tokens\nand region modules"),
+    ]
+    top, height, gap = 8.6, 1.15, 0.35
+    xs, w = 0.4, 5.6
+    for i, (name, desc) in enumerate(rungs):
+        y = top - i * (height + gap)
+        _box(ax, xs, y, w, height, f"{name}\n{desc}", fontsize=7.6)
+        if i:
+            y_prev = top - (i - 1) * (height + gap)
+            _arrow(ax, xs + w / 2, y_prev, xs + w / 2, y + height)
+    ax.text(
+        xs + w / 2,
+        top - len(rungs) * (height + gap) - 0.05,
+        "each rung trains a CA arm and a\nparameter-matched TC arm identically",
+        ha="center",
+        va="top",
+        fontsize=7.5,
+        style="italic",
+    )
+
+
+def _draw_architecture(ax) -> None:
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+    ax.set_title("(b) Donor-level architecture (R3 shown)", fontsize=10)
+    # encoder columns
+    _box(ax, 0.2, 7.6, 1.9, 1.0, "RNA counts", fontsize=8)
+    _box(ax, 0.2, 5.9, 1.9, 1.0, "ATAC counts", fontsize=8)
+    _box(ax, 2.6, 7.6, 1.9, 1.0, "RNA encoder\n(scaled dispersion)", fontsize=7.3)
+    _box(ax, 2.6, 5.9, 1.9, 1.0, "ATAC encoder\n(TF-IDF regions)", fontsize=7.3)
+    _box(ax, 5.0, 7.6, 1.7, 1.0, "RNA tokens", fontsize=8)
+    _box(ax, 5.0, 5.9, 1.7, 1.0, "ATAC tokens", fontsize=8)
+    _arrow(ax, 2.1, 8.1, 2.6, 8.1)
+    _arrow(ax, 2.1, 6.4, 2.6, 6.4)
+    _arrow(ax, 4.5, 8.1, 5.0, 8.1)
+    _arrow(ax, 4.5, 6.4, 5.0, 6.4)
+    # fusion + head
+    _box(ax, 7.2, 6.75, 2.5, 1.5, "cross-modal\nattention", fontsize=8.5)
+    _arrow(ax, 6.7, 8.1, 7.2, 7.7)
+    _arrow(ax, 6.7, 6.4, 7.2, 7.3)
+    _box(ax, 4.6, 4.1, 3.0, 1.0, "donor bag attention (MIL)", fontsize=8.3)
+    _arrow(ax, 8.45, 6.75, 6.1, 5.1)
+    _box(ax, 2.2, 2.3, 2.6, 1.0, "donor logit", fontsize=8.3)
+    _arrow(ax, 6.1, 4.1, 4.8, 3.3)
+    # auxiliary branches
+    _box(ax, 1.0, 0.3, 3.2, 1.0, "nuisance adversary (GRL)\nlibrary / batch / QC", fontsize=7.3)
+    _arrow(ax, 5.4, 4.1, 2.6, 1.3, style="-[")
+    _box(ax, 5.2, 0.3, 4.4, 1.0, "InfoNCE pairing loss\n(L2 projections, tau=0.1)", fontsize=7.3)
+    _arrow(ax, 5.85, 5.9, 7.4, 1.3, style="-[")
+    ax.text(
+        0.2,
+        0.15,
+        "attention weights are diagnostics, not explanations",
+        fontsize=6.8,
+        style="italic",
+    )
+
+
+def build_fig1(outdir: Path) -> list[Path]:
+    """Architecture / ladder schematic (no external source JSON)."""
+    fig, axes = plt.subplots(1, 2, figsize=(13.5, 6.0))
+    _draw_ladder(axes[0])
+    _draw_architecture(axes[1])
+    fig.tight_layout()
+    return _save(fig, outdir, "fig1_schematic")
 
 
 def _build_heatmap(ax, data: dict) -> None:
@@ -110,31 +233,29 @@ def build_fig2(data: dict, outdir: Path) -> list[Path]:
     fig.suptitle("Planted synthetic signal only; no biological or clinical claim", fontsize=9)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
 
-    outdir.mkdir(parents=True, exist_ok=True)
-    written: list[Path] = []
-    for ext in ("png", "pdf"):
-        path = outdir / f"fig2_planted.{ext}"
-        fig.savefig(path, dpi=300)
-        written.append(path)
-    plt.close(fig)
-    return written
+    return _save(fig, outdir, "fig2_planted")
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build P22-NN paper figures.")
-    ap.add_argument("--only", choices=("planted", "all"), default="all")
+    ap.add_argument("--only", choices=("schematic", "planted", "all"), default="all")
     ap.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
     args = ap.parse_args(argv)
 
     try:
+        if args.only in ("schematic", "all"):
+            for path in build_fig1(args.outdir):
+                print(f"wrote {path}")
         if args.only in ("planted", "all"):
             data = load_source(DEFAULT_PLANTED)
-            written = build_fig2(data, args.outdir)
-            for path in written:
+            for path in build_fig2(data, args.outdir):
                 print(f"wrote {path}")
     except MissingSourceError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
+    if args.only == "all":
+        for line in SKIPPED_FIGURES:
+            print(f"skipped {line}")
     return 0
 
 

@@ -1,1 +1,1 @@
-TODO
+DONE:paper/claims.csv (+Results in paper/draft.md,211 lines);check_paper.py 5/5 PASS;ruff clean;tests/test_paper_tools.py 15 passed
