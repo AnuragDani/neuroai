@@ -1,0 +1,8 @@
+{
+  "amendment_time": "2026-09-24T19:30:00Z",
+  "reason": "gene_activity rerun for N21",
+  "changes": {
+    "atac_matrix": "reports/generated/nn_20260923/gene_activity/counts.npz",
+    "atac_bed": "configs/nn_gene_activity_2026-09-23.bed"
+  }
+}
