@@ -30,14 +30,14 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N13 | Held-out faithfulness interventions | N10 | M | BLOCKED:N10_ladder_missing:no ladder fold models/runner; docs/nn_v2/faithfulness.json all cells N/A; NC not demonstrated; tags NOT_SHOWN_USED per decision_tree  |
 | N14 | Nuisance-probe diagnostics | N10 | S | BLOCKED:N10_ladder_missing:no R1/R2/R3 fitted embeddings to probe; R2_UNEVALUATED; docs/nn_v2/nuisance_probe.json |
 | N15 | Out-of-fold per-cell score export | N10 | S | BLOCKED:upstream N10:ladder lane stalled (N10=BLOCKED:lane_stalled) and saved no fold models, so per-cell s_i/a_i cannot be computed; reports/generated/nn_20260 |
-| N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
-| N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
+| N16 | Cell-state spectrum analysis | N15,N11 | M | BLOCKED:upstream N15:N15=BLOCKED:lane_stalled -> reports/generated/nn_20260923/spectrum/cell_scores.csv.gz absent; scripts/analyze_nn_v2_spectrum.py + tests/tes |
+| N17 | Routing/attention description by cell type | N15,N13 | S | BLOCKED:upstream N13:N13=BLOCKED:N10_ladder_missing -> decision_tree N17 fallback applied: all readouts NOT_SHOWN_USED (R3_gated routing weight, CA attention en |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | BLOCKED:upstream N10:dep N10=BLOCKED:lane_stalled; scripts/run_nn_v2_comparison.py absent on all lanes (geneact/cellstate/ladder/robust/faith); docs/nn_v2/ladde |
-| N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
-| N23 | Final verification | N22 | XS | TODO |
+| N22 | Results doc + unsent professor note | N10–N21 | M | DONE:wrote docs/nn_v2/NN_V2_RESULTS_2026-09-23.md (1435 words, 6 required sections + provenance table; label NN_ASSIGNMENT_PARTIAL_BLOCKED in first 10 lines) an |
+| N23 | Final verification | N22 | XS | DONE:pytest -q -x = 1171 passed in 62.90s; ruff check src tests scripts = All checks passed!; git status --short shows only lane-owned new/modified files, all < |
 | N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
 | N25 | Paper figures from evidence JSON | N24 | S | TODO |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
