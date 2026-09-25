@@ -1,0 +1,311 @@
+{
+  "integration_branch": "gnhf/p22-nn-cellstate",
+  "models": [
+    "gemini-3.1-pro-high",
+    "gemini-3.8-flash-high"
+  ],
+  "rollup": {
+    "N10": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ]
+  },
+  "stages": [
+    {
+      "id": "S6",
+      "hard": true,
+      "goal": "Audit and fix the ladder pipeline; verified full rerun.",
+      "gate": [
+        "PY gnhf/verify_ladder.py --run reports/generated/nn_20260923/ladder_v2 --write"
+      ],
+      "lanes": [
+        {
+          "name": "audit",
+          "tasks": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5"
+          ],
+          "critical": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5"
+          ],
+          "workers": 14,
+          "max_calls": 80,
+          "goal": "Find and fix the NN-v2 ladder pipeline bug (model-free chr21 AUROC 1.0 vs ladder chr21_dosage AUROC 0.345), restore frozen model widths, fix the summarizer CI, add AUROC/log-loss, rerun the full ladder into reports/generated/nn_20260923/ladder_v2.",
+          "owns": [
+            "src/p22/",
+            "scripts/",
+            "tests/",
+            "docs/nn_v2/ladder_summary.json",
+            "docs/nn_v2/LADDER.md",
+            "docs/nn_v2/ladder_run.json",
+            "docs/nn_v2/ladder_timing.json",
+            "docs/nn_v2/AUDIT.md",
+            "configs/nn_protocol_v2_amendment_*.json"
+          ],
+          "extra": "Ground truth you cannot edit: docs/nn_v2/chr21_sanity.json (per-donor chr21 share of raw counts, AUROC 1.0, DS/CON 1.58). Never edit configs/nn_protocol_v2_2026-09-23.json or anything under gnhf/. Fix the pipeline, not the checks.",
+          "checks": {
+            "A1": [
+              "PY -m pytest -q tests/test_nn_audit_alignment.py"
+            ],
+            "A2": [
+              "PY -m pytest -q tests/test_nn_conformance.py"
+            ],
+            "A3": [
+              "PY -m pytest -q tests/test_nn_summary.py"
+            ],
+            "A4": [
+              "PY gnhf/check_evidence.py docs/nn_v2/AUDIT.md --grep 'Root cause'"
+            ],
+            "A5": [
+              "PY gnhf/verify_ladder.py --run reports/generated/nn_20260923/ladder_v2 --write"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "hard": false,
+      "goal": "Redo robustness, faithfulness, export and gene-aligned on the verified ladder.",
+      "gate": [],
+      "lanes": [
+        {
+          "goal": "Professor D13 + D9: chr21-excluded sensitivity and init/sampling-seed sensitivity with the same frozen estimand.",
+          "owns": [
+            "scripts/run_nn_v2_comparison.py",
+            "docs/nn_v2/chr21_excluded.json",
+            "docs/nn_v2/seed_sensitivity.json",
+            "docs/nn_v2/ROBUSTNESS.md"
+          ],
+          "extra": "Outputs under reports/generated/nn_20260923/chr21_excluded/ and .../seeds/. Write the reading into docs/nn_v2/ROBUSTNESS.md, not LADDER.md. The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 5,
+          "max_calls": 30,
+          "name": "robust",
+          "tasks": [
+            "N11",
+            "N12"
+          ],
+          "checks": {
+            "N11": [
+              "PY gnhf/check_evidence.py docs/nn_v2/chr21_excluded.json"
+            ],
+            "N12": [
+              "PY gnhf/check_evidence.py docs/nn_v2/seed_sensitivity.json"
+            ]
+          }
+        },
+        {
+          "goal": "Professor D9 + D1: held-out interventions (branch ablation, within donor x cell-type ATAC permutation, attention knockout, uniform MIL pooling, gate clamp, no-op and planted positive control) and nuisance probes.",
+          "owns": [
+            "scripts/run_nn_v2_faithfulness.py",
+            "scripts/run_nn_v2_nuisance_probe.py",
+            "tests/test_nn_faithfulness.py",
+            "docs/nn_v2/faithfulness.json",
+            "docs/nn_v2/FAITHFULNESS.md",
+            "docs/nn_v2/nuisance_probe.json"
+          ],
+          "extra": "Reload fold models from reports/generated/nn_20260923/ladder/models/; refit only if a model file is missing (deterministic, recorded grid point). The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 5,
+          "max_calls": 30,
+          "name": "faith",
+          "tasks": [
+            "N13",
+            "N14"
+          ],
+          "checks": {
+            "N13": [
+              "PY -m pytest -q tests/test_nn_faithfulness.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/faithfulness.json"
+            ],
+            "N14": [
+              "PY gnhf/check_evidence.py docs/nn_v2/nuisance_probe.json"
+            ]
+          }
+        },
+        {
+          "goal": "Professor D2 input: out-of-fold per-cell DS-state scores and MIL attention for every sampled cell.",
+          "owns": [
+            "scripts/export_nn_v2_cell_scores.py",
+            "tests/test_nn_export.py",
+            "docs/nn_v2/donor_celltype_scores.csv.gz"
+          ],
+          "extra": "Write the full table to reports/generated/nn_20260923/spectrum/cell_scores.csv.gz. Also export the same table for the chr21-excluded arms if their models exist; otherwise record NOT_NEEDED for that part. The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 2,
+          "max_calls": 25,
+          "name": "export",
+          "tasks": [
+            "N15"
+          ],
+          "checks": {
+            "N15": [
+              "test -s reports/generated/nn_20260923/spectrum/cell_scores.csv.gz",
+              "test -s docs/nn_v2/donor_celltype_scores.csv.gz"
+            ]
+          }
+        },
+        {
+          "goal": "Professor D3 + D6: gene-aligned cross-attention (RNA gene g attends to ATAC gene-activity g and genomic neighbours) vs matched token-concat on the gene-activity panel. Secondary analysis.",
+          "owns": [
+            "src/p22/models/gene_aligned.py",
+            "tests/test_nn_gene_aligned.py",
+            "scripts/run_nn_v2_gene_activity.py",
+            "configs/nn_protocol_v2_amendment_gene_activity.json",
+            "docs/nn_v2/gene_activity_results.json",
+            "docs/nn_v2/GENE_ACTIVITY.md"
+          ],
+          "extra": "If tasks/nn/status/N20 is not DONE, write NOT_NEEDED:upstream N20 <status> to tasks/nn/status/N21 and stop. Do not edit scripts/run_nn_v2_comparison.py (robust lane owns it); import its functions instead. The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 4,
+          "max_calls": 30,
+          "name": "geneact",
+          "tasks": [
+            "N21"
+          ],
+          "checks": {
+            "N21": [
+              "PY -m pytest -q tests/test_nn_gene_aligned.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/gene_activity_results.json"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S8",
+      "hard": true,
+      "goal": "Spectrum, attention readout, results document with verified numbers, full tests.",
+      "gate": [
+        "PY gnhf/check_evidence.py docs/nn_v2/ladder_verification.json --in docs/nn_v2/NN_V2_RESULTS_2026-09-23.md primary_recomputed.ci"
+      ],
+      "lanes": [
+        {
+          "goal": "Professor D2 (cell-state spectrum), D9 (attention only where interventions show use), D11 (clear written conclusion); results doc and unsent professor note.",
+          "owns": [
+            "scripts/analyze_nn_v2_spectrum.py",
+            "scripts/describe_nn_v2_attention.py",
+            "tests/test_nn_spectrum.py",
+            "docs/nn_v2/spectrum.json",
+            "docs/nn_v2/SPECTRUM.md",
+            "docs/nn_v2/routing_attention.json",
+            "docs/nn_v2/ROUTING_ATTENTION.md",
+            "docs/nn_v2/NN_V2_RESULTS_2026-09-23.md",
+            "docs/nn_v2/PROFESSOR_NOTE_UNSENT.md",
+            "docs/nn_v2/FUTURE_WORK.md"
+          ],
+          "extra": " The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 8,
+          "max_calls": 40,
+          "name": "interpret",
+          "tasks": [
+            "N16",
+            "N17",
+            "N22",
+            "N23"
+          ],
+          "critical": [
+            "N22",
+            "N23"
+          ],
+          "checks": {
+            "N16": [
+              "PY -m pytest -q tests/test_nn_spectrum.py",
+              "PY gnhf/check_evidence.py docs/nn_v2/spectrum.json"
+            ],
+            "N17": [
+              "PY gnhf/check_evidence.py docs/nn_v2/routing_attention.json"
+            ],
+            "N22": [
+              "PY gnhf/check_evidence.py docs/nn_v2/NN_V2_RESULTS_2026-09-23.md --grep primary",
+              "test -s docs/nn_v2/PROFESSOR_NOTE_UNSENT.md",
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_verification.json --in docs/nn_v2/NN_V2_RESULTS_2026-09-23.md primary_recomputed.ci"
+            ],
+            "N23": [
+              "PY -m pytest -q"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S9",
+      "hard": true,
+      "goal": "Draft paper rebuilt on verified results.",
+      "gate": [
+        "PY paper/check_paper.py",
+        "grep -Eq 'DRAFT_V1_(COMPLETE|PARTIAL)' paper/draft.md",
+        "PY gnhf/check_evidence.py docs/nn_v2/ladder_verification.json --in paper/draft.md primary_recomputed.ci"
+      ],
+      "lanes": [
+        {
+          "goal": "First draft paper (DRAFT_V1) that traces every number to docs/nn_v2 evidence and cites only paper/refs_frozen.bib.",
+          "owns": [
+            "paper/"
+          ],
+          "extra": "One section per iteration. Run python paper/check_paper.py after every section once N31 starts. N33 is the only write allowed outside the worktree. The existing draft was written before the ladder existed and says the real-data contrast is untested: rewrite framing (N24 rule table), Results, Discussion, Abstract and title from the new evidence. Keep Introduction/Related Work/Methods unless a fact changed. N33: you cannot write outside the worktree; set N33 to DONE:driver-copy when N32 is DONE and the driver's N33 check copies the draft to the vault. The ONLY valid ladder is reports/generated/nn_20260923/ladder_v2 (verified by gnhf/verify_ladder.py -> docs/nn_v2/ladder_verification.json). Never read the old ladder/ directory: it came from a pipeline with a label/row bug.",
+          "workers": 2,
+          "tasks": [
+            "N24",
+            "N25",
+            "N27",
+            "N29",
+            "N30",
+            "N31",
+            "N32",
+            "N33",
+            "N34"
+          ],
+          "critical": [
+            "N24",
+            "N27",
+            "N30",
+            "N31",
+            "N34"
+          ],
+          "max_calls": 60,
+          "checks": {
+            "N24": [
+              "test -s paper/framing.md"
+            ],
+            "N25": [
+              "test -s paper/figures/fig3_ladder.png"
+            ],
+            "N27": [
+              "test -s paper/claims.csv",
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_verification.json --in paper/draft.md primary_recomputed.ci"
+            ],
+            "N29": [
+              "grep -q '^## Limitations' paper/draft.md"
+            ],
+            "N30": [
+              "grep -q '^## Abstract' paper/draft.md"
+            ],
+            "N31": [
+              "PY paper/check_paper.py"
+            ],
+            "N32": [
+              "test -s paper/self_review.md"
+            ],
+            "N33": [
+              "mkdir -p '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn' && cp -R paper/draft.md paper/figures paper/claims.csv paper/self_review.md paper/refs_frozen.bib '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/' && test -s '/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/draft.md'"
+            ],
+            "N34": [
+              "PY paper/check_paper.py",
+              "grep -Eq 'DRAFT_V1_(COMPLETE|PARTIAL)' paper/draft.md",
+              "PY gnhf/check_evidence.py docs/nn_v2/ladder_verification.json --in paper/draft.md primary_recomputed.ci"
+            ]
+          },
+          "name": "paper"
+        }
+      ]
+    }
+  ]
+}

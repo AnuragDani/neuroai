@@ -1,0 +1,221 @@
+{
+  "record_type": "chr21_sanity",
+  "n_chr21_genes": 538,
+  "n_donors": 30,
+  "auroc_unsupervised": 1.0,
+  "ds_mean": 0.0168458107124821,
+  "con_mean": 0.010634463270501182,
+  "ratio_ds_over_con": 1.5840771916727103,
+  "donors": [
+    {
+      "donor": "PCW10_CON_11950",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.009005117459751296,
+      "chr21_fraction_cell_mean": 0.00881945077560363,
+      "n_cells": 18826
+    },
+    {
+      "donor": "PCW11_CON_17833",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.009191008531374544,
+      "chr21_fraction_cell_mean": 0.00925719914711588,
+      "n_cells": 5227
+    },
+    {
+      "donor": "PCW11_DS_15405",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.016159420932806787,
+      "chr21_fraction_cell_mean": 0.01585486404308744,
+      "n_cells": 4289
+    },
+    {
+      "donor": "PCW11_DS_17720",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.015573418862572273,
+      "chr21_fraction_cell_mean": 0.015029393621156205,
+      "n_cells": 11644
+    },
+    {
+      "donor": "PCW12_CON_12152",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.009791418334101623,
+      "chr21_fraction_cell_mean": 0.009877858519184756,
+      "n_cells": 6331
+    },
+    {
+      "donor": "PCW12_CON_14427",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.010521644882888015,
+      "chr21_fraction_cell_mean": 0.01047681902089187,
+      "n_cells": 12279
+    },
+    {
+      "donor": "PCW12_CON_15569",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.010679173593530454,
+      "chr21_fraction_cell_mean": 0.010684745153098288,
+      "n_cells": 8135
+    },
+    {
+      "donor": "PCW12_DS_12941",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.01606970486371357,
+      "chr21_fraction_cell_mean": 0.01600926516797131,
+      "n_cells": 14310
+    },
+    {
+      "donor": "PCW12_DS_15186",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.016139152463851728,
+      "chr21_fraction_cell_mean": 0.016067204924370453,
+      "n_cells": 7534
+    },
+    {
+      "donor": "PCW12_DS_15931",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.01648042495030449,
+      "chr21_fraction_cell_mean": 0.016448071368791322,
+      "n_cells": 6795
+    },
+    {
+      "donor": "PCW13_CON_11928",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.011294609822615174,
+      "chr21_fraction_cell_mean": 0.011225275030410245,
+      "n_cells": 4426
+    },
+    {
+      "donor": "PCW13_CON_15044",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.01110268594742883,
+      "chr21_fraction_cell_mean": 0.01112417561223882,
+      "n_cells": 6382
+    },
+    {
+      "donor": "PCW13_DS_12740",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.016741491457762776,
+      "chr21_fraction_cell_mean": 0.01643332704091703,
+      "n_cells": 7413
+    },
+    {
+      "donor": "PCW13_DS_14239",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.015551201082026803,
+      "chr21_fraction_cell_mean": 0.015547619209878353,
+      "n_cells": 8002
+    },
+    {
+      "donor": "PCW13_DS_15848",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.016323994241946485,
+      "chr21_fraction_cell_mean": 0.01622983722740802,
+      "n_cells": 4950
+    },
+    {
+      "donor": "PCW13_DS_16427",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.01757851250015332,
+      "chr21_fraction_cell_mean": 0.017317954726936417,
+      "n_cells": 5788
+    },
+    {
+      "donor": "PCW14_CON_15077",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.0098124414481368,
+      "chr21_fraction_cell_mean": 0.00989095252463282,
+      "n_cells": 5011
+    },
+    {
+      "donor": "PCW15_DS_15744",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.017725768904150282,
+      "chr21_fraction_cell_mean": 0.01772017482042115,
+      "n_cells": 12468
+    },
+    {
+      "donor": "PCW16_CON_14940",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.010863353328071434,
+      "chr21_fraction_cell_mean": 0.011169587514203315,
+      "n_cells": 13842
+    },
+    {
+      "donor": "PCW16_DS_15877",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.015529448360036134,
+      "chr21_fraction_cell_mean": 0.01598321476607338,
+      "n_cells": 10605
+    },
+    {
+      "donor": "PCW17_CON_14310",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.011155932104458652,
+      "chr21_fraction_cell_mean": 0.01172228136652662,
+      "n_cells": 2450
+    },
+    {
+      "donor": "PCW17_CON_14559",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.011554078796323778,
+      "chr21_fraction_cell_mean": 0.011713551628300496,
+      "n_cells": 3306
+    },
+    {
+      "donor": "PCW17_DS_16070",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.017288261820370753,
+      "chr21_fraction_cell_mean": 0.017546193175774154,
+      "n_cells": 6033
+    },
+    {
+      "donor": "PCW18_CON_16419",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.01175106083447401,
+      "chr21_fraction_cell_mean": 0.012214131138579849,
+      "n_cells": 6504
+    },
+    {
+      "donor": "PCW18_CON_18189",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.011027146737336662,
+      "chr21_fraction_cell_mean": 0.01140644052943337,
+      "n_cells": 11076
+    },
+    {
+      "donor": "PCW18_DS_16485",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.017971912279605085,
+      "chr21_fraction_cell_mean": 0.018201755182384614,
+      "n_cells": 8854
+    },
+    {
+      "donor": "PCW18_DS_16545",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.016246904430591912,
+      "chr21_fraction_cell_mean": 0.016512083450795533,
+      "n_cells": 2190
+    },
+    {
+      "donor": "PCW20_CON_15167",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.010801783716761505,
+      "chr21_fraction_cell_mean": 0.011587480963024938,
+      "n_cells": 8765
+    },
+    {
+      "donor": "PCW20_CON_17916",
+      "ds": 0,
+      "chr21_fraction_pooled": 0.010965493520264966,
+      "chr21_fraction_cell_mean": 0.011102414993180253,
+      "n_cells": 13825
+    },
+    {
+      "donor": "PCW20_DS_15619_13",
+      "ds": 1,
+      "chr21_fraction_pooled": 0.021307543537339102,
+      "chr21_fraction_cell_mean": 0.020814136941722263,
+      "n_cells": 11738
+    }
+  ]
+}

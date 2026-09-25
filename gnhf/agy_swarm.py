@@ -23,9 +23,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import swarm as S  # noqa: E402  (reuse git/status/worktree helpers)
 
-CFG = json.loads((S.MAIN / "tasks/nn/swarm/agy_lanes.json").read_text())
+CFG_PATH = Path(os.environ.get("AGY_CONFIG", S.MAIN / "tasks/nn/swarm/agy_lanes.json"))
+CFG = json.loads(CFG_PATH.read_text())
 S.LOGDIR = S.MAIN / "reports/generated/nn_agy" / S.STAMP
 MODELS = CFG["models"]
+DENIED = re.compile(r"permission that headless mode cannot prompt for|auto-denied", re.I)
+ALLOWED_CMDS = "ls, cat, head, tail, grep, wc, find, git status, git diff, git log, and `.venv-p22/bin/python -m pytest <file>`"
 QUOTA = re.compile(r"RESOURCE_EXHAUSTED|quota|rate.?limit|\b429\b|exceeded your|try again later", re.I)
 RUN_OK = re.compile(r"^(scripts|paper|gnhf)/[\w./-]+\.py$")
 ENV = os.environ | {"PYTHONPATH": "src:scripts", "PYTHONDONTWRITEBYTECODE": "1", "OMP_NUM_THREADS": "1"}
@@ -170,8 +173,9 @@ def handle_runs(wt, lane):
 PREAMBLE = """Workspace root: {wt}
 Every path below is relative to that root; give your file tools absolute paths.
 
-You are the Gemini agent for lane `{name}` of the P22-NN study (stage {stage}). You have NO shell:
-never try to run a command. You edit files; the DRIVER does everything else after each call:
+You are the Gemini agent for lane `{name}` of the P22-NN study (stage {stage}). Your shell is limited to
+read-only commands: {allowed}. Any other command is auto-denied and WASTES the whole call.
+You edit files; the DRIVER does everything else after each call:
 it commits your edits, REVERTS edits to files you do not own, re-runs the acceptance check of
 every task you mark DONE (a false DONE is rejected and set back to TODO), and executes your run
 requests. Its output is at the end of this message: fix any failure there FIRST.
@@ -208,7 +212,7 @@ def lane_prompt(stage, lane, wt, report, feedback, idle):
     checks = "\n".join(f"- {t}: {' && '.join(c)}" for t, c in lane.get("checks", {}).items())
     nudge = ("\nYou changed nothing in your last calls. Take the SMALLEST next step now (one file or one "
              "run request). If a task truly cannot be done, say why in its status with evidence.\n") if idle >= 2 else ""
-    return (PREAMBLE.format(wt=wt, name=lane["name"], stage=stage["id"], workers=lane.get("workers", 2))
+    return (PREAMBLE.format(wt=wt, name=lane["name"], stage=stage["id"], workers=lane.get("workers", 2), allowed=ALLOWED_CMDS)
             + f"""
 ## Goal
 {lane['goal']}
@@ -297,7 +301,14 @@ def _run_lane(stage, lane):
         bad = revert_foreign(wt, lambda p: allowed(p, lane))
         changed = commit(wt, f"agy {name}: call {calls}")
         notes = handle_runs(wt, lane)
-        idle = 0 if (changed or notes) else idle + 1
+        bad_after = revert_foreign(wt, lambda p: allowed(p, lane))  # runs may not overwrite foreign files
+        if bad_after:
+            notes.append(f"Run outputs outside your owned files were discarded: {bad_after}")
+        commit(wt, f"agy {name}: run outputs after call {calls}")
+        if DENIED.search(out):
+            notes.append("WASTED CALL: you tried a shell command that is not allowed, so agy produced no output. "
+                         f"Allowed commands: {ALLOWED_CMDS}. Everything else goes through tasks/nn/run/<ID>.json.")
+        idle = 0 if (changed or (notes and not DENIED.search(out))) else idle + 1
         feedback = "\n\n".join(filter(None, [
             f"Reverted (not your files): {bad}" if bad else "",
             *notes,
@@ -357,6 +368,7 @@ def integrate(stage):
         rc, out = sh(cmd, S.MAIN, 1800)
         gate_ok = gate_ok and rc == 0
         outs.append(f"{cmd} -> {rc}")
+    commit(S.MAIN, f"agy-driver: {stage['id']} gate evidence")  # e.g. ladder_verification.json for later stages
     S.regen_todo_table()
     S.log(f"{stage['id']} gate {'PASS' if gate_ok else 'FAIL'}: {outs}")
     return gate_ok

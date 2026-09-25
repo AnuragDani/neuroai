@@ -803,3 +803,65 @@ Request `scripts/summarize_nn_v2.py --run reports/generated/nn_20260923/ladder -
 `margin`, `advantage`), `outcome` (decision tree N10 labels), `secondary`, `rung_decisions`,
 `per_arm`. Write `docs/nn_v2/LADDER.md` (≤ 60 lines, plain-language reading first).
 **Acceptance:** `check_evidence.py docs/nn_v2/ladder_summary.json primary.estimate primary.ci outcome rung_decisions per_arm`.
+
+---
+
+## Ladder audit (v4). N10 is re-rolled-up from A1–A5; the first ladder is superseded.
+
+Evidence: model-free per-donor chr21 share of raw counts separates DS from control perfectly
+(`docs/nn_v2/chr21_sanity.json`: AUROC 1.0, DS/CON 1.58, 538 genes; driver script
+`gnhf/chr21_sanity.py`). The first ladder's `chr21_dosage` arm scored AUROC 0.345 and most arms
+were below chance, so the ladder pipeline misaligns labels, rows, genes or probabilities. Its
+fold models also have ~4x fewer parameters than the frozen N9 counts, and the summarizer
+reported CI [0, 0]. All evidence derived from it is archived in `docs/nn_v2/superseded_buggy_ladder/`.
+The driver's gate is `gnhf/verify_ladder.py` (independent recomputation; agents cannot edit it).
+
+## A1: Find and fix the label/row/probability misalignment
+
+Write a FAILING test first: `tests/test_nn_audit_alignment.py` runs the ladder runner's data path
+for the chr21_dosage arm on real data (one outer fold is enough, or all donors in-sample) and
+asserts donor AUROC ≥ 0.85, and asserts that every donor's label in the fold output equals its
+`disease` in the H5AD. Then inspect, in order: label construction (`complete trisomy 21` → 1);
+sampled row indices ↔ metadata ↔ matrix row order; donor_id ordering of labels vs probabilities
+when writing fold JSON; which probability column is written (class 1?); chr21 gene mask
+(`raw/var` `seqnames` values are `chr21`); fold/donor aggregation. Fix the root cause in the
+shared path (not per arm). Record the root cause in `docs/nn_v2/AUDIT.md` under "Root cause".
+**Check:** `pytest tests/test_nn_audit_alignment.py`.
+
+## A2: Frozen model widths
+
+Fold models had R3_ca 98,874 parameters vs frozen 384,250 (all neural arms ~4x smaller). Find
+why (for example n_hvg, hidden_dim, embed_dim, n_tokens not taken from the protocol). Make the
+runner build every arm from `configs/nn_protocol_v2_2026-09-23.json` exactly. Test
+`tests/test_nn_conformance.py`: for every arm, parameter count on real widths equals
+`docs/nn_v2/parameter_counts.json` within 1%. If a width MUST differ, write
+`configs/nn_protocol_v2_amendment_<slug>.json` naming the field, the reason and the time BEFORE A5.
+**Check:** `pytest tests/test_nn_conformance.py`.
+
+## A3: Summarizer uncertainty
+
+`ladder_summary.json` reported CI [0, 0]; the independent donor bootstrap gives about
+[−0.083, +0.085]. Fix `scripts/summarize_nn_v2.py` so it reuses
+`p22.eval.repeated_comparison.repeated_primary_contrast` semantics (pooled donors per repeat,
+mean over repeats, 1,000 donor-cluster draws, seed 22). Test `tests/test_nn_summary.py` on
+synthetic folds: CI width > 0 and estimate/CI match an independent recomputation within 1e-9.
+**Check:** `pytest tests/test_nn_summary.py`.
+
+## A4: Metrics and audit record
+
+Add donor AUROC, donor log-loss and Brier per arm to the summary (secondary). Explain the pooled
+balanced-accuracy artefact (majority scored 0.353 because fold-wise training majorities flip
+under stratified folds) and add mean per-fold balanced accuracy as a sensitivity. Write
+`docs/nn_v2/AUDIT.md`: sections "Root cause", "Fixes", "Tests", "What changed in the protocol".
+**Check:** AUDIT.md contains "Root cause".
+
+## A5: Verified full rerun
+
+Request the full ladder into `reports/generated/nn_20260923/ladder_v2` (background, 14 workers;
+new directory, never overwrite `ladder/`). Then request
+`scripts/summarize_nn_v2.py --run reports/generated/nn_20260923/ladder_v2 --out docs/nn_v2`
+and write `docs/nn_v2/LADDER.md` (plain-language reading first).
+**Check (driver):** `gnhf/verify_ladder.py --run reports/generated/nn_20260923/ladder_v2 --write`
+exits 0: every arm 5 repeats × 30 donors, summary estimate/CI equal the independent recomputation,
+parameter counts equal the frozen record (or a named amendment), chr21_dosage AUROC ≥ 0.85.
+If the verifier still fails after a clean rerun, return to A1 with its output.
