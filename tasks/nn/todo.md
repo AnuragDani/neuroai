@@ -38,16 +38,16 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/geneact.md |
 | N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
 | N23 | Final verification | N22 | XS | TODO |
-| N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
-| N25 | Paper figures from evidence JSON | N24 | S | TODO |
+| N24 | Paper framing decision (rule-based) | N22 | XS | DONE:paper/framing.md |
+| N25 | Paper figures from evidence JSON | N24 | S | DONE:paper/figures/fig3_ladder.png |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
 | N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
 | N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
-| N29 | Draft Discussion + Limitations | N27 | S | TODO |
+| N29 | Draft Discussion + Limitations | N27 | S | BLOCKED:agy_call_cap:60 calls; see tasks/nn/lanes/paper.md |
 | N30 | Abstract + title | N29,N28 | XS | TODO |
 | N31 | Paper checker + fixes | N30 | S | TODO |
-| N32 | Adversarial self-review | N31 | S | TODO |
-| N33 | Copy draft to vault | N32 | XS | TODO |
+| N32 | Adversarial self-review | N31 | S | BLOCKED:agy_call_cap:60 calls; see tasks/nn/lanes/paper.md |
+| N33 | Copy draft to vault | N32 | XS | BLOCKED:agy_call_cap:60 calls; see tasks/nn/lanes/paper.md |
 | N34 | Final paper verification | N33 | XS | TODO |
 
 ## Run log
