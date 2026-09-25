@@ -1,9 +1,640 @@
 {
-  "status": "NOT_ESTIMABLE",
-  "reason": "input_missing",
-  "detail": "N15 export absent: reports/generated/nn_20260923/spectrum/cell_scores.csv.gz; N15 is BLOCKED so per-cell s_i/a_i do not exist.",
-  "spectrum_call": "NOT_ESTIMABLE",
-  "eligible_types": [],
-  "excluded_types": [],
-  "results": []
+  "status": "estimated",
+  "arm": "primary",
+  "n_boot": 2000,
+  "n_perm": 10000,
+  "seed": 22,
+  "support_floor": {
+    "min_cells_per_donor": 20,
+    "min_donors_per_group": 8
+  },
+  "eligible_types": [
+    "IPC",
+    "IPC_prol",
+    "NEU_CALB2",
+    "NEU_CUX2",
+    "NEU_RELN",
+    "NEU_RORB",
+    "NEU_SST",
+    "NEU_TLE4",
+    "NEU_low",
+    "OPC",
+    "RG",
+    "RG_prol"
+  ],
+  "excluded_types": [
+    {
+      "author_cell_type": "AST",
+      "n_cells": 1240,
+      "n_ds_donors": 15,
+      "n_con_donors": 15,
+      "reason": "support_floor"
+    },
+    {
+      "author_cell_type": "MIC",
+      "n_cells": 560,
+      "n_ds_donors": 15,
+      "n_con_donors": 15,
+      "reason": "support_floor"
+    },
+    {
+      "author_cell_type": "VASC",
+      "n_cells": 544,
+      "n_ds_donors": 15,
+      "n_con_donors": 15,
+      "reason": "support_floor"
+    }
+  ],
+  "significance_alpha": 0.05,
+  "results": [
+    {
+      "author_cell_type": "IPC",
+      "eligible": true,
+      "n_cells": 10560,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.18498899298387844,
+        "mean_con": -0.011466830598509722,
+        "diff": -0.17352216238536872,
+        "ci_low": -0.25851006647625585,
+        "ci_high": -0.07978583736202915,
+        "p_perm": 0.0012998700129987,
+        "p_holm": 0.0142985701429857,
+        "significant": true
+      },
+      "attention": {
+        "mean_ds": 0.0009926762831386031,
+        "mean_con": 0.0010067473466526926,
+        "diff": -1.4071063514089436e-05,
+        "ci_low": -8.257031508086177e-05,
+        "ci_high": 5.3101205298778254e-05,
+        "p_perm": 0.6988301169883012,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.010840688411141686,
+        "mean_con": -0.008484698608669022,
+        "diff": 0.019325387019810708,
+        "ci_low": 0.008690387722694435,
+        "ci_high": 0.03044906822087575,
+        "p_perm": 0.0022997700229977,
+        "p_holm": 0.0275972402759724,
+        "significant": true
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": -0.24716351501668518,
+          "p": 0.1879102373011996
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.14949675922064878,
+          "p": 0.4304157984522309
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": true
+    },
+    {
+      "author_cell_type": "IPC_prol",
+      "eligible": true,
+      "n_cells": 4468,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.17839814053030284,
+        "mean_con": -0.013469789215612392,
+        "diff": -0.16492835131469044,
+        "ci_low": -0.2613131581106175,
+        "ci_high": -0.05670624931106261,
+        "p_perm": 0.006899310068993101,
+        "p_holm": 0.055194480551944806,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0009546961883378338,
+        "mean_con": 0.0010602618731734089,
+        "diff": -0.00010556568483557503,
+        "ci_low": -0.00029634976968253565,
+        "ci_high": 1.3473372595745997e-05,
+        "p_perm": 0.18938106189381063,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.017760588758153582,
+        "mean_con": 0.002698053335036066,
+        "diff": 0.015062535423117517,
+        "ci_low": -0.007060311757738186,
+        "ci_high": 0.03911576376552565,
+        "p_perm": 0.25417458254174585,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.22313681868743046,
+          "p": 0.2359167000378454
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.08565152671137923,
+          "p": 0.6526908753920332
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "NEU_CALB2",
+      "eligible": true,
+      "n_cells": 5048,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.16328870177999946,
+        "mean_con": -0.002312197397799293,
+        "diff": -0.16097650438220018,
+        "ci_low": -0.2501060054366752,
+        "ci_high": -0.07927718696106033,
+        "p_perm": 0.0013998600139986002,
+        "p_holm": 0.0142985701429857,
+        "significant": true
+      },
+      "attention": {
+        "mean_ds": 0.0009994330761371481,
+        "mean_con": 0.0010338493602253438,
+        "diff": -3.441628408819568e-05,
+        "ci_low": -0.0001527617933516002,
+        "ci_high": 0.00010091361653093737,
+        "p_perm": 0.5782421757824218,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.02102695667618385,
+        "mean_con": 0.009565756720476533,
+        "diff": 0.011461199955707319,
+        "ci_low": -0.016684841230865905,
+        "ci_high": 0.04448237261268329,
+        "p_perm": 0.5136486351364864,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.2947719688542826,
+          "p": 0.11381068481392176
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.03551953076219926,
+          "p": 0.8521778701933016
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": true
+    },
+    {
+      "author_cell_type": "NEU_CUX2",
+      "eligible": true,
+      "n_cells": 40228,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.1957557472506032,
+        "mean_con": -0.01394476012637946,
+        "diff": -0.18181098712422375,
+        "ci_low": -0.2849943648635482,
+        "ci_high": -0.08117732416410763,
+        "p_perm": 0.0016998300169983002,
+        "p_holm": 0.015298470152984701,
+        "significant": true
+      },
+      "attention": {
+        "mean_ds": 0.0009908295316216418,
+        "mean_con": 0.0009854925450896229,
+        "diff": 5.336986532018936e-06,
+        "ci_low": -2.998294843440491e-05,
+        "ci_high": 3.626146095353513e-05,
+        "p_perm": 0.773922607739226,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.011620981880752434,
+        "mean_con": -0.0030667212593608805,
+        "diff": 0.014687703140113313,
+        "ci_low": 0.0034082484674724804,
+        "ci_high": 0.026982133812338386,
+        "p_perm": 0.014698530146985302,
+        "p_holm": 0.1232876712328767,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": -0.12747497219132367,
+          "p": 0.50203706964803
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.11892298590635068,
+          "p": 0.5313688186462384
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": true
+    },
+    {
+      "author_cell_type": "NEU_RELN",
+      "eligible": true,
+      "n_cells": 1976,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.12508149734884275,
+        "mean_con": -0.041725989595245844,
+        "diff": -0.0833555077535969,
+        "ci_low": -0.20421844310368495,
+        "ci_high": 0.03642800215030924,
+        "p_perm": 0.23017698230176983,
+        "p_holm": 0.46035396460353967,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.001004394467893714,
+        "mean_con": 0.0009520335338581299,
+        "diff": 5.236093403558411e-05,
+        "ci_low": -1.1209173631795093e-05,
+        "ci_high": 0.0001283398313694324,
+        "p_perm": 0.21477852214778523,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.03287672056124634,
+        "mean_con": -0.019023598704209763,
+        "diff": 0.0519003192654561,
+        "ci_low": 0.015925481728042465,
+        "ci_high": 0.08680034344343801,
+        "p_perm": 0.009299070092990702,
+        "p_holm": 0.0978902109789021,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": -0.3486095661846496,
+          "p": 0.059026935205469144
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.11240357836139005,
+          "p": 0.554266794734254
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "NEU_RORB",
+      "eligible": true,
+      "n_cells": 10100,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.13256057963384263,
+        "mean_con": -0.014456668276436454,
+        "diff": -0.11810391135740618,
+        "ci_low": -0.22869537596722503,
+        "ci_high": -0.010919443338828019,
+        "p_perm": 0.067993200679932,
+        "p_holm": 0.203979602039796,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0009685348900749084,
+        "mean_con": 0.0010354842804538395,
+        "diff": -6.694939037893118e-05,
+        "ci_low": -0.0001642160765310367,
+        "ci_high": -1.8520809221026605e-07,
+        "p_perm": 0.0746925307469253,
+        "p_holm": 0.8216178382161784,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.014781204674665519,
+        "mean_con": -0.01009250437978807,
+        "diff": 0.024873709054453588,
+        "ci_low": 0.0014059402821645333,
+        "ci_high": 0.05134952175769957,
+        "p_perm": 0.04839516048395161,
+        "p_holm": 0.3254674532546745,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": -0.16662958843159065,
+          "p": 0.3788253074539408
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.06496926829288345,
+          "p": 0.7330348319800748
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "NEU_SST",
+      "eligible": true,
+      "n_cells": 6704,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.14166640300839886,
+        "mean_con": -0.023439956095865407,
+        "diff": -0.11822644691253345,
+        "ci_low": -0.19888164353911197,
+        "ci_high": -0.032331666436448976,
+        "p_perm": 0.014098590140985901,
+        "p_holm": 0.08459154084591541,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.00101538325973992,
+        "mean_con": 0.0009642634810474696,
+        "diff": 5.111977869245044e-05,
+        "ci_low": -3.391527615357033e-05,
+        "ci_high": 0.00016702006217150838,
+        "p_perm": 0.49965003499650035,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.011191672597393055,
+        "mean_con": -0.016581109691285602,
+        "diff": 0.027772782288678657,
+        "ci_low": 0.008261470125008035,
+        "ci_high": 0.04887259463517122,
+        "p_perm": 0.008899110088991101,
+        "p_holm": 0.0978902109789021,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.0002224694104560623,
+          "p": 0.9990690797409111
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.08317864798742865,
+          "p": 0.6621199053424102
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "NEU_TLE4",
+      "eligible": true,
+      "n_cells": 12112,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.14295528411329997,
+        "mean_con": -0.004291716316724822,
+        "diff": -0.13866356779657515,
+        "ci_low": -0.24974799154519217,
+        "ci_high": -0.026446048126713445,
+        "p_perm": 0.031296870312968704,
+        "p_holm": 0.12518748125187482,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0010070100403897799,
+        "mean_con": 0.001038284694426102,
+        "diff": -3.1274654036322035e-05,
+        "ci_low": -9.61436307437117e-05,
+        "ci_high": 3.305775084494618e-05,
+        "p_perm": 0.37896210378962103,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.00386192749903832,
+        "mean_con": 0.0001214693378043513,
+        "diff": 0.0037404581612339688,
+        "ci_low": -0.012714663864593705,
+        "ci_high": 0.020064762972672734,
+        "p_perm": 0.6788321167883211,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.32413793103448274,
+          "p": 0.08055618262173098
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.14410138745930204,
+          "p": 0.4474240441308112
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "NEU_low",
+      "eligible": true,
+      "n_cells": 940,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.2043500873791203,
+        "mean_con": 0.021226066780198203,
+        "diff": -0.2255761541593185,
+        "ci_low": -0.3366698603704003,
+        "ci_high": -0.11493884626754355,
+        "p_perm": 0.0008999100089991,
+        "p_holm": 0.010798920107989201,
+        "significant": true
+      },
+      "attention": {
+        "mean_ds": 0.0009198780911452784,
+        "mean_con": 0.0011900553400835887,
+        "diff": -0.0002701772489383102,
+        "ci_low": -0.0006606145940017202,
+        "ci_high": -3.540768266693804e-05,
+        "p_perm": 0.010998900109989001,
+        "p_holm": 0.131986801319868,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": -0.015369955975328139,
+        "mean_con": 0.01707353151990808,
+        "diff": -0.03244348749523622,
+        "ci_low": -0.08797911496815103,
+        "ci_high": 0.00687447273177574,
+        "p_perm": 0.2822717728227177,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.07185761957730812,
+          "p": 0.7059172540757829
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.029000123217238636,
+          "p": 0.8790902579730118
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": true
+    },
+    {
+      "author_cell_type": "OPC",
+      "eligible": true,
+      "n_cells": 908,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.11254993959574185,
+        "mean_con": -0.06829529605720135,
+        "diff": -0.0442546435385405,
+        "ci_low": -0.18097855390483916,
+        "ci_high": 0.09638472141218477,
+        "p_perm": 0.577042295770423,
+        "p_holm": 0.577042295770423,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0009497068229363935,
+        "mean_con": 0.0009419626730474875,
+        "diff": 7.744149888906041e-06,
+        "ci_low": -2.7739487113742568e-05,
+        "ci_high": 4.5680007258981505e-05,
+        "p_perm": 0.6959304069593041,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.03276095586261078,
+        "mean_con": -0.02369202872291535,
+        "diff": 0.05645298458552613,
+        "ci_low": 0.003857572412545876,
+        "ci_high": 0.13773789313233,
+        "p_perm": 0.046495350464953504,
+        "p_holm": 0.3254674532546745,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.10300333704115683,
+          "p": 0.5880636614116412
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.034170687821862576,
+          "p": 0.8577336317213772
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "RG",
+      "eligible": true,
+      "n_cells": 19908,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.14654625365905502,
+        "mean_con": -0.008485499338242669,
+        "diff": -0.13806075432081236,
+        "ci_low": -0.23644638684251884,
+        "ci_high": -0.038600877719858186,
+        "p_perm": 0.016998300169983,
+        "p_holm": 0.084991500849915,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0009937255794242596,
+        "mean_con": 0.0009749090517930987,
+        "diff": 1.8816527631160935e-05,
+        "ci_low": -2.137147054670072e-05,
+        "ci_high": 5.9881200637711745e-05,
+        "p_perm": 0.38306169383061695,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.010579379455703296,
+        "mean_con": 0.0074235248667278665,
+        "diff": 0.0031558545889754297,
+        "ci_low": -0.02198932190368393,
+        "ci_high": 0.029088670411592674,
+        "p_perm": 0.8081191880811919,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.5052280311457175,
+          "p": 0.004403186363382567
+        },
+        "dev_PCW": {
+          "spearman_rho": 0.13196180099627194,
+          "p": 0.4869791088265094
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    },
+    {
+      "author_cell_type": "RG_prol",
+      "eligible": true,
+      "n_cells": 4704,
+      "n_donors_ds": 15,
+      "n_donors_con": 15,
+      "s": {
+        "mean_ds": -0.174637320605028,
+        "mean_con": -0.021861553116287406,
+        "diff": -0.1527757674887406,
+        "ci_low": -0.24881925617696737,
+        "ci_high": -0.050453643339412164,
+        "p_perm": 0.0086991300869913,
+        "p_holm": 0.0608939106089391,
+        "significant": false
+      },
+      "attention": {
+        "mean_ds": 0.0009768011835785777,
+        "mean_con": 0.0010201518397120605,
+        "diff": -4.3350656133482775e-05,
+        "ci_low": -0.00014852486181207505,
+        "ci_high": 4.2431787717612696e-05,
+        "p_perm": 0.40955904409559046,
+        "p_holm": 1.0,
+        "significant": false
+      },
+      "chr21": {
+        "mean_ds": 0.025245370705958937,
+        "mean_con": -0.006546082835718961,
+        "diff": 0.031791453541677894,
+        "ci_low": 0.009924288054377254,
+        "ci_high": 0.054304306535199624,
+        "p_perm": 0.0136986301369863,
+        "p_holm": 0.1232876712328767,
+        "significant": false
+      },
+      "confounds": {
+        "chr21_dosage": {
+          "spearman_rho": 0.13281423804226916,
+          "p": 0.4841446192155958
+        },
+        "dev_PCW": {
+          "spearman_rho": -0.029000123217238636,
+          "p": 0.8790902579730118
+        }
+      },
+      "residualized": null,
+      "confound_sensitive": false
+    }
+  ],
+  "spectrum_call": "SPECTRUM_LOCALIZED:IPC,NEU_CALB2,NEU_CUX2,NEU_low"
 }

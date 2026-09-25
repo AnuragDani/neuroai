@@ -5,3 +5,4 @@
 - iter3 N22: wrote docs/nn_v2/NN_V2_RESULTS_2026-09-23.md (1435 words; conclusion-first, D1-D13 coverage table, planted-benchmark answer = no CA_FAVOURED regime (S0-S4 LINEAR_SUFFICIENT, S5 MLP_FAVOURED), rung decisions all undecidable/N10 BLOCKED, limitations, replay commands + hashes HEAD 2ab4b92, number-provenance table) and docs/nn_v2/PROFESSOR_NOTE_UNSENT.md (278 words, not sent). Label NN_ASSIGNMENT_PARTIAL_BLOCKED at top. Next: N23.
 - iter4 N23: verification complete. pytest -q -x -> 1171 passed (62.90s). ruff check src tests scripts -> All checks passed! git status --short: only lane-owned new/modified files, none >200KB. Label NN_ASSIGNMENT_PARTIAL_BLOCKED at top of results doc. Lane interpret tasks N16/N17/N22/N23 all resolved; stop.
 - 2026-09-24T23:34:00Z N16 step: modified `analyze_nn_v2_spectrum.py` to include `chr21_dosage` alignment logic and requested run.
+- 2026-09-24T23:35Z N16 DONE. Verified docs/nn_v2/spectrum.json and SPECTRUM.md. Next: N17.
