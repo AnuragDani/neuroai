@@ -43,7 +43,7 @@ def test_runner_and_summarizer(tmp_path):
     assert run_data["folds_done"] == 4  # Should still be 4 total
     
     # Test summarizer
-    sum_cmd = [sys.executable, "scripts/summarize_nn_v2.py", str(out_dir)]
+    sum_cmd = [sys.executable, "scripts/summarize_nn_v2.py", "--run", str(out_dir), "--out", "docs/nn_v2"]
     res3 = subprocess.run(sum_cmd, capture_output=True, text=True)
     assert res3.returncode == 0, res3.stderr
     
