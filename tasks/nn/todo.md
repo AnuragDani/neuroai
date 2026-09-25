@@ -25,17 +25,17 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N8 | Program/module-token fusion models | N2 | M | DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention  |
 | N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | DONE:docs/nn_v2/PROTOCOL_FREEZE.md + configs/nn_protocol_v2_2026-09-23.json (protocol_sha256=80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161) + |
 | N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | DONE:rolled up from N10a, N10b, N10c, N10d |
-| N11 | chr21-excluded sensitivity | N10 | S | TODO |
-| N12 | Init-seed and sampling-seed sensitivity | N10 | S | TODO |
-| N13 | Held-out faithfulness interventions | N10 | M | TODO |
-| N14 | Nuisance-probe diagnostics | N10 | S | TODO |
-| N15 | Out-of-fold per-cell score export | N10 | S | TODO |
+| N11 | chr21-excluded sensitivity | N10 | S | DONE:docs/nn_v2/chr21_excluded.json |
+| N12 | Init-seed and sampling-seed sensitivity | N10 | S | DONE:docs/nn_v2/seed_sensitivity.json |
+| N13 | Held-out faithfulness interventions | N10 | M | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/faith.md |
+| N14 | Nuisance-probe diagnostics | N10 | S | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/faith.md |
+| N15 | Out-of-fold per-cell score export | N10 | S | DONE:reports/generated/nn_20260923/spectrum/cell_scores.csv.gz |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
 | N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
-| N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | TODO |
+| N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | BLOCKED:agy_call_cap:30 calls; see tasks/nn/lanes/geneact.md |
 | N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
 | N23 | Final verification | N22 | XS | TODO |
 | N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
