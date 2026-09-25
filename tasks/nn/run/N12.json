@@ -1,5 +1,0 @@
-{
-  "argv": ["scripts/run_n12.py"],
-  "background": true,
-  "timeout_min": 60
-}
