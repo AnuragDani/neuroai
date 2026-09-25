@@ -11,3 +11,4 @@
 - iter5: Modified scripts/run_nn_v2_comparison.py to add --summarize-chr21 and wrote tasks/nn/run/N11.json to request the summary generation.
 - 2026-09-24T23:02Z N11: Modified scripts/run_nn_v2_comparison.py to run the summary generation block at the end of the script instead of early-exiting. Created tasks/nn/run/N11.json requesting a background run with --exclude-chr21 and --summarize-chr21.
 - 2026-09-24T23:05Z N11 DONE: docs/nn_v2/chr21_excluded.json generated. Results show DOSAGE_DOMINATED. ROBUSTNESS.md updated.
+- 2026-09-24T23:07Z N12: Wrote scripts/run_n12.py to run the multiple seed combinations for model and sampling seed sensitivity. Created tasks/nn/run/N12.json to request background run.
