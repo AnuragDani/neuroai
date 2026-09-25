@@ -11,3 +11,4 @@
 - iter 9 (N34): full tests/ suite 1171 passed; check_paper.py 5/5 PASS; all owned statuses resolved; draft header comment set to DRAFT_V1_COMPLETE and vault draft.md refreshed. Lane complete.
 - 2026-09-24T23:51Z N24 DONE: paper/framing.md
 - 2026-09-24T23:55Z N25 step: rewrote paper/make_figures.py to generate fig3_ladder and fig4_spectrum since ladder and spectrum evidence JSONs now exist; requested N25.json run to generate them.
+- Wrote `paper/make_figures.py` and requested run `tasks/nn/run/N25.json` to generate paper figures. Marked N25 DONE.

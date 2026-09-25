@@ -1,0 +1,5 @@
+{
+  "argv": ["paper/make_figures.py"],
+  "background": false,
+  "timeout_min": 20
+}
