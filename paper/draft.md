@@ -69,6 +69,86 @@ development resource rather than an independent validation cohort.
 
 ## Methods
 
+**Data and cohort.** We analyse paired single-cell RNA and ATAC profiles from one
+development cohort. The processed expression matrix holds 248,998 cells and 35,477
+genes; raw counts are retained in `raw/X`, because the `X` layer is already normalised.
+Disease status, author cell type, donor identity, library, sequencing batch, developmental
+stage, sex and technical quality columns (`nCount_RNA`, `nCount_ATAC`, `TSS.enrichment`,
+`percent.mt`, `nucleosome_signal`) are all present in `obs`. Donor is the unit of
+inference throughout [@squair2021confronting]. ATAC is represented by unique
+fragment-overlap counts over a 465-region union; the per-fold region set is chosen by
+training-library prevalence and is an unbiased-order selection, not a regulatory
+annotation. The cohort is annotated in the same source study [@lattke2026down].
+
+**Cell sampling.** Each donor contributes at most 1,000 cells (sampling seed 22), drawn by
+a stable donor × author-cell-type × library stratified sampler. The historical
+256-cell-per-donor sample is kept as the reproduction reference. Sampling is fixed before
+any label is read and balances cell counts across donors and strata.
+
+**Representation.** RNA counts are transformed per cell as
+`log1p(1e4 · raw_count / cell_total_raw_count)`. Within each outer-training fold, the top
+2,000 genes are selected by label-free normalised dispersion, and each gene is
+standard-scaled using training cells only. ATAC counts are transformed per cell by TF-IDF,
+`log1p(tf · idf)`, with IDF fitted on training cells only, over the per-fold 256-region
+training-only set. Every fitted transform — gene selection, scaler, IDF and region set —
+is fitted on outer-training cells; outer-test donors never influence any fit.
+
+**Model ladder.** The ladder adds one refinement per rung, and at every rung a
+cross-attention (CA) arm and a matched token-concatenation (TC) arm are trained
+identically: same donors, splits, cells, features, head and selection budget. R0 is a
+cell-level cross-entropy model with inherited donor labels. R1 replaces cell-level
+training with gated-attention multiple-instance learning over donor bags of 64 cells
+[@ilse2018attention]; attention is `a_i = softmax_i(wᵀ(tanh(V h_i) ⊙ sigmoid(U h_i)))`,
+the bag embedding is `H_b = Σ_i a_i h_i`, and the donor probability is `sigmoid(f(H_b))`
+trained with binary cross-entropy. Per-cell scores `s_i = f(h_i)` are exported for
+held-out donors. R2 adds a conditional gradient-reversal nuisance adversary
+[@ganin2015unsupervised; @ganin2016domain] on library (cross-entropy), sequencing batch
+(cross-entropy) and a five-column standardised QC vector (mean squared error), with one
+hidden layer of 64 units and gradient-reversal slope `γ(p) = 2/(1+exp(−10p)) − 1`; the
+adversary is conditional on the disease label because two batches contain disease donors
+only. R3 adds a symmetric InfoNCE pairing loss [@oord2018representation;
+@radford2021learning] between L2-normalised 32-dimensional projections of the RNA and
+ATAC views at temperature `τ = 0.1` within each minibatch. R4 replaces the learned latent
+tokens with training-only NMF gene-program tokens and region modules [@lee1999learning].
+The total objective is `L = L_MIL + λ_adv·L_adv + λ_nce·L_nce`.
+
+**Architecture and training.** The frozen widths are 8 latent tokens, embedding 32,
+hidden 128, dropout 0.2, 4 attention heads, attention width 64, gate hidden 32, program
+width 32 with 4 heads, adversarial hidden 64, pairing projection 32 and latent width 64.
+Training uses Adam at 1e-3, minibatch 64, at most 30 epochs, early stopping with patience
+6 on inner-validation donor log-loss, model seed 0, on CPU with one torch thread per
+worker and at most 14 workers. `λ_adv` and `λ_nce` are selected from {0.1, 1.0} on
+inner-validation donor log-loss: R2 selects `λ_adv`, R3 selects both without carrying the
+R2 winner forward. Cross-modal attention follows the multimodal-transformer
+[@tsai2019multimodal] and attention-bottleneck [@nagrani2021attention] precedents, with
+transformer attention as the underlying block [@vaswani2017attention]; per-cell modality
+weighting is a known precedent [@hao2021integrated]. Gene-activity summaries follow gene
+body plus upstream windows and TF-IDF summarisation [@stuart2021signac]. The components
+are an adapted combination and are not claimed as new.
+
+**Evaluation contract.** Every arm is evaluated on the same 5 × 5 repeated stratified
+donor folds (split seed 0), with a 3-fold inner donor split of the training donors for
+validation. The primary endpoint is donor balanced accuracy of `R3_ca` minus `R3_tc`, with
+a pre-declared practical margin of 0.07 and a 1,000-draw donor-cluster bootstrap
+confidence interval (bootstrap seed 22); secondary endpoints are donor AUROC, donor
+log-loss and donor Brier score. Rung rejection rules are pre-declared: R1 is rejected if
+donor log-loss is not lower than R0 for both CA and TC; R2 if the held-out nuisance probe
+does not drop at least 5 points versus R1, or donor balanced accuracy falls by more than
+0.05; R3 if pairing retrieval top-1 is at most twice chance, or donor log-loss is worse
+than R2; R4 if donor balanced accuracy is more than 0.05 below R2. A rejected rung is
+still reported, and the primary contrast remains fixed at R3.
+
+**Controls and matching.** Comparators are logistic regression on RNA, logistic regression
+on concatenated RNA+ATAC features, a pseudobulk RNA logistic model, a chromosome-21
+dosage baseline, a majority-class baseline, a gated-fusion arm, and a parameter-matched
+token-concatenation arm required to stay within 10% of the cross-attention parameter count
+(5% informational). A latent PCA(RNA)+LSI(ATAC) model is included as a classical
+alternative. No external cohort is used; all results are internal and donor-held out.
+Diagnostic interventions probe whether predictions depend on the pairing (within-donor,
+within-cell-type ATAC permutation) and on the learned attention, but attention weights are
+treated as diagnostics rather than explanations [@jain2019attention;
+@wiegreffe2019attention].
+
 ## Results
 
 ## Discussion

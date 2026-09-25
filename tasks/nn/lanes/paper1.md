@@ -1,0 +1,3 @@
+# Lane paper1 log
+
+- iter2 N26: wrote Methods into paper/draft.md (856 words <=1400) using bold-led blocks to keep all text under `## Methods`; numbers traced to configs/nn_protocol_v2_2026-09-23.json + configs/nn_inputs_2026-09-23.json (parammatch 10%/5% from docs/nn_v2/PROTOCOL_FREEZE.md — not in configs); 15 frozen citekeys; check_paper.py 5/5 PASS, tests/test_paper_tools.py 15 passed, ruff clean. N26 DONE. All lane tasks complete.
