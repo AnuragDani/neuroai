@@ -394,6 +394,7 @@ def main(argv=None):
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--exclude-chr21", action="store_true")
     parser.add_argument("--summarize-chr21", action="store_true")
+    parser.add_argument("--seed-sensitivity", action="store_true")
     parser.add_argument("--model-seed", type=int, default=0)
     parser.add_argument("--sampling-seed", type=int, default=22)
     parser.add_argument("--synthetic", action="store_true")
@@ -660,7 +661,108 @@ def main(argv=None):
                 
             f.write(f"Results indicate {label}. {desc}\n")
 
+    if getattr(args, "seed_sensitivity", False):
+        import subprocess
+        
+        m_seeds = [0, 1, 2, 3, 4]
+        s_seeds = [23, 24]
+        runs = [(m, 22) for m in m_seeds] + [(0, s) for s in s_seeds]
+        
+        for m, s in runs:
+            out_dir = f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}"
+            cmd = [
+                sys.executable, __file__,
+                "--protocol", str(args.protocol),
+                "--out", out_dir,
+                "--arms", "R3_ca", "R3_tc",
+                "--model-seed", str(m),
+                "--sampling-seed", str(s),
+                "--resume",
+                "--workers", "5"
+            ]
+            logging.info(f"Running seed {m} / {s}")
+            subprocess.run(cmd, check=True)
+            
+        from p22.eval.repeated_comparison import repeated_primary_contrast
+        
+        def load_repeats_seed(folds_dir):
+            per_repeat = {}
+            for f in Path(folds_dir).glob("*.json"):
+                with open(f) as fp:
+                    rec = json.load(fp)
+                    rep = rec["repeat"]
+                    arm = rec["arm"]
+                    if rep not in per_repeat:
+                        per_repeat[rep] = {}
+                    if arm not in per_repeat[rep]:
+                        per_repeat[rep][arm] = []
+                    df = pd.DataFrame({
+                        "donor_id": rec["donor_ids"],
+                        "label": rec["donor_labels"],
+                        "probability": rec["donor_probabilities"]
+                    })
+                    per_repeat[rep][arm].append(df)
+            repeats = []
+            for rep in sorted(per_repeat.keys()):
+                entry = {"repeat": rep}
+                for arm in per_repeat[rep]:
+                    entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
+                repeats.append(entry)
+            return repeats
+
+        results = {}
+        model_seed_estimates = []
+        sampling_seed_estimates = []
+        
+        for m, s in runs:
+            out_dir = Path(f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}/folds")
+            repeats = load_repeats_seed(out_dir)
+            diff_stats = repeated_primary_contrast(repeats, model="R3_ca", reference="R3_tc")
+            est = diff_stats["estimate"]
+            results[f"m_{m}_s_{s}"] = {
+                "estimate": est,
+                "ci": diff_stats["interval"]
+            }
+            if s == 22:
+                model_seed_estimates.append(est)
+            if m == 0:
+                sampling_seed_estimates.append(est)
+                
+        model_spread = max(model_seed_estimates) - min(model_seed_estimates)
+        sampling_spread = max(sampling_seed_estimates) - min(sampling_seed_estimates)
+        
+        results["model_seed_spread"] = model_spread
+        results["sampling_seed_spread"] = sampling_spread
+        
+        with open("docs/nn_v2/ladder_summary.json") as f:
+            lsum = json.load(f)
+        outcome = lsum.get("outcome", "")
+        
+        with open("docs/nn_v2/seed_sensitivity.json", "w") as f:
+            json.dump(results, f, indent=2)
+            
+        with open("docs/nn_v2/ROBUSTNESS.md", "a") as f:
+            f.write("\n## Init-seed and sampling-seed sensitivity\n\n")
+            f.write(f"Model seed spread: {model_spread:.4f}. Sampling seed spread: {sampling_spread:.4f}. ")
+            
+            if outcome.startswith("A_"):
+                n_above = sum(1 for e in model_seed_estimates if e >= 0.07)
+                if n_above >= 4:
+                    f.write("Outcome A_ADVANTAGE is robust across init seeds. ")
+                else:
+                    f.write("Relabeled as A_FRAGILE. ")
+            else:
+                f.write("Report spread only (outcome B/C/D). ")
+                
+            if sampling_spread > 0.07:
+                f.write("SAMPLING_SENSITIVE.\n")
+            else:
+                f.write("\n")
+
+        return 0
+
     return 0 if not failures else 1
 
 if __name__ == "__main__":
     sys.exit(main())
+
