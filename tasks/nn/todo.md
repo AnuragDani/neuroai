@@ -24,31 +24,31 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N7 | Cross-modal InfoNCE pairing loss | N5 | S | DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired lo |
 | N8 | Program/module-token fusion models | N2 | M | DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention  |
 | N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | DONE:docs/nn_v2/PROTOCOL_FREEZE.md + configs/nn_protocol_v2_2026-09-23.json (protocol_sha256=80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161) + |
-| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | BLOCKED:lane_stalled:no commit in 3 attempts |
-| N11 | chr21-excluded sensitivity | N10 | S | BLOCKED:upstream N10 (BLOCKED:lane_stalled):no docs/nn_v2/ladder_summary.json; no reports/generated/nn_20260923/ladder/; 0 fold files; runner scripts/run_nn_v2_ |
-| N12 | Init-seed and sampling-seed sensitivity | N10 | S | BLOCKED:upstream N10 (BLOCKED:lane_stalled):no seed-0 frozen grid choices, no R3_ca/R3_tc fold models, no ladder_summary.json (0 fold files); runner absent; no  |
-| N13 | Held-out faithfulness interventions | N10 | M | BLOCKED:N10_ladder_missing:no ladder fold models/runner; docs/nn_v2/faithfulness.json all cells N/A; NC not demonstrated; tags NOT_SHOWN_USED per decision_tree  |
-| N14 | Nuisance-probe diagnostics | N10 | S | BLOCKED:N10_ladder_missing:no R1/R2/R3 fitted embeddings to probe; R2_UNEVALUATED; docs/nn_v2/nuisance_probe.json |
-| N15 | Out-of-fold per-cell score export | N10 | S | BLOCKED:upstream N10:ladder lane stalled (N10=BLOCKED:lane_stalled) and saved no fold models, so per-cell s_i/a_i cannot be computed; reports/generated/nn_20260 |
-| N16 | Cell-state spectrum analysis | N15,N11 | M | BLOCKED:upstream N15:N15=BLOCKED:lane_stalled -> reports/generated/nn_20260923/spectrum/cell_scores.csv.gz absent; scripts/analyze_nn_v2_spectrum.py + tests/tes |
-| N17 | Routing/attention description by cell type | N15,N13 | S | BLOCKED:upstream N13:N13=BLOCKED:N10_ladder_missing -> decision_tree N17 fallback applied: all readouts NOT_SHOWN_USED (R3_gated routing weight, CA attention en |
+| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | DONE:rolled up from N10a, N10b, N10c, N10d |
+| N11 | chr21-excluded sensitivity | N10 | S | TODO |
+| N12 | Init-seed and sampling-seed sensitivity | N10 | S | TODO |
+| N13 | Held-out faithfulness interventions | N10 | M | TODO |
+| N14 | Nuisance-probe diagnostics | N10 | S | TODO |
+| N15 | Out-of-fold per-cell score export | N10 | S | TODO |
+| N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
+| N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
-| N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | BLOCKED:upstream N10:dep N10=BLOCKED:lane_stalled; scripts/run_nn_v2_comparison.py absent on all lanes (geneact/cellstate/ladder/robust/faith); docs/nn_v2/ladde |
-| N22 | Results doc + unsent professor note | N10–N21 | M | DONE:wrote docs/nn_v2/NN_V2_RESULTS_2026-09-23.md (1435 words, 6 required sections + provenance table; label NN_ASSIGNMENT_PARTIAL_BLOCKED in first 10 lines) an |
-| N23 | Final verification | N22 | XS | DONE:pytest -q -x = 1171 passed in 62.90s; ruff check src tests scripts = All checks passed!; git status --short shows only lane-owned new/modified files, all < |
-| N24 | Paper framing decision (rule-based) | N22 | XS | DONE:paper/framing.md (58 lines) evaluates N24 table in order; F1 FALSE (N10 BLOCKED, N13 BLOCKED), F2 FALSE (planted_benchmark.json regime_labels: 0/15 CA_FAVO |
-| N25 | Paper figures from evidence JSON | N24 | S | DONE:paper/make_figures.py builds Fig1 fig1_schematic.{png,pdf} (ladder R0-R4 + donor architecture, --only schematic) and Fig2 fig2_planted.{png,pdf} (scenario  |
+| N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | TODO |
+| N22 | Results doc + unsent professor note | N10–N21 | M | TODO |
+| N23 | Final verification | N22 | XS | TODO |
+| N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
+| N25 | Paper figures from evidence JSON | N24 | S | TODO |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
-| N27 | Draft Results + claims ledger | N25,N26 | M | DONE:paper/claims.csv (+Results in paper/draft.md,211 lines);check_paper.py 5/5 PASS;ruff clean;tests/test_paper_tools.py 15 passed |
+| N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
 | N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
-| N29 | Draft Discussion + Limitations | N27 | S | DONE:paper/draft.md ##Discussion+##Limitations (combined <=700w);check_paper.py 5/5 PASS;ruff clean |
-| N30 | Abstract + title | N29,N28 | XS | DONE:paper/draft.md title+##Abstract (<=200w);check_paper.py 5/5 PASS |
-| N31 | Paper checker + fixes | N30 | S | DONE:paper/draft.md Abstract/title (<=200w);check_paper.py 5/5 PASS;ruff clean |
-| N32 | Adversarial self-review | N31 | S | DONE:paper/self_review.md (8 objections; batch/age confounding sentence added to Limitations);check_paper.py 5/5 PASS |
-| N33 | Copy draft to vault | N32 | XS | DONE:/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/paper-nn/ (draft.md, refs_frozen.bib, claims.csv, self_review.md, figures/ 4 fil |
-| N34 | Final paper verification | N33 | XS | DONE:1171 tests passed;check_paper.py 5/5 PASS;all statuses resolved;draft header label DRAFT_V1_COMPLETE |
+| N29 | Draft Discussion + Limitations | N27 | S | TODO |
+| N30 | Abstract + title | N29,N28 | XS | TODO |
+| N31 | Paper checker + fixes | N30 | S | TODO |
+| N32 | Adversarial self-review | N31 | S | TODO |
+| N33 | Copy draft to vault | N32 | XS | TODO |
+| N34 | Final paper verification | N33 | XS | TODO |
 
 ## Run log
 
