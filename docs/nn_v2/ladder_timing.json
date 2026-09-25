@@ -1,0 +1,10 @@
+{
+  "smoke_seconds": 77.68601727485657,
+  "projected_hours": 0.03853473079109949,
+  "reproduction": {
+    "estimate": -0.020000000000000007,
+    "expected": -0.02,
+    "abs_diff": 6.938893903907228e-18
+  },
+  "cap": 1000
+}
