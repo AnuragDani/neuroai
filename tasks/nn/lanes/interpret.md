@@ -6,3 +6,4 @@
 - iter4 N23: verification complete. pytest -q -x -> 1171 passed (62.90s). ruff check src tests scripts -> All checks passed! git status --short: only lane-owned new/modified files, none >200KB. Label NN_ASSIGNMENT_PARTIAL_BLOCKED at top of results doc. Lane interpret tasks N16/N17/N22/N23 all resolved; stop.
 - 2026-09-24T23:34:00Z N16 step: modified `analyze_nn_v2_spectrum.py` to include `chr21_dosage` alignment logic and requested run.
 - 2026-09-24T23:35Z N16 DONE. Verified docs/nn_v2/spectrum.json and SPECTRUM.md. Next: N17.
+- 2026-09-24T23:39Z N17 step 1/2 done: wrote scripts/describe_nn_v2_attention.py and tasks/nn/run/N17.json to request the run.
