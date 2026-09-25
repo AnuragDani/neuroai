@@ -212,7 +212,9 @@ def analyze_type(block: pd.DataFrame, eligible: bool, n_boot: int, n_perm: int, 
         "n_donors_ds": int(ds.shape[0]),
         "n_donors_con": int(con.shape[0]),
     }
-    for value_name, col in (("s", "s"), ("attention", "a")):
+    for value_name, col in (("s", "s"), ("attention", "a"), ("chr21", "chr21_dosage")):
+        if col not in ds.columns:
+            continue
         a_vals = ds[col].to_numpy(dtype=float)
         b_vals = con[col].to_numpy(dtype=float)
         diff = _diff(a_vals, b_vals)
@@ -283,13 +285,16 @@ def analyze_cells(cells: pd.DataFrame, n_boot: int = 2000, n_perm: int = 10000, 
         if not is_eligible:
             continue
         records.append(analyze_type(block, True, n_boot=n_boot, n_perm=n_perm, seed=seed))
-    # Holm across eligible types, separately for s and attention.
-    for key in ("s", "attention"):
-        pvals = [r[key]["p_perm"] for r in records]
+    # Holm across eligible types, separately for s, attention, and chr21.
+    for key in ("s", "attention", "chr21"):
+        pvals = [r[key]["p_perm"] for r in records if key in r]
+        if not pvals:
+            continue
         adjusted = holm_adjust(pvals)
         for rec, padj in zip(records, adjusted, strict=True):
-            rec[key]["p_holm"] = float(padj) if not np.isnan(padj) else None
-            rec[key]["significant"] = bool(padj < 0.05) if not np.isnan(padj) else False
+            if key in rec:
+                rec[key]["p_holm"] = float(padj) if not np.isnan(padj) else None
+                rec[key]["significant"] = bool(padj < 0.05) if not np.isnan(padj) else False
     # Residualised sensitivity label.
     for rec in records:
         res = rec.get("residualized")
@@ -312,10 +317,14 @@ def analyze_cells(cells: pd.DataFrame, n_boot: int = 2000, n_perm: int = 10000, 
         "results": records,
     }
     sig_types = [r["author_cell_type"] for r in records if r["s"]["significant"]]
+    sig_types_chr21 = [r["author_cell_type"] for r in records if r.get("chr21", {}).get("significant")]
     if not records:
         result["spectrum_call"] = "NOT_ESTIMABLE"
     elif sig_types:
-        result["spectrum_call"] = "SPECTRUM_LOCALIZED:" + ",".join(sig_types)
+        call = "SPECTRUM_LOCALIZED:" + ",".join(sig_types)
+        if set(sig_types) == set(sig_types_chr21) and len(sig_types) > 0:
+            call += " (dosage-aligned)"
+        result["spectrum_call"] = call
     else:
         result["spectrum_call"] = "SPECTRUM_NULL"
     return result
