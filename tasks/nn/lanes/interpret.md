@@ -4,3 +4,7 @@
 - iter2 N17: N13=BLOCKED:N10_ladder_missing -> decision_tree N17 fallback: wrote docs/nn_v2/routing_attention.json + ROUTING_ATTENTION.md with all readouts (R3_gated_routing_weight, ca_attention_entropy, R4_ca_program_module_attention) = NOT_SHOWN_USED; no script (unverifiable without models). N17 resolved BLOCKED:upstream N13.
 - iter3 N22: wrote docs/nn_v2/NN_V2_RESULTS_2026-09-23.md (1435 words; conclusion-first, D1-D13 coverage table, planted-benchmark answer = no CA_FAVOURED regime (S0-S4 LINEAR_SUFFICIENT, S5 MLP_FAVOURED), rung decisions all undecidable/N10 BLOCKED, limitations, replay commands + hashes HEAD 2ab4b92, number-provenance table) and docs/nn_v2/PROFESSOR_NOTE_UNSENT.md (278 words, not sent). Label NN_ASSIGNMENT_PARTIAL_BLOCKED at top. Next: N23.
 - iter4 N23: verification complete. pytest -q -x -> 1171 passed (62.90s). ruff check src tests scripts -> All checks passed! git status --short: only lane-owned new/modified files, none >200KB. Label NN_ASSIGNMENT_PARTIAL_BLOCKED at top of results doc. Lane interpret tasks N16/N17/N22/N23 all resolved; stop.
+- 2026-09-24T23:34:00Z N16 step: modified `analyze_nn_v2_spectrum.py` to include `chr21_dosage` alignment logic and requested run.
+- 2026-09-24T23:35Z N16 DONE. Verified docs/nn_v2/spectrum.json and SPECTRUM.md. Next: N17.
+- 2026-09-24T23:39Z N17 step 1/2 done: wrote scripts/describe_nn_v2_attention.py and tasks/nn/run/N17.json to request the run.
+- 2026-09-24T23:45Z N17 step 1/2 done: wrote tasks/nn/run/N17.json to request the run.
