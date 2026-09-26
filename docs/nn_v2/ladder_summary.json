@@ -2,10 +2,10 @@
   "primary": {
     "model": "R3_ca",
     "reference": "R3_tc",
-    "estimate": 0.0,
+    "estimate": 0.04166666666666663,
     "ci": [
       0.0,
-      0.0
+      0.13636363636363635
     ],
     "margin": 0.09,
     "advantage": false
@@ -21,10 +21,10 @@
     "R4": "descriptive"
   },
   "per_arm": {
-    "R3_tc": {
-      "mean_ba": 0.5
-    },
     "R3_ca": {
+      "mean_ba": 0.5416666666666666
+    },
+    "R3_tc": {
       "mean_ba": 0.5
     }
   }
