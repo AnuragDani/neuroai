@@ -128,14 +128,14 @@ def prepare_nn_fold(
     if train_donors & holdout_donors:
         raise ValueError("train and holdout rows share a donor; fold is not donor-held-out")
 
-    rna_norm = _rna_lognorm(inputs.rna, inputs.rna_totals)[:, gene_keep]
+    rna_norm = _rna_lognorm(inputs.rna[rows], inputs.rna_totals[rows])[:, gene_keep]
     hvg = _hvg_indices(rna_norm[train_position], n_hvg)
     selected_cols = np.flatnonzero(gene_keep)[hvg]
     rna_dense = np.asarray(rna_norm[:, selected_cols].todense(), dtype=np.float32)
     rna_scaler = StandardScaler().fit(rna_dense[train_position])
     rna = rna_scaler.transform(rna_dense).astype(np.float32)
 
-    atac_raw = inputs.atac[:, region_rows]
+    atac_raw = inputs.atac[rows][:, region_rows]
     atac_tfidf, idf = _atac_tfidf(atac_raw, train_position)
     atac_dense = np.asarray(atac_tfidf.todense(), dtype=np.float32)
     atac_scaler = StandardScaler().fit(atac_dense[train_position])

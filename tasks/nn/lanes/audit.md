@@ -1,0 +1,1 @@
+- A1 DONE: Found and fixed the matrix row misalignment bug in nn_fold.py; wrote test_nn_audit_alignment.py and documented root cause in AUDIT.md.
