@@ -21,10 +21,10 @@
     "R4": "descriptive"
   },
   "per_arm": {
-    "R3_ca": {
+    "R3_tc": {
       "mean_ba": 0.5
     },
-    "R3_tc": {
+    "R3_ca": {
       "mean_ba": 0.5
     }
   }
