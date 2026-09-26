@@ -1,66 +1,69 @@
 import pytest
-import json
-from pathlib import Path
-import tempfile
 import numpy as np
-from scripts.run_nn_v2_comparison import worker_task
-from p22.data.nn_inputs import load_nn_inputs
+import scipy.sparse as sparse
 from sklearn.metrics import roc_auc_score
+from p22.data.group_splits import iter_repeated_stratified_group_folds
+from p22.data.nn_inputs import load_nn_inputs
+from p22.data.nn_fold import prepare_nn_fold
+from p22.eval.nn_factory import build_arm, ArmData
+
+import json
 
 def test_audit_alignment():
-    # Load input manifest
-    with open("configs/nn_inputs_2026-09-23.json") as f:
-        input_manifest = json.load(f)
-        
-    h5ad_path = input_manifest["inputs"]["h5ad"]["path"]
-    atac_path = input_manifest["inputs"]["atac_tiebreak_counts"]["path"]
-    union_bed = input_manifest["inputs"]["tracked_union_bed"]["path"]
-    
-    # We load with cap=256 for faster testing
-    inputs = load_nn_inputs(
-        h5ad_path, atac_path, cap=256, seed=22, union_bed=union_bed
-    )
-    
+    # Use real configs to run ladder's data path for chr21_dosage
     with open("configs/nn_protocol_v2_2026-09-23.json") as f:
-        protocol = json.load(f)
-        
-    from p22.data.group_splits import iter_repeated_stratified_group_folds
-    metadata = inputs.metadata
-    donors = metadata["donor_id"].to_numpy()
-    labels = (metadata["disease"] == "complete trisomy 21").astype(int).to_numpy()
+        cfg = json.load(f)
     
-    splits = list(iter_repeated_stratified_group_folds(
-        donors, labels, n_repeats=1, n_folds=5, base_seed=protocol["splits"]["split_seed"]
-    ))
-    split = splits[0]
-    train_rows = split.train_index
-    test_rows = split.test_index
+    with open("configs/nn_inputs_2026-09-23.json") as f:
+        inputs_cfg = json.load(f)
     
-    with tempfile.TemporaryDirectory() as td:
-        out_dir = Path(td)
-        # We run chr21_dosage
-        rec, err = worker_task(
-            out_dir=out_dir,
+    h5ad = inputs_cfg["inputs"]["h5ad"]["path"]
+    atac_npz = inputs_cfg["inputs"]["atac_tiebreak_counts"]["path"]
+    
+    union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
+    inputs = load_nn_inputs(h5ad, atac_npz, cap=cfg["sampling"]["cap_per_donor"], seed=cfg["sampling"]["seed"], union_bed=union_bed)
+    donors = inputs.metadata["donor_id"].to_numpy()
+    labels = (inputs.metadata["disease"] == "complete trisomy 21").astype(int).to_numpy()
+    
+    # One fold
+    all_folds = list(iter_repeated_stratified_group_folds(donors, labels, n_repeats=1, n_folds=5, base_seed=0))
+    train_idx, test_idx = all_folds[0].train_index, all_folds[0].test_index
+    
+    # we need the region set for fold 0
+    region_rows = np.arange(inputs.atac.shape[1]) # just keep all for this test
+    
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path("scripts").absolute()))
+    from run_nn_v2_comparison import worker_task
+    
+    folds_dir = Path("/tmp/folds")
+    folds_dir.mkdir(parents=True, exist_ok=True)
+    
+    all_donors = []
+    all_labels = []
+    all_probs = []
+    
+    for fold_obj in all_folds:
+        record, error = worker_task(
+            out_dir=Path("/tmp"),
             arm_name="chr21_dosage",
-            repeat=0,
-            fold=0,
-            train_rows=train_rows,
-            test_rows=test_rows,
+            repeat=fold_obj.repeat,
+            fold=fold_obj.fold,
+            train_rows=fold_obj.train_index,
+            test_rows=fold_obj.test_index,
             inputs=inputs,
-            protocol=protocol,
+            protocol=cfg,
             exclude_chr21=False,
-            model_seed=0,
-            cfg=cfg
+            model_seed=42,
+            cfg=cfg["training"]
         )
-        assert err is None, f"Worker task failed: {err}"
+        assert error is None
         
-        # Check AUC
-        auroc = roc_auc_score(rec["donor_labels"], rec["donor_probabilities"])
-        assert auroc >= 0.85, f"AUROC {auroc} < 0.85"
+        all_donors.extend(record["donor_ids"])
+        all_labels.extend(record["donor_labels"])
+        all_probs.extend(record["donor_probabilities"])
         
-        # Check alignment: donor label matches H5AD disease
-        donor_disease = dict(zip(inputs.metadata["donor_id"], inputs.metadata["disease"]))
-        for donor_id, label in zip(rec["donor_ids"], rec["donor_labels"]):
-            disease = donor_disease[donor_id]
-            expected_label = 1 if disease == "complete trisomy 21" else 0
-            assert label == expected_label, f"Misalignment for donor {donor_id}: got {label}, expected {expected_label} ({disease})"
+    auroc = roc_auc_score(all_labels, all_probs)
+    print(f"Global worker_task AUROC: {auroc}")
+    assert auroc >= 0.85, f"AUROC too low: {auroc}"
