@@ -14,7 +14,7 @@ from scipy import sparse
 import pandas as pd
 
 from p22.data.group_splits import iter_repeated_stratified_group_folds
-from p22.data.nn_inputs import NNInputs, load_nn_inputs, region_indices, FoldArrays, prepare_nn_fold as _bad_prepare_nn_fold
+from p22.data.nn_inputs import NNInputs, load_nn_inputs, region_indices, FoldArrays, prepare_nn_fold
 from p22.data.nn_fold import _rna_lognorm, _hvg_indices, _atac_tfidf, _qc_matrix, QC_RAW_COLUMNS, NUISANCE_CATEGORICAL, LABEL_DISEASE, _array_sha256
 from p22.data.real_cohort import DEFAULT_RNA_MATRIX_KEY
 from p22.eval.nn_factory import build_arm, ArmData, ARM_NAMES
@@ -23,85 +23,6 @@ from p22.training.loop import set_all_seeds, predict
 from p22.training.mil_loop import predict_mil
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
-def prepare_nn_fold(
-    inputs: NNInputs,
-    train_rows: np.ndarray,
-    holdout_rows: np.ndarray,
-    region_rows: np.ndarray,
-    *,
-    n_hvg: int = 2000,
-    exclude_chr21: bool = False,
-) -> FoldArrays:
-    from sklearn.preprocessing import StandardScaler
-
-    train_rows = np.asarray(train_rows, dtype=np.int64)
-    holdout_rows = np.asarray(holdout_rows, dtype=np.int64)
-    region_rows = np.asarray(region_rows, dtype=np.int64)
-    rows = np.concatenate([train_rows, holdout_rows])
-    train_position = np.zeros(rows.size, dtype=bool)
-    train_position[: train_rows.size] = True
-
-    gene_keep = np.ones(inputs.gene_ids.size, dtype=bool)
-    if exclude_chr21:
-        gene_keep &= ~inputs.chr21_gene_mask()
-        region_rows = region_rows[~inputs.chr21_region_mask()[region_rows]]
-
-    train_donors = set(inputs.metadata["donor_id"].iloc[train_rows].astype(str))
-    holdout_donors = set(inputs.metadata["donor_id"].iloc[holdout_rows].astype(str))
-    if train_donors & holdout_donors:
-        raise ValueError("train and holdout rows share a donor")
-
-    rna_norm = _rna_lognorm(inputs.rna, inputs.rna_totals)[:, gene_keep]
-    hvg = _hvg_indices(rna_norm[train_position], n_hvg)
-    selected_cols = np.flatnonzero(gene_keep)[hvg]
-    rna_dense = np.asarray(rna_norm[:, hvg].todense(), dtype=np.float32)
-    rna_scaler = StandardScaler().fit(rna_dense[train_position])
-    rna = rna_scaler.transform(rna_dense).astype(np.float32)
-
-    atac_raw = inputs.atac[:, region_rows]
-    atac_tfidf, idf = _atac_tfidf(atac_raw, train_position)
-    atac_dense = np.asarray(atac_tfidf.todense(), dtype=np.float32)
-    atac_scaler = StandardScaler().fit(atac_dense[train_position])
-    atac = atac_scaler.transform(atac_dense).astype(np.float32)
-
-    qc_raw = _qc_matrix(inputs.metadata.iloc[rows], QC_RAW_COLUMNS)
-    qc_scaler = StandardScaler().fit(qc_raw[train_position])
-    qc = qc_scaler.transform(qc_raw).astype(np.float32)
-
-    nuisance_codes = {
-        column: pd.factorize(inputs.metadata[column].iloc[rows].astype(str))[0].astype(np.int64)
-        for column in NUISANCE_CATEGORICAL
-    }
-    label = (inputs.metadata["disease"].iloc[rows].astype(str) == LABEL_DISEASE).to_numpy(np.int64)
-    donor = inputs.metadata["donor_id"].iloc[rows].astype(str).to_numpy()
-
-    fit_donors = sorted(train_donors)
-
-    evidence = {
-        "n_train_rows": int(train_rows.size),
-        "n_holdout_rows": int(holdout_rows.size),
-        "n_hvg": int(selected_cols.size),
-        "n_regions": int(region_rows.size),
-        "exclude_chr21": bool(exclude_chr21),
-        "fit_donors": fit_donors,
-        "holdout_donors": sorted(holdout_donors),
-        "idf_sha256": _array_sha256(idf),
-        "qc_columns": list(QC_RAW_COLUMNS),
-        "nuisance_categorical": list(NUISANCE_CATEGORICAL),
-    }
-    return FoldArrays(
-        rna=rna,
-        atac=atac,
-        qc=qc,
-        label=label,
-        donor=donor,
-        nuisance_codes=nuisance_codes,
-        train_position=train_position,
-        gene_ids=inputs.gene_ids[selected_cols],
-        region_ids=tuple(inputs.regions[i] for i in region_rows),
-        evidence=evidence,
-    )
 
 
 def _inner_split(donors, labels, split_seed):
