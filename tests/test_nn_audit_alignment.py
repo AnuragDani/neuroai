@@ -13,7 +13,7 @@ def test_audit_alignment(tmp_path):
         "--out", str(out_dir),
         "--arms", "chr21_dosage",
         "--repeats", "1",
-        "--folds", "1",
+        "--folds", "2",
         "--workers", "1"
     ]
     
