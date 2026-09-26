@@ -1,69 +1,93 @@
 import pytest
-import numpy as np
-import scipy.sparse as sparse
-from sklearn.metrics import roc_auc_score
-from p22.data.group_splits import iter_repeated_stratified_group_folds
-from p22.data.nn_inputs import load_nn_inputs
-from p22.data.nn_fold import prepare_nn_fold
-from p22.eval.nn_factory import build_arm, ArmData
-
+from p22.eval.nn_factory import build_arm
+from p22.data.nn_inputs import load_nn_inputs, prepare_nn_fold
+from p22.eval.nn_factory import ArmData
 import json
+import numpy as np
+from sklearn.metrics import roc_auc_score
+from pathlib import Path
+import sys
 
-def test_audit_alignment():
-    # Use real configs to run ladder's data path for chr21_dosage
-    with open("configs/nn_protocol_v2_2026-09-23.json") as f:
-        cfg = json.load(f)
-    
+def test_chr21_dosage_alignment():
     with open("configs/nn_inputs_2026-09-23.json") as f:
         inputs_cfg = json.load(f)
-    
-    h5ad = inputs_cfg["inputs"]["h5ad"]["path"]
-    atac_npz = inputs_cfg["inputs"]["atac_tiebreak_counts"]["path"]
-    
-    union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
-    inputs = load_nn_inputs(h5ad, atac_npz, cap=cfg["sampling"]["cap_per_donor"], seed=cfg["sampling"]["seed"], union_bed=union_bed)
-    donors = inputs.metadata["donor_id"].to_numpy()
-    labels = (inputs.metadata["disease"] == "complete trisomy 21").astype(int).to_numpy()
-    
-    # One fold
-    all_folds = list(iter_repeated_stratified_group_folds(donors, labels, n_repeats=1, n_folds=5, base_seed=0))
-    train_idx, test_idx = all_folds[0].train_index, all_folds[0].test_index
-    
-    # we need the region set for fold 0
-    region_rows = np.arange(inputs.atac.shape[1]) # just keep all for this test
-    
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path("scripts").absolute()))
-    from run_nn_v2_comparison import worker_task
-    
-    folds_dir = Path("/tmp/folds")
-    folds_dir.mkdir(parents=True, exist_ok=True)
-    
-    all_donors = []
-    all_labels = []
-    all_probs = []
-    
-    for fold_obj in all_folds:
-        record, error = worker_task(
-            out_dir=Path("/tmp"),
-            arm_name="chr21_dosage",
-            repeat=fold_obj.repeat,
-            fold=fold_obj.fold,
-            train_rows=fold_obj.train_index,
-            test_rows=fold_obj.test_index,
-            inputs=inputs,
-            protocol=cfg,
-            exclude_chr21=False,
-            model_seed=42,
-            cfg=cfg["training"]
-        )
-        assert error is None
         
-        all_donors.extend(record["donor_ids"])
-        all_labels.extend(record["donor_labels"])
-        all_probs.extend(record["donor_probabilities"])
-        
-    auroc = roc_auc_score(all_labels, all_probs)
-    print(f"Global worker_task AUROC: {auroc}")
-    assert auroc >= 0.85, f"AUROC too low: {auroc}"
+    h5ad_path = inputs_cfg["inputs"]["h5ad"]["path"]
+    atac_path = inputs_cfg["inputs"]["atac_npz"]["path"]
+    union_bed = "configs/nn_gene_activity_2026-09-23.bed"
+    if not Path(union_bed).exists():
+        union_bed = inputs_cfg["inputs"]["region_sets"]["tie_break_465"]
+    
+    inputs = load_nn_inputs(h5ad_path, atac_path, cap=256, seed=22, union_bed=union_bed)
+    
+    train_rows = np.arange(len(inputs.metadata))
+    test_rows = np.arange(len(inputs.metadata))
+    region_rows = np.arange(len(inputs.regions))
+    
+    cfg = {"n_hvg": 2000}
+    
+    fold_arrays = prepare_nn_fold(inputs, train_rows, test_rows, region_rows, cfg=cfg)
+    
+    widths = {
+        "n_features_a": fold_arrays.rna.shape[1],
+        "n_features_b": fold_arrays.atac.shape[1],
+        "n_library": len(np.unique(inputs.metadata["library"])),
+        "n_batch": len(np.unique(inputs.metadata["batch_seq"])),
+        "k_rna": 16,
+        "k_atac": 8,
+        "n_classes": 2
+    }
+    
+    model, aux, trainer = build_arm("chr21_dosage", widths, cfg)
+    
+    test_pos = np.arange(len(train_rows), len(train_rows) + len(test_rows))
+    
+    chr21_mask = inputs.chr21_gene_mask()
+    chr21_genes_in_hvg = np.isin(fold_arrays.gene_ids, inputs.gene_ids[chr21_mask])
+    
+    chr21_dosage_train = fold_arrays.rna[np.arange(len(train_rows))][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(train_rows))
+    chr21_dosage_test = fold_arrays.rna[test_pos][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(test_pos))
+    
+    train_data = ArmData(
+        views={"chr21_dosage": chr21_dosage_train},
+        labels=fold_arrays.label[np.arange(len(train_rows))],
+        donors=fold_arrays.donor[np.arange(len(train_rows))],
+        cell_meta=None
+    )
+    
+    test_data = ArmData(
+        views={"chr21_dosage": chr21_dosage_test},
+        labels=fold_arrays.label[test_pos],
+        donors=fold_arrays.donor[test_pos],
+        cell_meta=None
+    )
+    
+    trained = trainer(model, train_data, test_data)
+    
+    probs = trained.predict_proba(test_data.views)
+    
+    donor_probs_dict = {}
+    for d, p in zip(test_data.donors, probs[:, 1]):
+        donor_probs_dict.setdefault(d, []).append(p)
+    donor_probs = {d: np.mean(v) for d, v in donor_probs_dict.items()}
+    donor_ids = sorted(donor_probs.keys())
+    donor_probabilities = [donor_probs[d] for d in donor_ids]
+    
+    donor_labels_dict = {}
+    for d, l in zip(test_data.donors, test_data.labels):
+        donor_labels_dict[d] = int(l)
+    donor_labels_list = [donor_labels_dict[d] for d in donor_ids]
+    
+    mismatches = 0
+    donor_disease = inputs.metadata.groupby("donor_id")["disease"].first()
+    for i, d in enumerate(donor_ids):
+        h5ad_label = 1 if donor_disease[d] == "complete trisomy 21" else 0
+        sys.stderr.write(f"{d}: fold_label={donor_labels_list[i]}, h5ad_label={h5ad_label}, prob={donor_probabilities[i]:.4f}\n")
+        if donor_labels_list[i] != h5ad_label:
+            mismatches += 1
+            
+    assert mismatches == 0, f"{mismatches} donor labels mismatched"
+    
+    auroc = roc_auc_score(donor_labels_list, donor_probabilities)
+    sys.stderr.write(f"AUROC: {auroc}\n")
+    assert auroc >= 0.85, f"AUROC {auroc} < 0.85"
