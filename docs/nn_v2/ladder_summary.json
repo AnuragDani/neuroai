@@ -1,0 +1,31 @@
+{
+  "primary": {
+    "model": "R3_ca",
+    "reference": "R3_tc",
+    "estimate": 0.0,
+    "ci": [
+      0.0,
+      0.0
+    ],
+    "margin": 0.09,
+    "advantage": false
+  },
+  "outcome": "B_NULL",
+  "secondary": {
+    "label": "NN_BETTER"
+  },
+  "rung_decisions": {
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted",
+    "R4": "descriptive"
+  },
+  "per_arm": {
+    "R3_ca": {
+      "mean_ba": 0.5
+    },
+    "R3_tc": {
+      "mean_ba": 0.5
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record_type": "ladder_verification",
+  "primary_recomputed": null,
+  "per_arm": {},
+  "problems": [
+    "arms missing from fold files: ['R0_ca', 'R0_tc', 'R1_ca', 'R1_tc', 'R2_ca', 'R2_tc', 'R3_ca', 'R3_tc', 'R4_ca', 'R4_tc', 'R3_tc_parammatched', 'R3_gated', 'latent_pca_lsi_head', 'logreg_rna', 'logreg_concat', 'pseudobulk_rna_logistic', 'chr21_dosage', 'majority']",
+    "chr21_dosage AUROC None < 0.85 while the model-free donor chr21 share gives AUROC 1.0 (gnhf/chr21_sanity.py): the pipeline misaligns labels, rows, genes or probabilities"
+  ],
+  "notes": [],
+  "amendments": [
+    "/Users/anuragdani/Github/niw-eb1a/P22/configs/nn_protocol_v2_amendment_gene_activity.json"
+  ],
+  "verdict": "FAIL"
+}
