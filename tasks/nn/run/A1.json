@@ -1,5 +1,0 @@
-{
-  "argv": ["-m", "pytest", "-v", "tests/test_nn_audit_alignment.py"],
-  "background": false,
-  "timeout_min": 20
-}
