@@ -24,9 +24,17 @@ def test_audit_alignment():
     with open("configs/nn_protocol_v2_2026-09-23.json") as f:
         protocol = json.load(f)
         
-    all_rows = np.arange(len(inputs.metadata))
-    cfg = protocol["training"].copy()
-    cfg["seed"] = 0
+    from p22.data.group_splits import iter_repeated_stratified_group_folds
+    metadata = inputs.metadata
+    donors = metadata["donor_id"].to_numpy()
+    labels = (metadata["disease"] == "complete trisomy 21").astype(int).to_numpy()
+    
+    splits = list(iter_repeated_stratified_group_folds(
+        donors, labels, n_repeats=1, n_folds=5, base_seed=protocol["splits"]["split_seed"]
+    ))
+    split = splits[0]
+    train_rows = split.train_index
+    test_rows = split.test_index
     
     with tempfile.TemporaryDirectory() as td:
         out_dir = Path(td)
@@ -36,8 +44,8 @@ def test_audit_alignment():
             arm_name="chr21_dosage",
             repeat=0,
             fold=0,
-            train_rows=all_rows,  # Train on all
-            test_rows=all_rows,   # Test on all (in-sample)
+            train_rows=train_rows,
+            test_rows=test_rows,
             inputs=inputs,
             protocol=protocol,
             exclude_chr21=False,
