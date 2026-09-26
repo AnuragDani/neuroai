@@ -28,7 +28,7 @@ CFG = json.loads(CFG_PATH.read_text())
 S.LOGDIR = S.MAIN / "reports/generated/nn_agy" / S.STAMP
 MODELS = CFG["models"]
 DENIED = re.compile(r"permission that headless mode cannot prompt for|auto-denied", re.I)
-ALLOWED_CMDS = "ls, cat, head, tail, grep, wc, find, git status, git diff, git log, and `.venv-p22/bin/python -m pytest <file>`"
+ALLOWED_CMDS = "any shell command inside the workspace root; never touch files outside it, never use git commit or reset"
 QUOTA = re.compile(r"RESOURCE_EXHAUSTED|quota|rate.?limit|\b429\b|exceeded your|try again later", re.I)
 RUN_OK = re.compile(r"^(scripts|paper|gnhf)/[\w./-]+\.py$")
 ENV = os.environ | {"PYTHONPATH": "src:scripts", "PYTHONDONTWRITEBYTECODE": "1", "OMP_NUM_THREADS": "1"}
@@ -245,7 +245,7 @@ def call_agy(wt, prompt, model, n, name):
     try:
         with open(logp, "w") as fh:
             rc = sp.run(["agy", "-p", prompt, "--add-dir", str(wt), "--model", model, "--mode", "accept-edits",
-                         "--sandbox", "--print-timeout", "45m"], cwd=wt, stdout=fh, stderr=sp.STDOUT,
+                         "--sandbox", "--dangerously-skip-permissions", "--print-timeout", "45m"], cwd=wt, stdout=fh, stderr=sp.STDOUT,
                         timeout=50 * 60).returncode
     except sp.TimeoutExpired:
         rc = "TIMEOUT"
