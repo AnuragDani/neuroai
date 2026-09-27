@@ -541,7 +541,9 @@ def main(argv=None):
                 repeats.append(entry)
             return repeats, arms
 
-        ladder_dir = Path("reports/generated/nn_20260923/ladder/folds")
+        # With-chr21 baseline must be the accepted ladder_v2 run, never the
+        # superseded buggy ladder/ directory (wrong frozen widths / labels).
+        ladder_dir = Path("reports/generated/nn_20260923/ladder_v2/folds")
         excluded_dir = Path("reports/generated/nn_20260923/chr21_excluded/folds")
         
         ladder_repeats, ladder_arms = load_repeats(ladder_dir)

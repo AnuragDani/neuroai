@@ -25,3 +25,7 @@ Primary estimate: -0.0067
 | pseudobulk_rna_logistic | 0.4467 | 0.5236 | 0.7475 | 0.2752 |
 
 Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.353 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging.
+
+## chr21-excluded sensitivity (N11)
+
+Holding the accepted ladder_v2 folds fixed and rerunning R3_ca, R3_tc, logreg_rna, and logreg_concat with chromosome-21 features dropped yields no-chr21 BA ≤ 0.55 for every arm (**DOSAGE_DOMINATED**). Details and source paths: `docs/nn_v2/chr21_excluded.json`, `docs/nn_v2/ROBUSTNESS.md`.
