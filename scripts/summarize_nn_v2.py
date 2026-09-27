@@ -77,7 +77,9 @@ def main(argv=None):
     if primary:
         est = primary["estimate"]
         ci = primary["ci"]
-        if est >= 0.07 and ci[0] > 0:
+        if ci[0] is None:
+            outcome = "FAILED_CI"
+        elif est >= 0.07 and ci[0] > 0:
             outcome = "A_ADVANTAGE"
         elif ci[0] <= 0 <= ci[1]:
             outcome = "B_NULL"
@@ -144,6 +146,15 @@ def main(argv=None):
         "per_arm": per_arm if per_arm else {"dummy": "dummy"}
     }
     
+    # Secondary contrasts
+    secondary_contrasts = {}
+    pairs = [("R1_ca", "R1_tc"), ("R2_ca", "R2_tc"), ("R3_ca", "R3_tc"), ("R4_ca", "R4_tc"), ("R3_ca", "logreg_rna"), ("R3_ca", "R3_tc_parammatched")]
+    for m, ref in pairs:
+        if m in arms and ref in arms:
+            res = repeated_primary_contrast(repeats, model=m, reference=ref)
+            secondary_contrasts[f"{m}_vs_{ref}"] = res
+    summary["secondary_contrasts"] = secondary_contrasts
+
     docs_dir = args.out_docs
     docs_dir.mkdir(parents=True, exist_ok=True)
     with open(docs_dir / "ladder_summary.json", "w") as f:
@@ -151,7 +162,19 @@ def main(argv=None):
         
     with open(docs_dir / "LADDER.md", "w") as f:
         f.write(f"# Ladder Summary\n\nOutcome: {outcome}\nPrimary estimate: {primary['estimate']:.4f}\n\n")
-        f.write("Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.353 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging.\n")
+        
+        # Add table
+        f.write("| Arm | BA | AUROC | Log-loss | Brier |\n")
+        f.write("|---|---|---|---|---|\n")
+        for arm in sorted(arms):
+            pa = per_arm[arm]
+            ba = f"{pa['mean_ba']:.4f}" if pa['mean_ba'] is not None else "N/A"
+            auroc = f"{pa['mean_auroc']:.4f}" if pa['mean_auroc'] is not None else "N/A"
+            ll = f"{pa['mean_logloss']:.4f}" if pa['mean_logloss'] is not None else "N/A"
+            brier = f"{pa['mean_brier']:.4f}" if pa['mean_brier'] is not None else "N/A"
+            f.write(f"| {arm} | {ba} | {auroc} | {ll} | {brier} |\n")
+            
+        f.write("\nArtefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.353 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging.\n")
         
     return 0
 

@@ -7,3 +7,4 @@ Requested run of scripts/test_dosage.py to debug AUROC inversion.
 - A3: Wrote `tests/test_nn_summary.py` to test the summarizer CI matching independent donor bootstrap. Marked A3 as DONE.
 - 2026-09-26T17:24Z A4 DONE. Edited scripts/summarize_nn_v2.py to calculate and add mean AUROC, log-loss, Brier score per arm, as well as mean per-fold balanced accuracy. Added a note to LADDER.md about the pooled balanced-accuracy artefact. Wrote docs/nn_v2/AUDIT.md with root cause and fixes.
 Requested full ladder run for A5 (reports/generated/nn_20260923/ladder_v2).
+- 2026-09-27T04:00Z A5: Requested background run to execute the fixed ladder pipeline.
