@@ -94,11 +94,16 @@ def worker_task(
         torch.use_deterministic_algorithms(True)
         t0 = time.time()
         
-        region_set_name = "per-fold training-only tie-break region set"
-        # Since we use synthetic data for testing, just use all regions. 
-        # In real data we would load regions for this fold from protocol["representation"]["atac"]["region_set_config"]
-        # Wait, the protocol specifies `region_set_config` but we are not passing it here, so let's just use all regions.
-        region_rows = np.arange(len(inputs.regions))
+        with open(protocol["representation"]["atac"]["region_set_config"]) as f:
+            atac_regions = json.load(f)
+        fold_regions = None
+        for item in atac_regions["per_fold"]:
+            if item["repeat"] == repeat and item["fold"] == fold:
+                fold_regions = item["regions"]
+                break
+        if fold_regions is None:
+            raise ValueError(f"Could not find regions for repeat {repeat} fold {fold}")
+        region_rows = region_indices(inputs, fold_regions)
         
         fold_arrays = prepare_nn_fold(
             inputs, 
@@ -183,8 +188,10 @@ def worker_task(
                 if exclude_chr21:
                     views["chr21_dosage"] = np.zeros(len(pos))
                 else:
-                    chr21_genes_in_hvg = np.isin(fold_arrays.gene_ids, inputs.gene_ids[chr21_mask])
-                    views["chr21_dosage"] = fold_arrays.rna[pos][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(pos))
+                    original_rows = np.concatenate([train_rows, test_rows])[pos]
+                    chr21_counts = np.asarray(inputs.rna[original_rows][:, chr21_mask].sum(axis=1)).ravel()
+                    totals = inputs.rna_totals[original_rows]
+                    views["chr21_dosage"] = chr21_counts / np.maximum(totals, 1.0)
                 
             cell_meta = {
                 "labels": fold_arrays.label[pos],
@@ -240,7 +247,7 @@ def worker_task(
             test_predictions = {
                 "donor_ids": donor_ids,
                 "donor_probabilities": np.array(donor_probabilities),
-                "cell_logits": np.log(probs[:, 1] / (1 - probs[:, 1] + 1e-9)),
+                "cell_logits": np.log((probs[:, 1] + 1e-9) / (1 - probs[:, 1] + 1e-9)),
                 "attention": np.zeros(len(test_pos))
             }
         elif hasattr(trained, "model") and hasattr(trained.model, "forward_bag"):
@@ -256,7 +263,7 @@ def worker_task(
             test_predictions = {
                 "donor_ids": donor_ids,
                 "donor_probabilities": np.array(donor_probabilities),
-                "cell_logits": np.log(probs[:, 1] / (1 - probs[:, 1] + 1e-9)),
+                "cell_logits": np.log((probs[:, 1] + 1e-9) / (1 - probs[:, 1] + 1e-9)),
                 "attention": np.zeros(len(test_pos))
             }
             
@@ -375,7 +382,8 @@ def main(argv=None):
             n_repeats=1, n_folds=5, base_seed=protocol["splits"]["split_seed"]
         ))
         split = splits[0]
-        cfg = protocol["training"].copy()
+        cfg = protocol["architecture"].copy()
+        cfg.update(protocol["training"])
         cfg["seed"] = args.model_seed
         
         total_elapsed = 0.0
@@ -439,7 +447,8 @@ def main(argv=None):
                 continue
             
             # Simple grid handling (for ladder only best-of-R2 logic is normally used, but we just use protocol dict)
-            cfg = protocol["training"].copy()
+            cfg = protocol["architecture"].copy()
+            cfg.update(protocol["training"])
             cfg["seed"] = args.model_seed
             cfg["cell_meta"] = None # We generate this inside
             

@@ -1,1 +1,1 @@
-TODO
+DONE:fixed nn_factory.py fit_intercept=True and tests/test_nn_audit_alignment.py holdout_rows

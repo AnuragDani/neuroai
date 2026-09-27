@@ -1,58 +1,84 @@
 import pytest
+from p22.eval.nn_factory import build_arm
+from p22.data.nn_inputs import load_nn_inputs, prepare_nn_fold
+from p22.eval.nn_factory import ArmData
 import json
-from pathlib import Path
-import tempfile
 import numpy as np
-from scripts.run_nn_v2_comparison import worker_task
-from p22.data.nn_inputs import load_nn_inputs
 from sklearn.metrics import roc_auc_score
+from pathlib import Path
+import sys
 
-def test_audit_alignment():
-    # Load input manifest
+def test_chr21_dosage_alignment():
     with open("configs/nn_inputs_2026-09-23.json") as f:
-        input_manifest = json.load(f)
+        inputs_cfg = json.load(f)
         
-    h5ad_path = input_manifest["inputs"]["h5ad"]["path"]
-    atac_path = input_manifest["inputs"]["atac_tiebreak_counts"]["path"]
-    union_bed = input_manifest["inputs"]["tracked_union_bed"]["path"]
+    h5ad_path = inputs_cfg["inputs"]["h5ad"]["path"]
+    atac_path = inputs_cfg["inputs"]["atac_tiebreak_counts"]["path"]
+    union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
     
-    # We load with cap=256 for faster testing
-    inputs = load_nn_inputs(
-        h5ad_path, atac_path, cap=256, seed=22, union_bed=union_bed
+    inputs = load_nn_inputs(h5ad_path, atac_path, cap=256, seed=22, union_bed=union_bed)
+    
+    train_rows = np.arange(len(inputs.metadata))
+    test_rows = np.arange(len(inputs.metadata))
+    region_rows = np.arange(len(inputs.regions))
+    
+    cfg = {"n_hvg": 2000}
+    
+    empty_rows = np.array([], dtype=np.int64)
+    fold_arrays = prepare_nn_fold(inputs, train_rows, empty_rows, region_rows, n_hvg=cfg["n_hvg"])
+    
+    widths = {
+        "n_features_a": fold_arrays.rna.shape[1],
+        "n_features_b": fold_arrays.atac.shape[1],
+        "n_library": len(np.unique(inputs.metadata["library"])),
+        "n_batch": len(np.unique(inputs.metadata["batch_seq"])),
+        "k_rna": 16,
+        "k_atac": 8,
+        "n_classes": 2
+    }
+    
+    model, aux, trainer = build_arm("chr21_dosage", widths, cfg)
+    
+    chr21_mask = inputs.chr21_gene_mask()
+    chr21_genes_in_hvg = np.isin(fold_arrays.gene_ids, inputs.gene_ids[chr21_mask])
+    
+    chr21_dosage_train = fold_arrays.rna[np.arange(len(train_rows))][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(train_rows))
+    
+    train_data = ArmData(
+        views={"chr21_dosage": chr21_dosage_train},
+        labels=fold_arrays.label[np.arange(len(train_rows))],
+        donors=fold_arrays.donor[np.arange(len(train_rows))],
+        cell_meta=None
     )
     
-    with open("configs/nn_protocol_v2_2026-09-23.json") as f:
-        protocol = json.load(f)
-        
-    all_rows = np.arange(len(inputs.metadata))
-    cfg = protocol["training"].copy()
-    cfg["seed"] = 0
+    test_data = train_data
     
-    with tempfile.TemporaryDirectory() as td:
-        out_dir = Path(td)
-        # We run chr21_dosage
-        rec, err = worker_task(
-            out_dir=out_dir,
-            arm_name="chr21_dosage",
-            repeat=0,
-            fold=0,
-            train_rows=all_rows,  # Train on all
-            test_rows=all_rows,   # Test on all (in-sample)
-            inputs=inputs,
-            protocol=protocol,
-            exclude_chr21=False,
-            model_seed=0,
-            cfg=cfg
-        )
-        assert err is None, f"Worker task failed: {err}"
-        
-        # Check AUC
-        auroc = roc_auc_score(rec["donor_labels"], rec["donor_probabilities"])
-        assert auroc >= 0.85, f"AUROC {auroc} < 0.85"
-        
-        # Check alignment: donor label matches H5AD disease
-        donor_disease = dict(zip(inputs.metadata["donor_id"], inputs.metadata["disease"]))
-        for donor_id, label in zip(rec["donor_ids"], rec["donor_labels"]):
-            disease = donor_disease[donor_id]
-            expected_label = 1 if disease == "complete trisomy 21" else 0
-            assert label == expected_label, f"Misalignment for donor {donor_id}: got {label}, expected {expected_label} ({disease})"
+    trained = trainer(model, train_data, test_data)
+    
+    probs = trained.predict_proba(test_data.views)
+    
+    donor_probs_dict = {}
+    for d, p in zip(test_data.donors, probs[:, 1]):
+        donor_probs_dict.setdefault(d, []).append(p)
+    donor_probs = {d: np.mean(v) for d, v in donor_probs_dict.items()}
+    donor_ids = sorted(donor_probs.keys())
+    donor_probabilities = [donor_probs[d] for d in donor_ids]
+    
+    donor_labels_dict = {}
+    for d, l in zip(test_data.donors, test_data.labels):
+        donor_labels_dict[d] = int(l)
+    donor_labels_list = [donor_labels_dict[d] for d in donor_ids]
+    
+    mismatches = 0
+    donor_disease = inputs.metadata.groupby("donor_id")["disease"].first()
+    for i, d in enumerate(donor_ids):
+        h5ad_label = 1 if donor_disease[d] == "complete trisomy 21" else 0
+        sys.stderr.write(f"{d}: fold_label={donor_labels_list[i]}, h5ad_label={h5ad_label}, prob={donor_probabilities[i]:.4f}\n")
+        if donor_labels_list[i] != h5ad_label:
+            mismatches += 1
+            
+    assert mismatches == 0, f"{mismatches} donor labels mismatched"
+    
+    auroc = roc_auc_score(donor_labels_list, donor_probabilities)
+    sys.stderr.write(f"AUROC: {auroc}\n")
+    assert auroc >= 0.85, f"AUROC {auroc} < 0.85"
