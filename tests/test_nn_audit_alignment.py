@@ -14,9 +14,7 @@ def test_chr21_dosage_alignment():
         
     h5ad_path = inputs_cfg["inputs"]["h5ad"]["path"]
     atac_path = inputs_cfg["inputs"]["atac_tiebreak_counts"]["path"]
-    union_bed = "configs/nn_gene_activity_2026-09-23.bed"
-    if not Path(union_bed).exists():
-        union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
+    union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
     
     inputs = load_nn_inputs(h5ad_path, atac_path, cap=256, seed=22, union_bed=union_bed)
     
