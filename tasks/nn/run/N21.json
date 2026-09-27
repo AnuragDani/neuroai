@@ -1,5 +1,0 @@
-{
-  "argv": ["scripts/run_nn_v2_gene_activity.py", "--protocol", "configs/nn_protocol_v2_amendment_gene_activity.json", "--out", "reports/generated/nn_20260923/gene_activity_results"],
-  "background": true,
-  "timeout_min": 60
-}
