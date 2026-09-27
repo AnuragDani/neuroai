@@ -138,15 +138,12 @@
       ]
     }
   },
-  "problems": [
-    "summary primary.estimate 0.0 != recomputed -0.006667",
-    "summary primary.ci [0.0, 0.0] disagrees with recomputed [-0.05277777777777776, 0.03484162895927606] (tolerance 0.02)"
-  ],
+  "problems": [],
   "notes": [
     "majority pooled BA 0.353 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
   ],
   "amendments": [
-    "/Users/anuragdani/Github/niw-eb1a/P22/configs/nn_protocol_v2_amendment_gene_activity.json"
+    "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_amendment_gene_activity.json"
   ],
-  "verdict": "FAIL"
+  "verdict": "PASS"
 }

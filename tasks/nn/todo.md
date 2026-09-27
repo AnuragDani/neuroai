@@ -24,7 +24,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N7 | Cross-modal InfoNCE pairing loss | N5 | S | DONE:src/p22/models/contrastive.py + tests/test_nn_contrastive.py (10 passed) + mil.py forward_bag_full branch exposure + mil_loop aux-head optimizer; paired lo |
 | N8 | Program/module-token fusion models | N2 | M | DONE:src/p22/models/program_tokens.py + tests/test_nn_program_tokens.py (14 passed; ruff clean); NMF train-only isolation, ProgramTokenCrossAttention attention  |
 | N9 | Model factory + frozen protocol v2 | N4,N5,N6,N7,N8 | S | DONE:docs/nn_v2/PROTOCOL_FREEZE.md + configs/nn_protocol_v2_2026-09-23.json (protocol_sha256=80931bfc05c403804db47f53b02b29989204a6c04720476cb752dd62968b7161) + |
-| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | DONE:rolled up from A1, A2, A3, A4, A5 |
+| N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | DONE:S6 gate PASS docs/nn_v2/ladder_verification.json; B_NULL; summary from ladder_v2 450/450 |
 | N11 | chr21-excluded sensitivity | N10 | S | TODO |
 | N12 | Init-seed and sampling-seed sensitivity | N10 | S | TODO |
 | N13 | Held-out faithfulness interventions | N10 | M | TODO |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-27T20:49Z N10/S6 DONE (gate accepted). Reused all 450 fold files at `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2` (`folds_done=450`, `failures=[]`; not copied into finish-base). Rebuilt `docs/nn_v2/ladder_summary.json` + `LADDER.md` via `scripts/summarize_nn_v2.py --run …/ladder_v2 --out docs/nn_v2`. `gnhf/verify_ladder.py --run …/ladder_v2 --summary docs/nn_v2/ladder_summary.json --write` → `verdict=PASS`, `problems=[]`. Outcome `B_NULL` (R3_ca−R3_tc ≈ −0.0067, CI includes 0); secondary `LINEAR_SUFFICIENT`; chr21 dosage AUROC ≈ 0.998; majority pooled-BA caveat retained. Branch `status.md` + `docs/INDEX.md` updated for accepted gate; main checkout left untouched. Next: S7 (N11/N12 integrate from robust; N13–N15/N21).
 - 2026-09-24T19:50Z N4: batch session was killed by the user mid-iteration. Full benchmark `scripts/run_nn_planted_benchmark.py --cap 1000 --workers 5` left running as PID 37613 (log reports/generated/nn_20260923/planted/run.log). Current docs/nn_v2/PLANTED_BENCHMARK.md + planted_benchmark.json are a 1-fold SMOKE (SD=nan), not the result. Next: per decision_tree G1, if PID alive do N5; when it exits, verify outputs cover 16 scenario×delta cells × 5 models × 5 folds, regenerate the docs, run tests, mark N4 DONE. Do not start a second benchmark.
 
 (append one line per iteration: date-time UTC, task, outcome, evidence path; record any
