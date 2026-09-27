@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import sys
+from sklearn.metrics import roc_auc_score, log_loss, brier_score_loss, balanced_accuracy_score
 
 from p22.eval.repeated_comparison import repeated_primary_contrast, repeated_model_accuracy
 
@@ -36,7 +37,8 @@ def main(argv=None):
             df = pd.DataFrame({
                 "donor_id": rec["donor_ids"],
                 "label": rec["donor_labels"],
-                "probability": rec["donor_probabilities"]
+                "probability": rec["donor_probabilities"],
+                "fold": rec.get("fold", 0)
             })
             per_repeat[rep][arm].append(df)
             
@@ -87,8 +89,46 @@ def main(argv=None):
     per_arm = {}
     for arm in arms:
         acc = repeated_model_accuracy(repeats, model=arm)
+        
+        aurocs = []
+        loglosses = []
+        briers = []
+        per_fold_bas = []
+        
+        for entry in repeats:
+            df = entry[arm]
+            df = df.sort_values("donor_id").reset_index(drop=True)
+            y_true = df["label"].values
+            y_prob = df["probability"].values
+            
+            try:
+                aurocs.append(roc_auc_score(y_true, y_prob))
+            except ValueError:
+                pass
+            
+            try:
+                loglosses.append(log_loss(y_true, y_prob, labels=[0, 1]))
+            except ValueError:
+                pass
+                
+            try:
+                briers.append(brier_score_loss(y_true, y_prob))
+            except ValueError:
+                pass
+                
+            fold_bas = []
+            for _, fold_df in df.groupby("fold"):
+                if len(fold_df["label"].unique()) > 1:
+                    fold_bas.append(balanced_accuracy_score(fold_df["label"], (fold_df["probability"] >= 0.5).astype(int)))
+            if fold_bas:
+                per_fold_bas.append(np.mean(fold_bas))
+
         per_arm[arm] = {
-            "mean_ba": acc.get("mean", 0.0)
+            "mean_ba": acc.get("mean", 0.0),
+            "mean_auroc": float(np.mean(aurocs)) if aurocs else None,
+            "mean_logloss": float(np.mean(loglosses)) if loglosses else None,
+            "mean_brier": float(np.mean(briers)) if briers else None,
+            "mean_per_fold_ba": float(np.mean(per_fold_bas)) if per_fold_bas else None
         }
         
     if "logreg_rna" in arms and per_arm.get("logreg_rna", {}).get("mean_ba", 0.0) >= per_arm.get("R3_ca", {}).get("mean_ba", 0.0) - 0.02:
@@ -110,7 +150,8 @@ def main(argv=None):
         json.dump(summary, f, indent=2)
         
     with open(docs_dir / "LADDER.md", "w") as f:
-        f.write(f"# Ladder Summary\n\nOutcome: {outcome}\nPrimary estimate: {primary['estimate']:.4f}\n")
+        f.write(f"# Ladder Summary\n\nOutcome: {outcome}\nPrimary estimate: {primary['estimate']:.4f}\n\n")
+        f.write("Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.353 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging.\n")
         
     return 0
 
