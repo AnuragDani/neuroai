@@ -26,3 +26,4 @@
 - iter6 N15: Fixed KeyError 'data' in scripts/export_nn_v2_cell_scores.py by changing protocol["data"]["cell_cap"] to protocol["sampling"]["cap_per_donor"] and protocol["data"]["sampling_seed"] to protocol["sampling"]["seed"]. Requested run via tasks/nn/run/N15.json. Status remains TODO pending execution.
 - iter7 N15: Fixed missing union_bed argument and IndexError for parsing regions in scripts/export_nn_v2_cell_scores.py. Requested run again via tasks/nn/run/N15.json. Status remains TODO pending execution.
 N15: Fixed paths and added multi-ladder export support; requested run.
+- iter9 N15: Fixed ValueError caused by mismatch in region counts. Updated scripts/export_nn_v2_cell_scores.py to use nn_gene_activity configs to match the count.npz used in the models. Requested run via tasks/nn/run/N15.json. Status remains TODO pending execution.

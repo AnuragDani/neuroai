@@ -29,7 +29,7 @@ def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21)
     # 1. Load inputs
     h5ad = "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
     atac_npz = "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/gene_activity/counts/counts.npz"
-    union_bed_path = "configs/atac_tiebreak_union_2026-09-21.bed"
+    union_bed_path = "configs/nn_gene_activity_2026-09-23.bed"
     inputs = load_nn_inputs(
         h5ad, atac_npz,
         cap=protocol["sampling"]["cap_per_donor"],
@@ -70,7 +70,7 @@ def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21)
         logging.info(f"Processing repeat {split.repeat} fold {split.fold}")
         
         from p22.data.nn_inputs import region_indices
-        rs_path = "configs/atac_tiebreak_region_sets_2026-09-21.json"
+        rs_path = "configs/nn_gene_activity_2026-09-23.json"
         with open(rs_path) as f:
             rs_data = json.load(f)
         fold_regions = next(
