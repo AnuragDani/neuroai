@@ -25,3 +25,4 @@
 - iter5 N15: Wrote `scripts/export_nn_v2_cell_scores.py` and `tests/test_nn_export.py`. Recomputed `chr21_dosage` using outer-train fit standard scaler. Saved model loop iterates over testing cells. Requested run via `tasks/nn/run/N15.json`. Status set to TODO pending execution.
 - iter6 N15: Fixed KeyError 'data' in scripts/export_nn_v2_cell_scores.py by changing protocol["data"]["cell_cap"] to protocol["sampling"]["cap_per_donor"] and protocol["data"]["sampling_seed"] to protocol["sampling"]["seed"]. Requested run via tasks/nn/run/N15.json. Status remains TODO pending execution.
 - iter7 N15: Fixed missing union_bed argument and IndexError for parsing regions in scripts/export_nn_v2_cell_scores.py. Requested run again via tasks/nn/run/N15.json. Status remains TODO pending execution.
+N15: Fixed paths and added multi-ladder export support; requested run.

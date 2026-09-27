@@ -17,25 +17,18 @@ from p22.training.loop import set_all_seeds
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--protocol", type=str, default="configs/nn_protocol_v2_2026-09-23.json")
-    parser.add_argument("--models-dir", type=str, default="reports/generated/nn_20260923/ladder/models")
-    parser.add_argument("--out-cells", type=str, default="reports/generated/nn_20260923/spectrum/cell_scores.csv.gz")
-    parser.add_argument("--out-compact", type=str, default="docs/nn_v2/donor_celltype_scores.csv.gz")
-    args = parser.parse_args()
-
-    out_cells_path = Path(args.out_cells)
+def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21):
+    out_cells_path = Path(out_cells)
     out_cells_path.parent.mkdir(parents=True, exist_ok=True)
-    out_compact_path = Path(args.out_compact)
+    out_compact_path = Path(out_compact)
     out_compact_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(args.protocol) as f:
+    with open(protocol_path) as f:
         protocol = json.load(f)
 
     # 1. Load inputs
-    h5ad = "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
-    atac_npz = "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz"
+    h5ad = "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
+    atac_npz = "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/gene_activity/counts/counts.npz"
     union_bed_path = "configs/atac_tiebreak_union_2026-09-21.bed"
     inputs = load_nn_inputs(
         h5ad, atac_npz,
@@ -53,16 +46,15 @@ def main():
 
     arms_to_export = ["R3_ca", "R3_tc", "R4_ca", "R1_ca"]
     
-    # Check if models exist.
     available_arms = []
     for arm in arms_to_export:
-        if (Path(args.models_dir) / arm).exists():
+        if (Path(models_dir) / arm).exists():
             available_arms.append(arm)
         else:
-            logging.warning(f"Models for arm {arm} not found, skipping.")
+            logging.warning(f"Models for arm {arm} not found in {models_dir}, skipping.")
 
     if not available_arms:
-        logging.error("No arms found to export!")
+        logging.error(f"No arms found to export in {models_dir}!")
         return
 
     n_cells = len(inputs.metadata)
@@ -74,30 +66,24 @@ def main():
     depth_rna = np.log1p(inputs.metadata["nCount_RNA"].astype(float).to_numpy())
     depth_atac = np.log1p(inputs.metadata["nCount_ATAC"].astype(float).to_numpy())
 
-    built_models = {}
-    for arm in available_arms:
-        cfg = protocol["architecture"].copy()
-        cfg.update(protocol["training"])
-        model, _, _ = build_arm(arm, inputs.metadata, cfg)
-        model.eval()
-        built_models[arm] = model
-
     for split in splits:
         logging.info(f"Processing repeat {split.repeat} fold {split.fold}")
         
         from p22.data.nn_inputs import region_indices
-        rs_path = f"reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json"
+        rs_path = "configs/atac_tiebreak_region_sets_2026-09-21.json"
         with open(rs_path) as f:
             rs_data = json.load(f)
-        fold_rs_id = f"repeat{split.repeat}_fold{split.fold}"
-        fold_regions = rs_data["sets"][fold_rs_id]
+        fold_regions = next(
+            x["regions"] for x in rs_data["per_fold"]
+            if x["repeat"] == split.repeat and x["fold"] == split.fold
+        )
         
         region_rows = region_indices(inputs, fold_regions)
 
         fold_arrays = prepare_nn_fold(
             inputs, split.train_index, split.test_index, region_rows,
             n_hvg=protocol["representation"]["n_hvg"],
-            exclude_chr21=False
+            exclude_chr21=exclude_chr21
         )
         
         test_mask = ~fold_arrays.train_position
@@ -122,14 +108,29 @@ def main():
         test_qc = torch.from_numpy(fold_arrays.qc[test_mask])
         test_donor = fold_arrays.donor[test_mask]
         
+        widths = {
+            "n_features_a": fold_arrays.rna.shape[1],
+            "n_features_b": fold_arrays.atac.shape[1],
+            "n_library": len(np.unique(inputs.metadata["library"])),
+            "n_batch": len(np.unique(inputs.metadata["batch_seq"])),
+            "k_rna": 16,
+            "k_atac": 8,
+            "n_classes": 2
+        }
+        
         for arm in available_arms:
-            model_path = Path(args.models_dir) / arm / f"r{split.repeat}_f{split.fold}.pt"
+            model_path = Path(models_dir) / arm / f"r{split.repeat}_f{split.fold}.pt"
             if not model_path.exists():
                 logging.error(f"Missing model {model_path}")
                 continue
                 
-            model = built_models[arm]
-            model.load_state_dict(torch.load(model_path, map_location="cpu", weights_only=True))
+            cfg = protocol["architecture"].copy()
+            cfg.update(protocol["training"])
+            model, _, _ = build_arm(arm, widths, cfg)
+            
+            # Load state dict
+            sd = torch.load(model_path, map_location="cpu", weights_only=True)
+            model.load_state_dict(sd)
             model.eval()
             
             with torch.no_grad():
@@ -199,6 +200,30 @@ def main():
     ].mean().reset_index()
     compact.to_csv(out_compact_path, index=False, compression="gzip")
     logging.info(f"Wrote {out_compact_path}")
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--protocol", type=str, default="configs/nn_protocol_v2_2026-09-23.json")
+    args = parser.parse_args()
+    
+    # 1. Main ladder v2
+    run_export(
+        protocol_path=args.protocol,
+        models_dir="reports/generated/nn_20260923/ladder_v2/models",
+        out_cells="reports/generated/nn_20260923/spectrum/cell_scores.csv.gz",
+        out_compact="docs/nn_v2/donor_celltype_scores.csv.gz",
+        exclude_chr21=False
+    )
+    
+    # 2. chr21 excluded ladder
+    if Path("reports/generated/nn_20260923/chr21_excluded/models").exists():
+        run_export(
+            protocol_path=args.protocol,
+            models_dir="reports/generated/nn_20260923/chr21_excluded/models",
+            out_cells="reports/generated/nn_20260923/spectrum/cell_scores_chr21_excluded.csv.gz",
+            out_compact="docs/nn_v2/donor_celltype_scores_chr21_excluded.csv.gz",
+            exclude_chr21=True
+        )
 
 if __name__ == "__main__":
     main()
