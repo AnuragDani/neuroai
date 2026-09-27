@@ -342,7 +342,8 @@ def main():
         inputs_cfg = json.load(f)
     h5ad = inputs_cfg["inputs"]["h5ad"]["path"]
     atac = inputs_cfg["inputs"]["atac_tiebreak_counts"]["path"]
-    inputs = load_nn_inputs(h5ad, atac, 1000, 22)
+    union_bed = inputs_cfg["inputs"]["tracked_union_bed"]["path"]
+    inputs = load_nn_inputs(h5ad, atac, 1000, 22, union_bed=union_bed)
     
     # We will test R3_ca, R3_tc, R3_gated, R4_ca
     test_arms = ["R3_ca", "R3_tc", "R3_gated", "R4_ca"]
