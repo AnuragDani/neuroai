@@ -11,3 +11,4 @@
   per decision_tree N17), `docs/nn_v2/FAITHFULNESS.md`, `docs/nn_v2/nuisance_probe.json`
   (R2_UNEVALUATED). Set status N13 = BLOCKED:N10_ladder_missing, N14 = BLOCKED:N10_ladder_missing.
   No Python written (real-data run infeasible; harness would be unverifiable dead code).
+- Wrote scripts/run_nn_v2_faithfulness.py and requested driver to run it for N13
