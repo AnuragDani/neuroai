@@ -34,11 +34,29 @@ def _inner_split(donors, labels, split_seed):
     return inner.train_index, inner.test_index
 
 
-def _make_synthetic_inputs(seed=42):
+def _make_synthetic_inputs(seed=42, protocol=None):
     rng = np.random.default_rng(seed)
     n_cells = 600
     n_genes = 300
-    n_regions = 200
+    
+    regions = None
+    if protocol is not None and "representation" in protocol:
+        try:
+            with open(protocol["representation"]["atac"]["region_set_config"]) as f:
+                atac_regions = json.load(f)
+            union = set()
+            for item in atac_regions["per_fold"]:
+                union.update(item["regions"])
+            regions = sorted(list(union))
+        except Exception:
+            pass
+            
+    if not regions:
+        n_regions = 200
+        regions = [f"chr1:{i}-{i+100}" for i in range(n_regions)]
+    else:
+        n_regions = len(regions)
+
     
     donors = np.repeat([f"D{i}" for i in range(24)], 25)
     labels = np.repeat([0, 1] * 12, 25)
@@ -66,7 +84,6 @@ def _make_synthetic_inputs(seed=42):
     
     atac = sparse.csr_matrix(rng.poisson(1, (n_cells, n_regions)).astype(np.float32))
     
-    regions = [f"chr1:{i}-{i+100}" for i in range(n_regions)]
     region_index = {r: i for i, r in enumerate(regions)}
     
     return NNInputs(
@@ -418,7 +435,7 @@ def main(argv=None):
     arms = args.arms if args.arms else protocol["arms"]
     
     if args.synthetic:
-        inputs = _make_synthetic_inputs(args.sampling_seed)
+        inputs = _make_synthetic_inputs(args.sampling_seed, protocol)
     else:
         # Load real inputs
         with open("configs/nn_inputs_2026-09-23.json") as f:
