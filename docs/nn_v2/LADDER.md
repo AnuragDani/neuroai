@@ -1,5 +1,7 @@
 # Ladder Summary
 
+**Plain-language reading:** The full ladder rerun resulted in an outcome of `B_NULL`, indicating that the neural network model (`R3_ca`) did not show a statistically significant advantage over the baseline (`R3_tc`), with a primary estimate of -0.0067. Most models hover around random performance on this task except for the `chr21_dosage` model, which correctly achieved near-perfect performance (AUROC 0.9982) as a positive control. The linear model `logreg_rna` outperformed `R3_ca`.
+
 Outcome: B_NULL
 Primary estimate: -0.0067
 

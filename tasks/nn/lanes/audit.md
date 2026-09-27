@@ -9,3 +9,4 @@ Requested run of scripts/test_dosage.py to debug AUROC inversion.
 Requested full ladder run for A5 (reports/generated/nn_20260923/ladder_v2).
 - 2026-09-27T04:00Z A5: Requested background run to execute the fixed ladder pipeline.
 - 2026-09-27T04:26Z A5: Session resumed. Verified that the bug causing the `AttributeError` is fixed and the AUROC inversion bug was already fixed by correcting `prepare_nn_fold`. Yielding control so the driver can execute `A5.json`.
+- A5 DONE. Added plain-language reading to LADDER.md and marked A5 as DONE following successful background ladder run.
