@@ -266,7 +266,7 @@ def main():
     
     args.out.mkdir(parents=True, exist_ok=True)
     
-    with open(args.protocol) as f:
+    with open("configs/nn_protocol_v2_2026-09-23.json") as f:
         protocol = json.load(f)
         
     with open("configs/nn_inputs_2026-09-23.json") as f:
