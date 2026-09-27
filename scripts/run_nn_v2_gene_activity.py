@@ -11,6 +11,7 @@ import torch
 from p22.data.group_splits import iter_repeated_stratified_group_folds
 from p22.data.nn_inputs import load_nn_inputs, prepare_nn_fold
 from p22.eval import nn_factory
+from p22.models.fusion import VIEW_A, VIEW_B
 import run_nn_v2_comparison
 
 # Patch nn_factory
@@ -332,6 +333,9 @@ def main():
     }
     with open(args.out / "run.json", "w") as f:
         json.dump(run_record, f, indent=2)
+        
+    import subprocess
+    subprocess.run([sys.executable, "scripts/summarize_nn_v2.py", "--run", str(args.out), "--out", "docs/nn_v2/gene_activity_results.json"], check=True)
 
 if __name__ == "__main__":
     main()
