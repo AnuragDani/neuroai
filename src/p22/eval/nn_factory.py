@@ -340,7 +340,7 @@ def _control_trainer(kind: str):
         matrix = _control_matrix(kind, train.views)
         weights = _donor_weights(train.donors)
         scaler = StandardScaler().fit(matrix)
-        estimator = LogisticRegression(max_iter=1000, fit_intercept=False)
+        estimator = LogisticRegression(max_iter=1000, fit_intercept=True)
         estimator.fit(scaler.transform(matrix), np.asarray(train.labels), sample_weight=weights)
         return FittedControl(
             kind=kind, estimator=_Scaled(scaler, estimator), n_features=n_features

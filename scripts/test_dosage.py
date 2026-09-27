@@ -20,7 +20,8 @@ def main():
 
     rows = np.arange(len(inputs.metadata))
     cfg = {"n_hvg": 2000}
-    fold_arrays = prepare_nn_fold(inputs, rows, rows, np.arange(len(inputs.regions)))
+    empty_rows = np.array([], dtype=np.int64)
+    fold_arrays = prepare_nn_fold(inputs, rows, empty_rows, np.arange(len(inputs.regions)))
 
     chr21_genes_in_hvg = np.isin(fold_arrays.gene_ids, inputs.gene_ids[chr21_mask])
     print("Num chr21 genes in HVG:", chr21_genes_in_hvg.sum())

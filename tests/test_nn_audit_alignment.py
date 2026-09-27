@@ -24,7 +24,8 @@ def test_chr21_dosage_alignment():
     
     cfg = {"n_hvg": 2000}
     
-    fold_arrays = prepare_nn_fold(inputs, train_rows, test_rows, region_rows, cfg=cfg)
+    empty_rows = np.array([], dtype=np.int64)
+    fold_arrays = prepare_nn_fold(inputs, train_rows, empty_rows, region_rows, n_hvg=cfg["n_hvg"])
     
     widths = {
         "n_features_a": fold_arrays.rna.shape[1],
@@ -38,13 +39,10 @@ def test_chr21_dosage_alignment():
     
     model, aux, trainer = build_arm("chr21_dosage", widths, cfg)
     
-    test_pos = np.arange(len(train_rows), len(train_rows) + len(test_rows))
-    
     chr21_mask = inputs.chr21_gene_mask()
     chr21_genes_in_hvg = np.isin(fold_arrays.gene_ids, inputs.gene_ids[chr21_mask])
     
     chr21_dosage_train = fold_arrays.rna[np.arange(len(train_rows))][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(train_rows))
-    chr21_dosage_test = fold_arrays.rna[test_pos][:, chr21_genes_in_hvg].mean(axis=1) if chr21_genes_in_hvg.any() else np.zeros(len(test_pos))
     
     train_data = ArmData(
         views={"chr21_dosage": chr21_dosage_train},
@@ -53,12 +51,7 @@ def test_chr21_dosage_alignment():
         cell_meta=None
     )
     
-    test_data = ArmData(
-        views={"chr21_dosage": chr21_dosage_test},
-        labels=fold_arrays.label[test_pos],
-        donors=fold_arrays.donor[test_pos],
-        cell_meta=None
-    )
+    test_data = train_data
     
     trained = trainer(model, train_data, test_data)
     
