@@ -375,7 +375,8 @@ def main(argv=None):
             n_repeats=1, n_folds=5, base_seed=protocol["splits"]["split_seed"]
         ))
         split = splits[0]
-        cfg = protocol["training"].copy()
+        cfg = protocol["architecture"].copy()
+        cfg.update(protocol["training"])
         cfg["seed"] = args.model_seed
         
         total_elapsed = 0.0
@@ -439,7 +440,8 @@ def main(argv=None):
                 continue
             
             # Simple grid handling (for ladder only best-of-R2 logic is normally used, but we just use protocol dict)
-            cfg = protocol["training"].copy()
+            cfg = protocol["architecture"].copy()
+            cfg.update(protocol["training"])
             cfg["seed"] = args.model_seed
             cfg["cell_meta"] = None # We generate this inside
             
