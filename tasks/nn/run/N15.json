@@ -1,5 +1,0 @@
-{
-    "argv": ["scripts/export_nn_v2_cell_scores.py"],
-    "background": false,
-    "timeout_min": 20
-}
