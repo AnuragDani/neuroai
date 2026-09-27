@@ -1,0 +1,43 @@
+{
+  "buggy_ladder_artifact": {
+    "note": "Superseded export from buggy ladder/; not used for N15 acceptance",
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/spectrum/cell_scores.buggy_ladder.csv.gz"
+  },
+  "chr21_excluded_export": {
+    "reason": "pass --include-chr21-excluded to export no-chr21 R3 scores",
+    "status": "DEFERRED"
+  },
+  "ladder_v2_export": {
+    "arms": [
+      "R1_ca",
+      "R3_ca",
+      "R3_tc",
+      "R4_ca"
+    ],
+    "cell_scores_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/spectrum/cell_scores.csv.gz",
+    "cell_scores_sha256": "9ae78f5bc90ba250cca2b718821f7f3e30e15941c565cee86d19f9c4860800a4",
+    "donor_celltype_scores_path": "docs/nn_v2/donor_celltype_scores.csv.gz",
+    "donor_celltype_scores_sha256": "afea9b6dff74f9a8266c411d8cdb1c30c568b52b6e45e3bc495fe98b9d7c2856",
+    "exclude_chr21": false,
+    "five_appearances_asserted": true,
+    "folds_used": 100,
+    "n_batch": 12,
+    "n_cell_arm_rows": 120000,
+    "n_donor_celltype_rows": 1800,
+    "n_library": 37,
+    "parameter_counts": {
+      "R1_ca": 367876,
+      "R3_ca": 384250,
+      "R3_tc": 380026,
+      "R4_ca": 29970
+    },
+    "rows_per_arm": {
+      "R1_ca": 30000,
+      "R3_ca": 30000,
+      "R3_tc": 30000,
+      "R4_ca": 30000
+    },
+    "smoke": false,
+    "source_run": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2"
+  }
+}

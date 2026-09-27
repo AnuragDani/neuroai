@@ -29,7 +29,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N12 | Init-seed and sampling-seed sensitivity | N10 | S | DONE:docs/nn_v2/seed_sensitivity.json; seeds_v2; SPREAD_ONLY |
 | N13 | Held-out faithfulness interventions | N10 | M | DONE:docs/nn_v2/faithfulness.json; CA_PAIRING_UNUSED,ATAC_USED; NC=0; PC N/A |
 | N14 | Nuisance-probe diagnostics | N10 | S | DONE:docs/nn_v2/nuisance_probe.json; R2_REJECTED; PROBE_DROP_INSUFFICIENT |
-| N15 | Out-of-fold per-cell score export | N10 | S | TODO |
+| N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; 120k rows; 5/arm asserted; chr21 export DEFERRED |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | TODO |
 | N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-27T22:25Z N15 DONE (S7). Rewrote `scripts/export_nn_v2_cell_scores.py` for absolute ladder_v2 (idf_sha256 check; n_library=37/n_batch=12; R4 chr21 dosage before program replace). Exported R1_ca/R3_ca/R3_tc/R4_ca (100 folds) → `…/spectrum/cell_scores.csv.gz` (120000 rows, every cell×arm n_repeats=5) + `docs/nn_v2/donor_celltype_scores.csv.gz` (1800) + `cell_scores_export.json` / `CELL_SCORES.md`. Params match frozen widths (R3_ca=384250). `tests/test_nn_export.py` 3 passed. Chr21-excluded score export DEFERRED. Next: N21 then S8 (N16).
 - 2026-09-27T22:05Z N14 DONE (S7). Added `src/p22/eval/nuisance_probe.py` + `scripts/run_nn_v2_nuisance_probe.py` + probe helper test in `tests/test_nn_nuisance.py`. Ran 150 fold-arm rows (25× R1/R2/R3 CA+TC) against absolute `…/ladder_v2`. `docs/nn_v2/nuisance_probe.json` + `NUISANCE_PROBE.md`: `R2_REJECTED` / `PROBE_DROP_INSUFFICIENT` (CA/TC batch probe ~0.05–0.06, drop < 5 points; no `ADVERSARY_ERASES_SIGNAL`). Library probe unscorable 0/150 under donor hold-out. `gnhf/check_evidence.py` OK. Next: N15/N21.
 - 2026-09-27T21:49Z N13 DONE (S7). Wrote ladder_v2-aware `scripts/run_nn_v2_faithfulness.py` + `tests/test_nn_faithfulness.py` (1 passed). Ran all 25 folds × arms R3_ca/R3_tc/R3_gated/R4_ca against absolute `…/ladder_v2` models (idf_sha256 matched; NC Δ=0 exact). `docs/nn_v2/faithfulness.json` + `FAITHFULNESS.md`: tags `CA_PAIRING_UNUSED`, `ATAC_USED` (I1 log-loss CI excludes 0 for R3_tc and R3_gated; I3/I4/I5/I6 CIs include 0). PC = N/A (no saved planted S4/S5 δ=1.0 models; pairing claim remains provisional). `gnhf/check_evidence.py` OK. Next: N14/N15/N21.
 - 2026-09-27T21:03Z N12 DONE (S7). Fixed-protocol seed sensitivity under `…/seeds_v2` (not buggy `…/seeds`). Reused ladder_v2 R3_ca/R3_tc as `m_0_s_22`; reran m_1–4_s_22 and m_0_s_23/24 (each 50/50 folds, R3_ca params=384250). `docs/nn_v2/seed_sensitivity.json`: model_spread=0.020, sampling_spread=0.040, labels=`SPREAD_ONLY` (B_NULL; not SAMPLING_SENSITIVE). Runner early-exits `--seed-sensitivity`, asserts frozen widths, and no longer writes `docs/nn_v2/ladder_run.json` from partial/seed outs (restored to 450/450). Updated ROBUSTNESS.md / LADDER.md / status. Next: N13–N15/N21.

@@ -41,3 +41,7 @@ Held-out interventions on ladder_v2 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC
 ## Nuisance-probe diagnostics (N14)
 
 Held-out within-disease embedding probes on R1/R2/R3 (CA and TC): **R2_REJECTED** (`PROBE_DROP_INSUFFICIENT`; no `ADVERSARY_ERASES_SIGNAL`). Batch probe stays near chance (~0.05–0.06) and does not drop ≥ 5 points from R1 to R2; library probe is unscorable under donor hold-out. See `docs/nn_v2/nuisance_probe.json`, `docs/nn_v2/NUISANCE_PROBE.md`.
+
+## Out-of-fold cell scores (N15)
+
+Exported per-cell logits and MIL attention for R1_ca/R3_ca/R3_tc/R4_ca from ladder_v2 fold models (100 folds; every cell appears exactly 5 times per arm before averaging). Compact donor×cell-type means in `docs/nn_v2/donor_celltype_scores.csv.gz`. Full table: `reports/generated/nn_20260923/spectrum/cell_scores.csv.gz`. Evidence: `docs/nn_v2/cell_scores_export.json`, `docs/nn_v2/CELL_SCORES.md`. Chr21-excluded score export deferred.
