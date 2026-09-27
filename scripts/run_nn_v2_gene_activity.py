@@ -259,7 +259,7 @@ def main():
     parser.add_argument("--exclude-chr21", action="store_true")
     parser.add_argument("--model-seed", type=int, default=0)
     parser.add_argument("--sampling-seed", type=int, default=22)
-    parser.add_argument("--atac-matrix", type=str, default="reports/generated/nn_20260923/gene_activity/counts.npz")
+    parser.add_argument("--atac-matrix", type=str, default="reports/generated/nn_20260923/gene_activity/counts/counts.npz")
     parser.add_argument("--atac-bed", type=str, default="configs/nn_gene_activity_2026-09-23.bed")
     args = parser.parse_args()
     
