@@ -16,3 +16,4 @@
 N12 run successful, updated status to DONE.
 - Requested N11 chr21-excluded sensitivity run.
 - 2026-09-26T21:46Z N11 DONE: docs/nn_v2/chr21_excluded.json generated and tests pass. N12 run requested.
+- 2026-09-27T01:50Z N12 DONE: docs/nn_v2/seed_sensitivity.json verified, acceptance check passes.
