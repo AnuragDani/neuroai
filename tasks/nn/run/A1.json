@@ -1,5 +1,0 @@
-{
-  "argv": ["scripts/test_dosage.py"],
-  "background": false,
-  "timeout_min": 20
-}
