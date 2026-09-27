@@ -1,12 +1,150 @@
 {
   "record_type": "ladder_verification",
-  "primary_recomputed": null,
-  "per_arm": {},
+  "primary_recomputed": {
+    "estimate": -0.006666666666666654,
+    "ci": [
+      -0.05277777777777776,
+      0.03484162895927606
+    ],
+    "valid_draws": 1000,
+    "margin": 0.07,
+    "advantage": false
+  },
+  "per_arm": {
+    "R0_ca": {
+      "balanced_accuracy": 0.45999999999999996,
+      "auroc": 0.38755555555555554,
+      "parameter_count": [
+        359426
+      ]
+    },
+    "R0_tc": {
+      "balanced_accuracy": 0.48,
+      "auroc": 0.4,
+      "parameter_count": [
+        355202
+      ]
+    },
+    "R1_ca": {
+      "balanced_accuracy": 0.33333333333333337,
+      "auroc": 0.34933333333333333,
+      "parameter_count": [
+        367876
+      ]
+    },
+    "R1_tc": {
+      "balanced_accuracy": 0.35333333333333333,
+      "auroc": 0.35244444444444445,
+      "parameter_count": [
+        363652
+      ]
+    },
+    "R2_ca": {
+      "balanced_accuracy": 0.35333333333333333,
+      "auroc": 0.33777777777777784,
+      "parameter_count": [
+        384250
+      ]
+    },
+    "R2_tc": {
+      "balanced_accuracy": 0.37333333333333335,
+      "auroc": 0.3742222222222222,
+      "parameter_count": [
+        380026
+      ]
+    },
+    "R3_ca": {
+      "balanced_accuracy": 0.37333333333333335,
+      "auroc": 0.36888888888888893,
+      "parameter_count": [
+        384250
+      ]
+    },
+    "R3_gated": {
+      "balanced_accuracy": 0.4600000000000001,
+      "auroc": 0.4373333333333334,
+      "parameter_count": [
+        314044
+      ]
+    },
+    "R3_tc": {
+      "balanced_accuracy": 0.38,
+      "auroc": 0.34577777777777774,
+      "parameter_count": [
+        380026
+      ]
+    },
+    "R3_tc_parammatched": {
+      "balanced_accuracy": 0.3533333333333334,
+      "auroc": 0.31466666666666665,
+      "parameter_count": [
+        380026
+      ]
+    },
+    "R4_ca": {
+      "balanced_accuracy": 0.4866666666666667,
+      "auroc": 0.472,
+      "parameter_count": [
+        29970
+      ]
+    },
+    "R4_tc": {
+      "balanced_accuracy": 0.4666666666666666,
+      "auroc": 0.488,
+      "parameter_count": [
+        25746
+      ]
+    },
+    "chr21_dosage": {
+      "balanced_accuracy": 0.9666666666666666,
+      "auroc": 0.9982222222222223,
+      "parameter_count": [
+        0
+      ]
+    },
+    "latent_pca_lsi_head": {
+      "balanced_accuracy": 0.3666666666666667,
+      "auroc": 0.36888888888888893,
+      "parameter_count": [
+        16836
+      ]
+    },
+    "logreg_concat": {
+      "balanced_accuracy": 0.4733333333333333,
+      "auroc": 0.39555555555555555,
+      "parameter_count": [
+        0
+      ]
+    },
+    "logreg_rna": {
+      "balanced_accuracy": 0.4933333333333333,
+      "auroc": 0.40888888888888886,
+      "parameter_count": [
+        0
+      ]
+    },
+    "majority": {
+      "balanced_accuracy": 0.3533333333333334,
+      "auroc": 0.3533333333333334,
+      "parameter_count": [
+        0
+      ]
+    },
+    "pseudobulk_rna_logistic": {
+      "balanced_accuracy": 0.4466666666666666,
+      "auroc": 0.5235555555555556,
+      "parameter_count": [
+        0
+      ]
+    }
+  },
   "problems": [
-    "arms missing from fold files: ['R0_ca', 'R0_tc', 'R1_ca', 'R1_tc', 'R2_ca', 'R2_tc', 'R3_ca', 'R3_tc', 'R4_ca', 'R4_tc', 'R3_tc_parammatched', 'R3_gated', 'latent_pca_lsi_head', 'logreg_rna', 'logreg_concat', 'pseudobulk_rna_logistic', 'chr21_dosage', 'majority']",
-    "chr21_dosage AUROC None < 0.85 while the model-free donor chr21 share gives AUROC 1.0 (gnhf/chr21_sanity.py): the pipeline misaligns labels, rows, genes or probabilities"
+    "summary primary.estimate 0.0 != recomputed -0.006667",
+    "summary primary.ci [0.0, 0.0] disagrees with recomputed [-0.05277777777777776, 0.03484162895927606] (tolerance 0.02)"
   ],
-  "notes": [],
+  "notes": [
+    "majority pooled BA 0.353 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
+  ],
   "amendments": [
     "/Users/anuragdani/Github/niw-eb1a/P22/configs/nn_protocol_v2_amendment_gene_activity.json"
   ],
