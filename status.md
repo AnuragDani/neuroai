@@ -1,6 +1,6 @@
 # P22 current status
 
-Updated: 2026-09-27 14:05 PDT. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
+Updated: 2026-09-27 14:10 PDT. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
@@ -11,10 +11,10 @@ Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet P
 | Professor guidance | About 60% implemented, 30–40% supported by completed evidence. Cell-state spectrum remains missing. These are task-based estimates, not scientific metrics. | [Direction-to-task map](tasks/nn/plan.md#1-what-the-professor-asked-and-how-this-plan-answers-it), [July meeting records](MOM/README.md) |
 | Main real-data ladder | 450/450 expected fold outputs produced. Training run complete; **S6 gate accepted**. | [Run record](reports/generated/nn_20260923/ladder_v2/run.json), [verifier](docs/nn_v2/ladder_verification.json) |
 | Ladder gate | **PASS**. Outcome `B_NULL`: primary R3_ca−R3_tc estimate −0.0067, CI includes 0 (summary ≈ [−0.0533, 0.0348]; verifier recomputed ≈ [−0.0528, 0.0348]). No complex-model superiority claim. Model-free chr21 dosage AUROC ≈ 0.998; majority pooled-BA caveat remains. | [Saved summary](docs/nn_v2/ladder_summary.json), [verifier](docs/nn_v2/ladder_verification.json), [LADDER.md](docs/nn_v2/LADDER.md) |
-| Downstream NN work | **N11 accepted** (`DOSAGE_DOMINATED`) vs ladder_v2. **N12 not accepted**: robust seed runs used buggy ~99k-param protocol; fixed-protocol rerun required. N13–N15 and N21 remain TODO. | [chr21_excluded.json](docs/nn_v2/chr21_excluded.json), [ROBUSTNESS.md](docs/nn_v2/ROBUSTNESS.md), [Main task status](tasks/nn/todo.md) |
+| Downstream NN work | **N11** `DOSAGE_DOMINATED`; **N12** accepted (`SPREAD_ONLY`; model spread 0.020, sampling spread 0.040; not SAMPLING_SENSITIVE) from fixed-protocol `seeds_v2`. N13–N15 and N21 remain TODO. | [chr21_excluded.json](docs/nn_v2/chr21_excluded.json), [seed_sensitivity.json](docs/nn_v2/seed_sensitivity.json), [ROBUSTNESS.md](docs/nn_v2/ROBUSTNESS.md), [Main task status](tasks/nn/todo.md) |
 | Paper | [Draft](paper/draft.md) still says real-data ladder never ran; rewrite after S7–S8. `paper/check_paper.py` currently fails number/claims checks. | [Draft](paper/draft.md), [paper task list](tasks/nn/todo.md) |
 | Old swarm | `p22agy4` kept hitting Gemini quota limits. Stopped at 13:44 PDT; tmux session and Python driver no longer running. Saved lane branches/outputs remain for verification. | [Swarm log](reports/generated/nn_agy/latest/swarm.log), [lane status](reports/generated/nn_agy/latest/status.json) |
-| Manual GNHF finish | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md) active on `codex/p22-nn-finish-base`. S6 done; S7 N11 integrated; N12 blocked pending fixed-protocol seed rerun. | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md), [saved gate](docs/nn_v2/ladder_verification.json) |
+| Manual GNHF finish | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md) active on `codex/p22-nn-finish-base`. S6 done; S7 N11+N12 accepted; next N13–N15/N21. | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md), [saved gate](docs/nn_v2/ladder_verification.json) |
 
 **Resolved conflict:** N10 task label previously said DONE while the S6 hard gate said FAIL. Gate now `PASS` with rebuilt summary from all 450 fold files; N10 scientific result accepted as `B_NULL`.
 
@@ -26,7 +26,7 @@ Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet P
 
 ## Next verified milestones
 
-1. Rerun N12 seed sensitivity under ladder_v2 frozen widths; then finish remaining S7 (N13–N15/N21) with evidence or explicit BLOCKED labels.
+1. Finish remaining S7 (N13–N15/N21) with evidence or explicit BLOCKED labels.
 2. Complete S8 results and S9 paper from verified numbers; pass paper checker and evidence gate before vault copy.
 
 ## Status maintenance

@@ -4,7 +4,7 @@
 
 - Accepted with-chr21 ladder: `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2` (`folds_done=450`, `failures=[]`; verifier PASS).
 - N11 no-chr21 folds: `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/chr21_excluded` (`folds_done=100`, `failures=[]`; arms R3_ca, R3_tc, logreg_rna, logreg_concat × 5 repeats × 5 folds). Same donor splits as ladder_v2; frozen architecture widths (~384k R3_ca params), not the superseded buggy `ladder/` (~99k).
-- N12 seed folds under `…/seeds/m_*_s_*` use the **buggy** ~99k-param protocol and are **not** accepted against ladder_v2. Do not reuse; rerun required.
+- N12 fixed-protocol seed folds: `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2` (7 combos × R3_ca/R3_tc × 25 folds; every R3_ca `parameter_count=384250`, R3_tc `380026`). `m_0_s_22` reuses ladder_v2 R3 folds. Superseded buggy `…/seeds/` (~99k) is not used.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -12,4 +12,16 @@ Rebuilt `docs/nn_v2/chr21_excluded.json` by comparing chr21-excluded fold predic
 
 ## Init-seed and sampling-seed sensitivity (N12)
 
-**Not accepted.** Robust-lane `seed_sensitivity.json` summarized runs whose fold `parameter_count` (~98874 for R3_ca) matches the superseded buggy ladder, not ladder_v2 (~384250). Status remains TODO pending a fixed-protocol seed rerun (model seeds 0–4 at sampling 22; sampling seeds 23–24 at model 0; arms R3_ca/R3_tc only).
+Accepted against ladder_v2 frozen widths. Primary contrast (R3_ca−R3_tc) across model seeds 0–4 at sampling seed 22 and sampling seeds {22,23,24} at model seed 0:
+
+| run | estimate | CI |
+|---|---:|---|
+| m_0_s_22 (ladder reuse) | −0.0067 | [−0.0533, 0.0348] |
+| m_1_s_22 | 0.0133 | [−0.0375, 0.0652] |
+| m_2_s_22 | 0.0067 | [−0.0302, 0.0431] |
+| m_3_s_22 | ≈0 | [−0.0616, 0.0590] |
+| m_4_s_22 | ≈0 | [−0.0407, 0.0438] |
+| m_0_s_23 | 0.0067 | [−0.0333, 0.0493] |
+| m_0_s_24 | 0.0333 | [−0.0213, 0.0861] |
+
+Model-seed spread = 0.020; sampling-seed spread = 0.040. Ladder outcome is `B_NULL`, so decision-tree N12 reports spread only (`SPREAD_ONLY`); sampling spread ≤ 0.07 so **not** `SAMPLING_SENSITIVE`. Evidence: `docs/nn_v2/seed_sensitivity.json`.

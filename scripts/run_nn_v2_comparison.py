@@ -328,6 +328,222 @@ def worker_task(
         return None, f"r{repeat}_f{fold}_{arm_name}: {str(e)}\n{traceback.format_exc()}"
 
 
+# Absolute main-checkout run root: do not copy ladder_v2 into finish-base.
+_SEEDS_V2_ROOT = Path(
+    "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2"
+)
+_LADDER_V2_ROOT = Path(
+    "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2"
+)
+_EXPECTED_R3_CA_PARAMS = 384250
+_EXPECTED_R3_TC_PARAMS = 380026
+
+
+def _reuse_ladder_v2_as_m0_s22(dest: Path) -> None:
+    """m_0_s_22 under frozen protocol is the accepted ladder_v2 R3_ca/R3_tc folds."""
+    import shutil
+
+    src_folds = _LADDER_V2_ROOT / "folds"
+    dest_folds = dest / "folds"
+    dest_folds.mkdir(parents=True, exist_ok=True)
+    n = 0
+    for arm in ("R3_ca", "R3_tc"):
+        for src in sorted(src_folds.glob(f"*_{arm}.json")):
+            shutil.copy2(src, dest_folds / src.name)
+            n += 1
+    if n != 50:
+        raise RuntimeError(f"expected 50 R3_ca/R3_tc folds from ladder_v2, got {n}")
+    (dest / "run.json").write_text(
+        json.dumps(
+            {
+                "folds_expected": 50,
+                "folds_done": 50,
+                "failures": [],
+                "source": str(_LADDER_V2_ROOT),
+                "reused_arms": ["R3_ca", "R3_tc"],
+                "model_seed": 0,
+                "sampling_seed": 22,
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+
+
+def _assert_seed_fold_protocol(folds_dir: Path) -> dict:
+    """Reject buggy ~99k-width folds; require frozen ladder_v2 widths."""
+    counts = {"R3_ca": [], "R3_tc": []}
+    for path in folds_dir.glob("*.json"):
+        with open(path) as fp:
+            rec = json.load(fp)
+        arm = rec["arm"]
+        if arm not in counts:
+            continue
+        counts[arm].append(int(rec["parameter_count"]))
+    for arm, expected in (
+        ("R3_ca", _EXPECTED_R3_CA_PARAMS),
+        ("R3_tc", _EXPECTED_R3_TC_PARAMS),
+    ):
+        if len(counts[arm]) != 25:
+            raise RuntimeError(f"{folds_dir}: expected 25 {arm} folds, got {len(counts[arm])}")
+        bad = [c for c in counts[arm] if c != expected]
+        if bad:
+            raise RuntimeError(
+                f"{folds_dir}: {arm} parameter_count {bad[0]} != expected {expected} "
+                "(buggy-protocol seed run; do not summarize)"
+            )
+    return {
+        "R3_ca_parameter_count": _EXPECTED_R3_CA_PARAMS,
+        "R3_tc_parameter_count": _EXPECTED_R3_TC_PARAMS,
+        "n_folds": 50,
+    }
+
+
+def _load_repeats_seed(folds_dir: Path):
+    per_repeat = {}
+    for path in Path(folds_dir).glob("*.json"):
+        with open(path) as fp:
+            rec = json.load(fp)
+        rep = rec["repeat"]
+        arm = rec["arm"]
+        if arm not in ("R3_ca", "R3_tc"):
+            continue
+        per_repeat.setdefault(rep, {}).setdefault(arm, []).append(
+            pd.DataFrame(
+                {
+                    "donor_id": rec["donor_ids"],
+                    "label": rec["donor_labels"],
+                    "probability": rec["donor_probabilities"],
+                }
+            )
+        )
+    repeats = []
+    for rep in sorted(per_repeat.keys()):
+        entry = {"repeat": rep}
+        for arm in per_repeat[rep]:
+            entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
+        repeats.append(entry)
+    return repeats
+
+
+def _run_seed_sensitivity(args) -> int:
+    """N12: fixed-protocol init/sampling seed sensitivity against ladder_v2 widths."""
+    import subprocess
+
+    from p22.eval.repeated_comparison import repeated_primary_contrast
+
+    m_seeds = [0, 1, 2, 3, 4]
+    s_seeds = [23, 24]
+    runs = [(m, 22) for m in m_seeds] + [(0, s) for s in s_seeds]
+    seeds_root = _SEEDS_V2_ROOT
+    seeds_root.mkdir(parents=True, exist_ok=True)
+
+    for m, s in runs:
+        out_dir = seeds_root / f"m_{m}_s_{s}"
+        if m == 0 and s == 22:
+            logging.info("Reusing ladder_v2 R3_ca/R3_tc as m_0_s_22 under %s", out_dir)
+            _reuse_ladder_v2_as_m0_s22(out_dir)
+            _assert_seed_fold_protocol(out_dir / "folds")
+            continue
+        cmd = [
+            sys.executable,
+            __file__,
+            "--protocol",
+            str(args.protocol),
+            "--out",
+            str(out_dir),
+            "--arms",
+            "R3_ca",
+            "R3_tc",
+            "--model-seed",
+            str(m),
+            "--sampling-seed",
+            str(s),
+            "--resume",
+            "--workers",
+            str(args.workers if args.workers else 5),
+        ]
+        logging.info("Running fixed-protocol seed m=%s s=%s -> %s", m, s, out_dir)
+        subprocess.run(cmd, check=True)
+        _assert_seed_fold_protocol(out_dir / "folds")
+
+    results = {
+        "record_type": "nn_v2_seed_sensitivity",
+        "protocol_source": str(args.protocol.resolve()),
+        "ladder_source": str(_LADDER_V2_ROOT),
+        "seeds_root": str(seeds_root),
+        "rejected_buggy_seeds_root": str(
+            Path("/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds")
+        ),
+        "expected_parameter_counts": {
+            "R3_ca": _EXPECTED_R3_CA_PARAMS,
+            "R3_tc": _EXPECTED_R3_TC_PARAMS,
+        },
+        "runs": {},
+    }
+    model_seed_estimates = []
+    sampling_seed_estimates = []
+
+    for m, s in runs:
+        key = f"m_{m}_s_{s}"
+        folds_dir = seeds_root / key / "folds"
+        protocol_info = _assert_seed_fold_protocol(folds_dir)
+        repeats = _load_repeats_seed(folds_dir)
+        diff_stats = repeated_primary_contrast(repeats, model="R3_ca", reference="R3_tc")
+        est = float(diff_stats["estimate"])
+        ci = [float(diff_stats["interval"][0]), float(diff_stats["interval"][1])]
+        entry = {
+            "estimate": est,
+            "ci": ci,
+            "model_seed": m,
+            "sampling_seed": s,
+            **protocol_info,
+            "source": "ladder_v2_reuse" if (m == 0 and s == 22) else str(folds_dir.parent),
+        }
+        results["runs"][key] = entry
+        # Flat keys retained for decision-tree consumers / prior schema.
+        results[key] = {"estimate": est, "ci": ci}
+        if s == 22:
+            model_seed_estimates.append(est)
+        if m == 0:
+            sampling_seed_estimates.append(est)
+
+    model_spread = max(model_seed_estimates) - min(model_seed_estimates)
+    sampling_spread = max(sampling_seed_estimates) - min(sampling_seed_estimates)
+    results["model_seed_spread"] = float(model_spread)
+    results["sampling_seed_spread"] = float(sampling_spread)
+
+    with open("docs/nn_v2/ladder_summary.json") as f:
+        lsum = json.load(f)
+    outcome = lsum.get("outcome", "")
+    labels = []
+    if outcome.startswith("A_"):
+        n_above = sum(1 for e in model_seed_estimates if e >= 0.07)
+        if n_above >= 4:
+            labels.append("A_ROBUST_INIT")
+        else:
+            labels.append("A_FRAGILE")
+    else:
+        labels.append("SPREAD_ONLY")
+    if sampling_spread > 0.07:
+        labels.append("SAMPLING_SENSITIVE")
+    results["ladder_outcome"] = outcome
+    results["labels"] = labels
+
+    Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+    with open("docs/nn_v2/seed_sensitivity.json", "w") as f:
+        json.dump(results, f, indent=2)
+        f.write("\n")
+
+    logging.info(
+        "N12 seed sensitivity done: model_spread=%.4f sampling_spread=%.4f labels=%s",
+        model_spread,
+        sampling_spread,
+        labels,
+    )
+    return 0
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--protocol", type=Path, required=True)
@@ -346,8 +562,11 @@ def main(argv=None):
     parser.add_argument("--n10b", action="store_true")
     args = parser.parse_args(argv)
     
+    # Seed-sensitivity must not fall through into a full ladder train on --out.
+    if getattr(args, "seed_sensitivity", False):
+        return _run_seed_sensitivity(args)
+
     args.out.mkdir(parents=True, exist_ok=True)
-    
 
         
     if args.n10b:
@@ -503,10 +722,14 @@ def main(argv=None):
     }
     with open(args.out / "run.json", "w") as f:
         json.dump(run_record, f, indent=2)
-        
-    Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
-    with open("docs/nn_v2/ladder_run.json", "w") as f:
-        json.dump(run_record, f, indent=2)
+
+    # Never clobber docs/nn_v2/ladder_run.json from seed/chr21/partial arm runs.
+    # Only refresh the tracked ladder run record when writing into ladder_v2 itself.
+    out_resolved = args.out.resolve()
+    if out_resolved.name == "ladder_v2" or out_resolved == _LADDER_V2_ROOT.resolve():
+        Path("docs/nn_v2").mkdir(parents=True, exist_ok=True)
+        with open("docs/nn_v2/ladder_run.json", "w") as f:
+            json.dump(run_record, f, indent=2)
         
     if args.summarize_chr21:
         from p22.eval.repeated_comparison import repeated_primary_contrast, repeated_model_accuracy
@@ -609,106 +832,6 @@ def main(argv=None):
                 desc = "Models lose some performance but remain partially predictive without chr21."
                 
             f.write(f"Results indicate {label}. {desc}\n")
-
-    if getattr(args, "seed_sensitivity", False):
-        import subprocess
-        
-        m_seeds = [0, 1, 2, 3, 4]
-        s_seeds = [23, 24]
-        runs = [(m, 22) for m in m_seeds] + [(0, s) for s in s_seeds]
-        
-        for m, s in runs:
-            out_dir = f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}"
-            cmd = [
-                sys.executable, __file__,
-                "--protocol", str(args.protocol),
-                "--out", out_dir,
-                "--arms", "R3_ca", "R3_tc",
-                "--model-seed", str(m),
-                "--sampling-seed", str(s),
-                "--resume",
-                "--workers", "5"
-            ]
-            logging.info(f"Running seed {m} / {s}")
-            subprocess.run(cmd, check=True)
-            
-        from p22.eval.repeated_comparison import repeated_primary_contrast
-        
-        def load_repeats_seed(folds_dir):
-            per_repeat = {}
-            for f in Path(folds_dir).glob("*.json"):
-                with open(f) as fp:
-                    rec = json.load(fp)
-                    rep = rec["repeat"]
-                    arm = rec["arm"]
-                    if rep not in per_repeat:
-                        per_repeat[rep] = {}
-                    if arm not in per_repeat[rep]:
-                        per_repeat[rep][arm] = []
-                    df = pd.DataFrame({
-                        "donor_id": rec["donor_ids"],
-                        "label": rec["donor_labels"],
-                        "probability": rec["donor_probabilities"]
-                    })
-                    per_repeat[rep][arm].append(df)
-            repeats = []
-            for rep in sorted(per_repeat.keys()):
-                entry = {"repeat": rep}
-                for arm in per_repeat[rep]:
-                    entry[arm] = pd.concat(per_repeat[rep][arm], ignore_index=True)
-                repeats.append(entry)
-            return repeats
-
-        results = {}
-        model_seed_estimates = []
-        sampling_seed_estimates = []
-        
-        for m, s in runs:
-            out_dir = Path(f"reports/generated/nn_20260923/seeds/m_{m}_s_{s}/folds")
-            repeats = load_repeats_seed(out_dir)
-            diff_stats = repeated_primary_contrast(repeats, model="R3_ca", reference="R3_tc")
-            est = diff_stats["estimate"]
-            results[f"m_{m}_s_{s}"] = {
-                "estimate": est,
-                "ci": diff_stats["interval"]
-            }
-            if s == 22:
-                model_seed_estimates.append(est)
-            if m == 0:
-                sampling_seed_estimates.append(est)
-                
-        model_spread = max(model_seed_estimates) - min(model_seed_estimates)
-        sampling_spread = max(sampling_seed_estimates) - min(sampling_seed_estimates)
-        
-        results["model_seed_spread"] = model_spread
-        results["sampling_seed_spread"] = sampling_spread
-        
-        with open("docs/nn_v2/ladder_summary.json") as f:
-            lsum = json.load(f)
-        outcome = lsum.get("outcome", "")
-        
-        with open("docs/nn_v2/seed_sensitivity.json", "w") as f:
-            json.dump(results, f, indent=2)
-            
-        with open("docs/nn_v2/ROBUSTNESS.md", "a") as f:
-            f.write("\n## Init-seed and sampling-seed sensitivity\n\n")
-            f.write(f"Model seed spread: {model_spread:.4f}. Sampling seed spread: {sampling_spread:.4f}. ")
-            
-            if outcome.startswith("A_"):
-                n_above = sum(1 for e in model_seed_estimates if e >= 0.07)
-                if n_above >= 4:
-                    f.write("Outcome A_ADVANTAGE is robust across init seeds. ")
-                else:
-                    f.write("Relabeled as A_FRAGILE. ")
-            else:
-                f.write("Report spread only (outcome B/C/D). ")
-                
-            if sampling_spread > 0.07:
-                f.write("SAMPLING_SENSITIVE.\n")
-            else:
-                f.write("\n")
-
-        return 0
 
     return 0 if not failures else 1
 

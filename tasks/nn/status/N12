@@ -1,1 +1,1 @@
-TODO:robust seeds/m_* use buggy ~99k protocol; must rerun against ladder_v2 widths before accept
+DONE:docs/nn_v2/seed_sensitivity.json; seeds_v2 fixed protocol; SPREAD_ONLY; model_spread=0.02 sampling_spread=0.04

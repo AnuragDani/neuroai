@@ -1,0 +1,159 @@
+{
+  "record_type": "nn_v2_seed_sensitivity",
+  "protocol_source": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_2026-09-23.json",
+  "ladder_source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2",
+  "seeds_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2",
+  "rejected_buggy_seeds_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds",
+  "expected_parameter_counts": {
+    "R3_ca": 384250,
+    "R3_tc": 380026
+  },
+  "runs": {
+    "m_0_s_22": {
+      "estimate": -0.006666666666666665,
+      "ci": [
+        -0.05333333333333331,
+        0.034845588235294114
+      ],
+      "model_seed": 0,
+      "sampling_seed": 22,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "ladder_v2_reuse"
+    },
+    "m_1_s_22": {
+      "estimate": 0.013333333333333341,
+      "ci": [
+        -0.0375,
+        0.06517857142857143
+      ],
+      "model_seed": 1,
+      "sampling_seed": 22,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_1_s_22"
+    },
+    "m_2_s_22": {
+      "estimate": 0.006666666666666665,
+      "ci": [
+        -0.030159182922340814,
+        0.043094243218082216
+      ],
+      "model_seed": 2,
+      "sampling_seed": 22,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_2_s_22"
+    },
+    "m_3_s_22": {
+      "estimate": -1.1102230246251566e-17,
+      "ci": [
+        -0.06161673804137038,
+        0.058955357142857115
+      ],
+      "model_seed": 3,
+      "sampling_seed": 22,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_3_s_22"
+    },
+    "m_4_s_22": {
+      "estimate": -1.1102230246251566e-17,
+      "ci": [
+        -0.04069477671451354,
+        0.04376736111111109
+      ],
+      "model_seed": 4,
+      "sampling_seed": 22,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_4_s_22"
+    },
+    "m_0_s_23": {
+      "estimate": 0.006666666666666677,
+      "ci": [
+        -0.0333371040723982,
+        0.04933823529411763
+      ],
+      "model_seed": 0,
+      "sampling_seed": 23,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_0_s_23"
+    },
+    "m_0_s_24": {
+      "estimate": 0.03333333333333334,
+      "ci": [
+        -0.021290849673202605,
+        0.086125
+      ],
+      "model_seed": 0,
+      "sampling_seed": 24,
+      "R3_ca_parameter_count": 384250,
+      "R3_tc_parameter_count": 380026,
+      "n_folds": 50,
+      "source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/seeds_v2/m_0_s_24"
+    }
+  },
+  "m_0_s_22": {
+    "estimate": -0.006666666666666665,
+    "ci": [
+      -0.05333333333333331,
+      0.034845588235294114
+    ]
+  },
+  "m_1_s_22": {
+    "estimate": 0.013333333333333341,
+    "ci": [
+      -0.0375,
+      0.06517857142857143
+    ]
+  },
+  "m_2_s_22": {
+    "estimate": 0.006666666666666665,
+    "ci": [
+      -0.030159182922340814,
+      0.043094243218082216
+    ]
+  },
+  "m_3_s_22": {
+    "estimate": -1.1102230246251566e-17,
+    "ci": [
+      -0.06161673804137038,
+      0.058955357142857115
+    ]
+  },
+  "m_4_s_22": {
+    "estimate": -1.1102230246251566e-17,
+    "ci": [
+      -0.04069477671451354,
+      0.04376736111111109
+    ]
+  },
+  "m_0_s_23": {
+    "estimate": 0.006666666666666677,
+    "ci": [
+      -0.0333371040723982,
+      0.04933823529411763
+    ]
+  },
+  "m_0_s_24": {
+    "estimate": 0.03333333333333334,
+    "ci": [
+      -0.021290849673202605,
+      0.086125
+    ]
+  },
+  "model_seed_spread": 0.020000000000000007,
+  "sampling_seed_spread": 0.04000000000000001,
+  "ladder_outcome": "B_NULL",
+  "labels": [
+    "SPREAD_ONLY"
+  ]
+}

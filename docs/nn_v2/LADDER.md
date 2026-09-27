@@ -29,3 +29,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 ## chr21-excluded sensitivity (N11)
 
 Holding the accepted ladder_v2 folds fixed and rerunning R3_ca, R3_tc, logreg_rna, and logreg_concat with chromosome-21 features dropped yields no-chr21 BA ≤ 0.55 for every arm (**DOSAGE_DOMINATED**). Details and source paths: `docs/nn_v2/chr21_excluded.json`, `docs/nn_v2/ROBUSTNESS.md`.
+
+## Init/sampling-seed sensitivity (N12)
+
+Fixed-protocol seed rerun under ladder_v2 widths (`seeds_v2/`, R3_ca params 384250): model-seed spread 0.020, sampling-seed spread 0.040. Outcome `B_NULL` → report spread only (`SPREAD_ONLY`); not `SAMPLING_SENSITIVE`. See `docs/nn_v2/seed_sensitivity.json` and `docs/nn_v2/ROBUSTNESS.md`.
