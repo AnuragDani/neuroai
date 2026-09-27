@@ -206,3 +206,57 @@ def test_adversary_strips_planted_batch_signal():
         f"control={mean_control:.3f} regularised={mean_regularised:.3f}"
     )
     assert min(label_scores) >= 0.90, f"label erased by adversary: {label_scores}"
+
+
+def test_held_out_within_label_probe_drops_unseen_nuisance_and_scores():
+    """N14 helper: fit within-label on train, score only train-seen nuisance on test."""
+    from p22.eval.nuisance_probe import (
+        decide_r2_rejection,
+        held_out_within_label_probe_accuracy,
+    )
+
+    rng = np.random.default_rng(0)
+    # Two labels, two batches. Batch is planted in embedding dim 0 within each label.
+    train_labels = np.array([0] * 40 + [1] * 40)
+    train_batch = np.array([0, 1] * 40)
+    train_emb = rng.normal(0, 0.1, (80, 3))
+    train_emb[:, 0] += np.where(train_batch == 1, 3.0, -3.0)
+
+    test_labels = np.array([0] * 20 + [1] * 20)
+    test_batch = np.array([0, 1] * 20)
+    # Unseen batch code 2 on two cells of label 0 — must be dropped, not crash.
+    test_batch[0] = 2
+    test_emb = rng.normal(0, 0.1, (40, 3))
+    test_emb[:, 0] += np.where(test_batch == 1, 3.0, -3.0)
+    test_emb[0, 0] = 0.0
+
+    acc = held_out_within_label_probe_accuracy(
+        train_emb, train_labels, train_batch, test_emb, test_labels, test_batch
+    )
+    assert acc is not None and acc >= 0.90
+
+    rejected = decide_r2_rejection(
+        r1_probe_accuracy=0.80,
+        r2_probe_accuracy=0.78,
+        r1_donor_ba=0.50,
+        r2_donor_ba=0.49,
+    )
+    assert rejected["decision"] == "R2_REJECTED"
+    assert "PROBE_DROP_INSUFFICIENT" in rejected["labels"]
+
+    erases = decide_r2_rejection(
+        r1_probe_accuracy=0.80,
+        r2_probe_accuracy=0.60,
+        r1_donor_ba=0.55,
+        r2_donor_ba=0.40,
+    )
+    assert erases["decision"] == "R2_REJECTED"
+    assert "ADVERSARY_ERASES_SIGNAL" in erases["labels"]
+
+    accepted = decide_r2_rejection(
+        r1_probe_accuracy=0.80,
+        r2_probe_accuracy=0.60,
+        r1_donor_ba=0.50,
+        r2_donor_ba=0.48,
+    )
+    assert accepted["decision"] == "R2_ACCEPTED"

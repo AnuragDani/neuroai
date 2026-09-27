@@ -1,0 +1,214 @@
+{
+  "task": "N14",
+  "title": "Nuisance-probe diagnostics (R2 rejection rule)",
+  "status": "DONE",
+  "source_run": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2",
+  "arms": [
+    "R1_ca",
+    "R1_tc",
+    "R2_ca",
+    "R2_tc",
+    "R3_ca",
+    "R3_tc"
+  ],
+  "smoke": true,
+  "n_fold_rows": 6,
+  "arm_summaries": [
+    {
+      "arm": "R1_ca",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.01906227378958036,
+      "primary_probe_accuracy": 0.01906227378958036,
+      "qc_r2": -0.12889695167541504,
+      "donor_ba": 0.5,
+      "parameter_count": 367876
+    },
+    {
+      "arm": "R1_tc",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.019173129821513514,
+      "primary_probe_accuracy": 0.019173129821513514,
+      "qc_r2": -0.12653567790985107,
+      "donor_ba": 0.5,
+      "parameter_count": 363652
+    },
+    {
+      "arm": "R2_ca",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.02142665094827408,
+      "primary_probe_accuracy": 0.02142665094827408,
+      "qc_r2": -0.08652769327163697,
+      "donor_ba": 0.5,
+      "parameter_count": 384250
+    },
+    {
+      "arm": "R2_tc",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.017363032822485573,
+      "primary_probe_accuracy": 0.017363032822485573,
+      "qc_r2": -0.08485417366027832,
+      "donor_ba": 0.5,
+      "parameter_count": 380026
+    },
+    {
+      "arm": "R3_ca",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.015562035945481997,
+      "primary_probe_accuracy": 0.015562035945481997,
+      "qc_r2": -0.03995246887207031,
+      "donor_ba": 0.5,
+      "parameter_count": 384250
+    },
+    {
+      "arm": "R3_tc",
+      "n_folds": 1,
+      "library_accuracy": null,
+      "batch_accuracy": 0.016305350458108415,
+      "primary_probe_accuracy": 0.016305350458108415,
+      "qc_r2": -0.04433274269104004,
+      "donor_ba": 0.5,
+      "parameter_count": 380026
+    }
+  ],
+  "decision": {
+    "r2_rejection_decision": "R2_REJECTED",
+    "labels": [
+      "R2_REJECTED",
+      "PROBE_DROP_INSUFFICIENT"
+    ],
+    "by_fusion": {
+      "ca": {
+        "probe_drop_points": -0.23643771586937187,
+        "ba_drop": 0.0,
+        "probe_ok": false,
+        "ba_ok": true,
+        "rejected": true,
+        "labels": [
+          "R2_REJECTED",
+          "PROBE_DROP_INSUFFICIENT"
+        ],
+        "decision": "R2_REJECTED",
+        "r1_arm": "R1_ca",
+        "r2_arm": "R2_ca",
+        "r1_primary_probe": 0.01906227378958036,
+        "r2_primary_probe": 0.02142665094827408,
+        "r1_donor_ba": 0.5,
+        "r2_donor_ba": 0.5
+      },
+      "tc": {
+        "probe_drop_points": 0.18100969990279409,
+        "ba_drop": 0.0,
+        "probe_ok": false,
+        "ba_ok": true,
+        "rejected": true,
+        "labels": [
+          "R2_REJECTED",
+          "PROBE_DROP_INSUFFICIENT"
+        ],
+        "decision": "R2_REJECTED",
+        "r1_arm": "R1_tc",
+        "r2_arm": "R2_tc",
+        "r1_primary_probe": 0.019173129821513514,
+        "r2_primary_probe": 0.017363032822485573,
+        "r1_donor_ba": 0.5,
+        "r2_donor_ba": 0.5
+      }
+    },
+    "rule": "R2 rejected if held-out within-disease nuisance-probe accuracy (mean of library and batch_seq) does not drop \u2265 5 points vs R1, OR donor BA drops > 0.05 vs R1 (plan \u00a74.2 / decision_tree N14)."
+  },
+  "folds": [
+    {
+      "arm": "R1_ca",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.01906227378958036,
+      "primary_probe_accuracy": 0.01906227378958036,
+      "qc_r2": -0.12889695167541504,
+      "donor_ba": 0.5,
+      "parameter_count": 367876,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    },
+    {
+      "arm": "R1_tc",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.019173129821513514,
+      "primary_probe_accuracy": 0.019173129821513514,
+      "qc_r2": -0.12653567790985107,
+      "donor_ba": 0.5,
+      "parameter_count": 363652,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    },
+    {
+      "arm": "R2_ca",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.02142665094827408,
+      "primary_probe_accuracy": 0.02142665094827408,
+      "qc_r2": -0.08652769327163697,
+      "donor_ba": 0.5,
+      "parameter_count": 384250,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    },
+    {
+      "arm": "R2_tc",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.017363032822485573,
+      "primary_probe_accuracy": 0.017363032822485573,
+      "qc_r2": -0.08485417366027832,
+      "donor_ba": 0.5,
+      "parameter_count": 380026,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    },
+    {
+      "arm": "R3_ca",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.015562035945481997,
+      "primary_probe_accuracy": 0.015562035945481997,
+      "qc_r2": -0.03995246887207031,
+      "donor_ba": 0.5,
+      "parameter_count": 384250,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    },
+    {
+      "arm": "R3_tc",
+      "repeat": 0,
+      "fold": 0,
+      "n_train_cells": 24000,
+      "n_test_cells": 6000,
+      "library_accuracy": null,
+      "batch_accuracy": 0.016305350458108415,
+      "primary_probe_accuracy": 0.016305350458108415,
+      "qc_r2": -0.04433274269104004,
+      "donor_ba": 0.5,
+      "parameter_count": 380026,
+      "idf_sha256": "f23dff4b9f7cb03fa50d949fccb847cc72869f30e91964f0765ef8781685b919"
+    }
+  ],
+  "acceptance": {
+    "r2_rejection_decision": "R2_REJECTED",
+    "rule": "R2 rejected if held-out within-disease nuisance-probe accuracy (mean of library and batch_seq) does not drop \u2265 5 points vs R1, OR donor BA drops > 0.05 vs R1 (plan \u00a74.2 / decision_tree N14)."
+  }
+}

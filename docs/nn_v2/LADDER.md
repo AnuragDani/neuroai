@@ -37,3 +37,7 @@ Fixed-protocol seed rerun under ladder_v2 widths (`seeds_v2/`, R3_ca params 3842
 ## Faithfulness interventions (N13)
 
 Held-out interventions on ladder_v2 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC Δ = 0 exact. Tags `CA_PAIRING_UNUSED` (I3 CI includes 0) and `ATAC_USED` (I1 log-loss CI excludes 0 on R3_tc and R3_gated). Attention knockout (I4), uniform MIL (I5), and gate clamps (I6) do not exclude 0. Planted PC not run (no saved S4/S5 models). Details: `docs/nn_v2/faithfulness.json`, `docs/nn_v2/FAITHFULNESS.md`.
+
+## Nuisance-probe diagnostics (N14)
+
+Held-out within-disease embedding probes on R1/R2/R3 (CA and TC): **R2_REJECTED** (`PROBE_DROP_INSUFFICIENT`; no `ADVERSARY_ERASES_SIGNAL`). Batch probe stays near chance (~0.05–0.06) and does not drop ≥ 5 points from R1 to R2; library probe is unscorable under donor hold-out. See `docs/nn_v2/nuisance_probe.json`, `docs/nn_v2/NUISANCE_PROBE.md`.
