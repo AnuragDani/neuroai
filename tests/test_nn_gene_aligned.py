@@ -1,84 +1,47 @@
 import pytest
 import torch
-import numpy as np
 
-from p22.models.gene_aligned import (
-    GeneAlignedTokenConcat,
-    GeneAlignedCrossAttention,
-    build_genomic_attention_mask,
-)
-from p22.models.fusion import VIEW_A, VIEW_B
+from p22.models.gene_aligned import GeneAlignedTokenConcat, GeneAlignedCrossAttention
 
-def test_build_genomic_attention_mask():
-    chromosomes = ["chr1", "chr1", "chr1", "chr2", "chr2"]
-    starts = [100, 300, 200, 50, 10]
-    
-    mask = build_genomic_attention_mask(chromosomes, starts, k=1)
-    
-    # expected sort order for chr1: 0 (100), 2 (200), 1 (300)
-    # indices:
-    # chr1: 0, 2, 1
-    # chr2: 4 (10), 3 (50)
-    
-    # Within chr1, sorted are [0, 2, 1]
-    # For 0: nearest k=1 means index 0 and 2. So mask[0, 0]=F, mask[0, 2]=F
-    # For 2: nearest k=1 means 0, 2, 1. mask[2, 0]=F, mask[2, 2]=F, mask[2, 1]=F
-    # For 1: nearest k=1 means 2, 1. mask[1, 2]=F, mask[1, 1]=F
-    
-    # Within chr2, sorted are [4, 3]
-    # For 4: nearest k=1 means 4, 3. mask[4, 4]=F, mask[4, 3]=F
-    # For 3: nearest k=1 means 4, 3. mask[3, 4]=F, mask[3, 3]=F
-    
-    expected_false = [
-        (0, 0), (0, 2),
-        (2, 0), (2, 2), (2, 1),
-        (1, 2), (1, 1),
-        (4, 4), (4, 3),
-        (3, 4), (3, 3)
-    ]
-    
-    assert mask.shape == (5, 5)
-    assert mask.dtype == torch.bool
-    
-    # Verify all expected Falses
-    for i, j in expected_false:
-        assert mask[i, j] == False, f"Expected False at ({i}, {j})"
-        
-    # Verify a few expected Trues
-    assert mask[0, 1] == True # Too far on chr1
-    assert mask[0, 3] == True # Different chromosome
-    assert mask[3, 2] == True
+def test_band_mask():
+    from p22.models.gene_aligned import _create_band_mask
+    mask = _create_band_mask(6, k=1, device=torch.device("cpu"))
+    # Expected: diagonal + 1 off-diagonal are False, rest True
+    assert mask.shape == (6, 6)
+    assert mask[0, 0] == False
+    assert mask[0, 1] == False
+    assert mask[0, 2] == True
+    assert mask[5, 5] == False
+    assert mask[5, 4] == False
+    assert mask[5, 3] == True
 
 def test_gene_aligned_token_concat():
-    model = GeneAlignedTokenConcat(num_genes=10, dim=16, n_classes=2)
-    view_a = torch.randn(4, 10)
-    view_b = torch.randn(4, 10)
+    model = GeneAlignedTokenConcat(num_genes=100, dim=16, n_classes=2)
+    view_a = torch.randn(16, 100)
+    view_b = torch.randn(16, 100)
     
     out = model(view_a, view_b)
-    assert out.logits.shape == (4, 2)
-    assert out.fused_embedding.shape == (4, 32)
-    
-    # Ablation
-    out_ablate = model(view_a, view_b, ablate_views=[VIEW_A])
-    assert out_ablate.logits.shape == (4, 2)
+    assert out.logits.shape == (16, 2)
+    assert out.fused_embedding.shape == (16, 32)
+    assert out.branch_embeddings["view_a"].shape == (16, 16)
+    assert out.branch_embeddings["view_b"].shape == (16, 16)
 
 def test_gene_aligned_cross_attention():
-    mask = torch.ones(10, 10, dtype=torch.bool)
-    # allow diagonal
-    for i in range(10):
-        mask[i, i] = False
-        
-    model = GeneAlignedCrossAttention(num_genes=10, dim=16, heads=4, n_classes=2, attn_mask=mask)
-    view_a = torch.randn(4, 10)
-    view_b = torch.randn(4, 10)
+    model = GeneAlignedCrossAttention(num_genes=100, dim=16, heads=4, n_classes=2, k_nearest=5)
+    view_a = torch.randn(16, 100)
+    view_b = torch.randn(16, 100)
     
     out = model(view_a, view_b, need_weights=True)
-    assert out.logits.shape == (4, 2)
-    assert out.fused_embedding.shape == (4, 32)
-    assert model.attention_weights is not None
-    assert model.attention_weights.shape == (4, 10, 10)
+    assert out.logits.shape == (16, 2)
+    assert out.fused_embedding.shape == (16, 32)
+    assert out.branch_embeddings["view_a"].shape == (16, 16)
+    assert out.branch_embeddings["view_b"].shape == (16, 16)
+    assert model.attention_weights.shape == (16, 100, 100)
     
-    # Check mask was applied (weights should be exactly 0 where mask is True, 
-    # except softmax behavior might make it small, but PyTorch puts -inf for True mask, so weights should be 0)
-    # Check off-diagonal
-    assert torch.allclose(model.attention_weights[:, 0, 1], torch.tensor(0.0))
+    # Check that attention mask is respected (attention weights should be 0 where mask is True)
+    # The mask prevents attention outside the band.
+    # We can check that weights are ~0 for distance > 5
+    weights = model.attention_weights[0].detach() # (100, 100)
+    
+    # Due to softmax, masked positions might be exactly 0 (or very close)
+    assert torch.allclose(weights[0, 10], torch.tensor(0.0), atol=1e-5)
