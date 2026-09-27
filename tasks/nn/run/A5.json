@@ -1,5 +1,0 @@
-{
-  "argv": ["scripts/run_A5.py"],
-  "background": true,
-  "timeout_min": 60
-}
