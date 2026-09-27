@@ -1,3 +1,4 @@
 N21 BLOCKED:upstream N10 — N10=BLOCKED:lane_stalled; required scripts/run_nn_v2_comparison.py and docs/nn_v2/ladder_summary.json absent on every lane, so no trained R3_ca/R3_tc arms to rerun and no CA baseline to compare; acceptance also needs N13 I1/I3/I4 (N13=TODO, itself downstream of N10). N21 section has no fallback for a blocked upstream (decision_tree G2), so no gene_aligned.py / gene_activity_results.json were written.
 - 2026-09-25T02:26Z N21 step 1: wrote src/p22/models/gene_aligned.py and tests/test_nn_gene_aligned.py. N21 stays TODO; next step is the real run.
 - 2026-09-26T21:45Z N21 step 1: rewrote src/p22/models/gene_aligned.py and tests/test_nn_gene_aligned.py. N21 stays TODO; next step is the real run.
+- 2026-09-26T21:50Z N21 step 2: formulated scripts/run_nn_v2_gene_activity.py, verified the tests passed locally, and wrote the background run request in tasks/nn/run/N21.json. N21 stays TODO while the driver runs it.
