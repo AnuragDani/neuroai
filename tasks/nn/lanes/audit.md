@@ -8,3 +8,4 @@ Requested run of scripts/test_dosage.py to debug AUROC inversion.
 - 2026-09-26T17:24Z A4 DONE. Edited scripts/summarize_nn_v2.py to calculate and add mean AUROC, log-loss, Brier score per arm, as well as mean per-fold balanced accuracy. Added a note to LADDER.md about the pooled balanced-accuracy artefact. Wrote docs/nn_v2/AUDIT.md with root cause and fixes.
 Requested full ladder run for A5 (reports/generated/nn_20260923/ladder_v2).
 - 2026-09-27T04:00Z A5: Requested background run to execute the fixed ladder pipeline.
+- 2026-09-27T04:26Z A5: Session resumed. Verified that the bug causing the `AttributeError` is fixed and the AUROC inversion bug was already fixed by correcting `prepare_nn_fold`. Yielding control so the driver can execute `A5.json`.

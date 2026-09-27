@@ -103,7 +103,7 @@ def worker_task(
                 break
         if fold_regions is None:
             raise ValueError(f"Could not find regions for repeat {repeat} fold {fold}")
-        region_rows = region_indices(inputs.regions, fold_regions)
+        region_rows = region_indices(inputs, fold_regions)
         
         fold_arrays = prepare_nn_fold(
             inputs, 
