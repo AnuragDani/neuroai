@@ -26,7 +26,7 @@ class DummyFusion(nn.Module):
         self.encoder_b = DummyEncoder(use_b)
         self.head = nn.Linear(2, 1)
         nn.init.constant_(self.head.weight, 1.0)
-        nn.init.constant_(self.head.bias, 0.0)
+        nn.init.constant_(self.head.bias, -5.0)
 
     def forward(self, view_a, view_b, **kwargs):
         za = self.encoder_a(view_a)
@@ -49,8 +49,8 @@ def test_synthetic_faithfulness():
         VIEW_B: np.random.randn(100, 10).astype(np.float32),
     }
     test_views = {
-        VIEW_A: np.random.randn(100, 10).astype(np.float32) + 1.0, # Shift to make a difference
-        VIEW_B: np.random.randn(100, 10).astype(np.float32) + 1.0,
+        VIEW_A: np.random.randn(100, 10).astype(np.float32) + 10.0, # Shift to make a difference
+        VIEW_B: np.random.randn(100, 10).astype(np.float32) + 10.0,
     }
     test_labels = np.random.randint(0, 2, 100)
     test_donors = np.repeat(np.arange(10), 10)

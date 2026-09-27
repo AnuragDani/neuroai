@@ -352,7 +352,7 @@ def main():
     
     # Ladder models
     for repeat, fold, train_rows, holdout_rows in iter_repeated_stratified_group_folds(
-        inputs.metadata["donor_id"].values, inputs.metadata["label"].values,
+        inputs.metadata["donor_id"].values, inputs.metadata["disease_status"].values,
         cfg["n_repeats"], cfg["n_folds"], cfg["split_seed"]
     ):
         region_rows = inputs.region_indices(cfg["region_set_sha256"])

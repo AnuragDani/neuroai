@@ -13,3 +13,4 @@
   No Python written (real-data run infeasible; harness would be unverifiable dead code).
 - Wrote scripts/run_nn_v2_faithfulness.py and requested driver to run it for N13
 - Fixed load_nn_inputs union_bed argument bug and re-requested N13 run.
+- 2026-09-27T04:57Z N13: Fixed KeyError label -> disease_status in run_nn_v2_faithfulness.py and fixed test_nn_faithfulness.py. Wrote tasks/nn/run/N13.json to request background run for N13.
