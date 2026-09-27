@@ -49,3 +49,7 @@ Exported per-cell logits and MIL attention for R1_ca/R3_ca/R3_tc/R4_ca from ladd
 ## Cell-state spectrum (N16)
 
 Donor-mean R3_ca scores from the accepted N15 export: **SPECTRUM_NULL** (9 eligible types; no Holm-significant DS−CON difference). Support-floor exclusions include NEU_RELN/NEU_low/OPC (single-arm cell counts). Chr21-excluded score compare `NOT_NEEDED` (export deferred). Interpret-lane `SPECTRUM_LOCALIZED` from buggy/mixed-arm scores is superseded. Evidence: `docs/nn_v2/spectrum.json`, `docs/nn_v2/SPECTRUM.md`.
+
+## Routing / attention (N17)
+
+Per-cell-type descriptive readouts from ladder_v2 fold models (75 folds: R3_gated / R3_ca / R4_ca). All three readouts tagged **NOT_SHOWN_USED** because mapped N13 interventions I4 (CA / program-CA attention knockout) and I6 (gated route clamps) have Δ log-loss CIs that include 0. N13 `ATAC_USED` (I1) does not authorize attention/routing claims. Evidence: `docs/nn_v2/routing_attention.json`, `docs/nn_v2/ROUTING_ATTENTION.md`.

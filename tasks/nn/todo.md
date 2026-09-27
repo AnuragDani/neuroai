@@ -31,7 +31,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N14 | Nuisance-probe diagnostics | N10 | S | DONE:docs/nn_v2/nuisance_probe.json; R2_REJECTED; PROBE_DROP_INSUFFICIENT |
 | N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; 120k rows; 5/arm asserted; chr21 export DEFERRED |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | DONE:docs/nn_v2/spectrum.json; SPECTRUM_NULL; ladder_v2 R3_ca; 9 eligible |
-| N17 | Routing/attention description by cell type | N15,N13 | S | TODO |
+| N17 | Routing/attention description by cell type | N15,N13 | S | DONE:docs/nn_v2/routing_attention.json; all NOT_SHOWN_USED (I4/I6) |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-27T22:41Z N17 DONE (S8). Rewrote `scripts/describe_nn_v2_attention.py` for absolute ladder_v2 (idf_sha256 check; n_library=37/n_batch=12; R4 via `_ProgramFusionAdapter.inner`). Ran 75 folds (25× R3_gated/R3_ca/R4_ca). `docs/nn_v2/routing_attention.json` + `ROUTING_ATTENTION.md`: all three readouts `NOT_SHOWN_USED` (mapped N13 I4/I6 CIs include 0; N13 DONE with ATAC_USED does not imply attention use). Params match frozen widths (R3_ca=384250). `tests/test_nn_attention.py` 3 passed. `gnhf/check_evidence.py` OK. Next: optional N21 or N22 (N21 may BLOCKED if geneact train empty).
 - 2026-09-27T22:30Z N16 DONE (S8). Pointed `scripts/analyze_nn_v2_spectrum.py` at absolute ladder_v2 N15 export; filter `--arm R3_ca`; map `log1p_nCount_*` depth aliases; record source sha256. `docs/nn_v2/spectrum.json` + `SPECTRUM.md`: `SPECTRUM_NULL` (9 eligible; no Holm-sig DS−CON). Hash matches `cell_scores_export.json`. Chr21-excluded compare `NOT_NEEDED` (export DEFERRED). Interpret-lane `SPECTRUM_LOCALIZED` rejected (buggy/mixed-arm). `tests/test_nn_spectrum.py` 7 passed. `gnhf/check_evidence.py` OK. Next: N17/N21 then N22.
 - 2026-09-27T22:25Z N15 DONE (S7). Rewrote `scripts/export_nn_v2_cell_scores.py` for absolute ladder_v2 (idf_sha256 check; n_library=37/n_batch=12; R4 chr21 dosage before program replace). Exported R1_ca/R3_ca/R3_tc/R4_ca (100 folds) → `…/spectrum/cell_scores.csv.gz` (120000 rows, every cell×arm n_repeats=5) + `docs/nn_v2/donor_celltype_scores.csv.gz` (1800) + `cell_scores_export.json` / `CELL_SCORES.md`. Params match frozen widths (R3_ca=384250). `tests/test_nn_export.py` 3 passed. Chr21-excluded score export DEFERRED. Next: N21 then S8 (N16).
 - 2026-09-27T22:05Z N14 DONE (S7). Added `src/p22/eval/nuisance_probe.py` + `scripts/run_nn_v2_nuisance_probe.py` + probe helper test in `tests/test_nn_nuisance.py`. Ran 150 fold-arm rows (25× R1/R2/R3 CA+TC) against absolute `…/ladder_v2`. `docs/nn_v2/nuisance_probe.json` + `NUISANCE_PROBE.md`: `R2_REJECTED` / `PROBE_DROP_INSUFFICIENT` (CA/TC batch probe ~0.05–0.06, drop < 5 points; no `ADVERSARY_ERASES_SIGNAL`). Library probe unscorable 0/150 under donor hold-out. `gnhf/check_evidence.py` OK. Next: N15/N21.
@@ -600,7 +601,7 @@ annotation). Each readout tagged `USED_BY_MODEL` or `NOT_SHOWN_USED` using N13 r
 **Output:** `docs/nn_v2/ROUTING_ATTENTION.md` + `routing_attention.json`.
 
 **Acceptance criteria:**
-- [ ] Every readout carries its N13 tag; no biological interpretation of untagged readouts.
+- [x] Every readout carries its N13 tag; no biological interpretation of untagged readouts.
 
 **Files:** `scripts/describe_nn_v2_attention.py`.
 
