@@ -33,3 +33,7 @@ Holding the accepted ladder_v2 folds fixed and rerunning R3_ca, R3_tc, logreg_rn
 ## Init/sampling-seed sensitivity (N12)
 
 Fixed-protocol seed rerun under ladder_v2 widths (`seeds_v2/`, R3_ca params 384250): model-seed spread 0.020, sampling-seed spread 0.040. Outcome `B_NULL` → report spread only (`SPREAD_ONLY`); not `SAMPLING_SENSITIVE`. See `docs/nn_v2/seed_sensitivity.json` and `docs/nn_v2/ROBUSTNESS.md`.
+
+## Faithfulness interventions (N13)
+
+Held-out interventions on ladder_v2 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC Δ = 0 exact. Tags `CA_PAIRING_UNUSED` (I3 CI includes 0) and `ATAC_USED` (I1 log-loss CI excludes 0 on R3_tc and R3_gated). Attention knockout (I4), uniform MIL (I5), and gate clamps (I6) do not exclude 0. Planted PC not run (no saved S4/S5 models). Details: `docs/nn_v2/faithfulness.json`, `docs/nn_v2/FAITHFULNESS.md`.

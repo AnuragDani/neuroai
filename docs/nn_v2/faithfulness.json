@@ -1,0 +1,464 @@
+{
+  "task": "N13",
+  "title": "Held-out faithfulness interventions",
+  "status": "DONE",
+  "source_run": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2",
+  "arms": [
+    "R3_ca",
+    "R3_tc",
+    "R3_gated",
+    "R4_ca"
+  ],
+  "smoke": false,
+  "i3_draws": 20,
+  "bootstrap_draws": 1000,
+  "bootstrap_seed": 22,
+  "decision": {
+    "tags": [
+      "CA_PAIRING_UNUSED",
+      "ATAC_USED"
+    ],
+    "nc_exact_zero": true,
+    "pc_status": "N/A",
+    "pc_reason": "No saved planted S4/S5 \u03b4=1.0 fold models under ladder_v2; PC not refit in this run. I3 tags are reported but pairing claims remain provisional without PC sensitivity."
+  },
+  "summary": [
+    {
+      "intervention": "I1",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.06795333333333334,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.006551774087551882,
+      "ll_drop_ci": [
+        -0.006624372597889336,
+        0.020806714704928637
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I1",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.11346,
+      "ba_drop": -0.06391316013194041,
+      "ba_drop_ci": [
+        -0.1696428571428571,
+        0.0
+      ],
+      "ll_drop": 0.011096040777599295,
+      "ll_drop_ci": [
+        0.00025991001413407946,
+        0.02424441319570782
+      ],
+      "used_by_model": true
+    },
+    {
+      "intervention": "I1",
+      "arm": "R3_tc",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.05942,
+      "ba_drop": -0.035544254335276006,
+      "ba_drop_ci": [
+        -0.14999999999999997,
+        0.0714285714285714
+      ],
+      "ll_drop": 0.014232011835163857,
+      "ll_drop_ci": [
+        0.0030406205903345256,
+        0.027897646017718075
+      ],
+      "used_by_model": true
+    },
+    {
+      "intervention": "I1",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 2.3415603096428316e-06,
+      "ll_drop_ci": [
+        -6.077335037599218e-06,
+        1.1175752111333702e-05
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I2",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.24819333333333332,
+      "ba_drop": 0.06134544935946033,
+      "ba_drop_ci": [
+        -0.12956101190476188,
+        0.2367187499999999
+      ],
+      "ll_drop": 0.044648958706667415,
+      "ll_drop_ci": [
+        0.006755750190690868,
+        0.0844554153291415
+      ],
+      "used_by_model": true
+    },
+    {
+      "intervention": "I2",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.23826666666666668,
+      "ba_drop": 0.001483186820171948,
+      "ba_drop_ci": [
+        -0.17473940533151058,
+        0.17199488491048584
+      ],
+      "ll_drop": 0.024096497744404838,
+      "ll_drop_ci": [
+        -0.023214155939765505,
+        0.07144416485309962
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I2",
+      "arm": "R3_tc",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.15254666666666666,
+      "ba_drop": -0.032510767664549294,
+      "ba_drop_ci": [
+        -0.21062030075187974,
+        0.15181051587301586
+      ],
+      "ll_drop": 0.04105970766885943,
+      "ll_drop_ci": [
+        0.003669747332492993,
+        0.07588669960888828
+      ],
+      "used_by_model": true
+    },
+    {
+      "intervention": "I2",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -1.771323498665378e-06,
+      "ll_drop_ci": [
+        -3.312558544191491e-05,
+        2.844852165134192e-05
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I3",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -0.00020951145409567296,
+      "ll_drop_ci": [
+        -0.000645308595315311,
+        0.0001374067858500831
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I3",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -2.479373119090855e-08,
+      "ll_drop_ci": [
+        -6.789701791856395e-05,
+        7.238280539605119e-05
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I3",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -2.982625040293119e-08,
+      "ll_drop_ci": [
+        -7.19379961294786e-08,
+        6.7422474658851405e-09
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I4",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.018273333333333332,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -0.0009452005049117516,
+      "ll_drop_ci": [
+        -0.0021637824675395656,
+        0.00017891362661078244
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I4",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 1.932794917836711e-06,
+      "ll_drop_ci": [
+        -3.3970339337191513e-06,
+        7.877422209953688e-06
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": -0.10558158571090072,
+      "ba_drop_ci": [
+        -0.3055555555555556,
+        0.1028893849206347
+      ],
+      "ll_drop": 0.029413891714980517,
+      "ll_drop_ci": [
+        -0.009611434624097965,
+        0.07128161680487537
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": -0.06953390685177434,
+      "ba_drop_ci": [
+        -0.2369617224880383,
+        0.10639140271493203
+      ],
+      "ll_drop": 0.012529638110243551,
+      "ll_drop_ci": [
+        -0.01761042795268391,
+        0.04031404264790424
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R3_tc",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": -0.0023802641668168615,
+      "ba_drop_ci": [
+        -0.20089445915926174,
+        0.18061755952380948
+      ],
+      "ll_drop": 0.020486471079147032,
+      "ll_drop_ci": [
+        -0.003659173382478978,
+        0.04696377749530584
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 3.0873082166271715e-07,
+      "ll_drop_ci": [
+        -3.556081156763646e-08,
+        7.116712743115982e-07
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I6_01",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.25998,
+      "ba_drop": 0.001483186820171948,
+      "ba_drop_ci": [
+        -0.17473940533151058,
+        0.17199488491048584
+      ],
+      "ll_drop": 0.008469723493712243,
+      "ll_drop_ci": [
+        -0.03542721267174076,
+        0.05389413978700199
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I6_10",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.10426666666666666,
+      "ba_drop": -0.03282986262598845,
+      "ba_drop_ci": [
+        -0.14999999999999997,
+        0.08333333333333337
+      ],
+      "ll_drop": -0.00034628260579608707,
+      "ll_drop_ci": [
+        -0.011064820294677863,
+        0.009641809352053108
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I6_55",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.027093333333333334,
+      "ba_drop": 0.03616654854003925,
+      "ba_drop_ci": [
+        -0.06666666666666665,
+        0.15084325396825393
+      ],
+      "ll_drop": 0.018558597236297523,
+      "ll_drop_ci": [
+        -0.0021858126174007257,
+        0.0384048842368472
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R3_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R3_gated",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R3_tc",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R4_ca",
+      "n_donors": 30,
+      "n_fold_rows": 25,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    }
+  ],
+  "acceptance": {
+    "nc_exact_zero": true,
+    "cells_filled_or_na": true,
+    "pc": "N/A"
+  }
+}

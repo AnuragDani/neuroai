@@ -1,0 +1,210 @@
+{
+  "task": "N13",
+  "title": "Held-out faithfulness interventions",
+  "status": "DONE",
+  "source_run": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2",
+  "arms": [
+    "R3_ca",
+    "R3_tc"
+  ],
+  "smoke": true,
+  "i3_draws": 5,
+  "bootstrap_draws": 200,
+  "bootstrap_seed": 22,
+  "decision": {
+    "tags": [
+      "CA_USES_PAIRING",
+      "ATAC_UNUSED"
+    ],
+    "nc_exact_zero": true,
+    "pc_status": "N/A",
+    "pc_reason": "No saved planted S4/S5 \u03b4=1.0 fold models under ladder_v2; PC not refit in this run. I3 tags are reported but pairing claims remain provisional without PC sensitivity."
+  },
+  "summary": [
+    {
+      "intervention": "I1",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.04483599353979597,
+      "ll_drop_ci": [
+        -0.022556415015722146,
+        0.11023651414478687
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I1",
+      "arm": "R3_tc",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.012790717891835151,
+      "ll_drop_ci": [
+        -0.014064089828227289,
+        0.03905495566882915
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I2",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.07840046916516225,
+      "ll_drop_ci": [
+        -0.007697781149290359,
+        0.16553127293782155
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I2",
+      "arm": "R3_tc",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0003333333333333333,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.04867187722947796,
+      "ll_drop_ci": [
+        -0.021797816140876933,
+        0.11949735988501742
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I3",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -6.694908061515682e-05,
+      "ll_drop_ci": [
+        -0.0001387368786083698,
+        -8.87414180827939e-06
+      ],
+      "used_by_model": true
+    },
+    {
+      "intervention": "I4",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": -0.0005515277731299911,
+      "ll_drop_ci": [
+        -0.0015809194469969424,
+        0.0006244751184187549
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.00038783560206178124,
+      "ll_drop_ci": [
+        -8.181465592580483e-05,
+        0.0009331679226319945
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "I5",
+      "arm": "R3_tc",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.000381618017741987,
+      "ll_drop_ci": [
+        -0.00030047021511129537,
+        0.0010575287207240881
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R3_ca",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    },
+    {
+      "intervention": "NC",
+      "arm": "R3_tc",
+      "n_donors": 6,
+      "n_fold_rows": 1,
+      "flip_rate": 0.0,
+      "ba_drop": 0.0,
+      "ba_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "ll_drop": 0.0,
+      "ll_drop_ci": [
+        0.0,
+        0.0
+      ],
+      "used_by_model": false
+    }
+  ],
+  "acceptance": {
+    "nc_exact_zero": true,
+    "cells_filled_or_na": true,
+    "pc": "N/A"
+  }
+}
