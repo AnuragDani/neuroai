@@ -45,3 +45,7 @@ Held-out within-disease embedding probes on R1/R2/R3 (CA and TC): **R2_REJECTED*
 ## Out-of-fold cell scores (N15)
 
 Exported per-cell logits and MIL attention for R1_ca/R3_ca/R3_tc/R4_ca from ladder_v2 fold models (100 folds; every cell appears exactly 5 times per arm before averaging). Compact donor×cell-type means in `docs/nn_v2/donor_celltype_scores.csv.gz`. Full table: `reports/generated/nn_20260923/spectrum/cell_scores.csv.gz`. Evidence: `docs/nn_v2/cell_scores_export.json`, `docs/nn_v2/CELL_SCORES.md`. Chr21-excluded score export deferred.
+
+## Cell-state spectrum (N16)
+
+Donor-mean R3_ca scores from the accepted N15 export: **SPECTRUM_NULL** (9 eligible types; no Holm-significant DS−CON difference). Support-floor exclusions include NEU_RELN/NEU_low/OPC (single-arm cell counts). Chr21-excluded score compare `NOT_NEEDED` (export deferred). Interpret-lane `SPECTRUM_LOCALIZED` from buggy/mixed-arm scores is superseded. Evidence: `docs/nn_v2/spectrum.json`, `docs/nn_v2/SPECTRUM.md`.

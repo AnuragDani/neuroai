@@ -116,3 +116,16 @@ def test_no_eligible_types_returns_not_estimable():
     payload = spec_mod.analyze_cells(cells, n_boot=50, n_perm=50, seed=1)
     assert payload["spectrum_call"] == "NOT_ESTIMABLE"
     assert payload["results"] == []
+
+
+def test_log1p_depth_aliases_enable_residualization():
+    cells = _synthetic_cells()
+    cells = cells.rename(
+        columns={
+            "log_nCount_RNA": "log1p_nCount_RNA",
+            "log_nCount_ATAC": "log1p_nCount_ATAC",
+        }
+    )
+    payload = spec_mod.analyze_cells(cells, n_boot=50, n_perm=100, seed=3)
+    assert payload["status"] == "estimated"
+    assert all(r.get("residualized") is not None for r in payload["results"])
