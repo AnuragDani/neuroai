@@ -27,9 +27,13 @@ def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21)
         protocol = json.load(f)
 
     # 1. Load inputs
-    h5ad = "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
-    atac_npz = "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/gene_activity/counts/counts.npz"
-    union_bed_path = "configs/nn_gene_activity_2026-09-23.bed"
+    with open("configs/nn_inputs_2026-09-23.json") as f:
+        input_manifest = json.load(f)
+        
+    h5ad = input_manifest["inputs"]["h5ad"]["path"]
+    atac_npz = input_manifest["inputs"]["atac_tiebreak_counts"]["path"]
+    union_bed_path = input_manifest["inputs"]["tracked_union_bed"]["path"]
+    
     inputs = load_nn_inputs(
         h5ad, atac_npz,
         cap=protocol["sampling"]["cap_per_donor"],
@@ -70,7 +74,7 @@ def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21)
         logging.info(f"Processing repeat {split.repeat} fold {split.fold}")
         
         from p22.data.nn_inputs import region_indices
-        rs_path = "configs/nn_gene_activity_2026-09-23.json"
+        rs_path = protocol["representation"]["atac"]["region_set_config"]
         with open(rs_path) as f:
             rs_data = json.load(f)
         fold_regions = next(
@@ -82,7 +86,7 @@ def run_export(protocol_path, models_dir, out_cells, out_compact, exclude_chr21)
 
         fold_arrays = prepare_nn_fold(
             inputs, split.train_index, split.test_index, region_rows,
-            n_hvg=protocol["representation"]["n_hvg"],
+            n_hvg=protocol["representation"]["rna"]["n_hvg"],
             exclude_chr21=exclude_chr21
         )
         
