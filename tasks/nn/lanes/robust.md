@@ -14,3 +14,4 @@
 - 2026-09-24T23:07Z N12: Wrote scripts/run_n12.py to run the multiple seed combinations for model and sampling seed sensitivity. Created tasks/nn/run/N12.json to request background run.
 - 2026-09-24T23:10Z N12: Modified scripts/run_nn_v2_comparison.py to support --seed-sensitivity (which spawns subprocesses for all seed combinations and summarizes them). Wrote tasks/nn/run/N12.json to request this background run.
 N12 run successful, updated status to DONE.
+- Requested N11 chr21-excluded sensitivity run.
