@@ -36,10 +36,12 @@ def main():
     # 1. Load inputs
     h5ad = "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
     atac_npz = "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz"
+    union_bed_path = "configs/atac_tiebreak_union_2026-09-21.bed"
     inputs = load_nn_inputs(
         h5ad, atac_npz,
-        cap=protocol["data"]["cell_cap"],
-        seed=protocol["data"]["sampling_seed"]
+        cap=protocol["sampling"]["cap_per_donor"],
+        seed=protocol["sampling"]["seed"],
+        union_bed=union_bed_path
     )
 
     donors = inputs.metadata["donor_id"].to_numpy()
@@ -83,16 +85,14 @@ def main():
     for split in splits:
         logging.info(f"Processing repeat {split.repeat} fold {split.fold}")
         
-        with open("configs/atac_tiebreak_union_2026-09-21.bed") as f:
-            union_ids = [line.split()[3] for line in f if line.strip()]
+        from p22.data.nn_inputs import region_indices
         rs_path = f"reports/generated/atac_tiebreak_sensitivity_20260921/region_sets_sha256.json"
         with open(rs_path) as f:
             rs_data = json.load(f)
         fold_rs_id = f"repeat{split.repeat}_fold{split.fold}"
         fold_regions = rs_data["sets"][fold_rs_id]
         
-        union_indices = {rid: i for i, rid in enumerate(union_ids)}
-        region_rows = np.array([union_indices[rid] for rid in fold_regions], dtype=np.int64)
+        region_rows = region_indices(inputs, fold_regions)
 
         fold_arrays = prepare_nn_fold(
             inputs, split.train_index, split.test_index, region_rows,
