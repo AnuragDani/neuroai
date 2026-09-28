@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), and N15 (`spectrum_v3` cell-score export) are done against `ladder_v3` (chr21-excluded scores now EXPORTED). N16–N17 still need `_v3` analysis/publish on the new export.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), N15 (`spectrum_v3` cell-score export), and N16 (`SPECTRUM_NULL` + chr21 `COMPARED`) are done against `ladder_v3`. N17 still needs `_v3` analysis/publish on the new export.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -61,7 +61,7 @@ Exported per-cell logits and MIL attention for R1_ca, R3_ca, R3_tc, R4_ca from l
 
 ## Cell-state spectrum (N16)
 
-Donor-mean R3_ca scores from the accepted N15 export: **SPECTRUM_NULL** (9 eligible types; no Holm-significant DS−CON difference). Support-floor exclusions include NEU_RELN/NEU_low/OPC (single-arm cell counts). Chr21-excluded score compare `NOT_NEEDED` (export deferred). Interpret-lane `SPECTRUM_LOCALIZED` from buggy/mixed-arm scores is superseded. Evidence: `docs/nn_v2/spectrum.json`, `docs/nn_v2/SPECTRUM.md`.
+Donor-mean R3_ca scores from the ladder_v3 N15 export (`spectrum_v3`): **SPECTRUM_NULL** (9 eligible types). Chr21-excluded score compare `COMPARED` (call `SPECTRUM_NULL`; agree=True). Evidence: `docs/nn_v2/spectrum.json`, `docs/nn_v2/SPECTRUM.md`.
 
 ## Routing / attention (N17)
 
