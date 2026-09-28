@@ -9,7 +9,7 @@ Start at [current status](../status.md). This index points to one entry per job;
 | What is NN-v2 protocol? | [Protocol freeze](nn_v2/PROTOCOL_FREEZE.md), [NN plan](../tasks/nn/plan.md) | Frozen scientific design |
 | What has NN-v2 produced? | [Ladder verifier](nn_v2/ladder_verification.json), [v4 stage plan](../tasks/nn/swarm/plan_v4_agy.md) | Gate result and remaining work; verifier PASS (`B_NULL`) |
 | How do I finish NN v2 with GNHF? | [Manual finish runbook](../tasks/nn/GNHF_FINISH_RUNBOOK.md) | Preflight, manual command, IF/ELSE completion rules; S6–S9 through N34 done (`DRAFT_V1_COMPLETE`) |
-| Where are NN-v2 written results? | [NN_V2_RESULTS_2026-09-23.md](nn_v2/NN_V2_RESULTS_2026-09-23.md), [PROFESSOR_NOTE_UNSENT.md](nn_v2/PROFESSOR_NOTE_UNSENT.md) | N22–N23: B_NULL + `NN_ASSIGNMENT_COMPLETE`; note unsent |
+| Where are NN-v2 written results? | [NN_V2_RESULTS_2026-09-23.md](nn_v2/NN_V2_RESULTS_2026-09-23.md), [PROFESSOR_NOTE_UNSENT.md](nn_v2/PROFESSOR_NOTE_UNSENT.md) | N22–N23 + P4: B_NULL on ladder_v3; Per-fold/V1–V4 + P2/P3 sections; note unsent |
 | Where is robustness evidence? | [chr21_excluded.json](nn_v2/chr21_excluded.json), [seed_sensitivity.json](nn_v2/seed_sensitivity.json), [ROBUSTNESS.md](nn_v2/ROBUSTNESS.md) | N11 DOSAGE_DOMINATED (chr21_excluded_v3); N12 SPREAD_ONLY (seeds_v3; model 0.073 / sampling 0.033) |
 | Where is faithfulness evidence? | [faithfulness.json](nn_v2/faithfulness.json), [FAITHFULNESS.md](nn_v2/FAITHFULNESS.md) | N13 on ladder_v3: NC=0; CA_PAIRING_UNUSED; ATAC_USED (I1 R3_tc); PC N/A |
 | Where is nuisance-probe evidence? | [nuisance_probe.json](nn_v2/nuisance_probe.json), [NUISANCE_PROBE.md](nn_v2/NUISANCE_PROBE.md) | N14 on ladder_v3: R2_REJECTED; PROBE_DROP_INSUFFICIENT; library unscorable |
