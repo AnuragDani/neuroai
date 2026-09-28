@@ -3,26 +3,28 @@ P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introductio
 Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
-Final label: DRAFT_V1_PARTIAL:N30-N34 (Discussion+Limitations rewritten for accepted ladder_v2 F4; Abstract/title still stale)
+Final label: DRAFT_V1_PARTIAL:N31-N34 (Abstract+title rewritten for accepted ladder_v2 F4)
 -->
 
-# RNA-linear sufficient? A donor-held-out benchmark of cross-modal attention on paired single-cell RNA+ATAC
+# Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
 
 ## Abstract
 
-Cross-modal attention is widely used to fuse paired single-cell RNA and ATAC measurements,
-but its donor-level benefit over simpler fusion is rarely tested with matched controls. We
-assembled a donor-held-out benchmark on thirty donors and ran a planted-signal ladder. The
-pre-declared real-data contrast proved not estimable because the comparison ladder did not
-complete, so we report it as untested rather than substitute a surrogate. In the planted
-benchmark no regime favoured cross-attention: at the null point the attention arm scored
-0.5 against a 0.5417 best non-attention baseline, when the signal was unambiguous every
-model recovered it with the attention arm at 0.9667 and concatenation logistic regression
-at 1.0, and parameter matching held relative error to 0.010993. A linear model on
-concatenated features was sufficient in thirteen of sixteen regimes, and cross-attention
-never exceeded the best non-attention comparator. We conclude that on linearly recoverable
-tasks cross-modal attention is not necessary, and we state the detectability limits that
-follow from a blocked real-data endpoint.
+Cross-modal attention is often used to fuse paired single-cell RNA and ATAC, but
+donor-level gain over matched non-attention fusion is rarely tested. We ran a
+donor-held-out ladder on thirty developmental-cortex donors with a planted-signal
+benchmark. The primary real-data contrast, R3 cross-attention minus matched
+token-concatenation donor balanced accuracy, is -0.0067 with a 0.95-level CI of
+[-0.0533, 0.0348]; the practical margin of 0.07 is unmet (outcome B_NULL). RNA
+logistic regression exceeds the attention arm (pooled BA 0.493 versus 0.373).
+Model-free chr21 dosage remains near ceiling (AUROC 0.998), and excluding chr21
+genes leaves disease-state BA near chance (DOSAGE_DOMINATED). Across sixteen
+planted regimes none favour cross-attention (thirteen LINEAR_SUFFICIENT, three
+MLP_FAVOURED); at the null point attention scores 0.5 against a 0.5417 best
+non-attention baseline. We conclude that, at this power and on this cohort, paired
+RNA+ATAC cross-attention shows no donor-level disease-state gain over RNA-linear
+or token-concat baselines, and we state the dosage and detectability limits that
+follow.
 
 ## Introduction
 
