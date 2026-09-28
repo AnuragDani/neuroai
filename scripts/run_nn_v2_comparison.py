@@ -103,8 +103,8 @@ def _make_synthetic_inputs(seed=42, protocol=None):
 
 
 def worker_task(
-    out_dir, arm_name, repeat, fold, train_rows, test_rows, inputs, protocol, 
-    exclude_chr21, model_seed, cfg
+    out_dir, arm_name, repeat, fold, train_rows, test_rows, inputs, protocol,
+    exclude_chr21, model_seed, cfg, force_include_chr21=False,
 ):
     try:
         torch.set_num_threads(1)
@@ -121,14 +121,16 @@ def worker_task(
         if fold_regions is None:
             raise ValueError(f"Could not find regions for repeat {repeat} fold {fold}")
         region_rows = region_indices(inputs, fold_regions)
-        
+
+        force_mask = inputs.chr21_gene_mask() if force_include_chr21 else None
         fold_arrays = prepare_nn_fold(
-            inputs, 
-            train_rows, 
-            test_rows, 
-            region_rows, 
+            inputs,
+            train_rows,
+            test_rows,
+            region_rows,
             n_hvg=protocol["representation"]["rna"].get("n_hvg", 2000),
-            exclude_chr21=exclude_chr21
+            exclude_chr21=exclude_chr21,
+            force_include_gene_mask=force_mask,
         )
         
         if arm_name.startswith("R4_"):
@@ -190,6 +192,19 @@ def worker_task(
         inner_train_pos = inner_train_idx
         inner_val_pos = inner_val_idx
         test_pos = np.arange(len(train_rows), len(train_rows) + len(test_rows))
+        # Sklearn controls discard val and have no hyperparameter search in this
+        # runner; fit them on the full outer train so hold-out donors are not
+        # wasted (positive-control and ladder control arms).
+        _CONTROL_FIT_FULL_TRAIN = {
+            "logreg_rna",
+            "logreg_concat",
+            "pseudobulk_rna_logistic",
+            "chr21_dosage",
+            "majority",
+        }
+        if arm_name in _CONTROL_FIT_FULL_TRAIN:
+            inner_train_pos = np.arange(len(train_rows))
+            inner_val_pos = inner_train_pos
         
         def _make_arm_data(pos):
             views = {}

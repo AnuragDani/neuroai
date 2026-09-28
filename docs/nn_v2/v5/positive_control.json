@@ -1,0 +1,134 @@
+{
+  "record_type": "v5_positive_control",
+  "repeat": 0,
+  "n_folds": 5,
+  "arms": [
+    "logreg_rna",
+    "R3_tc"
+  ],
+  "force_include": "all_chr21_genes_union_hvg",
+  "chr21_genes_in_hvg_default": 31,
+  "chr21_genes_in_hvg_default_per_fold": [
+    32,
+    33,
+    24,
+    33,
+    33
+  ],
+  "n_chr21_genes_total": 538,
+  "donor_auroc": 0.9244444444444445,
+  "per_fold_auroc": [
+    0.875,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "orientation_check": {
+    "spearman_rho": 0.6480533926585095,
+    "spearman_pvalue": 0.00010788152590670538,
+    "n_donors": 30,
+    "chr21_share_field": "chr21_fraction_pooled"
+  },
+  "primary_arm": "logreg_rna",
+  "per_arm": {
+    "logreg_rna": {
+      "donor_auroc": 0.9244444444444445,
+      "per_fold_auroc": [
+        0.875,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.875,
+          "n_features_rna": 2506
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2505
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2514
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2505
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2505
+        }
+      ],
+      "orientation_check": {
+        "spearman_rho": 0.6480533926585095,
+        "spearman_pvalue": 0.00010788152590670538,
+        "n_donors": 30,
+        "chr21_share_field": "chr21_fraction_pooled"
+      }
+    },
+    "R3_tc": {
+      "donor_auroc": 0.5422222222222222,
+      "per_fold_auroc": [
+        1.0,
+        1.0,
+        0.75,
+        0.5555555555555556,
+        0.8
+      ],
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2506
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "n_features_rna": 2505
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "n_features_rna": 2514
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.5555555555555556,
+          "n_features_rna": 2505
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "n_features_rna": 2505
+        }
+      ],
+      "orientation_check": {
+        "spearman_rho": 0.16974416017797553,
+        "spearman_pvalue": 0.3698503090079899,
+        "n_donors": 30,
+        "chr21_share_field": "chr21_fraction_pooled"
+      }
+    }
+  },
+  "run_dir": "reports/generated/nn_20260923/v5_positive_control",
+  "shared_path_fix": "sklearn controls now fit on the full outer-train split; previously worker_task passed only the inner-train third and _control_trainer discarded val, wasting one third of training donors"
+}

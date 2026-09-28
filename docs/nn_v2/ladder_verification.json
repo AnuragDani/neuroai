@@ -40,8 +40,8 @@
       ]
     },
     "R2_ca": {
-      "balanced_accuracy": 0.35333333333333333,
-      "auroc": 0.33777777777777784,
+      "balanced_accuracy": 0.3533333333333334,
+      "auroc": 0.3377777777777778,
       "parameter_count": [
         384250
       ]
@@ -61,15 +61,15 @@
       ]
     },
     "R3_gated": {
-      "balanced_accuracy": 0.4600000000000001,
-      "auroc": 0.4373333333333334,
+      "balanced_accuracy": 0.45999999999999996,
+      "auroc": 0.4373333333333333,
       "parameter_count": [
         314044
       ]
     },
     "R3_tc": {
       "balanced_accuracy": 0.38,
-      "auroc": 0.34577777777777774,
+      "auroc": 0.3457777777777778,
       "parameter_count": [
         380026
       ]
@@ -82,14 +82,14 @@
       ]
     },
     "R4_ca": {
-      "balanced_accuracy": 0.4866666666666667,
-      "auroc": 0.472,
+      "balanced_accuracy": 0.48666666666666664,
+      "auroc": 0.4720000000000001,
       "parameter_count": [
         29970
       ]
     },
     "R4_tc": {
-      "balanced_accuracy": 0.4666666666666666,
+      "balanced_accuracy": 0.4666666666666667,
       "auroc": 0.488,
       "parameter_count": [
         25746
@@ -103,21 +103,21 @@
       ]
     },
     "latent_pca_lsi_head": {
-      "balanced_accuracy": 0.3666666666666667,
+      "balanced_accuracy": 0.36666666666666664,
       "auroc": 0.36888888888888893,
       "parameter_count": [
         16836
       ]
     },
     "logreg_concat": {
-      "balanced_accuracy": 0.4733333333333333,
+      "balanced_accuracy": 0.47333333333333333,
       "auroc": 0.39555555555555555,
       "parameter_count": [
         0
       ]
     },
     "logreg_rna": {
-      "balanced_accuracy": 0.4933333333333333,
+      "balanced_accuracy": 0.49333333333333335,
       "auroc": 0.40888888888888886,
       "parameter_count": [
         0
@@ -125,13 +125,13 @@
     },
     "majority": {
       "balanced_accuracy": 0.3533333333333334,
-      "auroc": 0.3533333333333334,
+      "auroc": 0.35333333333333333,
       "parameter_count": [
         0
       ]
     },
     "pseudobulk_rna_logistic": {
-      "balanced_accuracy": 0.4466666666666666,
+      "balanced_accuracy": 0.44666666666666666,
       "auroc": 0.5235555555555556,
       "parameter_count": [
         0
