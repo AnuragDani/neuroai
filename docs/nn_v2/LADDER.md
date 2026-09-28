@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), and N14 (`nuisance_v3`) are done against `ladder_v3`. N15 `spectrum_v3` is RUNNING against `ladder_v3` (incl. chr21_excluded_v3 scores). N16–N17 still need `_v3` publish after N15 completes.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), and N15 (`spectrum_v3` cell-score export) are done against `ladder_v3` (chr21-excluded scores now EXPORTED). N16–N17 still need `_v3` analysis/publish on the new export.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -57,7 +57,7 @@ Held-out within-disease embedding probes on ladder_v3 R1/R2/R3 (CA and TC): **R2
 
 ## Out-of-fold cell scores (N15)
 
-Exported per-cell logits and MIL attention for R1_ca/R3_ca/R3_tc/R4_ca from ladder_v2 fold models (100 folds; every cell appears exactly 5 times per arm before averaging). Compact donor×cell-type means in `docs/nn_v2/donor_celltype_scores.csv.gz`. Full table: `reports/generated/nn_20260923/spectrum/cell_scores.csv.gz`. Evidence: `docs/nn_v2/cell_scores_export.json`, `docs/nn_v2/CELL_SCORES.md`. Chr21-excluded score export deferred.
+Exported per-cell logits and MIL attention for R1_ca, R3_ca, R3_tc, R4_ca from ladder_v3 fold models (100 folds; every cell appears exactly 5 times per arm before averaging). Compact donor×cell-type means in `docs/nn_v2/donor_celltype_scores.csv.gz`. Full table: `reports/generated/nn_20260923/spectrum_v3/cell_scores.csv.gz`. Evidence: `docs/nn_v2/cell_scores_export.json`, `docs/nn_v2/CELL_SCORES.md`. Chr21-excluded export: 60000 cell×arm rows from `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/chr21_excluded_v3`.
 
 ## Cell-state spectrum (N16)
 

@@ -29,7 +29,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N12 | Init-seed and sampling-seed sensitivity | N10 | S | DONE:docs/nn_v2/seed_sensitivity.json; seeds_v2; SPREAD_ONLY |
 | N13 | Held-out faithfulness interventions | N10 | M | DONE:faithfulness_v3→docs/nn_v2/faithfulness.json (ladder_v3); CA_PAIRING_UNUSED,ATAC_USED; NC=0; PC N/A |
 | N14 | Nuisance-probe diagnostics | N10 | S | DONE:docs/nn_v2/nuisance_probe.json bound to ladder_v3/nuisance_v3; R2_REJECTED; PROBE_DROP_INSUFFICIENT |
-| N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; 120k rows; 5/arm asserted; chr21 export DEFERRED |
+| N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; spectrum_v3 vs ladder_v3; 120k rows; 5/arm asserted; chr21_excluded_v3 60k EXPORTED |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | DONE:docs/nn_v2/spectrum.json; SPECTRUM_NULL; ladder_v2 R3_ca; 9 eligible |
 | N17 | Routing/attention description by cell type | N15,N13 | S | DONE:docs/nn_v2/routing_attention.json; all NOT_SHOWN_USED (I4/I6) |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-28T20:00Z P1/N15 DONE (v5). `spectrum_v3` EXIT:0 vs canonical `ladder_v3` + `chr21_excluded_v3`. Published `docs/nn_v2/cell_scores_export.json` (120000 cell×arm; five_appearances_asserted; chr21-excluded 60000 EXPORTED) + `CELL_SCORES.md` + promoted donor CSVs. `tests/test_nn_v5_cell_scores.py` 5 passed. Next: N16 spectrum analysis on ladder_v3 export.
 - 2026-09-28T09:50Z N34 DONE (S9). Full `pytest -q -x` → **1192 passed**. `paper/check_paper.py` 5/5 PASS (`--json` ok=true). `gnhf/check_evidence.py` OK on verifier `primary_recomputed.ci`. Ladder gate still `PASS`. Restored truncated `tasks/nn/status/N3`. Header `DRAFT_V1_COMPLETE`. Re-synced vault `paper-nn/draft.md`; updated vault `status.md`. MOM and `external_shared/2026-09-27` untouched. Claim limits (PC N/A; chr21 export DEFERRED; N21 secondary) remain. Next: independent Codex review / handoff.
 - 2026-09-28T11:25Z N33 DONE (S9). Copied allow-list to vault `paper-nn/`: `draft.md`, `figures/` (fig1–fig5 png+pdf), `refs_frozen.bib`, `claims.csv`, `self_review.md`; all sha256 matched repo. Replaced stale buggy-lane vault draft (`DRAFT_V1_COMPLETE` / “ladder never ran”). MOM and `external_shared/2026-09-27` untouched; vault `status.md` deferred to N34. Header `DRAFT_V1_PARTIAL:N34`. Next: N34 final verification.
 - 2026-09-28T11:10Z N32 DONE (S9). Wrote `paper/self_review.md` (8 reviewer objections). 7/8 resolved by citing Methods/Results/Discussion/Limitations; age confound not previously stated → added Limitations sentence (developmental stage recorded but not residualized/probed beyond library/batch/QC adversary). No new experiment. Header `DRAFT_V1_PARTIAL:N33-N34`. `python paper/check_paper.py` re-run after edit. Next: N33 vault copy.
