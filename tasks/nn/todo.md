@@ -31,7 +31,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N14 | Nuisance-probe diagnostics | N10 | S | DONE:docs/nn_v2/nuisance_probe.json bound to ladder_v3/nuisance_v3; R2_REJECTED; PROBE_DROP_INSUFFICIENT |
 | N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; spectrum_v3 vs ladder_v3; 120k rows; 5/arm asserted; chr21_excluded_v3 60k EXPORTED |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | DONE:docs/nn_v2/spectrum.json; SPECTRUM_NULL; ladder_v3 R3_ca; 9 eligible; chr21 COMPARED |
-| N17 | Routing/attention description by cell type | N15,N13 | S | RUNNING:90021:reports/generated/nn_20260923/logs/n17_routing_v3.log |
+| N17 | Routing/attention description by cell type | N15,N13 | S | DONE:docs/nn_v2/routing_attention.json; routing_v3 folds_used=75; all tags NOT_SHOWN_USED; source=ladder_v3 |
 | N18 | Fix retry-budget accounting defect | N0 | XS | DONE:Retry(Budget(raw)) composition; 15 passed tests/test_quantify_development_atac.py; ruff clean |
 | N19 | Gene-activity BED + transfer estimate | N18 | S | DONE:configs/nn_gene_activity_2026-09-23.bed+.json; 548 genes, estimate 3493593088<=3.5e9, estimator validation rel_err 0.0<=1%; 30 tests pass, ruff clean |
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-28T20:35Z P1/N17 DONE (v5). `routing_v3` EXIT:0 vs canonical `ladder_v3`; published `docs/nn_v2/routing_attention.json` + `ROUTING_ATTENTION.md` (folds_used=75; all three readout tags `NOT_SHOWN_USED`). P1 complete (N11–N17 on ladder_v3). `tests/test_nn_v5_routing.py` 5 passed. Next: P2 planted gene-aligned regime.
 - 2026-09-28T20:06Z P1/N17 RUNNING (v5). `routing_v3` pid 90021 (tmux `n17_routing`) vs canonical `ladder_v3`; smoke folds_used=3, all tags `NOT_SHOWN_USED` from N13 I4/I6. Wrapper `scripts/nn_v5_routing.py` + `tests/test_nn_v5_routing.py` (5 passed). Next: publish when EXIT:0.
 - 2026-09-28T20:02Z P1/N16 DONE (v5). `spectrum_v3` R3_ca on ladder_v3 → `docs/nn_v2/spectrum.json` + `SPECTRUM.md`: `SPECTRUM_NULL` (9 eligible; no Holm-sig). Chr21-excluded compare `COMPARED` (also `SPECTRUM_NULL`, agree=True). `tests/test_nn_v5_spectrum.py` 5 passed. Next: N17 routing/attention on ladder_v3.
 - 2026-09-28T20:00Z P1/N15 DONE (v5). `spectrum_v3` EXIT:0 vs canonical `ladder_v3` + `chr21_excluded_v3`. Published `docs/nn_v2/cell_scores_export.json` (120000 cell×arm; five_appearances_asserted; chr21-excluded 60000 EXPORTED) + `CELL_SCORES.md` + promoted donor CSVs. `tests/test_nn_v5_cell_scores.py` 5 passed. Next: N16 spectrum analysis on ladder_v3 export.

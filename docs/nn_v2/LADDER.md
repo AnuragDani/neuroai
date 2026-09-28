@@ -65,7 +65,7 @@ Donor-mean R3_ca scores from the ladder_v3 N15 export (`spectrum_v3`): **SPECTRU
 
 ## Routing / attention (N17)
 
-Per-cell-type descriptive readouts from ladder_v2 fold models (75 folds: R3_gated / R3_ca / R4_ca). All three readouts tagged **NOT_SHOWN_USED** because mapped N13 interventions I4 (CA / program-CA attention knockout) and I6 (gated route clamps) have Δ log-loss CIs that include 0. N13 `ATAC_USED` (I1) does not authorize attention/routing claims. Evidence: `docs/nn_v2/routing_attention.json`, `docs/nn_v2/ROUTING_ATTENTION.md`.
+Per-cell-type descriptive readouts from ladder_v3 fold models (75 folds: R3_gated / R3_ca / R4_ca). All three readouts tagged **NOT_SHOWN_USED** because mapped N13 interventions I4 (CA / program-CA attention knockout) and I6 (gated route clamps) have Δ log-loss CIs that include 0. N13 `ATAC_USED` (I1) does not authorize attention/routing claims. Evidence: `docs/nn_v2/routing_attention.json`, `docs/nn_v2/ROUTING_ATTENTION.md`.
 
 ## Gene-activity secondary ladder (N21)
 

@@ -1,6 +1,6 @@
 # Routing and attention (N17)
 
-Source models: `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v2` (accepted ladder_v2; not copied into finish-base).
+Source models: `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v3` (canonical ladder_v3; not copied into finish-base).
 
 **N13 status:** `DONE` (decision tags: CA_PAIRING_UNUSED, ATAC_USED).
 
@@ -14,21 +14,21 @@ Descriptive readouts only. An attention/gate readout may be described as `USED_B
 
 | Cell type | R3_gated RNA | R3_gated ATAC | R3_gated tag | R3_ca entropy | R3_ca tag | R4_ca tag |
 |---|---|---|---|---|---|---|
-| AST | 0.574 | 0.426 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| IPC | 0.544 | 0.456 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| IPC_prol | 0.538 | 0.462 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| MIC | 0.718 | 0.282 | `NOT_SHOWN_USED` | 2.044 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_CALB2 | 0.564 | 0.436 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_CUX2 | 0.549 | 0.451 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_RELN | 0.585 | 0.415 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_RORB | 0.587 | 0.413 | `NOT_SHOWN_USED` | 2.077 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_SST | 0.568 | 0.432 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_TLE4 | 0.574 | 0.426 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| NEU_low | 0.565 | 0.435 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| OPC | 0.581 | 0.419 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| RG | 0.549 | 0.451 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| RG_prol | 0.538 | 0.462 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
-| VASC | 0.597 | 0.403 | `NOT_SHOWN_USED` | 2.077 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| AST | 0.551 | 0.449 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| IPC | 0.519 | 0.481 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| IPC_prol | 0.517 | 0.483 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| MIC | 0.668 | 0.332 | `NOT_SHOWN_USED` | 2.066 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_CALB2 | 0.538 | 0.462 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_CUX2 | 0.522 | 0.478 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_RELN | 0.561 | 0.439 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_RORB | 0.556 | 0.444 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_SST | 0.538 | 0.462 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_TLE4 | 0.552 | 0.448 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| NEU_low | 0.544 | 0.456 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| OPC | 0.552 | 0.448 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| RG | 0.528 | 0.472 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| RG_prol | 0.519 | 0.481 | `NOT_SHOWN_USED` | 2.079 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
+| VASC | 0.567 | 0.433 | `NOT_SHOWN_USED` | 2.078 | `NOT_SHOWN_USED` | `NOT_SHOWN_USED` |
 
 ## R4_ca program-module attention
 
