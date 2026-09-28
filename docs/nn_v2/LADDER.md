@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 rerun against `ladder_v3` is done (`chr21_excluded_v3`). N12–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
+N11 (`chr21_excluded_v3`) and N12 (`seeds_v3`) are done against `ladder_v3`. N13–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -45,7 +45,7 @@ Holding the canonical `ladder_v3` folds fixed and rerunning R3_ca, R3_tc, logreg
 
 ## Init/sampling-seed sensitivity (N12)
 
-Fixed-protocol seed rerun under ladder_v2 widths (`seeds_v2/`, R3_ca params 384250): model-seed spread 0.020, sampling-seed spread 0.040. Outcome `B_NULL` → report spread only (`SPREAD_ONLY`); not `SAMPLING_SENSITIVE`. See `docs/nn_v2/seed_sensitivity.json` and `docs/nn_v2/ROBUSTNESS.md`.
+Fixed-protocol seed rerun under ladder_v3 widths (`seeds_v3/`, R3_ca params 384250; m_0_s_22 reuses ladder_v3): model-seed spread 0.073, sampling-seed spread 0.033. Outcome `B_NULL` → report spread only (`SPREAD_ONLY`); not `SAMPLING_SENSITIVE`. See `docs/nn_v2/seed_sensitivity.json` and `docs/nn_v2/ROBUSTNESS.md`.
 
 ## Faithfulness interventions (N13)
 
