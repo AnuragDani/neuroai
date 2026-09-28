@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`) and N12 (`seeds_v3`) are done against `ladder_v3`. N13–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), and N13 (`faithfulness_v3`) are done against `ladder_v3`. N14–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -49,7 +49,7 @@ Fixed-protocol seed rerun under ladder_v3 widths (`seeds_v3/`, R3_ca params 3842
 
 ## Faithfulness interventions (N13)
 
-Held-out interventions on ladder_v2 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC Δ = 0 exact. Tags `CA_PAIRING_UNUSED` (I3 CI includes 0) and `ATAC_USED` (I1 log-loss CI excludes 0 on R3_tc and R3_gated). Attention knockout (I4), uniform MIL (I5), and gate clamps (I6) do not exclude 0. Planted PC not run (no saved S4/S5 models). Details: `docs/nn_v2/faithfulness.json`, `docs/nn_v2/FAITHFULNESS.md`.
+Held-out interventions on ladder_v3 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC Δ = 0 exact. Tags `CA_PAIRING_UNUSED`, `ATAC_USED`. Attention knockout (I4), uniform MIL (I5), and gate clamps (I6) CIs that include 0 are not claimed as used. Planted PC not run (no saved S4/S5 models under ladder_v3). Details: `docs/nn_v2/faithfulness.json`, `docs/nn_v2/FAITHFULNESS.md`.
 
 ## Nuisance-probe diagnostics (N14)
 

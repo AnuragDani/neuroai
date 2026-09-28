@@ -27,7 +27,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N10 | Real DS ladder run (R0–R4 + controls) | N9 | M | DONE:S6 gate PASS docs/nn_v2/ladder_verification.json; B_NULL; summary from ladder_v2 450/450 |
 | N11 | chr21-excluded sensitivity | N10 | S | DONE:docs/nn_v2/chr21_excluded.json; DOSAGE_DOMINATED vs ladder_v2 |
 | N12 | Init-seed and sampling-seed sensitivity | N10 | S | DONE:docs/nn_v2/seed_sensitivity.json; seeds_v2; SPREAD_ONLY |
-| N13 | Held-out faithfulness interventions | N10 | M | DONE:docs/nn_v2/faithfulness.json; CA_PAIRING_UNUSED,ATAC_USED; NC=0; PC N/A |
+| N13 | Held-out faithfulness interventions | N10 | M | DONE:faithfulness_v3→docs/nn_v2/faithfulness.json (ladder_v3); CA_PAIRING_UNUSED,ATAC_USED; NC=0; PC N/A |
 | N14 | Nuisance-probe diagnostics | N10 | S | DONE:docs/nn_v2/nuisance_probe.json; R2_REJECTED; PROBE_DROP_INSUFFICIENT |
 | N15 | Out-of-fold per-cell score export | N10 | S | DONE:docs/nn_v2/cell_scores_export.json; 120k rows; 5/arm asserted; chr21 export DEFERRED |
 | N16 | Cell-state spectrum analysis | N15,N11 | M | DONE:docs/nn_v2/spectrum.json; SPECTRUM_NULL; ladder_v2 R3_ca; 9 eligible |
