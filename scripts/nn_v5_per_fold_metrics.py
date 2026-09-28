@@ -23,8 +23,9 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-DEFAULT_RUN = "reports/generated/nn_20260923/ladder_v2"
+DEFAULT_RUN = "reports/generated/nn_20260923/ladder_v3"
 DEFAULT_OUT = Path("docs/nn_v2/v5")
+CANONICAL_POINTER = DEFAULT_OUT / "CANONICAL_LADDER.txt"
 
 
 def fold_metrics(
@@ -194,18 +195,26 @@ def write_outputs(
     return summary
 
 
+def resolve_run_dir(explicit: Path | None = None) -> Path:
+    """Prefer --run, else CANONICAL_LADDER.txt, else DEFAULT_RUN."""
+    if explicit is not None:
+        return explicit
+    if CANONICAL_POINTER.is_file():
+        text = CANONICAL_POINTER.read_text().strip()
+        if text:
+            return Path(text)
+    return Path(DEFAULT_RUN)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--run", type=Path, default=Path(DEFAULT_RUN))
+    parser.add_argument("--run", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = parser.parse_args(argv)
-    run_dir = args.run
+    run_dir = resolve_run_dir(args.run)
     if not (run_dir / "folds").is_dir():
         raise SystemExit(f"missing folds directory under {run_dir}")
-    if run_dir.resolve() == Path(DEFAULT_RUN).resolve():
-        canonical = DEFAULT_RUN
-    else:
-        canonical = str(run_dir).replace("\\", "/")
+    canonical = str(run_dir).replace("\\", "/")
     summary = write_outputs(run_dir, args.out, canonical_text=canonical)
     print(f"wrote {args.out / 'per_fold_metrics.json'} ({summary['n_arms']} arms)")
     print(f"wrote {args.out / 'CANONICAL_LADDER.txt'} -> {canonical}")

@@ -1,30 +1,43 @@
 # Ladder Summary
 
+Canonical run: `reports/generated/nn_20260923/ladder_v3` (v5 rebuild after shared-path control-fit fix; supersedes `ladder_v2` for primary claims).
+
 Outcome: B_NULL
-Primary estimate: -0.0067
+Primary estimate: 0.0267 (R3_ca − R3_tc; 95% CI includes 0; no complex-model advantage)
 
 | Arm | BA | AUROC | Log-loss | Brier |
 |---|---|---|---|---|
-| R0_ca | 0.4600 | 0.3876 | 0.8576 | 0.3167 |
-| R0_tc | 0.4800 | 0.4000 | 0.8665 | 0.3186 |
-| R1_ca | 0.3333 | 0.3493 | 0.8319 | 0.3053 |
-| R1_tc | 0.3533 | 0.3524 | 0.8281 | 0.3032 |
-| R2_ca | 0.3533 | 0.3378 | 0.7970 | 0.2985 |
-| R2_tc | 0.3733 | 0.3742 | 0.8003 | 0.2981 |
-| R3_ca | 0.3733 | 0.3689 | 0.8693 | 0.2950 |
-| R3_gated | 0.4600 | 0.4373 | 0.7758 | 0.2837 |
-| R3_tc | 0.3800 | 0.3458 | 0.7707 | 0.2854 |
-| R3_tc_parammatched | 0.3533 | 0.3147 | 0.7641 | 0.2835 |
-| R4_ca | 0.4867 | 0.4720 | 0.6953 | 0.2511 |
-| R4_tc | 0.4667 | 0.4880 | 0.6953 | 0.2511 |
-| chr21_dosage | 0.9667 | 0.9982 | 0.4569 | 0.1376 |
-| latent_pca_lsi_head | 0.3667 | 0.3689 | 0.8993 | 0.3099 |
-| logreg_concat | 0.4733 | 0.3956 | 0.8591 | 0.3169 |
-| logreg_rna | 0.4933 | 0.4089 | 0.8521 | 0.3132 |
-| majority | 0.3533 | 0.3533 | 23.3082 | 0.6467 |
-| pseudobulk_rna_logistic | 0.4467 | 0.5236 | 0.7475 | 0.2752 |
+| R0_ca | 0.4733 | 0.3893 | 0.8567 | 0.3153 |
+| R0_tc | 0.4867 | 0.3929 | 0.8668 | 0.3191 |
+| R1_ca | 0.3467 | 0.3440 | 0.8323 | 0.3070 |
+| R1_tc | 0.3400 | 0.3484 | 0.8287 | 0.3041 |
+| R2_ca | 0.3867 | 0.3822 | 0.7931 | 0.2958 |
+| R2_tc | 0.3533 | 0.3458 | 0.8113 | 0.3031 |
+| R3_ca | 0.4000 | 0.3582 | 0.7465 | 0.2753 |
+| R3_gated | 0.3667 | 0.3840 | 0.7477 | 0.2754 |
+| R3_tc | 0.3733 | 0.3316 | 0.8306 | 0.3067 |
+| R3_tc_parammatched | 0.3533 | 0.3396 | 0.8346 | 0.2940 |
+| R4_ca | 0.5267 | 0.5147 | 0.6941 | 0.2505 |
+| R4_tc | 0.5000 | 0.4427 | 0.6960 | 0.2514 |
+| chr21_dosage | 1.0000 | 1.0000 | 0.4324 | 0.1249 |
+| latent_pca_lsi_head | 0.3800 | 0.3787 | 0.9131 | 0.3125 |
+| logreg_concat | 0.4133 | 0.3822 | 0.7693 | 0.2860 |
+| logreg_rna | 0.4267 | 0.3982 | 0.7653 | 0.2840 |
+| majority | 0.3000 | 0.3000 | 25.2306 | 0.7000 |
+| pseudobulk_rna_logistic | 0.5133 | 0.5573 | 0.7387 | 0.2705 |
 
-Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.353 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging.
+Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other models might score around 0.30–0.35 instead of ~0.5. This artefact occurs because fold-wise training majorities flip under stratified folds, leading to misaligned predictions when pooled across folds. Mean per-fold balanced accuracy (`mean_per_fold_ba`) correctly handles this by calculating the metric per fold before averaging. See also `docs/nn_v2/v5/per_fold_metrics.json` and `docs/nn_v2/v5/BELOW_CHANCE.md`.
+
+## v5 validity (V1–V4)
+
+- **V1** per-fold metrics on canonical `ladder_v3`: majority BA exactly 0.5 every fold; learned-arm per-fold AUROC means remain near/above chance while pooled AUROC stays below chance (pooling artefact persists alongside the control-fit fix).
+- **V2** positive control (forced chr21): logreg donor AUROC 0.924; shared-path fix = sklearn controls fit on full outer train.
+- **V3** verdict `PIPELINE_BUG_FIXED` → mandatory V4 rebuild.
+- **V4** this file / `ladder_summary.json` / `ladder_verification.json` regenerated from `ladder_v3` (`verify_ladder` PASS; still `B_NULL`).
+
+## Downstream (P1 pending on ladder_v3)
+
+N11–N17 and N21 evidence below was produced against `ladder_v2` and must be rerun into `_v3` paths under task P1 before those claims are treated as current for the v5 paper revision.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -77,27 +90,3 @@ Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-re
 ## Paper Results + claims (N27)
 
 Rewrote `paper/draft.md` Results from accepted ladder_v2 evidence (B_NULL; F4; figures linked) and wrote `paper/claims.csv`. `python paper/check_paper.py` PASS.
-
-## Paper Discussion + Limitations (N29)
-
-Rewrote Discussion+Limitations under F4 (506≤700 words): real-data `B_NULL`, no `CA_FAVOURED`, dosage/faithfulness/spectrum/R2 claim limits, mandatory cohort limits, PC N/A, chr21 export DEFERRED. `check_paper.py` PASS.
-
-## Paper Abstract + title (N30)
-
-Rewrote title + Abstract from `paper/framing.md` F4 and `paper/claims.csv` (152≤200 words): B_NULL −0.0067; replaced stale “ladder never ran / not estimable” Abstract. Header `DRAFT_V1_PARTIAL:N31-N34`. `check_paper.py` PASS. Next: N31–N34.
-
-## Paper checker (N31)
-
-`python paper/check_paper.py` → PASS on all five checks (citations, numbers, forbidden, figures, word_counts); `--json` reports `ok=true`, `failures=0`. No draft repairs. Header advanced to `DRAFT_V1_PARTIAL:N32-N34`. Next: N32–N34.
-
-## Paper adversarial self-review (N32)
-
-Wrote `paper/self_review.md` (8 objections). 7/8 cite existing Methods/Results/Discussion/Limitations; age confound added to Limitations. Header `DRAFT_V1_PARTIAL:N33-N34`. Next: N33 vault copy → N34.
-
-## Paper vault copy (N33)
-
-Copied allow-list to vault `paper-nn/` (`draft.md`, `figures/` fig1–fig5 png+pdf, `refs_frozen.bib`, `claims.csv`, `self_review.md`); sha256 matched repo. Replaced stale buggy-lane vault draft. MOM and unsent `external_shared/2026-09-27` untouched. Header `DRAFT_V1_PARTIAL:N34`. Next: N34.
-
-## Final paper verification (N34)
-
-Full `pytest -q -x` → **1192 passed**. `paper/check_paper.py` 5/5 PASS. `gnhf/check_evidence.py` OK (`primary_recomputed.ci`). Ladder gate `PASS`. Restored truncated `tasks/nn/status/N3`. Header `DRAFT_V1_COMPLETE`. Vault `paper-nn/draft.md` and vault `status.md` refreshed; MOM/packet untouched. Claim limits retained (PC N/A; chr21 export DEFERRED; N21 secondary).

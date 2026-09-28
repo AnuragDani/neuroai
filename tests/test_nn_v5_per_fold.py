@@ -132,17 +132,21 @@ def test_write_outputs_and_canonical_pointer(tmp_path: Path):
         probs=[1.0, 1.0],
     )
     out = tmp_path / "out"
-    summary = mod.write_outputs(run, out, canonical_text="reports/generated/nn_20260923/ladder_v2")
+    summary = mod.write_outputs(run, out, canonical_text="reports/generated/nn_20260923/ladder_v3")
     assert summary["n_arms"] == 1
     assert (out / "per_fold_metrics.json").is_file()
     assert (out / "CANONICAL_LADDER.txt").read_text().strip() == (
-        "reports/generated/nn_20260923/ladder_v2"
+        "reports/generated/nn_20260923/ladder_v3"
     )
 
 
 def test_canonical_ladder_majority_ba_is_half_every_fold():
-    """Live check on the frozen ladder_v2 majority arm (constant predictor)."""
-    run = ROOT / "reports/generated/nn_20260923/ladder_v2"
+    """Live check on the canonical ladder majority arm (constant predictor)."""
+    pointer = ROOT / "docs/nn_v2/v5/CANONICAL_LADDER.txt"
+    if pointer.is_file():
+        run = ROOT / pointer.read_text().strip()
+    else:
+        run = ROOT / "reports/generated/nn_20260923/ladder_v3"
     if not (run / "folds").is_dir():
         return
     summary = mod.compute_per_fold_metrics(run)
