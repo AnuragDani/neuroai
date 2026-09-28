@@ -1,1 +1,1 @@
-=4.6e-8, S1/S5 atac untouched)
+DONE:src/p22/eval/planted_signal.py + tests/test_nn_planted.py (5 passed) + real-fold check (S5 donor rna-mean |Δ| =4.6e-8, S1/S5 atac untouched)

@@ -1,6 +1,6 @@
 # NN-v2 results — 2026-09-23
 
-**Final label: `NN_ASSIGNMENT_COMPLETE`.** Mandatory N10–N17 accepted against `ladder_v2`; optional N21 secondary `GA_B_NULL`; N23 verification passed (1188 pytest; claim limits below remain in force). Paper phase N24–N34 remains. Study label stays `STUDY_PARTIAL` (no external validation).
+**Final label: `NN_ASSIGNMENT_COMPLETE`.** Mandatory N10–N17 accepted against `ladder_v2`; optional N21 secondary `GA_B_NULL`; N23 verification passed; N34 final paper verification passed (`pytest` 1192; `check_paper` 5/5 PASS; draft `DRAFT_V1_COMPLETE`). Claim limits below remain in force. Study label stays `STUDY_PARTIAL` (no external validation).
 
 **Claim limits (first lines).** (1) Planted pairing positive control (PC) is `N/A` — no saved S4/S5 δ=1.0 models under `ladder_v2`; I3 `CA_PAIRING_UNUSED` is reported but pairing-use claims stay provisional without PC sensitivity (`docs/nn_v2/faithfulness.json`). (2) N15 chr21-excluded cell-score export is `DEFERRED`, so N16 chr21-score compare is `NOT_NEEDED` — dosage alignment uses the per-cell `chr21_dosage` column on the primary arm (`docs/nn_v2/spectrum.json`). (3) N21 gene-activity is **secondary only**; never independent external validation (`docs/nn_v2/gene_activity_results.json`). (4) Planted benchmark has **zero** `CA_FAVOURED` regimes — no F2 planted support for a cross-attention-favoured headline (`docs/nn_v2/planted_benchmark.json`). (5) Attention/routing readouts are all `NOT_SHOWN_USED` (I4/I6 CIs include 0); do not treat attention as explanation [B11].
 

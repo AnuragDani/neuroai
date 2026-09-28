@@ -97,3 +97,7 @@ Wrote `paper/self_review.md` (8 objections). 7/8 cite existing Methods/Results/D
 ## Paper vault copy (N33)
 
 Copied allow-list to vault `paper-nn/` (`draft.md`, `figures/` fig1–fig5 png+pdf, `refs_frozen.bib`, `claims.csv`, `self_review.md`); sha256 matched repo. Replaced stale buggy-lane vault draft. MOM and unsent `external_shared/2026-09-27` untouched. Header `DRAFT_V1_PARTIAL:N34`. Next: N34.
+
+## Final paper verification (N34)
+
+Full `pytest -q -x` → **1192 passed**. `paper/check_paper.py` 5/5 PASS. `gnhf/check_evidence.py` OK (`primary_recomputed.ci`). Ladder gate `PASS`. Restored truncated `tasks/nn/status/N3`. Header `DRAFT_V1_COMPLETE`. Vault `paper-nn/draft.md` and vault `status.md` refreshed; MOM/packet untouched. Claim limits retained (PC N/A; chr21 export DEFERRED; N21 secondary).

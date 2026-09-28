@@ -1,5 +1,6 @@
 # paper lane
 
+- 2026-09-28 N34 (finish-base): Final verification — pytest 1192 PASS; check_paper 5/5 PASS; check_evidence OK; N3 status restored; header `DRAFT_V1_COMPLETE`; vault draft+status refreshed; MOM/packet untouched. Paper lane complete.
 - 2026-09-28 N33 (finish-base): Vault `paper-nn/` allow-list copy (draft, fig1–fig5, refs, claims, self_review); sha256 match; replaced buggy-lane vault draft; MOM/packet untouched; header `DRAFT_V1_PARTIAL:N34`. Next: N34 final verification.
 - 2026-09-28 N32 (finish-base): Wrote `paper/self_review.md` (8 objections); age confound Limitations add; 7/8 cite existing sections; header `DRAFT_V1_PARTIAL:N33-N34`. Next: N33 vault copy.
 - 2026-09-28 N31 (finish-base): Formal `check_paper.py` gate 5/5 PASS (citations/numbers/forbidden/figures/word_counts; 0 failures; `--json` ok=true); no draft repairs; header `DRAFT_V1_PARTIAL:N32-N34`. Next: N32 adversarial self-review.
