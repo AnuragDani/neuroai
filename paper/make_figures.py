@@ -8,7 +8,8 @@ Builds:
   * Fig 3 -- ladder forest (CA−TC per rung + logreg reference) from
     ``docs/nn_v2/ladder_summary.json``;
   * Fig 4 -- faithfulness Δ log-loss from ``docs/nn_v2/faithfulness.json``;
-  * Fig 5 -- cell-state spectrum from ``docs/nn_v2/spectrum.json``.
+  * Fig 5 -- cell-state spectrum from ``docs/nn_v2/spectrum.json``;
+  * Fig 6 -- per-fold vs pooled AUROC from ``docs/nn_v2/v5/per_fold_metrics.json``.
 
 IF a source JSON is missing, that figure is skipped and recorded in
 ``SKIPPED_FIGURES`` (decision-tree N25). Missing planted JSON still fails the
@@ -37,7 +38,9 @@ DEFAULT_PLANTED = _REPO_ROOT / "docs" / "nn_v2" / "planted_benchmark.json"
 DEFAULT_LADDER = _REPO_ROOT / "docs" / "nn_v2" / "ladder_summary.json"
 DEFAULT_FAITH = _REPO_ROOT / "docs" / "nn_v2" / "faithfulness.json"
 DEFAULT_SPECTRUM = _REPO_ROOT / "docs" / "nn_v2" / "spectrum.json"
+DEFAULT_PER_FOLD = _REPO_ROOT / "docs" / "nn_v2" / "v5" / "per_fold_metrics.json"
 DEFAULT_OUTDIR = _HERE / "figures"
+PER_FOLD_ARMS = ("R3_ca", "R3_tc", "logreg_rna", "majority", "chr21_dosage")
 
 MODEL_ORDER = (
     "cross_attention",
@@ -400,6 +403,53 @@ def build_fig5(data: dict, outdir: Path) -> list[Path]:
     return _save(fig, outdir, "fig5_spectrum")
 
 
+def build_fig6(data: dict, outdir: Path) -> list[Path]:
+    """Per-fold AUROC mean (±SD) vs pooled AUROC for key arms."""
+    arms = data.get("per_arm") or {}
+    labels: list[str] = []
+    means: list[float] = []
+    sds: list[float] = []
+    pooled: list[float] = []
+    for arm in PER_FOLD_ARMS:
+        row = arms.get(arm)
+        if not row:
+            raise ValueError(f"missing per-fold arm {arm}")
+        labels.append(arm)
+        means.append(float(row["per_fold_auroc_mean"]))
+        sds.append(float(row["per_fold_auroc_sd"]))
+        pooled.append(float(row["pooled_auroc"]))
+
+    x = np.arange(len(labels))
+    width = 0.36
+    fig, ax = plt.subplots(figsize=(7.6, 4.2))
+    ax.bar(
+        x - width / 2,
+        means,
+        width,
+        yerr=sds,
+        color="#1f4e79",
+        ecolor="#1f4e79",
+        capsize=3,
+        label="per-fold AUROC mean ± SD",
+    )
+    ax.bar(
+        x + width / 2,
+        pooled,
+        width,
+        color="#b85c38",
+        label="pooled AUROC",
+    )
+    ax.axhline(0.5, color="black", linestyle="--", linewidth=1.0, label="chance 0.5")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=15, ha="right")
+    ax.set_ylabel("donor AUROC")
+    ax.set_ylim(0.0, 1.05)
+    ax.set_title("Per-fold AUROC vs pooled AUROC (canonical ladder)")
+    ax.legend(fontsize=7.5, loc="lower left", frameon=False)
+    fig.tight_layout()
+    return _save(fig, outdir, "fig6_per_fold_auroc")
+
+
 def _try_build(
     label: str,
     source: Path,
@@ -428,7 +478,15 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build P22-NN paper figures.")
     ap.add_argument(
         "--only",
-        choices=("schematic", "planted", "ladder", "faithfulness", "spectrum", "all"),
+        choices=(
+            "schematic",
+            "planted",
+            "ladder",
+            "faithfulness",
+            "spectrum",
+            "per_fold",
+            "all",
+        ),
         default="all",
     )
     ap.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
@@ -477,6 +535,16 @@ def main(argv: list[str] | None = None) -> int:
             build_fig5,
             args.outdir,
             hard_fail=(only == "spectrum"),
+        )
+        if rc:
+            return rc
+    if only in ("per_fold", "all"):
+        rc = _try_build(
+            "fig6_per_fold_auroc",
+            DEFAULT_PER_FOLD,
+            build_fig6,
+            args.outdir,
+            hard_fail=(only == "per_fold"),
         )
         if rc:
             return rc

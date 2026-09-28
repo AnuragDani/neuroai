@@ -116,7 +116,9 @@ def _build_ga_arm(arm_name: str, widths: dict, cfg: dict | None, attn_mask: torc
 
 
 _original_build_arm = nn_factory.build_arm
+_original_arm_names = nn_factory.ARM_NAMES
 _ATTN_MASK: torch.Tensor | None = None
+_GA_PATCH_INSTALLED = False
 
 
 def _patched_build_arm(arm_name, widths, cfg=None):
@@ -125,8 +127,23 @@ def _patched_build_arm(arm_name, widths, cfg=None):
     return _original_build_arm(arm_name, widths, cfg)
 
 
-nn_factory.build_arm = _patched_build_arm
-nn_factory.ARM_NAMES = tuple(list(nn_factory.ARM_NAMES) + list(GA_ARMS))
+def install_ga_factory_patches() -> None:
+    """Register GA arms on the shared factory (idempotent; not at import time)."""
+    global _GA_PATCH_INSTALLED
+    if _GA_PATCH_INSTALLED and nn_factory.build_arm is _patched_build_arm:
+        return
+    nn_factory.build_arm = _patched_build_arm
+    if "GA_ca" not in nn_factory.ARM_NAMES:
+        nn_factory.ARM_NAMES = tuple(list(nn_factory.ARM_NAMES) + list(GA_ARMS))
+    _GA_PATCH_INSTALLED = True
+
+
+def uninstall_ga_factory_patches() -> None:
+    """Restore the protocol factory after a GA secondary run."""
+    global _GA_PATCH_INSTALLED
+    nn_factory.build_arm = _original_build_arm
+    nn_factory.ARM_NAMES = _original_arm_names
+    _GA_PATCH_INSTALLED = False
 
 
 def _panel_name_to_region_index(bed_path: Path) -> dict[str, int]:
@@ -157,6 +174,7 @@ def worker_task(
     bed_path,
 ):
     global _ATTN_MASK
+    install_ga_factory_patches()
     try:
         torch.set_num_threads(1)
         torch.use_deterministic_algorithms(True)
@@ -507,6 +525,7 @@ def main(argv=None) -> int:
         print(json.dumps({"outcome": summary["outcome"], "primary": summary["primary"]}, indent=2))
         return 0
 
+    install_ga_factory_patches()
     selection = select_ga_genes(args.gene_config, GA_TOKEN_CAP)
     # Verify against the existing gene_activity_v2 extremes when present.
     expected_min, expected_max = -0.41207420616229146, 14.044904881960885

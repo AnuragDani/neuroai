@@ -223,13 +223,28 @@ def test_make_figures_builds_fig5_spectrum(tmp_path):
         assert path.stat().st_size > 0
 
 
-def test_make_figures_all_writes_fig3_to_fig5(tmp_path, monkeypatch):
-    """N25: with all source JSON present, --only all emits fig3–fig5 stems."""
+def test_make_figures_builds_fig6_per_fold(tmp_path):
+    src = _ROOT / "docs" / "nn_v2" / "v5" / "per_fold_metrics.json"
+    if not src.exists():
+        pytest.skip("per_fold_metrics.json not present")
+    data = make_figures.load_source(src)
+    written = make_figures.build_fig6(data, tmp_path)
+    assert sorted(p.name for p in written) == [
+        "fig6_per_fold_auroc.pdf",
+        "fig6_per_fold_auroc.png",
+    ]
+    for path in written:
+        assert path.stat().st_size > 0
+
+
+def test_make_figures_all_writes_fig3_to_fig6(tmp_path, monkeypatch):
+    """N25/P6: with all source JSON present, --only all emits fig3–fig6 stems."""
     for name, default in (
         ("planted_benchmark.json", "DEFAULT_PLANTED"),
         ("ladder_summary.json", "DEFAULT_LADDER"),
         ("faithfulness.json", "DEFAULT_FAITH"),
         ("spectrum.json", "DEFAULT_SPECTRUM"),
+        ("v5/per_fold_metrics.json", "DEFAULT_PER_FOLD"),
     ):
         src = _ROOT / "docs" / "nn_v2" / name
         if not src.exists():
@@ -244,6 +259,7 @@ def test_make_figures_all_writes_fig3_to_fig5(tmp_path, monkeypatch):
         "fig3_ladder",
         "fig4_faithfulness",
         "fig5_spectrum",
+        "fig6_per_fold_auroc",
     ):
         assert (out / f"{stem}.png").stat().st_size > 0
         assert (out / f"{stem}.pdf").stat().st_size > 0

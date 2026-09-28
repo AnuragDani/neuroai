@@ -201,6 +201,7 @@ def main(argv=None) -> int:
     parser.add_argument("--bootstrap-draws", type=int, default=2000)
     parser.add_argument("--bootstrap-seed", type=int, default=22)
     args = parser.parse_args(argv)
+    ga.install_ga_factory_patches()
 
     selection = ga.select_ga_genes(args.gene_config, ga.GA_TOKEN_CAP)
     protocol = json.loads(args.protocol.read_text())

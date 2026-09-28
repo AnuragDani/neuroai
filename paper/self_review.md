@@ -1,8 +1,8 @@
-# Adversarial self-review (N32)
+# Adversarial self-review (N32; refreshed for P6 / DRAFT_V2_COMPLETE)
 
-Eight reviewer objections against the accepted F4 / ladder_v2 draft. For each: cite an
+Eight reviewer objections against the accepted F4 / ladder_v3 draft. For each: cite an
 existing `paper/draft.md` section if already answered, else add a Limitations sentence.
-No new experiment was run (decision-tree G9).
+No new experiment was run beyond the v5 validity / P2–P3 evidence already accepted.
 
 1. **Leakage between folds.** The reviewer asks whether outer-test donors can influence
    feature selection or model fitting. Resolved by Methods ("Representation"): every
@@ -15,9 +15,9 @@ No new experiment was run (decision-tree G9).
    developmental stage or sequencing batch rather than disease state. Batch side answered
    by Results ("Faithfulness, nuisance probe, and attention readouts") and Limitations:
    held-out probes reject R2 (`R2_REJECTED` / `PROBE_DROP_INSUFFICIENT`), so library and
-   batch confounding are not shown to be erased. Age side was not previously stated:
-   added to Limitations — developmental stage is recorded but not residualized or probed
-   as a DS confounder beyond the declared library / batch / QC adversary.
+   batch confounding are not shown to be erased. Age side: Limitations — developmental
+   stage is recorded but not residualized or probed as a DS confounder beyond the declared
+   library / batch / QC adversary.
 
 3. **Thirty-donor power.** The reviewer asks whether thirty donors can support a
    donor-level contrast. Resolved by Limitations: the cohort contains thirty donors, so
@@ -28,7 +28,7 @@ No new experiment was run (decision-tree G9).
    vindicates a negative real-data claim. Resolved by Results ("Planted benchmark"),
    Discussion, and Limitations: every planted signal is synthetic; the benchmark speaks
    only to detectability on constructed labels and carries no biological claim; zero of
-   sixteen regimes are `CA_FAVOURED`.
+   the S0–S5 regimes and the gene-matched S6 cells are `CA_FAVOURED`.
 
 5. **Parameter mismatch.** The reviewer asks whether the attention arm simply has more
    capacity. Resolved by Results ("Sampling and parameter matching") and Discussion: the
@@ -51,19 +51,24 @@ No new experiment was run (decision-tree G9).
    work is on a single internal development cohort, so estimates carry no transportability
    guarantee. Optional N21 gene-activity is never independent external validation.
 
+9. **Below-chance pooled AUROC.** Added in v5: Results ("Per-fold AUROC and below-chance
+   pooled scores") and Limitations state the pooling gap, the forced-chr21 positive
+   control (donor AUROC 0.924), and the `PIPELINE_BUG_FIXED` → `ladder_v3` rebuild. Report
+   per-fold AUROC alongside pooled metrics; never flip predictions.
+
 ## Disposition
 
 | # | Objection | Disposition |
 |---|---|---|
 | 1 | Leakage | Cite Methods + Results |
-| 2 | Age/batch confounding | Cite Results/Limitations for batch; **add** Limitations sentence for age |
+| 2 | Age/batch confounding | Cite Results/Limitations for batch; Limitations for age |
 | 3 | 30-donor power | Cite Limitations |
 | 4 | Planted-signal realism | Cite Results + Discussion + Limitations |
 | 5 | Parameter mismatch | Cite Results + Discussion |
 | 6 | Attention interpretation | Cite Results + Discussion + Limitations |
 | 7 | Region-panel adequacy | Cite Methods + Limitations |
 | 8 | External cohort | Cite Methods + Limitations |
+| 9 | Below-chance pooled AUROC | Cite Results + Limitations (v5 / P6) |
 
-Draft header advanced to `DRAFT_V1_PARTIAL:N33-N34`. Superseded buggy-ladder self-review under
-`paper/superseded_buggy_ladder/self_review.md` must not be reused (it assumed
-`R2_UNEVALUATED` and blocked faithfulness).
+Draft header advanced to `DRAFT_V2_COMPLETE`. Superseded buggy-ladder self-review under
+`paper/superseded_buggy_ladder/self_review.md` must not be reused.
