@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), and N13 (`faithfulness_v3`) are done against `ladder_v3`. N14–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), and N14 (`nuisance_v3`) are done against `ladder_v3`. N15–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
 
 ## chr21-excluded sensitivity (N11)
 
@@ -53,7 +53,7 @@ Held-out interventions on ladder_v3 fold models (R3_ca/R3_tc/R3_gated/R4_ca): NC
 
 ## Nuisance-probe diagnostics (N14)
 
-Held-out within-disease embedding probes on R1/R2/R3 (CA and TC): **R2_REJECTED** (`PROBE_DROP_INSUFFICIENT`; no `ADVERSARY_ERASES_SIGNAL`). Batch probe stays near chance (~0.05–0.06) and does not drop ≥ 5 points from R1 to R2; library probe is unscorable under donor hold-out. See `docs/nn_v2/nuisance_probe.json`, `docs/nn_v2/NUISANCE_PROBE.md`.
+Held-out within-disease embedding probes on ladder_v3 R1/R2/R3 (CA and TC): **R2_REJECTED** (`PROBE_DROP_INSUFFICIENT`). Batch probe stays near chance and does not drop ≥ 5 points from R1 to R2; library probe is unscorable under donor hold-out. See `docs/nn_v2/nuisance_probe.json`, `docs/nn_v2/NUISANCE_PROBE.md`.
 
 ## Out-of-fold cell scores (N15)
 

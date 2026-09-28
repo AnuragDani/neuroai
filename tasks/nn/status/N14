@@ -1,1 +1,1 @@
-DONE:docs/nn_v2/nuisance_probe.json; R2_REJECTED; PROBE_DROP_INSUFFICIENT (CA+TC); library probe unscorable under donor hold-out; no ADVERSARY_ERASES_SIGNAL
+DONE:docs/nn_v2/nuisance_probe.json bound to ladder_v3/nuisance_v3; R2_REJECTED; PROBE_DROP_INSUFFICIENT (CA+TC); library unscorable 0/150; no ADVERSARY_ERASES_SIGNAL
