@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), and N14 (`nuisance_v3`) are done against `ladder_v3`. N15–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), and N14 (`nuisance_v3`) are done against `ladder_v3`. N15 `spectrum_v3` is RUNNING against `ladder_v3` (incl. chr21_excluded_v3 scores). N16–N17 still need `_v3` publish after N15 completes.
 
 ## chr21-excluded sensitivity (N11)
 

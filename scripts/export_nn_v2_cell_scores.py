@@ -1,9 +1,9 @@
-"""N15 out-of-fold per-cell score export against accepted ladder_v2 models.
+"""N15 out-of-fold per-cell score export against accepted ladder models.
 
-Reloads saved fold state_dicts from the main-checkout ladder_v2 run (not copied
-here), rebuilds matching fold inputs, and writes per-cell logits / MIL attention
-averaged across the five outer-test repeats. Every sampled cell must appear
-exactly five times per arm before averaging (decision_tree N15).
+Reloads saved fold state_dicts from a ladder run (default ladder_v2; v5 uses
+ladder_v3 via --run), rebuilds matching fold inputs, and writes per-cell logits /
+MIL attention averaged across the five outer-test repeats. Every sampled cell
+must appear exactly five times per arm before averaging (decision_tree N15).
 """
 
 from __future__ import annotations
@@ -341,6 +341,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="Also export R3_ca/R3_tc from chr21_excluded models if present",
     )
+    parser.add_argument(
+        "--chr21-excluded-run",
+        type=Path,
+        default=_CHR21_EXCLUDED_ROOT,
+        help="Chr21-excluded models root (default: legacy chr21_excluded)",
+    )
     parser.add_argument("--smoke", action="store_true", help="Only repeat 0 fold 0")
     args = parser.parse_args(argv)
 
@@ -386,16 +392,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         smoke=args.smoke,
     )
 
+    # ladder_export is canonical; ladder_v2_export kept as a synonym for older readers.
     evidence: dict[str, Any] = {
+        "ladder_export": main_summary,
         "ladder_v2_export": main_summary,
         "chr21_excluded_export": None,
     }
 
     if args.include_chr21_excluded:
-        chr21_models = _CHR21_EXCLUDED_ROOT / "models"
+        chr21_run = args.chr21_excluded_run.resolve()
+        chr21_models = chr21_run / "models"
         if (chr21_models / "R3_ca").exists() and (chr21_models / "R3_tc").exists():
             evidence["chr21_excluded_export"] = export_run(
-                run_dir=_CHR21_EXCLUDED_ROOT,
+                run_dir=chr21_run,
                 arms=("R3_ca", "R3_tc"),
                 inputs=inputs,
                 splits=splits,
