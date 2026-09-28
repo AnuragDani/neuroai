@@ -57,3 +57,7 @@ Per-cell-type descriptive readouts from ladder_v2 fold models (75 folds: R3_gate
 ## Gene-activity secondary ladder (N21)
 
 Secondary-only rerun under the decision-tree 500-gene amendment (`gene_activity_v2/`; primary remains N10 `B_NULL`). Outcome **GA_B_NULL**: GA_ca−GA_tc estimate 0.0533, CI [−0.0527, 0.1572] (includes 0; below practical margin). View-B gene-activity arms also null for R3_ca−R3_tc. GA_ca I1/I3/I4 faithfulness: NC exact zero; tags `GA_ATAC_UNUSED_OR_NULL`, `GA_CA_PAIRING_UNUSED`, `GA_ATTENTION_NOT_SHOWN_USED`. Never claim as independent external validation. Evidence: `docs/nn_v2/gene_activity_results.json`, `docs/nn_v2/GENE_ACTIVITY.md`.
+
+## Results + unsent professor note (N22)
+
+Written conclusion and D1–D13 coverage from verified JSON: `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md`. Unsent note: `docs/nn_v2/PROFESSOR_NOTE_UNSENT.md`. Deferred experiments listed in `docs/nn_v2/FUTURE_WORK.md`. N23 verification still pending.
