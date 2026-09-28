@@ -34,5 +34,5 @@ pairing-only favoured gated fusion / MLP.
 Limits to keep visible: 30 donors; internal cohort; same-cohort annotations; region
 panel not regulatory; attention ≠ explanation; pairing PC not refit; prefer per-fold
 AUROC alongside pooled metrics. Paper draft still `DRAFT_V1_COMPLETE` pending P6.
-Coverage table for D1–D13 pending P5 (`PROFESSOR_UPDATE_v5.md`). This note is
-**unsent**.
+Full D1–D13 coverage table: `docs/nn_v2/v5/PROFESSOR_UPDATE_v5.md` (unsent). This note
+is **unsent**.

@@ -51,6 +51,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N34 | Final paper verification | N33 | XS | DONE:pytest 1192; check_paper 5/5 PASS; check_evidence OK; DRAFT_V1_COMPLETE; vault status refreshed |
 
 ## Run log
+- 2026-09-28T21:15Z P5 DONE (v5). Wrote `docs/nn_v2/v5/PROFESSOR_UPDATE_v5.md` (plain B_NULL lead; D1–D13 table DONE/evidence/finding; body 219w ≤600; unsent). `tests/test_nn_v5_professor_update.py` 4 passed. Next: P6 paper revision.
 - 2026-09-28T21:00Z P4 DONE (v5). Refreshed `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md` for canonical `ladder_v3` with §5 Per-fold metrics and validity (V1–V4), §6 P2 gene-aligned planted (no CA_FAVOURED), §7 P3 chr21-excluded spectrum (`SPECTRUM_NULL`); updated `PROFESSOR_NOTE_UNSENT.md`. Next: P5 PROFESSOR_UPDATE_v5.md.
 - 2026-09-28T20:50Z P3 DONE (v5). N16-style spectrum on chr21-excluded R3_ca scores (`chr21_excluded_v3` / spectrum_v3 export) → `docs/nn_v2/v5/spectrum_chr21_excluded.json` + `SPECTRUM_CHR21_EXCLUDED.md` (24 lines): `SPECTRUM_NULL` (9 eligible; no Holm-sig DS−CON). `tests/test_nn_v5_spectrum_chr21_excluded.py` 6 passed. Next: P4 results doc.
 - 2026-09-28T20:45Z P2 DONE (v5). Gene-matched planted S6 (δ=0.5/1.0, 5 folds, 64 GA genes) gene_aligned_ca vs gene_aligned_tc vs rna_atac_concat → `docs/nn_v2/v5/planted_gene_aligned.json` (30/30 ok; any_ca_favoured=false; both cells LINEAR_SUFFICIENT). `tests/test_nn_v5_planted_gene_aligned.py` 5 passed. Next: P3 spectrum_chr21_excluded.
