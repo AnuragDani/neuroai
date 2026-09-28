@@ -1,5 +1,5 @@
-# Lane `paper` log (stage S5)
+# paper lane
 
+- 2026-09-28 N27 (finish-base): Rewrote Results from accepted ladder_v2 JSON + `paper/claims.csv`; `check_paper.py` 5/5 PASS; header `DRAFT_V1_PARTIAL:N29-N34`. Abstract/Discussion/Limitations still stale. Next: N29 Discussion + Limitations.
 - 2026-09-28 N25 (finish-base): built fig1–fig5 from accepted planted/ladder_summary/faithfulness/spectrum JSON via `paper/make_figures.py --only all`; removed stale fig1_architecture and buggy fig4_spectrum; SKIPPED=[]. Next: N27 Results + claims.csv.
-- 2026-09-28 N24 (finish-base): rewrote `paper/framing.md` from accepted ladder_v2 evidence. F1 FALSE (B_NULL; CA_PAIRING_UNUSED), F2 FALSE (0 CA_FAVOURED / 16), F3 FALSE (SPECTRUM_NULL), F4 TRUE. Working title set; superseded F3 framing stays under paper/superseded_buggy_ladder/. Next: N25 figures.
 - Prior agy lane N24–N34 used blocked/buggy evidence and is superseded for framing/Results; keep Methods/Intro/Related Work from N26/N28 unless facts change.

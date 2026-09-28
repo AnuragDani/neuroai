@@ -72,4 +72,8 @@ Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-re
 
 ## Paper figures (N25)
 
-`paper/make_figures.py --only all` wrote `paper/figures/fig1_schematic`, `fig2_planted`, `fig3_ladder`, `fig4_faithfulness`, `fig5_spectrum` (PNG 300 dpi + PDF) from planted / ladder_summary / faithfulness / spectrum JSON. `SKIPPED_FIGURES=[]`. Stale `fig1_architecture` and buggy-lane `fig4_spectrum` removed. Next: N27 Results + claims ledger.
+`paper/make_figures.py --only all` wrote `paper/figures/fig1_schematic`, `fig2_planted`, `fig3_ladder`, `fig4_faithfulness`, `fig5_spectrum` (PNG 300 dpi + PDF) from planted / ladder_summary / faithfulness / spectrum JSON. `SKIPPED_FIGURES=[]`. Stale `fig1_architecture` and buggy-lane `fig4_spectrum` removed.
+
+## Paper Results + claims (N27)
+
+Rewrote `paper/draft.md` Results from accepted ladder_v2 evidence (B_NULL; F4; figures linked) and wrote `paper/claims.csv`. `python paper/check_paper.py` PASS. Abstract/Discussion/Limitations remain for N29–N30. Next: N29.

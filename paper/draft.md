@@ -3,7 +3,7 @@ P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introductio
 Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
-Final label: DRAFT_V1_COMPLETE
+Final label: DRAFT_V1_PARTIAL:N29-N34 (Results+claims rewritten for accepted ladder_v2; Abstract/Discussion/Limitations still stale)
 -->
 
 # RNA-linear sufficient? A donor-held-out benchmark of cross-modal attention on paired single-cell RNA+ATAC
@@ -167,58 +167,27 @@ treated as diagnostics rather than explanations [@jain2019attention;
 
 ## Results
 
-**The pre-declared real-data contrast is not estimable in this run.** The primary endpoint
-was donor balanced accuracy of `R3_ca` minus `R3_tc` on the measured disease-state task.
-The N10 comparison ladder produced no fitted fold model: the nuisance-probe record reports
-`N10_ladder_missing`, the ladder output directory is absent, and no saved model file exists
-anywhere in the worktree. The contrast therefore has no estimate, and we make no real-data
-performance claim. The same missing models leave the held-out nuisance probe unfitted
-(`R2_UNEVALUATED`) and every held-out faithfulness intervention at `N/A`; no routing,
-attention, pairing or multiple-instance readout is shown to be used by the model, and all
-three readouts carry the `NOT_SHOWN_USED` tag. The cell-state spectrum is `NOT_ESTIMABLE`
-because the per-cell score export does not exist. We do not substitute a surrogate endpoint:
-we report the planted-signal and input-integrity evidence that did complete and treat a
-real-data attention advantage as untested.
+**Primary real-data contrast is a null.** On the accepted ladder (`ladder_v2`; 450/450 folds; verifier `PASS`), the pre-declared endpoint is donor balanced accuracy of `R3_ca` minus `R3_tc`. The estimate is -0.0067 with a 0.95-level donor-cluster bootstrap CI of [-0.0533, 0.0348] in the rebuilt summary (verifier recomputed CI [-0.053, 0.035] at three decimal places). The practical margin of 0.07 is unmet and `advantage` is false, so the outcome is `B_NULL` (Fig. 3). Secondary label `LINEAR_SUFFICIENT`: RNA logistic pooled BA 0.493 exceeds `R3_ca` 0.373 (paired delta -0.120). Pooled BAs for selected arms are `R3_tc` 0.380, `R3_gated` 0.460, `logreg_concat` 0.473, and majority 0.353; the verifier notes that majority pooled BA below 0.5 reflects fold-wise threshold pooling, so AUROC should be read alongside BA. Model-free chr21 dosage remains near ceiling (BA 0.967; AUROC 0.998).
 
-**Sampling and input integrity.** Two stratified samples pass their proportionality audits.
-The primary run uses a 1,000-cell cap, draws 30,000 cells from 30 donors out of 248,998
-available cells, has seven donors contributing both libraries, holds the maximum
-per-stratum deviation to 2 cells, and passes. The reproduction run uses the historical
-256-cell cap, draws 7,680 cells from the same 30 donors, again finds seven two-library
-donors, and passes. A fold-preparation smoke test with sampler seed 22 samples 30,000
-cells and yields 35,477 genes and 465 regions in the union with 15,000 positive labels; its
-single fold has a 24,000-cell training split and a 6,000-cell holdout split, a 2,000-gene
-and 256-region training-only feature set, and a five-column QC matrix, peaking at 4.153 GiB
-resident memory. A separate 548-region gene-activity panel, selected without labels, is
-accepted after 11 of 11 integrity checks, with complete joins for all 548 regions and
-2,066,087,936 bytes fetched against a 3,500,000,000-byte budget; this is an input-integrity
-result and carries no biological claim.
+![Ladder primary contrast](figures/fig3_ladder.png)
 
-**Planted benchmark: no cross-attention advantage.** The planted benchmark spans 16 regimes
-over its delta grid, and no regime is labelled `CA_FAVOURED`. In the null regime S0@0.0 all
-five scored models sit in the null band: cross-attention and token concatenation are both
-at 0.5, gated fusion is at 0.5, RNA+ATAC concatenation is at 0.5333 and concatenation
-logistic regression is at 0.5417, so the attention model is 0.0417 below the best
-non-attention model. The recorded null range is 0.5 to 0.5417, inside the pre-declared
-0.35 to 0.65 null band.
+**Sampling and parameter matching.** The primary stratified sample uses a 1,000-cell cap, draws 30,000 cells from 30 donors out of 248,998 available cells, finds seven two-library donors, holds max per-stratum deviation to 2 cells, and passes. The historical 256-cell reproduction draws 7,680 cells from the same 30 donors and also passes. A fold-preparation smoke with sampler seed 22 yields 30,000 cells, 35,477 genes and 465 regions in the union, a 2,000-gene / 256-region training-only feature set, and peaks at 4.153 GiB resident memory. The parameter-matched token-concatenation arm has 380,026 parameters against the 384,250-parameter `R3_ca` target (relative error 0.010993), inside both the 10% acceptance rule and the 5% informational bound. R2/R3 CA share 384,250 parameters; R4 CA/TC are 29,970 and 25,746.
 
-When the planted signal is unambiguous, every model recovers it: in S1@0.25 all scored
-models are at or above 0.9, the minimum is 1.0, cross-attention sits at 0.9667 while
-concatenation logistic regression reaches 1.0, and attention trails by 0.0333. The
-linear-baseline failure regime is S5@1.0: concatenation logistic regression remains at
-0.5417, cross-attention reaches 0.9667 and gated fusion reaches 1.0; the planted deviation
-from chance tops out at 0.5 and the check that the regime stays within 0.05 of chance
-fails, as a designed signal-present control should. Across the grid, cross-modal attention
-never exceeds the best non-attention comparator, so zero of 16 regimes receive the
-`CA_FAVOURED` label (13 are `LINEAR_SUFFICIENT` and three are `MLP_FAVOURED`).
+**Planted benchmark: no `CA_FAVOURED` regime.** Across 16 planted regimes, 13 are `LINEAR_SUFFICIENT` and 3 are `MLP_FAVOURED`; none are `CA_FAVOURED` (Fig. 2). At the null point S0@0.0, cross-attention sits at 0.5 against a 0.5417 best non-attention baseline (concatenation logistic regression), a gap of 0.0417, inside the 0.35–0.65 null band. When the planted signal is unambiguous (S1@0.25), every scored model is at or above 0.9; cross-attention is 0.9667 while concatenation logistic regression reaches 1.0. In the linear-baseline failure cell S5@1.0, concatenation logistic regression remains at 0.5417, cross-attention reaches 0.9667, and gated fusion reaches 1.0; the check that S5 stays within 0.05 of chance fails by design. Planted labels are synthetic only.
 
-**Parameter matching.** The parameter-matched token-concatenation arm has 380,026
-parameters against the 384,250-parameter R3 cross-attention target, a relative error of
-0.010993, satisfying both the 10% acceptance rule and the 5% informational bound. R3
-cross-attention and R2 cross-attention have identical counts (384,250), and the R4
-program-token arms are much smaller (29,970 and 25,746 for cross-attention and
-token-concatenation respectively). The classical comparators have no neural parameter
-count.
+![Planted regimes](figures/fig2_planted.png)
+
+**Dosage domination and seed stability.** After excluding chr21 features, no-chr21 BAs are `R3_ca` 0.373, `R3_tc` 0.380, `logreg_rna` 0.480, and `logreg_concat` 0.460 — each meets the decision-tree `DOSAGE_DOMINATED` rule (all no-chr21 BA at or below the declared cutoff). Fixed-protocol seed sensitivity under `seeds_v2` (frozen R3_ca width 384250) yields model-seed spread 0.020 and sampling-seed spread 0.040 with labels `[SPREAD_ONLY]` (not `SAMPLING_SENSITIVE`).
+
+**Faithfulness, nuisance probe, and attention readouts.** Held-out interventions on 25 folds × arms `R3_ca`/`R3_tc`/`R3_gated`/`R4_ca` give tags `CA_PAIRING_UNUSED` and `ATAC_USED`; the no-change control (NC) Δ log-loss is exactly 0.0 on every scored arm (Fig. 4). I1 log-loss CIs exclude 0 for `R3_tc` and `R3_gated`; I3/I4/I5 CIs on `R3_ca` all include 0. Planted pairing positive control (PC) is `N/A` (no saved S4/S5 δ=1.0 models under `ladder_v2`), so pairing-use claims stay provisional. The held-out nuisance probe rejects R2 for both CA and TC (`R2_REJECTED` / `PROBE_DROP_INSUFFICIENT`): CA batch-seq probe accuracy is 0.056 at R1 and 0.063 at R2 and does not drop by the required 5 points versus R1, while library probe is unscorable on 0/150 fold-arm rows under donor hold-out. All three N17 attention/routing readouts are `NOT_SHOWN_USED` (I4/I6 CIs include 0); attention weights are diagnostics, not explanations [@jain2019attention; @wiegreffe2019attention].
+
+![Faithfulness interventions](figures/fig4_faithfulness.png)
+
+**Cell-state spectrum and secondary gene activity.** Out-of-fold cell scores cover 120,000 rows across four arms with five appearances per cell×arm asserted. On `R3_ca` alone the spectrum call is `SPECTRUM_NULL`: 9 eligible cell types, support floor of 20 cells per donor and 8 donors per group, and no Holm-significant DS−CON difference at α=0.05 (Fig. 5). Chr21-excluded score export remains `DEFERRED`, so the spectrum chr21 compare is `NOT_NEEDED`. Optional gene-aligned CA under the 500-gene amendment (panel 548 → 500) is secondary only and never independent external validation: `GA_ca`−`GA_tc` estimate 0.0533, CI [-0.0527, 0.1572], outcome `GA_B_NULL`; GA faithfulness tags are `GA_ATAC_UNUSED_OR_NULL`, `GA_CA_PAIRING_UNUSED`, and `GA_ATTENTION_NOT_SHOWN_USED`, with NC exact zero.
+
+![Cell-state spectrum](figures/fig5_spectrum.png)
+
+![Study schematic](figures/fig1_schematic.png)
 
 ## Discussion
 

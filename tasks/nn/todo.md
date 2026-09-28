@@ -41,7 +41,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N24 | Paper framing decision (rule-based) | N22 | XS | DONE:paper/framing.md; F4 (F1–F3 FALSE on accepted ladder_v2) |
 | N25 | Paper figures from evidence JSON | N24 | S | DONE:paper/figures fig1–fig5 png+pdf from verified JSON; SKIPPED=[] |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
-| N27 | Draft Results + claims ledger | N25,N26 | M | TODO |
+| N27 | Draft Results + claims ledger | N25,N26 | M | DONE:paper/draft.md Results + claims.csv; B_NULL/F4; check_paper PASS |
 | N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
 | N29 | Draft Discussion + Limitations | N27 | S | TODO |
 | N30 | Abstract + title | N29,N28 | XS | TODO |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-28T10:05Z N27 DONE (S9). Rewrote `paper/draft.md` Results from accepted ladder_v2 JSON (B_NULL −0.0067; DOSAGE_DOMINATED; SPECTRUM_NULL; F4 framing; fig1–fig5 linked). Wrote `paper/claims.csv` tracing every Results/Abstract decimal. Header `DRAFT_V1_PARTIAL:N29-N34`. `python paper/check_paper.py` 5/5 PASS; `pytest tests/test_paper_tools.py` 19 passed. Abstract/Discussion/Limitations still stale until N29–N30. Next: N29 Discussion + Limitations.
 - 2026-09-28T09:55Z N25 DONE (S9). Extended `paper/make_figures.py` with Fig 3–5 from accepted JSON; regenerated `paper/figures/fig1_schematic`, `fig2_planted`, `fig3_ladder`, `fig4_faithfulness`, `fig5_spectrum` (png+pdf 300 dpi). Removed stale `fig1_architecture` and renumbered-buggy `fig4_spectrum`. SKIPPED_FIGURES=[]. `pytest tests/test_paper_tools.py` 19 passed; ruff clean. Next: N27 Results + claims ledger.
 - 2026-09-28T09:50Z N24 DONE (S9). Wrote `paper/framing.md` (38 lines ≤60) from accepted evidence: F1 FALSE (`B_NULL`, `CA_PAIRING_UNUSED`), F2 FALSE (0/16 `CA_FAVOURED`), F3 FALSE (`SPECTRUM_NULL`), F4 TRUE → rigorous negative-result/detectability-limit framing + working title (no forbidden words). Superseded F3 framing stays under `paper/superseded_buggy_ladder/`. `check_paper.py` still FAIL numbers on stale draft Results/Abstract (expected until N27). Next: N25 figures from verified JSON.
 - 2026-09-28T09:45Z N23 DONE (S8). Full `pytest -q -x` → **1188 passed** (75.3s). Fixed flaky `test_nn_faithfulness` (explicit MIL head init so I2 flips when ATAC unused). Restored `paper/make_figures.py` P2 API (`MissingSourceError`/`load_source`/`build_fig2`) overwritten by agy stub. Pointed `test_nn_runner` summarizer `--out` at tmp so it no longer clobbers accepted `docs/nn_v2/ladder_summary.json`. Results label `NN_ASSIGNMENT_COMPLETE`; verifier CI 3dp `[-0.053, 0.035]` in results doc; `check_evidence` OK. Ruff clean on N23-touched files. No tracked additions >200KB. Next: N24 paper framing.
