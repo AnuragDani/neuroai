@@ -64,4 +64,8 @@ Written conclusion and D1–D13 coverage from verified JSON: `docs/nn_v2/NN_V2_R
 
 ## Final verification (N23)
 
-Full suite `pytest -q -x` → **1188 passed**. Results top label **`NN_ASSIGNMENT_COMPLETE`** (claim limits retained: PC N/A; chr21 score export DEFERRED; N21 secondary). `gnhf/check_evidence.py` confirms verifier `primary_recomputed.ci` 3dp digits in the results doc. Paper phase N24–N34 remains.
+Full suite `pytest -q -x` → **1188 passed**. Results top label **`NN_ASSIGNMENT_COMPLETE`** (claim limits retained: PC N/A; chr21 score export DEFERRED; N21 secondary). `gnhf/check_evidence.py` confirms verifier `primary_recomputed.ci` 3dp digits in the results doc.
+
+## Paper framing (N24)
+
+Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-result / detectability-limit paper. Evidence: `paper/framing.md`. Next: N25 figures.
