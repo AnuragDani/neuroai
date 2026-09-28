@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), N15 (`spectrum_v3` cell-score export), and N16 (`SPECTRUM_NULL` + chr21 `COMPARED`) are done against `ladder_v3`. N17 still needs `_v3` analysis/publish on the new export.
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), N15 (`spectrum_v3` cell-score export), and N16 (`SPECTRUM_NULL` + chr21 `COMPARED`) are done against `ladder_v3`. N17 `routing_v3` is RUNNING (publish when EXIT:0).
 
 ## chr21-excluded sensitivity (N11)
 

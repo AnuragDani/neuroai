@@ -361,7 +361,8 @@ def write_markdown(payload: Mapping[str, Any], path: Path) -> None:
         "",
         (
             f"Source models: `{payload['source_run']}` "
-            "(accepted ladder_v2; not copied into finish-base)."
+            f"(canonical {Path(payload['source_run']).name}; "
+            "not copied into finish-base)."
         ),
         "",
         f"**N13 status:** `{payload['n13_status']}` "
