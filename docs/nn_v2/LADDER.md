@@ -35,13 +35,13 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 - **V3** verdict `PIPELINE_BUG_FIXED` → mandatory V4 rebuild.
 - **V4** this file / `ladder_summary.json` / `ladder_verification.json` regenerated from `ladder_v3` (`verify_ladder` PASS; still `B_NULL`).
 
-## Downstream (P1 pending on ladder_v3)
+## Downstream (P1 on ladder_v3)
 
-N11–N17 and N21 evidence below was produced against `ladder_v2` and must be rerun into `_v3` paths under task P1 before those claims are treated as current for the v5 paper revision.
+N11 rerun against `ladder_v3` is done (`chr21_excluded_v3`). N12–N17 still need `_v3` paths before those claims are treated as current for the v5 paper revision.
 
 ## chr21-excluded sensitivity (N11)
 
-Holding the accepted ladder_v2 folds fixed and rerunning R3_ca, R3_tc, logreg_rna, and logreg_concat with chromosome-21 features dropped yields no-chr21 BA ≤ 0.55 for every arm (**DOSAGE_DOMINATED**). Details and source paths: `docs/nn_v2/chr21_excluded.json`, `docs/nn_v2/ROBUSTNESS.md`.
+Holding the canonical `ladder_v3` folds fixed and rerunning R3_ca, R3_tc, logreg_rna, and logreg_concat with chromosome-21 features dropped (`chr21_excluded_v3`, 100/100) yields no-chr21 BA ≤ 0.55 for every arm (**DOSAGE_DOMINATED**; R3_ca 0.333, R3_tc 0.373, logreg_rna 0.407, logreg_concat 0.400). Details: `docs/nn_v2/chr21_excluded.json`, `docs/nn_v2/ROBUSTNESS.md`.
 
 ## Init/sampling-seed sensitivity (N12)
 

@@ -779,11 +779,17 @@ def main(argv=None):
                 repeats.append(entry)
             return repeats, arms
 
-        # With-chr21 baseline must be the accepted ladder_v2 run, never the
-        # superseded buggy ladder/ directory (wrong frozen widths / labels).
-        ladder_dir = Path("reports/generated/nn_20260923/ladder_v2/folds")
-        excluded_dir = Path("reports/generated/nn_20260923/chr21_excluded/folds")
-        
+        # With-chr21 baseline follows CANONICAL_LADDER (ladder_v3 after V4);
+        # never the superseded buggy ladder/ directory. Excluded folds come
+        # from this run's --out (chr21_excluded_v3 under P1).
+        canon_ptr = Path("docs/nn_v2/v5/CANONICAL_LADDER.txt")
+        if canon_ptr.is_file():
+            ladder_root = Path(canon_ptr.read_text().strip())
+        else:
+            ladder_root = Path("reports/generated/nn_20260923/ladder_v3")
+        ladder_dir = ladder_root / "folds"
+        excluded_dir = args.out / "folds"
+
         ladder_repeats, ladder_arms = load_repeats(ladder_dir)
         excluded_repeats, excluded_arms = load_repeats(excluded_dir)
         

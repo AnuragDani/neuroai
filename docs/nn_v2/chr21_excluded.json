@@ -1,38 +1,43 @@
 {
+  "record_type": "nn_v5_chr21_excluded",
+  "ladder_source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v3",
+  "excluded_source": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/chr21_excluded_v3",
+  "n_excluded_folds": 100,
+  "label": "DOSAGE_DOMINATED",
   "R3_ca": {
-    "ba_with_chr21": 0.37333333333333335,
-    "ba_without_chr21": 0.37333333333333335,
-    "paired_difference": -1.1102230246251566e-17,
+    "ba_with_chr21": 0.4,
+    "ba_without_chr21": 0.33333333333333337,
+    "paired_difference": 0.06666666666666665,
     "ci": [
-      -0.048437939769209105,
-      0.04553571428571428
+      0.024999999999999988,
+      0.10769230769230767
     ]
   },
   "R3_tc": {
-    "ba_with_chr21": 0.38,
-    "ba_without_chr21": 0.38,
-    "paired_difference": 1.1102230246251566e-17,
+    "ba_with_chr21": 0.3733333333333334,
+    "ba_without_chr21": 0.37333333333333335,
+    "paired_difference": -1.1102230246251566e-17,
     "ci": [
-      -0.03333732057416268,
-      0.03751488095238094
+      -0.03751943779904306,
+      0.037500000000000006
     ]
   },
   "logreg_rna": {
-    "ba_with_chr21": 0.49333333333333335,
-    "ba_without_chr21": 0.48,
-    "paired_difference": 0.01333333333333333,
+    "ba_with_chr21": 0.42666666666666664,
+    "ba_without_chr21": 0.4066666666666666,
+    "paired_difference": 0.019999999999999997,
     "ci": [
-      -0.01292902711323761,
-      0.040000000000000015
+      -0.017647058823529415,
+      0.06380310457516339
     ]
   },
   "logreg_concat": {
-    "ba_with_chr21": 0.4733333333333333,
-    "ba_without_chr21": 0.45999999999999996,
+    "ba_with_chr21": 0.4133333333333333,
+    "ba_without_chr21": 0.4,
     "paired_difference": 0.01333333333333333,
     "ci": [
       0.0,
-      0.03333333333333334
+      0.03304315476190476
     ]
   }
 }
