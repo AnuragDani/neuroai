@@ -4,12 +4,15 @@
 Builds:
 
   * Fig 1 -- architecture / ladder schematic (no external source JSON);
-  * Fig 2 -- planted-signal benchmark from ``docs/nn_v2/planted_benchmark.json``
-    (scenario x model heatmap at delta = 1.0; accuracy vs delta for S4 and S5).
+  * Fig 2 -- planted-signal benchmark from ``docs/nn_v2/planted_benchmark.json``;
+  * Fig 3 -- ladder forest (CA−TC per rung + logreg reference) from
+    ``docs/nn_v2/ladder_summary.json``;
+  * Fig 4 -- faithfulness Δ log-loss from ``docs/nn_v2/faithfulness.json``;
+  * Fig 5 -- cell-state spectrum from ``docs/nn_v2/spectrum.json``.
 
-Figures 3-5 are skipped: their source evidence is absent or not estimable (see
-``SKIPPED_FIGURES``). Missing source JSON fails with a clear message and a
-non-zero exit code so the caller can skip/renumber.
+IF a source JSON is missing, that figure is skipped and recorded in
+``SKIPPED_FIGURES`` (decision-tree N25). Missing planted JSON still fails the
+``--only planted`` CLI with exit code 2 (P2 contract).
 
 Usage:
     python paper/make_figures.py --only all [--outdir paper/figures]
@@ -31,6 +34,9 @@ import matplotlib.pyplot as plt  # noqa: E402  (must follow matplotlib.use)
 _HERE = Path(__file__).resolve().parent
 _REPO_ROOT = _HERE.parent
 DEFAULT_PLANTED = _REPO_ROOT / "docs" / "nn_v2" / "planted_benchmark.json"
+DEFAULT_LADDER = _REPO_ROOT / "docs" / "nn_v2" / "ladder_summary.json"
+DEFAULT_FAITH = _REPO_ROOT / "docs" / "nn_v2" / "faithfulness.json"
+DEFAULT_SPECTRUM = _REPO_ROOT / "docs" / "nn_v2" / "spectrum.json"
 DEFAULT_OUTDIR = _HERE / "figures"
 
 MODEL_ORDER = (
@@ -49,11 +55,17 @@ MODEL_LABELS = {
 }
 SCENARIOS = ("S1", "S2", "S3", "S4", "S5")
 DELTAS = (0.25, 0.5, 1.0)
+LADDER_RUNG_KEYS = (
+    ("R1", "R1_ca_vs_R1_tc"),
+    ("R2", "R2_ca_vs_R2_tc"),
+    ("R3", "R3_ca_vs_R3_tc"),
+    ("R4", "R4_ca_vs_R4_tc"),
+)
+FAITH_PRIMARY_ARM = "R3_ca"
+FAITH_INTERVENTIONS = ("I1", "I2", "I3", "I4", "I5", "I6_01", "I6_10", "I6_55", "NC")
 
-# Fig 3–5 evidence JSON now exists (accepted ladder_v2 / N13 / N16). This module
-# still only builds Fig 1–2 (P2 API tests). N25 will wire Fig 3–5 builders.
-SKIPPED_FIGURES: tuple[str, ...] = ()
-
+# Populated by ``main`` when a Fig 3–5 source is absent (skip/renumber rule).
+SKIPPED_FIGURES: list[str] = []
 
 class MissingSourceError(FileNotFoundError):
     """Raised when a figure's source JSON is absent."""
@@ -233,24 +245,243 @@ def build_fig2(data: dict, outdir: Path) -> list[Path]:
     return _save(fig, outdir, "fig2_planted")
 
 
+def build_fig3(data: dict, outdir: Path) -> list[Path]:
+    """Ladder forest: CA−TC per rung with CIs; logreg reference line."""
+    contrasts = data["secondary_contrasts"]
+    labels: list[str] = []
+    estimates: list[float] = []
+    lo_err: list[float] = []
+    hi_err: list[float] = []
+    for rung, key in LADDER_RUNG_KEYS:
+        row = contrasts[key]
+        est = float(row["estimate"])
+        lo, hi = (float(row["interval"][0]), float(row["interval"][1]))
+        labels.append(f"{rung} CA−TC")
+        estimates.append(est)
+        lo_err.append(est - lo)
+        hi_err.append(hi - est)
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.2))
+    y = np.arange(len(labels))[::-1]
+    ax.errorbar(
+        estimates,
+        y,
+        xerr=[lo_err, hi_err],
+        fmt="o",
+        color="#1f4e79",
+        ecolor="#1f4e79",
+        capsize=3,
+        markersize=6,
+        label="CA − TC (95% CI)",
+    )
+    ax.axvline(0.0, color="black", linestyle="--", linewidth=1.0, label="null (0)")
+    margin = float(data["primary"]["margin"])
+    ax.axvline(
+        margin,
+        color="#888888",
+        linestyle=":",
+        linewidth=1.0,
+        label=f"practical margin ±{margin:g}",
+    )
+    ax.axvline(-margin, color="#888888", linestyle=":", linewidth=1.0)
+    logreg = contrasts.get("R3_ca_vs_logreg_rna")
+    if logreg is not None:
+        ax.axvline(
+            float(logreg["estimate"]),
+            color="#b85c38",
+            linestyle="-.",
+            linewidth=1.4,
+            label=f"R3_ca − logreg_rna ({float(logreg['estimate']):+.3f})",
+        )
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("donor balanced-accuracy contrast")
+    ax.set_title(
+        f"Ladder CA−TC forest (outcome {data.get('outcome', '?')}; "
+        f"primary ≈ {float(data['primary']['estimate']):+.4f})"
+    )
+    ax.legend(fontsize=7.5, loc="lower right", frameon=False)
+    ax.set_xlim(-0.28, 0.16)
+    fig.tight_layout()
+    return _save(fig, outdir, "fig3_ladder")
+
+
+def build_fig4(data: dict, outdir: Path) -> list[Path]:
+    """Faithfulness: Δ log-loss per intervention with CIs (primary R3_ca)."""
+    rows = [
+        r
+        for r in data["summary"]
+        if r["arm"] == FAITH_PRIMARY_ARM and r["intervention"] in FAITH_INTERVENTIONS
+    ]
+    by_name = {r["intervention"]: r for r in rows}
+    ordered = [by_name[name] for name in FAITH_INTERVENTIONS if name in by_name]
+    if not ordered:
+        raise ValueError(f"no faithfulness rows for arm {FAITH_PRIMARY_ARM}")
+
+    labels = [r["intervention"] for r in ordered]
+    estimates = [float(r["ll_drop"]) for r in ordered]
+    lo_err = [float(r["ll_drop"]) - float(r["ll_drop_ci"][0]) for r in ordered]
+    hi_err = [float(r["ll_drop_ci"][1]) - float(r["ll_drop"]) for r in ordered]
+    used = [bool(r.get("used_by_model")) for r in ordered]
+    colors = ["#1f4e79" if u else "#7a7a7a" for u in used]
+
+    fig, ax = plt.subplots(figsize=(8.0, 4.4))
+    y = np.arange(len(labels))[::-1]
+    ax.errorbar(
+        estimates,
+        y,
+        xerr=[lo_err, hi_err],
+        fmt="o",
+        ecolor="#444444",
+        capsize=3,
+        markersize=6,
+        color="none",
+    )
+    ax.scatter(estimates, y, c=colors, s=36, zorder=3)
+    ax.axvline(0.0, color="black", linestyle="--", linewidth=1.0)
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("Δ donor log-loss (intervention − baseline)")
+    tags = ",".join(data.get("decision", {}).get("tags", [])) or "untagged"
+    ax.set_title(f"Faithfulness interventions on {FAITH_PRIMARY_ARM} ({tags})")
+    ax.plot([], [], "o", color="#1f4e79", label="CI excludes 0 (used)")
+    ax.plot([], [], "o", color="#7a7a7a", label="CI includes 0")
+    ax.legend(fontsize=7.5, loc="lower right", frameon=False)
+    fig.tight_layout()
+    return _save(fig, outdir, "fig4_faithfulness")
+
+
+def build_fig5(data: dict, outdir: Path) -> list[Path]:
+    """Spectrum: eligible cell-type DS−CON donor effects with Holm markers."""
+    eligible = set(data.get("eligible_types", []))
+    rows = [r for r in data["results"] if r.get("eligible") and r["author_cell_type"] in eligible]
+    rows = sorted(rows, key=lambda r: float(r["s"]["diff"]))
+    if not rows:
+        raise ValueError("no eligible spectrum rows to plot")
+
+    labels = [r["author_cell_type"] for r in rows]
+    estimates = [float(r["s"]["diff"]) for r in rows]
+    lo_err = [float(r["s"]["diff"]) - float(r["s"]["ci_low"]) for r in rows]
+    hi_err = [float(r["s"]["ci_high"]) - float(r["s"]["diff"]) for r in rows]
+    sigs = [bool(r["s"].get("significant")) for r in rows]
+
+    fig, ax = plt.subplots(figsize=(7.5, max(4.0, 0.42 * len(labels) + 1.2)))
+    y = np.arange(len(labels))
+    ax.errorbar(
+        estimates,
+        y,
+        xerr=[lo_err, hi_err],
+        fmt="o",
+        color="#1f4e79",
+        ecolor="#1f4e79",
+        capsize=3,
+        markersize=5.5,
+    )
+    for i, sig in enumerate(sigs):
+        if sig:
+            ax.text(
+                estimates[i],
+                y[i] + 0.22,
+                "*",
+                ha="center",
+                va="bottom",
+                color="#b00020",
+                fontsize=14,
+                fontweight="bold",
+            )
+    ax.axvline(0.0, color="black", linestyle="--", linewidth=1.0)
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("DS − CON mean cell score (donor-level)")
+    call = data.get("spectrum_call", "?")
+    n_sig = sum(sigs)
+    ax.set_title(f"Cell-state spectrum ({call}; {n_sig}/{len(rows)} Holm-significant)")
+    fig.tight_layout()
+    return _save(fig, outdir, "fig5_spectrum")
+
+
+def _try_build(
+    label: str,
+    source: Path,
+    builder,
+    outdir: Path,
+    *,
+    hard_fail: bool,
+) -> int:
+    """Build one figure; skip+record if source missing unless hard_fail."""
+    try:
+        data = load_source(source) if source is not None else None
+        written = builder(data, outdir) if data is not None else builder(outdir)
+        for path in written:
+            print(f"wrote {path}")
+        return 0
+    except MissingSourceError as exc:
+        if hard_fail:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+        SKIPPED_FIGURES.append(f"{label}: {exc}")
+        print(f"skipped {label}: {exc}")
+        return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build P22-NN paper figures.")
-    ap.add_argument("--only", choices=("schematic", "planted", "all"), default="all")
+    ap.add_argument(
+        "--only",
+        choices=("schematic", "planted", "ladder", "faithfulness", "spectrum", "all"),
+        default="all",
+    )
     ap.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
     args = ap.parse_args(argv)
 
+    SKIPPED_FIGURES.clear()
+    only = args.only
+
     try:
-        if args.only in ("schematic", "all"):
+        if only in ("schematic", "all"):
             for path in build_fig1(args.outdir):
                 print(f"wrote {path}")
-        if args.only in ("planted", "all"):
+        if only in ("planted", "all"):
+            # P2 contract: planted missing → exit 2 (not silent skip).
             data = load_source(DEFAULT_PLANTED)
             for path in build_fig2(data, args.outdir):
                 print(f"wrote {path}")
     except MissingSourceError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
-    if args.only == "all":
+
+    if only in ("ladder", "all"):
+        rc = _try_build(
+            "fig3_ladder",
+            DEFAULT_LADDER,
+            build_fig3,
+            args.outdir,
+            hard_fail=(only == "ladder"),
+        )
+        if rc:
+            return rc
+    if only in ("faithfulness", "all"):
+        rc = _try_build(
+            "fig4_faithfulness",
+            DEFAULT_FAITH,
+            build_fig4,
+            args.outdir,
+            hard_fail=(only == "faithfulness"),
+        )
+        if rc:
+            return rc
+    if only in ("spectrum", "all"):
+        rc = _try_build(
+            "fig5_spectrum",
+            DEFAULT_SPECTRUM,
+            build_fig5,
+            args.outdir,
+            hard_fail=(only == "spectrum"),
+        )
+        if rc:
+            return rc
+
+    if only == "all":
         for line in SKIPPED_FIGURES:
             print(f"skipped {line}")
     return 0

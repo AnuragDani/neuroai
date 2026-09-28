@@ -68,4 +68,8 @@ Full suite `pytest -q -x` → **1188 passed**. Results top label **`NN_ASSIGNMEN
 
 ## Paper framing (N24)
 
-Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-result / detectability-limit paper. Evidence: `paper/framing.md`. Next: N25 figures.
+Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-result / detectability-limit paper. Evidence: `paper/framing.md`.
+
+## Paper figures (N25)
+
+`paper/make_figures.py --only all` wrote `paper/figures/fig1_schematic`, `fig2_planted`, `fig3_ladder`, `fig4_faithfulness`, `fig5_spectrum` (PNG 300 dpi + PDF) from planted / ladder_summary / faithfulness / spectrum JSON. `SKIPPED_FIGURES=[]`. Stale `fig1_architecture` and buggy-lane `fig4_spectrum` removed. Next: N27 Results + claims ledger.
