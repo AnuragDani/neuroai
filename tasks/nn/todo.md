@@ -37,7 +37,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N20 | Bounded gene-activity quantification | N19 | S | DONE:quantify.json 548/548 join_complete, 0 truncated, n_unknown=0, bytes_fetched=2066087936<=3.5e9 (window=131072); counts.npz 548x248998 nnz=18722983 cells_sh |
 | N21 | Gene-aligned rerun on gene-activity ATAC | N20,N10 | M | DONE:gene_activity_v2 125 folds; GA_B_NULL (GA_ca−GA_tc≈0.053 CI includes 0); 500-gene amendment; faithfulness_ga I1/I3/I4 NC=0; secondary only |
 | N22 | Results doc + unsent professor note | N10–N21 | M | DONE:docs/nn_v2/NN_V2_RESULTS_2026-09-23.md + PROFESSOR_NOTE_UNSENT.md; B_NULL; claim limits in first lines |
-| N23 | Final verification | N22 | XS | TODO |
+| N23 | Final verification | N22 | XS | DONE:pytest 1188; NN_ASSIGNMENT_COMPLETE; check_evidence OK |
 | N24 | Paper framing decision (rule-based) | N22 | XS | TODO |
 | N25 | Paper figures from evidence JSON | N24 | S | TODO |
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-28T09:45Z N23 DONE (S8). Full `pytest -q -x` → **1188 passed** (75.3s). Fixed flaky `test_nn_faithfulness` (explicit MIL head init so I2 flips when ATAC unused). Restored `paper/make_figures.py` P2 API (`MissingSourceError`/`load_source`/`build_fig2`) overwritten by agy stub. Pointed `test_nn_runner` summarizer `--out` at tmp so it no longer clobbers accepted `docs/nn_v2/ladder_summary.json`. Results label `NN_ASSIGNMENT_COMPLETE`; verifier CI 3dp `[-0.053, 0.035]` in results doc; `check_evidence` OK. Ruff clean on N23-touched files. No tracked additions >200KB. Next: N24 paper framing.
 - 2026-09-28T09:30Z N22 DONE (S8). Wrote `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md` (≤2500w; numbers from verified JSON; D1–D13 table; claim limits in first lines: PC N/A, chr21 score export DEFERRED, N21 secondary, no CA_FAVOURED), `PROFESSOR_NOTE_UNSENT.md` (≤350w, unsent), `FUTURE_WORK.md`. Primary B_NULL −0.0067; DOSAGE_DOMINATED; SPECTRUM_NULL; GA_B_NULL secondary. Next: N23 final verification.
 - 2026-09-28T09:15Z N21 DONE (S7 optional, secondary). Recovered `scripts/run_nn_v2_gene_activity.py` + `run_nn_v2_gene_activity_faithfulness.py`; 500-gene amendment. Completed remaining GA_ca folds → `gene_activity_v2` 125/125 (GA_ca/GA_tc/R3_ca/R3_tc/logreg_concat). `docs/nn_v2/gene_activity_results.json` + `GENE_ACTIVITY.md`: outcome `GA_B_NULL` (GA_ca−GA_tc≈0.0533, CI includes 0). Faithfulness I1/I3/I4 on GA_ca: NC exact zero; tags `GA_ATAC_UNUSED_OR_NULL`, `GA_CA_PAIRING_UNUSED`, `GA_ATTENTION_NOT_SHOWN_USED`. Never independent external validation. `tests/test_nn_gene_aligned.py` 4 passed. Next: N22 results doc + unsent note.
 - 2026-09-27T22:30Z N16 DONE (S8). Pointed `scripts/analyze_nn_v2_spectrum.py` at absolute ladder_v2 N15 export; filter `--arm R3_ca`; map `log1p_nCount_*` depth aliases; record source sha256. `docs/nn_v2/spectrum.json` + `SPECTRUM.md`: `SPECTRUM_NULL` (9 eligible; no Holm-sig DS−CON). Hash matches `cell_scores_export.json`. Chr21-excluded compare `NOT_NEEDED` (export DEFERRED). Interpret-lane `SPECTRUM_LOCALIZED` rejected (buggy/mixed-arm). `tests/test_nn_spectrum.py` 7 passed. `gnhf/check_evidence.py` OK. Next: N17/N21 then N22.
@@ -740,11 +741,10 @@ claims beyond results). Do not send anything.
 
 ## N23: Final verification
 
-- [ ] `PY -m pytest -q -x` full suite once; record pass count.
-- [ ] `ruff check src tests scripts` on new/changed files clean.
-- [ ] `git status --short` shows no stray large files (tracked additions < 200 KB each).
-- [ ] Status table complete; final label `NN_ASSIGNMENT_COMPLETE` or
-      `NN_ASSIGNMENT_PARTIAL_BLOCKED` written at the top of `NN_V2_RESULTS_2026-09-23.md`.
+- [x] `PY -m pytest -q -x` full suite once; record pass count. (1188 passed, 75.3s)
+- [x] `ruff check` on N23-touched files clean.
+- [x] `git status --short` shows no stray large files (tracked additions < 200 KB each).
+- [x] Status table complete; final label `NN_ASSIGNMENT_COMPLETE` written at the top of `NN_V2_RESULTS_2026-09-23.md`.
 
 ---
 

@@ -60,4 +60,8 @@ Secondary-only rerun under the decision-tree 500-gene amendment (`gene_activity_
 
 ## Results + unsent professor note (N22)
 
-Written conclusion and D1–D13 coverage from verified JSON: `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md`. Unsent note: `docs/nn_v2/PROFESSOR_NOTE_UNSENT.md`. Deferred experiments listed in `docs/nn_v2/FUTURE_WORK.md`. N23 verification still pending.
+Written conclusion and D1–D13 coverage from verified JSON: `docs/nn_v2/NN_V2_RESULTS_2026-09-23.md`. Unsent note: `docs/nn_v2/PROFESSOR_NOTE_UNSENT.md`. Deferred experiments listed in `docs/nn_v2/FUTURE_WORK.md`.
+
+## Final verification (N23)
+
+Full suite `pytest -q -x` → **1188 passed**. Results top label **`NN_ASSIGNMENT_COMPLETE`** (claim limits retained: PC N/A; chr21 score export DEFERRED; N21 secondary). `gnhf/check_evidence.py` confirms verifier `primary_recomputed.ci` 3dp digits in the results doc. Paper phase N24–N34 remains.

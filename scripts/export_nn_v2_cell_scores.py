@@ -374,7 +374,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         inputs=inputs,
         splits=splits,
         protocol=protocol,
-        out_cells=spectrum_dir / ("cell_scores_smoke.csv.gz" if args.smoke else "cell_scores.csv.gz"),
+        out_cells=spectrum_dir
+        / ("cell_scores_smoke.csv.gz" if args.smoke else "cell_scores.csv.gz"),
         out_compact=out_docs
         / (
             "donor_celltype_scores_smoke.csv.gz"

@@ -66,6 +66,11 @@ def test_synthetic_atac_unused_i1_zero_i2_large():
 
     fusion = _DummyFusion(use_a=True, use_b=False)  # ATAC unused
     model = MILWrapper(fusion, dim=2)
+    # Cell logits come from MILWrapper.head on fused embeddings, not DummyFusion.head.
+    # Bias −5 with unit weights: test RNA mean ≈ +10 → positive; I2 clamp to train
+    # mean ≈ 0 → negative; I1 (ATAC clamp) unchanged because ATAC is unused.
+    nn.init.constant_(model.head.weight, 1.0)
+    nn.init.constant_(model.head.bias, -5.0)
     pred = predict_mil(model, test_views, test_donors)
     order = {d: i for i, d in enumerate(pred["donor_ids"])}
     prob = np.array([pred["donor_probabilities"][order[d]] for d in donor_ids])

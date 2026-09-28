@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from scripts.export_nn_v2_cell_scores import assert_five_appearances
 
 
