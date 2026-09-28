@@ -1,1 +1,1 @@
-DONE:paper/make_figures.py --only planted builds paper/figures/fig2_planted.png+pdf from docs/nn_v2/planted_benchmark.json (Agg, 300dpi); missing-JSON exits 2 with clear message; 15 tests pass, ruff clean
+TODO
