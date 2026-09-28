@@ -37,7 +37,7 @@ Artefact note: The pooled balanced-accuracy (mean_ba) for `majority` and other m
 
 ## Downstream (P1 on ladder_v3)
 
-N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), N15 (`spectrum_v3` cell-score export), and N16 (`SPECTRUM_NULL` + chr21 `COMPARED`) are done against `ladder_v3`. N17 `routing_v3` is RUNNING (publish when EXIT:0).
+N11 (`chr21_excluded_v3`), N12 (`seeds_v3`), N13 (`faithfulness_v3`), N14 (`nuisance_v3`), N15 (`spectrum_v3` cell-score export), N16 (`SPECTRUM_NULL` + chr21 `COMPARED`), and N17 (`routing_v3`, all tags `NOT_SHOWN_USED`) are done against `ladder_v3`. P1 complete. P2 planted gene-aligned: no `CA_FAVOURED`. P3 chr21-excluded spectrum: `SPECTRUM_NULL` (`docs/nn_v2/v5/spectrum_chr21_excluded.json`).
 
 ## chr21-excluded sensitivity (N11)
 
@@ -62,6 +62,10 @@ Exported per-cell logits and MIL attention for R1_ca, R3_ca, R3_tc, R4_ca from l
 ## Cell-state spectrum (N16)
 
 Donor-mean R3_ca scores from the ladder_v3 N15 export (`spectrum_v3`): **SPECTRUM_NULL** (9 eligible types). Chr21-excluded score compare `COMPARED` (call `SPECTRUM_NULL`; agree=True). Evidence: `docs/nn_v2/spectrum.json`, `docs/nn_v2/SPECTRUM.md`.
+
+## P3 spectrum on chr21-excluded scores
+
+Because N11 is **DOSAGE_DOMINATED**, the N16 analysis was repeated as primary on R3_ca per-cell scores from `chr21_excluded_v3` (donor unit, Holm across eligible types): **SPECTRUM_NULL** (9 eligible; no Holm-significant DS−CON). Evidence: `docs/nn_v2/v5/spectrum_chr21_excluded.json`, `docs/nn_v2/v5/SPECTRUM_CHR21_EXCLUDED.md`.
 
 ## Routing / attention (N17)
 

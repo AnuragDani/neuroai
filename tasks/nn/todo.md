@@ -51,6 +51,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N34 | Final paper verification | N33 | XS | DONE:pytest 1192; check_paper 5/5 PASS; check_evidence OK; DRAFT_V1_COMPLETE; vault status refreshed |
 
 ## Run log
+- 2026-09-28T20:50Z P3 DONE (v5). N16-style spectrum on chr21-excluded R3_ca scores (`chr21_excluded_v3` / spectrum_v3 export) → `docs/nn_v2/v5/spectrum_chr21_excluded.json` + `SPECTRUM_CHR21_EXCLUDED.md` (24 lines): `SPECTRUM_NULL` (9 eligible; no Holm-sig DS−CON). `tests/test_nn_v5_spectrum_chr21_excluded.py` 6 passed. Next: P4 results doc.
 - 2026-09-28T20:45Z P2 DONE (v5). Gene-matched planted S6 (δ=0.5/1.0, 5 folds, 64 GA genes) gene_aligned_ca vs gene_aligned_tc vs rna_atac_concat → `docs/nn_v2/v5/planted_gene_aligned.json` (30/30 ok; any_ca_favoured=false; both cells LINEAR_SUFFICIENT). `tests/test_nn_v5_planted_gene_aligned.py` 5 passed. Next: P3 spectrum_chr21_excluded.
 
 - 2026-09-28T20:35Z P1/N17 DONE (v5). `routing_v3` EXIT:0 vs canonical `ladder_v3`; published `docs/nn_v2/routing_attention.json` + `ROUTING_ATTENTION.md` (folds_used=75; all three readout tags `NOT_SHOWN_USED`). P1 complete (N11–N17 on ladder_v3). `tests/test_nn_v5_routing.py` 5 passed. Next: P2 planted gene-aligned regime.
