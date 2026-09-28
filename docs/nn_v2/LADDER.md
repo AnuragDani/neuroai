@@ -76,4 +76,8 @@ Rule table on accepted evidence → **F4** (F1–F3 FALSE): rigorous negative-re
 
 ## Paper Results + claims (N27)
 
-Rewrote `paper/draft.md` Results from accepted ladder_v2 evidence (B_NULL; F4; figures linked) and wrote `paper/claims.csv`. `python paper/check_paper.py` PASS. Abstract/Discussion/Limitations remain for N29–N30. Next: N29.
+Rewrote `paper/draft.md` Results from accepted ladder_v2 evidence (B_NULL; F4; figures linked) and wrote `paper/claims.csv`. `python paper/check_paper.py` PASS.
+
+## Paper Discussion + Limitations (N29)
+
+Rewrote Discussion+Limitations under F4 (506≤700 words): real-data `B_NULL`, no `CA_FAVOURED`, dosage/faithfulness/spectrum/R2 claim limits, mandatory cohort limits, PC N/A, chr21 export DEFERRED. Header `DRAFT_V1_PARTIAL:N30-N34`. `check_paper.py` PASS. Next: N30 Abstract + title.

@@ -43,7 +43,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N26 | Draft Methods | N24 | S | DONE:paper/draft.md Methods (856 words <=1400, six bold-led blocks: data/cohort, sampling, representation, ladder, architecture+training, evaluation, controls); |
 | N27 | Draft Results + claims ledger | N25,N26 | M | DONE:paper/draft.md Results + claims.csv; B_NULL/F4; check_paper PASS |
 | N28 | Draft Introduction + Related work | N24 | S | DONE:paper/draft.md Introduction+Related Work (254+237=491 words <=900); 17 frozen citekeys used; check_paper.py 5/5 PASS; 15 tests pass; ruff clean |
-| N29 | Draft Discussion + Limitations | N27 | S | TODO |
+| N29 | Draft Discussion + Limitations | N27 | S | DONE:paper/draft.md Discussion+Limitations; F4; 506<=700w; check_paper PASS |
 | N30 | Abstract + title | N29,N28 | XS | TODO |
 | N31 | Paper checker + fixes | N30 | S | TODO |
 | N32 | Adversarial self-review | N31 | S | TODO |
@@ -52,6 +52,7 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 
 ## Run log
 
+- 2026-09-28T10:20Z N29 DONE (S9). Rewrote `paper/draft.md` Discussion+Limitations from accepted F4 / ladder_v2 evidence (B_NULL; no CA_FAVOURED; DOSAGE_DOMINATED; SPECTRUM_NULL; CA_PAIRING_UNUSED; NOT_SHOWN_USED; R2_REJECTED; GA secondary). Mandatory limits: 30 donors; internal cohort; [@lattke2026down]; region panel not regulatory; attention≠explanation; PC N/A; chr21 export DEFERRED. 506≤700 words. Header `DRAFT_V1_PARTIAL:N30-N34`. `python paper/check_paper.py` 5/5 PASS. Abstract/title still stale until N30. Next: N30 Abstract + title.
 - 2026-09-28T10:05Z N27 DONE (S9). Rewrote `paper/draft.md` Results from accepted ladder_v2 JSON (B_NULL −0.0067; DOSAGE_DOMINATED; SPECTRUM_NULL; F4 framing; fig1–fig5 linked). Wrote `paper/claims.csv` tracing every Results/Abstract decimal. Header `DRAFT_V1_PARTIAL:N29-N34`. `python paper/check_paper.py` 5/5 PASS; `pytest tests/test_paper_tools.py` 19 passed. Abstract/Discussion/Limitations still stale until N29–N30. Next: N29 Discussion + Limitations.
 - 2026-09-28T09:55Z N25 DONE (S9). Extended `paper/make_figures.py` with Fig 3–5 from accepted JSON; regenerated `paper/figures/fig1_schematic`, `fig2_planted`, `fig3_ladder`, `fig4_faithfulness`, `fig5_spectrum` (png+pdf 300 dpi). Removed stale `fig1_architecture` and renumbered-buggy `fig4_spectrum`. SKIPPED_FIGURES=[]. `pytest tests/test_paper_tools.py` 19 passed; ruff clean. Next: N27 Results + claims ledger.
 - 2026-09-28T09:50Z N24 DONE (S9). Wrote `paper/framing.md` (38 lines ≤60) from accepted evidence: F1 FALSE (`B_NULL`, `CA_PAIRING_UNUSED`), F2 FALSE (0/16 `CA_FAVOURED`), F3 FALSE (`SPECTRUM_NULL`), F4 TRUE → rigorous negative-result/detectability-limit framing + working title (no forbidden words). Superseded F3 framing stays under `paper/superseded_buggy_ladder/`. `check_paper.py` still FAIL numbers on stale draft Results/Abstract (expected until N27). Next: N25 figures from verified JSON.
