@@ -93,3 +93,7 @@ Rewrote title + Abstract from `paper/framing.md` F4 and `paper/claims.csv` (152�
 ## Paper adversarial self-review (N32)
 
 Wrote `paper/self_review.md` (8 objections). 7/8 cite existing Methods/Results/Discussion/Limitations; age confound added to Limitations. Header `DRAFT_V1_PARTIAL:N33-N34`. Next: N33 vault copy → N34.
+
+## Paper vault copy (N33)
+
+Copied allow-list to vault `paper-nn/` (`draft.md`, `figures/` fig1–fig5 png+pdf, `refs_frozen.bib`, `claims.csv`, `self_review.md`); sha256 matched repo. Replaced stale buggy-lane vault draft. MOM and unsent `external_shared/2026-09-27` untouched. Header `DRAFT_V1_PARTIAL:N34`. Next: N34.
