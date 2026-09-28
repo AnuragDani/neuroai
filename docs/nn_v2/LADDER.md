@@ -53,3 +53,7 @@ Donor-mean R3_ca scores from the accepted N15 export: **SPECTRUM_NULL** (9 eligi
 ## Routing / attention (N17)
 
 Per-cell-type descriptive readouts from ladder_v2 fold models (75 folds: R3_gated / R3_ca / R4_ca). All three readouts tagged **NOT_SHOWN_USED** because mapped N13 interventions I4 (CA / program-CA attention knockout) and I6 (gated route clamps) have Δ log-loss CIs that include 0. N13 `ATAC_USED` (I1) does not authorize attention/routing claims. Evidence: `docs/nn_v2/routing_attention.json`, `docs/nn_v2/ROUTING_ATTENTION.md`.
+
+## Gene-activity secondary ladder (N21)
+
+Secondary-only rerun under the decision-tree 500-gene amendment (`gene_activity_v2/`; primary remains N10 `B_NULL`). Outcome **GA_B_NULL**: GA_ca−GA_tc estimate 0.0533, CI [−0.0527, 0.1572] (includes 0; below practical margin). View-B gene-activity arms also null for R3_ca−R3_tc. GA_ca I1/I3/I4 faithfulness: NC exact zero; tags `GA_ATAC_UNUSED_OR_NULL`, `GA_CA_PAIRING_UNUSED`, `GA_ATTENTION_NOT_SHOWN_USED`. Never claim as independent external validation. Evidence: `docs/nn_v2/gene_activity_results.json`, `docs/nn_v2/GENE_ACTIVITY.md`.
