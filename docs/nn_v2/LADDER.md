@@ -89,3 +89,7 @@ Rewrote title + Abstract from `paper/framing.md` F4 and `paper/claims.csv` (152�
 ## Paper checker (N31)
 
 `python paper/check_paper.py` → PASS on all five checks (citations, numbers, forbidden, figures, word_counts); `--json` reports `ok=true`, `failures=0`. No draft repairs. Header advanced to `DRAFT_V1_PARTIAL:N32-N34`. Next: N32–N34.
+
+## Paper adversarial self-review (N32)
+
+Wrote `paper/self_review.md` (8 objections). 7/8 cite existing Methods/Results/Discussion/Limitations; age confound added to Limitations. Header `DRAFT_V1_PARTIAL:N33-N34`. Next: N33 vault copy → N34.

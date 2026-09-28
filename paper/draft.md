@@ -3,7 +3,7 @@ P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introductio
 Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
-Final label: DRAFT_V1_PARTIAL:N32-N34 (N31 check_paper.py 5/5 PASS; zero repairs)
+Final label: DRAFT_V1_PARTIAL:N33-N34 (N32 adversarial self-review complete)
 -->
 
 # Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
@@ -239,7 +239,9 @@ stay provisional even though NC is exact zero. The chr21-excluded cell-score exp
 `DEFERRED`, so the spectrum chr21 compare is `NOT_NEEDED` and dosage alignment uses the
 per-cell dosage column instead. Attention is not treated as explanation: all N17 readouts
 are `NOT_SHOWN_USED`. R2 does not pass the held-out probe-drop rule, so library and batch
-confounding are not shown to be erased. Majority pooled BA can sit below chance from
+confounding are not shown to be erased. Developmental stage (age) is recorded in the
+cohort metadata but is not residualized or probed as a disease-state confounder beyond
+the declared library / batch / QC adversary. Majority pooled BA can sit below chance from
 fold-wise threshold pooling; AUROC should be read alongside BA. Every planted signal is
 synthetic, so the benchmark speaks to detectability on constructed labels and carries no
 biological claim. This study is separate from the earlier August same-cap and September

@@ -1,5 +1,6 @@
 # paper lane
 
+- 2026-09-28 N32 (finish-base): Wrote `paper/self_review.md` (8 objections); age confound Limitations add; 7/8 cite existing sections; header `DRAFT_V1_PARTIAL:N33-N34`. Next: N33 vault copy.
 - 2026-09-28 N31 (finish-base): Formal `check_paper.py` gate 5/5 PASS (citations/numbers/forbidden/figures/word_counts; 0 failures; `--json` ok=true); no draft repairs; header `DRAFT_V1_PARTIAL:N32-N34`. Next: N32 adversarial self-review.
 - 2026-09-28 N30 (finish-base): Rewrote title + Abstract under F4 from framing.md/claims.csv (152≤200w; B_NULL −0.0067; replaced stale “ladder never ran”); `check_paper.py` 5/5 PASS; header `DRAFT_V1_PARTIAL:N31-N34`. Next: N31 formal checker + N32 self-review.
 - 2026-09-28 N29 (finish-base): Rewrote Discussion+Limitations under F4 (506≤700w; mandatory limits + PC N/A + chr21 DEFERRED); `check_paper.py` 5/5 PASS; header `DRAFT_V1_PARTIAL:N30-N34`. Abstract/title still stale. Next: N30 Abstract + title.

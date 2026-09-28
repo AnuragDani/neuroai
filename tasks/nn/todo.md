@@ -46,12 +46,13 @@ Status values: `TODO`, `RUNNING:<pid>:<log>`, `DONE:<evidence>`, `BLOCKED:<reaso
 | N29 | Draft Discussion + Limitations | N27 | S | DONE:paper/draft.md Discussion+Limitations; F4; 506<=700w; check_paper PASS |
 | N30 | Abstract + title | N29,N28 | XS | DONE:paper/draft.md Abstract+title from framing.md F4 + claims.csv (152<=200w; B_NULL -0.0067; check_paper 5/5 PASS); DRAFT_V1_PARTIAL:N31-N34 |
 | N31 | Paper checker + fixes | N30 | S | DONE:check_paper.py 5/5 PASS (citations/numbers/forbidden/figures/word_counts; 0 failures); no repairs; DRAFT_V1_PARTIAL:N32-N34 |
-| N32 | Adversarial self-review | N31 | S | TODO |
+| N32 | Adversarial self-review | N31 | S | DONE:paper/self_review.md 8 objections; age Limitations add; header DRAFT_V1_PARTIAL:N33-N34 |
 | N33 | Copy draft to vault | N32 | XS | TODO |
 | N34 | Final paper verification | N33 | XS | TODO |
 
 ## Run log
 
+- 2026-09-28T11:10Z N32 DONE (S9). Wrote `paper/self_review.md` (8 reviewer objections). 7/8 resolved by citing Methods/Results/Discussion/Limitations; age confound not previously stated → added Limitations sentence (developmental stage recorded but not residualized/probed beyond library/batch/QC adversary). No new experiment. Header `DRAFT_V1_PARTIAL:N33-N34`. `python paper/check_paper.py` re-run after edit. Next: N33 vault copy.
 - 2026-09-28T10:55Z N31 DONE (S9). Formal paper checker gate: `python paper/check_paper.py` → PASS citations/numbers/forbidden/figures/word_counts (0 problems; `--json` ok=true). No draft repairs required (≤2-iteration fix budget unused). Header `DRAFT_V1_PARTIAL:N32-N34`. `pytest tests/test_paper_tools.py` 19 passed. Next: N32 adversarial self-review.
 - 2026-09-28T10:40Z N30 DONE (S9). Rewrote `paper/draft.md` title + Abstract from `paper/framing.md` F4 and `paper/claims.csv`: B_NULL −0.0067 CI [−0.0533, 0.0348]; margin 0.07 unmet; RNA BA 0.493 vs R3_ca 0.373; chr21 AUROC 0.998; DOSAGE_DOMINATED; 0 CA_FAVOURED; null-point 0.5 vs 0.5417. 152≤200 words. Replaced stale “ladder never ran / not estimable” Abstract. Header `DRAFT_V1_PARTIAL:N31-N34`. `python paper/check_paper.py` 5/5 PASS. Next: N31 paper checker formal pass + N32 self-review.
 - 2026-09-28T10:20Z N29 DONE (S9). Rewrote `paper/draft.md` Discussion+Limitations from accepted F4 / ladder_v2 evidence (B_NULL; no CA_FAVOURED; DOSAGE_DOMINATED; SPECTRUM_NULL; CA_PAIRING_UNUSED; NOT_SHOWN_USED; R2_REJECTED; GA secondary). Mandatory limits: 30 donors; internal cohort; [@lattke2026down]; region panel not regulatory; attention≠explanation; PC N/A; chr21 export DEFERRED. 506≤700 words. Header `DRAFT_V1_PARTIAL:N30-N34`. `python paper/check_paper.py` 5/5 PASS. Abstract/title still stale until N30. Next: N30 Abstract + title.
