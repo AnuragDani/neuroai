@@ -85,3 +85,7 @@ Rewrote Discussion+Limitations under F4 (506≤700 words): real-data `B_NULL`, n
 ## Paper Abstract + title (N30)
 
 Rewrote title + Abstract from `paper/framing.md` F4 and `paper/claims.csv` (152≤200 words): B_NULL −0.0067; replaced stale “ladder never ran / not estimable” Abstract. Header `DRAFT_V1_PARTIAL:N31-N34`. `check_paper.py` PASS. Next: N31–N34.
+
+## Paper checker (N31)
+
+`python paper/check_paper.py` → PASS on all five checks (citations, numbers, forbidden, figures, word_counts); `--json` reports `ok=true`, `failures=0`. No draft repairs. Header advanced to `DRAFT_V1_PARTIAL:N32-N34`. Next: N32–N34.

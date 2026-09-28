@@ -3,7 +3,7 @@ P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introductio
 Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
-Final label: DRAFT_V1_PARTIAL:N31-N34 (Abstract+title rewritten for accepted ladder_v2 F4)
+Final label: DRAFT_V1_PARTIAL:N32-N34 (N31 check_paper.py 5/5 PASS; zero repairs)
 -->
 
 # Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
