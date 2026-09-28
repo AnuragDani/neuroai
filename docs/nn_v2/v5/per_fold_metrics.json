@@ -1,0 +1,4758 @@
+{
+  "run": "reports/generated/nn_20260923/ladder_v2",
+  "n_arms": 18,
+  "per_arm": {
+    "R0_ca": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5258888888888889,
+      "per_fold_auroc_sd": 0.2603591062312414,
+      "per_fold_ba_mean": 0.5449999999999999,
+      "per_fold_ba_sd": 0.21400934559032697,
+      "per_fold_log_loss_mean": 0.8575592802856711,
+      "per_fold_log_loss_sd": 0.18528342228554504,
+      "pooled_auroc": 0.3834666666666667,
+      "pooled_ba": 0.45999999999999996,
+      "pooled_log_loss": 0.857559280285671,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.625,
+          "log_loss": 1.1471231157545834,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7789273822894597,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6082316846605899,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.5966976179210857,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.2,
+          "log_loss": 0.842054038650809,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 1.221652612720476,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.375,
+          "log_loss": 1.0195233075784331,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.2,
+          "log_loss": 0.7616384176526844,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 0.6078772092420531,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.375,
+          "log_loss": 1.1227715669309735,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.625,
+          "log_loss": 0.9686851573457907,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.75,
+          "log_loss": 0.7568918366045693,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.4444444444444444,
+          "donor_ba": 0.5,
+          "log_loss": 0.7388337882795154,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 0.9102186118219114,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666666,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.679489241837126,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 1.082394277924031,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.25,
+          "log_loss": 1.0232888549671377,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.6,
+          "log_loss": 0.9786096124982001,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.75,
+          "log_loss": 0.7684353685397997,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.25,
+          "log_loss": 0.8365907239511742,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.6,
+          "log_loss": 1.0280144236271918,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.25,
+          "log_loss": 0.9514799169128992,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.8,
+          "log_loss": 0.7264333247274326,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.5504716998093332,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.3333333333333333,
+          "log_loss": 0.7326482148945188,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R0_tc": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5552222222222222,
+      "per_fold_auroc_sd": 0.2341366067433368,
+      "per_fold_ba_mean": 0.5623333333333332,
+      "per_fold_ba_sd": 0.19184947803479221,
+      "per_fold_log_loss_mean": 0.8664741742539672,
+      "per_fold_log_loss_sd": 0.20258507274090606,
+      "pooled_auroc": 0.3952,
+      "pooled_ba": 0.48,
+      "pooled_log_loss": 0.8664741742539672,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.625,
+          "log_loss": 1.1350423683377744,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7693507202685274,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6071869054165012,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.5933053083248635,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.2,
+          "log_loss": 0.8459722340286652,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 1.2201957039557538,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.974767107574216,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.2,
+          "log_loss": 0.780526190187726,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 0.6150274088838894,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.375,
+          "log_loss": 1.0604874213478548,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.625,
+          "log_loss": 1.01644967207521,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.75,
+          "log_loss": 0.7657494968328348,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.3333333333333333,
+          "log_loss": 0.7120080604584675,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.7,
+          "log_loss": 0.987587281168361,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666666,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.6555155952027865,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 1.102761805800668,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.25,
+          "log_loss": 1.1554945231881837,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.6,
+          "log_loss": 1.1312456383866587,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.75,
+          "log_loss": 0.7652478762752185,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.375,
+          "log_loss": 0.7743430801152256,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.6,
+          "log_loss": 1.0592505439483435,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.9943329384488937,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 0.6811050700431577,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.5488939832737377,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.5,
+          "log_loss": 0.7100074228056651,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R1_ca": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5801111111111111,
+      "per_fold_auroc_sd": 0.2950692323029493,
+      "per_fold_ba_mean": 0.5036666666666667,
+      "per_fold_ba_sd": 0.07564830908002283,
+      "per_fold_log_loss_mean": 0.831870726123745,
+      "per_fold_log_loss_sd": 0.1690910738499232,
+      "pooled_auroc": 0.33937777777777783,
+      "pooled_ba": 0.3333333333333333,
+      "pooled_log_loss": 0.8318707261237451,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.8825906163328447,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.7979705829190801,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.5689436044914978,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6911801489999313,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 1.102893107900383,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0170244882776887,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.76239731973777,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.2,
+          "log_loss": 1.4008484675630484,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7471169676528425,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.8677750435138515,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.861696662993258,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7471363280213262,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.684116317483681,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.8121080014175401,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6854218100425881,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.8017429089532621,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.125,
+          "donor_ba": 0.5,
+          "log_loss": 1.0035643022686063,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8728403768826963,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7229617867671906,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.761577268559114,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0121443478131338,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8585400945697174,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7079157491290696,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7133226028630629,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.712939247940445,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R1_tc": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6000555555555556,
+      "per_fold_auroc_sd": 0.2942647460039016,
+      "per_fold_ba_mean": 0.5316666666666666,
+      "per_fold_ba_sd": 0.07702813338860895,
+      "per_fold_log_loss_mean": 0.8280581792061125,
+      "per_fold_log_loss_sd": 0.18800385829609378,
+      "pooled_auroc": 0.34853333333333336,
+      "pooled_ba": 0.3533333333333334,
+      "pooled_log_loss": 0.8280581792061125,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.8783193755236072,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.8067221588536663,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.5612391192507556,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.888888888888889,
+          "donor_ba": 0.5,
+          "log_loss": 0.6895541216794276,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 1.0357857398916677,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.013095918917988,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7675031812121902,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.7,
+          "log_loss": 1.5728050307398116,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7316261243068821,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.8516816798982529,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.9375,
+          "donor_ba": 0.5,
+          "log_loss": 0.8787885675117691,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7504672010815558,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6854622862603453,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.8014350059705607,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6823574967155515,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.8079279325679418,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.8383648556397322,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.863581545963762,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7209325679087603,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7520503752864766,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0123744121727054,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8605639691710777,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7137088948066163,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7081725749078599,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.7169343439138478,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R2_ca": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5981111111111111,
+      "per_fold_auroc_sd": 0.29598623591621936,
+      "per_fold_ba_mean": 0.5166666666666666,
+      "per_fold_ba_sd": 0.05369667897862337,
+      "per_fold_log_loss_mean": 0.7970117331363821,
+      "per_fold_log_loss_sd": 0.12026527698231841,
+      "pooled_auroc": 0.34293333333333337,
+      "pooled_ba": 0.35333333333333333,
+      "pooled_log_loss": 0.7970117331363821,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.8791574678585597,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.8012745634823305,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.5637081002349933,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777779,
+          "donor_ba": 0.5,
+          "log_loss": 0.6920875190182882,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 1.0199269705679086,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0376521379590435,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7646860129760569,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.4,
+          "log_loss": 0.6855306789203935,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7205390136864493,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.625,
+          "log_loss": 0.7825125633232958,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8645814666071114,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7601366323092872,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666666,
+          "donor_ba": 0.5,
+          "log_loss": 0.6512189443652799,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.8155047971283637,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6818173409278997,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.8362357649633552,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.125,
+          "donor_ba": 0.5,
+          "log_loss": 0.9784462725275799,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8763378637281604,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7168414525615322,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7809364529032233,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0228361625476972,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8488122987571382,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7077297376906694,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7212015928044098,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.7155815205605278,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R2_tc": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5981111111111111,
+      "per_fold_auroc_sd": 0.28660929658489603,
+      "per_fold_ba_mean": 0.5146666666666667,
+      "per_fold_ba_sd": 0.08152300288875527,
+      "per_fold_log_loss_mean": 0.8003196301068463,
+      "per_fold_log_loss_sd": 0.12372847224803511,
+      "pooled_auroc": 0.3651555555555555,
+      "pooled_ba": 0.37333333333333335,
+      "pooled_log_loss": 0.8003196301068463,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8940241118990642,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.8055607051483937,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.625,
+          "log_loss": 0.5488664095662599,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6899570382593505,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.4,
+          "log_loss": 0.6830754301207173,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.034312255995432,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.75,
+          "log_loss": 0.8037459583238457,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.3,
+          "log_loss": 0.7969187048954226,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7139561364876871,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.625,
+          "log_loss": 1.0933077761020327,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.8926995136592254,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7565550391849772,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6895123550976904,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.8041770522912329,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.681450367247591,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.81533810969339,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.125,
+          "donor_ba": 0.5,
+          "log_loss": 0.9370985024068771,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8810378668492835,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7132748606078504,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7740433191400408,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 1.0019295399655037,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8553011464708457,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7132929597292899,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7097875111235066,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.4444444444444444,
+          "donor_ba": 0.5,
+          "log_loss": 0.7187680824056458,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R3_ca": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6868888888888887,
+      "per_fold_auroc_sd": 0.27208899234090017,
+      "per_fold_ba_mean": 0.54,
+      "per_fold_ba_sd": 0.09082951062292474,
+      "per_fold_log_loss_mean": 0.8692617608251385,
+      "per_fold_log_loss_sd": 0.6186645493689048,
+      "pooled_auroc": 0.36302222222222225,
+      "pooled_ba": 0.37333333333333335,
+      "pooled_log_loss": 0.8692617608251383,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.8310936567042853,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.7984142219794824,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6638031301512354,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6873495830596857,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 3.883147630602455,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.8119377471675349,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7806136565129135,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 0.706191973498547,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8019444436005685,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7529734040505912,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7844896788681743,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.7255038013103133,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.5,
+          "log_loss": 0.688877426302616,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7472010873524694,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6861032147109586,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7652547103942874,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.7768249034606601,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.7,
+          "log_loss": 0.6386492637571904,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.875,
+          "log_loss": 0.6967861283228148,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.625,
+          "log_loss": 0.6336384561370538,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.9198540104558006,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.8163462971170325,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7351602397746011,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6938761963934702,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.4444444444444445,
+          "donor_ba": 0.5,
+          "log_loss": 0.7055091589437187,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R3_gated": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6441111111111111,
+      "per_fold_auroc_sd": 0.2943053340149132,
+      "per_fold_ba_mean": 0.5466666666666667,
+      "per_fold_ba_sd": 0.1161177563223357,
+      "per_fold_log_loss_mean": 0.7758260402540847,
+      "per_fold_log_loss_sd": 0.12927591728079552,
+      "pooled_auroc": 0.43662222222222224,
+      "pooled_ba": 0.45999999999999996,
+      "pooled_log_loss": 0.7758260402540846,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7083703519727615,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.2,
+          "log_loss": 0.697763072262588,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.6240450980004079,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6831032770987547,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 0.9009473251159229,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.8935274952404857,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.677826284789021,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.5,
+          "log_loss": 0.6825288525966776,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.6,
+          "log_loss": 1.140421124548211,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.9645416535058594,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.724286967734672,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7208575443800175,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6896917560254301,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7031168925130346,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.5,
+          "log_loss": 0.6861919107808693,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.7674037056849636,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.625,
+          "log_loss": 0.8702483750630292,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.7,
+          "log_loss": 1.065621204867462,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.75,
+          "log_loss": 0.7460240262314995,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7127620837567367,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.8963029860279198,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7230553260591503,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7386307874182076,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6644706755906833,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.7139122290877543,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R3_tc": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6412222222222222,
+      "per_fold_auroc_sd": 0.2894425037256328,
+      "per_fold_ba_mean": 0.516,
+      "per_fold_ba_sd": 0.12244998979175131,
+      "per_fold_log_loss_mean": 0.7706899193677925,
+      "per_fold_log_loss_sd": 0.09388451316260589,
+      "pooled_auroc": 0.3415111111111111,
+      "pooled_ba": 0.38,
+      "pooled_log_loss": 0.7706899193677925,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7525166152414222,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.7829495932578704,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.663010800424568,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.5,
+          "log_loss": 0.6930089160617389,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 0.9903381286953482,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.8889157714754358,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.125,
+          "donor_ba": 0.125,
+          "log_loss": 0.8139148240597768,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.6517686107251114,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7337037266167429,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.726291783007178,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.837956165888163,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7225505735875252,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6918325877607128,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.7306610726688482,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6887920288171799,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7837660805295582,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.7587582935737558,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.9062199694778097,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.875,
+          "log_loss": 0.6768400748564644,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.7347942263093324,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.9034822440113816,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7717103670376132,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.8,
+          "log_loss": 0.9740301913976411,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6938793230662491,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.6955560156473877,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R3_tc_parammatched": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6291111111111111,
+      "per_fold_auroc_sd": 0.2776701124680593,
+      "per_fold_ba_mean": 0.5056666666666666,
+      "per_fold_ba_sd": 0.04586937976471885,
+      "per_fold_log_loss_mean": 0.7640942534695373,
+      "per_fold_log_loss_sd": 0.08568364552654567,
+      "pooled_auroc": 0.3080888888888889,
+      "pooled_ba": 0.35333333333333333,
+      "pooled_log_loss": 0.7640942534695372,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7641165664857407,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.7693654754778297,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.375,
+          "log_loss": 0.6859935824189153,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777779,
+          "donor_ba": 0.5,
+          "log_loss": 0.6878407765107432,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 0.9737332747400947,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.8626975960679807,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7045623085621627,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.6607748429419567,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.715375114505545,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.9837076203117251,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7888221391702569,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7134386395393971,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6835043038808964,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.776680428862258,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.888888888888889,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.689138831910753,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7519250843610026,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.7960345443894377,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8291344001196072,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7022376742172103,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7547427684474846,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.19999999999999996,
+          "donor_ba": 0.5,
+          "log_loss": 0.9036224933120209,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7736275754458424,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7142665098800703,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.7163673931798664,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.4444444444444444,
+          "donor_ba": 0.5,
+          "log_loss": 0.7006463919996325,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R4_ca": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.6101111111111112,
+      "per_fold_auroc_sd": 0.28527967650563635,
+      "per_fold_ba_mean": 0.5,
+      "per_fold_ba_sd": 0.0,
+      "per_fold_log_loss_mean": 0.6952938463309861,
+      "per_fold_log_loss_sd": 0.037521541905229105,
+      "pooled_auroc": 0.464,
+      "pooled_ba": 0.4866666666666667,
+      "pooled_log_loss": 0.6952938463309863,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6992332996185655,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.7184736645066131,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.6926838047245415,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.888888888888889,
+          "donor_ba": 0.5,
+          "log_loss": 0.6948531134547705,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.7296140820881836,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.6026027540039606,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.6958694859597712,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.7592076761061605,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6812322610598994,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.5,
+          "log_loss": 0.7062879090479649,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7085461031844521,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.6913154930270157,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.5,
+          "log_loss": 0.6939733049544637,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.6878382919232547,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6939186101271266,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6553940342703732,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6766480766367787,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6951313169247973,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.6848202318914405,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7042723244294246,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.6144300776414658,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.7080603506315994,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8019225673845104,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.6924288970842217,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.3333333333333333,
+          "donor_ba": 0.5,
+          "log_loss": 0.6935884275933019,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "R4_tc": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5175555555555555,
+      "per_fold_auroc_sd": 0.2909039975704513,
+      "per_fold_ba_mean": 0.5,
+      "per_fold_ba_sd": 0.0,
+      "per_fold_log_loss_mean": 0.6952775157340412,
+      "per_fold_log_loss_sd": 0.01689941803887802,
+      "pooled_auroc": 0.4636444444444444,
+      "pooled_ba": 0.4666666666666667,
+      "pooled_log_loss": 0.6952775157340412,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6937428619241452,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.6946502091473804,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.7091416800552203,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.33333333333333337,
+          "donor_ba": 0.5,
+          "log_loss": 0.6935722222004905,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.6738964711298951,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6724688425641457,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.6932406079057617,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.7060838477372043,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7032582290637152,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7036585878652888,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6723693571742343,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.690804530358822,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.22222222222222224,
+          "donor_ba": 0.5,
+          "log_loss": 0.6943957599996492,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 0.7255217417868144,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.22222222222222224,
+          "donor_ba": 0.5,
+          "log_loss": 0.694234655400415,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.6852998710248362,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6773107352473194,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7238671206564811,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.704414833158631,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6801172254137448,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6710962871847849,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.6835158595169891,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7392199577989942,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.701639579058738,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.11111111111111112,
+          "donor_ba": 0.5,
+          "log_loss": 0.6944168199773273,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "chr21_dosage": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 1.0,
+      "per_fold_auroc_sd": 0.0,
+      "per_fold_ba_mean": 0.977,
+      "per_fold_ba_sd": 0.04632493928760188,
+      "per_fold_log_loss_mean": 0.45689323818181926,
+      "per_fold_log_loss_sd": 0.04718905272616875,
+      "pooled_auroc": 0.9978666666666667,
+      "pooled_ba": 0.9666666666666667,
+      "pooled_log_loss": 0.45689323818181926,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.47752497124876864,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4615925660094969,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.42103625332474065,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.46165779659283107,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.3682334829257024,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.9,
+          "log_loss": 0.5364250529131613,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.40306665498054484,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4006896039144001,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4391380658620778,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4183523920906975,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.4897115701327274,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4492878558413947,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4346729784660443,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.5534470673683483,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.39102423980856765,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.4929468942335517,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.41059435860072563,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.5392771607296977,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4620547440908053,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.45614179649589276,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.9,
+          "log_loss": 0.5282464097871399,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4838207378501617,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.43776746915418974,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.4601615039769656,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 1.0,
+          "log_loss": 0.44545932814684747,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "latent_pca_lsi_head": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5181111111111111,
+      "per_fold_auroc_sd": 0.27722736579507984,
+      "per_fold_ba_mean": 0.523,
+      "per_fold_ba_sd": 0.11343818679008504,
+      "per_fold_log_loss_mean": 0.8992727395113082,
+      "per_fold_log_loss_sd": 0.35646886414970413,
+      "pooled_auroc": 0.37760000000000005,
+      "pooled_ba": 0.3666666666666667,
+      "pooled_log_loss": 0.8992727395113082,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 0.9531833568793676,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.8042156349651118,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.6173875451648628,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.5,
+          "log_loss": 0.6981180588809547,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.8,
+          "log_loss": 1.4930401160079871,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 1.0366449072079627,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.625,
+          "log_loss": 0.7507056265380383,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.7,
+          "log_loss": 2.400912658496651,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.7,
+          "log_loss": 0.681782675786685,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.25,
+          "log_loss": 0.8142582291069349,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.9054990154928305,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7528412822304782,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6589199837504446,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.8196375403905014,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.3333333333333333,
+          "log_loss": 0.7027232742624422,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.8188919628062239,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.125,
+          "donor_ba": 0.375,
+          "log_loss": 1.0850556990002411,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8752734691866532,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.7234303392764317,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.814511939865512,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.5,
+          "log_loss": 1.0767383519067961,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.8579738955673516,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7205409948812047,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7330073726868983,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.5555555555555556,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6865245574441382,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "logreg_concat": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5543333333333333,
+      "per_fold_auroc_sd": 0.2663030854746774,
+      "per_fold_ba_mean": 0.5429999999999999,
+      "per_fold_ba_sd": 0.21488601629701268,
+      "per_fold_log_loss_mean": 0.8590738062267512,
+      "per_fold_log_loss_sd": 0.1988552980893161,
+      "pooled_auroc": 0.38151111111111113,
+      "pooled_ba": 0.47333333333333333,
+      "pooled_log_loss": 0.8590738062267513,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.625,
+          "log_loss": 1.164546177657164,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.7,
+          "log_loss": 0.7648842846780967,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6137774080893686,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.5999761852793054,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.0,
+          "donor_ba": 0.2,
+          "log_loss": 0.798655188664239,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 1.3458741686442321,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.625,
+          "log_loss": 0.8791986047315622,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.2,
+          "log_loss": 0.7517865479254756,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.9,
+          "log_loss": 0.6492113040815121,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.375,
+          "log_loss": 1.090742092627701,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.625,
+          "log_loss": 0.9193207309511694,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7239646094846708,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.4444444444444444,
+          "donor_ba": 0.3333333333333333,
+          "log_loss": 0.7328332966515445,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.8829325447340239,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666666,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.6803534269758978,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 1.0563673704012346,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.25,
+          "log_loss": 1.076699148672629,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.2,
+          "log_loss": 1.042688684881665,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.75,
+          "log_loss": 0.7435356834807573,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.25,
+          "log_loss": 0.8238982149777119,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.6,
+          "log_loss": 1.143834148720086,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.9566531309805552,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7430827040851664,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.875,
+          "log_loss": 0.5786503433861986,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.4444444444444445,
+          "donor_ba": 0.5,
+          "log_loss": 0.7133791549068146,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "logreg_rna": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5732222222222222,
+      "per_fold_auroc_sd": 0.2327994951417885,
+      "per_fold_ba_mean": 0.572,
+      "per_fold_ba_sd": 0.18898677202386413,
+      "per_fold_log_loss_mean": 0.8521383761884223,
+      "per_fold_log_loss_sd": 0.19911889193974663,
+      "pooled_auroc": 0.3994666666666667,
+      "pooled_ba": 0.49333333333333335,
+      "pooled_log_loss": 0.8521383761884224,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.625,
+          "log_loss": 1.157418390417593,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7686361440318707,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6185376060880355,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.607844361663329,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.2,
+          "log_loss": 0.7777360388165242,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 1.339885145566188,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.75,
+          "log_loss": 0.8500844146391624,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.2,
+          "donor_ba": 0.3,
+          "log_loss": 0.7113611236651728,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.9,
+          "log_loss": 0.6492696005317482,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.375,
+          "log_loss": 1.0934030003869586,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.625,
+          "log_loss": 0.9224847284790624,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.7151237010012101,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.4444444444444444,
+          "donor_ba": 0.3333333333333333,
+          "log_loss": 0.7338341655698164,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.8532710576205584,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666666,
+          "donor_ba": 0.8333333333333333,
+          "log_loss": 0.677748084952011,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.5,
+          "log_loss": 1.0252679528302815,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.25,
+          "log_loss": 1.0698788236514412,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.7,
+          "log_loss": 1.0559514585348218,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.75,
+          "log_loss": 0.7278669948141596,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.375,
+          "log_loss": 0.7915316634043217,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.6,
+          "log_loss": 1.156043289591109,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.5,
+          "log_loss": 0.9612892467265404,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.7,
+          "log_loss": 0.7601732221270949,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.75,
+          "log_loss": 0.5906095659796929,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.5,
+          "log_loss": 0.6882096236218526,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "majority": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.5,
+      "per_fold_auroc_sd": 0.0,
+      "per_fold_ba_mean": 0.5,
+      "per_fold_ba_sd": 0.0,
+      "per_fold_log_loss_mean": 22.33537391841618,
+      "per_fold_log_loss_sd": 6.1613412258059395,
+      "pooled_auroc": 0.3533333333333333,
+      "pooled_ba": 0.35333333333333333,
+      "pooled_log_loss": 22.33537391841618,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.7829799936174,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 11.51319199744696,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 17.269388197455342,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.78231366242557,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.7829799936174,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 5.756595998723481,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.78231366242557,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 11.512925464970229,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 17.26978799617044,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.78231366242557,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 17.269388197455342,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.78231366242557,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.025850929940457,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.7829799936174,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.02638399489392,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 28.78231366242557,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 23.025850929940457,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 17.26978799617044,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    },
+    "pseudobulk_rna_logistic": {
+      "n_folds": 25,
+      "per_fold_auroc_mean": 0.7027777777777778,
+      "per_fold_auroc_sd": 0.2466854347214357,
+      "per_fold_ba_mean": 0.48533333333333334,
+      "per_fold_ba_sd": 0.13895003098636255,
+      "per_fold_log_loss_mean": 0.7474808432992116,
+      "per_fold_log_loss_sd": 0.1252670045917622,
+      "pooled_auroc": 0.5212444444444444,
+      "pooled_ba": 0.44666666666666666,
+      "pooled_log_loss": 0.7474808432992116,
+      "per_fold": [
+        {
+          "repeat": 0,
+          "fold": 0,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.375,
+          "log_loss": 0.7649901872638246,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 1,
+          "donor_auroc": 0.6,
+          "donor_ba": 0.5,
+          "log_loss": 0.5452229835391261,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 2,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.625,
+          "log_loss": 0.7353733641311696,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6162754659793105,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 0,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.6,
+          "log_loss": 0.9290044687684459,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 0,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.4,
+          "log_loss": 0.6945074079393406,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.25,
+          "log_loss": 0.6886605965310499,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 2,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.5,
+          "log_loss": 0.9472392273352143,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8495906517617596,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 1,
+          "fold": 4,
+          "donor_auroc": 0.375,
+          "donor_ba": 0.375,
+          "log_loss": 0.7514830543056227,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 0,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.634870658713691,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 1,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.6614033092394946,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 2,
+          "donor_auroc": 0.7777777777777778,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.6840357062957464,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 3,
+          "donor_auroc": 0.8,
+          "donor_ba": 0.6,
+          "log_loss": 0.945388801138229,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 2,
+          "fold": 4,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.6542890337739707,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 0,
+          "donor_auroc": 0.5,
+          "donor_ba": 0.5,
+          "log_loss": 0.7242527867750633,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 1,
+          "donor_auroc": 0.25,
+          "donor_ba": 0.125,
+          "log_loss": 0.7507590271927976,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 1.0552132203678186,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 3,
+          "donor_auroc": 0.75,
+          "donor_ba": 0.5,
+          "log_loss": 0.826090292331819,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 3,
+          "fold": 4,
+          "donor_auroc": 0.875,
+          "donor_ba": 0.75,
+          "log_loss": 0.5371288789855683,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 0,
+          "donor_auroc": 0.4,
+          "donor_ba": 0.2,
+          "log_loss": 0.682725989430629,
+          "n_donors_class_0": 5,
+          "n_donors_class_1": 1,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 1,
+          "donor_auroc": 0.625,
+          "donor_ba": 0.5,
+          "log_loss": 0.6898495897388816,
+          "n_donors_class_0": 4,
+          "n_donors_class_1": 2,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 2,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.8794083056707193,
+          "n_donors_class_0": 1,
+          "n_donors_class_1": 5,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 3,
+          "donor_auroc": 1.0,
+          "donor_ba": 0.5,
+          "log_loss": 0.7241521423187308,
+          "n_donors_class_0": 2,
+          "n_donors_class_1": 4,
+          "n_donors": 6
+        },
+        {
+          "repeat": 4,
+          "fold": 4,
+          "donor_auroc": 0.6666666666666667,
+          "donor_ba": 0.6666666666666666,
+          "log_loss": 0.7151059329522674,
+          "n_donors_class_0": 3,
+          "n_donors_class_1": 3,
+          "n_donors": 6
+        }
+      ]
+    }
+  }
+}
