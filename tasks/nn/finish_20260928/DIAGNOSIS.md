@@ -71,6 +71,6 @@ From saved controls and gates: is the constructed interaction learnable, do both
 | Evidence-linked diagnosis | **This file — COMPLETE** |
 | One proposed hypothesis + estimand | COMPLETE — [HYPOTHESIS.md](HYPOTHESIS.md) |
 | Frozen comparison / positive-result criteria | COMPLETE — [HYPOTHESIS.md](HYPOTHESIS.md) |
-| Feasibility + ordered execution tasks | Pending (PLAN item 3) |
+| Feasibility + ordered execution tasks | COMPLETE — [FEASIBILITY.md](FEASIBILITY.md) |
 
 Finished primary endpoint and gates remain unchanged.

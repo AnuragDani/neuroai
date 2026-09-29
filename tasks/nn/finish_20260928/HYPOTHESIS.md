@@ -2,7 +2,7 @@
 
 Planning only. No new fits, gate changes, downloads, external validation, email, or push.
 Depends on [DIAGNOSIS.md](DIAGNOSIS.md). Finished primary (`ladder_v3` `B_NULL`) and gates stay unchanged.
-Feasibility / power design and ordered execution tasks remain open ([PLAN.md](PLAN.md) item 3).
+Feasibility / power design and ordered execution tasks: [FEASIBILITY.md](FEASIBILITY.md) (PLAN item 3 COMPLETE).
 
 ## Choice (one path)
 
@@ -70,10 +70,10 @@ Identical to finished plan wording:
 
 ## Declarations required before any new real-label fit
 
-Copied from PLAN item 2; must appear in the future bounded protocol (item 3), not invented at run time:
+Copied from PLAN item 2; now instantiated in [FEASIBILITY.md](FEASIBILITY.md) (P0–P3, T1–T7):
 
-1. **Pairing intervention + PC sensitivity** — Gate 0 / 0b above.
-2. **Donor-level uncertainty** — power/precision design; current X4 grid does **not** set donor n (`min_detectable_delta=null` at n=30 up to δ=1.0).
+1. **Pairing intervention + PC sensitivity** — Gate 0 / 0b above; model retention required.
+2. **Donor-level uncertainty** — precision rules P0–P3; current X4 grid does **not** set donor n (`min_detectable_delta=null` at n=30 up to δ=1.0).
 3. **Confound checks** — dosage / chr21-excluded / library nuisance reporting as in finished decision tree; no silent primary redefinition.
 4. **Representation** — freeze file or named amendment; secondary vs primary labeled.
 5. **Practical margin** — remains **0.07** on donor BA for A_ADVANTAGE unless a separate protocol amendment explicitly changes it (not authorized here).
@@ -92,6 +92,6 @@ Copied from PLAN item 2; must appear in the future bounded protocol (item 3), no
 | Evidence-linked diagnosis | COMPLETE — [DIAGNOSIS.md](DIAGNOSIS.md) |
 | One proposed hypothesis + estimand | **This file — COMPLETE** |
 | Frozen comparison / positive-result criteria | **This file — COMPLETE** |
-| Feasibility + ordered execution tasks | Pending (PLAN item 3) |
+| Feasibility + ordered execution tasks | COMPLETE — [FEASIBILITY.md](FEASIBILITY.md) |
 
 Finished primary endpoint and gates remain unchanged.
