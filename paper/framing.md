@@ -15,24 +15,24 @@ Superseded buggy-ladder framing that selected F3 from `SPECTRUM_LOCALIZED` is ar
 
 ## Chosen framing (F4)
 
-**Kind:** rigorous negative-result / detectability-limit paper.
+**Kind:** detectability-limit paper; scientific null = advantage not demonstrated (not equivalence).
 
-**Headline claim allowed:** At 30 donors, paired RNA+ATAC cross-attention gives no donor-level DS gain over matched RNA-linear / token-concat baselines; planted regimes show no CA-favoured cell; stated power and dosage limits apply.
+**Headline claim allowed:** At 30 donors, paired RNA+ATAC cross-attention does not demonstrate a donor-level DS advantage over matched RNA-linear / token-concat baselines; planted regimes show no CA-favoured cell; stated power and dosage limits apply. Retain chr21-forced pooled `D_SMALL_POSITIVE` as secondary and distinguish mean-fold null.
 
-**Not allowed:** method-advantage claims; “pairing is used”; planted CA-helps headlines; cell-type localization of DS score; attention-as-explanation.
+**Not allowed:** method-advantage claims; equivalence/absence claims; “pairing is used”; planted CA-helps headlines; cell-type localization of DS score; attention-as-explanation; transportability beyond this cohort.
 
 ## Working title
 
-Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
+Paired RNA+ATAC cross-attention does not demonstrate donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
 
 (Forbidden words absent: novel, first, mechanism, biomarker.)
 
 ## Supporting facts for later sections (not headline)
 
-- Primary R3_ca−R3_tc ≈ −0.0067; CI includes 0; margin 0.07 unmet → `B_NULL`.
-- Secondary `LINEAR_SUFFICIENT`; model-free chr21 dosage AUROC ≈ 0.998; N11 `DOSAGE_DOMINATED`.
+- Primary R3_ca−R3_tc ≈ 0.0267; CI includes 0; margin 0.07 unmet → `B_NULL` on `ladder_v3`.
+- Secondary `LINEAR_SUFFICIENT`; model-free chr21 dosage AUROC 1.0; N11 `DOSAGE_DOMINATED`.
 - N13 NC exact zero; I3/I4/I6 CIs include 0; N17 all `NOT_SHOWN_USED`; PC N/A.
 - N21 gene-activity secondary `GA_B_NULL` only — not external validation.
-- Claim limits: PC N/A; chr21 score export DEFERRED; no F2 planted support.
+- Claim limits: PC N/A; N15 chr21-excluded scores EXPORTED; no F2 planted support; paper `DRAFT_V3_COMPLETE`.
 
 Sources: `docs/nn_v2/ladder_summary.json`, `ladder_verification.json`, `planted_benchmark.json`, `faithfulness.json`, `spectrum.json`, `NN_V2_RESULTS_2026-09-23.md`.
