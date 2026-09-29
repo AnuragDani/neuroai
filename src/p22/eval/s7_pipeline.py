@@ -160,6 +160,33 @@ def skipped_confirmation_result() -> dict[str, Any]:
     return evaluate_confirmation([], eligible=False)
 
 
+def _resolve_job_fold_views(
+    job: Mapping[str, Any],
+    *,
+    folds_by_index: Mapping[int, FoldArrays],
+    positions_by_fold: Mapping[int, Mapping[str, np.ndarray]],
+    cell_ids_by_fold: Mapping[int, np.ndarray] | None,
+    fold_pack_resolver: Callable[[int], Mapping[str, Any]] | None,
+) -> tuple[FoldArrays, Mapping[str, np.ndarray], np.ndarray | None]:
+    """Select fold arrays for one job; confirmation seeds use a fresh pack."""
+    fold_idx = int(job["fold"])
+    if fold_pack_resolver is not None:
+        pack = fold_pack_resolver(int(job["generator_seed"]))
+        folds = pack["folds_by_index"]
+        positions = pack["positions_by_fold"]
+        cell_map = pack.get("cell_ids_by_fold")
+    else:
+        folds = folds_by_index
+        positions = positions_by_fold
+        cell_map = cell_ids_by_fold
+    if fold_idx not in folds:
+        raise KeyError(f"missing fold arrays for fold {fold_idx}")
+    if fold_idx not in positions:
+        raise KeyError(f"missing positions for fold {fold_idx}")
+    cell_ids = None if cell_map is None else cell_map.get(fold_idx)
+    return folds[fold_idx], positions[fold_idx], cell_ids
+
+
 def run_fit_jobs(
     jobs: Sequence[Mapping[str, Any]],
     *,
@@ -173,12 +200,17 @@ def run_fit_jobs(
     feature_seed: int | None = None,
     check_disk: bool = True,
     fit_fn: Callable[..., dict[str, Any]] | None = None,
+    fold_pack_resolver: Callable[[int], Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Execute pending jobs one-at-a-time; record into ledger; respect caps.
 
     Skips fit_ids already present. Refuses to start when disk/artifact gates
     fail. Does not retune on errors — records status and continues so coverage
     evaluation can label incomplete/invalid honestly.
+
+    When ``fold_pack_resolver`` is set, each job's ``generator_seed`` selects
+    the fold pack (required for confirmation seeds 2001–2010). Otherwise the
+    single ``folds_by_index`` pack is used (smoke/screen/tests).
     """
     root = Path(output_root)
     ckpt = Path(checkpoint_dir)
@@ -195,18 +227,17 @@ def run_fit_jobs(
     for job in todo:
         if ledger.remaining_budget() <= 0:
             break
-        fold_idx = int(job["fold"])
-        if fold_idx not in folds_by_index:
-            raise KeyError(f"missing fold arrays for fold {fold_idx}")
-        if fold_idx not in positions_by_fold:
-            raise KeyError(f"missing positions for fold {fold_idx}")
-        cell_ids = None
-        if cell_ids_by_fold is not None:
-            cell_ids = cell_ids_by_fold.get(fold_idx)
-        record = worker(
-            folds_by_index[fold_idx],
+        fold, positions, cell_ids = _resolve_job_fold_views(
             job,
-            positions_by_fold[fold_idx],
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            cell_ids_by_fold=cell_ids_by_fold,
+            fold_pack_resolver=fold_pack_resolver,
+        )
+        record = worker(
+            fold,
+            job,
+            positions,
             cell_ids=cell_ids,
             protocol=protocol,
             feature_seed=feature_seed,
@@ -400,6 +431,7 @@ def execute_next_stage(
     fit_fn: Callable[..., dict[str, Any]] | None = None,
     pairing_fn: Callable[..., dict[str, Any]] | None = None,
     confirmation_eval_fn: Callable[..., dict[str, Any]] | None = None,
+    fold_pack_resolver: Callable[[int], Mapping[str, Any]] | None = None,
     state: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Advance exactly one runbook stage under ``decide_next_action``.
@@ -407,6 +439,9 @@ def execute_next_stage(
     Fit stages call ``run_fit_jobs``; pairing-PC and confirmation evaluation use
     the frozen executors (injectable for tests). Writes ``stage_state.json`` and,
     on handoff, ``S7_RESULT.md``. Never retunes or searches settings.
+
+    ``fold_pack_resolver`` supplies per-generator-seed fold packs so confirmation
+    trials (seeds 2001–2010) rebuild stratification under a fresh fake-label tag.
     """
     root = Path(output_root)
     ckpt = Path(checkpoint_dir)
@@ -448,6 +483,7 @@ def execute_next_stage(
             feature_seed=feature_seed,
             check_disk=check_disk,
             fit_fn=fit_fn,
+            fold_pack_resolver=fold_pack_resolver,
         )
         current["smoke_complete"] = smoke_is_complete(ledger)
 
@@ -464,6 +500,7 @@ def execute_next_stage(
             feature_seed=feature_seed,
             check_disk=check_disk,
             fit_fn=fit_fn,
+            fold_pack_resolver=fold_pack_resolver,
         )
         screen = evaluate_screen(ledger_records_for_stage(ledger, "screen"))
         current["screen"] = screen
@@ -496,6 +533,7 @@ def execute_next_stage(
             feature_seed=feature_seed,
             check_disk=check_disk,
             fit_fn=fit_fn,
+            fold_pack_resolver=fold_pack_resolver,
         )
         eval_fn = confirmation_eval_fn or run_confirmation_evaluation
         confirmation = eval_fn(
@@ -568,6 +606,7 @@ def run_until_handoff(
     fit_fn: Callable[..., dict[str, Any]] | None = None,
     pairing_fn: Callable[..., dict[str, Any]] | None = None,
     confirmation_eval_fn: Callable[..., dict[str, Any]] | None = None,
+    fold_pack_resolver: Callable[[int], Mapping[str, Any]] | None = None,
     max_steps: int = 8,
 ) -> dict[str, Any]:
     """Drive ``execute_next_stage`` until handoff or ``max_steps`` (safety cap).
@@ -593,6 +632,7 @@ def run_until_handoff(
             fit_fn=fit_fn,
             pairing_fn=pairing_fn,
             confirmation_eval_fn=confirmation_eval_fn,
+            fold_pack_resolver=fold_pack_resolver,
             state=state,
         )
         steps.append(

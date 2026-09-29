@@ -240,6 +240,62 @@ def test_run_fit_jobs_records_and_skips(tmp_path: Path) -> None:
     assert ledger.n_completed == 2
 
 
+def test_run_fit_jobs_uses_fold_pack_resolver_per_seed(tmp_path: Path) -> None:
+    ledger = S7FitLedger(tmp_path / "ledger", max_total_fits=10, smoke_fit_limit=5)
+    _freeze(ledger)
+    screen_fold = make_fold()
+    confirm_fold = make_fold()
+    assert id(screen_fold) != id(confirm_fold)
+    positions = split_positions(screen_fold)
+    seen: list[tuple[int, int]] = []
+
+    def _resolver(seed: int):
+        fold = screen_fold if seed == SEED else confirm_fold
+        return {
+            "folds_by_index": {0: fold},
+            "positions_by_fold": {0: positions},
+            "cell_ids_by_fold": {0: np.asarray([f"c{i}" for i in range(fold.donor.size)])},
+        }
+
+    def _fit(fold, job, positions, **kwargs):
+        del positions, kwargs
+        seen.append((int(job["generator_seed"]), id(fold)))
+        return _stub_fit(fold, job, split_positions(fold))
+
+    jobs = [
+        {
+            "fit_id": make_fit_id("smoke", 0.0, SEED, 0, "logreg_rna"),
+            "stage": "smoke",
+            "rho": 0.0,
+            "generator_seed": SEED,
+            "fold": 0,
+            "model": "logreg_rna",
+        },
+        {
+            "fit_id": make_fit_id("confirm", 1.0, 2001, 0, "logreg_rna"),
+            "stage": "confirm",
+            "rho": 1.0,
+            "generator_seed": 2001,
+            "fold": 0,
+            "model": "logreg_rna",
+        },
+    ]
+    out = run_fit_jobs(
+        jobs,
+        folds_by_index={0: screen_fold},
+        positions_by_fold={0: positions},
+        ledger=ledger,
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_fit,
+        fold_pack_resolver=_resolver,
+    )
+    assert out["n_recorded"] == 2
+    assert seen == [(SEED, id(screen_fold)), (2001, id(confirm_fold))]
+
+
 def test_assemble_skips_confirmation_when_not_eligible() -> None:
     stages = assemble_stage_results(
         screen_records=[],

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Callable, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -351,3 +351,69 @@ def write_preflight_record(path: Path | str, payload: Mapping[str, Any]) -> Path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(dict(payload), indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return out
+
+
+def write_split_log(path: Path | str, pack: Mapping[str, Any]) -> Path:
+    """Persist one generator-seed split log (donor sets + fake-label tag)."""
+    payload = {
+        "generator_seed": int(pack["generator_seed"]),
+        "fake_label_tag": pack["fake_label_tag"],
+        "donor_inventory": pack["donor_inventory"],
+        "split_log": pack["split_log"],
+    }
+    return write_preflight_record(path, payload)
+
+
+class FoldPackCache:
+    """Lazy per-seed fold packs for screen vs confirmation generator tags.
+
+    Confirmation trials need a fresh ``prospective-s7:<seed>`` stratification
+    (fixed ``split_seed``). Screen/smoke/PC reuse seed 1001. Caches packs so
+    each seed is prepared at most once; never retunes splits from outcomes.
+    """
+
+    def __init__(
+        self,
+        inputs: NNInputs,
+        panels: Mapping[int, Sequence[str]],
+        *,
+        protocol: MultiomeProtocol = S7_PROTOCOL,
+        n_folds: int = S7_N_FOLDS,
+        split_log_dir: Path | str | None = None,
+        initial: Mapping[int, Mapping[str, Any]] | None = None,
+    ) -> None:
+        self._inputs = inputs
+        self._panels = panels
+        self._protocol = protocol
+        self._n_folds = int(n_folds)
+        self._split_log_dir = None if split_log_dir is None else Path(split_log_dir)
+        self._packs: dict[int, dict[str, Any]] = {
+            int(seed): dict(pack) for seed, pack in (initial or {}).items()
+        }
+
+    def get(self, generator_seed: int) -> dict[str, Any]:
+        seed = int(generator_seed)
+        if seed not in self._packs:
+            pack = prepare_s7_folds(
+                self._inputs,
+                self._panels,
+                generator_seed=seed,
+                protocol=self._protocol,
+                n_folds=self._n_folds,
+            )
+            self._packs[seed] = pack
+            if self._split_log_dir is not None:
+                self._split_log_dir.mkdir(parents=True, exist_ok=True)
+                write_split_log(
+                    self._split_log_dir / f"split_log_seed_{seed}.json",
+                    pack,
+                )
+        return self._packs[seed]
+
+    def resolver(self) -> Callable[[int], dict[str, Any]]:
+        """Return a ``Callable[[int], dict]`` for the pipeline fit runner."""
+        return self.get
+
+    @property
+    def prepared_seeds(self) -> tuple[int, ...]:
+        return tuple(sorted(self._packs))

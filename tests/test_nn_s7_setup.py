@@ -17,6 +17,7 @@ from p22.eval.s7_setup import (
     S7_FITTING_SOURCE_RELS,
     S7_PROTOCOL_ID,
     S7_SPEC_REL,
+    FoldPackCache,
     build_provenance,
     donor_inventory,
     fold_positions,
@@ -24,6 +25,7 @@ from p22.eval.s7_setup import (
     resolve_repo_root,
     resolve_s7_paths,
     write_preflight_record,
+    write_split_log,
 )
 
 
@@ -129,3 +131,80 @@ def test_write_preflight_record(tmp_path: Path) -> None:
     path = write_preflight_record(tmp_path / "preflight.json", {"ok": True, "n": 1})
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert payload == {"n": 1, "ok": True}
+
+
+def test_write_split_log_records_seed_and_tag(tmp_path: Path) -> None:
+    pack = {
+        "generator_seed": 2001,
+        "fake_label_tag": "prospective-s7:2001",
+        "donor_inventory": {"n_donors": 30},
+        "split_log": {"0": {"train_donors": ["d0"]}},
+    }
+    path = write_split_log(tmp_path / "split_log_seed_2001.json", pack)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["generator_seed"] == 2001
+    assert payload["fake_label_tag"] == "prospective-s7:2001"
+    assert payload["split_log"]["0"]["train_donors"] == ["d0"]
+
+
+def test_fold_pack_cache_reuses_initial_and_logs_new(tmp_path: Path, monkeypatch) -> None:
+    screen = {
+        "generator_seed": 1001,
+        "fake_label_tag": "prospective-s7:1001",
+        "folds_by_index": {0: "screen-fold"},
+        "positions_by_fold": {0: {"train": np.asarray([0])}},
+        "cell_ids_by_fold": {0: np.asarray(["c0"])},
+        "donor_inventory": {"n_donors": 30},
+        "split_log": {"0": {"fake_label_tag": "prospective-s7:1001"}},
+    }
+    confirm = {
+        "generator_seed": 2001,
+        "fake_label_tag": "prospective-s7:2001",
+        "folds_by_index": {0: "confirm-fold"},
+        "positions_by_fold": {0: {"train": np.asarray([1])}},
+        "cell_ids_by_fold": {0: np.asarray(["c1"])},
+        "donor_inventory": {"n_donors": 30},
+        "split_log": {"0": {"fake_label_tag": "prospective-s7:2001"}},
+    }
+    prepared: list[int] = []
+
+    def _fake_prepare(inputs, panels, *, generator_seed, protocol, n_folds):
+        del inputs, panels, protocol, n_folds
+        prepared.append(int(generator_seed))
+        assert int(generator_seed) == 2001
+        return confirm
+
+    monkeypatch.setattr(
+        "p22.eval.s7_setup.prepare_s7_folds",
+        _fake_prepare,
+    )
+
+    class _Inputs:
+        pass
+
+    cache = FoldPackCache(
+        _Inputs(),  # type: ignore[arg-type]
+        panels={},
+        split_log_dir=tmp_path / "split_logs",
+        initial={1001: screen},
+    )
+
+    assert cache.get(1001)["folds_by_index"][0] == "screen-fold"
+    assert prepared == []
+    resolved = cache.resolver()(2001)
+    assert resolved["fake_label_tag"] == "prospective-s7:2001"
+    assert prepared == [2001]
+    assert cache.get(2001) is resolved  # cached; no second prepare
+    assert prepared == [2001]
+    log_path = tmp_path / "split_logs" / "split_log_seed_2001.json"
+    assert log_path.is_file()
+    payload = json.loads(log_path.read_text(encoding="utf-8"))
+    assert payload["generator_seed"] == 2001
+    assert payload["fake_label_tag"] == "prospective-s7:2001"
+    assert set(cache.prepared_seeds) == {1001, 2001}
+
+
+def test_confirm_seeds_use_distinct_fake_label_tags() -> None:
+    assert s7_label_tag(1001) != s7_label_tag(2001)
+    assert s7_label_tag(2001) == "prospective-s7:2001"
+    assert s7_label_tag(2010) == "prospective-s7:2010"

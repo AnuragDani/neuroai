@@ -39,6 +39,7 @@ from p22.eval.s7_runner import (  # noqa: E402
 )
 from p22.eval.s7_setup import (  # noqa: E402
     S7_CAP,
+    FoldPackCache,
     build_provenance,
     load_region_panels,
     load_s7_inputs,
@@ -46,6 +47,7 @@ from p22.eval.s7_setup import (  # noqa: E402
     preflight_param_match,
     resolve_s7_paths,
     write_preflight_record,
+    write_split_log,
 )
 
 
@@ -99,8 +101,13 @@ def run_preflight(
         "provenance": provenance.to_dict(),
         "cap": int(cap),
         "n_folds": len(folds["folds_by_index"]),
+        "screen_generator_seed": int(folds["generator_seed"]),
     }
     write_preflight_record(paths["durable_root"] / "preflight.json", preflight)
+    write_split_log(
+        paths["durable_root"] / "split_logs" / f"split_log_seed_{folds['generator_seed']}.json",
+        folds,
+    )
     # Mirror a short pointer under the worktree reports tree.
     write_preflight_record(
         paths["worktree_reports"] / "preflight_pointer.json",
@@ -120,6 +127,14 @@ def run_preflight(
     else:
         ledger.freeze(provenance)
 
+    fold_cache = FoldPackCache(
+        inputs,
+        panels,
+        protocol=S7_PROTOCOL,
+        split_log_dir=paths["durable_root"] / "split_logs",
+        initial={int(folds["generator_seed"]): folds},
+    )
+
     return {
         "paths": paths,
         "ledger": ledger,
@@ -127,6 +142,8 @@ def run_preflight(
         "folds_by_index": folds["folds_by_index"],
         "positions_by_fold": folds["positions_by_fold"],
         "cell_ids_by_fold": folds["cell_ids_by_fold"],
+        "fold_pack_resolver": fold_cache.resolver(),
+        "fold_cache": fold_cache,
         "preflight": preflight,
     }
 
@@ -180,6 +197,7 @@ def main(argv: list[str] | None = None) -> int:
         feature_seed=1001,
         provenance=bundle["provenance"].to_dict(),
         check_disk=not args.skip_disk_check,
+        fold_pack_resolver=bundle["fold_pack_resolver"],
     )
 
     if args.once:
