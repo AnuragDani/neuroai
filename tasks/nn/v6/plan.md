@@ -58,7 +58,7 @@ External validation: DEFERRED to the end by author decision (2026-09-28). Planne
 
 ## Task list (details and acceptance criteria in `tasks/nn/v6/todo.md`)
 
-### Phase 1: Integrate (Claude or user, ~10 min)
+### Phase 1: Integrate (GNHF task X7 at the end of the v6 run; prompt `tasks/nn/v6/gnhf_prompt.md`)
 - [ ] T1 Merge `codex/p22-nn-finish-base` into `gnhf/p22-nn-cellstate`
 - [ ] T2 Push `gnhf/p22-nn-cellstate`; open PR to `main`
 ### Checkpoint 1: integration branch has v5 results; `v5_gate.py` PASS on it
@@ -68,7 +68,7 @@ External validation: DEFERRED to the end by author decision (2026-09-28). Planne
 - [ ] T4 Decide: send professor update now, or after Phase 3
 ### Checkpoint 2: professor update approved by author
 
-### Phase 3: Optional science extensions (GNHF/Cursor; each pre-registered before running)
+### Phase 3: Science extensions (GNHF/Cursor tasks X1–X6 in `tasks/nn/v6/gnhf_prompt.md`, gate `gnhf/v6_gate.py`)
 - [ ] T5 Dosage-aware representation sensitivity: force chr21 genes into every arm; rerun ladder → `ladder_v4_chr21forced`
 - [ ] T6 Per-fold (not pooled) primary contrast as a prespecified sensitivity
 - [ ] T7 Power/detectability analysis: minimum detectable BA difference at 30 donors (planted effect sizes)
