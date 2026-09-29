@@ -264,3 +264,8 @@ completion. Final label must be one of `NN_ASSIGNMENT_COMPLETE` or
 `NN_ASSIGNMENT_PARTIAL_BLOCKED`; the study label stays `STUDY_PARTIAL` (no external
 validation). Return GNHF's required JSON result every iteration; `success=true` after a
 coherent saved increment; `should_fully_stop=false` while runnable tasks remain.
+
+
+## Finish definition and positive-result decision — 2026-09-28
+
+Acceptance, frozen positive-result criteria, C1–C3 closeout and prospective research decision: [finish plan](finish_20260928/PLAN.md). Current internal completion does not require positivity. Runner starts are manual only; external validation remains separate.

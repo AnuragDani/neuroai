@@ -4,6 +4,7 @@ Start at [current status](../status.md). This index points to one entry per job;
 
 | Need | Open | Role |
 |---|---|---|
+| Definition of done and positive result? | [Finish plan](../tasks/nn/finish_20260928/PLAN.md) | Current finish COMPLETE; A_ADVANTAGE rule, method-paper requirements and separate prospective research path |
 | What is happening now? | [status.md](../status.md) | Current snapshot, blockers, next milestones |
 | What did professor ask? | [MOM index](../MOM/README.md), [direction map](../tasks/nn/plan.md#1-what-the-professor-asked-and-how-this-plan-answers-it) | Original meeting sources and task mapping |
 | What is NN-v2 protocol? | [Protocol freeze](nn_v2/PROTOCOL_FREEZE.md), [NN plan](../tasks/nn/plan.md) | Frozen scientific design |

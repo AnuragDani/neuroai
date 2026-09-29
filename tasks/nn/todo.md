@@ -892,3 +892,8 @@ and write `docs/nn_v2/LADDER.md` (plain-language reading first).
 exits 0: every arm 5 repeats × 30 donors, summary estimate/CI equal the independent recomputation,
 parameter counts equal the frozen record (or a named amendment), chr21_dosage AUROC ≥ 0.85.
 If the verifier still fails after a clean rerun, return to A1 with its output.
+
+
+## Finish definition and positive-result decision — 2026-09-28
+
+Acceptance, frozen positive-result criteria, C1–C3 closeout and prospective research decision: [finish plan](finish_20260928/PLAN.md). Current internal completion does not require positivity. Runner starts are manual only; external validation remains separate.

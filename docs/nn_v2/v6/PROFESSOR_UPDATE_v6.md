@@ -22,7 +22,7 @@ includes 0. Linear arms rise most (logreg_rna per-fold AUROC ~0.534 → 0.983).
 
 **External validation is deferred** (T13; author decision). This note is
 **unsent**. Paper header `DRAFT_V3_COMPLETE` (`check_paper` pass; engineering
-suite check still pending while E1 runs).
+suite verified on local review branch (1278 tests; V6_GATE PASS; not pushed)).
 
 ## Direction coverage (plan §1, D1–D13)
 
