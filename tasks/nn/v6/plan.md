@@ -48,7 +48,7 @@ Down-syndrome signal these models can use is chromosome-21 dosage, which linear 
 | D12 | Verify GenAI claims | DONE (DOI/arXiv-verified refs; checker) | `paper/check_paper.py` |
 | D13 | DS vs control beyond dosage | DONE — answer: no beyond-dosage signal detected | `chr21_excluded.json` |
 
-Not done by design: external validation (NeMO cohort blocked by access/QC; assumption A4).
+External validation: DEFERRED to the end by author decision (2026-09-28). Planned as T13: RNA-only, frozen R3_ca/R3_tc/logreg_concat/chr21_dosage refit once on all 30 development donors, scored once on the external cohort; strongest-reasoning agent with author approval per step, not Cursor auto.
 
 ## Architecture decisions (keep)
 
@@ -83,6 +83,9 @@ Not done by design: external validation (NeMO cohort blocked by access/QC; assum
 ### Phase 5: Hygiene
 - [ ] T11 Remove merged lane worktrees/branches; keep `p22-results-executio-debda8` until the paper is submitted
 - [ ] T12 Update project memory and vault summary
+
+### Phase 6: External validation (deferred to the end)
+- [ ] T13 RNA-only one-shot external validation (see Professor guidance note)
 
 ## Risks and mitigations
 

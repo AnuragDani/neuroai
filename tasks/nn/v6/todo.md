@@ -87,3 +87,10 @@ Plan: `tasks/nn/v6/plan.md`. Status in this file (checkboxes); evidence path on 
 **Acceptance:** project memory and vault README reflect v5 verified results and this plan.
 **Dependencies:** T1. **Scope:** XS.
 - [ ] T12
+
+## Phase 6: External validation (DEFERRED to the end, author decision 2026-09-28)
+
+### T13: RNA-only one-shot external validation
+**Acceptance:** access terms confirmed; frozen arms refit once on all 30 development donors; external cohort scored once, no tuning; result reported whatever it is.
+**Dependencies:** T10 or author go-ahead. **Scope:** L. **Agent:** strongest reasoning model with author approval per step.
+- [ ] T13
