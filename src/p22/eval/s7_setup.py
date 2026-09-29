@@ -2,11 +2,14 @@
 
 Builds provenance hashes, prepares five donor folds with cell-id mapping under
 the frozen screen generator tag, and gates CA/TC parameter match before fits.
-Does not search scenarios, seeds or hyperparameters. No real-disease-label fits.
+Includes the S7-v2-only SHA256 donor quota splitter (v1 StratifiedGroupKFold
+path unchanged). Does not search scenarios, seeds or hyperparameters. No
+real-disease-label fits.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
@@ -52,6 +55,17 @@ S7_CAP = 256
 S7_N_RNA_VIEW = 2000
 S7_N_ATAC_VIEW = 256
 
+# S7-v2 deterministic donor quota splitter (never StratifiedGroupKFold).
+S7_V2_SPLIT_PREFIX = "s7-split-v2"
+S7_V2_CLASS0_OUTER_QUOTAS: tuple[int, ...] = (4, 3, 3, 3, 3)
+S7_V2_CLASS1_OUTER_QUOTAS: tuple[int, ...] = (2, 3, 3, 3, 3)
+S7_V2_INNER_VAL_PER_CLASS = 4
+S7_V2_EXPECTED_N_CLASS0 = 16
+S7_V2_EXPECTED_N_CLASS1 = 14
+S7_V2_EXPECTED_N_DONORS = (
+    S7_V2_EXPECTED_N_CLASS0 + S7_V2_EXPECTED_N_CLASS1
+)
+
 # Fitting sources whose hash change after outcomes invalidates the run.
 S7_FITTING_SOURCE_RELS: tuple[Path, ...] = (
     Path("src/p22/eval/planted_signal.py"),
@@ -68,6 +82,269 @@ S7_FITTING_SOURCE_RELS: tuple[Path, ...] = (
     Path("src/p22/eval/multiome_runner.py"),
     Path("src/p22/training/loop.py"),
 )
+
+
+def s7_v2_split_digest(
+    *,
+    split_seed: int,
+    generator_seed: int,
+    stage: str,
+    label: int,
+    donor_id: str,
+) -> str:
+    """SHA256 digest for one donor under the frozen S7-v2 ranking string."""
+    payload = "\n".join(
+        [
+            S7_V2_SPLIT_PREFIX,
+            str(int(split_seed)),
+            str(int(generator_seed)),
+            str(stage),
+            str(int(label)),
+            str(donor_id),
+        ]
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def s7_v2_rank_donors(
+    donor_ids: Sequence[str],
+    *,
+    split_seed: int,
+    generator_seed: int,
+    stage: str,
+    label: int,
+) -> list[str]:
+    """Rank donors by (digest, donor_id); deterministic and order-invariant."""
+    unique = sorted({str(d) for d in donor_ids})
+    return sorted(
+        unique,
+        key=lambda donor: (
+            s7_v2_split_digest(
+                split_seed=split_seed,
+                generator_seed=generator_seed,
+                stage=stage,
+                label=label,
+                donor_id=donor,
+            ),
+            donor,
+        ),
+    )
+
+
+def collect_s7_v2_donor_labels(
+    donor_ids: Sequence[Any],
+    labels: Sequence[Any],
+) -> dict[str, int]:
+    """Map each donor to its fake label; refuse mixed-label or empty input."""
+    donors = [str(d) for d in donor_ids]
+    labs = [int(x) for x in labels]
+    if len(donors) != len(labs):
+        raise ValueError(
+            f"donor_ids length {len(donors)} != labels length {len(labs)}"
+        )
+    if not donors:
+        raise ValueError("S7-v2 split requires at least one donor row")
+    by_donor: dict[str, int] = {}
+    for donor, label in zip(donors, labs, strict=True):
+        if label not in (0, 1):
+            raise ValueError(f"S7-v2 fake label must be 0 or 1; got {label}")
+        prior = by_donor.get(donor)
+        if prior is None:
+            by_donor[donor] = label
+        elif prior != label:
+            raise ValueError(
+                f"S7-v2 mixed-label donor refused: {donor} has {prior} and {label}"
+            )
+    return by_donor
+
+
+def _assert_s7_v2_class_balance(donor_labels: Mapping[str, int]) -> dict[int, int]:
+    counts = {0: 0, 1: 0}
+    for label in donor_labels.values():
+        if label not in counts:
+            raise ValueError(f"S7-v2 unexpected donor label {label}")
+        counts[int(label)] += 1
+    if (
+        counts[0] != S7_V2_EXPECTED_N_CLASS0
+        or counts[1] != S7_V2_EXPECTED_N_CLASS1
+    ):
+        raise ValueError(
+            "S7-v2 requires exactly "
+            f"{S7_V2_EXPECTED_N_CLASS0}/{S7_V2_EXPECTED_N_CLASS1} "
+            f"class-0/1 donors; found {counts[0]}/{counts[1]}"
+        )
+    if len(donor_labels) != S7_V2_EXPECTED_N_DONORS:
+        raise ValueError(
+            f"S7-v2 requires {S7_V2_EXPECTED_N_DONORS} unique donors; "
+            f"found {len(donor_labels)}"
+        )
+    return counts
+
+
+def _class_counts(donors: Sequence[str], donor_labels: Mapping[str, int]) -> dict[str, int]:
+    counts = {"0": 0, "1": 0}
+    for donor in donors:
+        counts[str(int(donor_labels[donor]))] += 1
+    return counts
+
+
+def allocate_s7_v2_donor_folds(
+    donor_ids: Sequence[Any],
+    labels: Sequence[Any],
+    *,
+    split_seed: int = 0,
+    generator_seed: int,
+    n_folds: int = S7_N_FOLDS,
+) -> dict[str, Any]:
+    """Allocate S7-v2 outer test and inner train/val donor partitions.
+
+    Uses frozen class-quota SHA256 ranking only. Does not consult features,
+    predictions, or metrics. Leaves the v1 StratifiedGroupKFold path untouched.
+    """
+    if int(n_folds) != S7_N_FOLDS:
+        raise ValueError(f"S7-v2 requires n_folds={S7_N_FOLDS}; got {n_folds}")
+    if len(S7_V2_CLASS0_OUTER_QUOTAS) != S7_N_FOLDS:
+        raise ValueError("class-0 outer quotas must cover five folds")
+    if len(S7_V2_CLASS1_OUTER_QUOTAS) != S7_N_FOLDS:
+        raise ValueError("class-1 outer quotas must cover five folds")
+    if sum(S7_V2_CLASS0_OUTER_QUOTAS) != S7_V2_EXPECTED_N_CLASS0:
+        raise ValueError("class-0 outer quotas must sum to 16")
+    if sum(S7_V2_CLASS1_OUTER_QUOTAS) != S7_V2_EXPECTED_N_CLASS1:
+        raise ValueError("class-1 outer quotas must sum to 14")
+
+    donor_labels = collect_s7_v2_donor_labels(donor_ids, labels)
+    class_balance = _assert_s7_v2_class_balance(donor_labels)
+
+    ranked0 = s7_v2_rank_donors(
+        [d for d, lab in donor_labels.items() if lab == 0],
+        split_seed=split_seed,
+        generator_seed=generator_seed,
+        stage="outer",
+        label=0,
+    )
+    ranked1 = s7_v2_rank_donors(
+        [d for d, lab in donor_labels.items() if lab == 1],
+        split_seed=split_seed,
+        generator_seed=generator_seed,
+        stage="outer",
+        label=1,
+    )
+
+    folds: dict[str, Any] = {}
+    seen_test: list[str] = []
+    cursor0 = 0
+    cursor1 = 0
+    for fold_idx in range(S7_N_FOLDS):
+        n0 = S7_V2_CLASS0_OUTER_QUOTAS[fold_idx]
+        n1 = S7_V2_CLASS1_OUTER_QUOTAS[fold_idx]
+        test0 = ranked0[cursor0 : cursor0 + n0]
+        test1 = ranked1[cursor1 : cursor1 + n1]
+        cursor0 += n0
+        cursor1 += n1
+        test_donors = sorted(test0 + test1)
+        if len(test_donors) != 6:
+            raise ValueError(
+                f"fold {fold_idx} expected 6 test donors; got {len(test_donors)}"
+            )
+        if len(set(test_donors)) != len(test_donors):
+            raise ValueError(f"fold {fold_idx} duplicate test donors: {test_donors}")
+        overlap = set(test_donors) & set(seen_test)
+        if overlap:
+            raise ValueError(
+                f"S7-v2 donor overlap across outer tests refused: {sorted(overlap)}"
+            )
+        seen_test.extend(test_donors)
+
+        remaining = sorted(set(donor_labels) - set(test_donors))
+        if len(remaining) != 24:
+            raise ValueError(
+                f"fold {fold_idx} expected 24 remaining donors; got {len(remaining)}"
+            )
+        rem0 = [d for d in remaining if donor_labels[d] == 0]
+        rem1 = [d for d in remaining if donor_labels[d] == 1]
+        inner_stage = f"inner:{fold_idx}"
+        ranked_rem0 = s7_v2_rank_donors(
+            rem0,
+            split_seed=split_seed,
+            generator_seed=generator_seed,
+            stage=inner_stage,
+            label=0,
+        )
+        ranked_rem1 = s7_v2_rank_donors(
+            rem1,
+            split_seed=split_seed,
+            generator_seed=generator_seed,
+            stage=inner_stage,
+            label=1,
+        )
+        if (
+            len(ranked_rem0) < S7_V2_INNER_VAL_PER_CLASS
+            or len(ranked_rem1) < S7_V2_INNER_VAL_PER_CLASS
+        ):
+            raise ValueError(
+                f"fold {fold_idx} lacks four donors/class for inner validation"
+            )
+        val_donors = sorted(
+            ranked_rem0[:S7_V2_INNER_VAL_PER_CLASS]
+            + ranked_rem1[:S7_V2_INNER_VAL_PER_CLASS]
+        )
+        train_donors = sorted(
+            ranked_rem0[S7_V2_INNER_VAL_PER_CLASS:]
+            + ranked_rem1[S7_V2_INNER_VAL_PER_CLASS:]
+        )
+        if len(val_donors) != 8 or len(train_donors) != 16:
+            raise ValueError(
+                f"fold {fold_idx} expected train/val 16/8; "
+                f"got {len(train_donors)}/{len(val_donors)}"
+            )
+        parts = (set(train_donors), set(val_donors), set(test_donors))
+        if len(parts[0] | parts[1] | parts[2]) != S7_V2_EXPECTED_N_DONORS:
+            raise ValueError(f"fold {fold_idx} partitions miss donors")
+        if parts[0] & parts[1] or parts[0] & parts[2] or parts[1] & parts[2]:
+            raise ValueError(f"fold {fold_idx} overlapping train/val/test donors")
+        for part_name, part in (
+            ("train", train_donors),
+            ("val", val_donors),
+            ("test", test_donors),
+        ):
+            counts = _class_counts(part, donor_labels)
+            if counts["0"] < 1 or counts["1"] < 1:
+                raise ValueError(
+                    f"fold {fold_idx} {part_name} lacks both fake classes: {counts}"
+                )
+
+        folds[str(fold_idx)] = {
+            "train_donors": train_donors,
+            "val_donors": val_donors,
+            "test_donors": test_donors,
+            "train_class_counts": _class_counts(train_donors, donor_labels),
+            "val_class_counts": _class_counts(val_donors, donor_labels),
+            "test_class_counts": _class_counts(test_donors, donor_labels),
+            "outer_quotas": {
+                "class0": n0,
+                "class1": n1,
+            },
+        }
+
+    if cursor0 != len(ranked0) or cursor1 != len(ranked1):
+        raise ValueError("outer quota cursors did not consume all ranked donors")
+    if len(seen_test) != S7_V2_EXPECTED_N_DONORS or len(set(seen_test)) != S7_V2_EXPECTED_N_DONORS:
+        raise ValueError(
+            "S7-v2 outer tests must cover each donor exactly once; "
+            f"covered {len(set(seen_test))} unique / {len(seen_test)} listed"
+        )
+
+    return {
+        "split_seed": int(split_seed),
+        "generator_seed": int(generator_seed),
+        "n_folds": S7_N_FOLDS,
+        "donor_labels": dict(sorted(donor_labels.items())),
+        "class_balance": {"0": class_balance[0], "1": class_balance[1]},
+        "outer_class0_quotas": list(S7_V2_CLASS0_OUTER_QUOTAS),
+        "outer_class1_quotas": list(S7_V2_CLASS1_OUTER_QUOTAS),
+        "folds": folds,
+        "test_donors_once": sorted(seen_test),
+    }
 
 
 def resolve_repo_root(start: Path | str | None = None) -> Path:

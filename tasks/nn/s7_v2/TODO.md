@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: planning complete; T1–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1 DONE (focused splitter tests 15 passed); T2–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -8,9 +8,10 @@ Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_S
 
 Description: Implement S7-v2-only SHA256 donor rank/quota splitter in existing S7 setup path. No change to real-data or v1 split code. Likely files: `src/p22/eval/s7_setup.py`, `tests/test_nn_s7_setup.py`.
 
-- [ ] Acceptance: 16/14 donor labels allocate outer quotas 4/2 then 3/3×4, six test donors/fold, once-only coverage; inner validation four/class, 16 train donors.
-- [ ] Acceptance: donor overlap/purity refusal; metadata row-order invariance and deterministic replay.
-- [ ] Verify: focused splitter tests, including refusal of duplicate/mixed-label donors; zero model fits.
+- [x] Acceptance: 16/14 donor labels allocate outer quotas 4/2 then 3/3×4, six test donors/fold, once-only coverage; inner validation four/class, 16 train donors.
+- [x] Acceptance: donor overlap/purity refusal; metadata row-order invariance and deterministic replay.
+- [x] Verify: focused splitter tests, including refusal of duplicate/mixed-label donors; zero model fits.
+  Evidence: `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts …/.venv-p22/bin/python -m pytest tests/test_nn_s7_setup.py -q` → **15 passed**; `git diff --check` clean. Helpers: `allocate_s7_v2_donor_folds`, `collect_s7_v2_donor_labels`, `s7_v2_split_digest` in `src/p22/eval/s7_setup.py`. v1 StratifiedGroupKFold path unchanged.
 
 ### T2: All-seed no-fit preflight — M; depends: T1
 

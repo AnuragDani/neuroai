@@ -17,13 +17,21 @@ from p22.eval.s7_setup import (
     S7_FITTING_SOURCE_RELS,
     S7_PROTOCOL_ID,
     S7_SPEC_REL,
+    S7_V2_CLASS0_OUTER_QUOTAS,
+    S7_V2_CLASS1_OUTER_QUOTAS,
+    S7_V2_EXPECTED_N_CLASS0,
+    S7_V2_EXPECTED_N_CLASS1,
     FoldPackCache,
+    allocate_s7_v2_donor_folds,
     build_provenance,
+    collect_s7_v2_donor_labels,
     donor_inventory,
     fold_positions,
     preflight_param_match,
     resolve_repo_root,
     resolve_s7_paths,
+    s7_v2_rank_donors,
+    s7_v2_split_digest,
     write_preflight_record,
     write_split_log,
 )
@@ -208,3 +216,139 @@ def test_confirm_seeds_use_distinct_fake_label_tags() -> None:
     assert s7_label_tag(1001) != s7_label_tag(2001)
     assert s7_label_tag(2001) == "prospective-s7:2001"
     assert s7_label_tag(2010) == "prospective-s7:2010"
+
+
+def _synthetic_s7_v2_donors(
+    *, n0: int = S7_V2_EXPECTED_N_CLASS0, n1: int = S7_V2_EXPECTED_N_CLASS1
+) -> tuple[list[str], list[int]]:
+    donors = [f"d0_{i:02d}" for i in range(n0)] + [f"d1_{i:02d}" for i in range(n1)]
+    labels = [0] * n0 + [1] * n1
+    return donors, labels
+
+
+def test_s7_v2_split_digest_matches_frozen_encoding() -> None:
+    import hashlib
+
+    expected = hashlib.sha256(
+        b"s7-split-v2\n0\n1001\nouter\n0\nPCW11_CON_17833"
+    ).hexdigest()
+    assert (
+        s7_v2_split_digest(
+            split_seed=0,
+            generator_seed=1001,
+            stage="outer",
+            label=0,
+            donor_id="PCW11_CON_17833",
+        )
+        == expected
+    )
+
+
+def test_s7_v2_rank_donors_is_order_invariant() -> None:
+    donors = ["b", "a", "c", "a"]
+    ranked = s7_v2_rank_donors(
+        donors,
+        split_seed=0,
+        generator_seed=1001,
+        stage="outer",
+        label=0,
+    )
+    ranked_rev = s7_v2_rank_donors(
+        list(reversed(donors)),
+        split_seed=0,
+        generator_seed=1001,
+        stage="outer",
+        label=0,
+    )
+    assert ranked == ranked_rev
+    assert ranked == sorted(set(donors), key=lambda d: (s7_v2_split_digest(
+        split_seed=0, generator_seed=1001, stage="outer", label=0, donor_id=d
+    ), d))
+
+
+def test_collect_s7_v2_donor_labels_refuses_mixed_and_accepts_repeats() -> None:
+    labels = collect_s7_v2_donor_labels(
+        ["d0", "d0", "d1"],
+        [0, 0, 1],
+    )
+    assert labels == {"d0": 0, "d1": 1}
+    try:
+        collect_s7_v2_donor_labels(["d0", "d0"], [0, 1])
+    except ValueError as exc:
+        assert "mixed-label" in str(exc)
+    else:
+        raise AssertionError("expected mixed-label refusal")
+
+
+def test_allocate_s7_v2_donor_folds_quotas_coverage_and_inner() -> None:
+    donors, labels = _synthetic_s7_v2_donors()
+    # Expand to cell-level rows with shuffled order to prove invariance.
+    cell_donors = donors + list(reversed(donors))
+    cell_labels = labels + list(reversed(labels))
+    alloc = allocate_s7_v2_donor_folds(
+        cell_donors,
+        cell_labels,
+        split_seed=0,
+        generator_seed=1001,
+    )
+    assert alloc["class_balance"] == {"0": 16, "1": 14}
+    assert alloc["outer_class0_quotas"] == list(S7_V2_CLASS0_OUTER_QUOTAS)
+    assert alloc["outer_class1_quotas"] == list(S7_V2_CLASS1_OUTER_QUOTAS)
+    assert alloc["outer_class0_quotas"][0] == 4
+    assert alloc["outer_class1_quotas"][0] == 2
+
+    all_test: list[str] = []
+    for fold_idx in range(5):
+        fold = alloc["folds"][str(fold_idx)]
+        assert len(fold["test_donors"]) == 6
+        assert len(fold["val_donors"]) == 8
+        assert len(fold["train_donors"]) == 16
+        assert fold["val_class_counts"] == {"0": 4, "1": 4}
+        assert int(fold["test_class_counts"]["0"]) == S7_V2_CLASS0_OUTER_QUOTAS[fold_idx]
+        assert int(fold["test_class_counts"]["1"]) == S7_V2_CLASS1_OUTER_QUOTAS[fold_idx]
+        assert int(fold["train_class_counts"]["0"]) >= 1
+        assert int(fold["train_class_counts"]["1"]) >= 1
+        train, val, test = (
+            set(fold["train_donors"]),
+            set(fold["val_donors"]),
+            set(fold["test_donors"]),
+        )
+        assert not (train & val or train & test or val & test)
+        assert train | val | test == set(donors)
+        all_test.extend(fold["test_donors"])
+
+    assert len(all_test) == 30
+    assert len(set(all_test)) == 30
+    assert set(all_test) == set(donors)
+
+    replay = allocate_s7_v2_donor_folds(
+        list(reversed(cell_donors)),
+        list(reversed(cell_labels)),
+        split_seed=0,
+        generator_seed=1001,
+    )
+    assert replay["folds"] == alloc["folds"]
+    assert replay["donor_labels"] == alloc["donor_labels"]
+
+    other_seed = allocate_s7_v2_donor_folds(
+        cell_donors,
+        cell_labels,
+        split_seed=0,
+        generator_seed=2001,
+    )
+    assert other_seed["folds"] != alloc["folds"]
+    # Quotas unchanged across generator tags.
+    for fold_idx in range(5):
+        a = alloc["folds"][str(fold_idx)]["test_class_counts"]
+        b = other_seed["folds"][str(fold_idx)]["test_class_counts"]
+        assert a == b
+
+
+def test_allocate_s7_v2_refuses_wrong_balance() -> None:
+    donors, labels = _synthetic_s7_v2_donors(n0=15, n1=14)
+    try:
+        allocate_s7_v2_donor_folds(donors, labels, split_seed=0, generator_seed=1001)
+    except ValueError as exc:
+        assert "16/14" in str(exc)
+    else:
+        raise AssertionError("expected class-balance refusal")
