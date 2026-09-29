@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1 DONE (focused splitter tests 15 passed); T2–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T2 DONE (focused setup tests 19 passed); T3–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -17,10 +17,10 @@ Description: Implement S7-v2-only SHA256 donor rank/quota splitter in existing S
 
 Description: Validate screen plus all ten confirmation seeds before opening result ledger. Likely files: `src/p22/eval/s7_setup.py`, `scripts/run_nn_s7_covariance.py`, `tests/test_nn_s7_setup.py`.
 
-- [ ] Acceptance: manifest covers 11 seeds × five folds, each train/val/test 16/8/6 donors and both classes; no overlap, once-only tests, cell-ID and planted/full-label match.
-- [ ] Acceptance: injected single-class fold prevents any fit call/row/checkpoint; one invalid confirmation seed blocks entire batch.
-- [ ] Verify: focused negative test and independent manifest re-count; no model fits.
-
+- [x] Acceptance: manifest covers 11 seeds × five folds, each train/val/test 16/8/6 donors and both classes; no overlap, once-only tests, cell-ID and planted/full-label match.
+- [x] Acceptance: injected single-class fold prevents any fit call/row/checkpoint; one invalid confirmation seed blocks entire batch.
+- [x] Verify: focused negative test and independent manifest re-count; no model fits.
+  Evidence: `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts …/.venv-p22/bin/python -m pytest tests/test_nn_s7_setup.py -q` → **19 passed**; `git diff --check` clean. Helpers: `build_s7_v2_all_seed_split_manifest`, `validate_s7_v2_allocation`, `run_s7_v2_all_seed_nofit_preflight`, `guarded_s7_v2_call`, `S7V2PreflightError`/`INVALID_PREFLIGHT`; `prepare_s7_folds(..., split_method="v2")`; CLI `--split-v2` / `--all-seed-preflight`. Versioned durable root remains T3.
 ### T3: Versioned CLI, root and provenance — M; depends: T1–T2
 
 Description: Use v2 protocol ID/spec/result root and fresh durable ledger; old path read-only. Likely files: `src/p22/eval/s7_setup.py`, `scripts/run_nn_s7_covariance.py`, `tests/test_nn_s7_setup.py` or `tests/test_nn_s7_ledger.py`.

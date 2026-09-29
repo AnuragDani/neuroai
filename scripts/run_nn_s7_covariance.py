@@ -39,13 +39,18 @@ from p22.eval.s7_runner import (  # noqa: E402
 )
 from p22.eval.s7_setup import (  # noqa: E402
     S7_CAP,
+    S7_V2_DECLARED_SEEDS,
     FoldPackCache,
+    S7V2PreflightError,
     build_provenance,
+    build_s7_v2_label_rows_by_seed,
+    collect_s7_v2_donor_labels,
     load_region_panels,
     load_s7_inputs,
     prepare_s7_folds,
     preflight_param_match,
     resolve_s7_paths,
+    run_s7_v2_all_seed_nofit_preflight,
     write_preflight_record,
     write_split_log,
 )
@@ -65,8 +70,15 @@ def run_preflight(
     repo_root: Path,
     cap: int = S7_CAP,
     check_disk: bool = True,
+    split_method: str = "v1",
+    all_seed_preflight: bool = False,
 ) -> dict:
-    """Hash freeze, disk gate, param match, fold prep; return pipeline kwargs."""
+    """Hash freeze, disk gate, param match, fold prep; return pipeline kwargs.
+
+    When ``split_method='v2'`` or ``all_seed_preflight=True``, validate all 11
+    declared generator seeds (55 train/val/test triplets) before ledger freeze
+    or any fit. Failure raises ``S7V2PreflightError`` (INVALID_PREFLIGHT).
+    """
     paths = resolve_s7_paths(repo_root)
     paths["durable_root"].mkdir(parents=True, exist_ok=True)
     paths["ledger_root"].mkdir(parents=True, exist_ok=True)
@@ -83,11 +95,31 @@ def run_preflight(
     provenance = build_provenance(repo_root)
     inputs = load_s7_inputs(repo_root=repo_root, cap=cap, protocol=S7_PROTOCOL)
     panels = load_region_panels(paths["config"])
+
+    split_manifest = None
+    if all_seed_preflight or split_method == "v2":
+        label_rows = build_s7_v2_label_rows_by_seed(inputs, seeds=S7_V2_DECLARED_SEEDS)
+        planted_unique = {
+            int(seed): collect_s7_v2_donor_labels(donors, labels)
+            for seed, (donors, labels) in label_rows.items()
+        }
+        try:
+            split_manifest = run_s7_v2_all_seed_nofit_preflight(
+                label_rows_by_seed=label_rows,
+                split_seed=int(S7_PROTOCOL.split_seed),
+                planted_labels_by_seed=planted_unique,
+                manifest_path=paths["durable_root"] / "split_manifest_v2.json",
+            )
+        except S7V2PreflightError:
+            # Do not freeze ledger or prepare fits after INVALID_PREFLIGHT.
+            raise
+
     folds = prepare_s7_folds(
         inputs,
         panels,
         generator_seed=1001,
         protocol=S7_PROTOCOL,
+        split_method=split_method,
     )
 
     preflight = {
@@ -102,6 +134,14 @@ def run_preflight(
         "cap": int(cap),
         "n_folds": len(folds["folds_by_index"]),
         "screen_generator_seed": int(folds["generator_seed"]),
+        "split_method": split_method,
+        "all_seed_preflight": bool(all_seed_preflight or split_method == "v2"),
+        "split_manifest_ok": None if split_manifest is None else bool(split_manifest.get("ok")),
+        "split_manifest_sha256": None
+        if split_manifest is None
+        else split_manifest.get("split_manifest_sha256"),
+        "n_declared_seeds": None if split_manifest is None else split_manifest.get("n_seeds"),
+        "n_triplets": None if split_manifest is None else split_manifest.get("n_triplets"),
     }
     write_preflight_record(paths["durable_root"] / "preflight.json", preflight)
     write_split_log(
@@ -117,6 +157,9 @@ def run_preflight(
             "checkpoint_dir": str(paths["checkpoint_dir"]),
             "result_dir": str(paths["result_dir"]),
             "preflight": str(paths["durable_root"] / "preflight.json"),
+            "split_manifest_v2": str(paths["durable_root"] / "split_manifest_v2.json")
+            if split_manifest is not None
+            else None,
         },
     )
 
@@ -131,6 +174,7 @@ def run_preflight(
         inputs,
         panels,
         protocol=S7_PROTOCOL,
+        split_method=split_method,
         split_log_dir=paths["durable_root"] / "split_logs",
         initial={int(folds["generator_seed"]): folds},
     )
@@ -145,6 +189,7 @@ def run_preflight(
         "fold_pack_resolver": fold_cache.resolver(),
         "fold_cache": fold_cache,
         "preflight": preflight,
+        "split_manifest": split_manifest,
     }
 
 
@@ -168,6 +213,16 @@ def main(argv: list[str] | None = None) -> int:
         help="Freeze provenance and prepare folds; do not fit",
     )
     parser.add_argument(
+        "--split-v2",
+        action="store_true",
+        help="Use S7-v2 donor-quota splitter and all-seed no-fit preflight",
+    )
+    parser.add_argument(
+        "--all-seed-preflight",
+        action="store_true",
+        help="Validate all 11 declared seeds before ledger freeze (implies no fits yet)",
+    )
+    parser.add_argument(
         "--skip-disk-check",
         action="store_true",
         help="Skip free-disk gate (tests only; not for result fits)",
@@ -176,11 +231,18 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     _configure_threads(args.torch_threads)
-    bundle = run_preflight(
-        repo_root=args.repo_root.resolve(),
-        cap=args.cap,
-        check_disk=not args.skip_disk_check,
-    )
+    split_method = "v2" if args.split_v2 else "v1"
+    try:
+        bundle = run_preflight(
+            repo_root=args.repo_root.resolve(),
+            cap=args.cap,
+            check_disk=not args.skip_disk_check,
+            split_method=split_method,
+            all_seed_preflight=bool(args.all_seed_preflight or args.split_v2),
+        )
+    except S7V2PreflightError as exc:
+        print(json.dumps({"action": "invalid_preflight", "error": str(exc)}, indent=2))
+        return 3
     if args.preflight_only:
         print(json.dumps({"action": "preflight_only", "preflight": bundle["preflight"]}, indent=2))
         return 0

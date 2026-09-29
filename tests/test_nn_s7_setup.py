@@ -19,19 +19,30 @@ from p22.eval.s7_setup import (
     S7_SPEC_REL,
     S7_V2_CLASS0_OUTER_QUOTAS,
     S7_V2_CLASS1_OUTER_QUOTAS,
+    S7_V2_DECLARED_SEEDS,
     S7_V2_EXPECTED_N_CLASS0,
     S7_V2_EXPECTED_N_CLASS1,
+    S7_V2_N_TRIPLETS,
     FoldPackCache,
+    S7V2PreflightError,
     allocate_s7_v2_donor_folds,
+    assert_s7_v2_fake_label_agreement,
     build_provenance,
+    build_s7_v2_all_seed_split_manifest,
     collect_s7_v2_donor_labels,
     donor_inventory,
     fold_positions,
+    guarded_s7_v2_call,
     preflight_param_match,
+    recount_s7_v2_split_manifest,
+    require_s7_v2_preflight_pass,
     resolve_repo_root,
     resolve_s7_paths,
+    run_s7_v2_all_seed_nofit_preflight,
+    s7_v2_cell_id_hash,
     s7_v2_rank_donors,
     s7_v2_split_digest,
+    validate_s7_v2_allocation,
     write_preflight_record,
     write_split_log,
 )
@@ -176,8 +187,8 @@ def test_fold_pack_cache_reuses_initial_and_logs_new(tmp_path: Path, monkeypatch
     }
     prepared: list[int] = []
 
-    def _fake_prepare(inputs, panels, *, generator_seed, protocol, n_folds):
-        del inputs, panels, protocol, n_folds
+    def _fake_prepare(inputs, panels, *, generator_seed, protocol, n_folds, split_method="v1"):
+        del inputs, panels, protocol, n_folds, split_method
         prepared.append(int(generator_seed))
         assert int(generator_seed) == 2001
         return confirm
@@ -352,3 +363,171 @@ def test_allocate_s7_v2_refuses_wrong_balance() -> None:
         assert "16/14" in str(exc)
     else:
         raise AssertionError("expected class-balance refusal")
+
+
+def _label_rows_for_all_declared_seeds() -> dict[int, tuple[list[str], list[int]]]:
+    donors, labels = _synthetic_s7_v2_donors()
+    # Distinct cell-level expansion; labels are donor-pure.
+    cell_donors = donors + list(reversed(donors))
+    cell_labels = labels + list(reversed(labels))
+    return {int(seed): (cell_donors, cell_labels) for seed in S7_V2_DECLARED_SEEDS}
+
+
+def test_s7_v2_all_seed_manifest_covers_55_triplets(tmp_path: Path) -> None:
+    label_rows = _label_rows_for_all_declared_seeds()
+    planted = {
+        seed: collect_s7_v2_donor_labels(donors, labels)
+        for seed, (donors, labels) in label_rows.items()
+    }
+    cell_hashes = {
+        seed: {
+            str(fold): {
+                "train": s7_v2_cell_id_hash([f"{seed}-{fold}-train"]),
+                "val": s7_v2_cell_id_hash([f"{seed}-{fold}-val"]),
+                "test": s7_v2_cell_id_hash([f"{seed}-{fold}-test"]),
+            }
+            for fold in range(5)
+        }
+        for seed in S7_V2_DECLARED_SEEDS
+    }
+    manifest_path = tmp_path / "split_manifest_v2.json"
+    manifest = run_s7_v2_all_seed_nofit_preflight(
+        label_rows_by_seed=label_rows,
+        split_seed=0,
+        planted_labels_by_seed=planted,
+        cell_id_hashes_by_seed=cell_hashes,
+        manifest_path=manifest_path,
+    )
+    assert manifest["ok"] is True
+    assert manifest["n_seeds"] == 11
+    assert manifest["n_triplets"] == S7_V2_N_TRIPLETS == 55
+    assert list(manifest["declared_seeds"]) == list(S7_V2_DECLARED_SEEDS)
+    assert manifest_path.is_file()
+
+    recount = recount_s7_v2_split_manifest(manifest)
+    assert recount["ok"] is True
+    assert recount["n_seeds"] == 11
+    assert recount["n_triplets"] == 55
+    for seed in S7_V2_DECLARED_SEEDS:
+        entry = manifest["seeds"][str(seed)]
+        assert entry["n_test_donors_unique"] == 30
+        for fold_idx in range(5):
+            fold = entry["folds"][str(fold_idx)]
+            assert fold["n_train_donors"] == 16
+            assert fold["n_val_donors"] == 8
+            assert fold["n_test_donors"] == 6
+            assert fold["train_class_counts"]["0"] >= 1
+            assert fold["train_class_counts"]["1"] >= 1
+            assert fold["val_class_counts"]["0"] >= 1
+            assert fold["val_class_counts"]["1"] >= 1
+            assert fold["test_class_counts"]["0"] >= 1
+            assert fold["test_class_counts"]["1"] >= 1
+        assert "cell_id_hashes" in entry
+
+
+def test_s7_v2_single_class_fold_blocks_entire_batch_and_fits() -> None:
+    label_rows = _label_rows_for_all_declared_seeds()
+    # Keep 16/14 balance but force fold-0 test to six class-0 donors only.
+    good = allocate_s7_v2_donor_folds(
+        *label_rows[2005],
+        split_seed=0,
+        generator_seed=2005,
+    )
+    donor_labels = dict(good["donor_labels"])
+    class0 = sorted(d for d, lab in donor_labels.items() if lab == 0)
+    class1 = sorted(d for d, lab in donor_labels.items() if lab == 1)
+    bad_test = class0[:6]
+    rem0 = class0[6:]
+    rem1 = class1
+    bad_val = sorted(rem0[:4] + rem1[:4])
+    bad_train = sorted(rem0[4:] + rem1[4:])
+    poisoned_folds = {k: dict(v) for k, v in good["folds"].items()}
+    poisoned_folds["0"] = {
+        "train_donors": bad_train,
+        "val_donors": bad_val,
+        "test_donors": bad_test,
+        "train_class_counts": {"0": 6, "1": 10},
+        "val_class_counts": {"0": 4, "1": 4},
+        "test_class_counts": {"0": 6, "1": 0},
+        "outer_quotas": {"class0": 6, "class1": 0},
+    }
+    poisoned = dict(good)
+    poisoned["folds"] = poisoned_folds
+
+    try:
+        validate_s7_v2_allocation(poisoned)
+    except S7V2PreflightError as exc:
+        assert "INVALID_PREFLIGHT" in str(exc)
+        assert "single-class" in str(exc)
+    else:
+        raise AssertionError("expected single-class preflight refusal")
+
+    fit_calls: list[str] = []
+
+    def _fake_fit(name: str) -> str:
+        fit_calls.append(name)
+        return "fitted"
+
+    try:
+        guarded_s7_v2_call({"ok": False, "n_triplets": 0}, _fake_fit, "cross_attention")
+    except S7V2PreflightError as exc:
+        assert "INVALID_PREFLIGHT" in str(exc)
+    else:
+        raise AssertionError("expected fit refusal")
+    assert fit_calls == []
+
+    # Missing confirmation seed in label rows also blocks the whole batch.
+    incomplete = dict(label_rows)
+    del incomplete[2007]
+    try:
+        build_s7_v2_all_seed_split_manifest(label_rows_by_seed=incomplete, split_seed=0)
+    except S7V2PreflightError as exc:
+        assert "2007" in str(exc)
+    else:
+        raise AssertionError("expected missing-seed refusal")
+    assert fit_calls == []
+
+    require_s7_v2_preflight_pass(
+        run_s7_v2_all_seed_nofit_preflight(label_rows_by_seed=label_rows, split_seed=0)
+    )
+    assert guarded_s7_v2_call(
+        {"ok": True, "n_triplets": 55}, _fake_fit, "token_concat"
+    ) == "fitted"
+    assert fit_calls == ["token_concat"]
+
+
+def test_s7_v2_planted_full_label_mismatch_refused() -> None:
+    donors, labels = _synthetic_s7_v2_donors()
+    full = collect_s7_v2_donor_labels(donors, labels)
+    planted = dict(full)
+    planted[donors[0]] = 1 - int(full[donors[0]])
+    try:
+        assert_s7_v2_fake_label_agreement(full, planted)
+    except S7V2PreflightError as exc:
+        assert "disagree" in str(exc)
+    else:
+        raise AssertionError("expected planted/full mismatch refusal")
+
+    label_rows = _label_rows_for_all_declared_seeds()
+    planted_by_seed = {
+        seed: collect_s7_v2_donor_labels(d, labs)
+        for seed, (d, labs) in label_rows.items()
+    }
+    planted_by_seed[2003] = dict(planted_by_seed[2003])
+    victim = next(iter(planted_by_seed[2003]))
+    planted_by_seed[2003][victim] = 1 - planted_by_seed[2003][victim]
+    try:
+        build_s7_v2_all_seed_split_manifest(
+            label_rows_by_seed=label_rows,
+            split_seed=0,
+            planted_labels_by_seed=planted_by_seed,
+        )
+    except S7V2PreflightError as exc:
+        assert "2003" in str(exc) or "disagree" in str(exc)
+    else:
+        raise AssertionError("expected one invalid confirmation seed to block batch")
+
+
+def test_s7_v2_cell_id_hash_is_stable() -> None:
+    assert s7_v2_cell_id_hash(["c0", "c1"]) == s7_v2_cell_id_hash(["c0", "c1"])
+    assert s7_v2_cell_id_hash(["c0", "c1"]) != s7_v2_cell_id_hash(["c1", "c0"])
