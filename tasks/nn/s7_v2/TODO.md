@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T4 + Checkpoint A DONE (executed-path audit; focused S7+planted 110 passed; full suite 1378 passed; zero fits); T5–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T5 + Checkpoint A DONE (live no-fit preflight 55/55 PASS; zero fits); Checkpoint B–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -50,9 +50,10 @@ Description: Audit reused S7 generator→fit→ledger→score→PC→confirmatio
 
 Description: Run v2 `--preflight-only` on real configured inputs, inspect all declared seed splits, hashes and resource headroom. Likely outputs: v2 preflight/split manifest and audit log; no code edits after PASS without repeating T4.
 
-- [ ] Acceptance: 55/55 train/val/test triplets class-valid; 30 donors/seed; CA/TC ≤10%; input hashes and cell mappings recorded.
-- [ ] Acceptance: v2 ledger has zero fit rows; old result/ledger unchanged; disk ≥11 GiB and path separation confirmed.
-- [ ] Verify: independent manifest parser prints per-seed/fold class counts, unique test donors, split hash; zero-fit evidence saved. Any fail → `INVALID_PREFLIGHT`, stop.
+- [x] Acceptance: 55/55 train/val/test triplets class-valid; 30 donors/seed; CA/TC ≤10%; input hashes and cell mappings recorded.
+- [x] Acceptance: v2 ledger has zero fit rows; old result/ledger unchanged; disk ≥11 GiB and path separation confirmed.
+- [x] Verify: independent manifest parser prints per-seed/fold class counts, unique test donors, split hash; zero-fit evidence saved. Any fail → `INVALID_PREFLIGHT`, stop.
+  Evidence: [T5_LIVE_NOFIT_PREFLIGHT.md](../../../docs/nn_v2/s7_v2/T5_LIVE_NOFIT_PREFLIGHT.md), [T5_LIVE_NOFIT_PREFLIGHT.json](../../../docs/nn_v2/s7_v2/T5_LIVE_NOFIT_PREFLIGHT.json), [T5_PREFLIGHT_STDOUT.json](../../../docs/nn_v2/s7_v2/T5_PREFLIGHT_STDOUT.json). CLI `--split-v2 --preflight-only` exit 0; `split_manifest_ok=true`, `n_seeds=11`, `n_triplets=55`, independent recount PASS with empty problems; seed 1001 fold-0 test classes `{0:4,1:2}` (v1 was `{6,0}`); CA/TC relative_error=0.011752 matched; free_gib=26.647; v2 fit_ledger absent/0 rows; v1 ledger `5e23387a…` / provenance `d9e941d2…` unchanged; durable `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`; `split_manifest_sha256=9a845b5c…`. **Zero fits.** Checkpoint B still required before T6.
 
 ### Checkpoint B — fit authorization by frozen evidence
 

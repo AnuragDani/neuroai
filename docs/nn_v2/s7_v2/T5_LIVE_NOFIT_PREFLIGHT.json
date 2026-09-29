@@ -1,0 +1,1211 @@
+{
+  "action": "preflight_only",
+  "all_partitions_16_8_6_both_classes": true,
+  "cli": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts /.venv-p22/bin/python scripts/run_nn_s7_covariance.py --split-v2 --preflight-only",
+  "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+  "fold0_seed1001_test_class_counts": {
+    "0": 4,
+    "1": 2
+  },
+  "independent_problems": [],
+  "independent_recount_ok": true,
+  "label": "PASS",
+  "n_independent_partition_rows": 55,
+  "n_seeds": 11,
+  "n_triplets": 55,
+  "param_match": {
+    "cross_attention": 359426,
+    "matched": true,
+    "relative_error": 0.011752,
+    "token_concat": 355202,
+    "tolerance": 0.1
+  },
+  "partitions": [
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 1001,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 1001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 1001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 1001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 1001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2001,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2001,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2002,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2002,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2002,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2002,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2002,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2003,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2003,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2003,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2003,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2003,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2004,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2004,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2004,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2004,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2004,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2005,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2005,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2005,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2005,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2005,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2006,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2006,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2006,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2006,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2006,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2007,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2007,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2007,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2007,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2007,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2008,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2008,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2008,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2008,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2008,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2009,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2009,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2009,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2009,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2009,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 0,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2010,
+      "test_class_counts": {
+        "0": 4,
+        "1": 2
+      },
+      "train_class_counts": {
+        "0": 8,
+        "1": 8
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 1,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2010,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 2,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2010,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 3,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2010,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    },
+    {
+      "both_classes_all_partitions": true,
+      "fold": 4,
+      "n_test": 6,
+      "n_train": 16,
+      "n_val": 8,
+      "ok_16_8_6": true,
+      "seed": 2010,
+      "test_class_counts": {
+        "0": 3,
+        "1": 3
+      },
+      "train_class_counts": {
+        "0": 9,
+        "1": 7
+      },
+      "val_class_counts": {
+        "0": 4,
+        "1": 4
+      }
+    }
+  ],
+  "path_separation_ok": true,
+  "protocol_id": "S7_covariance_split_v2_20260929",
+  "provenance_frozen": {
+    "input_sha256": {
+      "atac_tiebreak_counts": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+      "h5ad": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "nn_inputs_config": "45d9b540d2a1c906879867003a488e7a54a9e4818a82f776b91643f77ae9f766",
+      "region_sets_sha256_json": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+      "tracked_union_bed": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23"
+    },
+    "protocol_id": "S7_covariance_split_v2_20260929",
+    "spec_sha256": "e8b127ad576a7a179532e830547d57010b7de2ac327983f49ba848928dfde88f",
+    "split_manifest_sha256": "9a845b5c0b8622624a40dc0cee6771d5d567e8c288c0be1f23bfcfd75668e2be"
+  },
+  "resources": {
+    "artifacts_gib": 0.0,
+    "free_gib": 26.647,
+    "max_artifacts_gib": 2.0,
+    "min_free_gib": 11.0,
+    "ok": true
+  },
+  "split_manifest_ok": true,
+  "split_manifest_sha256": "9a845b5c0b8622624a40dc0cee6771d5d567e8c288c0be1f23bfcfd75668e2be",
+  "task": "T5_live_nofit_preflight",
+  "v1_ledger_sha256": "5e23387a3ad5c75f70d6926e5de7f2848e5363b820dedac21a92288a4657d2a8",
+  "v1_ledger_unchanged": true,
+  "v1_provenance_sha256": "d9e941d24cb0e28ee5baca8b0fdbec0233a3a84a001f135eeee7412af8a62888",
+  "v2_checkpoints": [],
+  "v2_fit_ledger_exists": false,
+  "v2_fit_ledger_rows": 0,
+  "worktree_pointer": "reports/generated/nn_s7_covariance_split_v2_20260929/preflight_pointer.json"
+}
