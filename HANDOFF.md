@@ -1,5 +1,8 @@
 # Handoff
 
+> Historical snapshot dated 2026-07-27. For current work, read [status.md](status.md)
+> and [document index](docs/INDEX.md). Statements below describe July state only.
+
 **Date:** 2026-07-27
 **Branch:** `develop`
 **Next action:** `awaiting_professor_approval`
