@@ -1,1 +1,1 @@
-BLOCKED:merge conflicts abort:docs/INDEX.md,status.md; finish-base now merges cellstate with those files resolved to finish-base/v6; retry X7 after gnhf commits this merge
+DONE:finish-base ancestor of gnhf/p22-nn-cellstate at 9a1e777; origin/gnhf/p22-nn-cellstate==local; stale conflict label cleared; parallel finish-engineering/writing branches local-review only (c23769e/0948a4a not pushed); evidence=reports/generated/nn_finish_20260928/engineering-e2-handoff.md+engineering-v6-gate-e2.log
