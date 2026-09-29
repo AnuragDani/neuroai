@@ -1,12 +1,16 @@
 # P22 current status
 
-Updated: 2026-09-28 22:11 PDT. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
+Updated: 2026-09-29. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## S7 prospective control — INVALID blocker — 2026-09-29
+
+Bounded S7 synthetic-control run on `codex/p22-prospective-controls-20260929` stopped with scientific label **`INVALID`**. Frozen `split_seed=0` + `prospective-s7:1001` assigns all six fold-0 test donors fake label 0 (16/14 donor-level fake balance); smoke (fold 0 only) recorded 14/14 `single_class`. Screen cannot complete under this freeze; no seed/setting retune. Live check withdrew the earlier plant-recompute diagnosis (`plant_covariance` matches full-cohort labels). Biological power `POWER_UNESTABLISHED`; finished primary remains **`B_NULL`**; study `STUDY_PARTIAL`. No canonical gate, packet, or paper-claim edits. [S7_RESULT](docs/nn_v2/s7/S7_RESULT.md); durable ledger `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929/`; [blocker evidence](/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929/split_class_blocker_evidence.json).
+
 ## Accepted finish closeout — 2026-09-28
 
-Current internal finish task **COMPLETE** after independent review corrections. Canonical results now say advantage not demonstrated (not equivalence); results/professor note report verified local tests. Earlier integrated evidence: 1278 tests PASS and V6_GATE PASS; source/tests/protocol/scientific JSON unchanged in this prose-only closeout. Fresh paper/CI checks, safe-display notebook (6 cells/zero errors), HTML, 30 local links, 22 hashes, ZIP and vault sync PASS. [Definition of done / positive-result plan](tasks/nn/finish_20260928/PLAN.md); [closeout checks](reports/generated/nn_finish_20260928/CODEX_CLOSEOUT_CHECKS.json). Earlier review findings resolved; [dated review](reports/generated/nn_finish_20260928/CODEX_REVIEW.md) remains historical. Final deliverables live on `codex/p22-finish-engineering-20260928`; local only, no canonical merge/push. September 28 packet prepared/unsent; last sent August 16. Scientific outcome remains `B_NULL`, broader study `STUDY_PARTIAL`. New positive-result research is prospectively planned only; no new experiments or GNHF restart.
+Current internal finish task **COMPLETE** after independent review corrections. Canonical results now say advantage not demonstrated (not equivalence); results/professor note report verified local tests. Earlier integrated evidence: 1278 tests PASS and V6_GATE PASS; source/tests/protocol/scientific JSON unchanged in this prose-only closeout. Fresh paper/CI checks, safe-display notebook (6 cells/zero errors), HTML, 30 local links, 22 hashes, ZIP and vault sync PASS. [Definition of done / positive-result plan](tasks/nn/finish_20260928/PLAN.md); [closeout checks](reports/generated/nn_finish_20260928/CODEX_CLOSEOUT_CHECKS.json). Earlier review findings resolved; [dated review](reports/generated/nn_finish_20260928/CODEX_REVIEW.md) remains historical. Final deliverables live on `codex/p22-finish-engineering-20260928`; local only, no canonical merge/push. September 28 packet prepared/unsent; last sent August 16. Scientific outcome remains `B_NULL`, broader study `STUDY_PARTIAL`.
 
 ## Current work: NN v2
 
@@ -34,9 +38,10 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
-2. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
-3. Follow-up decision only: bounded internal paper versus later external validation (T13); do not execute external validation from this status.
+1. S7 prospective control handoff is complete as `INVALID` (split-class blocker); do not retune seeds or resume that freeze.
+2. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
+3. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
+4. Follow-up decision only: bounded internal paper versus later external validation (T13); do not execute external validation from this status.
 
 ## Status maintenance
 
