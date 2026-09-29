@@ -1,0 +1,13 @@
+{
+  "amendment_time": "2026-09-29T00:50:10Z",
+  "reason": "default HVG keeps 31/538 chr21 genes; test whether forcing all chr21 genes changes the cross-attention contrast",
+  "changes": {
+    "n_hvg": "HVG ∪ all chr21 genes (width field: effective feature count after union; base n_hvg remains 2000)",
+    "feature_rule": "HVG ∪ all chr21 genes",
+    "runner_flag": "--force-chr21",
+    "reuses": "V2 positive-control force_include_gene_mask / force_include_chr21 path"
+  },
+  "primary_endpoint_unchanged": true,
+  "sensitivity_only": true,
+  "statement": "The primary endpoint is unchanged and this is a sensitivity analysis only; canonical primary remains ladder_v3 R3_ca − R3_tc."
+}

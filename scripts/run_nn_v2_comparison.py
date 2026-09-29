@@ -569,6 +569,11 @@ def main(argv=None):
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--exclude-chr21", action="store_true")
+    parser.add_argument(
+        "--force-chr21",
+        action="store_true",
+        help="Union all chr21 genes into per-fold HVG (sensitivity / positive-control path)",
+    )
     parser.add_argument("--summarize-chr21", action="store_true")
     parser.add_argument("--seed-sensitivity", action="store_true")
     parser.add_argument("--model-seed", type=int, default=0)
@@ -717,8 +722,9 @@ def main(argv=None):
         futures = []
         for arm, rep, fold, train_rows, test_rows, cfg in tasks:
             fut = executor.submit(
-                worker_task, args.out, arm, rep, fold, train_rows, test_rows, 
-                inputs, protocol, args.exclude_chr21, args.model_seed, cfg
+                worker_task, args.out, arm, rep, fold, train_rows, test_rows,
+                inputs, protocol, args.exclude_chr21, args.model_seed, cfg,
+                bool(args.force_chr21),
             )
             futures.append(fut)
             

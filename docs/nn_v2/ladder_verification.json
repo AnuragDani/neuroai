@@ -143,6 +143,7 @@
     "majority pooled BA 0.300 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
   ],
   "amendments": [
+    "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_amendment_chr21forced.json",
     "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_amendment_gene_activity.json"
   ],
   "verdict": "PASS"
