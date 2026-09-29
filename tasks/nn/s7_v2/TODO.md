@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T2 DONE (focused setup tests 19 passed); T3–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T3 DONE (focused setup tests 24 passed); Checkpoint A / T4–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -25,9 +25,10 @@ Description: Validate screen plus all ten confirmation seeds before opening resu
 
 Description: Use v2 protocol ID/spec/result root and fresh durable ledger; old path read-only. Likely files: `src/p22/eval/s7_setup.py`, `scripts/run_nn_s7_covariance.py`, `tests/test_nn_s7_setup.py` or `tests/test_nn_s7_ledger.py`.
 
-- [ ] Acceptance: v2 absolute paths cannot alias v1; new ledger empty; v1 ledger/result hashes unchanged.
-- [ ] Acceptance: spec/source/input/split-manifest hashes frozen before fit; changed hash refuses resume.
-- [ ] Verify: path/provenance tests and `realpath` audit; no model fits.
+- [x] Acceptance: v2 absolute paths cannot alias v1; new ledger empty; v1 ledger/result hashes unchanged.
+- [x] Acceptance: spec/source/input/split-manifest hashes frozen before fit; changed hash refuses resume.
+- [x] Verify: path/provenance tests and `realpath` audit; no model fits.
+  Evidence: `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:scripts …/.venv-p22/bin/python -m pytest tests/test_nn_s7_setup.py -q` → **24 passed**; `git diff --check` clean. Helpers: `S7_V2_PROTOCOL_ID` / `S7_V2_DURABLE_ROOT` / `S7_V2_SPEC_REL` / `S7_V2_RESULT_REL`, `resolve_s7_paths(..., protocol_version=)`, `assert_s7_v2_paths_disjoint`, `build_provenance(..., protocol_version=, split_manifest_sha256=)`; CLI `--split-v2` resolves v2 durable/result roots and refuses `--skip-disk-check`. V1 ledger hashes unchanged; v2 durable root not created by path tests (empty until live preflight).
 
 ### Checkpoint A — zero-fit code gate
 

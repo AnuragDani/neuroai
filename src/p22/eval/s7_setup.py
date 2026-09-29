@@ -46,6 +46,7 @@ from p22.eval.s7_runner import S7_PROTOCOL
 from p22.eval.s7_screen import fold_cell_ids
 
 S7_PROTOCOL_ID = "S7_covariance_20260929"
+S7_V2_PROTOCOL_ID = "S7_covariance_split_v2_20260929"
 INVALID_PREFLIGHT = "INVALID_PREFLIGHT"
 # Screen seed 1001 plus confirmation seeds 2001–2010 (11 declared packs).
 S7_V2_DECLARED_SEEDS: tuple[int, ...] = (S7_SCREEN_SEED, *S7_CONFIRM_SEEDS)
@@ -54,11 +55,20 @@ S7_V2_N_TRIPLETS = S7_V2_N_DECLARED_SEEDS * S7_N_FOLDS
 assert S7_V2_N_DECLARED_SEEDS == 11
 assert S7_V2_N_TRIPLETS == 55
 S7_SPEC_REL = Path("tasks/nn/finish_20260928/BENCHMARK_SPEC.json")
+S7_V2_SPEC_REL = Path("tasks/nn/s7_v2/BENCHMARK_SPEC.json")
 S7_CONFIG_REL = Path("configs/nn_inputs_2026-09-23.json")
 S7_RESULT_REL = Path("docs/nn_v2/s7")
+S7_V2_RESULT_REL = Path("docs/nn_v2/s7_v2")
 S7_WORKTREE_REPORTS_REL = Path("reports/generated/nn_s7_covariance_20260929")
+S7_V2_WORKTREE_REPORTS_REL = Path(
+    "reports/generated/nn_s7_covariance_split_v2_20260929"
+)
 S7_DURABLE_ROOT = Path(
     "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929"
+)
+S7_V2_DURABLE_ROOT = Path(
+    "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/"
+    "nn_s7_covariance_split_v2_20260929"
 )
 S7_CAP = 256
 S7_N_RNA_VIEW = 2000
@@ -650,27 +660,95 @@ def resolve_repo_root(start: Path | str | None = None) -> Path:
     """Locate repository root containing the frozen S7 spec."""
     here = Path(start) if start is not None else Path(__file__).resolve()
     for candidate in (here, *here.parents):
-        if (candidate / S7_SPEC_REL).is_file() and (candidate / S7_CONFIG_REL).is_file():
+        has_v1 = (candidate / S7_SPEC_REL).is_file()
+        has_v2 = (candidate / S7_V2_SPEC_REL).is_file()
+        if (has_v1 or has_v2) and (candidate / S7_CONFIG_REL).is_file():
             return candidate
     raise FileNotFoundError("could not locate S7 repo root (missing spec/config)")
 
 
-def resolve_s7_paths(repo_root: Path | str | None = None) -> dict[str, Path]:
-    """Frozen worktree result + durable ledger/checkpoint locations."""
+def _normalize_protocol_version(protocol_version: str) -> str:
+    version = str(protocol_version).strip().lower()
+    if version not in {"v1", "v2"}:
+        raise ValueError(
+            f"protocol_version must be 'v1' or 'v2'; got {protocol_version!r}"
+        )
+    return version
+
+
+def resolve_s7_paths(
+    repo_root: Path | str | None = None,
+    *,
+    protocol_version: str = "v1",
+) -> dict[str, Path]:
+    """Frozen worktree result + durable ledger/checkpoint locations.
+
+    ``protocol_version='v2'`` selects the S7-v2 durable root, result dir and
+    spec. V1 paths stay readable/immutable and never alias v2 locations.
+    """
     root = resolve_repo_root(repo_root)
-    durable = S7_DURABLE_ROOT
-    worktree_reports = root / S7_WORKTREE_REPORTS_REL
+    version = _normalize_protocol_version(protocol_version)
+    if version == "v2":
+        durable = S7_V2_DURABLE_ROOT
+        result_rel = S7_V2_RESULT_REL
+        worktree_rel = S7_V2_WORKTREE_REPORTS_REL
+        spec_rel = S7_V2_SPEC_REL
+    else:
+        durable = S7_DURABLE_ROOT
+        result_rel = S7_RESULT_REL
+        worktree_rel = S7_WORKTREE_REPORTS_REL
+        spec_rel = S7_SPEC_REL
     return {
         "repo_root": root,
-        "spec": root / S7_SPEC_REL,
+        "spec": root / spec_rel,
         "config": root / S7_CONFIG_REL,
-        "result_dir": root / S7_RESULT_REL,
-        "worktree_reports": worktree_reports,
+        "result_dir": root / result_rel,
+        "worktree_reports": root / worktree_rel,
         "durable_root": durable,
         "ledger_root": durable / "ledger",
         "checkpoint_dir": durable / "checkpoints",
         "stage_output_root": durable,
+        "old_run_read_only": S7_DURABLE_ROOT,
     }
+
+
+def _absolute_path(path: Path) -> Path:
+    """Absolute path without requiring the target to exist."""
+    return path.expanduser().resolve(strict=False)
+
+
+def assert_s7_v2_paths_disjoint(
+    repo_root: Path | str | None = None,
+) -> dict[str, str]:
+    """Refuse any v2 absolute path that aliases or nests under v1 outputs."""
+    v1 = resolve_s7_paths(repo_root, protocol_version="v1")
+    v2 = resolve_s7_paths(repo_root, protocol_version="v2")
+    keys = (
+        "durable_root",
+        "ledger_root",
+        "checkpoint_dir",
+        "result_dir",
+        "worktree_reports",
+        "spec",
+        "stage_output_root",
+    )
+    audit: dict[str, str] = {
+        "v1_protocol_id": S7_PROTOCOL_ID,
+        "v2_protocol_id": S7_V2_PROTOCOL_ID,
+    }
+    for key in keys:
+        left = _absolute_path(Path(v1[key]))
+        right = _absolute_path(Path(v2[key]))
+        audit[f"v1_{key}"] = str(left)
+        audit[f"v2_{key}"] = str(right)
+        if left == right:
+            raise ValueError(f"v2 {key} aliases v1 path: {left}")
+        if key in {"durable_root", "ledger_root", "checkpoint_dir", "stage_output_root"}:
+            if right == left or left in right.parents or right in left.parents:
+                raise ValueError(
+                    f"v2 {key} nests with v1 path (v1={left}, v2={right})"
+                )
+    return audit
 
 
 def fold_positions(
@@ -753,10 +831,18 @@ def build_provenance(
     *,
     input_paths: Mapping[str, Path | str] | None = None,
     extra: Mapping[str, Any] | None = None,
+    protocol_version: str = "v1",
+    split_manifest_sha256: str | None = None,
 ) -> Provenance:
-    """Hash frozen spec, fitting sources and declared inputs for ledger freeze."""
+    """Hash frozen spec, fitting sources and declared inputs for ledger freeze.
+
+    For S7-v2, hashes the versioned spec, records ``S7_V2_PROTOCOL_ID``, and
+    freezes ``split_manifest_sha256`` when provided so a changed split refuses
+    resume before any further fits.
+    """
     root = resolve_repo_root(repo_root)
-    paths = resolve_s7_paths(root)
+    version = _normalize_protocol_version(protocol_version)
+    paths = resolve_s7_paths(root, protocol_version=version)
     source_sha256 = {
         path.name: sha256_file(root / path) for path in S7_FITTING_SOURCE_RELS
     }
@@ -770,12 +856,21 @@ def build_provenance(
             "nn_inputs_config": paths["config"],
         }
     input_sha256 = {key: sha256_file(path) for key, path in sorted(input_paths.items())}
+    protocol_id = S7_V2_PROTOCOL_ID if version == "v2" else S7_PROTOCOL_ID
+    extra_payload: dict[str, Any] = {} if extra is None else dict(extra)
+    if split_manifest_sha256 is not None:
+        extra_payload["split_manifest_sha256"] = str(split_manifest_sha256)
+    if version == "v2":
+        extra_payload.setdefault("protocol_version", "v2")
+        extra_payload.setdefault("old_run_read_only", str(S7_DURABLE_ROOT))
+        extra_payload.setdefault("durable_root", str(paths["durable_root"]))
+        extra_payload.setdefault("result_dir", str(paths["result_dir"]))
     return Provenance(
-        protocol_id=S7_PROTOCOL_ID,
+        protocol_id=protocol_id,
         spec_sha256=sha256_file(paths["spec"]),
         source_sha256=source_sha256,
         input_sha256=input_sha256,
-        extra=None if extra is None else dict(extra),
+        extra=None if not extra_payload else extra_payload,
     )
 
 

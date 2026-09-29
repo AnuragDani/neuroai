@@ -42,6 +42,7 @@ from p22.eval.s7_setup import (  # noqa: E402
     S7_V2_DECLARED_SEEDS,
     FoldPackCache,
     S7V2PreflightError,
+    assert_s7_v2_paths_disjoint,
     build_provenance,
     build_s7_v2_label_rows_by_seed,
     collect_s7_v2_donor_labels,
@@ -78,8 +79,17 @@ def run_preflight(
     When ``split_method='v2'`` or ``all_seed_preflight=True``, validate all 11
     declared generator seeds (55 train/val/test triplets) before ledger freeze
     or any fit. Failure raises ``S7V2PreflightError`` (INVALID_PREFLIGHT).
+    V2 writes only under the versioned durable/result roots and never aliases v1.
     """
-    paths = resolve_s7_paths(repo_root)
+    protocol_version = "v2" if split_method == "v2" else "v1"
+    paths = resolve_s7_paths(repo_root, protocol_version=protocol_version)
+    path_audit = None
+    if protocol_version == "v2":
+        path_audit = assert_s7_v2_paths_disjoint(repo_root)
+        if not check_disk:
+            raise ValueError(
+                "S7-v2 live runs refuse --skip-disk-check; disk headroom is required"
+            )
     paths["durable_root"].mkdir(parents=True, exist_ok=True)
     paths["ledger_root"].mkdir(parents=True, exist_ok=True)
     paths["checkpoint_dir"].mkdir(parents=True, exist_ok=True)
@@ -92,7 +102,6 @@ def run_preflight(
         write_resource_snapshot(paths["durable_root"] / "resources_preflight.json", resources)
 
     param_match = preflight_param_match(S7_PROTOCOL)
-    provenance = build_provenance(repo_root)
     inputs = load_s7_inputs(repo_root=repo_root, cap=cap, protocol=S7_PROTOCOL)
     panels = load_region_panels(paths["config"])
 
@@ -114,6 +123,16 @@ def run_preflight(
             # Do not freeze ledger or prepare fits after INVALID_PREFLIGHT.
             raise
 
+    provenance = build_provenance(
+        repo_root,
+        protocol_version=protocol_version,
+        split_manifest_sha256=(
+            None
+            if split_manifest is None
+            else split_manifest.get("split_manifest_sha256")
+        ),
+    )
+
     folds = prepare_s7_folds(
         inputs,
         panels,
@@ -124,7 +143,9 @@ def run_preflight(
 
     preflight = {
         "protocol_id": provenance.protocol_id,
+        "protocol_version": protocol_version,
         "paths": {key: str(value) for key, value in paths.items()},
+        "path_audit": path_audit,
         "param_match": param_match,
         "resources": resources,
         "donor_inventory": folds["donor_inventory"],
@@ -152,10 +173,13 @@ def run_preflight(
     write_preflight_record(
         paths["worktree_reports"] / "preflight_pointer.json",
         {
+            "protocol_id": provenance.protocol_id,
+            "protocol_version": protocol_version,
             "durable_root": str(paths["durable_root"]),
             "ledger_root": str(paths["ledger_root"]),
             "checkpoint_dir": str(paths["checkpoint_dir"]),
             "result_dir": str(paths["result_dir"]),
+            "old_run_read_only": str(paths["old_run_read_only"]),
             "preflight": str(paths["durable_root"] / "preflight.json"),
             "split_manifest_v2": str(paths["durable_root"] / "split_manifest_v2.json")
             if split_manifest is not None
@@ -232,6 +256,17 @@ def main(argv: list[str] | None = None) -> int:
 
     _configure_threads(args.torch_threads)
     split_method = "v2" if args.split_v2 else "v1"
+    if args.split_v2 and args.skip_disk_check:
+        print(
+            json.dumps(
+                {
+                    "action": "invalid_preflight",
+                    "error": "S7-v2 refuses --skip-disk-check for live runs",
+                },
+                indent=2,
+            )
+        )
+        return 3
     try:
         bundle = run_preflight(
             repo_root=args.repo_root.resolve(),
@@ -243,6 +278,11 @@ def main(argv: list[str] | None = None) -> int:
     except S7V2PreflightError as exc:
         print(json.dumps({"action": "invalid_preflight", "error": str(exc)}, indent=2))
         return 3
+    except ValueError as exc:
+        if args.split_v2:
+            print(json.dumps({"action": "invalid_preflight", "error": str(exc)}, indent=2))
+            return 3
+        raise
     if args.preflight_only:
         print(json.dumps({"action": "preflight_only", "preflight": bundle["preflight"]}, indent=2))
         return 0

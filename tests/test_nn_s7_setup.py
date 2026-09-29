@@ -7,9 +7,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from p22.eval.planted_signal import s7_label_tag
-from p22.eval.s7_ledger import Provenance, S7_SCREEN_SEED, sha256_file
+from p22.eval.s7_ledger import Provenance, S7FitLedger, S7_SCREEN_SEED, sha256_file
 from p22.eval.s7_runner import S7_PROTOCOL
 from p22.eval.s7_setup import (
     S7_CAP,
@@ -20,13 +21,18 @@ from p22.eval.s7_setup import (
     S7_V2_CLASS0_OUTER_QUOTAS,
     S7_V2_CLASS1_OUTER_QUOTAS,
     S7_V2_DECLARED_SEEDS,
+    S7_V2_DURABLE_ROOT,
     S7_V2_EXPECTED_N_CLASS0,
     S7_V2_EXPECTED_N_CLASS1,
     S7_V2_N_TRIPLETS,
+    S7_V2_PROTOCOL_ID,
+    S7_V2_RESULT_REL,
+    S7_V2_SPEC_REL,
     FoldPackCache,
     S7V2PreflightError,
     allocate_s7_v2_donor_folds,
     assert_s7_v2_fake_label_agreement,
+    assert_s7_v2_paths_disjoint,
     build_provenance,
     build_s7_v2_all_seed_split_manifest,
     collect_s7_v2_donor_labels,
@@ -57,7 +63,181 @@ def test_resolve_paths_and_frozen_locations() -> None:
     assert paths["result_dir"] == root / "docs/nn_v2/s7"
     assert paths["ledger_root"] == S7_DURABLE_ROOT / "ledger"
     assert paths["checkpoint_dir"] == S7_DURABLE_ROOT / "checkpoints"
+    assert paths["old_run_read_only"] == S7_DURABLE_ROOT
     assert S7_CAP == 256
+
+
+def test_resolve_s7_v2_paths_are_versioned_and_disjoint() -> None:
+    root = resolve_repo_root()
+    assert (root / S7_V2_SPEC_REL).is_file()
+    v1 = resolve_s7_paths(root, protocol_version="v1")
+    v2 = resolve_s7_paths(root, protocol_version="v2")
+    assert v2["durable_root"] == S7_V2_DURABLE_ROOT
+    assert v2["result_dir"] == root / S7_V2_RESULT_REL
+    assert v2["spec"] == root / S7_V2_SPEC_REL
+    assert v2["ledger_root"] == S7_V2_DURABLE_ROOT / "ledger"
+    assert v2["checkpoint_dir"] == S7_V2_DURABLE_ROOT / "checkpoints"
+    assert v2["old_run_read_only"] == S7_DURABLE_ROOT
+    assert v2["durable_root"] != v1["durable_root"]
+    assert v2["result_dir"] != v1["result_dir"]
+    assert v2["spec"] != v1["spec"]
+    audit = assert_s7_v2_paths_disjoint(root)
+    assert audit["v1_protocol_id"] == S7_PROTOCOL_ID
+    assert audit["v2_protocol_id"] == S7_V2_PROTOCOL_ID
+    assert Path(audit["v1_durable_root"]).resolve() != Path(audit["v2_durable_root"]).resolve()
+    assert Path(audit["v1_result_dir"]).resolve() != Path(audit["v2_result_dir"]).resolve()
+
+
+def test_s7_v2_path_resolution_does_not_mutate_v1_ledger() -> None:
+    ledger = S7_DURABLE_ROOT / "ledger" / "fit_ledger.jsonl"
+    provenance = S7_DURABLE_ROOT / "ledger" / "provenance.json"
+    assert ledger.is_file()
+    assert provenance.is_file()
+    before_ledger = sha256_file(ledger)
+    before_prov = sha256_file(provenance)
+    before_mtime = ledger.stat().st_mtime_ns
+    root = resolve_repo_root()
+    resolve_s7_paths(root, protocol_version="v2")
+    assert_s7_v2_paths_disjoint(root)
+    assert sha256_file(ledger) == before_ledger
+    assert sha256_file(provenance) == before_prov
+    assert ledger.stat().st_mtime_ns == before_mtime
+
+
+def test_s7_v2_new_ledger_starts_empty(tmp_path: Path) -> None:
+    # Emulate a fresh v2 ledger root without touching the durable filesystem.
+    ledger_root = tmp_path / "nn_s7_covariance_split_v2_20260929" / "ledger"
+    ledger = S7FitLedger(ledger_root)
+    ledger.load()
+    assert ledger.n_completed == 0
+    assert not ledger.ledger_path.exists()
+    assert not ledger.provenance_path.exists()
+    assert list(ledger_root.glob("*")) == [] or not ledger_root.exists()
+
+
+def test_build_provenance_hashes_spec_and_sources(tmp_path: Path) -> None:
+    # Use live repo roots; assert structure and that hashes are 64 hex chars.
+    root = resolve_repo_root()
+    # Point inputs at tiny temp files so we do not re-hash the multi-GiB h5ad.
+    tiny = {
+        "h5ad": tmp_path / "h5ad.bin",
+        "atac": tmp_path / "atac.bin",
+        "bed": tmp_path / "union.bed",
+        "regions": tmp_path / "regions.json",
+        "config": tmp_path / "config.json",
+    }
+    for path in tiny.values():
+        path.write_bytes(b"s7-preflight-input\n")
+    prov = build_provenance(
+        root,
+        input_paths={
+            "h5ad": tiny["h5ad"],
+            "atac_tiebreak_counts": tiny["atac"],
+            "tracked_union_bed": tiny["bed"],
+            "region_sets_sha256_json": tiny["regions"],
+            "nn_inputs_config": tiny["config"],
+        },
+        extra={"note": "unit-test"},
+    )
+    assert isinstance(prov, Provenance)
+    assert prov.protocol_id == S7_PROTOCOL_ID
+    assert len(prov.spec_sha256) == 64
+    assert prov.spec_sha256 == sha256_file(root / S7_SPEC_REL)
+    for rel in S7_FITTING_SOURCE_RELS:
+        assert rel.name in prov.source_sha256
+        assert len(prov.source_sha256[rel.name]) == 64
+    assert set(prov.input_sha256) == {
+        "h5ad",
+        "atac_tiebreak_counts",
+        "tracked_union_bed",
+        "region_sets_sha256_json",
+        "nn_inputs_config",
+    }
+    assert prov.extra == {"note": "unit-test"}
+
+
+def test_build_s7_v2_provenance_uses_v2_spec_and_split_hash(tmp_path: Path) -> None:
+    root = resolve_repo_root()
+    tiny = {
+        "h5ad": tmp_path / "h5ad.bin",
+        "atac": tmp_path / "atac.bin",
+        "bed": tmp_path / "union.bed",
+        "regions": tmp_path / "regions.json",
+        "config": tmp_path / "config.json",
+    }
+    for path in tiny.values():
+        path.write_bytes(b"s7-v2-provenance-input\n")
+    split_hash = "a" * 64
+    prov = build_provenance(
+        root,
+        protocol_version="v2",
+        split_manifest_sha256=split_hash,
+        input_paths={
+            "h5ad": tiny["h5ad"],
+            "atac_tiebreak_counts": tiny["atac"],
+            "tracked_union_bed": tiny["bed"],
+            "region_sets_sha256_json": tiny["regions"],
+            "nn_inputs_config": tiny["config"],
+        },
+    )
+    assert prov.protocol_id == S7_V2_PROTOCOL_ID
+    assert prov.spec_sha256 == sha256_file(root / S7_V2_SPEC_REL)
+    assert prov.spec_sha256 != sha256_file(root / S7_SPEC_REL)
+    assert prov.extra is not None
+    assert prov.extra["split_manifest_sha256"] == split_hash
+    assert prov.extra["protocol_version"] == "v2"
+    assert prov.extra["old_run_read_only"] == str(S7_DURABLE_ROOT)
+    assert prov.extra["durable_root"] == str(S7_V2_DURABLE_ROOT)
+    assert Path(prov.extra["result_dir"]).name == "s7_v2"
+
+
+def test_s7_v2_changed_split_manifest_hash_refuses_resume(tmp_path: Path) -> None:
+    root = resolve_repo_root()
+    tiny = {
+        "h5ad": tmp_path / "h5ad.bin",
+        "atac": tmp_path / "atac.bin",
+        "bed": tmp_path / "union.bed",
+        "regions": tmp_path / "regions.json",
+        "config": tmp_path / "config.json",
+    }
+    for path in tiny.values():
+        path.write_bytes(b"s7-v2-resume-input\n")
+    input_paths = {
+        "h5ad": tiny["h5ad"],
+        "atac_tiebreak_counts": tiny["atac"],
+        "tracked_union_bed": tiny["bed"],
+        "region_sets_sha256_json": tiny["regions"],
+        "nn_inputs_config": tiny["config"],
+    }
+    frozen = build_provenance(
+        root,
+        protocol_version="v2",
+        split_manifest_sha256="b" * 64,
+        input_paths=input_paths,
+    )
+    ledger = S7FitLedger(tmp_path / "ledger")
+    ledger.freeze(frozen)
+    changed = build_provenance(
+        root,
+        protocol_version="v2",
+        split_manifest_sha256="c" * 64,
+        input_paths=input_paths,
+    )
+    with pytest.raises(RuntimeError, match="resume hash refusal"):
+        ledger.assert_resume_hashes(changed)
+    assert ledger.is_invalid
+    # Identical freeze still resumes.
+    clean = S7FitLedger(tmp_path / "ledger_ok")
+    clean.freeze(frozen)
+    clean.assert_resume_hashes(
+        build_provenance(
+            root,
+            protocol_version="v2",
+            split_manifest_sha256="b" * 64,
+            input_paths=input_paths,
+        )
+    )
+    assert not clean.is_invalid
 
 
 def test_fold_positions_train_val_test_order() -> None:
