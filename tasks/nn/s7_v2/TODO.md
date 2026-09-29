@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T3 + Checkpoint A DONE (focused setup tests 24 passed; v1↔v2 spec diff limited to split/preflight/identity/paths; v1 ledger/result hashes unchanged; zero fits); T4–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T4 + Checkpoint A DONE (executed-path audit; focused S7+planted 110 passed; full suite 1378 passed; zero fits); T5–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -41,9 +41,10 @@ Description: Use v2 protocol ID/spec/result root and fresh durable ledger; old p
 
 Description: Audit reused S7 generator→fit→ledger→score→PC→confirmation→handoff path; targeted deletion/repair only before freeze. Likely files: `src/p22/eval/s7_*.py`, existing S7 tests, short audit report. Limit each edit slice to ≤5 files.
 
-- [ ] Acceptance: coverage requires all scoreable jobs; PC requires checkpoint identity; confirmation gate cannot bypass screen+PC; no post-fit source edits.
-- [ ] Acceptance: redundant code removal is behavior-preserving; no speculative stack rewrite.
-- [ ] Verify: focused S7 tests, adjacent N3/N4 planted tests, full suite once after final source edit, `git diff --check`; save test counts and audit.
+- [x] Acceptance: coverage requires all scoreable jobs; PC requires checkpoint identity; confirmation gate cannot bypass screen+PC; no post-fit source edits.
+- [x] Acceptance: redundant code removal is behavior-preserving; no speculative stack rewrite.
+- [x] Verify: focused S7 tests, adjacent N3/N4 planted tests, full suite once after final source edit, `git diff --check`; save test counts and audit.
+  Evidence: [T4_EXECUTED_PATH_AUDIT.md](../../../docs/nn_v2/s7_v2/T4_EXECUTED_PATH_AUDIT.md). Explicit `single_class` screen INCOMPLETE assertion added in `tests/test_nn_s7_screen.py` (test-only). No fitting-source edits; no redundant deletions. Focused `tests/test_nn_s7_*.py` + planted → **110 passed**; full suite → **1378 passed** after justified worktree symlink `reports/generated/nn_20260923` → main P22 artifacts (first full run had 21 ladder-path fails with 0 folds). `git diff --check` clean. V1 ledger hashes unchanged; **zero fits**.
 
 ### T5: Live no-fit preflight — S; depends: T4
 

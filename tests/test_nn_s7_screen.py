@@ -116,6 +116,18 @@ def test_evaluate_screen_labels() -> None:
     assert incomplete["screen_label"] == SCREEN_INCOMPLETE
     assert incomplete["eligible_for_pairing_pc"] is False
 
+    # single_class rows are not scoreable: coverage must refuse PASS.
+    single_class_rows = _full_ok_records()
+    for row in single_class_rows:
+        if row["rho"] == 1.0 and row["fold"] == 0 and row["model"] == "cross_attention":
+            row["status"] = "single_class"
+            row["donor_balanced_accuracy"] = None
+            break
+    single_class = evaluate_screen(single_class_rows)
+    assert single_class["screen_label"] == SCREEN_INCOMPLETE
+    assert single_class["eligible_for_pairing_pc"] is False
+    assert single_class["coverage"]["complete"] is False
+
     invalid = evaluate_screen(
         _full_ok_records(ba_by_rho_model={(0.0, "gated_fusion"): 0.10})
     )
