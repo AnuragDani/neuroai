@@ -1,0 +1,191 @@
+{
+  "id": "S7_covariance_split_v2_20260929",
+  "kind": "prospective_semisynthetic_control_only",
+  "base_commit": "834b22d",
+  "hypothesis": "Does the existing CA family show finite-budget advantage on label-dependent within-cell RNA/ATAC covariance versus fair non-attention comparators?",
+  "scenario": "one fixed S7 covariance scenario; no guaranteed CA winner",
+  "generation": {
+    "features_per_view": 20,
+    "feature_selection": "reuse label-free hash ranking select_features; pair sorted selected columns as artificial channels, not genomic matches",
+    "fake_labels": "fake_donor_labels with tag prospective-s7:<generator_seed>; balance within original disease strata; never train on real disease labels",
+    "equation": "For each donor/channel generate independent Gaussian vectors z,w using SHA256(seed,donor_id,channel) stable seed. Centre z,w; scale z to population variance 1; orthogonalize w against z then centre/scale w to variance 1. Replace selected RNA channel by z and ATAC channel by (2*y_d-1)*rho*z + sqrt(1-rho*rho)*w. Leave other transformed columns unchanged. Handle <4 cells or degenerate vectors by explicit refusal.",
+    "interpretation": "Both planted channel means zero and variances one per donor at all rho; rho controls signed cross-view covariance. Synthetic latent normalization uses only newly generated noise for that donor, not fitted real-feature transforms. Equal moments do not prove equality of all finite-sample marginals; single-view controls check leakage.",
+    "row_identity": "generate in stable saved cell_id order, restore fold tensor order; donor/channel latent draws must not depend on fold number or observed feature values",
+    "test_pairing_shuffle": "permute ATAC rows within each held-out donor, fixed seeds, preserve exact marginal row multiset; do not shuffle across labels/donors"
+  },
+  "data": {
+    "config": "configs/nn_inputs_2026-09-23.json",
+    "cap": 256,
+    "sampling_seed": 22,
+    "train_only_features": {
+      "rna_hvg": 2000,
+      "atac_regions": 256
+    },
+    "n_donors_expected": 30,
+    "no_download": true
+  },
+  "models": [
+    "cross_attention",
+    "token_concat",
+    "rna_atac_concat",
+    "gated_fusion",
+    "logreg_concat",
+    "logreg_rna",
+    "logreg_atac"
+  ],
+  "training": {
+    "reuse": "N4_PROTOCOL and existing paired_model/model_inputs/train_model/fit_logistic/donor_cell_weights",
+    "n_folds": 5,
+    "n_repeats": 1,
+    "split_seed": 0,
+    "max_epochs": 20,
+    "patience": 5,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "n_tokens": 8,
+    "embed_dim": 32,
+    "hidden_dim": 128,
+    "n_heads": 4,
+    "dropout": 0.2,
+    "model_seed": "equal generator seed in every arm; seed before constructing model",
+    "selection": "same inner-validation donor log-loss and identical available training budget for neural arms; no hyperparameter sweep",
+    "param_match": "CA/TC within 10%; calculate before fitting and refuse mismatch unless deterministic label-free matching is declared before fits",
+    "split_method": "S7-v2 deterministic class-quota donor allocation; never use StratifiedGroupKFold for S7-v2",
+    "outer_allocation": "For each generator seed, full-cohort fake labels must have exactly 16 class-0 and 14 class-1 donors. Hash-rank IDs separately by SHA256(\"s7-split-v2\\n\"+split_seed+\"\\n\"+generator_seed+\"\\nouter\\n\"+label+\"\\n\"+donor_id), ascending digest then donor ID. Give class-0 ranked IDs to folds in quotas [4,3,3,3,3] and class-1 IDs in quotas [2,3,3,3,3]. Each fold has exactly six test donors; each donor appears once.",
+    "inner_allocation": "For each outer fold, hash-rank remaining donor IDs separately by fake label using same encoding with stage \"inner:<outer_fold>\"; choose first four IDs per class for validation (8 donors). Other 16 train. Freeze this one inner split; no outcomes or feature values in ranking.",
+    "split_validation": "Before ledger freeze or fit, for screen seed 1001 and confirmation seeds 2001-2010, validate all 55 outer+inner triplets: donor purity, expected 30 unique donors, 16/14 full fake balance, train/val/test donor counts 16/8/6, both fake classes in each partition, no overlap, exactly-once outer test coverage, deterministic replay, full-cohort versus planted fake labels match, stable cell_id mapping. Write class counts and donor IDs to v2 split manifest; any failure stops without fits."
+  },
+  "screen": {
+    "generator_seed": 1001,
+    "rho_grid": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "fits": 105,
+    "fixed_decision_cell": 1.0,
+    "do_not_choose_best_rho": true
+  },
+  "confirmation": {
+    "generator_seeds": [
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010
+    ],
+    "rho": 1.0,
+    "fits": 350,
+    "run_only_if_screen_and_pairing_checks_pass": true,
+    "label_split_and_model_seeds": "fresh generator tag/model seed per trial; split seed fixed; log all donor sets and labels"
+  },
+  "evaluation": {
+    "primary_comparator": "token_concat",
+    "donor_prediction": "mean held-out cell probability; threshold fixed 0.5; 5 disjoint outer folds pooled once per trial; also report mean-fold BA/AUROC to expose pooling effects",
+    "margin": 0.07,
+    "bootstrap": {
+      "draws": 1000,
+      "seed": 22,
+      "cluster_unit": "donor",
+      "paired_shared_draws": true,
+      "invalid_draws": "count/report single-class draws; never silently redraw; insufficient valid draws (<950) => incomplete"
+    },
+    "joint_success": "estimate >=0.07 AND 95% CI lower >0, not merely CI excludes zero; no negative contrast detection counted as success",
+    "compare_every_baseline": "report paired contrasts to each non-attention arm; screen CA_favoured requires gap>=0.07 against best non-attention; confirmation all-baseline success also requires joint success against every baseline. Joint all-baseline claim is intersection-union; rho .5 is descriptive only.",
+    "null_check": "at rho=0 all complete-arm pooled donor BA in [0.35,0.65]; failure means invalid null/control design, not a favourable method claim",
+    "marginal_check": "at rho=1 logreg_rna and logreg_atac donor BA <=0.60; failure means potential marginal/background shortcut; refuse pairing-only interpretation",
+    "synthetic_reliability": "report CA-TC and all-baseline joint successes / 10 and Wilson 95% intervals; >=8/10 only exploratory conditional screen, never established biological power"
+  },
+  "pairing_pc": {
+    "retain_models": "CA+TC all screen folds for rho=1; CA+TC confirmation folds if run; checkpoint weights, architecture, synthetic/fold seeds, train transform provenance and split/feature hashes; verify reload reproduces predictions",
+    "permutations": 32,
+    "seeds": [
+      3001,
+      3002,
+      3003,
+      3004,
+      3005,
+      3006,
+      3007,
+      3008,
+      3009,
+      3010,
+      3011,
+      3012,
+      3013,
+      3014,
+      3015,
+      3016,
+      3017,
+      3018,
+      3019,
+      3020,
+      3021,
+      3022,
+      3023,
+      3024,
+      3025,
+      3026,
+      3027,
+      3028,
+      3029,
+      3030,
+      3031,
+      3032
+    ],
+    "identity": "repeat same inputs produces identical eval outputs within atol=1e-6",
+    "drop_metric": "mean donor log-loss(shuffled)-original; average shuffle outcomes within donor, then paired donor-bootstrap CI; CI lower>0 required; report BA drop but do not choose metric posthoc",
+    "diagnostic_even_if_no_CA_advantage": "may evaluate already fitted screen checkpoints and export diagnostic outcome; no additional confirmation fits after screen failure"
+  },
+  "resources": {
+    "max_total_fits": 480,
+    "expected_main_fits": 455,
+    "smoke_fit_limit": 14,
+    "max_simultaneous_workers": 2,
+    "torch_threads_per_worker": 2,
+    "device": "cpu",
+    "max_fitting_elapsed_hours": 12,
+    "max_new_artifacts_gib": 2,
+    "min_free_disk_gib": 11,
+    "max_rss_gib": 32,
+    "no_fallback_retuning": true,
+    "failures": "at most two source/harness repairs; completed result fits immutable; scientific negative triggers no new variant",
+    "resumption": "Fresh v2 ledger under outputs.durable_root; old S7 ledger/checkpoints/predictions are read-only and never reused. Freeze v2 spec, source, inputs and split-manifest hashes before first fit; completed v2 fits immutable; changed fitting code after first fit invalidates only v2 run."
+  },
+  "scope": {
+    "manual_start_only": true,
+    "allow": "S7-v2 split/preflight repair, focused tests and source audit, no-fit live preflight of all seeds, bounded synthetic fits only after valid freeze, pairing/conditional confirmation, evidence handoff and local commits; user manually starts GNHF.",
+    "deny": [
+      "real-disease label fits",
+      "external acquisition",
+      "new packages",
+      "canonical scientific JSON/gate edits",
+      "professor packet edits",
+      "email",
+      "push",
+      "merge into canonical branch",
+      "additional scenarios or amplitude/seed searches",
+      "reuse of old INVALID run outputs as v2 results",
+      "outcome-driven split/seed search",
+      "editing old S7 spec/result/ledger/checkpoints"
+    ]
+  },
+  "supersedes": "S7_covariance_20260929 was INVALID due to single-class outer fold; old spec, result, ledger and checkpoints are immutable.",
+  "changes_from_v1": [
+    "replace donor split allocation only",
+    "validate every planned split before any fit",
+    "use fresh v2 result and durable paths"
+  ],
+  "outputs": {
+    "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+    "result_dir": "docs/nn_v2/s7_v2",
+    "report_dir": "reports/generated/nn_s7_covariance_split_v2_20260929",
+    "old_run_read_only": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929"
+  },
+  "prior_spec_sha256": "66225413f1cf7d5dae4f2a87af888deecce6124e4ea1514d2636d0d27b527ab1"
+}
