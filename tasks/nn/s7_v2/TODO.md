@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T7 + Checkpoints A–B DONE (screen 105/105 scoreable; screen_label=`INVALID` on rho-0 null; cumulative fits=119; confirmation ineligible); T8 diagnostic / T10 handoff next; T9 skipped. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T8 + Checkpoints A–B DONE (screen `INVALID`; pairing-PC `PC_FAIL`; cumulative fits=119 unchanged; confirmation ineligible; T9 skipped); T10 handoff next. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -84,8 +84,9 @@ Description: Run 105 declared screen jobs only; fixed rho-1 decision after cover
 
 Description: Reload saved rho-1 CA/TC; 32 within-donor ATAC shuffles, no new fits.
 
-- [ ] Acceptance: checkpoint identity, ATAC within-donor marginal preservation and predeclared seed list; CA donor log-loss drop CI lower >0 for PASS.
-- [ ] Verify: donor/seed coverage, 1000 bootstrap draws and ≥950 valid draws; report BA drop secondary. PC diagnostic after negative screen cannot unlock T9.
+- [x] Acceptance: checkpoint identity, ATAC within-donor marginal preservation and predeclared seed list; CA donor log-loss drop CI lower >0 for PASS — **not met**: identity PASS but ll-drop CI lower `−0.003847` ≤ 0 → `pc_label=PC_FAIL`.
+- [x] Verify: donor/seed coverage, 1000 bootstrap draws and ≥950 valid draws; report BA drop secondary. PC diagnostic after negative screen cannot unlock T9.
+  Evidence: [T8_PAIRING_PC.md](../../../docs/nn_v2/s7_v2/T8_PAIRING_PC.md), [T8_PAIRING_PC_AUDIT.json](../../../docs/nn_v2/s7_v2/T8_PAIRING_PC_AUDIT.json). CLI `--split-v2 --once` EXIT=0 (~9s); 5/5 CA checkpoints; identity `max_abs_diff=0.0`; seeds 3001–3032; 30 donors; bootstrap 1000/1000 valid; ll-drop estimate `−1.434e-4`, 95% CI `[−3.847e-3, 4.451e-3]`; BA drop `0.0`; **`pc_label=PC_FAIL`**; confirmation_eligible=false; ledger still 119 rows / sha256 `53920364…`; provenance `52cde0ba…`; v1 unchanged. **T9 skipped; authorizes T10 handoff only.**
 
 ### T9: Conditional confirmation — M; depends: T7 PASS + T8 PASS
 
