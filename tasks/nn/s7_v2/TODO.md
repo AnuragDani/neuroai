@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T6 + Checkpoints A–B DONE (smoke 14/14 scoreable; cumulative fits=14); T7–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T7 + Checkpoints A–B DONE (screen 105/105 scoreable; screen_label=`INVALID` on rho-0 null; cumulative fits=119; confirmation ineligible); T8 diagnostic / T10 handoff next; T9 skipped. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -75,8 +75,10 @@ Description: Fit fixed rho 0/1 × fold 0 × seven models only. Likely outputs: v
 
 Description: Run 105 declared screen jobs only; fixed rho-1 decision after coverage.
 
-- [ ] Acceptance: 105/105 scoreable rows; rho-0 BA 0.35–0.65 all arms; rho-1 single-view BA ≤0.60; CA minus best non-attention ≥0.07 plus existing N4 regime for PASS.
-- [ ] Verify: recompute pooled/fold metrics, CIs, control gates from raw rows; cumulative attempts ≤119. Negative/invalid gate prevents confirmation.
+- [x] Acceptance (coverage): 105/105 scoreable rows; both held-out classes; cumulative attempts ≤119.
+- [x] Acceptance (gates): rho-0 BA 0.35–0.65 all arms; rho-1 single-view BA ≤0.60; CA minus best non-attention ≥0.07 plus existing N4 regime for PASS — **not met**: rho-0 null FAIL → `screen_label=INVALID`; confirmation blocked.
+- [x] Verify: recompute pooled/fold metrics and control gates from raw rows; invalid gate prevents confirmation.
+  Evidence: [T7_SCREEN.md](../../../docs/nn_v2/s7_v2/T7_SCREEN.md), [T7_SCREEN_AUDIT.json](../../../docs/nn_v2/s7_v2/T7_SCREEN_AUDIT.json). CLI `--split-v2 --once` EXIT=0 (~62s); ledger 105/105 screen `ok` (cumulative 119); both classes all folds; rho-0 null **FAIL** (`token_concat` mean BA 0.341667 < 0.35); rho-1 marginal PASS; regime `NONE_DETECT` (CA−best-non −0.083); **`screen_label=INVALID`**; confirmation_eligible=false; provenance/source hashes match Checkpoint B; v1 unchanged; no retuning. **Authorizes T8 diagnostic PC only; T9 confirmation skipped.**
 
 ### T8: Pairing PC — S; depends: T7
 

@@ -4,9 +4,13 @@ Updated: 2026-09-29. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## S7-v2 screen INVALID — 2026-09-29
+
+Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T7 fixed screen under frozen Checkpoint B: **105/105** scoreable jobs (cumulative fits=119 / remaining 361), both classes all folds, rho-1 marginal PASS, but rho-0 null **FAIL** (`token_concat` mean-fold donor BA 0.341667 < 0.35) → **`screen_label=INVALID`**. Confirmation ineligible; no retuning. Next authorized stage is T8 pairing-PC diagnostic only (no new fits; cannot unlock T9), then T10 handoff. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T7 evidence](docs/nn_v2/s7_v2/T7_SCREEN.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
+
 ## S7-v2 smoke PASS — 2026-09-29
 
-Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T6 smoke under frozen Checkpoint B: **14/14** scoreable fold-0 jobs (`status=ok`), held-out classes `{0:4,1:2}`, CA/TC reload identity `≤1e-6`, cumulative fits=14 / remaining 466, artifacts 0.003 GiB. Old S7-v1 remains **`INVALID`** and immutable. Next authorized stage is T7 fixed screen only (`--split-v2 --once`). Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T6 evidence](docs/nn_v2/s7_v2/T6_SMOKE.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
+Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T6 smoke under frozen Checkpoint B: **14/14** scoreable fold-0 jobs (`status=ok`), held-out classes `{0:4,1:2}`, CA/TC reload identity `≤1e-6`, cumulative fits=14 / remaining 466, artifacts 0.003 GiB. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T6 evidence](docs/nn_v2/s7_v2/T6_SMOKE.md).
 
 ## S7 prospective control — INVALID blocker — 2026-09-29
 
@@ -42,7 +46,7 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. S7-v2: run T7 fixed screen only after T6 PASS (`--split-v2 --once`); stop on negative/invalid screen before confirmation. Old S7-v1 `INVALID` remains immutable.
+1. S7-v2: run T8 pairing-PC diagnostic after T7 `INVALID` screen (`--split-v2 --once`); cannot unlock T9; then T10 handoff. Old S7-v1 `INVALID` remains immutable.
 2. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
 3. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
 4. Follow-up decision only: bounded internal paper versus later external validation (T13); do not execute external validation from this status.

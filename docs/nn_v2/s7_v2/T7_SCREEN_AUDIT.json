@@ -1,0 +1,214 @@
+{
+  "PASS": false,
+  "all_status_ok": true,
+  "authorizes": "T8_pairing_pc_diagnostic_only_no_confirmation",
+  "command": "scripts/run_nn_s7_covariance.py --split-v2 --once",
+  "confirmation_eligible": false,
+  "coverage": {
+    "complete": true,
+    "missing": [],
+    "n_expected": 105,
+    "n_ok": 105
+  },
+  "cumulative_fits": 119,
+  "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+  "fold_test_class_patterns": {
+    "0": [
+      [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    ],
+    "1": [
+      [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    ],
+    "2": [
+      [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    ],
+    "3": [
+      [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    ],
+    "4": [
+      [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    ]
+  },
+  "gate": "COMPLETE_INVALID",
+  "ids_match_expected": true,
+  "invalid_reason": "rho-0 null control failed: token_concat mean-fold donor BA 0.341667 < 0.35",
+  "ledger_sha256": "53920364c1e1afba48384598c9f998d9429e6ebb4107956e6b1631e3f6ba3be2",
+  "marginal_check": {
+    "ba_max": 0.6,
+    "failures": [],
+    "mean_fold_donor_ba": {
+      "logreg_atac": 0.475,
+      "logreg_rna": 0.366667
+    },
+    "passed": true,
+    "rho": 1.0
+  },
+  "n_rows_total": 119,
+  "n_screen": 105,
+  "n_screen_ca_tc_checkpoints": 10,
+  "n_smoke": 14,
+  "n_test_donors_all_6": true,
+  "no_retuning": true,
+  "null_check": {
+    "failures": [
+      "token_concat"
+    ],
+    "mean_fold_donor_ba": {
+      "cross_attention": 0.375,
+      "gated_fusion": 0.35,
+      "logreg_atac": 0.475,
+      "logreg_concat": 0.391667,
+      "logreg_rna": 0.366667,
+      "rna_atac_concat": 0.375,
+      "token_concat": 0.341667
+    },
+    "passed": false,
+    "range": [
+      0.35,
+      0.65
+    ],
+    "rho": 0.0
+  },
+  "problems": [],
+  "provenance_file_sha256": "52cde0ba8b3aabf107647ae7435ce5a00f728ed2bd8d0333d7e5da6ad9b6f6b4",
+  "provenance_matches_checkpoint_b": {
+    "provenance_file_sha256_unchanged": true,
+    "source_sha256": true,
+    "spec_sha256": true,
+    "split_manifest_sha256": true
+  },
+  "remaining_budget": 361,
+  "resources": {
+    "artifacts_gib": 0.016,
+    "free_gib": 26.617,
+    "max_artifacts_gib": 2.0,
+    "min_free_gib": 11.0,
+    "ok": true
+  },
+  "rho05_mean_ba": {
+    "cross_attention": 0.408333,
+    "gated_fusion": 0.375,
+    "logreg_atac": 0.475,
+    "logreg_concat": 0.391667,
+    "logreg_rna": 0.366667,
+    "rna_atac_concat": 0.408333,
+    "token_concat": 0.375
+  },
+  "rho0_mean_ba": {
+    "cross_attention": 0.375,
+    "gated_fusion": 0.35,
+    "logreg_atac": 0.475,
+    "logreg_concat": 0.391667,
+    "logreg_rna": 0.366667,
+    "rna_atac_concat": 0.375,
+    "token_concat": 0.341667
+  },
+  "rho1_mean_ba": {
+    "cross_attention": 0.325,
+    "gated_fusion": 0.358333,
+    "logreg_atac": 0.475,
+    "logreg_concat": 0.366667,
+    "logreg_rna": 0.366667,
+    "rna_atac_concat": 0.408333,
+    "token_concat": 0.375
+  },
+  "rho1_regime": {
+    "best_non_attention": "rna_atac_concat",
+    "ca_favoured": false,
+    "cross_attention_minus_best_non_attention": -0.083333,
+    "mean_fold_donor_ba": {
+      "cross_attention": 0.325,
+      "gated_fusion": 0.358333,
+      "logreg_atac": 0.475,
+      "logreg_concat": 0.366667,
+      "logreg_rna": 0.366667,
+      "rna_atac_concat": 0.408333,
+      "token_concat": 0.375
+    },
+    "n_models_scored": 7,
+    "regime": "NONE_DETECT",
+    "rho": 1.0
+  },
+  "screen_label": "INVALID",
+  "screen_log_window": {
+    "elapsed_s": 62,
+    "end_utc": "2026-09-29T20:39:53Z",
+    "exit": 0,
+    "start_utc": "2026-09-29T20:38:51Z"
+  },
+  "single_class_sidecars": [],
+  "stage_complete": true,
+  "token_concat_rho0_fold_ba": [
+    {
+      "ba": 0.375,
+      "fold": 0
+    },
+    {
+      "ba": 0.5,
+      "fold": 1
+    },
+    {
+      "ba": 0.5,
+      "fold": 2
+    },
+    {
+      "ba": 0.0,
+      "fold": 3
+    },
+    {
+      "ba": 0.3333333333333333,
+      "fold": 4
+    }
+  ],
+  "v1_immutable": {
+    "expected_ledger_prefix": "5e23387a",
+    "expected_provenance_prefix": "d9e941d2",
+    "ledger_sha256": "5e23387a3ad5c75f70d6926e5de7f2848e5363b820dedac21a92288a4657d2a8",
+    "provenance_sha256": "d9e941d24cb0e28ee5baca8b0fdbec0233a3a84a001f135eeee7412af8a62888"
+  }
+}
