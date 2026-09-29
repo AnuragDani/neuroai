@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T3 DONE (focused setup tests 24 passed); Checkpoint A / T4–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T3 + Checkpoint A DONE (focused setup tests 24 passed; v1↔v2 spec diff limited to split/preflight/identity/paths; v1 ledger/result hashes unchanged; zero fits); T4–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -32,9 +32,10 @@ Description: Use v2 protocol ID/spec/result root and fresh durable ledger; old p
 
 ### Checkpoint A — zero-fit code gate
 
-- [ ] T1–T3 focused checks pass; `git diff --check` pass.
-- [ ] V2 spec diff versus v1 limited to split, all-seed preflight, identity/paths. No model, margin, scenario or seed changes.
-- [ ] Old v1 result/ledger unchanged. Any conflict or unplanned scientific change stops before fitting.
+- [x] T1–T3 focused checks pass; `git diff --check` pass.
+- [x] V2 spec diff versus v1 limited to split, all-seed preflight, identity/paths. No model, margin, scenario or seed changes.
+- [x] Old v1 result/ledger unchanged. Any conflict or unplanned scientific change stops before fitting.
+  Evidence: [CHECKPOINT_A.md](../../../docs/nn_v2/s7_v2/CHECKPOINT_A.md). `pytest tests/test_nn_s7_setup.py -q` → **24 passed**; `git diff --check` clean. Scientific blocks identical (models/screen/PC/confirmation/evaluation.margin/scenario/seeds); only id/paths/split/preflight/scope+resumption prose differ. V1 `fit_ledger.jsonl` sha256 `5e23387a…`, `provenance.json` `d9e941d2…`; v2 durable root still absent; **zero fits**.
 
 ### T4: Executed-path audit — S–M; depends: checkpoint A
 
