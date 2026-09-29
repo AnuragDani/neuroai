@@ -1,0 +1,419 @@
+{
+  "bootstrap": {
+    "n_replicates": 1000,
+    "seed": 22
+  },
+  "cap": 1000,
+  "deltas": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "detection_threshold": 0.8,
+  "generated_at": "2026-09-29T01:54:29.793572+00:00",
+  "min_detectable_delta": null,
+  "models": [
+    "cross_attention",
+    "token_concat"
+  ],
+  "n_donors": 30,
+  "n_folds": 5,
+  "n_ok": 125,
+  "n_records": 125,
+  "n_repeats": 5,
+  "per_delta": {
+    "0.1": {
+      "delta": 0.1,
+      "detection_fraction": 0.0,
+      "mean_contrast": 0.02767857142857142,
+      "n_repeats": 5,
+      "n_repeats_detected": 0,
+      "n_repeats_ok": 5,
+      "per_repeat": [
+        {
+          "ci": [
+            0.0,
+            0.1071428571428571
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 0,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.23076923076923073
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.1071428571428571,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 1,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 2,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 3,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 4,
+          "status": "ok"
+        }
+      ]
+    },
+    "0.25": {
+      "delta": 0.25,
+      "detection_fraction": 0.0,
+      "mean_contrast": -0.008928571428571442,
+      "n_repeats": 5,
+      "n_repeats_detected": 0,
+      "n_repeats_ok": 5,
+      "per_repeat": [
+        {
+          "ci": [
+            -0.2142857142857143,
+            0.036298581932773
+          ],
+          "ci_excludes_zero": false,
+          "estimate": -0.0758928571428572,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 0,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            -0.1071428571428571,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": -0.03571428571428581,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 1,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.10013157894736839
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 2,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.10013157894736839
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 3,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            -0.08333333333333326,
+            0.10005681818181822
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0044642857142858094,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 4,
+          "status": "ok"
+        }
+      ]
+    },
+    "0.5": {
+      "delta": 0.5,
+      "detection_fraction": 0.0,
+      "mean_contrast": 0.0,
+      "n_repeats": 5,
+      "n_repeats_detected": 0,
+      "n_repeats_ok": 5,
+      "per_repeat": [
+        {
+          "ci": [
+            -0.09999999999999998,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": -0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 0,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 1,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.09999999999999998
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 2,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 3,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 4,
+          "status": "ok"
+        }
+      ]
+    },
+    "0.75": {
+      "delta": 0.75,
+      "detection_fraction": 0.0,
+      "mean_contrast": 0.03392857142857146,
+      "n_repeats": 5,
+      "n_repeats_detected": 0,
+      "n_repeats_ok": 5,
+      "per_repeat": [
+        {
+          "ci": [
+            0.0,
+            0.17508928571428567
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.07142857142857151,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 0,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 1,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.16666666666666663
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.06696428571428581,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 2,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 3,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.10000000000000009
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.03125,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 4,
+          "status": "ok"
+        }
+      ]
+    },
+    "1.0": {
+      "delta": 1.0,
+      "detection_fraction": 0.0,
+      "mean_contrast": 0.025892857142857162,
+      "n_repeats": 5,
+      "n_repeats_detected": 0,
+      "n_repeats_ok": 5,
+      "per_repeat": [
+        {
+          "ci": [
+            0.0,
+            0.125
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0357142857142857,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 0,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 1,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 2,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            0.0,
+            0.1696428571428571
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.06696428571428581,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 3,
+          "status": "ok"
+        },
+        {
+          "ci": [
+            -0.08043154761904749,
+            0.1333333333333333
+          ],
+          "ci_excludes_zero": false,
+          "estimate": 0.0267857142857143,
+          "n_donors": 30,
+          "n_failed": 0,
+          "n_valid": 1000,
+          "repeat": 4,
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "plant_seed": 0,
+  "protocol": {
+    "dropout": 0.2,
+    "embed_dim": 32,
+    "hidden_dim": 128,
+    "max_epochs": 20,
+    "n_folds": 5,
+    "n_heads": 4,
+    "n_repeats": 5,
+    "n_tokens": 8
+  },
+  "protocol_sha256": "8763c73c18219f4e830276e719991c8a3533eb66f5b90ab998a51dad1fd898a3",
+  "reading": "Planted S4 context-interaction only; reports when CA\u2212TC donor-BA CI excludes 0 across repeats. No biological claim.",
+  "scenario": "S4",
+  "statement": "not detectable up to \u03b4 = 1.0",
+  "task": "X4 detectability S4 CA\u2212TC at 30 donors"
+}
