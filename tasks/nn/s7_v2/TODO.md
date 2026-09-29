@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T5 + Checkpoint A DONE (live no-fit preflight 55/55 PASS; zero fits); Checkpoint B–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T5 + Checkpoints A–B DONE (fit-authorization freeze; zero fits); T6–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -57,8 +57,9 @@ Description: Run v2 `--preflight-only` on real configured inputs, inspect all de
 
 ### Checkpoint B — fit authorization by frozen evidence
 
-- [ ] Record clean source/spec/config/input/split hashes, Git commit, zero-fit ledger, passed tests and resource snapshot.
-- [ ] Freeze code before T6; post-fit fitting-source change invalidates v2, no same-task restart.
+- [x] Record clean source/spec/config/input/split hashes, Git commit, zero-fit ledger, passed tests and resource snapshot.
+- [x] Freeze code before T6; post-fit fitting-source change invalidates v2, no same-task restart.
+  Evidence: [CHECKPOINT_B.md](../../../docs/nn_v2/s7_v2/CHECKPOINT_B.md), [CHECKPOINT_B.json](../../../docs/nn_v2/s7_v2/CHECKPOINT_B.json). Git `a363826f…` on `codex/p22-s7-v2-plan-20260929`; spec `e8b127ad…`; split_manifest content `9a845b5c…`; provenance file `52cde0ba…`; 13 fitting-source hashes match live rehash; inputs frozen; v2 fit_ledger absent/0 rows; checkpoints `[]`; `pytest tests/test_nn_s7_setup.py -q` → **24 passed**; `git diff --check` clean; free_gib=`26.771`; RSS baseline=`14.734 MiB`; v1 ledger/provenance unchanged. Exact T6: `--split-v2 --once`. **Zero fits.** Post-fit source/hash change → v2 `INVALID`, no same-task restart.
 
 ## Phase 2 — one bounded synthetic batch
 
