@@ -1,6 +1,6 @@
 # Prospective path — one hypothesis and frozen criteria (2026-09-28)
 
-Planning only. No new fits, gate changes, downloads, external validation, email, or push.
+Hypothesis freeze only. Bounded S7 synthetic fits may follow the September 29 manual execution runbook; no real-label fits, gate changes, downloads, external validation, email, or push.
 Depends on [DIAGNOSIS.md](DIAGNOSIS.md). Finished primary (`ladder_v3` `B_NULL`) and gates stay unchanged.
 Feasibility / power design and ordered execution tasks: [FEASIBILITY.md](FEASIBILITY.md) (PLAN item 3 COMPLETE).
 
@@ -20,8 +20,8 @@ Not selected now: a new beyond-dosage biological estimand. Saved evidence shows 
 
 | Layer | Estimand | Unit | Contrast |
 |---|---|---|---|
-| Gate 0 (required first) | Planted regime label under `CA_FAVOURED` rule from decision tree N4 | Planted scenario×δ cell | CA mean donor BA − best non-attention arm > 0 (and regime labeled `CA_FAVOURED`) |
-| Gate 0b (required with Gate 0) | Pairing PC sensitivity | Held-out I3 on saved S4/S5-class δ=1.0 CA fold models | I3 must reduce planted-task performance when pairing is used (`used_by_model=true`); `pc_status` must not remain `N/A` |
+| Gate 0 (required first) | Planted regime label under `CA_FAVOURED` rule from decision tree N4 | Predeclared S7 rho=1.0 cell | CA mean donor BA − best non-attention arm ≥0.07 (and regime labeled `CA_FAVOURED`) |
+| Gate 0b (required with Gate 0) | Pairing PC sensitivity | Held-out within-donor ATAC shuffle on retained S7 rho=1.0 CA fold models | Predeclared donor log-loss drop CI lower >0; checkpoint reload and identity checks pass; `pc_status` must not remain `N/A` |
 | Primary (only if Gate 0 + 0b PASS) | Same finished rule, new protocol instance | Donor | CA − matched TC (and vs best fair simple baseline declared in protocol) donor balanced accuracy |
 | Explicit non-estimands | Finished `ladder_v3` primary; chr21-forced ladder_v4 pooled; dosage AUROC; gene-activity secondary | — | Do not re-label or replace |
 
@@ -29,10 +29,10 @@ Not selected now: a new beyond-dosage biological estimand. Saved evidence shows 
 
 Declared before any authorized fit:
 
-1. **CA arm:** architecture-matched to finished R3_ca family (embed/heads/tokens as in protocol freeze) unless an amendment file records a single justified change.
+1. **CA arm:** existing N4 architecture and hyperparameters, frozen in [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). This synthetic control is not a new R3 biological primary.
 2. **Matched neural baseline:** token-concat / TC twin with parameter match within 10% (finished rule).
 3. **Fair simple baselines (must beat best of these for `CA_FAVOURED`):** at least `logreg_concat`, `rna_atac_concat` (feature-concat MLP), and `gated_fusion` — the arms that already solve S4/S5/S6 in saved evidence.
-4. **Disease/dosage anchors (confound / ceiling checks, not method wins):** `chr21_dosage` and RNA logreg remain reported; a CA win that disappears when dosage is controlled is not a beyond-dosage claim.
+4. **Synthetic marginal controls:** `logreg_rna` and `logreg_atac` detect single-view shortcuts. Real-disease/dosage analyses remain outside this batch; no beyond-dosage claim.
 5. **Representation:** default remains protocol freeze (RNA HVG + ATAC TF-IDF tie-break). Any chr21-forced or gene-matched representation change is a named secondary sensitivity, not a silent primary swap (ladder_v4 precedent).
 
 ## Positive-result criteria (frozen for this prospective path)
@@ -41,13 +41,13 @@ Reuse finished internal endpoint semantics; do not weaken.
 
 ### Gate 0 — pairing-sensitive CA-favoured control
 
-- At least one planted scenario×δ cell labeled **`CA_FAVOURED`** under the existing N4 rule (CA beats **best** non-attention baseline above).
-- That cell must be **pairing-sensitive by design** (pairing shuffle or modality mis-pairing destroys the label for linear/additive solvers; fusion-only solve without CA does **not** count as CA-unique).
+- Fixed S7 rho=1.0 screen cell labeled **`CA_FAVOURED`** under the existing N4 rule, with complete five-fold coverage for all seven declared arms. CA beats **best** non-attention baseline by ≥0.07. Rho=0 and 0.5 are controls, not alternate candidate cells.
+- That cell must be **pairing-sensitive by design** (within-donor shuffle removes planted cross-view covariance while preserving labels and marginal values; fusion-only solve without CA does **not** count as CA-unique).
 - Saved fold models retained so PC is runnable (addresses finished `pc_status=N/A`).
 
 ### Gate 0b — PC / I3 sensitivity
 
-- On the Gate-0 CA models at δ=1.0 (or the declared PC cell): I3 pairing intervention yields `used_by_model=true` with CI excluding 0 on the agreed drop metric (same faithfulness convention as N13).
+- On saved Gate-0 CA models at S7 rho=1.0: within-donor ATAC pairing shuffle yields positive donor log-loss drop with 95% donor-bootstrap CI lower >0. Report BA drop as secondary. Checkpoint reload and identity intervention must reproduce original predictions.
 - If Gate 0 fails or Gate 0b stays `N/A` / unused: **stop the method-advantage path**; retain finished internal null; do not proceed to new real-label fits for attention advantage.
 
 ### Primary positive (only after Gate 0 + 0b)
@@ -83,7 +83,7 @@ Copied from PLAN item 2; now instantiated in [FEASIBILITY.md](FEASIBILITY.md) (P
 - H1 is not supported by saved planted evidence today (`CA_FAVOURED` count = 0).
 - Finished primary estimate 0.0267, CI [−0.0250, 0.0768] remains `B_NULL`.
 - Chr21-forced 0.060 [0.011, 0.113] remains secondary only.
-- No experiment is authorized by this document.
+- Bounded S7 synthetic execution is specified by [EXECUTION_RUNBOOK.md](EXECUTION_RUNBOOK.md); launching it manually authorizes only that scope. Real-label fits require a separate design and authorization.
 
 ## Status of planning deliverables
 

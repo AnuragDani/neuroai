@@ -1,6 +1,6 @@
 # Prospective path — bounded protocol, feasibility, ordered tasks (2026-09-28)
 
-Planning only. No new fits, downloads, gate changes, external validation, email, or push.
+Planning only. No fits performed by this planning document. Synthetic execution continuation is specified below; no downloads, canonical gate changes, external validation, email, or push.
 Depends on [DIAGNOSIS.md](DIAGNOSIS.md) and [HYPOTHESIS.md](HYPOTHESIS.md).
 Finished primary (`ladder_v3` `B_NULL`) and gates stay unchanged.
 Raw evidence under `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/` was read, not modified.
@@ -38,32 +38,32 @@ Raw evidence under `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/` wa
 2. **Primary verifier** ([ladder_verification.json](../../../docs/nn_v2/ladder_verification.json)): estimate **0.0267**, CI **[−0.0250, 0.0768]** at n=30. Half-width ≈ **0.051**. Estimate sits **0.043** below margin; CI includes 0. Precision alone does not explain the null: the point estimate never cleared 0.07.
 3. **Diagnosis:** S4/S6 are solved by strong non-attention arms → current planted grid does **not** create a CA-unique contrast large enough for A_ADVANTAGE. Therefore **donor n required for a reliable CA−TC contrast is not established** by X4 (PLAN item 3). Scaling n without a CA-unique signal is not a plan.
 
-### Prospective precision rules (declare before real-label fit)
+### Corrected precision and detection rules
 
-Use empirical bootstrap precision; do **not** invent a fitted power curve in this planning pass.
+CI width is descriptive, not proof of 80% power. A planted amplitude is not the resulting CA-minus-TC effect. Selected-screen control estimates must not set an assumed true effect or establish biological-cohort power.
 
-| Rule ID | Rule | Pass condition |
+| Rule | Meaning | Evidence / disposition |
 |---|---|---|
-| P0 | Binding Gate 0 contrast | Observed CA − best non-attention donor BA on the Gate-0 cell ≥ **0.07** (same margin family as A_ADVANTAGE); else Gate 0 cannot motivate real-label power for method advantage |
-| P1 | Same-n precision proxy | On Gate-0 CA vs matched TC (or declared primary contrast twin), donor-bootstrap **half-width at n=30** must be **≤ 0.07** so a true margin-sized effect can in principle yield CI LB > 0; report half-width explicitly |
-| P2 | Detection-rate target (if a future authorized n-sweep exists) | Fraction of repeats with CA−TC CI excluding 0 ≥ **0.8** at the design δ/contrast (X4 convention). **Current grid provides no such n**; until an authorized sweep exists, treat required n as **unknown** |
-| P3 | Real-label authorization | Require P0 + P1 PASS **and** Gate 0b PASS. If P0 or P1 FAIL at available n=30 and no larger cohort is accessible → outcome **`BLOCKED_POWER`**: stop method-advantage real-label fits; retain finished `B_NULL`; complete bounded paper |
+| P0 | Comparative control | Fixed rho=1.0 screen must beat every fair non-attention arm by >=0.07; complete donor/fold/arm coverage required. No selection of a winning amplitude. |
+| P1 | Descriptive uncertainty | Report paired donor CIs and half-widths only. No <=0.07 pass shortcut and no authorization inferred from CI width. |
+| P2 | Fresh simulation confirmation | Ten predeclared fresh generator/label/model seeds on fixed rho=1.0; joint success is estimate >=0.07 AND CI lower >0. Report success count/10 with a Wilson 95% interval. These are conditional synthetic trials on reused cohort background, not ten independent biological cohorts. Rate >=0.8 is an exploratory design screen, not proof of >=80% population power; uncertainty remains explicit. |
+| P3 | Biological continuation | Biological-cohort power/precision remains POWER_UNESTABLISHED; synthetic confirmation cannot authorize real-label reruns. A later study needs an independently justified design effect, full joint success rule, donor sampling design and prospective adequacy assessment. |
 
-**Interpretation for continuation decision.** At n=30, primary half-width (~0.05) is not wildly larger than 0.07, so **insufficient n is not proven to be the sole barrier** if a true CA−TC gap ≥ 0.07 existed. The binding prospective barrier is still **absence of a pairing-sensitive CA-favoured control** (Gate 0), then PC sensitivity (Gate 0b), then P0/P1. Do not authorize “run until significant.”
+New [EXECUTION_RUNBOOK.md](EXECUTION_RUNBOOK.md) and [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json) instantiate T1 and bound synthetic implementation/execution. The researcher requested planning/setup and a manual GNHF command to perform this bounded work on September 29. That continuation supersedes planning-only restrictions for this synthetic batch when the researcher launches it; no model fits are started during setup. T5–T7 remain out of this run. Failure rejects this bounded scenario/protocol, not all attention architectures.
 
 ## Ordered execution tasks (prospective; not started)
 
 | ID | Task | Depends | Verifiable exit | On fail |
 |---|---|---|---|---|
 | T1 | Write planted-scenario **amendment spec**: pairing-sensitive label; explicit failure modes for linear/additive and gated-fusion solvers; freeze representation unless named secondary | DIAGNOSIS + HYPOTHESIS | Spec reviewed; no fits | Revise spec; do not fit |
-| T2 | **Gate 0** planted grid on existing cohort; arms include CA, matched TC, `logreg_concat`, `rna_atac_concat`, `gated_fusion`; **retain** CA fold models at PC cell | T1 + run authorization | ≥1 cell `CA_FAVOURED`; models on disk | **Stop method path**; keep `B_NULL` |
+| T2 | **Gate 0** fixed S7 rho grid on existing cohort; seven arms frozen in spec; **retain** CA/TC fold models at rho=1 | T1 + manual launch | Fixed rho=1 cell `CA_FAVOURED`; models on disk; null/marginal controls pass | **Stop method path**; keep `B_NULL` |
 | T3 | **Gate 0b** I3 pairing PC on saved Gate-0 CA models | T2 PASS | `used_by_model=true`; not `N/A` | **Stop method path** |
-| T4 | **Precision gate** P0–P1 (and P2 only if n-sweep authorized) | T3 PASS | Document half-width + contrast; P0∧P1 | **`BLOCKED_POWER`**; no real-label method fit |
+| T4 | Fresh-seed synthetic confirmation and descriptive uncertainty | T3 PASS | Full joint detection rule, 10 trials, Wilson interval; biological power explicitly unestablished | Preserve null/partial; no real-label method fit |
 | T5 | One real-label ladder/protocol instance; frozen HYPOTHESIS comparison set + A_ADVANTAGE; confound/dosage reporting | T4 PASS + separate authorization | Outcome labeled A_ADVANTAGE / B_NULL / A_FRAGILE per frozen rules | Report supported null/negative; **do not retune** |
 | T6 | Robustness seeds (≥4/5) + CA_USES_PAIRING package for method-paper framing | T5 A_ADVANTAGE | Seeds + pairing evidence PASS | A_FRAGILE / mechanism claim withheld |
 | T7 | Independent external paired evaluation | Separate cohort access + T5/T6 scope closed | External protocol PASS/FAIL | Remain `STUDY_PARTIAL`; do not claim transportability |
 
-**Authorization boundary.** T1 is documentation-only and may proceed under a future planning/implementation ticket. **T2–T7 require explicit researcher authorization**; this file does not grant it. No task may loop on primary variants until significant.
+**Authorization update (September 29).** T1 is instantiated; the new runbook covers bounded synthetic T2–T4 after manual launch. Real-label T5–T7 remain out of scope. Never loop on primary variants until significant.
 
 ## Feasibility summary
 
@@ -71,9 +71,9 @@ Use empirical bootstrap precision; do **not** invent a fitted power curve in thi
 |---|---|
 | Can Gate 0/0b be attempted without new donors? | **Yes** (n=30 internal cohort present) |
 | Is CA−TC donor n for A_ADVANTAGE established? | **No** (`min_detectable_delta=null`; X4 mean contrasts ≪ 0.07) |
-| Is method-advantage path ready to run? | **No** — waiting on redesign + authorization; binding scientific gap is Gate 0 |
-| Precise blocker if stopping without runs? | Not a sample-access blocker for Gate 0. Real-label method path is **conditionally blocked on power** (`BLOCKED_POWER`) until P0/P1 pass or larger n arrives. External phase blocked on cohort access (T13) |
-| Recommended researcher decision now | Either authorize T1→T2 under a new ticket, or close method-advantage as unsupported by saved controls and keep the bounded internal null paper |
+| Is method-advantage path ready to run? | **Synthetic batch ready for manual launch** after setup checks; scientific Gate 0 remains open |
+| Precise blocker if stopping without runs? | Not a sample-access blocker for Gate 0. Real-label method path remains **POWER_UNESTABLISHED** pending a separate prospective adequacy assessment; synthetic P0/P2 passes do not clear it. External phase blocked on cohort access (T13) |
+| Recommended researcher decision now | Run the frozen synthetic batch via the new runbook, or retain the bounded internal null paper; never infer a guaranteed method win |
 
 ## Explicit non-claims
 
