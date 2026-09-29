@@ -1,10 +1,12 @@
-# P22 — synthetic-only multimodal routing workspace
+# P22 — paired RNA/ATAC research workspace
 
-Faithfulness-tested two-view routing for identifying and validating regulatory
-mechanisms. **Condition-specific data work is blocked** until Professor Fang
-approves a dataset, target, and protocol.
+**Start here:** [current status](status.md) → [document index](docs/INDEX.md) →
+[professor meetings and dated handoffs](MOM/README.md). `status.md` records current
+NN-v2 gate failure and active work; this README describes repository layout.
 
-Current data mode: `synthetic` (plus read-only legacy Tasic evidence).
+Current work includes public paired RNA/ATAC experiments, synthetic controls,
+and earlier Tasic engineering checks. Scientific acceptance depends on the
+specific protocol and verification gate for each study.
 
 ## What this repository is
 
@@ -19,7 +21,7 @@ cloud executions, see the [code and notebook index](archive/code/README.md).
 
 ## What this repository is not
 
-- Not approved real-data training
+- Not a claim of cross-attention superiority from the current NN-v2 ladder
 - Not a claim that Tasic proxy-view results are independent two-modality evidence
 - Not a claim that routing weights explain biology
 - Not translational or eligibility evidence
@@ -76,8 +78,8 @@ make live
 Use exactly these labels in reports and docs: `verified`, `experimental result`,
 `proposed`, `inference`, `unknown`.
 
-## Approval blocker
+## Current gates
 
-Next decision owner: **Professor Fang**.
-Next action: `awaiting_professor_approval`.
-See `HANDOFF.md` and `docs/interim_methods_protocol.md`.
+See [status.md](status.md) for live stage and blockers. [HANDOFF.md](HANDOFF.md)
+records July 2026 `awaiting_professor_approval` under Professor Fang. That is
+historical, not current approval or experiment status.

@@ -1,1 +1,1 @@
-BLOCKED:merge conflicts abort:docs/INDEX.md,status.md
+BLOCKED:merge conflicts abort:docs/INDEX.md,status.md; finish-base now merges cellstate with those files resolved to finish-base/v6; retry X7 after gnhf commits this merge
