@@ -352,19 +352,20 @@ def plant_and_fit_job(
         "model_seed": scores.get("model_seed"),
         "checkpoint": scores.get("checkpoint"),
         "test_cell_probabilities": scores.get("test_cell_probabilities"),
+        "donor_probabilities": scores.get("donor_probabilities"),
     }
     return record
 
 
 def should_retain_checkpoint(job: Mapping[str, Any]) -> bool:
-    """Retain CA/TC weights for rho=1 screen (and confirmation) pairing-PC."""
+    """Retain CA/TC weights for rho=1 screen/confirm (and smoke) diagnostics."""
     model = str(job["model"])
     rho = float(job["rho"])
     stage = str(job.get("stage", ""))
     return (
         model in S7_CHECKPOINT_MODELS
         and abs(rho - 1.0) < 1e-12
-        and stage in {"screen", "confirmation", "smoke"}
+        and stage in {"screen", "confirm", "smoke"}
     )
 
 
@@ -451,14 +452,26 @@ def record_completed_fit(
     record: Mapping[str, Any],
     *,
     checkpoint_dir: Path | str | None = None,
+    prediction_dir: Path | str | None = None,
 ) -> dict[str, Any]:
-    """Append fit to ledger and optionally save a retainable checkpoint."""
+    """Append fit to ledger; optionally save checkpoint and donor predictions."""
+    # Local import avoids a cycle: confirm_exec imports confirmation gates only.
+    from p22.eval.s7_confirm_exec import save_donor_predictions
+
     ckpt_path = None
     if checkpoint_dir is not None:
         ckpt_path = save_checkpoint(record, checkpoint_dir)
+    pred_root = prediction_dir
+    if pred_root is None and checkpoint_dir is not None:
+        pred_root = Path(checkpoint_dir).parent / "donor_predictions"
+    pred_path = None
+    if pred_root is not None:
+        pred_path = save_donor_predictions(record, pred_root)
     payload = ledger_payload(record)
     if ckpt_path is not None:
         payload["checkpoint_path"] = str(ckpt_path)
+    if pred_path is not None:
+        payload["donor_predictions_path"] = str(pred_path)
     return ledger.record_fit(str(record["fit_id"]), payload)
 
 
