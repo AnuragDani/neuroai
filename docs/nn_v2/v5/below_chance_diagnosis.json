@@ -1,0 +1,74 @@
+{
+  "record_type": "v5_below_chance_diagnosis",
+  "verdict": "PIPELINE_BUG_FIXED",
+  "reason": "V2 required a shared-path fix (positive-control donor_auroc=0.924); canonical ladder must be rerun under the corrected fit path.",
+  "v2_required_shared_path_fix": true,
+  "positive_control_donor_auroc": 0.9244444444444445,
+  "positive_control_orientation_spearman": 0.6480533926585095,
+  "chr21_genes_in_hvg_default": 31,
+  "shared_path_fix": "sklearn controls now fit on the full outer-train split; previously worker_task passed only the inner-train third and _control_trainer discarded val, wasting one third of training donors",
+  "learned_arms": [
+    {
+      "arm": "R3_ca",
+      "per_fold_auroc_mean": 0.6868888888888887,
+      "per_fold_auroc_sd": 0.27208899234090017,
+      "pooled_auroc": 0.36302222222222225,
+      "abs_mean_minus_half": 0.18688888888888866,
+      "mean_near_chance": false,
+      "pooled_below_chance": true
+    },
+    {
+      "arm": "R3_tc",
+      "per_fold_auroc_mean": 0.6412222222222222,
+      "per_fold_auroc_sd": 0.2894425037256328,
+      "pooled_auroc": 0.3415111111111111,
+      "abs_mean_minus_half": 0.14122222222222225,
+      "mean_near_chance": false,
+      "pooled_below_chance": true
+    },
+    {
+      "arm": "logreg_rna",
+      "per_fold_auroc_mean": 0.5732222222222222,
+      "per_fold_auroc_sd": 0.2327994951417885,
+      "pooled_auroc": 0.3994666666666667,
+      "abs_mean_minus_half": 0.07322222222222219,
+      "mean_near_chance": true,
+      "pooled_below_chance": true
+    }
+  ],
+  "reference_arms": [
+    {
+      "arm": "majority",
+      "per_fold_auroc_mean": 0.5,
+      "per_fold_auroc_sd": 0.0,
+      "pooled_auroc": 0.3533333333333333,
+      "abs_mean_minus_half": 0.0,
+      "mean_near_chance": true,
+      "pooled_below_chance": true
+    },
+    {
+      "arm": "chr21_dosage",
+      "per_fold_auroc_mean": 1.0,
+      "per_fold_auroc_sd": 0.0,
+      "pooled_auroc": 0.9978666666666667,
+      "abs_mean_minus_half": 0.5,
+      "mean_near_chance": false,
+      "pooled_below_chance": false
+    }
+  ],
+  "decision_tree": {
+    "pooling_artefact_requires": {
+      "per_fold_mean_near_0.5": "|mean-0.5|<=0.1",
+      "pooled_below": "pooled<0.45",
+      "v2_without_code_changes": true
+    },
+    "pipeline_bug_fixed_requires": "v2_required_shared_path_fix",
+    "real_anti_signal_requires": "per-fold clearly <0.5 and V2 clean"
+  },
+  "sources": {
+    "per_fold_metrics": "docs/nn_v2/v5/per_fold_metrics.json",
+    "positive_control": "docs/nn_v2/v5/positive_control.json",
+    "canonical_ladder": "docs/nn_v2/v5/CANONICAL_LADDER.txt"
+  },
+  "next_step": "V4: rerun full ladder into ladder_v3"
+}

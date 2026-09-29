@@ -1,13 +1,27 @@
+import importlib.util
+import sys
+from pathlib import Path
+
 import pytest
 import torch
-import numpy as np
 
+from p22.models.fusion import VIEW_A
 from p22.models.gene_aligned import (
-    GeneAlignedTokenConcat,
     GeneAlignedCrossAttention,
+    GeneAlignedTokenConcat,
     build_genomic_attention_mask,
 )
-from p22.models.fusion import VIEW_A, VIEW_B
+
+
+def _load_gene_activity_runner():
+    path = Path(__file__).resolve().parents[1] / "scripts" / "run_nn_v2_gene_activity.py"
+    spec = importlib.util.spec_from_file_location("run_nn_v2_gene_activity", path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
 
 def test_build_genomic_attention_mask():
     chromosomes = ["chr1", "chr1", "chr1", "chr2", "chr2"]
@@ -42,12 +56,12 @@ def test_build_genomic_attention_mask():
     
     # Verify all expected Falses
     for i, j in expected_false:
-        assert mask[i, j] == False, f"Expected False at ({i}, {j})"
+        assert not mask[i, j], f"Expected False at ({i}, {j})"
         
     # Verify a few expected Trues
-    assert mask[0, 1] == True # Too far on chr1
-    assert mask[0, 3] == True # Different chromosome
-    assert mask[3, 2] == True
+    assert mask[0, 1] # Too far on chr1
+    assert mask[0, 3] # Different chromosome
+    assert mask[3, 2]
 
 def test_gene_aligned_token_concat():
     model = GeneAlignedTokenConcat(num_genes=10, dim=16, n_classes=2)
@@ -79,6 +93,20 @@ def test_gene_aligned_cross_attention():
     assert model.attention_weights.shape == (4, 10, 10)
     
     # Check mask was applied (weights should be exactly 0 where mask is True, 
-    # except softmax behavior might make it small, but PyTorch puts -inf for True mask, so weights should be 0)
+    # except softmax may make it small; True mask -> -inf so weights should be 0)
     # Check off-diagonal
     assert torch.allclose(model.attention_weights[:, 0, 1], torch.tensor(0.0))
+
+
+def test_select_ga_genes_matches_amendment_extremes():
+    mod = _load_gene_activity_runner()
+    cfg = Path(__file__).resolve().parents[1] / "configs" / "nn_gene_activity_2026-09-23.json"
+    selection = mod.select_ga_genes(cfg, cap=500)
+    assert selection["ga_n_genes"] == 500
+    assert selection["panel_n_genes"] == 548
+    assert selection["selection"] == "highest_label_free_dispersion_z"
+    assert selection["dispersion_z_min"] == pytest.approx(-0.41207420616229146)
+    assert selection["dispersion_z_max"] == pytest.approx(14.044904881960885)
+    assert len(selection["names"]) == 500
+    assert len(selection["chromosomes"]) == 500
+    assert len(selection["starts"]) == 500

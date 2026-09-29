@@ -7,11 +7,14 @@ If the N15 export is absent (N15 BLOCKED) the script writes a ``NOT_ESTIMABLE``
 spectrum document and exits 0; it never fabricates a table.
 
 Usage:
-    PYTHONPATH=src:scripts $PY scripts/analyze_nn_v2_spectrum.py
+    PYTHONPATH=src:scripts $PY scripts/analyze_nn_v2_spectrum.py \\
+      --cell-scores /abs/path/to/spectrum/cell_scores.csv.gz --arm R3_ca
 """
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -21,8 +24,12 @@ import pandas as pd
 from scipy import stats
 
 ROOT = Path(__file__).resolve().parents[1]
-CELL_SCORES = ROOT / "reports/generated/nn_20260923/spectrum/cell_scores.csv.gz"
-DONOR_MEANS = ROOT / "docs/nn_v2/donor_celltype_scores.csv.gz"
+# Default: accepted N15 export under the main checkout (not copied into finish-base).
+_DEFAULT_CELL_SCORES = Path(
+    "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/"
+    "spectrum/cell_scores.csv.gz"
+)
+_DEFAULT_ARM = "R3_ca"
 OUT_JSON = ROOT / "docs/nn_v2/spectrum.json"
 OUT_MD = ROOT / "docs/nn_v2/SPECTRUM.md"
 
@@ -37,11 +44,16 @@ MIN_DONORS_PER_GROUP = 8
 # Stage strata used for the stratified donor-label permutation.
 STAGE_BINS = ((11, 13, "PCW11_12"), (13, 17, "PCW13_16"), (17, 21, "PCW17_20"))
 
+# N15 export uses log1p_*; accept either name.
 CONFOUND_COLUMNS = {
     "chr21_dosage": "chr21_dosage",
     "dev_PCW": "dev_PCW",
     "log_nCount_RNA": "log_nCount_RNA",
     "log_nCount_ATAC": "log_nCount_ATAC",
+}
+_DEPTH_ALIASES = {
+    "log_nCount_RNA": ("log_nCount_RNA", "log1p_nCount_RNA"),
+    "log_nCount_ATAC": ("log_nCount_ATAC", "log1p_nCount_ATAC"),
 }
 
 
@@ -194,6 +206,19 @@ def _residualize(values: np.ndarray, covariates: np.ndarray) -> np.ndarray:
     return values - design @ beta
 
 
+def _normalize_depth_columns(cells: pd.DataFrame) -> pd.DataFrame:
+    """Map N15 log1p_* depth columns onto the confound names used below."""
+    out = cells.copy()
+    for canonical, aliases in _DEPTH_ALIASES.items():
+        if canonical in out.columns:
+            continue
+        for alias in aliases:
+            if alias in out.columns:
+                out[canonical] = out[alias]
+                break
+    return out
+
+
 def analyze_type(block: pd.DataFrame, eligible: bool, n_boot: int, n_perm: int, seed: int):
     """Full spectrum record for one author cell type."""
     donor_rows = block.groupby("donor").agg(
@@ -271,7 +296,7 @@ def analyze_type(block: pd.DataFrame, eligible: bool, n_boot: int, n_perm: int, 
 
 def analyze_cells(cells: pd.DataFrame, n_boot: int = 2000, n_perm: int = 10000, seed: int = 22):
     """Run the full N16 analysis over a per-cell score table."""
-    cells = cells.copy()
+    cells = _normalize_depth_columns(cells)
     cells["donor"] = cells["donor"].astype(str)
     cells["label"] = cells["label"].astype(int)
     cells["author_cell_type"] = cells["author_cell_type"].astype(str)
@@ -303,7 +328,6 @@ def analyze_cells(cells: pd.DataFrame, n_boot: int = 2000, n_perm: int = 10000, 
         rec["confound_sensitive"] = bool(raw_sig and not res_sig)
     result = {
         "status": "estimated",
-        "arm": "primary",
         "n_boot": n_boot,
         "n_perm": n_perm,
         "seed": seed,
@@ -317,17 +341,33 @@ def analyze_cells(cells: pd.DataFrame, n_boot: int = 2000, n_perm: int = 10000, 
         "results": records,
     }
     sig_types = [r["author_cell_type"] for r in records if r["s"]["significant"]]
-    sig_types_chr21 = [r["author_cell_type"] for r in records if r.get("chr21", {}).get("significant")]
+    sig_types_chr21 = [
+        r["author_cell_type"] for r in records if r.get("chr21", {}).get("significant")
+    ]
+    confound_types = [
+        r["author_cell_type"] for r in records if r.get("confound_sensitive")
+    ]
+    result["confound_sensitive_types"] = confound_types
     if not records:
         result["spectrum_call"] = "NOT_ESTIMABLE"
     elif sig_types:
         call = "SPECTRUM_LOCALIZED:" + ",".join(sig_types)
         if set(sig_types) == set(sig_types_chr21) and len(sig_types) > 0:
             call += " (dosage-aligned)"
+        if confound_types:
+            call += f"; CONFOUND_SENSITIVE:{','.join(confound_types)}"
         result["spectrum_call"] = call
     else:
         result["spectrum_call"] = "SPECTRUM_NULL"
     return result
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _not_estimable(reason: str, detail: str) -> dict:
@@ -352,8 +392,23 @@ def _write_md(payload: dict, path: Path) -> None:
         ]
         path.write_text("\n".join(lines) + "\n")
         return
+    src = payload.get("source", {})
+    if src:
+        lines.append(
+            f"Source: `{src.get('cell_scores_path')}` arm `{src.get('arm')}` "
+            f"(sha256 `{src.get('cell_scores_sha256', '')[:12]}…`; "
+            f"ladder_v2 OOF export)."
+        )
+        lines.append("")
     lines.append(f"Call: `{payload.get('spectrum_call', 'SPECTRUM_NULL')}`")
     lines.append("")
+    if payload.get("chr21_excluded_compare") is not None:
+        lines.append(
+            f"Chr21-excluded score compare: "
+            f"`{payload['chr21_excluded_compare'].get('status')}` — "
+            f"{payload['chr21_excluded_compare'].get('reason', '')}"
+        )
+        lines.append("")
     lines.append(
         "| cell type | n donors DS | n donors CON | diff s | 95% CI | "
         "p (Holm) | sig | confound-sensitive |"
@@ -375,31 +430,110 @@ def _write_md(payload: dict, path: Path) -> None:
             )
         )
     lines.append("")
-    lines.append(
-        "Reading: the model signal is associated with the cell types above; a cell type "
-        "with no significant difference carries no detectable model signal at this "
-        "donor count. Attention mass is descriptive only."
-    )
+    call = str(payload.get("spectrum_call", "SPECTRUM_NULL"))
+    if call.startswith("SPECTRUM_NULL"):
+        reading = (
+            "Reading: no eligible cell type shows a Holm-significant DS−CON difference "
+            "in donor-mean model score at this donor count (`SPECTRUM_NULL`). Effect "
+            "sizes and CIs are reported above for transparency. Attention mass is "
+            "descriptive only. Cohort-internal only; not external validation."
+        )
+    else:
+        reading = (
+            "Reading: the model signal is associated with the significant cell types "
+            "above; a cell type with no significant difference carries no detectable "
+            "model signal at this donor count. Attention mass is descriptive only. "
+            "Cohort-internal only; not external validation."
+        )
+    lines.append(reading)
     path.write_text("\n".join(lines) + "\n")
 
 
 def main() -> int:
-    if not CELL_SCORES.exists():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--cell-scores",
+        type=Path,
+        default=_DEFAULT_CELL_SCORES,
+        help="N15 cell_scores.csv.gz (absolute path to main-checkout export)",
+    )
+    parser.add_argument(
+        "--arm",
+        default=_DEFAULT_ARM,
+        help="Primary arm to analyze (default R3_ca)",
+    )
+    parser.add_argument("--out-json", type=Path, default=OUT_JSON)
+    parser.add_argument("--out-md", type=Path, default=OUT_MD)
+    parser.add_argument("--n-boot", type=int, default=2000)
+    parser.add_argument("--n-perm", type=int, default=10000)
+    parser.add_argument("--seed", type=int, default=22)
+    args = parser.parse_args()
+
+    cell_scores = args.cell_scores
+    if not cell_scores.exists():
         payload = _not_estimable(
             "input_missing",
-            f"N15 export absent: {CELL_SCORES.relative_to(ROOT)}; "
+            f"N15 export absent: {cell_scores}; "
             "N15 is BLOCKED so per-cell s_i/a_i do not exist.",
         )
-        OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-        OUT_JSON.write_text(json.dumps(payload, indent=2) + "\n")
-        _write_md(payload, OUT_MD)
+        args.out_json.parent.mkdir(parents=True, exist_ok=True)
+        args.out_json.write_text(json.dumps(payload, indent=2) + "\n")
+        _write_md(payload, args.out_md)
         print(json.dumps({k: payload[k] for k in ("status", "reason", "spectrum_call")}))
         return 0
-    cells = pd.read_csv(CELL_SCORES)
-    payload = analyze_cells(cells)
-    OUT_JSON.write_text(json.dumps(payload, indent=2) + "\n")
-    _write_md(payload, OUT_MD)
-    print(json.dumps({"status": payload["status"], "spectrum_call": payload["spectrum_call"]}))
+
+    cells = pd.read_csv(cell_scores)
+    if "arm" in cells.columns:
+        arms_present = sorted(set(cells["arm"].astype(str)))
+        if args.arm not in arms_present:
+            payload = _not_estimable(
+                "arm_missing",
+                f"Requested arm {args.arm!r} not in export arms {arms_present}.",
+            )
+            args.out_json.write_text(json.dumps(payload, indent=2) + "\n")
+            _write_md(payload, args.out_md)
+            print(json.dumps({k: payload[k] for k in ("status", "reason", "spectrum_call")}))
+            return 0
+        cells = cells.loc[cells["arm"].astype(str) == args.arm].copy()
+    else:
+        arms_present = [args.arm]
+
+    payload = analyze_cells(
+        cells, n_boot=args.n_boot, n_perm=args.n_perm, seed=args.seed
+    )
+    payload["arm"] = args.arm
+    payload["source"] = {
+        "cell_scores_path": str(cell_scores),
+        "cell_scores_sha256": _sha256(cell_scores),
+        "arm": args.arm,
+        "arms_in_export": arms_present,
+        "n_rows_analyzed": int(len(cells)),
+        "ladder_source": (
+            "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/"
+            "nn_20260923/ladder_v2"
+        ),
+        "export_evidence": "docs/nn_v2/cell_scores_export.json",
+    }
+    payload["chr21_excluded_compare"] = {
+        "status": "NOT_NEEDED",
+        "reason": (
+            "N15 chr21-excluded score export DEFERRED; dosage alignment uses "
+            "per-cell chr21_dosage column on the primary arm instead"
+        ),
+    }
+    args.out_json.parent.mkdir(parents=True, exist_ok=True)
+    args.out_json.write_text(json.dumps(payload, indent=2) + "\n")
+    _write_md(payload, args.out_md)
+    print(
+        json.dumps(
+            {
+                "status": payload["status"],
+                "spectrum_call": payload["spectrum_call"],
+                "arm": payload["arm"],
+                "n_eligible": len(payload.get("eligible_types", [])),
+            }
+        )
+    )
     return 0
 
 

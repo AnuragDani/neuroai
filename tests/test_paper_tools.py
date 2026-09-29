@@ -185,3 +185,84 @@ def test_make_figures_builds_fig2(tmp_path):
     assert names == ["fig2_planted.pdf", "fig2_planted.png"]
     for path in written:
         assert path.exists() and path.stat().st_size > 0
+
+
+def test_make_figures_builds_fig3_ladder(tmp_path):
+    src = _ROOT / "docs" / "nn_v2" / "ladder_summary.json"
+    if not src.exists():
+        pytest.skip("ladder_summary.json not present")
+    data = make_figures.load_source(src)
+    written = make_figures.build_fig3(data, tmp_path)
+    assert sorted(p.name for p in written) == ["fig3_ladder.pdf", "fig3_ladder.png"]
+    for path in written:
+        assert path.stat().st_size > 0
+
+
+def test_make_figures_builds_fig4_faithfulness(tmp_path):
+    src = _ROOT / "docs" / "nn_v2" / "faithfulness.json"
+    if not src.exists():
+        pytest.skip("faithfulness.json not present")
+    data = make_figures.load_source(src)
+    written = make_figures.build_fig4(data, tmp_path)
+    assert sorted(p.name for p in written) == [
+        "fig4_faithfulness.pdf",
+        "fig4_faithfulness.png",
+    ]
+    for path in written:
+        assert path.stat().st_size > 0
+
+
+def test_make_figures_builds_fig5_spectrum(tmp_path):
+    src = _ROOT / "docs" / "nn_v2" / "spectrum.json"
+    if not src.exists():
+        pytest.skip("spectrum.json not present")
+    data = make_figures.load_source(src)
+    written = make_figures.build_fig5(data, tmp_path)
+    assert sorted(p.name for p in written) == ["fig5_spectrum.pdf", "fig5_spectrum.png"]
+    for path in written:
+        assert path.stat().st_size > 0
+
+
+def test_make_figures_builds_fig6_per_fold(tmp_path):
+    src = _ROOT / "docs" / "nn_v2" / "v5" / "per_fold_metrics.json"
+    if not src.exists():
+        pytest.skip("per_fold_metrics.json not present")
+    data = make_figures.load_source(src)
+    written = make_figures.build_fig6(data, tmp_path)
+    assert sorted(p.name for p in written) == [
+        "fig6_per_fold_auroc.pdf",
+        "fig6_per_fold_auroc.png",
+    ]
+    for path in written:
+        assert path.stat().st_size > 0
+
+
+def test_make_figures_all_writes_fig3_to_fig7(tmp_path, monkeypatch):
+    """N25/P6/X6: with all source JSON present, --only all emits fig3–fig7 stems."""
+    for name, default in (
+        ("planted_benchmark.json", "DEFAULT_PLANTED"),
+        ("ladder_summary.json", "DEFAULT_LADDER"),
+        ("faithfulness.json", "DEFAULT_FAITH"),
+        ("spectrum.json", "DEFAULT_SPECTRUM"),
+        ("v5/per_fold_metrics.json", "DEFAULT_PER_FOLD"),
+        ("v6/detectability.json", "DEFAULT_DETECT"),
+    ):
+        src = _ROOT / "docs" / "nn_v2" / name
+        if not src.exists():
+            pytest.skip(f"{name} not present")
+        monkeypatch.setattr(make_figures, default, src)
+    out = tmp_path / "figs"
+    rc = make_figures.main(["--only", "all", "--outdir", str(out)])
+    assert rc == 0
+    for stem in (
+        "fig1_schematic",
+        "fig2_planted",
+        "fig3_ladder",
+        "fig4_faithfulness",
+        "fig5_spectrum",
+        "fig6_per_fold_auroc",
+        "fig7_detectability",
+    ):
+        assert (out / f"{stem}.png").stat().st_size > 0
+        assert (out / f"{stem}.pdf").stat().st_size > 0
+    assert make_figures.SKIPPED_FIGURES == []

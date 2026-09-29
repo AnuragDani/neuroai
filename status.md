@@ -1,6 +1,6 @@
 # P22 current status
 
-Updated: 2026-09-27 15:52 PDT. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
+Updated: 2026-09-28 19:20 PDT. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
@@ -8,28 +8,29 @@ Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet P
 
 | Item | State | Evidence |
 |---|---|---|
-| Professor guidance | About 60% implemented, 30–40% supported by completed evidence. Cell-state spectrum remains missing. These are task-based estimates, not scientific metrics. | [Direction-to-task map](tasks/nn/plan.md#1-what-the-professor-asked-and-how-this-plan-answers-it), [July meeting records](MOM/README.md) |
-| Main real-data ladder | 450/450 expected fold outputs produced. Training run complete; result **not accepted**. | [Run record](reports/generated/nn_20260923/ladder_v2/run.json), [verifier](docs/nn_v2/ladder_verification.json) |
-| Ladder gate | **FAIL**. Saved summary says contrast 0, CI [0, 0]; independent fold-file recomputation says −0.0067, CI [−0.0528, 0.0348]. Recomputed values are provisional until gate passes. | [Saved summary](docs/nn_v2/ladder_summary.json), [verifier](docs/nn_v2/ladder_verification.json) |
-| Downstream NN work | Main checklist remains stale. Running GNHF branch `codex/p22-nn-finish-base` has committed N11–N17 through eight iterations; independent final review and integration remain pending. N21 is in progress there. | [Main task status](tasks/nn/todo.md), [finish runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md) |
-| Paper | [Draft](paper/draft.md) exists but says real-data ladder never ran. Its current-result sections need rewriting; `paper/check_paper.py` currently fails number/claims checks. | [Draft](paper/draft.md), [paper task list](tasks/nn/todo.md) |
+| Professor guidance | About 100% implemented for the NN-v2 assignment scope; ~96% supported by completed evidence (claim limits: PC N/A; N21 secondary; external validation deferred T13). These are task-based estimates, not scientific metrics. | [Direction-to-task map](tasks/nn/plan.md#1-what-the-professor-asked-and-how-this-plan-answers-it), [July meeting records](MOM/README.md), [framing](paper/framing.md), [self-review](paper/self_review.md), [NN_V2_RESULTS](docs/nn_v2/NN_V2_RESULTS_2026-09-23.md), [v6 update](docs/nn_v2/v6/PROFESSOR_UPDATE_v6.md) |
+| Main real-data ladder | Canonical is now **ladder_v3** (450/450) after v5 shared-path control-fit fix; `ladder_v2` retained. | [Run record](reports/generated/nn_20260923/ladder_v3/run.json), [CANONICAL_LADDER](docs/nn_v2/v5/CANONICAL_LADDER.txt), [verifier](docs/nn_v2/ladder_verification.json) |
+| Ladder gate | **PASS** on ladder_v3. Primary outcome still `B_NULL`: R3_ca−R3_tc estimate ≈ 0.0267, CI includes 0. V1–V4 + P1–P6 DONE. Paper header `DRAFT_V3_COMPLETE`. **`python3 gnhf/v5_gate.py` → `V5_GATE PASS`.** v6 X1–X6 DONE; X7 merge/push pending after conflict prep. | [Saved summary](docs/nn_v2/ladder_summary.json), [verifier](docs/nn_v2/ladder_verification.json), [NN_V2_RESULTS](docs/nn_v2/NN_V2_RESULTS_2026-09-23.md), [P5 update](docs/nn_v2/v5/PROFESSOR_UPDATE_v5.md), [v6 update](docs/nn_v2/v6/PROFESSOR_UPDATE_v6.md), [Draft](paper/draft.md) |
+| Downstream NN work | **N11**–**N17** refreshed on `ladder_v3`. **P2** no `CA_FAVOURED` on gene-matched S6. **P3** chr21-excluded spectrum `SPECTRUM_NULL`. **P4**–**P5** results + professor coverage table. **P6**/`X6` paper revision (`DRAFT_V3_COMPLETE`, fig6–fig7, vault synced). Study remains `STUDY_PARTIAL`. | [chr21_excluded](docs/nn_v2/chr21_excluded.json), [spectrum](docs/nn_v2/spectrum.json), [P3 spectrum](docs/nn_v2/v5/spectrum_chr21_excluded.json), [v6 chr21-forced](docs/nn_v2/v6/CHR21_FORCED.md), [detectability](docs/nn_v2/v6/DETECTABILITY.md), [Draft](paper/draft.md) |
+| v6 sensitivities | **X1–X4** DONE: chr21-forced ladder_v4 (450/450, `CHR21FORCED_D_SMALL_POSITIVE`); per-fold primary contrast CI includes 0; detectability `min_detectable_delta=null` up to δ=1.0. Primary remains `B_NULL`. **X5–X6** docs/paper DONE. **X7** blocked pending clean merge after bringing `gnhf/p22-nn-cellstate` into finish-base. | [v6 summary](docs/nn_v2/v6/ladder_v4_summary.json), [per-fold](docs/nn_v2/v6/per_fold_contrast.json), [detectability.json](docs/nn_v2/v6/detectability.json), [lane log](tasks/nn/lanes/v6.md) |
+| Paper | Framing **F4**; figures **fig1–fig7**; Results/Discussion/Abstract include ladder_v3 + per-fold AUROC + positive control + chr21-forced + detectability; **N31** checker PASS; vault `paper-nn/` copy. Header `DRAFT_V3_COMPLETE`. | [framing](paper/framing.md), [self-review](paper/self_review.md), [Draft](paper/draft.md), [claims](paper/claims.csv) |
 | Old swarm | `p22agy4` kept hitting Gemini quota limits. Stopped at 13:44 PDT; tmux session and Python driver no longer running. Saved lane branches/outputs remain for verification. | [Swarm log](reports/generated/nn_agy/latest/swarm.log), [lane status](reports/generated/nn_agy/latest/status.json) |
-| Manual GNHF finish | **Running** in isolated branch `codex/p22-nn-finish-base`. Its verifier says `PASS`, primary outcome `B_NULL`, and N11–N17 have committed; these have not been merged or independently reviewed. This main checkout's saved gate still says `FAIL`. | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md), [main saved gate](docs/nn_v2/ladder_verification.json) |
+| Manual GNHF finish | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md) on `codex/p22-nn-finish-base` reached N34 + v5 P6 + v6 X1–X6; X7 integrate/push remains. | [Runbook](tasks/nn/GNHF_FINISH_RUNBOOK.md), [self-review](paper/self_review.md), [saved gate](docs/nn_v2/ladder_verification.json) |
 
-**Conflict to resolve:** `tasks/nn/status/N10` says DONE, but the S6 hard gate and `ladder_verification.json` say FAIL. Treat N10's scientific result as unaccepted until the gate passes. Do not cite `docs/nn_v2/LADDER.md` or the saved summary as final results.
+**Resolved conflict:** N10 task label previously said DONE while the S6 hard gate said FAIL. Gate now `PASS` with rebuilt summary from all 450 fold files; N10 scientific result accepted as `B_NULL`.
+
+**X7 blocker (active):** merge of `codex/p22-nn-finish-base` into `gnhf/p22-nn-cellstate` aborted on add/add conflicts in `docs/INDEX.md` and `status.md`. Finish-base has now merged `gnhf/p22-nn-cellstate` and kept the finish-base/v6 versions of those two files so the reverse merge can retry cleanly.
 
 ## Other study tracks
 
 - Earlier paired multiome study: corrected internal comparison is an accepted null within its own protocol; external paired validation remains unperformed. It is **not** the NN-v2 ladder. See [corrected handoff](MOM/2026-09-21/GNHF_P22_CORRECTED_RESULTS_AND_HANDOFF.md).
 - Professor meeting records stay in [MOM](MOM/README.md), separate from plans and experiment outputs. June and July transcripts live in the linked Obsidian vault; September execution handoffs live here.
 - Historical July [HANDOFF.md](HANDOFF.md) and September [session handoff](docs/P22_SESSION_HANDOFF_2026-09-23.md) are dated snapshots, not current status.
-- For the next professor update, first read [packet status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/external_shared/STATUS.md>) and [packet guide](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/UPDATE_GUIDE.md>). The last confirmed **sent** update remains August 16; the September 27 packet is prepared but unsent.
 
 ## Next verified milestones
 
-1. Reconcile ladder summary with all fold files; rerun `gnhf/verify_ladder.py` and require `PASS`.
-2. Recheck and integrate N11/N12; finish remaining S7 work with evidence and explicit BLOCKED labels where needed.
-3. Complete S8 results and S9 paper from verified numbers; pass paper checker and evidence gate before vault copy.
+1. Retry X7: merge finish-base into `gnhf/p22-nn-cellstate`, run `v6_gate`, push both remotes (no force).
+2. Do not mark the professor note as sent; leave the unsent packets untouched.
 
 ## Status maintenance
 

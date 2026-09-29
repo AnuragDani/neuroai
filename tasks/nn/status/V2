@@ -1,0 +1,1 @@
+DONE:docs/nn_v2/v5/positive_control.json;logreg pooled AUROC=0.924;chr21_in_hvg_default=31/538;orientation Spearman=0.648;shared-path fix: controls fit full outer train;tests/test_nn_v5_positive_control.py 4 passed

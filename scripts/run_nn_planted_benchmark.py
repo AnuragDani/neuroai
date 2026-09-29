@@ -8,6 +8,10 @@ fusion families (``rna_atac_concat``, ``gated_fusion``, ``token_concat``,
 ``cross_attention``). Donor-level balanced accuracy, AUROC and log-loss are
 recorded.
 
+P2 / D3 adds helpers ``gene_aligned_delta_grid`` / ``gene_aligned_regime_labels``
+and ``GA_MODELS`` for the S6 gene-matched RNA×ATAC interaction regime; the
+runner is ``scripts/nn_v5_planted_gene_aligned.py``.
+
 Outer and inner folds are stratified by the *fake* planted label (grouped by
 donor), not the true disease label: the fake label alternates within each true
 group, so a true-stratified split can leave a single fake class in a test or
@@ -44,7 +48,12 @@ from p22.data.nn_inputs import (  # noqa: E402
 from p22.eval.metrics import balanced_accuracy  # noqa: E402
 from p22.eval.multiome_protocol import MultiomeProtocol  # noqa: E402
 from p22.eval.multiome_runner import model_inputs, paired_model  # noqa: E402
-from p22.eval.planted_signal import SCENARIOS, fake_donor_labels, plant  # noqa: E402
+from p22.eval.planted_signal import (  # noqa: E402
+    GENE_ALIGNED_SCENARIO,
+    SCENARIOS,
+    fake_donor_labels,
+    plant,
+)
 from p22.models.fusion import VIEW_A, VIEW_B  # noqa: E402
 from p22.training.loop import predict, train_model  # noqa: E402
 from run_real_paired_comparison import _fold_map, _indices  # noqa: E402
@@ -53,8 +62,11 @@ from run_real_paired_linear_controls import donor_cell_weights, fit_logistic  # 
 CONFIG = ROOT / "configs" / "nn_inputs_2026-09-23.json"
 N_RNA_VIEW, N_ATAC_VIEW = 2000, 256
 DELTAS = (0.25, 0.5, 1.0)
+GENE_ALIGNED_DELTAS = (0.5, 1.0)
 NEURAL_MODELS = ("rna_atac_concat", "gated_fusion", "token_concat", "cross_attention")
 MODELS = ("logreg_concat", *NEURAL_MODELS)
+# P2 / D3: gene-aligned CA vs matched token-concat vs MLP on S6.
+GA_MODELS = ("gene_aligned_ca", "gene_aligned_tc", "rna_atac_concat")
 PLANT_SEED = 0
 N4_PROTOCOL = MultiomeProtocol(
     n_tokens=8, embed_dim=32, hidden_dim=128, n_heads=4, dropout=0.2,
@@ -68,6 +80,45 @@ def delta_grid() -> list[tuple[str, float]]:
     for scenario in SCENARIOS[1:]:
         cells.extend((scenario, delta) for delta in DELTAS)
     return cells
+
+
+def gene_aligned_delta_grid() -> list[tuple[str, float]]:
+    """P2 S6 gene-matched interaction cells at δ ∈ {0.5, 1.0}."""
+    return [(GENE_ALIGNED_SCENARIO, delta) for delta in GENE_ALIGNED_DELTAS]
+
+
+def gene_aligned_regime_labels(records: list[dict]) -> dict:
+    """N4 CA_FAVOURED rule on gene-aligned CA vs non-attention (tc + MLP)."""
+    frame = pd.DataFrame([r for r in records if r["status"] == "ok"])
+    out = {}
+    if frame.empty:
+        return out
+    for (scenario, delta), group in frame.groupby(["scenario", "delta"]):
+        means = group.groupby("model")["donor_balanced_accuracy"].mean()
+        present = [m for m in GA_MODELS if m in means.index]
+        best = float(means[present].max()) if present else float("nan")
+        non_attn = [m for m in ("gene_aligned_tc", "rna_atac_concat") if m in means.index]
+        best_non = float(means[non_attn].max()) if non_attn else float("nan")
+        cross = (
+            float(means["gene_aligned_ca"]) if "gene_aligned_ca" in means.index
+            else float("nan")
+        )
+        if "rna_atac_concat" in means.index and float(means["rna_atac_concat"]) >= best - 0.03:
+            label = "LINEAR_SUFFICIENT"
+        elif non_attn and np.isfinite(cross) and cross - best_non >= 0.07:
+            label = "CA_FAVOURED"
+        elif "gene_aligned_tc" in means.index and float(means["gene_aligned_tc"]) >= best - 0.03:
+            label = "MLP_FAVOURED"
+        else:
+            label = "NONE_DETECT"
+        out[f"{scenario}@{delta}"] = {
+            "regime": label,
+            "n_models_scored": len(present),
+            "mean_balanced_accuracy": {k: round(float(v), 4) for k, v in means.items()},
+            "cross_attention_minus_best_non_attention": round(cross - best_non, 4),
+        }
+    return out
+
 
 
 def fold_positions(train_rows: np.ndarray, val_rows: np.ndarray, test_rows: np.ndarray) -> dict:

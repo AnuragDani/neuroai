@@ -1,0 +1,1 @@
+DONE:docs/nn_v2/v5/below_chance_diagnosis.json;verdict=PIPELINE_BUG_FIXED;V2 shared-path fix (controls fit full outer train);positive_control AUROC=0.924;R3_ca per-fold mean 0.687 vs pooled 0.363;tests/test_nn_v5_below_chance.py 4 passed

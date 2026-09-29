@@ -1,0 +1,1 @@
+DONE:docs/nn_v2/v5/per_fold_metrics.json;18 arms;majority per-fold BA=0.5 all 25 folds;tests/test_nn_v5_per_fold.py 5 passed

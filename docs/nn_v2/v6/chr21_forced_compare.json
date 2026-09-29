@@ -1,0 +1,110 @@
+{
+  "record_type": "v6_chr21_forced_reading",
+  "run": "reports/generated/nn_20260923/ladder_v4_chr21forced",
+  "canonical_run": "reports/generated/nn_20260923/ladder_v3",
+  "summary": "docs/nn_v2/v6/ladder_v4_summary.json",
+  "primary_contrast_donor_ba": {
+    "estimate": 0.06,
+    "ci": [
+      0.010697624743677399,
+      0.11267590768364762
+    ],
+    "margin": 0.07,
+    "advantage": false
+  },
+  "outcome_n10": "D_SMALL_POSITIVE",
+  "label": "CHR21FORCED_D_SMALL_POSITIVE",
+  "per_arm_per_fold_auroc": {
+    "R0_ca": {
+      "ladder_v3_per_fold_auroc_mean": 0.5258888888888889,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.87,
+      "delta": 0.34411111111111115
+    },
+    "R0_tc": {
+      "ladder_v3_per_fold_auroc_mean": 0.5507777777777778,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.88,
+      "delta": 0.3292222222222222
+    },
+    "R1_ca": {
+      "ladder_v3_per_fold_auroc_mean": 0.591,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9096666666666667,
+      "delta": 0.31866666666666676
+    },
+    "R1_tc": {
+      "ladder_v3_per_fold_auroc_mean": 0.5851111111111111,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9226666666666666,
+      "delta": 0.3375555555555555
+    },
+    "R2_ca": {
+      "ladder_v3_per_fold_auroc_mean": 0.6241111111111111,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9046666666666667,
+      "delta": 0.28055555555555567
+    },
+    "R2_tc": {
+      "ladder_v3_per_fold_auroc_mean": 0.5942222222222222,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.8876666666666665,
+      "delta": 0.2934444444444443
+    },
+    "R3_ca": {
+      "ladder_v3_per_fold_auroc_mean": 0.6559999999999999,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.7803333333333333,
+      "delta": 0.1243333333333334
+    },
+    "R3_gated": {
+      "ladder_v3_per_fold_auroc_mean": 0.6216666666666667,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.7672222222222221,
+      "delta": 0.14555555555555544
+    },
+    "R3_tc": {
+      "ladder_v3_per_fold_auroc_mean": 0.6581111111111112,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.8162222222222223,
+      "delta": 0.1581111111111111
+    },
+    "R3_tc_parammatched": {
+      "ladder_v3_per_fold_auroc_mean": 0.6082222222222222,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.8063333333333333,
+      "delta": 0.19811111111111113
+    },
+    "R4_ca": {
+      "ladder_v3_per_fold_auroc_mean": 0.6231111111111112,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.5284444444444444,
+      "delta": -0.09466666666666679
+    },
+    "R4_tc": {
+      "ladder_v3_per_fold_auroc_mean": 0.5857777777777778,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.5898888888888889,
+      "delta": 0.004111111111111065
+    },
+    "chr21_dosage": {
+      "ladder_v3_per_fold_auroc_mean": 1.0,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 1.0,
+      "delta": 0.0
+    },
+    "latent_pca_lsi_head": {
+      "ladder_v3_per_fold_auroc_mean": 0.5972222222222221,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.762,
+      "delta": 0.1647777777777779
+    },
+    "logreg_concat": {
+      "ladder_v3_per_fold_auroc_mean": 0.49722222222222223,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9795555555555556,
+      "delta": 0.4823333333333334
+    },
+    "logreg_rna": {
+      "ladder_v3_per_fold_auroc_mean": 0.5335555555555556,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9825555555555556,
+      "delta": 0.44900000000000007
+    },
+    "majority": {
+      "ladder_v3_per_fold_auroc_mean": 0.5,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.5,
+      "delta": 0.0
+    },
+    "pseudobulk_rna_logistic": {
+      "ladder_v3_per_fold_auroc_mean": 0.6666666666666667,
+      "ladder_v4_chr21forced_per_fold_auroc_mean": 0.9405555555555556,
+      "delta": 0.27388888888888885
+    }
+  },
+  "note": "Sensitivity only; canonical primary remains ladder_v3 B_NULL."
+}

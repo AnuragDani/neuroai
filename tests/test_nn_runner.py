@@ -1,7 +1,7 @@
 import json
 import subprocess
 import sys
-from pathlib import Path
+
 
 def test_runner_and_summarizer(tmp_path):
     # Call the runner with synthetic flag
@@ -42,17 +42,26 @@ def test_runner_and_summarizer(tmp_path):
     assert run_data["folds_expected"] == 4
     assert run_data["folds_done"] == 4  # Should still be 4 total
     
-    # Test summarizer
-    sum_cmd = [sys.executable, "scripts/summarize_nn_v2.py", "--run", str(out_dir), "--out", "docs/nn_v2"]
+    # Test summarizer into a temp out dir (never clobber accepted docs/nn_v2/)
+    sum_out = tmp_path / "docs_nn_v2"
+    sum_out.mkdir()
+    sum_cmd = [
+        sys.executable,
+        "scripts/summarize_nn_v2.py",
+        "--run",
+        str(out_dir),
+        "--out",
+        str(sum_out),
+    ]
     res3 = subprocess.run(sum_cmd, capture_output=True, text=True)
     assert res3.returncode == 0, res3.stderr
-    
-    summary_file = Path("docs/nn_v2/ladder_summary.json")
+
+    summary_file = sum_out / "ladder_summary.json"
     assert summary_file.exists()
-    
+
     with open(summary_file) as f:
         summary = json.load(f)
-        
+
     assert "primary" in summary
     assert "estimate" in summary["primary"]
     assert "outcome" in summary

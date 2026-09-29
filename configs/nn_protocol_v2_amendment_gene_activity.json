@@ -1,8 +1,14 @@
 {
-  "amendment_time": "2026-09-24T19:30:00Z",
-  "reason": "gene_activity rerun for N21",
+  "amendment_time": "2026-09-27T23:50:00Z",
+  "reason": "N21 gene-activity secondary ladder under decision_tree 500-gene amendment",
   "changes": {
-    "atac_matrix": "reports/generated/nn_20260923/gene_activity/counts.npz",
-    "atac_bed": "configs/nn_gene_activity_2026-09-23.bed"
+    "atac_matrix": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/gene_activity/counts/counts.npz",
+    "atac_bed": "configs/nn_gene_activity_2026-09-23.bed",
+    "ga_token_cap": 500,
+    "ga_token_selection": "highest_label_free_dispersion_z from configs/nn_gene_activity_2026-09-23.json",
+    "ga_arms": ["GA_ca", "GA_tc"],
+    "view_b_gene_activity_arms": ["R3_ca", "R3_tc", "logreg_concat"],
+    "secondary_only": true,
+    "never_independent_external_validation": true
   }
 }

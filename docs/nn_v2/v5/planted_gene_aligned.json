@@ -1,0 +1,43 @@
+{
+  "any_ca_favoured": false,
+  "cap": 1000,
+  "deltas": [
+    0.5,
+    1.0
+  ],
+  "finding": "no CA_FAVOURED regime on gene-matched S6 (null acceptable)",
+  "ga_token_cap": 64,
+  "generated_at": "2026-09-28T20:42:00.432559+00:00",
+  "models": [
+    "gene_aligned_ca",
+    "gene_aligned_tc",
+    "rna_atac_concat"
+  ],
+  "n_ok": 30,
+  "n_records": 30,
+  "reading": "Planted synthetic gene-matched interaction only; no biological claim.",
+  "regime_labels": {
+    "S6@0.5": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "gene_aligned_ca": 1.0,
+        "gene_aligned_tc": 0.7,
+        "rna_atac_concat": 1.0
+      },
+      "n_models_scored": 3,
+      "regime": "LINEAR_SUFFICIENT"
+    },
+    "S6@1.0": {
+      "cross_attention_minus_best_non_attention": 0.0,
+      "mean_balanced_accuracy": {
+        "gene_aligned_ca": 1.0,
+        "gene_aligned_tc": 0.8667,
+        "rna_atac_concat": 1.0
+      },
+      "n_models_scored": 3,
+      "regime": "LINEAR_SUFFICIENT"
+    }
+  },
+  "scenario": "S6",
+  "task": "P2 planted gene-aligned S6"
+}

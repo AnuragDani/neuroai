@@ -103,11 +103,16 @@ def prepare_nn_fold(
     *,
     n_hvg: int = N_HVG_DEFAULT,
     exclude_chr21: bool = False,
+    force_include_gene_mask: np.ndarray | None = None,
 ) -> FoldArrays:
     """Fit all preprocessing on train rows and return dense fold tensors.
 
     ``region_rows`` are row positions into ``inputs.regions`` (use
     :func:`p22.data.nn_inputs.region_indices` to map the fold's region ids).
+
+    ``force_include_gene_mask`` (full gene-axis bool) unions those genes into the
+    HVG set after dispersion selection. Ignored genes already dropped by
+    ``exclude_chr21`` stay dropped.
     """
     from sklearn.preprocessing import StandardScaler
 
@@ -130,6 +135,14 @@ def prepare_nn_fold(
 
     rna_norm = _rna_lognorm(inputs.rna[rows], inputs.rna_totals[rows])[:, gene_keep]
     hvg = _hvg_indices(rna_norm[train_position], n_hvg)
+    if force_include_gene_mask is not None:
+        force = np.asarray(force_include_gene_mask, dtype=bool)
+        if force.shape != (inputs.gene_ids.size,):
+            raise ValueError(
+                f"force_include_gene_mask shape {force.shape} != ({inputs.gene_ids.size},)"
+            )
+        force_local = np.flatnonzero(force[gene_keep])
+        hvg = np.unique(np.concatenate([hvg, force_local]))
     selected_cols = np.flatnonzero(gene_keep)[hvg]
     rna_dense = np.asarray(rna_norm[:, hvg].todense(), dtype=np.float32)
     rna_scaler = StandardScaler().fit(rna_dense[train_position])
@@ -164,6 +177,9 @@ def prepare_nn_fold(
         "n_hvg": int(selected_cols.size),
         "n_regions": int(region_rows.size),
         "exclude_chr21": bool(exclude_chr21),
+        "force_include_genes": int(
+            force_include_gene_mask.sum() if force_include_gene_mask is not None else 0
+        ),
         "fit_donors": fit_donors,
         "holdout_donors": sorted(holdout_donors),
         "idf_sha256": _array_sha256(idf),

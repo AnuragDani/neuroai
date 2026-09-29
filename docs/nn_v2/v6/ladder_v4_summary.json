@@ -1,0 +1,339 @@
+{
+  "primary": {
+    "model": "R3_ca",
+    "reference": "R3_tc",
+    "estimate": 0.06,
+    "ci": [
+      0.010697624743677399,
+      0.11267590768364762
+    ],
+    "margin": 0.07,
+    "advantage": false
+  },
+  "outcome": "D_SMALL_POSITIVE",
+  "secondary": {
+    "label": "LINEAR_SUFFICIENT"
+  },
+  "rung_decisions": {
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted",
+    "R4": "descriptive"
+  },
+  "per_arm": {
+    "R2_tc": {
+      "mean_ba": 0.5666666666666667,
+      "mean_auroc": 0.7333333333333333,
+      "mean_logloss": 0.6588739572797416,
+      "mean_brier": 0.23278411256456533,
+      "mean_per_fold_ba": 0.6699999999999999
+    },
+    "logreg_rna": {
+      "mean_ba": 0.8466666666666667,
+      "mean_auroc": 0.9413333333333334,
+      "mean_logloss": 0.5021136121994965,
+      "mean_brier": 0.15913365577367594,
+      "mean_per_fold_ba": 0.8906666666666666
+    },
+    "majority": {
+      "mean_ba": 0.30000000000000004,
+      "mean_auroc": 0.3,
+      "mean_logloss": 25.230557372382005,
+      "mean_brier": 0.7,
+      "mean_per_fold_ba": 0.5
+    },
+    "latent_pca_lsi_head": {
+      "mean_ba": 0.5666666666666667,
+      "mean_auroc": 0.6177777777777778,
+      "mean_logloss": 0.731402320791417,
+      "mean_brier": 0.24954403608221906,
+      "mean_per_fold_ba": 0.6403333333333332
+    },
+    "R4_ca": {
+      "mean_ba": 0.47333333333333333,
+      "mean_auroc": 0.49155555555555547,
+      "mean_logloss": 0.6978168294005777,
+      "mean_brier": 0.25232762177831825,
+      "mean_per_fold_ba": 0.5
+    },
+    "R2_ca": {
+      "mean_ba": 0.5666666666666667,
+      "mean_auroc": 0.664,
+      "mean_logloss": 0.6960169539722163,
+      "mean_brier": 0.24482918068144288,
+      "mean_per_fold_ba": 0.6653333333333333
+    },
+    "pseudobulk_rna_logistic": {
+      "mean_ba": 0.6733333333333332,
+      "mean_auroc": 0.9120000000000001,
+      "mean_logloss": 0.5691080848702933,
+      "mean_brier": 0.19247798192823584,
+      "mean_per_fold_ba": 0.6956666666666667
+    },
+    "R1_tc": {
+      "mean_ba": 0.6266666666666666,
+      "mean_auroc": 0.7031111111111111,
+      "mean_logloss": 0.7210386323849931,
+      "mean_brier": 0.23747585011410582,
+      "mean_per_fold_ba": 0.72
+    },
+    "R3_tc_parammatched": {
+      "mean_ba": 0.4533333333333333,
+      "mean_auroc": 0.5039999999999999,
+      "mean_logloss": 0.7732266719826407,
+      "mean_brier": 0.2751397324126629,
+      "mean_per_fold_ba": 0.5860000000000001
+    },
+    "R3_tc": {
+      "mean_ba": 0.4,
+      "mean_auroc": 0.45155555555555554,
+      "mean_logloss": 0.783416162167493,
+      "mean_brier": 0.2829259754378469,
+      "mean_per_fold_ba": 0.5466666666666666
+    },
+    "R1_ca": {
+      "mean_ba": 0.6133333333333333,
+      "mean_auroc": 0.6728888888888889,
+      "mean_logloss": 0.7510073041773935,
+      "mean_brier": 0.24384719436634789,
+      "mean_per_fold_ba": 0.7296666666666666
+    },
+    "R0_tc": {
+      "mean_ba": 0.6799999999999999,
+      "mean_auroc": 0.7644444444444445,
+      "mean_logloss": 0.591277780148227,
+      "mean_brier": 0.20146860886558643,
+      "mean_per_fold_ba": 0.7529999999999999
+    },
+    "R3_gated": {
+      "mean_ba": 0.4333333333333334,
+      "mean_auroc": 0.52,
+      "mean_logloss": 0.8190454244849356,
+      "mean_brier": 0.28217555396068167,
+      "mean_per_fold_ba": 0.5746666666666667
+    },
+    "logreg_concat": {
+      "mean_ba": 0.86,
+      "mean_auroc": 0.9351111111111111,
+      "mean_logloss": 0.5058743228279011,
+      "mean_brier": 0.16106077561585033,
+      "mean_per_fold_ba": 0.9006666666666667
+    },
+    "R4_tc": {
+      "mean_ba": 0.45999999999999996,
+      "mean_auroc": 0.468888888888889,
+      "mean_logloss": 0.6962684029846133,
+      "mean_brier": 0.2515597261256285,
+      "mean_per_fold_ba": 0.5
+    },
+    "R0_ca": {
+      "mean_ba": 0.6799999999999999,
+      "mean_auroc": 0.7777777777777778,
+      "mean_logloss": 0.5877869766293684,
+      "mean_brier": 0.19987838582933523,
+      "mean_per_fold_ba": 0.7529999999999999
+    },
+    "chr21_dosage": {
+      "mean_ba": 1.0,
+      "mean_auroc": 1.0,
+      "mean_logloss": 0.43237178074339966,
+      "mean_brier": 0.12485745200829154,
+      "mean_per_fold_ba": 1.0
+    },
+    "R3_ca": {
+      "mean_ba": 0.45999999999999996,
+      "mean_auroc": 0.4720000000000001,
+      "mean_logloss": 0.7889167735641374,
+      "mean_brier": 0.28267221795069697,
+      "mean_per_fold_ba": 0.5806666666666667
+    }
+  },
+  "secondary_contrasts": {
+    "R1_ca_vs_R1_tc": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R1_ca",
+      "reference": "R1_tc",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.033333333333333215,
+        "1": -0.03333333333333344,
+        "2": 0.0,
+        "3": 0.033333333333333215,
+        "4": -0.033333333333333326
+      },
+      "seed": 22,
+      "estimate": -0.013333333333333353,
+      "interval": [
+        -0.054477678571428566,
+        0.03128214712918657
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    },
+    "R2_ca_vs_R2_tc": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R2_ca",
+      "reference": "R2_tc",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.09999999999999998,
+        "1": 0.06666666666666665,
+        "2": -0.033333333333333326,
+        "3": 0.03333333333333344,
+        "4": 0.033333333333333326
+      },
+      "seed": 22,
+      "estimate": 2.2204460492503132e-17,
+      "interval": [
+        -0.036507936507936524,
+        0.03749999999999999
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    },
+    "R3_ca_vs_R3_tc": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R3_ca",
+      "reference": "R3_tc",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.09999999999999998,
+        "1": 0.16666666666666669,
+        "2": 0.09999999999999998,
+        "3": 0.033333333333333326,
+        "4": 0.09999999999999998
+      },
+      "seed": 22,
+      "estimate": 0.06,
+      "interval": [
+        0.010697624743677399,
+        0.11267590768364762
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    },
+    "R4_ca_vs_R4_tc": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R4_ca",
+      "reference": "R4_tc",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.06666666666666665,
+        "1": -0.1333333333333333,
+        "2": 0.13333333333333336,
+        "3": 0.13333333333333336,
+        "4": 0.0
+      },
+      "seed": 22,
+      "estimate": 0.013333333333333353,
+      "interval": [
+        -0.10138333802420489,
+        0.1303621031746032
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    },
+    "R3_ca_vs_logreg_rna": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R3_ca",
+      "reference": "logreg_rna",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.43333333333333335,
+        "1": -0.2333333333333334,
+        "2": -0.3666666666666667,
+        "3": -0.3666666666666666,
+        "4": -0.5333333333333333
+      },
+      "seed": 22,
+      "estimate": -0.3866666666666666,
+      "interval": [
+        -0.4833333333333332,
+        -0.28567550096961863
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    },
+    "R3_ca_vs_R3_tc_parammatched": {
+      "metric": "repeated_paired_donor_balanced_accuracy_delta",
+      "model": "R3_ca",
+      "reference": "R3_tc_parammatched",
+      "unit": "donor",
+      "level": 0.95,
+      "n_repeats": 5,
+      "n_replicates_requested": 1000,
+      "n_donors": 30,
+      "n_control": 15,
+      "n_positive": 15,
+      "practical_margin": 0.07,
+      "per_repeat_delta": {
+        "0": -0.30000000000000004,
+        "1": 0.1333333333333333,
+        "2": 0.1333333333333333,
+        "3": 0.06666666666666665,
+        "4": 0.0
+      },
+      "seed": 22,
+      "estimate": 0.006666666666666643,
+      "interval": [
+        -0.030555555555555558,
+        0.050005980861244005
+      ],
+      "n_valid": 1000,
+      "n_failed": 0,
+      "failure_reasons": [],
+      "advantage_demonstrated": false,
+      "not_applicable": null
+    }
+  }
+}

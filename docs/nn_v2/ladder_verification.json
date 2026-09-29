@@ -1,10 +1,10 @@
 {
   "record_type": "ladder_verification",
   "primary_recomputed": {
-    "estimate": -0.006666666666666654,
+    "estimate": 0.026666666666666672,
     "ci": [
-      -0.05277777777777776,
-      0.03484162895927606
+      -0.025000000000000022,
+      0.07678571428571423
     ],
     "valid_draws": 1000,
     "margin": 0.07,
@@ -12,141 +12,139 @@
   },
   "per_arm": {
     "R0_ca": {
-      "balanced_accuracy": 0.45999999999999996,
-      "auroc": 0.38755555555555554,
+      "balanced_accuracy": 0.47333333333333333,
+      "auroc": 0.38933333333333336,
       "parameter_count": [
         359426
       ]
     },
     "R0_tc": {
-      "balanced_accuracy": 0.48,
-      "auroc": 0.4,
+      "balanced_accuracy": 0.4866666666666667,
+      "auroc": 0.3928888888888889,
       "parameter_count": [
         355202
       ]
     },
     "R1_ca": {
-      "balanced_accuracy": 0.33333333333333337,
-      "auroc": 0.34933333333333333,
+      "balanced_accuracy": 0.3466666666666667,
+      "auroc": 0.344,
       "parameter_count": [
         367876
       ]
     },
     "R1_tc": {
-      "balanced_accuracy": 0.35333333333333333,
-      "auroc": 0.35244444444444445,
+      "balanced_accuracy": 0.34,
+      "auroc": 0.34844444444444445,
       "parameter_count": [
         363652
       ]
     },
     "R2_ca": {
-      "balanced_accuracy": 0.35333333333333333,
-      "auroc": 0.33777777777777784,
+      "balanced_accuracy": 0.3866666666666667,
+      "auroc": 0.3822222222222222,
       "parameter_count": [
         384250
       ]
     },
     "R2_tc": {
-      "balanced_accuracy": 0.37333333333333335,
-      "auroc": 0.3742222222222222,
+      "balanced_accuracy": 0.3533333333333334,
+      "auroc": 0.3457777777777778,
       "parameter_count": [
         380026
       ]
     },
     "R3_ca": {
-      "balanced_accuracy": 0.37333333333333335,
-      "auroc": 0.36888888888888893,
+      "balanced_accuracy": 0.4,
+      "auroc": 0.3582222222222222,
       "parameter_count": [
         384250
       ]
     },
     "R3_gated": {
-      "balanced_accuracy": 0.4600000000000001,
-      "auroc": 0.4373333333333334,
+      "balanced_accuracy": 0.3666666666666667,
+      "auroc": 0.384,
       "parameter_count": [
         314044
       ]
     },
     "R3_tc": {
-      "balanced_accuracy": 0.38,
-      "auroc": 0.34577777777777774,
+      "balanced_accuracy": 0.37333333333333335,
+      "auroc": 0.33155555555555555,
       "parameter_count": [
         380026
       ]
     },
     "R3_tc_parammatched": {
       "balanced_accuracy": 0.3533333333333334,
-      "auroc": 0.31466666666666665,
+      "auroc": 0.33955555555555555,
       "parameter_count": [
         380026
       ]
     },
     "R4_ca": {
-      "balanced_accuracy": 0.4866666666666667,
-      "auroc": 0.472,
+      "balanced_accuracy": 0.5266666666666666,
+      "auroc": 0.5146666666666666,
       "parameter_count": [
         29970
       ]
     },
     "R4_tc": {
-      "balanced_accuracy": 0.4666666666666666,
-      "auroc": 0.488,
+      "balanced_accuracy": 0.5,
+      "auroc": 0.44266666666666665,
       "parameter_count": [
         25746
       ]
     },
     "chr21_dosage": {
-      "balanced_accuracy": 0.9666666666666666,
-      "auroc": 0.9982222222222223,
+      "balanced_accuracy": 1.0,
+      "auroc": 1.0,
       "parameter_count": [
         0
       ]
     },
     "latent_pca_lsi_head": {
-      "balanced_accuracy": 0.3666666666666667,
-      "auroc": 0.36888888888888893,
+      "balanced_accuracy": 0.38,
+      "auroc": 0.37866666666666665,
       "parameter_count": [
         16836
       ]
     },
     "logreg_concat": {
-      "balanced_accuracy": 0.4733333333333333,
-      "auroc": 0.39555555555555555,
+      "balanced_accuracy": 0.4133333333333334,
+      "auroc": 0.38222222222222224,
       "parameter_count": [
         0
       ]
     },
     "logreg_rna": {
-      "balanced_accuracy": 0.4933333333333333,
-      "auroc": 0.40888888888888886,
+      "balanced_accuracy": 0.42666666666666664,
+      "auroc": 0.3982222222222222,
       "parameter_count": [
         0
       ]
     },
     "majority": {
-      "balanced_accuracy": 0.3533333333333334,
-      "auroc": 0.3533333333333334,
+      "balanced_accuracy": 0.30000000000000004,
+      "auroc": 0.3,
       "parameter_count": [
         0
       ]
     },
     "pseudobulk_rna_logistic": {
-      "balanced_accuracy": 0.4466666666666666,
-      "auroc": 0.5235555555555556,
+      "balanced_accuracy": 0.5133333333333333,
+      "auroc": 0.5573333333333333,
       "parameter_count": [
         0
       ]
     }
   },
-  "problems": [
-    "summary primary.estimate 0.0 != recomputed -0.006667",
-    "summary primary.ci [0.0, 0.0] disagrees with recomputed [-0.05277777777777776, 0.03484162895927606] (tolerance 0.02)"
-  ],
+  "problems": [],
   "notes": [
-    "majority pooled BA 0.353 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
+    "majority pooled BA 0.300 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
   ],
   "amendments": [
-    "/Users/anuragdani/Github/niw-eb1a/P22/configs/nn_protocol_v2_amendment_gene_activity.json"
+    "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_amendment_chr21forced.json",
+    "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base/configs/nn_protocol_v2_amendment_gene_activity.json"
   ],
-  "verdict": "FAIL"
+  "verdict": "PASS"
 }

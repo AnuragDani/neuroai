@@ -110,6 +110,14 @@ def test_s1_changes_only_positive_donor_rna() -> None:
     assert np.array_equal(planted.atac, fold.atac)
 
 
+def test_s6_preserves_s0_s5_and_is_exported():
+    from p22.eval.planted_signal import ALL_SCENARIOS, GENE_ALIGNED_SCENARIO, SCENARIOS
+
+    assert GENE_ALIGNED_SCENARIO == "S6"
+    assert "S6" in ALL_SCENARIOS
+    assert "S6" not in SCENARIOS
+
+
 def test_select_features_sizes_and_determinism() -> None:
     fold = make_fold()
     rna_idx, atac_idx = select_features(fold, seed=7)

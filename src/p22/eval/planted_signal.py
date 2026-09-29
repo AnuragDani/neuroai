@@ -26,6 +26,9 @@ PLANTED_TAG = "planted-v1"
 N_RNA_FEATURES = 20
 N_ATAC_FEATURES = 20
 SCENARIOS = ("S0", "S1", "S2", "S3", "S4", "S5")
+# S6: gene-matched RNA×ATAC interaction (equal-width views); used by P2 / D3.
+GENE_ALIGNED_SCENARIO = "S6"
+ALL_SCENARIOS = SCENARIOS + (GENE_ALIGNED_SCENARIO,)
 
 
 def _digest(*parts: str) -> str:
@@ -74,10 +77,12 @@ def plant(
     Returns ``(planted_fold, fake_labels)`` where ``fake_labels`` is per cell.
     ``S0`` is the identity (null); ``S5`` shifts RNA by
     ``delta * sign(m_i - median_train(m))`` and then re-centres RNA per donor so
-    each donor's RNA marginal mean is unchanged.
+    each donor's RNA marginal mean is unchanged. ``S6`` requires equal-width
+    matched gene views and adds ``delta`` to RNA gene ``g`` on positive-donor
+    cells where ATAC gene ``g`` exceeds its train median (gene-level interaction).
     """
-    if scenario not in SCENARIOS:
-        raise ValueError(f"unknown planted scenario {scenario!r}; expected {SCENARIOS}")
+    if scenario not in ALL_SCENARIOS:
+        raise ValueError(f"unknown planted scenario {scenario!r}; expected {ALL_SCENARIOS}")
     delta = float(delta)
     fake = fake_donor_labels(fold.donor, fold.label)
     rna = np.array(fold.rna, dtype=np.float32, copy=True)
@@ -85,10 +90,22 @@ def plant(
     if scenario == "S0":
         return replace(fold, rna=rna, atac=atac), fake
 
-    rna_idx, atac_idx = select_features(fold, seed)
     rows = np.flatnonzero(fake == 1)
-    m = atac[:, atac_idx].mean(axis=1)
     train = np.asarray(fold.train_position, dtype=bool)
+
+    if scenario == GENE_ALIGNED_SCENARIO:
+        # Per-gene RNA×ATAC interaction on matched columns (equal widths).
+        if rna.shape[1] != atac.shape[1]:
+            raise ValueError("S6 requires matched gene views (equal RNA/ATAC widths)")
+        medians = np.median(atac[train], axis=0).astype(np.float32)
+        for gene in range(rna.shape[1]):
+            context = rows[atac[rows, gene] > medians[gene]]
+            if context.size:
+                rna[context, gene] += delta
+        return replace(fold, rna=rna, atac=atac), fake
+
+    rna_idx, atac_idx = select_features(fold, seed)
+    m = atac[:, atac_idx].mean(axis=1)
     median = float(np.median(m[train]))
 
     if scenario == "S1":
