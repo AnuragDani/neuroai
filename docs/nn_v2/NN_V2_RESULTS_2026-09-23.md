@@ -1,6 +1,6 @@
 # NN-v2 results — 2026-09-23
 
-**Final label: `NN_ASSIGNMENT_COMPLETE`.** Mandatory N10–N17 accepted; optional N21 secondary `GA_B_NULL`; N23 verification passed; N34 final paper verification passed. **v5 validity (V1–V4) + P1–P6 DONE** against canonical `ladder_v3` after a shared-path control-fit fix; primary outcome remains `B_NULL`. Claim limits below remain in force. Study label stays `STUDY_PARTIAL` (no external validation). P4 results refresh (this doc + unsent note); P5 coverage table in `v5/PROFESSOR_UPDATE_v5.md`; P6 paper `DRAFT_V2_COMPLETE` (`check_paper` 5/5; vault `paper-nn/` synced).
+**Final label: `NN_ASSIGNMENT_COMPLETE`.** Mandatory N10–N17 accepted; optional N21 secondary `GA_B_NULL`; N23 verification passed; N34 final paper verification passed. **v5 validity (V1–V4) + P1–P6 DONE** against canonical `ladder_v3` after a shared-path control-fit fix; primary outcome remains `B_NULL`. **v6 sensitivities (X1–X4)** add chr21-forced representation, per-fold primary contrast, and detectability without changing the primary endpoint; external validation remains deferred (T13). Claim limits below remain in force. Study label stays `STUDY_PARTIAL` (no external validation). P4 results refresh (this doc + unsent note); P5 coverage table in `v5/PROFESSOR_UPDATE_v5.md`; v6 unsent note in `v6/PROFESSOR_UPDATE_v6.md`; P6 paper `DRAFT_V2_COMPLETE` (`check_paper` 5/5; vault `paper-nn/` synced).
 
 **Claim limits (first lines).** (1) Planted pairing positive control (PC) is `N/A` — no saved S4/S5 δ=1.0 models under `ladder_v3`; I3 `CA_PAIRING_UNUSED` is reported but pairing-use claims stay provisional without PC sensitivity (`docs/nn_v2/faithfulness.json`). (2) N15 chr21-excluded cell-score export is **EXPORTED** (60k rows); N16 chr21-score compare is `COMPARED` and also `SPECTRUM_NULL`; P3 primary on those scores is `SPECTRUM_NULL` (`docs/nn_v2/spectrum.json`, `docs/nn_v2/v5/spectrum_chr21_excluded.json`). (3) N21 gene-activity is **secondary only**; never independent external validation (`docs/nn_v2/gene_activity_results.json`). (4) Planted benchmark has **zero** `CA_FAVOURED` regimes (N4 S0–S5 and v5 P2 gene-matched S6) — no F2 planted support for a cross-attention-favoured headline (`docs/nn_v2/planted_benchmark.json`, `docs/nn_v2/v5/planted_gene_aligned.json`). (5) Attention/routing readouts are all `NOT_SHOWN_USED` (I4/I6 CIs include 0); do not treat attention as explanation [B11].
 
@@ -102,21 +102,55 @@ Added planted regime S6: gene-level RNA×ATAC interaction on matched genes (`doc
 
 Repeated N16 spectrum analysis on per-cell scores from chr21-excluded models (`docs/nn_v2/v5/spectrum_chr21_excluded.json`; arm R3_ca; donor unit; Holm across eligible types). Prerequisite N11 label `DOSAGE_DOMINATED`. Label **`SPECTRUM_NULL`** (9 eligible author cell types; 0 Holm-significant DS−CON differences). Reading ≤ 40 lines: `docs/nn_v2/v5/SPECTRUM_CHR21_EXCLUDED.md`. No mechanism language.
 
-## 8. Limitations
+## 8. chr21-forced sensitivity
 
-- 30 donors; internal development cohort only; no external validation.
+Prespecified sensitivity only (`configs/nn_protocol_v2_amendment_chr21forced.json`): default HVG keeps 31/538 chr21 genes; test whether forcing **HVG ∪ all chr21 genes** changes the R3_ca − R3_tc contrast. Primary endpoint stays `ladder_v3` `B_NULL`. Full 18-arm × 5×5 ladder into `reports/generated/nn_20260923/ladder_v4_chr21forced` (450/450); summary `docs/nn_v2/v6/ladder_v4_summary.json`; verifier **PASS** (no `--write`).
+
+From `docs/nn_v2/v6/ladder_v4_summary.json` / `docs/nn_v2/v6/chr21_forced_compare.json`: pooled R3_ca − R3_tc donor BA estimate **0.060**, 95% CI **[0.011, 0.113]**, margin 0.07 unmet → label **`CHR21FORCED_D_SMALL_POSITIVE`**. Per-fold AUROC means (v3 → chr21-forced): R3_ca 0.656 → 0.780; R3_tc 0.658 → 0.816; logreg_rna 0.534 → 0.983; chr21_dosage 1.0 → 1.0. Linear arms gain most; CA−TC gap stays below the 0.07 advantage margin. Reading: `docs/nn_v2/v6/CHR21_FORCED.md`.
+
+## 9. Per-fold primary contrast
+
+Prespecified sensitivity (`docs/nn_v2/v6/per_fold_contrast.json`): for each of 25 folds, R3_ca − R3_tc donor BA (and AUROC); mean over folds; 95% CI by donor-cluster bootstrap over folds within repeats (1,000 draws, seed 22).
+
+| Ladder | Metric | Mean-fold estimate | 95% CI |
+|---|---|---:|---|
+| `ladder_v3` (canonical) | donor_ba | 0.0160 | [−0.0158, 0.0447] |
+| `ladder_v3` | donor_auroc | −0.0021 | [−0.0922, 0.1021] |
+| chr21-forced (`ladder_v4`) | donor_ba | 0.0340 | [−0.0176, 0.0699] |
+| chr21-forced (`ladder_v4`) | donor_auroc | −0.0359 | [−0.1076, 0.0476] |
+
+Mean-of-per-fold BA on `ladder_v3` is smaller than the pooled primary (0.027) and both CIs include 0 → agrees with `B_NULL`. On chr21-forced, the pooled primary was `D_SMALL_POSITIVE` but the per-fold BA CI still includes 0.
+
+## 10. Detectability
+
+Planted S4-type interaction at 30 donors, 5×5, CA vs TC (`docs/nn_v2/v6/detectability.json`; 125/125 ok). Effect sizes δ ∈ {0.1, 0.25, 0.5, 0.75, 1.0}; detection = fraction of repeats whose donor-bootstrap CA−TC BA CI excludes 0 (threshold 80%).
+
+| δ | detection fraction | mean contrast |
+|---:|---:|---:|
+| 0.1 | 0.00 | +0.0277 |
+| 0.25 | 0.00 | −0.0089 |
+| 0.5 | 0.00 | +0.0000 |
+| 0.75 | 0.00 | +0.0339 |
+| 1.0 | 0.00 | +0.0259 |
+
+**`min_detectable_delta` = null** (not detectable up to δ = 1.0). Reading: `docs/nn_v2/v6/DETECTABILITY.md`. Primary real-data endpoint unchanged.
+
+## 11. Limitations
+
+- 30 donors; internal development cohort only; no external validation (deferred, T13).
 - Same-cohort annotations are not independent validation [B14].
 - ATAC region panel is prevalence/tie-break ordered, **not** a regulatory panel; N21 gene-activity (500-gene amendment of 548) remains secondary measurement, not external validation [B13].
 - Attention is not explanation [B11]; N17 tags follow N13 I4/I6 only.
 - R2 adversary fails the held-out probe-drop rule; do not claim technical nuisance erasure.
 - Majority / some pooled BA and AUROC values are depressed by pooling fold-specific scores across stratified folds; prefer per-fold AUROC / `mean_per_fold_ba` (§5).
+- Detectability: at 30 donors, S4 CA−TC CIs never exclude 0 up to δ = 1.0 (§10); null is the valid outcome.
 - Separate from August same-cap and September paired corrected studies (plan §2).
 
-## 9. Citations used
+## 12. Citations used
 
 Only plan §6 keys: [B1] Ilse et al.; [B2] Ganin et al.; [B3] van den Oord et al.; [B4] Radford et al.; [B5] Vaswani et al.; [B6] Tsai et al.; [B7] Nagrani et al.; [B8] Hao et al.; [B9] Lee & Seung; [B10] Ashuach / Argelaguet (named exclusions); [B11] Jain / Wiegreffe; [B12] Squair et al.; [B13] Stuart et al.; [B14] Lattke et al. Novelty language: adapted combination of known techniques — not claimed novel.
 
-## 10. Replay commands, hashes, runtime
+## 13. Replay commands, hashes, runtime
 
 ```bash
 export PY=/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python
