@@ -9,6 +9,7 @@ negatives and incompletes are complete handoffs; biological primary stays
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
 
@@ -16,6 +17,7 @@ import numpy as np
 
 from p22.data.nn_inputs import FoldArrays
 from p22.eval.multiome_protocol import MultiomeProtocol
+from p22.eval.s7_confirm_exec import run_confirmation_evaluation
 from p22.eval.s7_confirmation import (
     CONFIRM_SKIPPED,
     enumerate_confirmation_jobs,
@@ -31,6 +33,7 @@ from p22.eval.s7_ledger import (
     enumerate_screen_jobs,
 )
 from p22.eval.s7_pairing import PC_PASS
+from p22.eval.s7_pairing_exec import run_pairing_pc_diagnostic
 from p22.eval.s7_runner import (
     S7_PROTOCOL,
     check_disk_resources,
@@ -41,6 +44,8 @@ from p22.eval.s7_runner import (
     write_resource_snapshot,
 )
 from p22.eval.s7_screen import SCREEN_CA_FAVOURED, evaluate_screen
+
+STAGE_STATE_NAME = "stage_state.json"
 
 ACTION_RUN_SMOKE = "run_smoke"
 ACTION_RUN_SCREEN = "run_screen"
@@ -326,3 +331,291 @@ def planned_stage_jobs(stage: str) -> list[dict[str, Any]]:
     if stage == "confirm":
         return enumerate_confirmation_jobs()
     raise ValueError(f"unknown fit stage {stage!r}; expected smoke/screen/confirm")
+
+
+def empty_stage_state() -> dict[str, Any]:
+    """Fresh persisted stage labels/payloads (no evaluation yet)."""
+    return {
+        "smoke_complete": False,
+        "screen_label": None,
+        "pc_label": None,
+        "confirm_label": None,
+        "screen": None,
+        "pairing_pc": None,
+        "confirmation": None,
+        "confirmation_eligible": False,
+        "handoff_paths": None,
+        "last_action": None,
+        "last_reason": None,
+    }
+
+
+def stage_state_path(output_root: Path | str) -> Path:
+    return Path(output_root) / STAGE_STATE_NAME
+
+
+def load_stage_state(output_root: Path | str) -> dict[str, Any]:
+    """Load ``stage_state.json`` or return an empty state."""
+    path = stage_state_path(output_root)
+    if not path.exists():
+        return empty_stage_state()
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    state = empty_stage_state()
+    state.update(raw)
+    return state
+
+
+def save_stage_state(output_root: Path | str, state: Mapping[str, Any]) -> Path:
+    """Persist stage labels so resume does not re-fit completed stages."""
+    root = Path(output_root)
+    root.mkdir(parents=True, exist_ok=True)
+    path = stage_state_path(root)
+    path.write_text(
+        json.dumps(dict(state), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def sync_smoke_complete(state: Mapping[str, Any], ledger: S7FitLedger) -> dict[str, Any]:
+    """Refresh smoke_complete from the immutable ledger (source of truth)."""
+    out = dict(state)
+    out["smoke_complete"] = smoke_is_complete(ledger)
+    return out
+
+
+def execute_next_stage(
+    *,
+    ledger: S7FitLedger,
+    folds_by_index: Mapping[int, FoldArrays],
+    positions_by_fold: Mapping[int, Mapping[str, np.ndarray]],
+    checkpoint_dir: Path | str,
+    output_root: Path | str,
+    result_dir: Path | str,
+    cell_ids_by_fold: Mapping[int, np.ndarray] | None = None,
+    protocol: MultiomeProtocol = S7_PROTOCOL,
+    feature_seed: int | None = None,
+    provenance: Mapping[str, Any] | None = None,
+    check_disk: bool = True,
+    fit_fn: Callable[..., dict[str, Any]] | None = None,
+    pairing_fn: Callable[..., dict[str, Any]] | None = None,
+    confirmation_eval_fn: Callable[..., dict[str, Any]] | None = None,
+    state: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Advance exactly one runbook stage under ``decide_next_action``.
+
+    Fit stages call ``run_fit_jobs``; pairing-PC and confirmation evaluation use
+    the frozen executors (injectable for tests). Writes ``stage_state.json`` and,
+    on handoff, ``S7_RESULT.md``. Never retunes or searches settings.
+    """
+    root = Path(output_root)
+    ckpt = Path(checkpoint_dir)
+    current = sync_smoke_complete(
+        empty_stage_state() if state is None else dict(state),
+        ledger,
+    )
+    decision = decide_next_action(
+        smoke_complete=bool(current["smoke_complete"]),
+        screen_label=current.get("screen_label"),
+        pc_label=current.get("pc_label"),
+        confirm_label=current.get("confirm_label"),
+        run_invalid=ledger.is_invalid,
+    )
+    action = str(decision["action"])
+    detail: dict[str, Any] = {"decision": decision}
+
+    if action == ACTION_STOP_HARD:
+        current["last_action"] = action
+        current["last_reason"] = decision.get("reason")
+        save_stage_state(root, current)
+        return {
+            "action": action,
+            "state": current,
+            "detail": detail,
+            "done": True,
+        }
+
+    if action == ACTION_RUN_SMOKE:
+        detail["fit"] = run_fit_jobs(
+            planned_stage_jobs("smoke"),
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            ledger=ledger,
+            checkpoint_dir=ckpt,
+            output_root=root,
+            cell_ids_by_fold=cell_ids_by_fold,
+            protocol=protocol,
+            feature_seed=feature_seed,
+            check_disk=check_disk,
+            fit_fn=fit_fn,
+        )
+        current["smoke_complete"] = smoke_is_complete(ledger)
+
+    elif action == ACTION_RUN_SCREEN:
+        detail["fit"] = run_fit_jobs(
+            planned_stage_jobs("screen"),
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            ledger=ledger,
+            checkpoint_dir=ckpt,
+            output_root=root,
+            cell_ids_by_fold=cell_ids_by_fold,
+            protocol=protocol,
+            feature_seed=feature_seed,
+            check_disk=check_disk,
+            fit_fn=fit_fn,
+        )
+        screen = evaluate_screen(ledger_records_for_stage(ledger, "screen"))
+        current["screen"] = screen
+        current["screen_label"] = screen.get("screen_label")
+
+    elif action == ACTION_RUN_PAIRING_PC:
+        worker = pairing_fn or run_pairing_pc_diagnostic
+        pairing = worker(
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            ledger_records=list(ledger.records.values()),
+            cell_ids_by_fold=cell_ids_by_fold,
+            feature_seed=feature_seed,
+            protocol=protocol,
+        )
+        detail["pairing_pc"] = pairing
+        current["pairing_pc"] = pairing
+        current["pc_label"] = pairing.get("pc_label")
+
+    elif action == ACTION_RUN_CONFIRMATION:
+        detail["fit"] = run_fit_jobs(
+            planned_stage_jobs("confirm"),
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            ledger=ledger,
+            checkpoint_dir=ckpt,
+            output_root=root,
+            cell_ids_by_fold=cell_ids_by_fold,
+            protocol=protocol,
+            feature_seed=feature_seed,
+            check_disk=check_disk,
+            fit_fn=fit_fn,
+        )
+        eval_fn = confirmation_eval_fn or run_confirmation_evaluation
+        confirmation = eval_fn(
+            ledger_records_for_stage(ledger, "confirm"),
+            eligible=True,
+        )
+        detail["confirmation"] = confirmation
+        current["confirmation"] = confirmation
+        current["confirm_label"] = confirmation.get("confirm_label")
+        current["confirmation_eligible"] = True
+
+    elif action == ACTION_WRITE_HANDOFF:
+        stages = assemble_stage_results(
+            screen_records=ledger_records_for_stage(ledger, "screen"),
+            pairing_pc=current.get("pairing_pc"),
+            confirmation=current.get("confirmation"),
+            confirmation_eligible=decision.get("confirmation_eligible"),
+        )
+        # Prefer freshly assembled labels; keep prior payloads if assemble rebuilds.
+        current["screen"] = stages.get("screen")
+        current["screen_label"] = stages.get("screen_label")
+        current["pairing_pc"] = stages.get("pairing_pc")
+        current["pc_label"] = stages.get("pc_label")
+        current["confirmation"] = stages.get("confirmation")
+        current["confirm_label"] = stages.get("confirm_label")
+        current["confirmation_eligible"] = stages.get("confirmation_eligible")
+        resources = None
+        post_path = root / "resources_post_fit.json"
+        if post_path.exists():
+            resources = json.loads(post_path.read_text(encoding="utf-8"))
+        handoff = write_pipeline_handoff(
+            result_dir=result_dir,
+            stages=stages,
+            provenance=provenance,
+            resources=resources,
+            ledger_path=ledger.ledger_path,
+            checkpoint_root=ckpt,
+            run_invalid=ledger.is_invalid,
+            run_invalid_reason=ledger.invalid_reason,
+        )
+        detail["handoff"] = handoff
+        current["handoff_paths"] = handoff.get("paths")
+    else:
+        raise ValueError(f"unknown pipeline action {action!r}")
+
+    current["last_action"] = action
+    current["last_reason"] = decision.get("reason")
+    save_stage_state(root, current)
+    return {
+        "action": action,
+        "state": current,
+        "detail": detail,
+        "done": action in {ACTION_WRITE_HANDOFF, ACTION_STOP_HARD},
+    }
+
+
+def run_until_handoff(
+    *,
+    ledger: S7FitLedger,
+    folds_by_index: Mapping[int, FoldArrays],
+    positions_by_fold: Mapping[int, Mapping[str, np.ndarray]],
+    checkpoint_dir: Path | str,
+    output_root: Path | str,
+    result_dir: Path | str,
+    cell_ids_by_fold: Mapping[int, np.ndarray] | None = None,
+    protocol: MultiomeProtocol = S7_PROTOCOL,
+    feature_seed: int | None = None,
+    provenance: Mapping[str, Any] | None = None,
+    check_disk: bool = True,
+    fit_fn: Callable[..., dict[str, Any]] | None = None,
+    pairing_fn: Callable[..., dict[str, Any]] | None = None,
+    confirmation_eval_fn: Callable[..., dict[str, Any]] | None = None,
+    max_steps: int = 8,
+) -> dict[str, Any]:
+    """Drive ``execute_next_stage`` until handoff or ``max_steps`` (safety cap).
+
+    ``max_steps`` defaults to 8 (> smoke/screen/PC/confirm/handoff) so a stuck
+    loop cannot spin forever; incomplete coverage is still an honest handoff.
+    """
+    state = load_stage_state(output_root)
+    steps: list[dict[str, Any]] = []
+    for _ in range(int(max_steps)):
+        step = execute_next_stage(
+            ledger=ledger,
+            folds_by_index=folds_by_index,
+            positions_by_fold=positions_by_fold,
+            checkpoint_dir=checkpoint_dir,
+            output_root=output_root,
+            result_dir=result_dir,
+            cell_ids_by_fold=cell_ids_by_fold,
+            protocol=protocol,
+            feature_seed=feature_seed,
+            provenance=provenance,
+            check_disk=check_disk,
+            fit_fn=fit_fn,
+            pairing_fn=pairing_fn,
+            confirmation_eval_fn=confirmation_eval_fn,
+            state=state,
+        )
+        steps.append(
+            {
+                "action": step["action"],
+                "done": step["done"],
+                "reason": step["state"].get("last_reason"),
+            }
+        )
+        state = step["state"]
+        if step["done"]:
+            return {
+                "done": True,
+                "n_steps": len(steps),
+                "steps": steps,
+                "state": state,
+                "final_action": step["action"],
+            }
+    return {
+        "done": False,
+        "n_steps": len(steps),
+        "steps": steps,
+        "state": state,
+        "final_action": None if not steps else steps[-1]["action"],
+        "reason": f"max_steps={max_steps} reached without handoff",
+    }

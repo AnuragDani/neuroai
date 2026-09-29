@@ -8,7 +8,11 @@ import numpy as np
 
 from p22.data.nn_inputs import FoldArrays
 from p22.eval.multiome_protocol import MultiomeProtocol
-from p22.eval.s7_confirmation import CONFIRM_RELIABLE, CONFIRM_SKIPPED
+from p22.eval.s7_confirmation import (
+    CONFIRM_NEGATIVE,
+    CONFIRM_RELIABLE,
+    CONFIRM_SKIPPED,
+)
 from p22.eval.s7_handoff import LABEL_CA_FAVOURED_CONTROL, LABEL_CONTROL_NEGATIVE
 from p22.eval.s7_ledger import (
     S7_MODELS,
@@ -17,7 +21,7 @@ from p22.eval.s7_ledger import (
     enumerate_screen_jobs,
     make_fit_id,
 )
-from p22.eval.s7_pairing import PC_FAIL, PC_PASS
+from p22.eval.s7_pairing import PC_FAIL, PC_INCOMPLETE, PC_PASS
 from p22.eval.s7_pipeline import (
     ACTION_RUN_CONFIRMATION,
     ACTION_RUN_PAIRING_PC,
@@ -26,9 +30,13 @@ from p22.eval.s7_pipeline import (
     ACTION_WRITE_HANDOFF,
     assemble_stage_results,
     decide_next_action,
+    empty_stage_state,
+    execute_next_stage,
+    load_stage_state,
     pending_jobs,
     planned_stage_jobs,
     run_fit_jobs,
+    run_until_handoff,
     smoke_is_complete,
     write_pipeline_handoff,
 )
@@ -319,3 +327,266 @@ def test_planned_stage_job_counts() -> None:
     assert len(planned_stage_jobs("smoke")) == 14
     assert len(planned_stage_jobs("screen")) == len(enumerate_screen_jobs()) == 105
     assert len(planned_stage_jobs("confirm")) == 350
+
+
+def _stub_fit(fold, job, positions, **kwargs):
+    """Deterministic stub that never trains; records BA from job model/rho."""
+    del fold, positions, kwargs
+    model = str(job["model"])
+    rho = float(job["rho"])
+    ba = 0.50
+    if abs(rho - 1.0) < 1e-12:
+        if model == "cross_attention":
+            ba = 0.85
+        elif model in ("logreg_rna", "logreg_atac"):
+            ba = 0.55
+        else:
+            ba = 0.70
+    elif abs(rho) < 1e-12:
+        ba = 0.50
+    # Retainable CA/TC rho=1 jobs need a checkpoint blob for save_checkpoint.
+    retain = model in {"cross_attention", "token_concat"} and abs(rho - 1.0) < 1e-12
+    checkpoint = None
+    if retain:
+        checkpoint = {
+            "kind": "neural",
+            "widths": [16, 16],
+            "protocol": {
+                "n_tokens": 4,
+                "embed_dim": 8,
+                "hidden_dim": 16,
+                "n_heads": 2,
+                "dropout": 0.0,
+                "model_seed": int(job["generator_seed"]),
+            },
+            "state_dict": {},
+        }
+    return {
+        "fit_id": job["fit_id"],
+        "stage": job["stage"],
+        "rho": job["rho"],
+        "generator_seed": job["generator_seed"],
+        "fold": job["fold"],
+        "model": model,
+        "status": "ok",
+        "donor_balanced_accuracy": ba,
+        "donor_auroc": 0.5,
+        "donor_log_loss": 0.7,
+        "n_test_donors": 2,
+        "model_seed": int(job["generator_seed"]),
+        "checkpoint": checkpoint,
+        "test_cell_probabilities": None,
+        "donor_probabilities": {
+            "donor_id": ["d0", "d1"],
+            "probability": [0.2, 0.8],
+            "label": [0.0, 1.0],
+        },
+    }
+
+
+def _record_smoke_complete(ledger: S7FitLedger) -> None:
+    for job in enumerate_smoke_jobs():
+        ledger.record_fit(
+            job["fit_id"],
+            {
+                "stage": "smoke",
+                "rho": job["rho"],
+                "generator_seed": job["generator_seed"],
+                "fold": job["fold"],
+                "model": job["model"],
+                "status": "ok",
+                "donor_balanced_accuracy": 0.5,
+            },
+        )
+
+
+def test_execute_next_stage_smoke_then_screen(tmp_path: Path) -> None:
+    ledger = S7FitLedger(tmp_path / "ledger", max_total_fits=200, smoke_fit_limit=14)
+    _freeze(ledger)
+    fold = make_fold()
+    positions = split_positions(fold)
+    out = execute_next_stage(
+        ledger=ledger,
+        folds_by_index={0: fold},
+        positions_by_fold={0: positions},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+    )
+    assert out["action"] == ACTION_RUN_SMOKE
+    assert out["done"] is False
+    assert out["state"]["smoke_complete"] is True
+    assert smoke_is_complete(ledger)
+    assert load_stage_state(tmp_path / "out")["smoke_complete"] is True
+
+    again = execute_next_stage(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        state=out["state"],
+    )
+    assert again["action"] == ACTION_RUN_SCREEN
+    assert again["state"]["screen_label"] == SCREEN_CA_FAVOURED
+    assert ledger.n_completed == 14 + 105
+
+
+def test_run_until_handoff_skips_confirmation_on_pc_fail(tmp_path: Path) -> None:
+    ledger = S7FitLedger(tmp_path / "ledger", max_total_fits=200, smoke_fit_limit=14)
+    _freeze(ledger)
+    fold = make_fold()
+    positions = split_positions(fold)
+
+    def _pc_fail(**kwargs):
+        del kwargs
+        return {
+            "pc_label": PC_FAIL,
+            "eligible_for_confirmation": False,
+            "reason": "injected fail",
+        }
+
+    out = run_until_handoff(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        pairing_fn=_pc_fail,
+    )
+    assert out["done"] is True
+    assert out["final_action"] == ACTION_WRITE_HANDOFF
+    actions = [s["action"] for s in out["steps"]]
+    assert ACTION_RUN_SMOKE in actions
+    assert ACTION_RUN_SCREEN in actions
+    assert ACTION_RUN_PAIRING_PC in actions
+    assert ACTION_RUN_CONFIRMATION not in actions
+    assert out["state"]["confirm_label"] == CONFIRM_SKIPPED
+    assert out["state"]["pc_label"] == PC_FAIL
+    md = Path(out["state"]["handoff_paths"]["markdown"])
+    assert md.exists()
+    text = md.read_text(encoding="utf-8")
+    assert "CONTROL_NEGATIVE" in text
+    assert "POWER_UNESTABLISHED" in text
+    # No confirmation fits recorded.
+    assert not any(r.get("stage") == "confirm" for r in ledger.records.values())
+
+
+def test_run_until_handoff_runs_confirmation_when_eligible(tmp_path: Path) -> None:
+    ledger = S7FitLedger(tmp_path / "ledger", max_total_fits=500, smoke_fit_limit=14)
+    _freeze(ledger)
+    fold = make_fold()
+    positions = split_positions(fold)
+
+    def _pc_pass(**kwargs):
+        del kwargs
+        return {
+            "pc_label": PC_PASS,
+            "eligible_for_confirmation": True,
+            "reason": None,
+        }
+
+    def _confirm_neg(records, *, eligible):
+        assert eligible is True
+        assert len(records) == 350
+        return {
+            "confirm_label": CONFIRM_NEGATIVE,
+            "ca_tc_successes": 2,
+            "all_baseline_successes": 1,
+            "reason": "injected negative",
+        }
+
+    out = run_until_handoff(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        pairing_fn=_pc_pass,
+        confirmation_eval_fn=_confirm_neg,
+    )
+    assert out["done"] is True
+    actions = [s["action"] for s in out["steps"]]
+    assert ACTION_RUN_CONFIRMATION in actions
+    assert out["state"]["confirm_label"] == CONFIRM_NEGATIVE
+    assert out["state"]["confirmation_eligible"] is True
+    text = Path(out["state"]["handoff_paths"]["markdown"]).read_text(encoding="utf-8")
+    assert "CONTROL_NEGATIVE" in text
+    assert ledger.n_completed == 14 + 105 + 350
+
+
+def test_execute_handoff_after_incomplete_pc(tmp_path: Path) -> None:
+    ledger = S7FitLedger(tmp_path / "ledger", max_total_fits=200, smoke_fit_limit=14)
+    _freeze(ledger)
+    _record_smoke_complete(ledger)
+    fold = make_fold()
+    positions = split_positions(fold)
+    # Screen via stub.
+    screen_step = execute_next_stage(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        state=empty_stage_state(),
+    )
+    assert screen_step["action"] == ACTION_RUN_SCREEN
+
+    def _pc_incomplete(**kwargs):
+        del kwargs
+        return {
+            "pc_label": PC_INCOMPLETE,
+            "eligible_for_confirmation": False,
+            "reason": "missing checkpoints",
+        }
+
+    pc_step = execute_next_stage(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        pairing_fn=_pc_incomplete,
+        state=screen_step["state"],
+    )
+    assert pc_step["action"] == ACTION_RUN_PAIRING_PC
+    assert pc_step["state"]["pc_label"] == PC_INCOMPLETE
+
+    handoff = execute_next_stage(
+        ledger=ledger,
+        folds_by_index={i: fold for i in range(5)},
+        positions_by_fold={i: positions for i in range(5)},
+        checkpoint_dir=tmp_path / "ckpt",
+        output_root=tmp_path / "out",
+        result_dir=tmp_path / "docs",
+        protocol=_tiny_protocol(),
+        check_disk=False,
+        fit_fn=_stub_fit,
+        state=pc_step["state"],
+    )
+    assert handoff["action"] == ACTION_WRITE_HANDOFF
+    assert handoff["done"] is True
+    assert handoff["state"]["confirm_label"] == CONFIRM_SKIPPED
