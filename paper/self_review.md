@@ -59,9 +59,9 @@ v5 and v6 (X1–X4).
    per-fold AUROC alongside pooled metrics; never flip predictions.
 
 10. **chr21-forced and per-fold sensitivities.** Added in v6: Results ("chr21-forced
-    sensitivity", "Per-fold primary contrast") keep the primary as `ladder_v3` `B_NULL`;
-    chr21-forced pooled label is `CHR21FORCED_D_SMALL_POSITIVE` while mean-fold CI still
-    includes 0.
+    sensitivity", "Per-fold primary contrast") keep the primary as `ladder_v3` `B_NULL`
+    (advantage not demonstrated, not equivalence); chr21-forced pooled label is
+    `CHR21FORCED_D_SMALL_POSITIVE` (secondary) while mean-fold CI still includes 0.
 
 ## Disposition
 

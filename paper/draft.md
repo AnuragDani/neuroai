@@ -6,7 +6,7 @@ later typesetting pass; all in-text keys are validated against refs_frozen.bib.
 Final label: DRAFT_V3_COMPLETE
 -->
 
-# Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
+# Paired RNA+ATAC cross-attention does not demonstrate donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
 
 ## Abstract
 
@@ -16,18 +16,18 @@ donor-held-out ladder on thirty developmental-cortex donors with a planted-signa
 benchmark. On the canonical ladder after a shared-path control-fit fix, the primary
 contrast R3 cross-attention minus matched token-concatenation donor balanced
 accuracy is 0.0267 with a 0.95-level CI of [-0.0267, 0.0770] (verifier recomputed
-[-0.025, 0.077]); the practical margin of 0.07 is unmet (outcome B_NULL). RNA
-logistic regression exceeds the attention arm (pooled BA 0.427 versus 0.400).
-Learned-arm pooled AUROC sits below chance while per-fold AUROC means are above
-chance, so we report per-fold AUROC alongside pooled metrics; a forced-chr21
-positive control reaches donor AUROC 0.924. Model-free chr21 dosage remains at
-ceiling (AUROC 1.0), and excluding chr21 genes leaves disease-state BA near chance
-(DOSAGE_DOMINATED). A chr21-forced sensitivity (HVG ∪ all chr21) yields estimate
-0.060 without changing the primary. Planted detectability at 30 donors finds no
-CA−TC CI excluding 0 up to δ=1.0. Across planted regimes, none favour
-cross-attention. We conclude that, at this power and on this cohort, paired
-RNA+ATAC cross-attention shows no donor-level disease-state gain over RNA-linear
-or token-concat baselines.
+[-0.025, 0.077]); the practical margin of 0.07 is unmet (outcome B_NULL; advantage
+not demonstrated, not equivalence). RNA logistic exceeds the attention arm
+(pooled BA 0.427 versus 0.400). Learned-arm pooled AUROC sits below chance while
+per-fold AUROC means are above chance, so we report per-fold AUROC alongside
+pooled metrics; a forced-chr21 positive control reaches donor AUROC 0.924.
+Model-free chr21 dosage remains at ceiling (AUROC 1.0), and excluding chr21 genes
+leaves disease-state BA near chance (DOSAGE_DOMINATED). Secondary chr21-forced
+(HVG ∪ all chr21) is D_SMALL_POSITIVE (pooled 0.060) while mean-fold CI includes
+0; primary stays B_NULL. Planted detectability at 30 donors finds no CA−TC CI
+excluding 0 up to δ=1.0. Across planted regimes, none favour cross-attention. At
+this power and cohort, paired RNA+ATAC cross-attention does not demonstrate a
+donor-level disease-state advantage over RNA-linear or token-concat baselines.
 
 ## Introduction
 
@@ -240,14 +240,16 @@ detectable up to δ = 1.0; Fig. 7). Synthetic labels only; primary endpoint unch
 
 We asked whether cross-modal attention yields a donor-level gain on paired single-cell
 RNA+ATAC, and what detectability limits follow. Under the accepted F4 framing the answer
-is a rigorous negative: on the verified real-data ladder the primary contrast
-`R3_ca`−`R3_tc` is a null (`B_NULL`), RNA logistic remains the stronger secondary arm
-(`LINEAR_SUFFICIENT`), and the planted grid—including the gene-matched interaction—
-contains no `CA_FAVOURED` regime. When the planted signal is absent, models stay in the
-null band; when it is unambiguous, a linear model on concatenated features already
-reaches the ceiling; when the linear baseline fails, gated fusion—not cross-attention—is
-the strongest non-attention comparator. Parameter matching rules out a capacity
-explanation for this pattern.
+is that advantage was not demonstrated: on the verified real-data ladder the primary
+contrast `R3_ca`−`R3_tc` is a null (`B_NULL`; not an equivalence claim), RNA logistic
+remains the stronger secondary arm (`LINEAR_SUFFICIENT`), and the planted
+grid—including the gene-matched interaction—contains no `CA_FAVOURED` regime. When the
+planted signal is absent, models stay in the null band; when it is unambiguous, a
+linear model on concatenated features already reaches the ceiling; when the linear
+baseline fails, gated fusion—not cross-attention—is the strongest non-attention
+comparator. Parameter matching rules out a capacity explanation for this pattern.
+The chr21-forced pooled secondary remains `CHR21FORCED_D_SMALL_POSITIVE` while
+mean-fold CA−TC CI includes 0; neither retargets the primary.
 
 The real-data null is consistent with dosage domination and with faithfulness. After
 dropping chr21 features, scored arms stay at or below the declared no-chr21 BA cutoff
