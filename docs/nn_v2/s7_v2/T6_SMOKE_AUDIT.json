@@ -1,0 +1,87 @@
+{
+  "PASS": true,
+  "all_status_ok": true,
+  "artifacts_bytes": 3008322,
+  "authorizes": "T7_fixed_screen_only",
+  "checkpoints": [
+    "smoke__1__1001__0__cross_attention.pt",
+    "smoke__1__1001__0__token_concat.pt"
+  ],
+  "command": "scripts/run_nn_s7_covariance.py --split-v2 --once",
+  "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+  "fitting_sources_match_checkpoint_b": true,
+  "fold0_test_class_counts": {
+    "0": 4,
+    "1": 2
+  },
+  "gate": "PASS",
+  "identities": {
+    "cross_attention": {
+      "cell_double_reload": {
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "donor_vs_sidecar": {
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "max_abs_donor": 0.0,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "test_label_counts": {
+        "0": 1024,
+        "1": 512
+      }
+    },
+    "token_concat": {
+      "cell_double_reload": {
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "donor_vs_sidecar": {
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "max_abs_donor": 0.0,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "test_label_counts": {
+        "0": 1024,
+        "1": 512
+      }
+    }
+  },
+  "ids_match_expected": true,
+  "ledger_sha256": "332febeadf00027e13bc150be2838bd976f64cd6d97b29b76ca0c70fd8ed686d",
+  "n_completed": 14,
+  "n_rows": 14,
+  "problems": [],
+  "provenance_file_sha256": "52cde0ba8b3aabf107647ae7435ce5a00f728ed2bd8d0333d7e5da6ad9b6f6b4",
+  "remaining_budget": 466,
+  "resources": {
+    "artifacts_gib": 0.003,
+    "free_gib": 26.755,
+    "max_artifacts_gib": 2.0,
+    "min_free_gib": 11.0,
+    "ok": true
+  },
+  "smoke_is_complete": true,
+  "smoke_log_window": {
+    "end_utc": "2026-09-29T20:30:38Z",
+    "exit": 0,
+    "start_utc": "2026-09-29T20:30:24Z"
+  },
+  "spec_sha256": "e8b127ad576a7a179532e830547d57010b7de2ac327983f49ba848928dfde88f",
+  "split_manifest_content_sha256": "9a845b5c0b8622624a40dc0cee6771d5d567e8c288c0be1f23bfcfd75668e2be",
+  "task": "T6",
+  "v1_ledger_sha256": "5e23387a3ad5c75f70d6926e5de7f2848e5363b820dedac21a92288a4657d2a8",
+  "v1_provenance_sha256": "d9e941d24cb0e28ee5baca8b0fdbec0233a3a84a001f135eeee7412af8a62888"
+}

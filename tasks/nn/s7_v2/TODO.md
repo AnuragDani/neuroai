@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T5 + Checkpoints A–B DONE (fit-authorization freeze; zero fits); T6–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T6 + Checkpoints A–B DONE (smoke 14/14 scoreable; cumulative fits=14); T7–T10 not started. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -67,8 +67,9 @@ Description: Run v2 `--preflight-only` on real configured inputs, inspect all de
 
 Description: Fit fixed rho 0/1 × fold 0 × seven models only. Likely outputs: v2 ledger, CA/TC checkpoints and prediction sidecars.
 
-- [ ] Acceptance: 14/14 scoreable rows, finite donor metrics, both held-out classes and reload identity ≤1e-6.
-- [ ] Verify: ledger/checkpoint/sidecar audit; cumulative fits ≤14. Any invalid/missing/changed hash stops before T7.
+- [x] Acceptance: 14/14 scoreable rows, finite donor metrics, both held-out classes and reload identity ≤1e-6.
+- [x] Verify: ledger/checkpoint/sidecar audit; cumulative fits ≤14. Any invalid/missing/changed hash stops before T7.
+  Evidence: [T6_SMOKE.md](../../../docs/nn_v2/s7_v2/T6_SMOKE.md), [T6_SMOKE_AUDIT.json](../../../docs/nn_v2/s7_v2/T6_SMOKE_AUDIT.json). CLI `--split-v2 --once` EXIT=0 (~14s); ledger 14/14 `ok`; fold-0 test classes `{0:4,1:2}`; CA/TC reload identity `max_abs_diff=0.0` ≤1e-6; cumulative fits=14; remaining budget 466; artifacts 0.003 GiB; provenance/source hashes match Checkpoint B; v1 ledger/provenance unchanged. **Authorizes T7 only.**
 
 ### T7: Complete fixed screen — S; depends: T6
 
