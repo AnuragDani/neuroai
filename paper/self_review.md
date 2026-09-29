@@ -1,8 +1,9 @@
-# Adversarial self-review (N32; refreshed for P6 / DRAFT_V2_COMPLETE)
+# Adversarial self-review (N32; refreshed for X6 / DRAFT_V3_COMPLETE)
 
-Eight reviewer objections against the accepted F4 / ladder_v3 draft. For each: cite an
-existing `paper/draft.md` section if already answered, else add a Limitations sentence.
-No new experiment was run beyond the v5 validity / P2–P3 evidence already accepted.
+Eight reviewer objections against the accepted F4 / ladder_v3 draft, plus v5/v6
+sensitivities. For each: cite an existing `paper/draft.md` section if already answered,
+else add a Limitations sentence. No new experiment beyond evidence already accepted under
+v5 and v6 (X1–X4).
 
 1. **Leakage between folds.** The reviewer asks whether outer-test donors can influence
    feature selection or model fitting. Resolved by Methods ("Representation"): every
@@ -20,9 +21,9 @@ No new experiment was run beyond the v5 validity / P2–P3 evidence already acce
    library / batch / QC adversary.
 
 3. **Thirty-donor power.** The reviewer asks whether thirty donors can support a
-   donor-level contrast. Resolved by Limitations: the cohort contains thirty donors, so
-   donor-level contrasts are low-powered and between-donor variance cannot be
-   characterised with confidence. Abstract and title also state the 30-donor scope.
+   donor-level contrast. Resolved by Limitations and Results ("Detectability"): the cohort
+   contains thirty donors; planted S4 detectability finds `min_detectable_delta` null (not
+   detectable up to δ = 1.0). Abstract and title also state the 30-donor scope.
 
 4. **Planted-signal realism.** The reviewer questions whether a synthetic planted ladder
    vindicates a negative real-data claim. Resolved by Results ("Planted benchmark"),
@@ -47,14 +48,20 @@ No new experiment was run beyond the v5 validity / P2–P3 evidence already acce
    rerun uses a gene-window amendment and remains secondary only.
 
 8. **Lack of external cohort.** The reviewer asks about transportability. Resolved by
-   Methods ("Controls and matching") and Limitations: no external cohort is used; all
-   work is on a single internal development cohort, so estimates carry no transportability
-   guarantee. Optional N21 gene-activity is never independent external validation.
+   Methods ("Controls and matching" / "Prespecified sensitivities") and Limitations:
+   external validation is deferred; all work is on a single internal development cohort, so
+   estimates carry no transportability guarantee. Optional N21 gene-activity is never
+   independent external validation.
 
 9. **Below-chance pooled AUROC.** Added in v5: Results ("Per-fold AUROC and below-chance
    pooled scores") and Limitations state the pooling gap, the forced-chr21 positive
    control (donor AUROC 0.924), and the `PIPELINE_BUG_FIXED` → `ladder_v3` rebuild. Report
    per-fold AUROC alongside pooled metrics; never flip predictions.
+
+10. **chr21-forced and per-fold sensitivities.** Added in v6: Results ("chr21-forced
+    sensitivity", "Per-fold primary contrast") keep the primary as `ladder_v3` `B_NULL`;
+    chr21-forced pooled label is `CHR21FORCED_D_SMALL_POSITIVE` while mean-fold CI still
+    includes 0.
 
 ## Disposition
 
@@ -62,13 +69,14 @@ No new experiment was run beyond the v5 validity / P2–P3 evidence already acce
 |---|---|---|
 | 1 | Leakage | Cite Methods + Results |
 | 2 | Age/batch confounding | Cite Results/Limitations for batch; Limitations for age |
-| 3 | 30-donor power | Cite Limitations |
+| 3 | 30-donor power | Cite Limitations + Detectability |
 | 4 | Planted-signal realism | Cite Results + Discussion + Limitations |
 | 5 | Parameter mismatch | Cite Results + Discussion |
 | 6 | Attention interpretation | Cite Results + Discussion + Limitations |
 | 7 | Region-panel adequacy | Cite Methods + Limitations |
-| 8 | External cohort | Cite Methods + Limitations |
+| 8 | External cohort | Cite Methods + Limitations (deferred) |
 | 9 | Below-chance pooled AUROC | Cite Results + Limitations (v5 / P6) |
+| 10 | chr21-forced / per-fold | Cite Results (v6 / X6) |
 
-Draft header advanced to `DRAFT_V2_COMPLETE`. Superseded buggy-ladder self-review under
+Draft header advanced to `DRAFT_V3_COMPLETE`. Superseded buggy-ladder self-review under
 `paper/superseded_buggy_ladder/self_review.md` must not be reused.

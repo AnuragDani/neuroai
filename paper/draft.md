@@ -3,7 +3,7 @@ P22-NN paper draft. Section authorship is tracked by task: N28 wrote Introductio
 Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Discussion
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
-Final label: DRAFT_V2_COMPLETE
+Final label: DRAFT_V3_COMPLETE
 -->
 
 # Paired RNA+ATAC cross-attention shows no donor-level gain over RNA-linear baselines in a 30-donor developmental cortex cohort
@@ -22,10 +22,12 @@ Learned-arm pooled AUROC sits below chance while per-fold AUROC means are above
 chance, so we report per-fold AUROC alongside pooled metrics; a forced-chr21
 positive control reaches donor AUROC 0.924. Model-free chr21 dosage remains at
 ceiling (AUROC 1.0), and excluding chr21 genes leaves disease-state BA near chance
-(DOSAGE_DOMINATED). Across planted regimes, including a gene-matched RNA×ATAC
-interaction, none favour cross-attention. We conclude that, at this power and on
-this cohort, paired RNA+ATAC cross-attention shows no donor-level disease-state
-gain over RNA-linear or token-concat baselines.
+(DOSAGE_DOMINATED). A chr21-forced sensitivity (HVG ∪ all chr21) yields estimate
+0.060 without changing the primary. Planted detectability at 30 donors finds no
+CA−TC CI excluding 0 up to δ=1.0. Across planted regimes, none favour
+cross-attention. We conclude that, at this power and on this cohort, paired
+RNA+ATAC cross-attention shows no donor-level disease-state gain over RNA-linear
+or token-concat baselines.
 
 ## Introduction
 
@@ -174,6 +176,18 @@ within-cell-type ATAC permutation) and on the learned attention, but attention w
 treated as diagnostics rather than explanations [@jain2019attention;
 @wiegreffe2019attention].
 
+**Prespecified sensitivities (v6).** Three sensitivities leave the primary endpoint fixed
+at `ladder_v3` `B_NULL`. (1) chr21-forced representation: amendment
+`configs/nn_protocol_v2_amendment_chr21forced.json` sets the RNA feature rule to
+HVG ∪ all chr21 genes (`n_hvg`) and reruns the full 18-arm × 5×5 ladder into
+`ladder_v4_chr21forced`. (2) Per-fold primary contrast: for each of the 25 outer folds,
+compute `R3_ca`−`R3_tc` donor BA (and AUROC), then mean over folds with a 1,000-draw
+donor-cluster bootstrap over folds within repeats (seed 22). (3) Detectability at 30
+donors: on planted S4-type interaction labels, train CA vs TC on the same 5×5 design for
+δ ∈ {0.1, 0.25, 0.5, 0.75, 1.0}; per δ report the fraction of repeats whose donor-bootstrap
+CA−TC BA CI excludes 0, and set `min_detectable_delta` to the smallest δ with ≥ 80%
+detection (or null if none). External validation remains deferred.
+
 ## Results
 
 **Primary real-data contrast is a null.** On the accepted ladder (`ladder_v3`; 450/450 folds; verifier `PASS`), the pre-declared endpoint is donor balanced accuracy of `R3_ca` minus `R3_tc`. The estimate is 0.0267 with a 0.95-level donor-cluster bootstrap CI of [-0.0267, 0.0770] in the rebuilt summary (verifier recomputed CI [-0.025, 0.077] at three decimal places). The practical margin of 0.07 is unmet and `advantage` is false, so the outcome is `B_NULL` (Fig. 3). Secondary label `LINEAR_SUFFICIENT`: RNA logistic pooled BA 0.427 exceeds `R3_ca` 0.400 (paired delta -0.0267). Pooled BAs for selected arms are `R3_tc` 0.373, `R3_gated` 0.367, `logreg_concat` 0.413, and majority 0.300; the verifier notes that majority pooled BA below 0.5 reflects fold-wise threshold pooling, so AUROC should be read alongside BA. Model-free chr21 dosage remains at ceiling (BA 1.0; AUROC 1.0).
@@ -201,6 +215,24 @@ treated as diagnostics rather than explanations [@jain2019attention;
 **Cell-state spectrum and secondary gene activity.** Out-of-fold cell scores cover 120,000 rows across four arms with five appearances per cell×arm asserted; chr21-excluded scores cover 60,000 rows and are `EXPORTED`. On `R3_ca` alone the spectrum call is `SPECTRUM_NULL`: 9 eligible cell types, support floor of 20 cells per donor and 8 donors per group, and no Holm-significant DS−CON difference at α=0.05 (Fig. 5). The spectrum compare on chr21-excluded scores is also `SPECTRUM_NULL` (same 9 eligible types; 0 Holm-significant DS−CON differences). Optional gene-aligned CA under the 500-gene amendment (panel 548 → 500) is secondary only and never independent external validation: `GA_ca`−`GA_tc` estimate 0.0533, CI [-0.0527, 0.1572], outcome `GA_B_NULL`; GA faithfulness tags are `GA_ATAC_UNUSED_OR_NULL`, `GA_CA_PAIRING_UNUSED`, and `GA_ATTENTION_NOT_SHOWN_USED`, with NC exact zero.
 
 ![Cell-state spectrum](figures/fig5_spectrum.png)
+
+**chr21-forced sensitivity.** Under the pre-registered HVG ∪ all-chr21 amendment
+(`ladder_v4_chr21forced`; 450/450; verifier `PASS`), pooled `R3_ca`−`R3_tc` donor BA is
+0.060 with CI [0.011, 0.113]; the 0.07 margin is unmet → `CHR21FORCED_D_SMALL_POSITIVE`.
+Per-fold AUROC means rise (v3 → chr21-forced): `R3_ca` 0.656 → 0.780; `R3_tc` 0.658 →
+0.816; `logreg_rna` 0.534 → 0.983; `chr21_dosage` stays 1.0. Linear arms gain most; the
+primary `ladder_v3` `B_NULL` is unchanged.
+
+**Per-fold primary contrast.** Mean-over-folds `R3_ca`−`R3_tc` donor BA on `ladder_v3` is
+0.0160 with CI [-0.0158, 0.0447] (both include 0, agreeing with `B_NULL`). On
+chr21-forced the mean-fold BA is 0.0340 with CI [-0.0176, 0.0699] (CI includes 0 even
+though the pooled sensitivity was `D_SMALL_POSITIVE`).
+
+**Detectability.** On planted S4 at 30 donors (5×5; 125/125 ok), detection fraction is
+0.0 at every δ ∈ {0.1, 0.25, 0.5, 0.75, 1.0}; `min_detectable_delta` is null (not
+detectable up to δ = 1.0; Fig. 7). Synthetic labels only; primary endpoint unchanged.
+
+![Detectability at 30 donors](figures/fig7_detectability.png)
 
 ![Study schematic](figures/fig1_schematic.png)
 
@@ -242,12 +274,13 @@ the attention arm.
 
 Several limits bound these conclusions. The cohort contains thirty donors, so donor-level
 contrasts are low-powered and between-donor variance cannot be characterised with
-confidence. All work is on a single internal development cohort with no external
-validation, so the estimates carry no transportability guarantee. The disease-state
-annotations are same-cohort labels from the developing Down syndrome cortical atlas
-[@lattke2026down] and were not independently adjudicated. The ATAC region panel is a
-prevalence / tie-break window set, not a curated regulatory panel; the gene-activity
-rerun (N21) uses a gene-window amendment and remains secondary only.
+confidence. Detectability at this size finds no CA−TC CI excluding 0 up to planted
+δ = 1.0 on S4 (`min_detectable_delta` null). All work is on a single internal development
+cohort with no external validation (deferred), so the estimates carry no transportability
+guarantee. The disease-state annotations are same-cohort labels from the developing Down
+syndrome cortical atlas [@lattke2026down] and were not independently adjudicated. The
+ATAC region panel is a prevalence / tie-break window set, not a curated regulatory panel;
+the gene-activity rerun (N21) uses a gene-window amendment and remains secondary only.
 
 Interpretation is further restricted by incomplete controls. The planted pairing positive
 control is `N/A` (no saved S4/S5 δ=1.0 models under `ladder_v3`), so I3 pairing-use claims

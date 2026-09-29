@@ -9,7 +9,9 @@ Builds:
     ``docs/nn_v2/ladder_summary.json``;
   * Fig 4 -- faithfulness Δ log-loss from ``docs/nn_v2/faithfulness.json``;
   * Fig 5 -- cell-state spectrum from ``docs/nn_v2/spectrum.json``;
-  * Fig 6 -- per-fold vs pooled AUROC from ``docs/nn_v2/v5/per_fold_metrics.json``.
+  * Fig 6 -- per-fold vs pooled AUROC from ``docs/nn_v2/v5/per_fold_metrics.json``;
+  * Fig 7 -- detectability (S4 CA−TC detection fraction vs δ) from
+    ``docs/nn_v2/v6/detectability.json``.
 
 IF a source JSON is missing, that figure is skipped and recorded in
 ``SKIPPED_FIGURES`` (decision-tree N25). Missing planted JSON still fails the
@@ -39,6 +41,7 @@ DEFAULT_LADDER = _REPO_ROOT / "docs" / "nn_v2" / "ladder_summary.json"
 DEFAULT_FAITH = _REPO_ROOT / "docs" / "nn_v2" / "faithfulness.json"
 DEFAULT_SPECTRUM = _REPO_ROOT / "docs" / "nn_v2" / "spectrum.json"
 DEFAULT_PER_FOLD = _REPO_ROOT / "docs" / "nn_v2" / "v5" / "per_fold_metrics.json"
+DEFAULT_DETECT = _REPO_ROOT / "docs" / "nn_v2" / "v6" / "detectability.json"
 DEFAULT_OUTDIR = _HERE / "figures"
 PER_FOLD_ARMS = ("R3_ca", "R3_tc", "logreg_rna", "majority", "chr21_dosage")
 
@@ -450,6 +453,58 @@ def build_fig6(data: dict, outdir: Path) -> list[Path]:
     return _save(fig, outdir, "fig6_per_fold_auroc")
 
 
+def build_fig7(data: dict, outdir: Path) -> list[Path]:
+    """Detection fraction and mean CA−TC contrast vs planted δ (S4, 30 donors)."""
+    per_delta = data.get("per_delta") or {}
+    deltas = list(data.get("deltas") or sorted(float(k) for k in per_delta))
+    if not deltas:
+        raise ValueError("detectability.json missing deltas / per_delta")
+    fractions: list[float] = []
+    contrasts: list[float] = []
+    for d in deltas:
+        row = per_delta.get(str(d)) or per_delta.get(d)
+        if not row:
+            raise ValueError(f"missing per_delta entry for δ={d}")
+        fractions.append(float(row["detection_fraction"]))
+        contrasts.append(float(row["mean_contrast"]))
+
+    threshold = float(data.get("detection_threshold") or 0.8)
+    min_d = data.get("min_detectable_delta")
+    title_extra = (
+        f"min_detectable_delta={min_d}"
+        if min_d is not None
+        else "min_detectable_delta=null (not detectable up to δ=1.0)"
+    )
+
+    x = np.arange(len(deltas))
+    fig, ax1 = plt.subplots(figsize=(7.2, 4.2))
+    ax1.bar(x, fractions, color="#1f4e79", width=0.55, label="detection fraction")
+    ax1.axhline(
+        threshold,
+        color="black",
+        linestyle="--",
+        linewidth=1.0,
+        label=f"80% threshold ({threshold:g})",
+    )
+    ax1.set_xticks(x)
+    ax1.set_xticklabels([str(d) for d in deltas])
+    ax1.set_xlabel("planted effect size δ (S4)")
+    ax1.set_ylabel("detection fraction")
+    ax1.set_ylim(-0.05, 1.05)
+    ax1.set_title(f"Detectability at 30 donors: CA−TC CI excludes 0\n{title_extra}")
+
+    ax2 = ax1.twinx()
+    ax2.plot(x, contrasts, color="#b85c38", marker="o", linewidth=1.5, label="mean contrast")
+    ax2.axhline(0.0, color="#b85c38", linestyle=":", linewidth=0.8)
+    ax2.set_ylabel("mean CA−TC donor BA contrast")
+
+    h1, l1 = ax1.get_legend_handles_labels()
+    h2, l2 = ax2.get_legend_handles_labels()
+    ax1.legend(h1 + h2[:1], l1 + l2[:1], fontsize=7.5, loc="upper right", frameon=False)
+    fig.tight_layout()
+    return _save(fig, outdir, "fig7_detectability")
+
+
 def _try_build(
     label: str,
     source: Path,
@@ -485,6 +540,7 @@ def main(argv: list[str] | None = None) -> int:
             "faithfulness",
             "spectrum",
             "per_fold",
+            "detectability",
             "all",
         ),
         default="all",
@@ -545,6 +601,16 @@ def main(argv: list[str] | None = None) -> int:
             build_fig6,
             args.outdir,
             hard_fail=(only == "per_fold"),
+        )
+        if rc:
+            return rc
+    if only in ("detectability", "all"):
+        rc = _try_build(
+            "fig7_detectability",
+            DEFAULT_DETECT,
+            build_fig7,
+            args.outdir,
+            hard_fail=(only == "detectability"),
         )
         if rc:
             return rc

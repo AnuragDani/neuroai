@@ -1,4 +1,4 @@
-"""P6 paper-revision checks: DRAFT_V2, per-fold AUROC phrase, fig6 builder."""
+"""P6/X6 paper-revision checks: DRAFT_V2→V3, per-fold AUROC phrase, fig6 builder."""
 
 from __future__ import annotations
 
@@ -20,7 +20,8 @@ make_figures = _load("make_figures_v5", "paper/make_figures.py")
 
 def test_draft_v2_complete_and_per_fold_auroc_phrase():
     text = (_ROOT / "paper" / "draft.md").read_text(encoding="utf-8")
-    assert "DRAFT_V2_COMPLETE" in text
+    # V3 supersedes V2; either complete label is acceptable for the v5 content checks.
+    assert ("DRAFT_V3_COMPLETE" in text) or ("DRAFT_V2_COMPLETE" in text)
     assert "per-fold AUROC" in text
     assert "0.924" in text  # positive control
     assert "PIPELINE_BUG_FIXED" in text

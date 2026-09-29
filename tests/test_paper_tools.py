@@ -237,14 +237,15 @@ def test_make_figures_builds_fig6_per_fold(tmp_path):
         assert path.stat().st_size > 0
 
 
-def test_make_figures_all_writes_fig3_to_fig6(tmp_path, monkeypatch):
-    """N25/P6: with all source JSON present, --only all emits fig3–fig6 stems."""
+def test_make_figures_all_writes_fig3_to_fig7(tmp_path, monkeypatch):
+    """N25/P6/X6: with all source JSON present, --only all emits fig3–fig7 stems."""
     for name, default in (
         ("planted_benchmark.json", "DEFAULT_PLANTED"),
         ("ladder_summary.json", "DEFAULT_LADDER"),
         ("faithfulness.json", "DEFAULT_FAITH"),
         ("spectrum.json", "DEFAULT_SPECTRUM"),
         ("v5/per_fold_metrics.json", "DEFAULT_PER_FOLD"),
+        ("v6/detectability.json", "DEFAULT_DETECT"),
     ):
         src = _ROOT / "docs" / "nn_v2" / name
         if not src.exists():
@@ -260,6 +261,7 @@ def test_make_figures_all_writes_fig3_to_fig6(tmp_path, monkeypatch):
         "fig4_faithfulness",
         "fig5_spectrum",
         "fig6_per_fold_auroc",
+        "fig7_detectability",
     ):
         assert (out / f"{stem}.png").stat().st_size > 0
         assert (out / f"{stem}.pdf").stat().st_size > 0
