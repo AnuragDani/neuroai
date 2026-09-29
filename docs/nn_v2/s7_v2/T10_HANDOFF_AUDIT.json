@@ -1,0 +1,97 @@
+{
+  "PASS": true,
+  "T10_ACCEPTANCE": true,
+  "budget_ok": true,
+  "checkpoint_c": {
+    "CA_FAVOURED_CONTROL": false,
+    "biological_A_ADVANTAGE": false,
+    "requires_screen_pc_confirm_for_favourable": true,
+    "scientific_label": "INVALID"
+  },
+  "checkpoint_d": {
+    "handoff_complete": true,
+    "no_new_jobs_pending": true,
+    "stop_reason": "complete_truthful_handoff_INVALID",
+    "t9_skipped": true
+  },
+  "files": {
+    "S7_RESULT.json": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202/docs/nn_v2/s7_v2/S7_RESULT.json",
+    "S7_RESULT.md": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202/docs/nn_v2/s7_v2/S7_RESULT.md",
+    "S7_V2_RESULT.json": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202/docs/nn_v2/s7_v2/S7_V2_RESULT.json",
+    "S7_V2_RESULT.md": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202/docs/nn_v2/s7_v2/S7_V2_RESULT.md"
+  },
+  "independent_finalize": {
+    "biological_power": "POWER_UNESTABLISHED",
+    "confirmation_required": false,
+    "eligible_for_confirmation": false,
+    "finished_primary": "B_NULL",
+    "reason": "null/marginal control design failure",
+    "scientific_label": "INVALID",
+    "stages": {
+      "confirmation": "CONFIRM_SKIPPED",
+      "pairing_pc": "PC_FAIL",
+      "screen": "INVALID"
+    },
+    "study": "STUDY_PARTIAL"
+  },
+  "independent_null_check": {
+    "failures": [
+      "token_concat"
+    ],
+    "mean_fold_donor_ba": {
+      "cross_attention": 0.375,
+      "gated_fusion": 0.35,
+      "logreg_atac": 0.475,
+      "logreg_concat": 0.391667,
+      "logreg_rna": 0.366667,
+      "rna_atac_concat": 0.375,
+      "token_concat": 0.341667
+    },
+    "passed": false,
+    "range": [
+      0.35,
+      0.65
+    ],
+    "rho": 0.0
+  },
+  "independent_screen_label": "INVALID",
+  "ledger": {
+    "is_invalid_marker": false,
+    "n_rows": 119,
+    "sha256": "53920364c1e1afba48384598c9f998d9429e6ebb4107956e6b1631e3f6ba3be2",
+    "stages": {
+      "screen": 105,
+      "smoke": 14
+    },
+    "statuses": {
+      "ok": 119
+    }
+  },
+  "no_new_fits_at_handoff": true,
+  "pipeline_protocol_id_defaulted_to_v1": true,
+  "protocol_id": "S7_covariance_split_v2_20260929",
+  "provenance_file_sha256": "52cde0ba8b3aabf107647ae7435ce5a00f728ed2bd8d0333d7e5da6ad9b6f6b4",
+  "provenance_matches_checkpoint_b": true,
+  "resources": {
+    "artifacts_gib": 0.016,
+    "free_gib": 26.617,
+    "max_artifacts_gib": 2.0,
+    "min_free_gib": 11.0,
+    "ok": true
+  },
+  "scientific_label": "INVALID",
+  "stage_labels": {
+    "confirm": "CONFIRM_SKIPPED",
+    "pc": "PC_FAIL",
+    "screen": "INVALID"
+  },
+  "t9_skipped": true,
+  "v1_immutable": {
+    "ledger_sha256": "5e23387a3ad5c75f70d6926e5de7f2848e5363b820dedac21a92288a4657d2a8",
+    "provenance_sha256": "d9e941d24cb0e28ee5baca8b0fdbec0233a3a84a001f135eeee7412af8a62888",
+    "result_json_sha256": "8456440992a21355849b9a8738c558200c3d583cbe0bffb0f9199e595dc244d9",
+    "result_md": "docs/nn_v2/s7/S7_RESULT.md",
+    "result_md_sha256": "d9ae29df8b4e86093e926248c1224e5216a746d37a9dc9135e0df0adb8d51222",
+    "scientific_label": "INVALID"
+  }
+}

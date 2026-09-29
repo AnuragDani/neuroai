@@ -1,0 +1,340 @@
+{
+  "biological_power": "POWER_UNESTABLISHED",
+  "budget": {
+    "absolute_cap": 480,
+    "confirmation_fits": 0,
+    "cumulative_fits": 119,
+    "planned_cap": 469,
+    "remaining_absolute": 361,
+    "screen_fits": 105,
+    "smoke_fits": 14
+  },
+  "checkpoint_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints",
+  "claims": {
+    "biological_advantage": false,
+    "edits_canonical_gates": false,
+    "real_disease_label_fits": false
+  },
+  "confirmation": {
+    "all_baseline_successes": null,
+    "all_baseline_wilson": null,
+    "ca_tc_successes": null,
+    "ca_tc_wilson": null,
+    "confirm_label": "CONFIRM_SKIPPED",
+    "reason": "screen/pairing not eligible; confirmation not run",
+    "trials": []
+  },
+  "evidence": {
+    "checkpoint_b": "docs/nn_v2/s7_v2/CHECKPOINT_B.md",
+    "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+    "pipeline_handoff_json": "docs/nn_v2/s7_v2/S7_RESULT.json",
+    "pipeline_handoff_md": "docs/nn_v2/s7_v2/S7_RESULT.md",
+    "t5_preflight": "docs/nn_v2/s7_v2/T5_LIVE_NOFIT_PREFLIGHT.md",
+    "t6_smoke": "docs/nn_v2/s7_v2/T6_SMOKE.md",
+    "t7_screen": "docs/nn_v2/s7_v2/T7_SCREEN.md",
+    "t8_pairing_pc": "docs/nn_v2/s7_v2/T8_PAIRING_PC.md"
+  },
+  "finalize": {
+    "biological_power": "POWER_UNESTABLISHED",
+    "confirmation_required": false,
+    "eligible_for_confirmation": false,
+    "finished_primary": "B_NULL",
+    "reason": "INVALID: S7-v2 fixed screen rho-0 null FAIL (token_concat mean-fold donor BA 0.341667 < 0.35); pairing-PC diagnostic PC_FAIL (CA ll-drop 95% CI lower -0.003847 <= 0); T9 confirmation skipped (ineligible). Cumulative fits=119/480. Biological primary remains B_NULL; POWER_UNESTABLISHED; STUDY_PARTIAL.",
+    "scientific_label": "INVALID",
+    "stages": {
+      "confirmation": "CONFIRM_SKIPPED",
+      "pairing_pc": "PC_FAIL",
+      "screen": "INVALID"
+    },
+    "study": "STUDY_PARTIAL"
+  },
+  "finished_primary": "B_NULL",
+  "ledger_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/ledger/fit_ledger.jsonl",
+  "ledger_sha256": "53920364c1e1afba48384598c9f998d9429e6ebb4107956e6b1631e3f6ba3be2",
+  "pairing_pc": {
+    "eligible_for_confirmation": false,
+    "evaluate": {
+      "ba_drop_bootstrap": {
+        "estimate": 0.0,
+        "incomplete": false,
+        "level": 0.95,
+        "lower": 0.0,
+        "n_donors": 30,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "reason": null,
+        "upper": 0.0
+      },
+      "drops": {
+        "mean_ba_drop_estimate": 0.0,
+        "mean_ll_drop_estimate": -0.00014342861596693287,
+        "n_donors": 30,
+        "n_seeds": 32
+      },
+      "eligible_for_confirmation": false,
+      "identity": {
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "ll_drop_bootstrap": {
+        "estimate": -0.00014342861596693287,
+        "incomplete": false,
+        "level": 0.95,
+        "lower": -0.0038465315376797673,
+        "n_donors": 30,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "reason": null,
+        "upper": 0.004450600084545107
+      },
+      "pc_label": "PC_FAIL"
+    },
+    "fold_results": [
+      {
+        "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__0__cross_attention.pt",
+        "fit_id": "screen|1|1001|0|cross_attention",
+        "fold": 0,
+        "n_test_cells": 1536,
+        "n_test_donors": 6
+      },
+      {
+        "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__1__cross_attention.pt",
+        "fit_id": "screen|1|1001|1|cross_attention",
+        "fold": 1,
+        "n_test_cells": 1536,
+        "n_test_donors": 6
+      },
+      {
+        "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__2__cross_attention.pt",
+        "fit_id": "screen|1|1001|2|cross_attention",
+        "fold": 2,
+        "n_test_cells": 1536,
+        "n_test_donors": 6
+      },
+      {
+        "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__3__cross_attention.pt",
+        "fit_id": "screen|1|1001|3|cross_attention",
+        "fold": 3,
+        "n_test_cells": 1536,
+        "n_test_donors": 6
+      },
+      {
+        "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__4__cross_attention.pt",
+        "fit_id": "screen|1|1001|4|cross_attention",
+        "fold": 4,
+        "n_test_cells": 1536,
+        "n_test_donors": 6
+      }
+    ],
+    "n_donors": 30,
+    "pc_label": "PC_FAIL",
+    "reason": null,
+    "selection": {
+      "complete": true,
+      "expected": 5,
+      "missing": [],
+      "present": 5,
+      "records": [
+        {
+          "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__0__cross_attention.pt",
+          "donor_auroc": 0.125,
+          "donor_balanced_accuracy": 0.125,
+          "donor_log_loss": 0.9586009400658982,
+          "donor_predictions_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions/screen__1__1001__0__cross_attention.donors.json",
+          "fit_id": "screen|1|1001|0|cross_attention",
+          "fold": 0,
+          "generator_seed": 1001,
+          "model": "cross_attention",
+          "model_seed": 1001,
+          "n_test_donors": 6,
+          "rho": 1.0,
+          "stage": "screen",
+          "status": "ok"
+        },
+        {
+          "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__1__cross_attention.pt",
+          "donor_auroc": 0.22222222222222224,
+          "donor_balanced_accuracy": 0.5,
+          "donor_log_loss": 0.8563603482478962,
+          "donor_predictions_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions/screen__1__1001__1__cross_attention.donors.json",
+          "fit_id": "screen|1|1001|1|cross_attention",
+          "fold": 1,
+          "generator_seed": 1001,
+          "model": "cross_attention",
+          "model_seed": 1001,
+          "n_test_donors": 6,
+          "rho": 1.0,
+          "stage": "screen",
+          "status": "ok"
+        },
+        {
+          "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__2__cross_attention.pt",
+          "donor_auroc": 0.4444444444444445,
+          "donor_balanced_accuracy": 0.5,
+          "donor_log_loss": 0.7393018672769829,
+          "donor_predictions_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions/screen__1__1001__2__cross_attention.donors.json",
+          "fit_id": "screen|1|1001|2|cross_attention",
+          "fold": 2,
+          "generator_seed": 1001,
+          "model": "cross_attention",
+          "model_seed": 1001,
+          "n_test_donors": 6,
+          "rho": 1.0,
+          "stage": "screen",
+          "status": "ok"
+        },
+        {
+          "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__3__cross_attention.pt",
+          "donor_auroc": 0.0,
+          "donor_balanced_accuracy": 0.0,
+          "donor_log_loss": 0.9220780304965125,
+          "donor_predictions_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions/screen__1__1001__3__cross_attention.donors.json",
+          "fit_id": "screen|1|1001|3|cross_attention",
+          "fold": 3,
+          "generator_seed": 1001,
+          "model": "cross_attention",
+          "model_seed": 1001,
+          "n_test_donors": 6,
+          "rho": 1.0,
+          "stage": "screen",
+          "status": "ok"
+        },
+        {
+          "checkpoint_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/checkpoints/screen__1__1001__4__cross_attention.pt",
+          "donor_auroc": 0.4444444444444444,
+          "donor_balanced_accuracy": 0.5,
+          "donor_log_loss": 0.7215823645169234,
+          "donor_predictions_path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions/screen__1__1001__4__cross_attention.donors.json",
+          "fit_id": "screen|1|1001|4|cross_attention",
+          "fold": 4,
+          "generator_seed": 1001,
+          "model": "cross_attention",
+          "model_seed": 1001,
+          "n_test_donors": 6,
+          "rho": 1.0,
+          "stage": "screen",
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "protocol_id": "S7_covariance_split_v2_20260929",
+  "provenance": {
+    "extra": {
+      "durable_root": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929",
+      "old_run_read_only": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929",
+      "protocol_version": "v2",
+      "result_dir": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202/docs/nn_v2/s7_v2",
+      "split_manifest_sha256": "9a845b5c0b8622624a40dc0cee6771d5d567e8c288c0be1f23bfcfd75668e2be"
+    },
+    "input_sha256": {
+      "atac_tiebreak_counts": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+      "h5ad": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+      "nn_inputs_config": "45d9b540d2a1c906879867003a488e7a54a9e4818a82f776b91643f77ae9f766",
+      "region_sets_sha256_json": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+      "tracked_union_bed": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23"
+    },
+    "protocol_id": "S7_covariance_split_v2_20260929",
+    "source_sha256": {
+      "loop.py": "195274bf29284e17746bef20020394737d175666361c5537fb0cdac1df347c1a",
+      "multiome_runner.py": "119f93e269eee11a27b93e29f1c85a192b25793d9fad28e546bba99c93abd0b5",
+      "planted_signal.py": "a3a6a7f3e5e5550038a38d9e5bff15abd09486d6b238f23c0bfa182cef8e3a5e",
+      "s7_confirm_exec.py": "45e15aa402739cd18aa6bda3c1cfbfc4680714a9763047b0be2d0cb57bb85dde",
+      "s7_confirmation.py": "0167290a59a4f7e0a44fedc072cc64a40555e987884648c2e399303ae55ae073",
+      "s7_handoff.py": "16d9240648d3ba5bf7b8f64845105d7f7b798d1835d0758bb71445f4213393ac",
+      "s7_ledger.py": "e018cd03d5ea9353a10f71afd8b636576f4e0a50207b84d5624a8890a93467f7",
+      "s7_pairing.py": "6475afd4d3d9e21ded6ce73b61e629a21ab10b8a11977cb2b56ed83652cef61e",
+      "s7_pairing_exec.py": "75cfefc6ad0c673540c7c9676f07fa161a8ea1d97f29009b5fa2206effdc3e1b",
+      "s7_pipeline.py": "72e701d04d9ab0ad8fc6b7a6692732cb77fbec2a12f66d052e77122c1f6d2dad",
+      "s7_runner.py": "b86a495a66771b8b736dbd4aba61d12b2b603d73a6138f406e24e37b4679d6e9",
+      "s7_screen.py": "96c829566877b64faba284b087253f34a8d0b91af858c2c498d24c71e8a78cb3",
+      "s7_setup.py": "a309e205293dffcddd30eb3aaa31f332fc5ea8b1e5e80e35601eee411ace07b3"
+    },
+    "spec_sha256": "e8b127ad576a7a179532e830547d57010b7de2ac327983f49ba848928dfde88f"
+  },
+  "provenance_file_sha256": "52cde0ba8b3aabf107647ae7435ce5a00f728ed2bd8d0333d7e5da6ad9b6f6b4",
+  "reason": "INVALID: S7-v2 fixed screen rho-0 null FAIL (token_concat mean-fold donor BA 0.341667 < 0.35); pairing-PC diagnostic PC_FAIL (CA ll-drop 95% CI lower -0.003847 <= 0); T9 confirmation skipped (ineligible). Cumulative fits=119/480. Biological primary remains B_NULL; POWER_UNESTABLISHED; STUDY_PARTIAL.",
+  "resources": {
+    "artifacts_gib": 0.016,
+    "free_gib": 26.617,
+    "max_artifacts_gib": 2.0,
+    "min_free_gib": 11.0,
+    "ok": true
+  },
+  "scientific_label": "INVALID",
+  "screen": {
+    "coverage": {
+      "complete": true,
+      "missing": [],
+      "n_expected": 105,
+      "n_ok": 105
+    },
+    "eligible_for_pairing_pc": false,
+    "marginal_check": {
+      "ba_max": 0.6,
+      "failures": [],
+      "mean_fold_donor_ba": {
+        "logreg_atac": 0.475,
+        "logreg_rna": 0.366667
+      },
+      "passed": true,
+      "rho": 1.0
+    },
+    "null_check": {
+      "failures": [
+        "token_concat"
+      ],
+      "mean_fold_donor_ba": {
+        "cross_attention": 0.375,
+        "gated_fusion": 0.35,
+        "logreg_atac": 0.475,
+        "logreg_concat": 0.391667,
+        "logreg_rna": 0.366667,
+        "rna_atac_concat": 0.375,
+        "token_concat": 0.341667
+      },
+      "passed": false,
+      "range": [
+        0.35,
+        0.65
+      ],
+      "rho": 0.0
+    },
+    "rho1_regime": {
+      "best_non_attention": "rna_atac_concat",
+      "ca_favoured": false,
+      "cross_attention_minus_best_non_attention": -0.083333,
+      "mean_fold_donor_ba": {
+        "cross_attention": 0.325,
+        "gated_fusion": 0.358333,
+        "logreg_atac": 0.475,
+        "logreg_concat": 0.366667,
+        "logreg_rna": 0.366667,
+        "rna_atac_concat": 0.408333,
+        "token_concat": 0.375
+      },
+      "n_models_scored": 7,
+      "regime": "NONE_DETECT",
+      "rho": 1.0
+    },
+    "screen_label": "INVALID"
+  },
+  "split_manifest_sha256": "9a845b5c0b8622624a40dc0cee6771d5d567e8c288c0be1f23bfcfd75668e2be",
+  "stop_reason": "complete_truthful_handoff_INVALID",
+  "study": "STUDY_PARTIAL",
+  "t9_confirmation": {
+    "ran": false,
+    "reason": "screen_label=INVALID and pc_label=PC_FAIL; confirmation_eligible=false",
+    "status": "skipped_ineligible"
+  },
+  "v1_immutable": {
+    "ledger_sha256": "5e23387a3ad5c75f70d6926e5de7f2848e5363b820dedac21a92288a4657d2a8",
+    "provenance_sha256": "d9e941d24cb0e28ee5baca8b0fdbec0233a3a84a001f135eeee7412af8a62888",
+    "result_json_sha256": "8456440992a21355849b9a8738c558200c3d583cbe0bffb0f9199e595dc244d9",
+    "result_md": "docs/nn_v2/s7/S7_RESULT.md",
+    "result_md_sha256": "d9ae29df8b4e86093e926248c1224e5216a746d37a9dc9135e0df0adb8d51222",
+    "scientific_label": "INVALID"
+  }
+}

@@ -4,17 +4,21 @@ Updated: 2026-09-29. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## S7-v2 complete — INVALID handoff — 2026-09-29
+
+Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` finished with scientific label **`INVALID`**. Split repair made all screen folds scoreable (55/55 preflight; smoke 14/14; screen 105/105; cumulative fits=119/480), but rho-0 null FAIL (`token_concat` BA 0.341667 < 0.35) and pairing-PC `PC_FAIL` (ll-drop CI lower ≤ 0; 0 new fits). **T9 skipped**. Truthful handoff written; Checkpoints C–D complete; GNHF stop. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [S7_V2_RESULT](docs/nn_v2/s7_v2/S7_V2_RESULT.md); [T10 handoff](docs/nn_v2/s7_v2/T10_HANDOFF.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
+
 ## S7-v2 pairing PC FAIL — 2026-09-29
 
-Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T8 pairing-PC diagnostic after T7 `INVALID` screen: **0 new fits** (cumulative still 119), identity reload `max_abs_diff=0.0`, seeds 3001–3032, 30 donors, bootstrap 1000/1000 valid, but CA log-loss drop 95% CI lower `−0.003847` ≤ 0 → **`pc_label=PC_FAIL`**. Confirmation remains ineligible; **T9 skipped**. Next authorized stage is **T10 handoff only**. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T8 evidence](docs/nn_v2/s7_v2/T8_PAIRING_PC.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
+T8 pairing-PC diagnostic after T7 `INVALID` screen: **0 new fits** (cumulative 119), identity `max_abs_diff=0.0`, seeds 3001–3032, 30 donors, bootstrap 1000/1000 valid, CA ll-drop 95% CI lower `−0.003847` ≤ 0 → **`pc_label=PC_FAIL`**. [T8 evidence](docs/nn_v2/s7_v2/T8_PAIRING_PC.md).
 
 ## S7-v2 screen INVALID — 2026-09-29
 
-Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T7 fixed screen under frozen Checkpoint B: **105/105** scoreable jobs (cumulative fits=119 / remaining 361), both classes all folds, rho-1 marginal PASS, but rho-0 null **FAIL** (`token_concat` mean-fold donor BA 0.341667 < 0.35) → **`screen_label=INVALID`**. Confirmation ineligible; no retuning. Pairing-PC diagnostic completed as T8 (`PC_FAIL`); T9 skipped; T10 handoff next. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T7 evidence](docs/nn_v2/s7_v2/T7_SCREEN.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
+T7 fixed screen: **105/105** scoreable (cumulative 119), both classes all folds, rho-1 marginal PASS, rho-0 null **FAIL** → **`screen_label=INVALID`**. [T7 evidence](docs/nn_v2/s7_v2/T7_SCREEN.md).
 
 ## S7-v2 smoke PASS — 2026-09-29
 
-Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` completed T6 smoke under frozen Checkpoint B: **14/14** scoreable fold-0 jobs (`status=ok`), held-out classes `{0:4,1:2}`, CA/TC reload identity `≤1e-6`, cumulative fits=14 / remaining 466, artifacts 0.003 GiB. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [T6 evidence](docs/nn_v2/s7_v2/T6_SMOKE.md).
+T6 smoke under Checkpoint B: **14/14** scoreable fold-0 jobs, held-out classes `{0:4,1:2}`, CA/TC reload identity `≤1e-6`. [T6 evidence](docs/nn_v2/s7_v2/T6_SMOKE.md).
 
 ## S7 prospective control — INVALID blocker — 2026-09-29
 
@@ -50,7 +54,7 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. S7-v2: write T10 handoff after T7 `INVALID` + T8 `PC_FAIL` (T9 skipped; no confirmation fits). Old S7-v1 `INVALID` remains immutable.
+1. S7-v2 handoff complete (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
 2. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
 3. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
 4. Follow-up decision only: bounded internal paper versus later external validation (T13); do not execute external validation from this status.

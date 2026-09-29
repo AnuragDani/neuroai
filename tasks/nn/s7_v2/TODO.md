@@ -1,6 +1,6 @@
 # S7-v2 Cursor task list
 
-Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T8 + Checkpoints A–B DONE (screen `INVALID`; pairing-PC `PC_FAIL`; cumulative fits=119 unchanged; confirmation ineligible; T9 skipped); T10 handoff next. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
+Source of truth: [PLAN.md](PLAN.md) and frozen [BENCHMARK_SPEC.json](BENCHMARK_SPEC.json). Check boxes only after acceptance evidence saved. Current state: T1–T8 + T10 + Checkpoints A–D DONE. Scientific label **`INVALID`** (screen rho-0 null FAIL; pairing-PC `PC_FAIL`; T9 skipped; cumulative fits=119). Truthful handoff complete; GNHF stop. Old S7-v1 is `INVALID`, immutable. Run tasks in order; fail-fast dependencies apply.
 
 ## Phase 1 — zero-fit implementation
 
@@ -92,13 +92,15 @@ Description: Reload saved rho-1 CA/TC; 32 within-donor ATAC shuffles, no new fit
 
 Description: Run fixed ten seeds × five folds × seven models, rho 1; skip entirely unless eligible.
 
-- [ ] Acceptance: 350/350 scoreable distinct jobs, pooled 30 donors/seed; frozen joint CA−TC and six-baseline contrasts, count/10 plus Wilson intervals.
-- [ ] Verify: independent paired-bootstrap recomputation; planned total ≤469 and absolute ≤480; ≥8/10 is synthetic reliability only. Ineligible/partial run records precise skip/incomplete reason.
+- [x] Acceptance: skipped entirely — screen `INVALID` + PC `PC_FAIL` → `confirmation_eligible=false`; zero confirmation fits.
+- [x] Verify: precise skip reason recorded in handoff (`CONFIRM_SKIPPED`); cumulative fits remain 119 ≤469/480.
+  Evidence: [S7_V2_RESULT.md](../../../docs/nn_v2/s7_v2/S7_V2_RESULT.md), [T10_HANDOFF.md](../../../docs/nn_v2/s7_v2/T10_HANDOFF.md). T9 not run; no retuning.
 
 ### Checkpoint C — scientific gate
 
-- [ ] Scientific label derived from raw coverage and gates: `CA_FAVOURED_CONTROL`, `CONTROL_NEGATIVE`, `INVALID`, or `INCOMPLETE`.
-- [ ] `CA_FAVOURED_CONTROL` requires complete screen+PC+confirmation; no biological `A_ADVANTAGE` claim.
+- [x] Scientific label derived from raw coverage and gates: `INVALID`.
+- [x] `CA_FAVOURED_CONTROL` requires complete screen+PC+confirmation; no biological `A_ADVANTAGE` claim.
+  Evidence: [S7_V2_RESULT.json](../../../docs/nn_v2/s7_v2/S7_V2_RESULT.json) finalize stages screen=`INVALID`, pairing_pc=`PC_FAIL`, confirmation=`CONFIRM_SKIPPED`; biological `B_NULL` / `POWER_UNESTABLISHED` / `STUDY_PARTIAL`.
 
 ## Phase 3 — handoff
 
@@ -106,11 +108,13 @@ Description: Run fixed ten seeds × five folds × seven models, rho 1; skip enti
 
 Description: Produce versioned v2 Markdown/JSON result with evidence links, budget, hashes, and stop reason; update status/index only at gate or blocker. Likely files: `docs/nn_v2/s7_v2/S7_V2_RESULT.md`, JSON, `status.md`, `docs/INDEX.md`.
 
-- [ ] Acceptance: all numbers trace to ledger; v1 `INVALID` remains; biological `B_NULL`, `POWER_UNESTABLISHED`, `STUDY_PARTIAL` explicit.
-- [ ] Acceptance: no canonical JSON/gate, real-label, professor packet/MOM, push, merge, acquisition or new package changes.
-- [ ] Verify: focused checks, saved-record recount, `git diff --check`, local commit and clean worktree; precise blocker if incomplete.
+- [x] Acceptance: all numbers trace to ledger; v1 `INVALID` remains; biological `B_NULL`, `POWER_UNESTABLISHED`, `STUDY_PARTIAL` explicit.
+- [x] Acceptance: no canonical JSON/gate, real-label, professor packet/MOM, push, merge, acquisition or new package changes.
+- [x] Verify: independent ledger/screen re-eval → `INVALID`; `git diff --check` clean on handoff docs; local commit deferred to gnhf orchestrator.
+  Evidence: [S7_V2_RESULT.md](../../../docs/nn_v2/s7_v2/S7_V2_RESULT.md), [S7_V2_RESULT.json](../../../docs/nn_v2/s7_v2/S7_V2_RESULT.json), [T10_HANDOFF.md](../../../docs/nn_v2/s7_v2/T10_HANDOFF.md), [T10_HANDOFF_AUDIT.json](../../../docs/nn_v2/s7_v2/T10_HANDOFF_AUDIT.json). CLI `--split-v2 --once` wrote handoff; independent recount 119 fits; label `INVALID`; v1 hashes unchanged; T9 skipped.
 
 ### Checkpoint D — done
 
-- [ ] T10 result/handoff complete even if control negative or invalid; GNHF stopped, no new jobs pending under frozen rules.
-- [ ] User can review branch, raw v2 ledger and scientific label without consulting GNHF iteration count or notes.
+- [x] T10 result/handoff complete even if control negative or invalid; GNHF stopped, no new jobs pending under frozen rules.
+- [x] User can review branch, raw v2 ledger and scientific label without consulting GNHF iteration count or notes.
+  Evidence: durable `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`; versioned result `docs/nn_v2/s7_v2/S7_V2_RESULT.md` label `INVALID`.
