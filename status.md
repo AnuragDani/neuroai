@@ -8,6 +8,8 @@ Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet P
 
 Versioned S7-v2 continuation on `codex/p22-s7-v2-plan-20260929` finished with scientific label **`INVALID`**. Split repair made all screen folds scoreable (55/55 preflight; smoke 14/14; screen 105/105; cumulative fits=119/480), but rho-0 null FAIL (`token_concat` BA 0.341667 < 0.35) and pairing-PC `PC_FAIL` (ll-drop CI lower ≤ 0; 0 new fits). **T9 skipped**. Truthful handoff written; Checkpoints C–D complete; GNHF stop. Old S7-v1 remains **`INVALID`** and immutable. Biological primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [S7_V2_RESULT](docs/nn_v2/s7_v2/S7_V2_RESULT.md); [T10 handoff](docs/nn_v2/s7_v2/T10_HANDOFF.md); durable v2 `/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/`.
 
+**Independent review:** [dated review](docs/nn_v2/s7_v2/CODEX_REVIEW_20260929.md) recomputed the frozen **pooled-donor** rho-0 gate from saved predictions. Token-concat BA 0.330357 and gated-fusion BA 0.325893 both fail `[0.35,0.65]`, so `INVALID` stands. GNHF's cited 0.341667 was **mean-fold** BA from an implementation/spec mismatch; versioned `S7_V2_RESULT` is the handoff entrypoint. One failed GNHF iteration was an output-parse error; 119 unique successful fit rows survived. No further fits under this freeze.
+
 ## S7-v2 pairing PC FAIL — 2026-09-29
 
 T8 pairing-PC diagnostic after T7 `INVALID` screen: **0 new fits** (cumulative 119), identity `max_abs_diff=0.0`, seeds 3001–3032, 30 donors, bootstrap 1000/1000 valid, CA ll-drop 95% CI lower `−0.003847` ≤ 0 → **`pc_label=PC_FAIL`**. [T8 evidence](docs/nn_v2/s7_v2/T8_PAIRING_PC.md).
