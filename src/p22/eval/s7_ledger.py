@@ -281,6 +281,11 @@ class S7FitLedger:
         return frozenset(self._records)
 
     @property
+    def records(self) -> dict[str, dict[str, Any]]:
+        """Shallow copy of completed fit rows (immutable IDs; callers must not rewrite)."""
+        return {fit_id: dict(row) for fit_id, row in self._records.items()}
+
+    @property
     def n_completed(self) -> int:
         return len(self._records)
 
