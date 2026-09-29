@@ -69,8 +69,8 @@ From saved controls and gates: is the constructed interaction learnable, do both
 | Deliverable | Status |
 |---|---|
 | Evidence-linked diagnosis | **This file — COMPLETE** |
-| One proposed hypothesis + estimand | Pending next iteration |
-| Frozen comparison / positive-result criteria | Pending (reuse finished A_ADVANTAGE rule until explicitly re-declared for a new protocol) |
-| Feasibility + ordered execution tasks | Pending |
+| One proposed hypothesis + estimand | COMPLETE — [HYPOTHESIS.md](HYPOTHESIS.md) |
+| Frozen comparison / positive-result criteria | COMPLETE — [HYPOTHESIS.md](HYPOTHESIS.md) |
+| Feasibility + ordered execution tasks | Pending (PLAN item 3) |
 
 Finished primary endpoint and gates remain unchanged.

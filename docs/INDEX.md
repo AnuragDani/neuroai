@@ -4,7 +4,7 @@ Start at [current status](../status.md). This index points to one entry per job;
 
 | Need | Open | Role |
 |---|---|---|
-| Definition of done and positive result? | [Finish plan](../tasks/nn/finish_20260928/PLAN.md), [prospective diagnosis](../tasks/nn/finish_20260928/DIAGNOSIS.md) | Current finish COMPLETE; A_ADVANTAGE rule, method-paper requirements and separate prospective research path; saved-evidence diagnosis distinguishes learnability / model / donor uncertainty |
+| Definition of done and positive result? | [Finish plan](../tasks/nn/finish_20260928/PLAN.md), [prospective diagnosis](../tasks/nn/finish_20260928/DIAGNOSIS.md), [prospective hypothesis](../tasks/nn/finish_20260928/HYPOTHESIS.md) | Current finish COMPLETE; A_ADVANTAGE rule, method-paper requirements and separate prospective research path; diagnosis + one method-advantage hypothesis with frozen gate/primary criteria; feasibility protocol still open |
 | What is happening now? | [status.md](../status.md) | Current snapshot, blockers, next milestones |
 | What did professor ask? | [MOM index](../MOM/README.md), [direction map](../tasks/nn/plan.md#1-what-the-professor-asked-and-how-this-plan-answers-it) | Original meeting sources and task mapping |
 | What is NN-v2 protocol? | [Protocol freeze](nn_v2/PROTOCOL_FREEZE.md), [NN plan](../tasks/nn/plan.md) | Frozen scientific design |
