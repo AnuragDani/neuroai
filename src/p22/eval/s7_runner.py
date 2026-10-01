@@ -7,6 +7,7 @@ pairing-PC stage. No real-disease-label fits.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -193,6 +194,21 @@ def _matrix_for_logreg(name: str, views: Mapping[str, np.ndarray]) -> np.ndarray
     raise ValueError(f"not a logreg model: {name!r}")
 
 
+def _state_dict_sha256(state: Mapping[str, Any]) -> str:
+    """Stable SHA-256 of a tensor state_dict for initial-state provenance."""
+    hasher = hashlib.sha256()
+    for key in sorted(state):
+        hasher.update(key.encode("utf-8"))
+        tensor = state[key]
+        arr = (
+            tensor.detach().cpu().numpy()
+            if hasattr(tensor, "detach")
+            else np.asarray(tensor)
+        )
+        hasher.update(np.ascontiguousarray(arr).tobytes())
+    return hasher.hexdigest()
+
+
 def fit_s7_arm(
     name: str,
     views: Mapping[str, np.ndarray],
@@ -253,6 +269,11 @@ def fit_s7_arm(
         widths = [views[VIEW_A].shape[1], views[VIEW_B].shape[1]]
         model = paired_model(name, widths, proto)
         selected = model_inputs(name, dict(views))
+        initial_state = {
+            key: value.detach().cpu().clone()
+            for key, value in model.state_dict().items()
+        }
+        initial_state_sha256 = _state_dict_sha256(initial_state)
         trained = train_model(
             model,
             {key: value[train] for key, value in selected.items()},
@@ -277,6 +298,12 @@ def fit_s7_arm(
             "model": name,
             "widths": widths,
             "state_dict": {k: v.detach().cpu() for k, v in trained.model.state_dict().items()},
+            "initial_state_sha256": initial_state_sha256,
+            "history": [record.to_dict() for record in trained.history],
+            "epochs_run": int(trained.epochs_run),
+            "best_epoch": int(trained.best_epoch),
+            "stopped_early": bool(trained.stopped_early),
+            "best_val_score": float(trained.best_val_score),
             "protocol": {
                 "n_tokens": proto.n_tokens,
                 "embed_dim": proto.embed_dim,

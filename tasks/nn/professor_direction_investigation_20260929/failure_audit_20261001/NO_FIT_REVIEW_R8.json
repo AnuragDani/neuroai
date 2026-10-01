@@ -1,0 +1,101 @@
+{
+  "task": "R8",
+  "protocol_id": "S10_corrected_null_pairing_use_20261001",
+  "date": "2026-10-01",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "git_commit_at_review": "aa9d2e10f36affef94faacfe11a9651523280a0e",
+  "note": "Authorization binds working-tree file hashes below; commit before scientific dispatch.",
+  "verdict": "PASS",
+  "disposition": "PASS",
+  "correction_cycle": 0,
+  "max_correction_cycles": 2,
+  "self_certification": false,
+  "reviewer": {
+    "identity": "cursor Task generalPurpose agent (independent of R7 authoring session)",
+    "agent_id": "fd860419-c20a-4e11-8c6f-f56ddc15fdec",
+    "self_certification": false,
+    "review_file": "INDEPENDENT_REVIEW_R8.md"
+  },
+  "critical_findings": [],
+  "non_critical_notes": [
+    "Working-tree s10_execute.py / s7_runner.py differ from HEAD aa9d2e1; Checkpoint C binds working-tree hashes.",
+    "s7_runner.py additive history/initial_state fields are reviewed but not one of the five lock keys; record SHA for provenance.",
+    "Pairing shuffle seeds 4001-4016 reused from S9 intervention schedule (documented).",
+    "Hours-cap refusal after per-job reserve can consume an attempt without completing a fit if the cap is already reached."
+  ],
+  "reviewed_hashes": {
+    "S10_PROTOCOL.json": "f16e503df4e4ba19029ddf06354b3c95aa1612a6ba0c49dbc2d891e8beb1798c",
+    "S10_SPLIT_MANIFEST.json": "ec210b253386938a62047728992c094107e6e65f0169aa04ef7e59ff6b676ba6",
+    "S10_SEED_SCHEDULE.json": "4ef154fe783db23aa0df09ba31d38e409a3efd2070cb581603a226b8b25c33ec",
+    "src/p22/eval/s10_analytic.py": "5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e",
+    "src/p22/eval/s10_execute.py": "2aed78eaf2f0e9ef9643acfad9ddc7a8e7d81afca35ac7e92ad426e012eefe77"
+  },
+  "dependency_hashes": {
+    "src/p22/eval/s7_runner.py": "290b5e2769629d139691be52c2be292bc03c5af986c3c33bf8a1feefe8d84790",
+    "src/p22/eval/s9_analytic.py": "dad126cd6dc33e9e8226b9924baa7c0b0fd3e88f8b413a6b06c9313c06d4ea02"
+  },
+  "hashes_match": true,
+  "checklist": {
+    "equations": "PASS",
+    "estimand": "PASS",
+    "null_validity": "PASS",
+    "oracle_interpretation": "PASS",
+    "arm_multiplicity_fit_arithmetic": "PASS",
+    "leakage": "PASS",
+    "seeds": "PASS",
+    "output_root_safety": "PASS",
+    "executor_full_path": "PASS",
+    "claim_hierarchy": "PASS",
+    "resource_caps": "PASS",
+    "change_scope": "PASS"
+  },
+  "independent_recompute": {
+    "rho1_oracle_ba": 1.0,
+    "rho0_oracle_ba": 0.5416666666666666,
+    "rho1_shuffled_oracle_ba": 0.5416666666666667,
+    "rho0_max_abs_product_mean": 0.3741281454092913,
+    "exchangeability_mean_ratio": 1.0043166718824277,
+    "smoke_plus_screen_jobs": 49,
+    "cap": 90,
+    "headroom": 41,
+    "decision_generator_seed": 9301,
+    "decision_split_seed": 17,
+    "decision_model_seed": 9301,
+    "workers": 1,
+    "reserve_attempts_before_dispatch": true,
+    "reviewed_hashes_complete_before_lock": false
+  },
+  "focused_tests": {
+    "command": "PYTHONPATH=<workspace>/src .venv-p22/bin/python -m pytest tests/test_failure_audit_protocol_r7.py tests/test_failure_audit_decision_r6.py tests/test_nn_s7_runner.py -q",
+    "exit_code": 0,
+    "passed": 18
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s9": "INVALID",
+    "s9_immutable": true,
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "claim_level": 1
+  },
+  "checkpoint_c": {
+    "authorized_by_review": true,
+    "blocks_if": "critical FAIL/UNRESOLVED on exact reviewed hashes or post-review code change without re-review",
+    "resource_headroom_established": true,
+    "planned_fits": 49,
+    "cap": 90,
+    "headroom_fits": 41,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "payloads": 0,
+    "diagnostic_remaining": 0,
+    "allowed_raw_root": "reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001/"
+  },
+  "next": "Checkpoint C then R9 bounded S10 batch under frozen hashes"
+}

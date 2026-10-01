@@ -10,7 +10,9 @@
 
 ## Executor dependency hashes
 
-Chain SHA-256: `05945cafb97aa18dd30e6c4597ca7b00ed48f33a0e95a3e8c82a7184c9cc3192`
+Chain SHA-256: `409974f90a683be0900b4a5e936e975c7021673ee1b226f9238c7408bc05d7eb`
+
+R8 amendment (2026-10-01): additive `s7_runner` neural checkpoint fields (`initial_state_sha256`, learning history); prior R3 chain `05945caf…cc3192` retained in `execution_audit.json` `executor_hashes_r8_amendment`. Independent R8 agent `fd860419-c20a-4e11-8c6f-f56ddc15fdec`.
 
 | Rel path | SHA-256 |
 |---|---|
@@ -18,7 +20,7 @@ Chain SHA-256: `05945cafb97aa18dd30e6c4597ca7b00ed48f33a0e95a3e8c82a7184c9cc3192
 | `src/p22/eval/multiome_runner.py` | `119f93e269eee11a27b93e29f1c85a192b25793d9fad28e546bba99c93abd0b5` |
 | `src/p22/eval/s7_ledger.py` | `e018cd03d5ea9353a10f71afd8b636576f4e0a50207b84d5624a8890a93467f7` |
 | `src/p22/eval/s7_pairing.py` | `6475afd4d3d9e21ded6ce73b61e629a21ab10b8a11977cb2b56ed83652cef61e` |
-| `src/p22/eval/s7_runner.py` | `b86a495a66771b8b736dbd4aba61d12b2b603d73a6138f406e24e37b4679d6e9` |
+| `src/p22/eval/s7_runner.py` | `290b5e2769629d139691be52c2be292bc03c5af986c3c33bf8a1feefe8d84790` |
 | `src/p22/eval/s9_analytic.py` | `dad126cd6dc33e9e8226b9924baa7c0b0fd3e88f8b413a6b06c9313c06d4ea02` |
 | `src/p22/eval/s9_execute.py` | `b05eeb67a6742da6df596abbbc1979619871682eb7bf77bf814235b76748390a` |
 | `src/p22/models/baselines.py` | `64258573821aae8f88ba5e69ba1d2035c99516c68c1201456abb6f426ddaf625` |

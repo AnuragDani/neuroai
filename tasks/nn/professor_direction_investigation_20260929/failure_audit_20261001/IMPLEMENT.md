@@ -32,7 +32,9 @@ Machine-readable: [implement.json](implement.json); frozen [S10_PROTOCOL.json](S
 - `S10_SPLIT_MANIFEST.json`: `ec210b253386938a62047728992c094107e6e65f0169aa04ef7e59ff6b676ba6`
 - `S10_SEED_SCHEDULE.json`: `4ef154fe783db23aa0df09ba31d38e409a3efd2070cb581603a226b8b25c33ec`
 - `src/p22/eval/s10_analytic.py`: `5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e`
-- `src/p22/eval/s10_execute.py`: `f5cfc2fe898a7313f82922d333906a3fa99d2da2f78a2170351cc21db4f88242`
+- `src/p22/eval/s10_execute.py`: `2aed78eaf2f0e9ef9643acfad9ddc7a8e7d81afca35ac7e92ad426e012eefe77`
+
+R8 prep note (post-R7, before fits): executor uses external `R8_REVIEWED_HASHES.json` (no self-embedded digests); serial path reserves attempts before dispatch; neural checkpoints carry `initial_state_sha256` / learning history via additive `fit_s7_arm` fields.
 
 ## Scientific invariants (unchanged)
 
