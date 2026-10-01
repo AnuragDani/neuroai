@@ -1,0 +1,174 @@
+{
+  "task": "Q12",
+  "disposition": "DONE",
+  "scientific_result": "INVALID",
+  "protocol_id": "S9_analytic_pairing_use_synthetic_20260930",
+  "date": "2026-10-01",
+  "timestamp_utc": "2026-10-01T07:43:49Z",
+  "branch": "gnhf/execute-the-p22-data-146414",
+  "base_commit": "04282f0a803cc40c5d40aa0a9a7c535a213e1560",
+  "tip_before_q12": "d685124085e4c245b2bfa54f5fe00447a645f198",
+  "worktree": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414",
+  "interpreter": "/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python",
+  "p22_file": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/src/p22/__init__.py",
+  "network_bytes": 0,
+  "depends_on": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11a", "Q11b", "Q11c"],
+  "task_dispositions": {
+    "Q0": {"status": "DONE", "label": "PASS", "evidence": "PREFLIGHT.md"},
+    "Q1": {"status": "DONE", "label": "PASS", "evidence": "REPLAY.md"},
+    "Q2": {"status": "DONE", "label": "ENDPOINT_UNRESOLVED", "evidence": "ENDPOINTS.md; endpoint_inventory.json"},
+    "Q3": {"status": "DONE", "label": "REGULATORY_ADEQUACY_UNRESOLVED", "structural": "STRUCTURAL_COVERAGE_PASS", "evidence": "REGULATORY_COVERAGE.md; regulatory_coverage.json"},
+    "Checkpoint_A": {"status": "DONE", "evidence": "Q1-Q3"},
+    "Q4": {"status": "DONE", "label": "SUPPORT_REPAIR_PASS; ELIGIBILITY_FROZEN", "evidence": "SAMPLING_FEASIBILITY.md; sampling_feasibility.json"},
+    "Q5": {"status": "DONE", "label": "EXTERNAL_FEASIBILITY_BOUNDED; confirmatory UNRESOLVED", "evidence": "EXTERNAL_FEASIBILITY.md; external_feasibility.json"},
+    "Checkpoint_B": {"status": "DONE", "evidence": "Q4-Q5"},
+    "Q6": {"status": "DONE", "label": "EXPERIMENT_SELECTED", "fit_arithmetic": "PASS", "evidence": "RESEARCH_DECISION.md; FIT_LEDGER.json"},
+    "Q7": {"status": "DONE", "label": "PROTOCOL_FROZEN", "evidence": "SYNTHETIC_PROTOCOL.md; SYNTHETIC_PROTOCOL.json; SPLIT_MANIFEST.json"},
+    "Q8": {"status": "DONE", "label": "IMPLEMENT_PASS", "evidence": "IMPLEMENT.md; implement.json"},
+    "Q9": {"status": "DONE", "label": "PASS", "evidence": "NO_FIT_REVIEW.json; INDEPENDENT_REVIEW_Q9.md", "reviewer_agent_id": "393c27bd-2487-49eb-8225-ddd76b74ec4a", "self_certification": false},
+    "Checkpoint_C": {"status": "DONE", "label": "PASS", "evidence": "CHECKPOINT_C.md"},
+    "Q10": {"status": "DONE", "label": "INVALID", "evidence": "EXECUTE.md; execute.json", "fits": 49},
+    "Q11a": {"status": "BLOCKED", "reason": "Q2 ENDPOINT_UNRESOLVED; Q10 INVALID does not unlock biological pilot"},
+    "Q11b": {"status": "BLOCKED", "reason": "blocked with Q11a"},
+    "Q11c": {"status": "BLOCKED", "reason": "blocked with Q11a; 0 real-pilot fits"},
+    "Q12": {"status": "DONE", "evidence": "HANDOFF.md; VERIFICATION.json"},
+    "Checkpoint_D": {"status": "DONE", "stop_condition_met": true}
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "s9_selected_experiment": "INVALID",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "q3_regulatory": "REGULATORY_ADEQUACY_UNRESOLVED",
+    "q5_external": "EXTERNAL_FEASIBILITY_BOUNDED / confirmatory UNRESOLVED"
+  },
+  "reviewed_hashes": {
+    "SYNTHETIC_PROTOCOL.json": "eedf5e77c4ba08d8a801609e5a2bdfccc5d882e2d297d9469c4af364ad25ec7a",
+    "SPLIT_MANIFEST.json": "2d9a3b9fac7bfd8dd48b7517e0ad22e297eab9a4e9f775ac814dd99b8c50fd4d",
+    "FIT_LEDGER.json": "841c8468b6b17a43628d14af00f277ffb156b774264fe1dad0545b2ab5cd3563",
+    "src/p22/eval/s9_analytic.py": "dad126cd6dc33e9e8226b9924baa7c0b0fd3e88f8b413a6b06c9313c06d4ea02"
+  },
+  "evidence_hashes_q12": {
+    "HANDOFF.md": "49bd1d2f781c1358abe993cb0d7a9292aefc814b7feda1f39e55c758e03fd996",
+    "EXECUTE.md": "f8e533df183f0d6697b35d0738d0c92caa0f6b5e13b1ec16071d26b6dd5b471f",
+    "execute.json": "8e98bb6b6bf7a6861371db065bff09ea9e786676ae33502c130a650584be9985",
+    "NO_FIT_REVIEW.json": "1f34a4b7c0ad352e4815aa00ce5556b6969a23919ff3fc657fea198fc36a2b2d",
+    "CHECKPOINT_C.md": "6d88ad2d0bf97268576ff96af34e542e15a58c1090659731bc6a4b4541ad397d",
+    "src/p22/eval/s9_execute.py": "b05eeb67a6742da6df596abbbc1979619871682eb7bf77bf814235b76748390a",
+    "PLAN.md": "46aac7bcd58245ea7cb13f815d69c5aacf4b2f49de258cd45a31ba1c915864b8",
+    "note": "execute.json SHA may change on --skip-fits replay solely via resources.disk.free_gib; scientific gates unchanged"
+  },
+  "raw_paths": {
+    "s9_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_s9_analytic_pairing_20260930",
+    "s9_logs": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_s9_analytic_pairing_20260930/logs",
+    "s9_attempt_ledger": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_s9_analytic_pairing_20260930/attempt_ledger.jsonl",
+    "q1_replay_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_next_stage_q1_replay_20260930",
+    "ladder_v3": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_20260923/ladder_v3",
+    "s7_v1": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_20260929",
+    "s7_v2": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929"
+  },
+  "resources": {
+    "attempted_fits": 49,
+    "completed_ok": 49,
+    "failed": 0,
+    "synthetic_cap": 60,
+    "within_synthetic_cap": true,
+    "fitting_seconds": 5.234899454993865,
+    "fitting_hours": 0.001454138737498296,
+    "fitting_hours_cap": 4,
+    "within_fitting_hours": true,
+    "artifacts_gib": 0.003378,
+    "artifact_gib_cap": 2,
+    "within_artifact_cap": true,
+    "continuation_fit_cap": 180,
+    "continuation_fitting_hours_cap": 12,
+    "continuation_artifact_gib_cap": 4,
+    "real_pilot_fits": 0,
+    "real_pilot_cap": 120,
+    "workers": 2,
+    "torch_threads": 2,
+    "network_bytes": 0,
+    "package_installs": 0
+  },
+  "reviewer": {
+    "q9_verdict": "PASS",
+    "agent_id": "393c27bd-2487-49eb-8225-ddd76b74ec4a",
+    "self_certification": false,
+    "correction_cycle": 0,
+    "max_correction_cycles": 2,
+    "critical_findings": []
+  },
+  "commands": [
+    {
+      "id": "focused_pytest_q1_q10",
+      "command": "PYTHONPATH=<worktree>/src PYTHONDONTWRITEBYTECODE=1 /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/test_next_stage_diagnostic_replay.py tests/test_next_stage_endpoints_q2.py tests/test_next_stage_regulatory_coverage_q3.py tests/test_next_stage_sampling_feasibility_q4.py tests/test_next_stage_external_feasibility_q5.py tests/test_next_stage_research_decision_q6.py tests/test_next_stage_synthetic_protocol_q7.py tests/test_next_stage_s9_implement_q8.py tests/test_next_stage_review_q9.py tests/test_next_stage_s9_execute_q10.py -q --tb=no",
+      "exit_code": 0,
+      "passed": 55,
+      "failed": 0,
+      "wall_seconds": 6.48,
+      "timestamp_utc": "2026-10-01T07:42:48Z",
+      "note": "Fresh Q12 verification count; do not reuse prior iteration tallies as this run's evidence"
+    },
+    {
+      "id": "focused_pytest_q1_q12",
+      "command": "PYTHONPATH=<worktree>/src PYTHONDONTWRITEBYTECODE=1 /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/test_next_stage_diagnostic_replay.py tests/test_next_stage_endpoints_q2.py tests/test_next_stage_regulatory_coverage_q3.py tests/test_next_stage_sampling_feasibility_q4.py tests/test_next_stage_external_feasibility_q5.py tests/test_next_stage_research_decision_q6.py tests/test_next_stage_synthetic_protocol_q7.py tests/test_next_stage_s9_implement_q8.py tests/test_next_stage_review_q9.py tests/test_next_stage_s9_execute_q10.py tests/test_next_stage_handoff_q12.py -q --tb=line",
+      "exit_code": 0,
+      "passed": 60,
+      "failed": 0,
+      "wall_seconds": 6.45,
+      "timestamp_utc": "2026-10-01T07:44:30Z",
+      "note": "Includes 5 new Q12 handoff tests; Q10 replay test may refresh execute.json free_gib only"
+    },
+    {
+      "id": "s9_replay_skip_fits",
+      "command": "PYTHONPATH=<worktree>/src PYTHONDONTWRITEBYTECODE=1 /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python scripts/report_next_stage_s9_execute.py --skip-fits",
+      "exit_code": 0,
+      "wall_seconds": 2,
+      "timestamp_utc": "2026-10-01T07:43:20Z",
+      "note": "Replays pairing/gates from saved donor predictions; no new research fits; refreshed execute.json resources.disk.free_gib only"
+    },
+    {
+      "id": "git_diff_check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "timestamp_utc": "2026-10-01T07:43:20Z"
+    },
+    {
+      "id": "ruff_owned_paths",
+      "command": "/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/ruff check src/p22/eval/s9_analytic.py src/p22/eval/s9_execute.py scripts/report_next_stage_s9_execute.py tests/test_next_stage_s9_execute_q10.py tests/test_next_stage_review_q9.py",
+      "exit_code": 0,
+      "timestamp_utc": "2026-10-01T07:43:49Z"
+    },
+    {
+      "id": "make_lint_worktree",
+      "command": "make lint",
+      "exit_code": 2,
+      "timestamp_utc": "2026-10-01T07:43:40Z",
+      "inherited_failure": true,
+      "note": "Worktree has no .venv-p22 symlink; Makefile expects ./.venv-p22/bin/ruff. Not introduced by Q12. Absolute interpreter ruff on owned paths PASS."
+    }
+  ],
+  "q10_gates_summary": {
+    "disposition": "INVALID",
+    "primary_reason": "rho=1 unimodal marginal BA exceeds 0.60 (logreg_rna/logreg_atac shortcut)",
+    "logreg_rna_ba": 0.75,
+    "logreg_atac_ba": 0.7083333333333334,
+    "pairing_rho0": "PAIRING_POSITIVE",
+    "pairing_rho1": "PAIRING_NEGATIVE",
+    "advantage_contrast": {
+      "label": "SEPARATE_NON_PRIMARY",
+      "ca_minus_token_concat": 0.0
+    }
+  },
+  "smallest_next_action": "Obtain or define an independently measured cell-state/maturation endpoint orthogonal to NN RNA inputs before any biological pilot; otherwise write the F4 bounded null/detectability paper from immutable gates. Do not redesign/refit S9 to chase a positive result.",
+  "stop": {
+    "checkpoint_d": true,
+    "reason": "Q0-Q12 evidence-backed dispositions complete; selected experiment INVALID; Q11 blocked; independent safe work exhausted; no positive-result search",
+    "push_merge": false,
+    "vault_mom_packet_edits": false
+  }
+}

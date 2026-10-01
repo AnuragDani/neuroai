@@ -401,7 +401,7 @@
     "artifact_gib_cap": 2,
     "within_artifact_cap": true,
     "disk": {
-      "free_gib": 16.118,
+      "free_gib": 16.058,
       "artifacts_gib": 0.003,
       "min_free_gib": 2.0,
       "max_artifacts_gib": 2.0,

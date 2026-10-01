@@ -21,8 +21,8 @@ Detailed acceptance criteria, verification commands, dependencies and likely fil
 - [ ] Q11a: If justified, freeze/review one separate real-data exploratory pilot protocol. — `BLOCKED`. Evidence: Q2 `ENDPOINT_UNRESOLVED` (and Q3/Q5 unresolved) cannot authorize a biological pilot; Q10 control disposition `INVALID` does not unlock Q11.
 - [ ] Q11b: Verify minimal existing-runner adaptation and matched controls if needed. — `BLOCKED`. Evidence: blocked with Q11a (no pilot protocol authorized).
 - [ ] Q11c: Execute bounded pilot, replay results and faithfulness; otherwise document SKIPPED/BLOCKED. — `BLOCKED`. Evidence: blocked with Q11a; no real-pilot fits.
-- [ ] Q12: Commit verified handoff, disposition/evidence for every task, cumulative budgets and one next action.
-- [ ] Checkpoint D: Stop on completed handoff or precise blocker after independent safe tasks finish. Positive result not required.
+- [x] Q12: Commit verified handoff, disposition/evidence for every task, cumulative budgets and one next action. — `DONE`. Evidence: [HANDOFF.md](nn/professor_direction_investigation_20260929/next_stage_20260930/HANDOFF.md); [VERIFICATION.json](nn/professor_direction_investigation_20260929/next_stage_20260930/VERIFICATION.json); scientific result `INVALID` (S9); Q11a–c `BLOCKED`; primary `B_NULL`; S7 `INVALID`; prior S8 `NO FIT`; fresh focused suite 60 PASS; one next action recorded.
+- [x] Checkpoint D: Stop on completed handoff or precise blocker after independent safe tasks finish. Positive result not required. — `DONE`. Evidence: Q0–Q12 dispositions recorded; selected experiment `INVALID`; biological pilot blocked by `ENDPOINT_UNRESOLVED`; independent safe work exhausted; no positive-result search.
 
 For skipped/blocked tasks, retain unchecked box and record disposition plus evidence beside it; do not mark an unexecuted experiment DONE. Q12 may close the run while broader study remains partial. Launch details: [GNHF_PROMPT.md](nn/professor_direction_investigation_20260929/next_stage_20260930/GNHF_PROMPT.md).
 
