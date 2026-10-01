@@ -1,0 +1,191 @@
+{
+  "task": "R6",
+  "disposition": "EXPERIMENT_SELECTED",
+  "fit_feasibility": "PASS",
+  "recorded_date": "2026-10-01",
+  "recorded_utc": "2026-10-01T08:44Z",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "research_fits": 0,
+  "diagnostic_fits": 0,
+  "payload_downloads": 0,
+  "scientific_labels_retained": {
+    "primary": "B_NULL",
+    "s9": "INVALID",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "study": "STUDY_PARTIAL",
+    "s9_immutable": true
+  },
+  "cause_ranking": [
+    {
+      "rank": 1,
+      "cause_class": "null_invalidity",
+      "partition": "null_invalidity",
+      "strength": "ESTABLISHED",
+      "summary": "rho=0 exact orthogonalization breaks within-donor ATAC shuffle exchangeability; rho=0 PAIRING_POSITIVE consistent with broken null",
+      "evidence": [
+        "NULL_AUDIT.md",
+        "null_audit.json",
+        "NULL_INVARIANCE_DIAGNOSTIC.json"
+      ],
+      "would_change_conclusion": "Exchangeable rho=0 generator still yielding pairing CI lower >0 after complete coverage"
+    },
+    {
+      "rank": 2,
+      "cause_class": "missing_provenance_review_coverage",
+      "partition": "learned_model_inadequacy_process",
+      "strength": "ESTABLISHED_PROCESS_GAP_LOW_CAUSAL",
+      "summary": "Q10 executor outside Q9 REVIEWED_HASHES; checkpoints lack learning history",
+      "evidence": ["S9_AUDIT.md", "s9_audit.json"],
+      "would_change_conclusion": "Full-path review of executor plus persisted learning histories on new protocol"
+    },
+    {
+      "rank": 3,
+      "cause_class": "uncertain_optimization",
+      "partition": "learned_model_inadequacy",
+      "strength": "PARTIAL",
+      "summary": "Cannot establish under-training from state_dict-only checkpoints and short fit totals",
+      "evidence": ["S9_AUDIT.md"],
+      "would_change_conclusion": "Epoch/learning histories with initial-state hashes"
+    },
+    {
+      "rank": 4,
+      "cause_class": "concurrent_rng_ledger_accounting",
+      "partition": "learned_model_inadequacy_execution",
+      "strength": "CODE_PATH_EXISTS_EFFECT_UNCONFIRMED",
+      "summary": "ThreadPoolExecutor x set_all_seeds path exists; R3 NO_DIVERGENCE_OBSERVED_UNDER_SPEC; no per-job reserve",
+      "evidence": ["EXECUTION_AUDIT.md", "execution_audit.json"],
+      "would_change_conclusion": "Confirmed serial-vs-thread divergence on reviewed larger diagnostic"
+    },
+    {
+      "rank": 5,
+      "cause_class": "finite_sample_unimodal_ba_leak_inference",
+      "partition": "null_invalidity_or_leak_unresolved",
+      "strength": "UNRESOLVED_LEAK_NOT_ESTABLISHED",
+      "summary": "Single positive 95% null CI and marginal BA are not proof of leak",
+      "evidence": ["NULL_AUDIT.md", "S9_AUDIT.md"],
+      "would_change_conclusion": "Valid exchangeable null plus repeated independent draws"
+    },
+    {
+      "rank": 6,
+      "cause_class": "learned_model_architecture_inadequacy",
+      "partition": "learned_model_inadequacy",
+      "strength": "NOT_ESTABLISHED",
+      "summary": "No measured architecture defect; biological ladder B_NULL is a separate estimand",
+      "evidence": ["GUIDANCE_AND_CLAIMS.md"],
+      "would_change_conclusion": "Persistent rho=0 INVALID under corrected exchangeable null with optimization provenance"
+    },
+    {
+      "rank": 7,
+      "cause_class": "dataset_inadequacy",
+      "partition": "dataset_task_inadequacy",
+      "strength": "NOT_ESTABLISHED_INGESTION_BLOCKED",
+      "summary": "Structural matrices PASS; dataset change forbidden from null alone; no <=256 MiB public candidate ready",
+      "evidence": ["TASK_DATA_OPTIONS.md", "task_data_options.json"],
+      "would_change_conclusion": "Measured limitation addressed by feasible pinned <=256 MiB object or costed larger proposal"
+    },
+    {
+      "rank": 8,
+      "cause_class": "task_endpoint_claim4_biology",
+      "partition": "dataset_task_inadequacy",
+      "strength": "ESTABLISHED_BLOCKER_L4_ONLY",
+      "summary": "Q2 ENDPOINT_UNRESOLVED blocks claim-4 biology only",
+      "evidence": ["GUIDANCE_AND_CLAIMS.md"],
+      "would_change_conclusion": "Independent orthogonal cell-state assay"
+    }
+  ],
+  "chosen_experiment": {
+    "experiment_id": "S10_corrected_null_pairing_use_20261001",
+    "kind": "corrected_software_null_reproducibility_test",
+    "claim_level": 1,
+    "route": "corrected_software_null_reproducibility_test",
+    "null_candidate_id": "independent_gaussian_rho0_within_donor_shuffle_20261001",
+    "null_change": "centre_scaled_independent_gaussians_rho0_without_exact_orthogonalization",
+    "estimand": "CA donor log-loss drop under within-donor ATAC shuffle at rho=1 with exchangeable rho=0 fitted null gate",
+    "arms": [
+      "cross_attention",
+      "token_concat",
+      "rna_atac_concat",
+      "gated_fusion",
+      "logreg_concat",
+      "logreg_rna",
+      "logreg_atac"
+    ],
+    "n_arms": 7,
+    "coverage": {
+      "smoke": 7,
+      "screen_rho0": 21,
+      "screen_rho1": 21,
+      "planned_scientific_fits": 49,
+      "scientific_fit_cap": 90,
+      "headroom": 41,
+      "arithmetic": "7 + 7*3 + 7*3 = 49"
+    },
+    "execution": {
+      "workers": 1,
+      "torch_threads": 2,
+      "parallel_scientific_dispatch": false,
+      "rationale": "PLAN default serial until isolation proven; R3 race unconfirmed"
+    },
+    "acquisition_mib": 0,
+    "payload_downloads": 0,
+    "smallest_useful_result": [
+      "VALID rho=0 null gate under corrected exchangeable null with complete 49-fit coverage",
+      "rho=1 PAIRING_POSITIVE with marginal gate PASS under corrected generator"
+    ],
+    "inference_limitations": [
+      "claim_level_1_software_only",
+      "does_not_overturn_historical_s9_INVALID",
+      "fit_feasibility_is_not_established_power",
+      "not_biology_not_dataset_defect_proof"
+    ],
+    "effect_assumptions_before_outcomes": [
+      "planted_rho_controls_within_cell_covariance_only",
+      "unimodal_planted_channels_label_blind_by_construction",
+      "under_exchangeable_rho0_null_CA_pairing_CI_lower_leq_0_expected_for_VALID"
+    ],
+    "forbidden": [
+      "s9_rescue",
+      "seed_shopping",
+      "outcome_driven_threshold_change",
+      "biology_upgrade",
+      "nemo_development_use"
+    ]
+  },
+  "rejected_alternatives": [
+    {
+      "id": "current_paired_masked_atac_from_rna_20261001",
+      "route": "current_data_computational_pilot",
+      "reason": "Feasible claim-2 but does not resolve established null invalidity; deferred not combined"
+    },
+    {
+      "id": "bounded_new_dataset_ingestion",
+      "route": "bounded_new_dataset_ingestion_pilot",
+      "reason": "No <=256 MiB ready candidate; NeMO preserved; dataset change forbidden from null alone"
+    },
+    {
+      "id": "biological_cell_state_pilot",
+      "reason": "Q2 ENDPOINT_UNRESOLVED blocks claim-4"
+    },
+    {
+      "id": "s9_relaunch_or_gate_widen",
+      "reason": "PLAN forbids; prior INVALID immutable"
+    },
+    {
+      "id": "paper_only_closeout",
+      "reason": "PLAN forbids choosing paper-only by default"
+    },
+    {
+      "id": "runner_rewrite_unconfirmed_rng_race",
+      "reason": "R3 no confirmed divergence; serial default sufficient"
+    }
+  ],
+  "budget_ledger_path": "BUDGET_LEDGER.md",
+  "prior_evidence_cited": [
+    "NULL_AUDIT.md",
+    "EXECUTION_AUDIT.md",
+    "GUIDANCE_AND_CLAIMS.md",
+    "TASK_DATA_OPTIONS.md",
+    "S9_AUDIT.md",
+    "../next_stage_20260930/SYNTHETIC_PROTOCOL.md"
+  ]
+}

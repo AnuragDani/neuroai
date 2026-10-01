@@ -1,0 +1,60 @@
+{
+  "task": "R6",
+  "experiment_id": "S10_corrected_null_pairing_use_20261001",
+  "recorded_date": "2026-10-01",
+  "recorded_utc": "2026-10-01T08:44Z",
+  "fit_feasibility": "PASS",
+  "r6_consumption": {
+    "scientific_fits": 0,
+    "diagnostic_fits": 0,
+    "payload_mib": 0,
+    "generator_draws": 0
+  },
+  "stage_cumulative_before_r7": {
+    "generator_only_draws": 81,
+    "generator_only_cap": 256,
+    "generator_remaining": 175,
+    "diagnostic_fit_attempts": 12,
+    "diagnostic_fit_cap": 12,
+    "diagnostic_remaining": 0,
+    "scientific_fit_attempts": 0,
+    "scientific_fit_cap": 90,
+    "scientific_remaining": 90,
+    "fitting_hours": 0.0002197239352770137,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib": 0.0,
+    "artifact_gib_cap": 4.0,
+    "network_metadata_bytes_r5": 927209,
+    "network_metadata_requests_r5": 20,
+    "network_payload_mib": 0,
+    "network_payload_cap_mib": 256,
+    "counter_path": "reports/generated/nn_failure_audit_20261001/attempt_counter.json"
+  },
+  "planned_selected_experiment": {
+    "smoke": 7,
+    "screen_rho0": 21,
+    "screen_rho1": 21,
+    "planned_scientific_fits": 49,
+    "arithmetic": "7 + 7*3 + 7*3 = 49",
+    "headroom_vs_scientific_cap": 41,
+    "planned_diagnostic_fits": 0,
+    "recommended_r7_generator_draws_max": 64,
+    "workers": 1,
+    "torch_threads": 2,
+    "payload_mib": 0,
+    "fitting_hours_cap_applies": 6.0,
+    "artifact_gib_cap_applies": 4.0
+  },
+  "checks": {
+    "scientific_49_le_90": true,
+    "diagnostic_0_le_0_remaining": true,
+    "payload_0_le_256": true,
+    "serial_default": true,
+    "power_established": false
+  },
+  "concrete_missing_if_dataset_route": {
+    "needed": "pinned_public_multimodal_ds_object_le_256_mib_with_resolved_qc_specimen_feature",
+    "current_blocker_example": "NeMO ATAC counts package ~1.4G exceeds 256 MiB ceiling",
+    "action": "costed_larger_download_proposal_not_this_experiment"
+  }
+}
