@@ -1,8 +1,12 @@
 # P22 current status
 
-Updated: 2026-09-29. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
+Updated: 2026-09-30. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
+
+## Professor-direction continuation — NO FIT closeout — 2026-09-30
+
+Ordered continuation `CONTINUATION_20260930` finished on local branch `gnhf/read-users-anuragdan-b61180` with scientific label **`NO FIT`**. C0–C2 complete; C3–C5 skipped (I2 control-design FAIL). Lane B S8 draft rejected for invalid chance-null calibration (constant/Bernoulli band does not match fitted seven-arm pooled-BA). Chosen path: **bounded internal null / detectability paper (F4)**. No S8 freeze, no synthetic fits (budget 0), no `nn_s8_*` root, no real-label refit, no external acquisition, no push/merge/vault/packet/MOM edit. Old S7-v1/v2 remain **`INVALID`**; primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [HANDOFF](tasks/nn/professor_direction_investigation_20260929/continuation/HANDOFF.md); [DECISION](tasks/nn/professor_direction_investigation_20260929/continuation/DECISION.md); [Lane A recovery](tasks/nn/professor_direction_investigation_20260929/continuation/LANE_A_RECOVERY.md); [PREFLIGHT](tasks/nn/professor_direction_investigation_20260929/continuation/PREFLIGHT.md). Local only — not pushed.
 
 ## S7-v2 complete — INVALID handoff — 2026-09-29
 
@@ -56,10 +60,11 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. S7-v2 handoff complete (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
-2. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
-3. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
-4. Follow-up decision only: bounded internal paper versus later external validation (T13); do not execute external validation from this status.
+1. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Write bounded internal null/detectability paper (F4) as a separate writing milestone; do not search for a positive synthetic remake.
+2. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
+3. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
+4. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
+5. External validation (T13) remains deferred; NeMO blockers unchanged; do not execute acquisition from this status.
 
 ## Status maintenance
 
