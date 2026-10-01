@@ -1,0 +1,142 @@
+{
+  "task": "R5",
+  "disposition": "TASK_DATA_OPTIONS_BOUNDED",
+  "recorded_date": "2026-10-01",
+  "recorded_utc": "2026-10-01T08:39:57Z",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "research_fits": 0,
+  "diagnostic_fits": 0,
+  "payload_downloads": 0,
+  "scientific_labels_retained": {
+    "primary": "B_NULL",
+    "s9": "INVALID",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "study": "STUDY_PARTIAL"
+  },
+  "network": {
+    "new_requests": 20,
+    "aggregate_new_download_bytes": 927209,
+    "budget_ceiling_bytes": 33554432,
+    "budget_ceiling_requests": 20,
+    "ledger_path": "reports/generated/nn_failure_audit_20261001/r5_network_ledger.jsonl",
+    "excerpts_dir": "reports/generated/nn_failure_audit_20261001/r5_source_excerpts",
+    "notes": [
+      "GEO HTML acc.cgi pages returned reCAPTCHA challenge bodies (HTTP 200) — not treated as series metadata",
+      "GEO form=text briefs supplied real !Series_* records",
+      "SciAdv doi.org returned HTTP 403; abstract recovered via PubMed PMID 37824614 and EuropePMC",
+      "No matrix/fragment payloads fetched"
+    ]
+  },
+  "current_data_repair": {
+    "rare_type_support": "REPAIRED_Q4",
+    "structural_paired_matrices": "PASS",
+    "independent_cell_state_endpoint": "ENDPOINT_UNRESOLVED",
+    "software_null_exchangeability": "DEFECT_MEASURED_R2",
+    "dataset_defect_from_ds_null": "FORBIDDEN",
+    "h5ad_path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "h5ad_exists": true,
+    "conclusion": "Current paired cohort usable for claim-1 software repair and claim-2 masked/pairing tasks; claim-4 biology blocked"
+  },
+  "masked_measurement_task": {
+    "id": "current_paired_masked_atac_from_rna_20261001",
+    "claim_level": 2,
+    "status": "FEASIBLE_CANDIDATE",
+    "estimand": "Predict held-out measured ATAC region counts from RNA under donor-held-out splits; not biological state truth",
+    "independent_donors": true,
+    "paired_assays": true,
+    "objective_target_validity": "measured_atac_regions_held_out_by_construction",
+    "leakage_risks": [
+      "held_out_regions_present_in_inputs",
+      "gene_activity_overlap_with_held_out_peaks",
+      "rna_derived_labels_as_targets",
+      "train_transforms_on_test_donors"
+    ],
+    "feature_count_compatibility": "current_exact_465_region_union_structurally_pass",
+    "metadata_payload_sizes": "no_new_payload_local_h5ad_present",
+    "reuse_access": "existing_public_paired_attestation_scope",
+    "evidence_status": "candidate_for_R6_not_protocol_frozen"
+  },
+  "public_candidates": [
+    {
+      "id": "NeMO_Vuong_delaTorre_DS_snMultiome",
+      "role": "external_confirmatory_test",
+      "nemo_evaluation_role": "PRESERVED",
+      "nemo_switched_to_development": false,
+      "independent_donors": "reported_26_q5_metadata; provider_separation_no_overlap_not_certified",
+      "paired_assays": true,
+      "objective_target_validity": "specimen_DS_possible; no_independent_cell_state_assay",
+      "leakage_risks": ["development_use_forfeits_external_role"],
+      "feature_count_compatibility": "UNRESOLVED_vs_465_union",
+      "metadata_payload_sizes": {
+        "atac_counts_listing_label": "1.4G",
+        "prior_declared_bytes": 1540753269,
+        "filename": "VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz",
+        "exceeds_256mib_ceiling": true
+      },
+      "reuse_access": "public_nemo; qc_specimen_feature_UNRESOLVED_q5",
+      "evidence_status": "EXTERNAL_FEASIBILITY_BOUNDED_UNRESOLVED",
+      "addresses_measured_limitation": false,
+      "fresh_sources": [
+        "https://assets.nemoarchive.org/col-umstjg0",
+        "https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/"
+      ]
+    },
+    {
+      "id": "GSE280175",
+      "role": "RNA_only_DS_orthogonal_check",
+      "status": "EXPLORATORY_ONLY",
+      "independent_donors": "gds_n_samples_10; exact_donor_table_not_re_derived",
+      "paired_assays": false,
+      "gdstype": "Expression profiling by high throughput sequencing",
+      "objective_target_validity": "DS_prenatal_brain_rna; no_same_nucleus_ATAC",
+      "leakage_risks": ["cannot_close_multimodal_external_eval"],
+      "feature_count_compatibility": "rna_only_not_applicable_to_paired_atac_contract",
+      "metadata_payload_sizes": "unknown_not_fetched",
+      "reuse_access": "public_geo",
+      "geo_metadata_inconsistency": "Series_overall_design mentions Slide-seq n=3+3 while title/type indicate snRNA-seq Series",
+      "evidence_status": "EXPLORATORY_ONLY",
+      "fresh_sources": [
+        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE280175&targ=self&form=text&view=brief",
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gds&id=200280175&retmode=json",
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41027953&rettype=abstract&retmode=text",
+        "https://www.nature.com/articles/s41467-025-63752-0"
+      ]
+    },
+    {
+      "id": "GSE204684",
+      "role": "general_cortex_multiome_pretraining_candidate",
+      "status": "EXPLORATORY_ONLY",
+      "independent_donors": "gds_n_samples_24_superseries",
+      "paired_assays": true,
+      "gdstype": "Expression profiling by high throughput sequencing; Genome binding/occupancy profiling by high throughput sequencing",
+      "subseries": ["GSE204682", "GSE204683"],
+      "objective_target_validity": "no_DS_versus_euploid_design; neuropsychiatric_trait_loci_only",
+      "leakage_risks": ["cannot_validate_current_DS_specimen_classifier"],
+      "feature_count_compatibility": "unknown_without_payload_common_region_contract",
+      "metadata_payload_sizes": "unknown_not_fetched",
+      "reuse_access": "public_geo; sciadv_doi_html_403_this_run",
+      "evidence_status": "EXPLORATORY_ONLY",
+      "fresh_sources": [
+        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE204684&targ=self&form=text&view=brief",
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gds&id=200204684&retmode=json",
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37824614&rettype=abstract&retmode=text",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:37824614&format=json&resultType=core"
+      ]
+    }
+  ],
+  "constraints_for_r6": {
+    "dataset_change_from_null_alone": "forbidden",
+    "nemo_external_test_role": "preserved",
+    "claim2_masked_task_rankable": true,
+    "claim1_corrected_null_rankable": true,
+    "public_candidate_ready_for_256mib_predictive_ingestion": false,
+    "claim4_biology_current_inputs": "blocked",
+    "experiment_selected_in_r5": false
+  },
+  "prior_evidence_cited": [
+    "tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/SAMPLING_FEASIBILITY.md",
+    "tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/EXTERNAL_FEASIBILITY.md",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/NULL_AUDIT.md",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md"
+  ]
+}
