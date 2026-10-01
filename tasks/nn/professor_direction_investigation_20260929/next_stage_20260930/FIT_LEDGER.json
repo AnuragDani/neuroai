@@ -1,0 +1,98 @@
+{
+  "synthetic_attempt_cap": 60,
+  "synthetic_fitting_hours_cap": 4,
+  "synthetic_artifact_gib_cap": 2,
+  "workers": 2,
+  "torch_threads_per_worker": 2,
+  "candidates": [
+    {
+      "id": "rejected_s8_chance_null_relaunch",
+      "status": "REJECT",
+      "attempted_fits": 119,
+      "cap": 60,
+      "fits_within_cap": false,
+      "null_valid": false,
+      "reason": "Prior S8 draft smoke14+screen105=119>60; chance/Bernoulli BA band is mechanism-mismatched for fitted seven-arm pooled BA (exact-band correction does not rehabilitate it)."
+    },
+    {
+      "id": "s7_shaped_5fold_3rho_7arm",
+      "status": "REJECT",
+      "attempted_fits": 119,
+      "cap": 60,
+      "fits_within_cap": false,
+      "null_valid": "unspecified",
+      "reason": "Smoke14+screen105 exceeds synthetic cap 60 before any new calibration."
+    },
+    {
+      "id": "decision_5fold_2rho_7arm_plus_smoke",
+      "status": "REJECT",
+      "attempted_fits": 77,
+      "breakdown": {
+        "smoke": 7,
+        "screen": 70,
+        "pairing": 0
+      },
+      "cap": 60,
+      "fits_within_cap": false,
+      "reason": "7 arms \u00d7 5 folds \u00d7 2 rho = 70 plus smoke 7 = 77 > 60."
+    },
+    {
+      "id": "fitted_ba_montecarlo_joint_calibration",
+      "status": "DESIGN_UNRESOLVED",
+      "attempted_fits_lower_bound": 280,
+      "cap": 60,
+      "fits_within_cap": false,
+      "null_valid": "would_be_if_budgeted",
+      "reason": "R\u226520 independent complete-pipeline null replicates for a joint seven-arm fitted BA critical value at even 2 folds is \u2265280 fits, far above 60. Do not shrink joint calibration or relax thresholds to unlock fits."
+    },
+    {
+      "id": "selected_pairing_use_fitted_plant_null",
+      "status": "SELECT",
+      "attempted_fits": 49,
+      "breakdown": {
+        "smoke_fold0_rho1": 7,
+        "screen_rho0": 21,
+        "screen_rho1": 21,
+        "pairing_interventions": 0,
+        "total": 49
+      },
+      "design": {
+        "arms": [
+          "cross_attention",
+          "token_concat",
+          "rna_atac_concat",
+          "gated_fusion",
+          "logreg_concat",
+          "logreg_rna",
+          "logreg_atac"
+        ],
+        "n_arms": 7,
+        "n_folds": 3,
+        "rhos": [
+          0.0,
+          1.0
+        ],
+        "primary_statistic": "donor log-loss drop under within-donor ATAC shuffle at rho=1 (CA); 95% CI lower > 0 for PAIRING_POSITIVE",
+        "fitted_mechanism_null": "same fitted pipeline and pairing intervention at rho=0 must not yield PAIRING_POSITIVE (CI lower <= 0)",
+        "joint_rule": "all seven arms must complete smoke+screen coverage before interpreting pairing; advantage contrast CA\u2212concat is separately labelled and non-primary; no chance/Bernoulli BA band",
+        "fold_rationale": "Prospective F=3 for analytic synthetic software/mechanism detectability of a planted pairing signal \u2014 not biological power and not a post-hoc shrink of a frozen 5-fold disease protocol",
+        "oracle": "analytic / non-learned target confirming planted pairing exists and shuffle destroys it",
+        "calibration_decision": "rho plants and seeds fixed before results; no outcome-guided band shopping; disjoint from any optional robustness seed in headroom"
+      },
+      "cap": 60,
+      "fitting_hours_cap": 4,
+      "artifact_gib_cap": 2,
+      "fits_within_cap": true,
+      "headroom_fits": 11,
+      "null_valid": "prospective_pairing_plant_null_not_chance_ba",
+      "reason": "49 \u2264 60 attempts with seven equally supervised arms, fitted rho=0 pairing null matching the tested pairing mechanism, and no chance-predictor BA calibration."
+    }
+  ],
+  "selected_candidate_id": "selected_pairing_use_fitted_plant_null",
+  "selected_attempted_fits": 49,
+  "fit_feasibility": "PASS",
+  "design_unresolved_paths": [
+    "fitted_ba_montecarlo_joint_calibration"
+  ],
+  "note": "Fitted BA Monte Carlo joint calibration remains DESIGN_UNRESOLVED under the cap and is not selected. Selected path uses pairing-plant null instead."
+}

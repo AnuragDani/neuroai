@@ -1,0 +1,372 @@
+{
+  "task": "Q6",
+  "disposition": "EXPERIMENT_SELECTED",
+  "fit_feasibility": "PASS",
+  "date": "2026-09-30",
+  "branch": "gnhf/execute-the-p22-data-146414",
+  "fits": 0,
+  "predictions": null,
+  "network_bytes": 0,
+  "bottlenecks": [
+    {
+      "id": "task_endpoint",
+      "rank_label": "established",
+      "summary": "No independently measured cell-state/maturation endpoint orthogonal to NN RNA inputs.",
+      "supporting_evidence": [
+        "Q2 disposition ENDPOINT_UNRESOLVED",
+        "H5AD lacks continuous pseudotime/maturation fields",
+        "author_cell_type/SCT clusters are RNA-derived from the same Gene Expression modality"
+      ],
+      "contradicting_evidence": [
+        "Specimen disease/group remains a valid non-state primary endpoint (already used; B_NULL)"
+      ],
+      "blocks": [
+        "biological_cell_state_pilot",
+        "Q11_real_pilot_unless_new_endpoint"
+      ]
+    },
+    {
+      "id": "implementation_optimization_control",
+      "rank_label": "established",
+      "summary": "S7-v1/v2 INVALID and prior S8 NO FIT leave pairing-use / fitted-null software control unresolved; July 21 discriminating multimodal benchmark vs concat remains open.",
+      "supporting_evidence": [
+        "S7-v2 rho-0 pooled null FAIL; pairing-PC PC_FAIL",
+        "Prior S8 chance-null rejected for mechanism mismatch (exact-band correction below)",
+        "PLAN D3 / July 21 MOM 14:02\u201317:39 request a discriminating benchmark with concat baseline"
+      ],
+      "contradicting_evidence": [
+        "Primary ladder_v3 verifier PASS with B_NULL does not by itself prove software failure"
+      ],
+      "blocks": []
+    },
+    {
+      "id": "sampling_support",
+      "rank_label": "plausible_resolved_for_support",
+      "summary": "Targeted sampling restores rare-type support; eligibility frozen; not every-fold feasible for MIC/OPC.",
+      "supporting_evidence": [
+        "Q4 disposition SUPPORT_REPAIR_PASS; eligibility ELIGIBILITY_FROZEN",
+        "MIC/OPC/VASC selected \u226520 restored to available counts under cap64/seed22"
+      ],
+      "contradicting_evidence": [
+        "Restored support \u2260 biological signal; power POWER_UNESTABLISHED",
+        "MIC/OPC remain non-split-feasible under frozen 5\u00d75 both-class-every-fold rule"
+      ],
+      "blocks": []
+    },
+    {
+      "id": "atac_regulatory_coverage",
+      "rank_label": "plausible_structural_unknown_regulatory",
+      "summary": "Structural 25-panel coverage PASS; regulatory adequacy unresolved without element catalog.",
+      "supporting_evidence": [
+        "Q3 structural STRUCTURAL_COVERAGE_PASS / regulatory REGULATORY_ADEQUACY_UNRESOLVED",
+        "Exact counted 465-region union present; fold-0/repeat-0 replay matched"
+      ],
+      "contradicting_evidence": [
+        "Gene-body/flank overlaps are descriptive only",
+        "Cannot authorize biological regulatory-feature claims"
+      ],
+      "blocks": [
+        "biological_regulatory_feature_claim"
+      ]
+    },
+    {
+      "id": "donor_count_power",
+      "rank_label": "established_limit_unknown_cause",
+      "summary": "30 donors / 15+15 limits replication; cell count \u2260 donor count; power unestablished.",
+      "supporting_evidence": [
+        "DATA_DIAGNOSTIC / Q4: 30 donors; practical_margin 0.07 at 15+15",
+        "detectability min_detectable_delta=null; POWER_UNESTABLISHED"
+      ],
+      "contradicting_evidence": [
+        "Null result alone does not prove donor-count is the binding cause"
+      ],
+      "blocks": [
+        "equivalence_or_power_claim"
+      ]
+    },
+    {
+      "id": "external_confirmatory",
+      "rank_label": "unknown_unresolved",
+      "summary": "NeMO confirmatory evaluation unresolved (QC/specimen/feature); role preserved.",
+      "supporting_evidence": [
+        "Q5 disposition EXTERNAL_FEASIBILITY_BOUNDED; confirmatory UNRESOLVED",
+        "Age conventions + source declaration ACCEPTED; 0 new network bytes"
+      ],
+      "contradicting_evidence": [
+        "Empty donor-ID overlap is not certified specimen independence"
+      ],
+      "blocks": [
+        "external_predictive_evaluation",
+        "payload_download_this_run"
+      ]
+    }
+  ],
+  "s8_numerical_correction": {
+    "source_donor_predictions": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/nn_s7_covariance_split_v2_20260929/donor_predictions",
+    "label_vector": {
+      "n0": 16,
+      "n1": 14,
+      "n": 30
+    },
+    "bernoulli_mc": {
+      "predictor": "Bernoulli-0.5 hard labels",
+      "draws": 10000,
+      "seed": 0,
+      "exact_central_95": [
+        0.32589285714285715,
+        0.6741071428571428
+      ],
+      "rounded_3dp_central_95": [
+        0.326,
+        0.674
+      ]
+    },
+    "exact_pooled_rho0_bas": {
+      "cross_attention": 0.35714285714285715,
+      "token_concat": 0.33035714285714285,
+      "rna_atac_concat": 0.35714285714285715,
+      "gated_fusion": 0.32589285714285715,
+      "logreg_concat": 0.38839285714285715,
+      "logreg_rna": 0.35714285714285715,
+      "logreg_atac": 0.4419642857142857
+    },
+    "boundary_case": {
+      "arm": "gated_fusion",
+      "exact_pooled_ba": 0.32589285714285715,
+      "reported_6dp_in_prior_review": 0.325893,
+      "equals_exact_lo": true,
+      "inside_exact_band": true,
+      "inside_rounded_band_3dp": false,
+      "correction": "Rounded endpoints [0.326, 0.674] incorrectly exclude gated_fusion exact BA 0.32589285714285715, which sits exactly on the Bernoulli 2.5% quantile 0.32589285714285715. Exact band classification must be used."
+    },
+    "token_concat": {
+      "exact_pooled_ba": 0.33035714285714285,
+      "inside_exact_band": true,
+      "inside_rounded_band_3dp": true
+    },
+    "illustrative_claim_with_exact_values": {
+      "all_seven_arms_inside_exact_chance_band": true,
+      "arms": [
+        {
+          "arm": "cross_attention",
+          "exact_pooled_ba": 0.35714285714285715,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.03125
+        },
+        {
+          "arm": "token_concat",
+          "exact_pooled_ba": 0.33035714285714285,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.004464285714285698
+        },
+        {
+          "arm": "rna_atac_concat",
+          "exact_pooled_ba": 0.35714285714285715,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.03125
+        },
+        {
+          "arm": "gated_fusion",
+          "exact_pooled_ba": 0.32589285714285715,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": false,
+          "delta_vs_exact_lo": 0.0
+        },
+        {
+          "arm": "logreg_concat",
+          "exact_pooled_ba": 0.38839285714285715,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.0625
+        },
+        {
+          "arm": "logreg_rna",
+          "exact_pooled_ba": 0.35714285714285715,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.03125
+        },
+        {
+          "arm": "logreg_atac",
+          "exact_pooled_ba": 0.4419642857142857,
+          "inside_exact_band": true,
+          "inside_rounded_band_3dp": true,
+          "delta_vs_exact_lo": 0.11607142857142855
+        }
+      ],
+      "retained_conclusion": "Under the exact Bernoulli central 95% band, every S7-v2 rho=0 pooled BA (including token_concat and gated_fusion) falls inside. Adopting that chance band after seeing the frozen [0.35,0.65] failures remains an outcome-guided relaxation. Mechanism mismatch alone still rejects chance predictors as a fitted-model null."
+    },
+    "mechanism_mismatch_retained": true,
+    "unsupported_rounded_argument_removed": true,
+    "prior_s8_no_fit_unchanged": true
+  },
+  "chosen_experiment": {
+    "experiment_id": "S9_analytic_pairing_use_synthetic_20260930",
+    "kind": "analytic_synthetic_pairing_use_software_control",
+    "plan_ref": "PLAN D3 / Q6\u2013Q7",
+    "professor_ref": "July 21 MOM 14:02\u201317:39 discriminating multimodal benchmark + concat baseline; 03:40 stratified/donor sampling already audited in Q4",
+    "what_result_would_change": "PAIRING_POSITIVE under valid rho=0 null + oracle PASS would support that the CA implementation can use planted within-cell pairing on this generator/budget; PAIRING_NEGATIVE / oracle-fail / INVALID would direct repair of representation/optimization before new disease data or pilots.",
+    "what_remains_unidentified": [
+      "Biological cell-state endpoint (Q2 ENDPOINT_UNRESOLVED)",
+      "Regulatory-element adequacy (Q3 REGULATORY_ADEQUACY_UNRESOLVED)",
+      "NeMO confirmatory QC/specimen/feature (Q5 UNRESOLVED)",
+      "Biological power / min_detectable_delta (POWER_UNESTABLISHED)"
+    ],
+    "fit_candidate_id": "selected_pairing_use_fitted_plant_null",
+    "attempted_fits": 49
+  },
+  "rejected_alternatives": [
+    {
+      "id": "biological_cell_state_pilot",
+      "reason": "Q2 ENDPOINT_UNRESOLVED; Checkpoint A forbids unlocking biological cell-state fits"
+    },
+    {
+      "id": "targeted_sampling_full_ladder_rerun",
+      "reason": "Q4 repaired support but endpoint/power gates fail; PLAN forbids full-ladder rerun merely for more cells"
+    },
+    {
+      "id": "atac_regulatory_representation_pilot",
+      "reason": "Q3 regulatory adequacy unresolved; structural coverage PASS does not authorize a biological regulatory claim; endpoint still unresolved"
+    },
+    {
+      "id": "external_nemo_acquisition_or_predictive_eval",
+      "reason": "Q5 confirmatory UNRESOLVED; payload ~1.54 GiB out of budget; NeMO evaluation role PRESERVED"
+    },
+    {
+      "id": "relaunch_rejected_s8_chance_null",
+      "reason": "Prior NO FIT preserved; chance-null mechanism mismatch retained after exact-band correction; budget 119>60"
+    },
+    {
+      "id": "new_real_label_ca_advantage_same_30_donors",
+      "reason": "Primary already B_NULL; POWER_UNESTABLISHED; between-model gap small vs practical_margin"
+    },
+    {
+      "id": "paper_only_closeout_as_this_experiments_destination",
+      "reason": "Bounded null paper remains valid later writing path but is not the predetermined destination of Q0\u2013Q12"
+    }
+  ],
+  "fit_ledger": {
+    "synthetic_attempt_cap": 60,
+    "synthetic_fitting_hours_cap": 4,
+    "synthetic_artifact_gib_cap": 2,
+    "workers": 2,
+    "torch_threads_per_worker": 2,
+    "candidates": [
+      {
+        "id": "rejected_s8_chance_null_relaunch",
+        "status": "REJECT",
+        "attempted_fits": 119,
+        "cap": 60,
+        "fits_within_cap": false,
+        "null_valid": false,
+        "reason": "Prior S8 draft smoke14+screen105=119>60; chance/Bernoulli BA band is mechanism-mismatched for fitted seven-arm pooled BA (exact-band correction does not rehabilitate it)."
+      },
+      {
+        "id": "s7_shaped_5fold_3rho_7arm",
+        "status": "REJECT",
+        "attempted_fits": 119,
+        "cap": 60,
+        "fits_within_cap": false,
+        "null_valid": "unspecified",
+        "reason": "Smoke14+screen105 exceeds synthetic cap 60 before any new calibration."
+      },
+      {
+        "id": "decision_5fold_2rho_7arm_plus_smoke",
+        "status": "REJECT",
+        "attempted_fits": 77,
+        "breakdown": {
+          "smoke": 7,
+          "screen": 70,
+          "pairing": 0
+        },
+        "cap": 60,
+        "fits_within_cap": false,
+        "reason": "7 arms \u00d7 5 folds \u00d7 2 rho = 70 plus smoke 7 = 77 > 60."
+      },
+      {
+        "id": "fitted_ba_montecarlo_joint_calibration",
+        "status": "DESIGN_UNRESOLVED",
+        "attempted_fits_lower_bound": 280,
+        "cap": 60,
+        "fits_within_cap": false,
+        "null_valid": "would_be_if_budgeted",
+        "reason": "R\u226520 independent complete-pipeline null replicates for a joint seven-arm fitted BA critical value at even 2 folds is \u2265280 fits, far above 60. Do not shrink joint calibration or relax thresholds to unlock fits."
+      },
+      {
+        "id": "selected_pairing_use_fitted_plant_null",
+        "status": "SELECT",
+        "attempted_fits": 49,
+        "breakdown": {
+          "smoke_fold0_rho1": 7,
+          "screen_rho0": 21,
+          "screen_rho1": 21,
+          "pairing_interventions": 0,
+          "total": 49
+        },
+        "design": {
+          "arms": [
+            "cross_attention",
+            "token_concat",
+            "rna_atac_concat",
+            "gated_fusion",
+            "logreg_concat",
+            "logreg_rna",
+            "logreg_atac"
+          ],
+          "n_arms": 7,
+          "n_folds": 3,
+          "rhos": [
+            0.0,
+            1.0
+          ],
+          "primary_statistic": "donor log-loss drop under within-donor ATAC shuffle at rho=1 (CA); 95% CI lower > 0 for PAIRING_POSITIVE",
+          "fitted_mechanism_null": "same fitted pipeline and pairing intervention at rho=0 must not yield PAIRING_POSITIVE (CI lower <= 0)",
+          "joint_rule": "all seven arms must complete smoke+screen coverage before interpreting pairing; advantage contrast CA\u2212concat is separately labelled and non-primary; no chance/Bernoulli BA band",
+          "fold_rationale": "Prospective F=3 for analytic synthetic software/mechanism detectability of a planted pairing signal \u2014 not biological power and not a post-hoc shrink of a frozen 5-fold disease protocol",
+          "oracle": "analytic / non-learned target confirming planted pairing exists and shuffle destroys it",
+          "calibration_decision": "rho plants and seeds fixed before results; no outcome-guided band shopping; disjoint from any optional robustness seed in headroom"
+        },
+        "cap": 60,
+        "fitting_hours_cap": 4,
+        "artifact_gib_cap": 2,
+        "fits_within_cap": true,
+        "headroom_fits": 11,
+        "null_valid": "prospective_pairing_plant_null_not_chance_ba",
+        "reason": "49 \u2264 60 attempts with seven equally supervised arms, fitted rho=0 pairing null matching the tested pairing mechanism, and no chance-predictor BA calibration."
+      }
+    ],
+    "selected_candidate_id": "selected_pairing_use_fitted_plant_null",
+    "selected_attempted_fits": 49,
+    "fit_feasibility": "PASS",
+    "design_unresolved_paths": [
+      "fitted_ba_montecarlo_joint_calibration"
+    ],
+    "note": "Fitted BA Monte Carlo joint calibration remains DESIGN_UNRESOLVED under the cap and is not selected. Selected path uses pairing-plant null instead."
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL"
+  },
+  "unresolved_flags_retained": [
+    "ENDPOINT_UNRESOLVED",
+    "REGULATORY_ADEQUACY_UNRESOLVED",
+    "EXTERNAL_FEASIBILITY_BOUNDED/confirmatory UNRESOLVED",
+    "POWER_UNESTABLISHED"
+  ],
+  "q_report_dispositions": {
+    "q2": "ENDPOINT_UNRESOLVED",
+    "q3": "REGULATORY_ADEQUACY_UNRESOLVED",
+    "q3_structural": "STRUCTURAL_COVERAGE_PASS",
+    "q4": "SUPPORT_REPAIR_PASS",
+    "q4_eligibility": "ELIGIBILITY_FROZEN",
+    "q5": "EXTERNAL_FEASIBILITY_BOUNDED",
+    "q5_confirmatory": "UNRESOLVED"
+  }
+}
