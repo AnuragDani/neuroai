@@ -4,6 +4,10 @@ Updated: 2026-09-30. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## Data-driven continuation Q0 — provenance PASS — 2026-09-30
+
+New ordered continuation Q0–Q12 started on local branch `gnhf/execute-the-p22-data-146414` from base `04282f0`. **Q0 PASS:** owned dated plan/prompt/three diagnostic JSONs copied with matching SHA-256; root `tasks/todo.md` / `tasks/plan.md` appended without overwriting older sections; interpreter imports and shared read-only inputs verified; `p22` loads from this worktree `src`. No fits, downloads, or package installs. Dirty main (`gnhf/p22-nn-cellstate` @ `9a1e777`) preserved; unrelated dirty files not copied. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. Next: Q1 diagnostic replay. [PREFLIGHT](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/PREFLIGHT.md); [PLAN](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/PLAN.md); [Q checklist](tasks/todo.md#data-driven-investigation-continuation-q0q12).
+
 ## Professor-direction continuation — NO FIT closeout — 2026-09-30
 
 Ordered continuation `CONTINUATION_20260930` finished on local branch `gnhf/read-users-anuragdan-b61180` with scientific label **`NO FIT`**. C0–C2 complete; C3–C5 skipped (I2 control-design FAIL). Lane B S8 draft rejected for invalid chance-null calibration (constant/Bernoulli band does not match fitted seven-arm pooled-BA). Chosen path: **bounded internal null / detectability paper (F4)**. No S8 freeze, no synthetic fits (budget 0), no `nn_s8_*` root, no real-label refit, no external acquisition, no push/merge/vault/packet/MOM edit. Old S7-v1/v2 remain **`INVALID`**; primary remains **`B_NULL`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [HANDOFF](tasks/nn/professor_direction_investigation_20260929/continuation/HANDOFF.md); [DECISION](tasks/nn/professor_direction_investigation_20260929/continuation/DECISION.md); [Lane A recovery](tasks/nn/professor_direction_investigation_20260929/continuation/LANE_A_RECOVERY.md); [PREFLIGHT](tasks/nn/professor_direction_investigation_20260929/continuation/PREFLIGHT.md). Local only — not pushed.
@@ -60,11 +64,12 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Write bounded internal null/detectability paper (F4) as a separate writing milestone; do not search for a positive synthetic remake.
-2. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
-3. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
-4. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
-5. External validation (T13) remains deferred; NeMO blockers unchanged; do not execute acquisition from this status.
+1. Data-driven continuation Q0 PASS; execute Q1 reproducible diagnostic replay next. Do not fit until protocol review gates pass. Prior S8 `NO FIT` preserved; not a stop on all future designs.
+2. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Bounded internal null/detectability paper (F4) remains a valid later writing path, not the predetermined destination of Q0–Q12.
+3. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
+4. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
+5. Do not mark the professor note or packet as sent; leave last-sent baseline as August 16.
+6. External validation (T13) remains deferred; NeMO blockers unchanged; do not execute acquisition from this status.
 
 ## Status maintenance
 

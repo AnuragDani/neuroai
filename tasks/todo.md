@@ -1,5 +1,31 @@
 # Paired DS multiome implementation checklist
 
+## Data-driven investigation continuation — Q0–Q12
+
+Detailed acceptance criteria, verification commands, dependencies and likely files are defined per task in [the dated plan](nn/professor_direction_investigation_20260929/next_stage_20260930/PLAN.md#execution-amendment-detailed-tasks-and-verification). This is the canonical checklist for the new continuation. Existing checkboxes below retain their original scope. Earlier D0 metadata/count checks completed; Q1 adds a fresh reproducible replay and failure checks.
+
+- [x] Q0: Pin source/runtime/input provenance; preserve dirty main; copy only owned plan/evidence into isolated worktree. — `DONE`. Evidence: [PREFLIGHT.md](nn/professor_direction_investigation_20260929/next_stage_20260930/PREFLIGHT.md); owned plan/prompt/three diagnostic JSONs copied with matching SHA-256; root plan/checklist appended without overwriting older sections.
+- [ ] Q1: Reproduce saved diagnostics and canonical verifier; verify tamper/order/overwrite refusals.
+- [ ] Q2: Audit independent cell-state endpoint or record ENDPOINT_UNRESOLVED.
+- [ ] Q3: Quantify all fold-specific ATAC panels; distinguish measured coverage from regulatory adequacy.
+- [ ] Checkpoint A: Source/replay/measurement contracts checked; unresolved endpoint cannot unlock a biological fit.
+- [ ] Q4: Verify targeted sampling, donor/age/class support and declared adequacy; freeze eligibility before effect analysis.
+- [ ] Q5: Complete bounded external source/QC/specimen/feature feasibility or precise blocker.
+- [ ] Checkpoint B: Support and candidate-source reports reviewed; no dataset-defect inference solely from null.
+- [ ] Q6: Rank evidence-backed bottlenecks; choose one experiment; verify fit/resource arithmetic.
+- [ ] Q7: Commit new analytic synthetic protocol with fitted-mechanism null and disjoint calibration/decision allocation.
+- [ ] Q8: Reuse existing runner/models; verify oracle, leakage, pairing, gradients, reload and refusal risks.
+- [ ] Q9: Obtain independent scientific/code review on exact hashes; maximum two correction cycles.
+- [ ] Checkpoint C: Exact protocol/code/test/review/resource gates pass before fits.
+- [ ] Q10: Run one bounded synthetic batch if authorized by gates; replay predictions; preserve every attempt.
+- [ ] Q11a: If justified, freeze/review one separate real-data exploratory pilot protocol.
+- [ ] Q11b: Verify minimal existing-runner adaptation and matched controls if needed.
+- [ ] Q11c: Execute bounded pilot, replay results and faithfulness; otherwise document SKIPPED/BLOCKED.
+- [ ] Q12: Commit verified handoff, disposition/evidence for every task, cumulative budgets and one next action.
+- [ ] Checkpoint D: Stop on completed handoff or precise blocker after independent safe tasks finish. Positive result not required.
+
+For skipped/blocked tasks, retain unchecked box and record disposition plus evidence beside it; do not mark an unexecuted experiment DONE. Q12 may close the run while broader study remains partial. Launch details: [GNHF_PROMPT.md](nn/professor_direction_investigation_20260929/next_stage_20260930/GNHF_PROMPT.md).
+
 Updated: 2026-09-14 (planning only). Bounded F1–F3 implementation and input decision complete.
 E0 and E1 tiny-reader proof complete; nine live fixture/control cases pass.
 E2 offline pass recorded SOURCE_UNRESOLVED; exact object contract and E3 pending.

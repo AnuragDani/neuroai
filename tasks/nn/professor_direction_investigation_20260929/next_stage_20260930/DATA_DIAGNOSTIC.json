@@ -1,0 +1,247 @@
+{
+  "record_type": "saved_record_dataset_diagnostic",
+  "date": "2026-09-30",
+  "source": "/Users/anuragdani/Github/niw-eb1a/P22/docs/nn_v2/sampling_cap1000_seed22.json",
+  "source_sha256": "e515b2eee03804b3836256ba3e8b7604fa6a8043e50c06c36b24988250423b2f",
+  "donors": 30,
+  "classes": {
+    "CON": 15,
+    "DS": 15
+  },
+  "available_cells": 248998,
+  "selected_cells": 30000,
+  "age_counts_from_donor_ids": {
+    "10": {
+      "CON": 1
+    },
+    "11": {
+      "CON": 1,
+      "DS": 2
+    },
+    "12": {
+      "CON": 3,
+      "DS": 3
+    },
+    "13": {
+      "CON": 2,
+      "DS": 4
+    },
+    "14": {
+      "CON": 1
+    },
+    "15": {
+      "DS": 1
+    },
+    "16": {
+      "CON": 1,
+      "DS": 1
+    },
+    "17": {
+      "CON": 2,
+      "DS": 1
+    },
+    "18": {
+      "CON": 2,
+      "DS": 2
+    },
+    "20": {
+      "CON": 2,
+      "DS": 1
+    }
+  },
+  "cell_type_support": [
+    {
+      "cell_type": "AST",
+      "CON": {
+        "cell_type_available_donors_ge20": 10,
+        "cell_type_selected_donors_ge20": 1
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 10,
+        "cell_type_selected_donors_ge20": 4
+      }
+    },
+    {
+      "cell_type": "IPC",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 14
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 15
+      }
+    },
+    {
+      "cell_type": "IPC_prol",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 11
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 13
+      }
+    },
+    {
+      "cell_type": "MIC",
+      "CON": {
+        "cell_type_available_donors_ge20": 9,
+        "cell_type_selected_donors_ge20": 0
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 10,
+        "cell_type_selected_donors_ge20": 0
+      }
+    },
+    {
+      "cell_type": "NEU_CALB2",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 12
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 10
+      }
+    },
+    {
+      "cell_type": "NEU_CUX2",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 15
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 15
+      }
+    },
+    {
+      "cell_type": "NEU_RELN",
+      "CON": {
+        "cell_type_available_donors_ge20": 13,
+        "cell_type_selected_donors_ge20": 2
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 4
+      }
+    },
+    {
+      "cell_type": "NEU_RORB",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 10
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 13,
+        "cell_type_selected_donors_ge20": 9
+      }
+    },
+    {
+      "cell_type": "NEU_SST",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 13
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 12
+      }
+    },
+    {
+      "cell_type": "NEU_TLE4",
+      "CON": {
+        "cell_type_available_donors_ge20": 14,
+        "cell_type_selected_donors_ge20": 14
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 13
+      }
+    },
+    {
+      "cell_type": "NEU_low",
+      "CON": {
+        "cell_type_available_donors_ge20": 12,
+        "cell_type_selected_donors_ge20": 1
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 13,
+        "cell_type_selected_donors_ge20": 0
+      }
+    },
+    {
+      "cell_type": "OPC",
+      "CON": {
+        "cell_type_available_donors_ge20": 12,
+        "cell_type_selected_donors_ge20": 0
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 13,
+        "cell_type_selected_donors_ge20": 0
+      }
+    },
+    {
+      "cell_type": "RG",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 15
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 15
+      }
+    },
+    {
+      "cell_type": "RG_prol",
+      "CON": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 11
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 15,
+        "cell_type_selected_donors_ge20": 13
+      }
+    },
+    {
+      "cell_type": "VASC",
+      "CON": {
+        "cell_type_available_donors_ge20": 8,
+        "cell_type_selected_donors_ge20": 0
+      },
+      "DS": {
+        "cell_type_available_donors_ge20": 8,
+        "cell_type_selected_donors_ge20": 0
+      }
+    }
+  ],
+  "support_cutoff_note": "20 cells/donor is descriptive screening only; not an accepted inference or power gate",
+  "primary": {
+    "estimate": 0.026666666666666672,
+    "ci": [
+      -0.025000000000000022,
+      0.07678571428571423
+    ],
+    "valid_draws": 1000,
+    "margin": 0.07,
+    "advantage": false
+  },
+  "diagnostic_limits": [
+    "Saved sampling records, not fresh H5AD QC replay.",
+    "Age parsed from donor IDs, requires metadata check before adjustment.",
+    "More cells do not add independent donors.",
+    "Cannot attribute null to dataset or model from these counts."
+  ],
+  "fresh_h5ad_metadata_crosscheck": {
+    "status": "PASS",
+    "cells": 248998,
+    "donors": 30,
+    "checks": [
+      "all donor counts",
+      "all donor/cell-type available counts",
+      "age metadata agrees with donor ID"
+    ],
+    "scope": "obs metadata only; expression/ATAC values not read; whole-file checksum not recomputed"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "date": "2026-09-30",
+  "status": "STRUCTURAL_AND_DESCRIPTIVE_CHECKS_PASS",
+  "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+  "ordered_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+  "bed_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+  "shape": [
+    465,
+    248998
+  ],
+  "count_unit": "unique_fragment_overlap",
+  "panel_zero_cell_fraction": 0.0035462132225961653,
+  "per_type": [
+    {
+      "cell_type": "AST",
+      "available_cells": 2334,
+      "panel_zero_cell_fraction": 0.004712939160239932,
+      "median_panel_nonzero_regions": 27.0,
+      "median_panel_fragment_overlaps": 34.0,
+      "median_full_atac_depth_obs": 1621.0,
+      "median_rna_depth_obs": 2188.5,
+      "targeted_cap64_selected_cells": 1064,
+      "targeted_ge20_donors": {
+        "CON": 10,
+        "DS": 10
+      }
+    },
+    {
+      "cell_type": "IPC",
+      "available_cells": 21748,
+      "panel_zero_cell_fraction": 0.0029887805775243702,
+      "median_panel_nonzero_regions": 32.0,
+      "median_panel_fragment_overlaps": 38.0,
+      "median_full_atac_depth_obs": 2216.5,
+      "median_rna_depth_obs": 1558.5,
+      "targeted_cap64_selected_cells": 1920,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "IPC_prol",
+      "available_cells": 9335,
+      "panel_zero_cell_fraction": 0.0032137118371719335,
+      "median_panel_nonzero_regions": 37.0,
+      "median_panel_fragment_overlaps": 46.0,
+      "median_full_atac_depth_obs": 2655.0,
+      "median_rna_depth_obs": 1994.0,
+      "targeted_cap64_selected_cells": 1897,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "MIC",
+      "available_cells": 885,
+      "panel_zero_cell_fraction": 0.0,
+      "median_panel_nonzero_regions": 31.0,
+      "median_panel_fragment_overlaps": 43.0,
+      "median_full_atac_depth_obs": 1725.0,
+      "median_rna_depth_obs": 1784.0,
+      "targeted_cap64_selected_cells": 852,
+      "targeted_ge20_donors": {
+        "CON": 9,
+        "DS": 10
+      }
+    },
+    {
+      "cell_type": "NEU_CALB2",
+      "available_cells": 10451,
+      "panel_zero_cell_fraction": 0.0035403310687972442,
+      "median_panel_nonzero_regions": 27.0,
+      "median_panel_fragment_overlaps": 33.0,
+      "median_full_atac_depth_obs": 1593.0,
+      "median_rna_depth_obs": 1439.0,
+      "targeted_cap64_selected_cells": 1875,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "NEU_CUX2",
+      "available_cells": 80672,
+      "panel_zero_cell_fraction": 0.0033716779055930186,
+      "median_panel_nonzero_regions": 26.0,
+      "median_panel_fragment_overlaps": 31.0,
+      "median_full_atac_depth_obs": 1640.0,
+      "median_rna_depth_obs": 1697.0,
+      "targeted_cap64_selected_cells": 1920,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "NEU_RELN",
+      "available_cells": 3768,
+      "panel_zero_cell_fraction": 0.0034501061571125266,
+      "median_panel_nonzero_regions": 23.0,
+      "median_panel_fragment_overlaps": 32.0,
+      "median_full_atac_depth_obs": 1434.5,
+      "median_rna_depth_obs": 3781.5,
+      "targeted_cap64_selected_cells": 1540,
+      "targeted_ge20_donors": {
+        "CON": 13,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "NEU_RORB",
+      "available_cells": 21204,
+      "panel_zero_cell_fraction": 0.0058951141294095455,
+      "median_panel_nonzero_regions": 22.0,
+      "median_panel_fragment_overlaps": 33.0,
+      "median_full_atac_depth_obs": 1515.0,
+      "median_rna_depth_obs": 3176.0,
+      "targeted_cap64_selected_cells": 1713,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 13
+      }
+    },
+    {
+      "cell_type": "NEU_SST",
+      "available_cells": 13891,
+      "panel_zero_cell_fraction": 0.0035274638254985244,
+      "median_panel_nonzero_regions": 27.0,
+      "median_panel_fragment_overlaps": 34.0,
+      "median_full_atac_depth_obs": 1622.0,
+      "median_rna_depth_obs": 1450.0,
+      "targeted_cap64_selected_cells": 1903,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "NEU_TLE4",
+      "available_cells": 26777,
+      "panel_zero_cell_fraction": 0.004406767001531165,
+      "median_panel_nonzero_regions": 25.0,
+      "median_panel_fragment_overlaps": 36.0,
+      "median_full_atac_depth_obs": 1656.0,
+      "median_rna_depth_obs": 3298.0,
+      "targeted_cap64_selected_cells": 1852,
+      "targeted_ge20_donors": {
+        "CON": 14,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "NEU_low",
+      "available_cells": 1856,
+      "panel_zero_cell_fraction": 0.0021551724137931034,
+      "median_panel_nonzero_regions": 25.0,
+      "median_panel_fragment_overlaps": 35.0,
+      "median_full_atac_depth_obs": 1687.0,
+      "median_rna_depth_obs": 2276.5,
+      "targeted_cap64_selected_cells": 1124,
+      "targeted_ge20_donors": {
+        "CON": 12,
+        "DS": 13
+      }
+    },
+    {
+      "cell_type": "OPC",
+      "available_cells": 1580,
+      "panel_zero_cell_fraction": 0.006329113924050633,
+      "median_panel_nonzero_regions": 25.0,
+      "median_panel_fragment_overlaps": 37.0,
+      "median_full_atac_depth_obs": 1532.5,
+      "median_rna_depth_obs": 2608.5,
+      "targeted_cap64_selected_cells": 1294,
+      "targeted_ge20_donors": {
+        "CON": 12,
+        "DS": 13
+      }
+    },
+    {
+      "cell_type": "RG",
+      "available_cells": 43531,
+      "panel_zero_cell_fraction": 0.0028944889848613632,
+      "median_panel_nonzero_regions": 37.0,
+      "median_panel_fragment_overlaps": 46.0,
+      "median_full_atac_depth_obs": 2557.0,
+      "median_rna_depth_obs": 2024.0,
+      "targeted_cap64_selected_cells": 1920,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "RG_prol",
+      "available_cells": 10079,
+      "panel_zero_cell_fraction": 0.002083540033733505,
+      "median_panel_nonzero_regions": 45.0,
+      "median_panel_fragment_overlaps": 58.0,
+      "median_full_atac_depth_obs": 3017.0,
+      "median_rna_depth_obs": 2576.0,
+      "targeted_cap64_selected_cells": 1900,
+      "targeted_ge20_donors": {
+        "CON": 15,
+        "DS": 15
+      }
+    },
+    {
+      "cell_type": "VASC",
+      "available_cells": 887,
+      "panel_zero_cell_fraction": 0.002254791431792559,
+      "median_panel_nonzero_regions": 32.0,
+      "median_panel_fragment_overlaps": 53.0,
+      "median_full_atac_depth_obs": 2097.0,
+      "median_rna_depth_obs": 3940.0,
+      "targeted_cap64_selected_cells": 817,
+      "targeted_ge20_donors": {
+        "CON": 8,
+        "DS": 8
+      }
+    }
+  ],
+  "limits": [
+    "No biological effect/prediction analysis.",
+    "Panel overlap counts are not full-genome ATAC depth.",
+    "465 union regions; fold panels use 256. No regulatory-coverage adequacy inferred.",
+    "Cap64 and >=20 are descriptive feasibility settings, not a frozen fit protocol.",
+    "Independent cell-state outcome not yet established."
+  ]
+}

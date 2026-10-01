@@ -1,5 +1,9 @@
 # Paired DS multiome development plan
 
+## Data-driven investigation continuation — 2026-09-30
+
+Researcher requests experiments aligned with original professor guidance and a dataset change only when evidence supports it. Extend the current P22 research plan; preserve all older M/E/R scopes and evidence. Detailed plan, dependency graph, per-task acceptance/verification, budgets and stop rules: [Q0–Q12 plan](nn/professor_direction_investigation_20260929/next_stage_20260930/PLAN.md#execution-amendment-detailed-tasks-and-verification). Canonical checklist: [Q0–Q12 in todo.md](todo.md#data-driven-investigation-continuation-q0q12). New GNHF begins from reviewed local continuation commit `04282f0`; main dirty checkout is preserved. No new predictive fitting has run for this stage. Launching the supplied command accepts this scoped continuation; per-experiment scientific review gates remain binding.
+
 Updated: 2026-09-14 (PDT; planning revision only). F1–F3 implemented and the bounded audit completed;
 final decision review is recorded in the audit guide. No further execution is
 authorized by this completion record. Status: retained-cell ingestion, donor-aware networks, final
