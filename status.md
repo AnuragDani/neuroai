@@ -4,6 +4,10 @@ Updated: 2026-09-30. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## Data-driven continuation Q3 — REGULATORY_ADEQUACY_UNRESOLVED — 2026-09-30
+
+**Q3 DONE** with disposition **`REGULATORY_ADEQUACY_UNRESOLVED`** and structural label **`STRUCTURAL_COVERAGE_PASS`** on `gnhf/execute-the-p22-data-146414`. All 25 training-only 256-region panels (5×5) reported from the exact counted 465-region union (GRCh38, `unique_fragment_overlap`); independent fold-0/repeat-0 BED+matrix replay matched; gene-body/flank and gene-activity BED overlaps recorded as descriptive only (no regulatory-element catalog in repo). One alternate representation proposed: existing gene-activity exact counts (no new recount; no biological-zero fill). Unresolved regulatory adequacy **cannot** authorize a biological regulatory-feature claim; Q2 endpoint unresolved still blocks cell-state fits. Q4–Q5 may continue. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [REGULATORY_COVERAGE](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/REGULATORY_COVERAGE.md); [coverage JSON](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/regulatory_coverage.json).
+
 ## Data-driven continuation Q2 — ENDPOINT_UNRESOLVED — 2026-09-30
 
 **Q2 DONE** with disposition **`ENDPOINT_UNRESOLVED`** on `gnhf/execute-the-p22-data-146414`. Live H5AD obs audit found no independently measured cell-state/maturation endpoint orthogonal to NN RNA inputs: disease/`group` is specimen-level (existing primary, not state); `dev_PCW` is age (not interchangeable with state); `author_cell_type`/SCT clusters and N16 OOF disease scores are RNA-/model-derived proxies; no pseudotime/maturation assay columns present. Identity uniqueness PASS (248,998). Unresolved endpoint **cannot** authorize a biological cell-state fit (Checkpoint A); Q3–Q5 may continue. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [ENDPOINTS](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/ENDPOINTS.md); [inventory](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/endpoint_inventory.json).
@@ -72,7 +76,7 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. Data-driven continuation Q0–Q2 done (Q2 `ENDPOINT_UNRESOLVED`); execute Q3–Q5 read-only reports next. Unresolved endpoint blocks biological cell-state fits; synthetic/control paths still gated separately. Prior S8 `NO FIT` preserved; not a stop on all future designs.
+1. Data-driven continuation Q0–Q3 done (Q2 `ENDPOINT_UNRESOLVED`; Q3 structural PASS / `REGULATORY_ADEQUACY_UNRESOLVED`); execute Q4–Q5 read-only reports next. Unresolved endpoint/regulatory adequacy block biological cell-state / regulatory-feature fits; synthetic/control paths still gated separately. Prior S8 `NO FIT` preserved; not a stop on all future designs.
 2. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Bounded internal null/detectability paper (F4) remains a valid later writing path, not the predetermined destination of Q0–Q12.
 3. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
 4. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
