@@ -1,0 +1,441 @@
+{
+  "record_type": "endpoint_inventory",
+  "date": "2026-09-30",
+  "task": "Q2",
+  "disposition": "ENDPOINT_UNRESOLVED",
+  "selected_pilot_endpoint": null,
+  "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+  "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+  "citation_doi": "10.1038/s41591-026-04211-1",
+  "dataset_title": "Human fetal cortex in Down syndrome, 10X-Multiome (snRNA/ATACseq), complete dataset",
+  "n_obs": 248998,
+  "n_vars_gene_expression": 35477,
+  "identity_checks": {
+    "obs_index_n": 248998,
+    "obs_index_nunique": 248998,
+    "obs_index_unique": true,
+    "observation_joinid_nunique": 248998,
+    "observation_joinid_unique": true,
+    "duplicate_obs_index_count": 0,
+    "duplicate_joinid_count": 0
+  },
+  "cluster_name_prefix_vs_author_cell_type_mismatches": 0,
+  "donors_with_multiple_PCW": 0,
+  "pcw_donor_counts_one_class_only": {
+    "10": {
+      "CON": 1,
+      "DS": 0
+    },
+    "14": {
+      "CON": 1,
+      "DS": 0
+    },
+    "15": {
+      "CON": 0,
+      "DS": 1
+    }
+  },
+  "candidates": [
+    {
+      "candidate_id": "disease_group",
+      "fields": [
+        "group",
+        "disease",
+        "disease_ontology_term_id"
+      ],
+      "category": "independent_measured_outcome_specimen_level",
+      "label_construction": "Specimen disease class from cohort metadata (CON vs DS / normal vs complete trisomy 21); matches donor_id token and group.",
+      "measurement_source": "Clinical/karyotype specimen annotation in Lattke et al. CELLxGENE release; not assayed from the same RNA matrix used as NN input.",
+      "availability": {
+        "donors_CON": 15,
+        "donors_DS": 15,
+        "cells_CON": 126385,
+        "cells_DS": 122613
+      },
+      "overlaps_model_inputs": false,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Donor/specimen disease label is the existing NN-v2 primary supervision target, not a cell-state or maturation endpoint.",
+        "Professor direction (Jul 2) asked for cell-state spectrum beyond coarse disease/person-level prediction."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "developmental_age_PCW",
+      "fields": [
+        "dev_PCW",
+        "development_stage",
+        "development_stage_ontology_term_id",
+        "stage"
+      ],
+      "category": "contextual_covariate",
+      "label_construction": "Specimen post-conception week (PCW) recorded once per donor; stage bins PCW11_12 / PCW13_16 / PCW17_20 derived from PCW.",
+      "measurement_source": "Specimen developmental age metadata (HsapDv ontology terms); not a measured intracellular state.",
+      "availability": {
+        "donors": 30,
+        "unique_PCW": 10,
+        "PCW_range": [
+          10,
+          20
+        ],
+        "age_counts_by_class_donors": {
+          "10": {
+            "CON": 1,
+            "DS": 0
+          },
+          "11": {
+            "CON": 1,
+            "DS": 2
+          },
+          "12": {
+            "CON": 3,
+            "DS": 3
+          },
+          "13": {
+            "CON": 2,
+            "DS": 4
+          },
+          "14": {
+            "CON": 1,
+            "DS": 0
+          },
+          "15": {
+            "CON": 0,
+            "DS": 1
+          },
+          "16": {
+            "CON": 1,
+            "DS": 1
+          },
+          "17": {
+            "CON": 2,
+            "DS": 1
+          },
+          "18": {
+            "CON": 2,
+            "DS": 2
+          },
+          "20": {
+            "CON": 2,
+            "DS": 1
+          }
+        }
+      },
+      "overlaps_model_inputs": false,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Age is not interchangeable with cell state (PLAN Q2 / D1).",
+        "Some PCWs appear in only one disease class at the donor level (e.g. PCW10 CON-only, PCW14 CON-only, PCW15 DS-only).",
+        "Donor-constant; cannot resolve within-donor maturation gradients."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "author_cell_type_clusters",
+      "fields": [
+        "author_cell_type",
+        "cluster_name",
+        "cell_class",
+        "seurat_clusters",
+        "SCT_snn_res.0.3",
+        "SCT_snn_res.0.5",
+        "SCT_snn_res.0.6",
+        "SCT_snn_res.0.7",
+        "SCT_snn_res.0.8",
+        "SCT_snn_res.0.9",
+        "SCT_snn_res.1",
+        "SCT_snn_res.1.1",
+        "SCT_snn_res.1.5",
+        "cell_type",
+        "cell_type_ontology_term_id"
+      ],
+      "category": "rna_derived_proxy",
+      "label_construction": "Author cell-type labels and Seurat/SCT SNN cluster resolutions from the published RNA (SCTransform) analysis; cluster_name prefixes match author_cell_type exactly (0 mismatches). Ontology cell_type maps the same annotations to CL terms.",
+      "measurement_source": "Lattke et al. Nature Medicine 2026 RNA clustering/annotation in the CELLxGENE H5AD (doi:10.1038/s41591-026-04211-1); SCT_* fields indicate SCTransform RNA graph clustering.",
+      "availability": {
+        "n_author_cell_types": 15,
+        "donor_x_type_ge20_support": [
+          {
+            "author_cell_type": "AST",
+            "available_cells": 2334,
+            "CON_cells": 853,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 10,
+            "DS_cells": 1481,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 10
+          },
+          {
+            "author_cell_type": "IPC",
+            "available_cells": 21748,
+            "CON_cells": 10297,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 11451,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "IPC_prol",
+            "available_cells": 9335,
+            "CON_cells": 4330,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 5005,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "MIC",
+            "available_cells": 885,
+            "CON_cells": 399,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 9,
+            "DS_cells": 486,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 10
+          },
+          {
+            "author_cell_type": "NEU_CALB2",
+            "available_cells": 10451,
+            "CON_cells": 5325,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 5126,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "NEU_CUX2",
+            "available_cells": 80672,
+            "CON_cells": 38745,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 41927,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "NEU_RELN",
+            "available_cells": 3768,
+            "CON_cells": 1840,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 13,
+            "DS_cells": 1928,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "NEU_RORB",
+            "available_cells": 21204,
+            "CON_cells": 15435,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 5769,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 13
+          },
+          {
+            "author_cell_type": "NEU_SST",
+            "available_cells": 13891,
+            "CON_cells": 7079,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 6812,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "NEU_TLE4",
+            "available_cells": 26777,
+            "CON_cells": 14468,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 14,
+            "DS_cells": 12309,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "NEU_low",
+            "available_cells": 1856,
+            "CON_cells": 1066,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 12,
+            "DS_cells": 790,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 13
+          },
+          {
+            "author_cell_type": "OPC",
+            "available_cells": 1580,
+            "CON_cells": 725,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 12,
+            "DS_cells": 855,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 13
+          },
+          {
+            "author_cell_type": "RG",
+            "available_cells": 43531,
+            "CON_cells": 20364,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 23167,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "RG_prol",
+            "available_cells": 10079,
+            "CON_cells": 4991,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 15,
+            "DS_cells": 5088,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 15
+          },
+          {
+            "author_cell_type": "VASC",
+            "available_cells": 887,
+            "CON_cells": 468,
+            "CON_donors_any": 15,
+            "CON_donors_ge20": 8,
+            "DS_cells": 419,
+            "DS_donors_any": 15,
+            "DS_donors_ge20": 8
+          }
+        ]
+      },
+      "overlaps_model_inputs": true,
+      "overlap_detail": "Labels are constructed from the same Gene Expression RNA modality that supplies NN RNA features (X / assay=Gene Expression, 35477 genes). Using them as supervised targets creates circular dependence on input RNA structure.",
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "RNA-derived categorical type/cluster labels are stratification covariates, not independent continuous cell-state truth.",
+        "Jul 2 professor note: avoid saturated subtype classification as the main direction without wet-lab validation.",
+        "No independent ATAC-only or assay-orthogonal state annotation is present."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "excitatory_lineage_subset",
+      "fields": [
+        "cells_in_excitatory_lineage_subset",
+        "cluster_name_subset"
+      ],
+      "category": "rna_derived_proxy",
+      "label_construction": "Boolean membership and subset cluster names for an excitatory-lineage subset defined in the author RNA analysis (True for AST/IPC/IPC_prol/NEU_CUX2/NEU_RORB/NEU_TLE4/RG/RG_prol; False for MIC/OPC/VASC/inhibitory/NEU_low).",
+      "measurement_source": "Same RNA-derived annotation pipeline as author_cell_type.",
+      "availability": {
+        "True_cells": 215680,
+        "False_cells": 33318
+      },
+      "overlaps_model_inputs": true,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Subset mask, not a graded maturation/state endpoint.",
+        "Derived from RNA clusters."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "nn_v2_oof_disease_model_scores",
+      "fields": [
+        "ladder_v3 spectrum cell_scores (external export, not an H5AD obs column)"
+      ],
+      "category": "model_derived_circular_proxy",
+      "label_construction": "Held-out donor OOF disease-prediction scores from NN-v2 ladder arms (e.g. R3_ca), previously used in N16 spectrum stratified by author_cell_type.",
+      "measurement_source": "reports/generated/nn_20260923/spectrum_v3/cell_scores.csv.gz; docs/nn_v2/spectrum.json call SPECTRUM_NULL.",
+      "availability": {
+        "eligible_types_n16": 9,
+        "spectrum_call": "SPECTRUM_NULL"
+      },
+      "overlaps_model_inputs": true,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "PLAN/D1 forbid calling current disease-model scores independent biological truth.",
+        "Scores are functions of the same RNA+ATAC inputs under disease supervision; circular as a cell-state endpoint.",
+        "N16 remains a valid descriptive readout of the primary disease models, not an independent maturation assay."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "sex",
+      "fields": [
+        "sex",
+        "sex_ontology_term_id"
+      ],
+      "category": "contextual_covariate",
+      "label_construction": "Specimen sex metadata.",
+      "measurement_source": "Cohort metadata (PATO terms).",
+      "availability": {
+        "male_cells": 151961,
+        "female_cells": 97037
+      },
+      "overlaps_model_inputs": false,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Biological covariate; not cell state."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "technical_qc_depths",
+      "fields": [
+        "nCount_RNA",
+        "nFeature_RNA",
+        "nCount_ATAC",
+        "nFeature_ATAC",
+        "nCount_SCT",
+        "nFeature_SCT",
+        "percent.mt",
+        "nucleosome_signal",
+        "TSS.enrichment",
+        "tissue_quality"
+      ],
+      "category": "technical_measurement",
+      "label_construction": "Per-cell library depth/complexity and ATAC QC metrics.",
+      "measurement_source": "Assay QC from multiome processing; SCT counts are RNA-normalized.",
+      "availability": {
+        "null_nCount_RNA": 0,
+        "null_nCount_ATAC": 0
+      },
+      "overlaps_model_inputs": true,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Technical nuisance/QC, not biological state targets."
+      ],
+      "pilot_eligible_as_cell_state": false
+    },
+    {
+      "candidate_id": "continuous_maturation_or_pseudotime",
+      "fields": [],
+      "category": "absent",
+      "label_construction": "No pseudotime, maturation score, trajectory, RNA velocity, or orthogonal wet-lab state assay columns are present in obs/obsm (only X_umap embedding).",
+      "measurement_source": null,
+      "availability": {
+        "present": false,
+        "suspect_column_hits": []
+      },
+      "overlaps_model_inputs": null,
+      "is_cell_state_endpoint": false,
+      "limitations": [
+        "Independently supported maturation/state endpoint does not exist in this release."
+      ],
+      "pilot_eligible_as_cell_state": false
+    }
+  ],
+  "decision_rule": {
+    "require_independent_of_model_rna_inputs": true,
+    "forbid_rna_derived_pseudotime_as_truth": true,
+    "forbid_disease_model_scores_as_truth": true,
+    "age_not_interchangeable_with_cell_state": true,
+    "do_not_select_by_CA_or_DS_effect": true
+  },
+  "decision_summary": "No candidate qualifies as an independently measured cell-state or maturation endpoint orthogonal to the RNA used as NN input. Record ENDPOINT_UNRESOLVED. Continue Q3\u2013Q5; unresolved endpoint cannot authorize a biological cell-state fit (Checkpoint A).",
+  "notes": [
+    "Prior N16 cell-state spectrum used disease-model OOF scores \u00d7 author_cell_type; retained as descriptive, not independent truth.",
+    "author_cell_type remains usable as a stratification/sampling factor, not as a supervised cell-state target claiming independent biology.",
+    "Primary disease endpoint and B_NULL / SPECTRUM_NULL records are preserved and not reopened here."
+  ]
+}

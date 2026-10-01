@@ -4,6 +4,10 @@ Updated: 2026-09-30. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## Data-driven continuation Q2 — ENDPOINT_UNRESOLVED — 2026-09-30
+
+**Q2 DONE** with disposition **`ENDPOINT_UNRESOLVED`** on `gnhf/execute-the-p22-data-146414`. Live H5AD obs audit found no independently measured cell-state/maturation endpoint orthogonal to NN RNA inputs: disease/`group` is specimen-level (existing primary, not state); `dev_PCW` is age (not interchangeable with state); `author_cell_type`/SCT clusters and N16 OOF disease scores are RNA-/model-derived proxies; no pseudotime/maturation assay columns present. Identity uniqueness PASS (248,998). Unresolved endpoint **cannot** authorize a biological cell-state fit (Checkpoint A); Q3–Q5 may continue. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [ENDPOINTS](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/ENDPOINTS.md); [inventory](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/endpoint_inventory.json).
+
 ## Data-driven continuation Q1 — diagnostic replay PASS — 2026-09-30
 
 **Q1 PASS** on `gnhf/execute-the-p22-data-146414`. Fresh replay under `reports/generated/nn_next_stage_q1_replay_20260930/` is byte-identical (SHA-256) to the three immutable next_stage diagnostic JSONs; overwrite/tamper/order/missing-column refusals covered by `tests/test_next_stage_diagnostic_replay.py`; `gnhf/verify_ladder.py` on shared ladder_v3 returned **PASS** / `advantage=false` without `--write`. No fits. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. Next: Q2–Q5 read-only reports. [REPLAY](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/REPLAY.md); [script](scripts/replay_next_stage_diagnostics.py).
@@ -68,7 +72,7 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. Data-driven continuation Q0–Q1 PASS; execute Q2–Q5 read-only reports next. Do not fit until protocol review gates pass. Prior S8 `NO FIT` preserved; not a stop on all future designs.
+1. Data-driven continuation Q0–Q2 done (Q2 `ENDPOINT_UNRESOLVED`); execute Q3–Q5 read-only reports next. Unresolved endpoint blocks biological cell-state fits; synthetic/control paths still gated separately. Prior S8 `NO FIT` preserved; not a stop on all future designs.
 2. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Bounded internal null/detectability paper (F4) remains a valid later writing path, not the predetermined destination of Q0–Q12.
 3. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
 4. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
