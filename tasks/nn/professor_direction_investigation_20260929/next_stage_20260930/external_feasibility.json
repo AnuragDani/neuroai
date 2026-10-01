@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "record_kind": "next_stage_external_feasibility_q5",
+  "created_utc": "2026-10-01T07:14:53.269567+00:00",
+  "disposition": "EXTERNAL_FEASIBILITY_BOUNDED",
+  "overall_confirmatory_status": "UNRESOLVED",
+  "nemo_evaluation_role": "PRESERVED",
+  "network": {
+    "new_requests_this_run": 0,
+    "aggregate_new_download_bytes": 0,
+    "budget_ceiling_bytes": 67108864,
+    "budget_ceiling_requests": 10,
+    "note": "No new network in Q5; prior bag GET (1867 bytes, 2026-09-12) cited from pinned source_identity.json; metadata and bag read locally.",
+    "prior_cited_requests": [
+      {
+        "method": "GET",
+        "url": "https://data.nemoarchive.org/publication_release/Vuong_delaTorre_Human_snMultiome-2026-05-04/Analysis_bag_3_Vuong_delaTorre_Human_snMultiome_Analysis_ATAC_Open.tgz",
+        "status": 200,
+        "body_bytes": 1867
+      }
+    ]
+  },
+  "local_reads": {
+    "metadata_tar_sha256": "72cf7284663aeaee76ed3bab16ce0b414faf82847a883e946e7c2afab21b1526",
+    "source_bag_sha256": "4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45",
+    "source_identity_sha256": "45ed2cb478fa4b780f8f29f3e2499109f0a93a3e9610bcc298d1d7813f154735",
+    "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+    "budget": {
+      "input_bytes": 4618240,
+      "expanded_bytes": 31460988,
+      "records": [
+        {
+          "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/multiome/VuongWeber_DSdevctx_metadata.tar",
+          "member": "VuongWeber_2025_DSdevctx_metadata_20260128/VuongWeber_2025_DSdevctx_metadata_20260128.csv.gz",
+          "source_url": "https://assets.nemoarchive.org/col-umstjg0",
+          "sha256": "72cf7284663aeaee76ed3bab16ce0b414faf82847a883e946e7c2afab21b1526",
+          "input_bytes": 4618240,
+          "expanded_bytes": 31460988
+        }
+      ]
+    },
+    "bag_decoded_bytes": 23394
+  },
+  "contracts": {
+    "source_declaration": {
+      "status": "ACCEPTED",
+      "evidence": "Offline replay of pinned ATAC Open bag matches expected SHA-256 and resolves the same count-package URL/size/MD5 as prior source_identity.json; no payload downloaded.",
+      "resolved_payload": {
+        "url": "https://data.nemoarchive.org/other/grant/r21_delatorre/delatorre/multimodal/sncell/10xMultiome_ATACseq/human/processed/counts/VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz",
+        "path": "data/VuongWeber_2025_DSdevctx_atac_counts_20260128.mex.tar.gz",
+        "bytes": 1540753269,
+        "md5": "796c8b3aa587b257af0a46615a437dba"
+      },
+      "bag_sha256": "4698c4b80d1e1bde7588b9b0979beb113df2ca24aebf54afbbac606eaf064d45",
+      "prior_request": {
+        "created_utc": "2026-09-12T21:08:11.848877+00:00",
+        "body_bytes": 1867,
+        "requests": [
+          {
+            "method": "GET",
+            "url": "https://data.nemoarchive.org/publication_release/Vuong_delaTorre_Human_snMultiome-2026-05-04/Analysis_bag_3_Vuong_delaTorre_Human_snMultiome_Analysis_ATAC_Open.tgz",
+            "status": 200,
+            "body_bytes": 1867
+          }
+        ],
+        "stop_reason": "RESOLVED"
+      }
+    },
+    "qc_release_discrepancy": {
+      "status": "UNRESOLVED",
+      "evidence": "Metadata has 117,532 rows vs published 113,801. Exact candidate reconciliation class!='Unk' yields 3,731 removed and 113,801 remaining (status=ANNOTATION_COUNT_MATCH_QC_UNVERIFIED), but exclusion is not applied and upstream QC is not reproduced; candidate rows still include {'atac_count_le_100': 1751, 'mitochondrial_percent_ge_5': 6, 'either': 1757} threshold hits.",
+      "annotation_status": "ANNOTATION_COUNT_MATCH_QC_UNVERIFIED",
+      "class_unknown_cells": 3731,
+      "candidate_count_matches_published": true,
+      "exclusion_applied": false,
+      "qc_reproduced": false,
+      "candidate_qc_threshold_counters": {
+        "atac_count_le_100": 1751,
+        "mitochondrial_percent_ge_5": 6,
+        "either": 1757
+      }
+    },
+    "specimen_provenance": {
+      "status": "UNRESOLVED",
+      "evidence": "Provider-level separation documented (NeMO UCLA/NIH_NBB vs current HDBR multiome). Donor-ID overlap with current H5AD is empty. This is no_overlap_evidence, not independently certified specimen non-overlap.",
+      "nemo_donors_per_source": {
+        "NIH_NBB": 8,
+        "UCLA": 18
+      },
+      "current_h5ad_donors": 30,
+      "nemo_donors": 26,
+      "donor_id_overlap": [],
+      "specimen_independence_certified": false,
+      "metadata_specimen_independence": "UNRESOLVED"
+    },
+    "age_conventions": {
+      "status": "ACCEPTED",
+      "evidence": "Pinned obstetric_GW unit with documented age_source; conversion GW_minus_2_approximate yields age_pcw for all rows. Canonical PCW 13\u201320 overlap is SUPPORTED at 8 control / 10 Ts21 donors (support_is_not_power).",
+      "age_unit": [
+        "obstetric_GW"
+      ],
+      "age_conversion": [
+        "GW_minus_2_approximate"
+      ],
+      "age_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13225313/",
+      "age_overlap": {
+        "status": "SUPPORTED",
+        "age_pcw_range": [
+          13,
+          20
+        ],
+        "donors_per_class": {
+          "0": 8,
+          "1": 10
+        },
+        "unknown_age_donors": 0,
+        "excluded_donors": 8,
+        "support_is_not_power": true
+      },
+      "donors_per_class_all_ages": {
+        "0": 13,
+        "1": 13
+      }
+    },
+    "feature_count_semantics": {
+      "status": "UNRESOLVED",
+      "evidence": "ATAC count-package declaration resolved (bytes/MD5/URL) but payload not downloaded. Study-specific peak calling; no common measured-region or count-unit contract established versus current exact 465-region union. paired_matrices_checked=false.",
+      "paired_matrices_checked": false,
+      "declared_payload_bytes": 1540753269,
+      "declared_payload_md5": "796c8b3aa587b257af0a46615a437dba",
+      "payload_downloaded": false
+    }
+  },
+  "nemo_metadata_report": {
+    "metadata_cells": 117532,
+    "published_cells": 113801,
+    "count_difference": 3731,
+    "release_qc_status": "UNRESOLVED",
+    "n_donors": 26,
+    "expected_donors": 26,
+    "donor_count_matches": true,
+    "donors_per_class": {
+      "0": 13,
+      "1": 13
+    },
+    "cells_per_class": {
+      "0": 61656,
+      "1": 55876
+    },
+    "n_libraries": 13,
+    "age_overlap": {
+      "status": "SUPPORTED",
+      "age_pcw_range": [
+        13,
+        20
+      ],
+      "donors_per_class": {
+        "0": 8,
+        "1": 10
+      },
+      "unknown_age_donors": 0,
+      "excluded_donors": 8,
+      "support_is_not_power": true
+    },
+    "specimen_independence": "UNRESOLVED",
+    "confirmatory_ready": false,
+    "paired_matrices_checked": false,
+    "annotation_diagnostics": {
+      "status": "ANNOTATION_COUNT_MATCH_QC_UNVERIFIED",
+      "published_cells": 113801,
+      "candidate_count_matches_published": true,
+      "candidate_rule": "class != 'Unk'; diagnostic only, no exclusion applied",
+      "class_unknown_cells": 3731,
+      "cluster_unknown_cells": 3731,
+      "unknown_masks_equal": true,
+      "exclusion_applied": false,
+      "qc_reproduced": false,
+      "specimen_independence_certified": false,
+      "all_rows": {
+        "cells": 117532,
+        "donors": 26,
+        "qc_threshold_counters": {
+          "atac_count_le_100": 1798,
+          "mitochondrial_percent_ge_5": 7,
+          "either": 1805
+        },
+        "cells_per_condition": {
+          "Ctrl": 61656,
+          "Ts21": 55876
+        },
+        "donors_per_condition": {
+          "Ctrl": 13,
+          "Ts21": 13
+        },
+        "cells_per_source": {
+          "NIH_NBB": 43186,
+          "UCLA": 74346
+        },
+        "donors_per_source": {
+          "NIH_NBB": 8,
+          "UCLA": 18
+        }
+      },
+      "candidate": {
+        "cells": 113801,
+        "donors": 26,
+        "qc_threshold_counters": {
+          "atac_count_le_100": 1751,
+          "mitochondrial_percent_ge_5": 6,
+          "either": 1757
+        },
+        "cells_per_condition": {
+          "Ctrl": 59549,
+          "Ts21": 54252
+        },
+        "donors_per_condition": {
+          "Ctrl": 13,
+          "Ts21": 13
+        },
+        "cells_per_source": {
+          "NIH_NBB": 42414,
+          "UCLA": 71387
+        },
+        "donors_per_source": {
+          "NIH_NBB": 8,
+          "UCLA": 18
+        }
+      },
+      "qc_counter_interpretation": "Current metadata values, not reproduced upstream QC"
+    }
+  },
+  "comparison_current_vs_external": {
+    "current_cohort_gse305146": {
+      "donors": 30,
+      "cells": 248998,
+      "q4_support": "SUPPORT_REPAIR_PASS / ELIGIBILITY_FROZEN",
+      "q2_endpoint": "ENDPOINT_UNRESOLVED",
+      "q3_regulatory": "REGULATORY_ADEQUACY_UNRESOLVED (structural PASS)",
+      "atac_representation": "exact counted 465-region union / fold 256-region panels present locally",
+      "addresses_independent_cohort": false,
+      "note": "Targeted sampling repaired rare-type cell support; donor count and independent cell-state endpoint remain binding. Null/primary B_NULL does not imply the dataset is defective."
+    },
+    "external_candidate_nemo": {
+      "donors": 26,
+      "published_cells": 113801,
+      "metadata_cells": 117532,
+      "donors_per_class": {
+        "0": 13,
+        "1": 13
+      },
+      "role_preserved": "reserved_external_evaluation",
+      "addresses_independent_cohort": true,
+      "confirmatory_ready": false,
+      "blocking_contracts": [
+        "qc_release_discrepancy",
+        "specimen_provenance",
+        "feature_count_semantics"
+      ],
+      "note": "Different-study candidate with resolved payload declaration; QC, specimen certification, and common-region contracts remain UNRESOLVED. Not a demonstrated power remedy."
+    },
+    "nemo_switched_to_development": false,
+    "nemo_evaluation_role_preserved": true
+  },
+  "alternatives": [
+    {
+      "id": "GSE280175",
+      "role": "RNA-only external replication candidate",
+      "status": "EXPLORATORY_ONLY",
+      "rationale": "5+5 fetal cortex donors with snRNA-seq only; no same-nucleus ATAC. Cannot close multimodal external evaluation; retain as orthogonal RNA check.",
+      "sources": [
+        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE280175",
+        "https://www.nature.com/articles/s41467-025-63752-0"
+      ]
+    },
+    {
+      "id": "GSE204684",
+      "role": "general cortex multiome pretraining candidate",
+      "status": "EXPLORATORY_ONLY",
+      "rationale": "Paired RNA+ATAC exists but lacks DS-versus-euploid disease design; cannot train or validate the target DS classifier.",
+      "sources": [
+        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE204684",
+        "https://doi.org/10.1126/sciadv.adg3754"
+      ]
+    }
+  ],
+  "costed_payload_note": "Full NeMO ATAC count package is declared at 1540753269 bytes (~1.54 GiB) MD5 796c8b3aa587b257af0a46615a437dba. Acquisition exceeds this continuation's 64 MiB / no-payload budget; deliver a separate costed proposal before any download/recount.",
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "no_dataset_defect_from_null_alone": true
+  },
+  "predictions": null,
+  "fits": 0
+}
