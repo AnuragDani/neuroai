@@ -1,0 +1,37 @@
+{
+  "task": "R4",
+  "review_target": "GUIDANCE_AND_CLAIMS",
+  "verdict": "PASS",
+  "recorded_date": "2026-10-01",
+  "reviewer_agent_id": "f7042b9d-22ff-46c9-a8bc-99f65c5dce5a",
+  "self_certification": false,
+  "correction_cycle": 0,
+  "max_correction_cycles": 2,
+  "critical_findings": [],
+  "non_blocking_criticisms": [
+    "G7 MD/JSON level alignment fixed post-review (JSON [1,2] retained)",
+    "G8 Anurag [12:12] citation hygiene fixed; professor anchor is Direction/To-Do 10",
+    "Disease claim-2 composition sensitivity retained as disclosure warning"
+  ],
+  "checklist": {
+    "mom_anchors": "PASS",
+    "professor_vs_worker_separation": "PASS",
+    "claim_hierarchy_gate_mapping": "PASS",
+    "q2_not_relabeled_pass": "PASS",
+    "objective_approval_bounds": "PASS",
+    "input_target_overlap": "PASS",
+    "no_fits_downloads": "PASS"
+  },
+  "hashes_post_hygiene": {
+    "GUIDANCE_AND_CLAIMS.md": "c452b45c8533a15d8631856cf26323adfc620a09a221a157a1b649bb1586af6f",
+    "guidance_and_claims.json": "d5ccf498ede4d870a21fb9841cf555186feb7c5570c679402a23a6efc46f2254",
+    "july_2_mom": "38871f240c5a0f7f95ea9e279fa5b73a4306152e24a6b1b5515a509011529a91",
+    "july_21_mom": "0bce4ea91e7daefac37645bfc6dc35b4742473ea3b5152737ded8bf9eff3ace2",
+    "attestation": "efb6921e927ea38b5e4a3a3a565b805ced463249319598425fdef6f2f51bc8fd"
+  },
+  "focused_tests": {
+    "command": "pytest tests/test_failure_audit_guidance_r4.py tests/test_failure_audit_s9_replay_r1.py tests/test_failure_audit_null_r2.py tests/test_failure_audit_execution_r3.py -q",
+    "result": "24 passed",
+    "ruff": "PASS on owned test path"
+  }
+}

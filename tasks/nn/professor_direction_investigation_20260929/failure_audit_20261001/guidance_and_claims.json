@@ -1,0 +1,101 @@
+{
+  "task": "R4",
+  "disposition": "GUIDANCE_CLAIMS_PASS",
+  "recorded_date": "2026-10-01",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "research_fits": 0,
+  "diagnostic_fits": 0,
+  "downloads": 0,
+  "scientific_labels_retained": {
+    "primary": "B_NULL",
+    "s9": "INVALID",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "study": "STUDY_PARTIAL"
+  },
+  "mom_hashes": {
+    "july_2": "38871f240c5a0f7f95ea9e279fa5b73a4306152e24a6b1b5515a509011529a91",
+    "july_21": "0bce4ea91e7daefac37645bfc6dc35b4742473ea3b5152737ded8bf9eff3ace2"
+  },
+  "attestation": {
+    "path": "plan/real_data_attestation_2026-09-08.json",
+    "sha256": "efb6921e927ea38b5e4a3a3a565b805ced463249319598425fdef6f2f51bc8fd",
+    "professor_approval_date": null,
+    "independently_verified": false,
+    "scope": "Continue existing public-data RNA/paired plans; not a dated independent Fang endorsement of a changed disease objective"
+  },
+  "guidance_rows": [
+    {"id": "G1", "anchor": "Jul2[00:00]", "professor": "mathematical tweaks / loss / residualize non-clinical", "worker": "customize only for measured defects", "levels": [1, 2]},
+    {"id": "G2", "anchor": "Jul2[00:36]", "professor": "cell-type cohorts and gradual spectrum", "worker": "donor DS signal + descriptive spectrum; not independent state", "levels": [3]},
+    {"id": "G3", "anchor": "Jul2[14:12]", "professor": "equal supervision / apple-to-apple", "worker": "matched arms/splits/budget", "levels": [1, 2]},
+    {"id": "G4", "anchor": "Jul2[19:30]/[20:51]", "professor": "no saturated subtype without wet-lab; prefer granular state", "worker": "cell types strata-only; Q2 blocks claim-4 proxies", "levels": [4]},
+    {"id": "G5", "anchor": "Jul21 Direction/[00:00]", "professor": "Tasic engineering only; gene-defined labels circular", "worker": "no accuracy-superiority; PCA not independent modality", "levels": [1, 4]},
+    {"id": "G6", "anchor": "Jul21[03:40]", "professor": "stratified / donor downsampling", "worker": "Q4 sampler; donor-held-out", "levels": [1, 2, 3, 4]},
+    {"id": "G7", "anchor": "Jul21[14:02]-[17:39]", "professor": "discriminating multimodal benchmark; concat baseline; independent modalities", "worker": "S9 software control; ladder RNA/ATAC+concat/CA", "levels": [1, 2]},
+    {"id": "G8", "anchor": "Jul21 Direction/To-Do10", "professor": "faithfulness interventions", "worker": "N13 clamp/permute/ablate", "levels": [1, 2]},
+    {"id": "G9", "anchor": "Jul21 disease pending/[24:15]", "professor": "disease-vs-control proposed; pending approval", "worker": "user attestation for existing public plans; date null; not changed-objective endorsement", "levels": [2]},
+    {"id": "G10", "anchor": "Jul21[25:26]", "professor": "paper-grounded customization", "worker": "only when defect established", "levels": [1, 2]}
+  ],
+  "claim_hierarchy_gates": [
+    {
+      "level": 1,
+      "name": "software_mechanism_control",
+      "gate": "protocol_review_fit_replay",
+      "q2_blocks": false,
+      "proceed_with_current_inputs": true,
+      "note": "S9 INVALID retained; corrected null still in scope"
+    },
+    {
+      "level": 2,
+      "name": "computational_prediction",
+      "gate": "masking_donor_isolation_leakage",
+      "q2_blocks": false,
+      "proceed_with_current_inputs": true,
+      "note": "masked genes/regions or pairing prediction; not biological proof"
+    },
+    {
+      "level": 3,
+      "name": "descriptive_cell_state_program",
+      "gate": "construct_validity_disclosure",
+      "q2_blocks": false,
+      "proceed_with_current_inputs": true,
+      "limited": true,
+      "note": "RNA-derived OK only with disclosed circularity limits; no upgrade to level 4"
+    },
+    {
+      "level": 4,
+      "name": "biological_state_perturbation",
+      "gate": "Q2_ENDPOINT_UNRESOLVED",
+      "q2_blocks": true,
+      "proceed_with_current_inputs": false,
+      "note": "no orthogonal maturation/state assay; Q2 not relabeled PASS"
+    }
+  ],
+  "prospective_amendment": {
+    "id": "endpoint_gate_scope_20261001",
+    "summary": "Q2 ENDPOINT_UNRESOLVED applies to claim level 4 and proxy-as-biology statements; not a universal stop for levels 1-2 or limited disclosed level-3 descriptive work.",
+    "q2_relabeled_pass": false,
+    "authorizes_new_biological_claim": false,
+    "authorizes_experiment_by_itself": false
+  },
+  "current_data_paths": {
+    "claim1_software_null_or_repro": "eligible_for_decision",
+    "claim2_masked_measurement_or_pairing": "eligible_candidate_R5_R6",
+    "claim3_descriptive_limited": "eligible_with_disclosure",
+    "claim4_biological_cell_state": "blocked",
+    "dataset_change_from_null_alone": "forbidden",
+    "nemo_external_test_role": "preserved"
+  },
+  "objective_approval": {
+    "jul21_disease_pending": true,
+    "dated_independent_fang_approval_for_changed_disease_objective": false,
+    "user_attestation_existing_public_plans": true,
+    "may_claim_professor_endorsed_changed_disease_task": false
+  },
+  "independent_review": {
+    "verdict": "PASS",
+    "agent_id": "f7042b9d-22ff-46c9-a8bc-99f65c5dce5a",
+    "self_certification": false,
+    "correction_cycle": 0,
+    "evidence": "INDEPENDENT_REVIEW_R4_GUIDANCE.md"
+  }
+}
