@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-01",
+  "kind": "no_fit_null_invariance_diagnostic",
+  "source_commit": "67245a2b19de9d6fb094fc01190590d9362d6d43",
+  "generator_seed": 9001,
+  "rho": 0,
+  "shuffle_seeds": [
+    4001,
+    4002,
+    4003,
+    4004,
+    4005,
+    4006,
+    4007,
+    4008,
+    4009,
+    4010,
+    4011,
+    4012,
+    4013,
+    4014,
+    4015,
+    4016
+  ],
+  "original_max_abs_donor_channel_product_mean": 1.734723475976807e-16,
+  "shuffled_mean_abs_donor_channel_product_mean": 0.1465336998807442,
+  "shuffled_max_abs_donor_channel_product_mean": 0.576881076114585,
+  "observations": [
+    "Original rho=0 construction imposes exact donor/channel orthogonality.",
+    "Within-donor ATAC permutation does not preserve this constraint.",
+    "Zero covariance here does not establish independent exchangeable cell pairs."
+  ],
+  "limits": [
+    "No training/refitting performed.",
+    "Does not establish cause of observed neural log-loss drop or unimodal BA.",
+    "Historical frozen S9 INVALID remains unchanged."
+  ]
+}

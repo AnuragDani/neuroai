@@ -1,5 +1,27 @@
 # Paired DS multiome implementation checklist
 
+## Failure audit and next experiment — R0–R10
+
+Canonical checklist; per-task acceptance/verification/dependencies/files in [dated R plan](nn/professor_direction_investigation_20260929/failure_audit_20261001/PLAN.md). Preserve older Q/M/E/R task records; this R0–R10 block has its own dated scope.
+
+- [x] R0: Pin source/runtime/provenance; copy owned plan/evidence to isolated checkout. — `DONE`. Evidence: [PREFLIGHT.md](nn/professor_direction_investigation_20260929/failure_audit_20261001/PREFLIGHT.md); owned PLAN.md / GNHF_PROMPT.md / NULL_INVARIANCE_DIAGNOSTIC.json copied with matching SHA-256; root plan/checklist appended without overwriting older Q0–Q12 or prior sections.
+- [ ] R1: Replay immutable S9 evidence and trace actual execution/review coverage.
+- [ ] R2: Test null exchangeability and diagnose marginal failure with no research fits.
+- [ ] Checkpoint A: Replay and null-contract evidence checked; old INVALID retained.
+- [ ] R3: Review fixed tiny reproducibility spec; test global RNG/thread risk within 12 diagnostic-fit cap; repair only confirmed cause.
+- [ ] R4: Reconcile original professor guidance with claim-specific endpoint requirements.
+- [ ] R5: Compare current-data computational task and bounded primary-source dataset candidates.
+- [ ] Checkpoint B: Execution/claims/data audits complete or precisely blocked.
+- [ ] R6: Rank causes; choose one discriminating experiment with budget/inference limits.
+- [ ] R7: Commit separate protocol; minimally implement and test required changes.
+- [ ] R8: Independent full-path review on actual executor/dependency/protocol hashes.
+- [ ] Checkpoint C: Scientific acquisition/fit gates pass; diagnostic fit allowance separately reviewed.
+- [ ] R9: Run one bounded experiment if justified; replay saved results; otherwise report precise NO FIT.
+- [ ] R10: Commit truthful handoff/verification, resources, dispositions and one next action.
+- [ ] Checkpoint D: Stop after verified closeout or precise blocker with independent safe work exhausted.
+
+Blocked/skipped tasks retain unchecked boxes with evidence-backed disposition. No new positive scientific outcome required. Launch prompt: [GNHF_PROMPT.md](nn/professor_direction_investigation_20260929/failure_audit_20261001/GNHF_PROMPT.md).
+
 ## Data-driven investigation continuation — Q0–Q12
 
 Detailed acceptance criteria, verification commands, dependencies and likely files are defined per task in [the dated plan](nn/professor_direction_investigation_20260929/next_stage_20260930/PLAN.md#execution-amendment-detailed-tasks-and-verification). This is the canonical checklist for the new continuation. Existing checkboxes below retain their original scope. Earlier D0 metadata/count checks completed; Q1 adds a fresh reproducible replay and failure checks.
