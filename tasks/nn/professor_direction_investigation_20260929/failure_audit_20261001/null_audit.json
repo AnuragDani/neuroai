@@ -1,0 +1,282 @@
+{
+  "disposition": "NULL_AUDIT_PASS",
+  "date": "2026-10-01",
+  "kind": "r2_null_exchangeability_marginal_diagnosis",
+  "research_fits": 0,
+  "diagnostic_fits": 0,
+  "generator_draws_this_run": 81,
+  "generator_draws_cumulative": 81,
+  "generator_draw_cap": 256,
+  "seed_schedule_sha256": "34235ddfa2e3773142e92509c8d6ee256a1a5a27185af0363c9594c202a1692c",
+  "seed_schedule": {
+    "committed_before_simulation": true,
+    "decision_generator_seed": 9001,
+    "shuffle_seeds_reproduce_prior": [
+      4001,
+      4002,
+      4003,
+      4004,
+      4005,
+      4006,
+      4007,
+      4008,
+      4009,
+      4010,
+      4011,
+      4012,
+      4013,
+      4014,
+      4015,
+      4016
+    ],
+    "independent_gaussian_generator_seeds": [
+      5101,
+      5102,
+      5103,
+      5104,
+      5105,
+      5106,
+      5107,
+      5108,
+      5109,
+      5110,
+      5111,
+      5112,
+      5113,
+      5114,
+      5115,
+      5116,
+      5117,
+      5118,
+      5119,
+      5120,
+      5121,
+      5122,
+      5123,
+      5124,
+      5125,
+      5126,
+      5127,
+      5128,
+      5129,
+      5130,
+      5131,
+      5132,
+      5133,
+      5134,
+      5135,
+      5136,
+      5137,
+      5138,
+      5139,
+      5140,
+      5141,
+      5142,
+      5143,
+      5144,
+      5145,
+      5146,
+      5147,
+      5148,
+      5149,
+      5150,
+      5151,
+      5152,
+      5153,
+      5154,
+      5155,
+      5156,
+      5157,
+      5158,
+      5159,
+      5160,
+      5161,
+      5162,
+      5163,
+      5164
+    ],
+    "orthogonal_rho0_generator_seeds": [
+      5201,
+      5202,
+      5203,
+      5204,
+      5205,
+      5206,
+      5207,
+      5208,
+      5209,
+      5210,
+      5211,
+      5212,
+      5213,
+      5214,
+      5215,
+      5216
+    ],
+    "max_generator_array_draws": 256,
+    "fit_attempts_allowed": 0
+  },
+  "orthogonality_reproduction": {
+    "original_max_abs_donor_channel_product_mean": 1.734723475976807e-16,
+    "shuffled_mean_abs_donor_channel_product_mean": 0.1465336998807442,
+    "shuffled_max_abs_donor_channel_product_mean": 0.576881076114585,
+    "shuffled_per_seed_mean_abs": [
+      0.16193457405061928,
+      0.1582957315574944,
+      0.15172016448969347,
+      0.16332908480363045,
+      0.1377161459569136,
+      0.1370568367490429,
+      0.12863730220221117,
+      0.16166422966022762,
+      0.137564293586367,
+      0.15350355367885196,
+      0.12462202049893782,
+      0.1345363164188659,
+      0.1470460206303523,
+      0.14578361016966682,
+      0.14851415625690398,
+      0.15261515738212839
+    ],
+    "matches_prior_diagnostic": {
+      "original_max_abs": true,
+      "shuffled_mean_abs": true,
+      "shuffled_max_abs": true
+    },
+    "prior_sha256": "d6207ea0b5a0372bec5a90e6091cdccfdc4ce73eafe5ed05b61299c903abbedf"
+  },
+  "exchangeability": {
+    "intended_claim": "Software/mechanism control: detect planted within-cell RNA\u2194ATAC pairing via donor log-loss drop under within-donor ATAC shuffle.",
+    "pairing_statistic_tests": {
+      "primary_object": "Whether fitted predictions depend on within-donor cell pairing of RNA and ATAC rows (cell-pair exchangeability under the intervention).",
+      "not_primarily": "Label relevance of unimodal features; that is gated separately by the unimodal marginal BA \u2264 0.60 check.",
+      "mixture_caveat": "If the generative null is not exchangeable under the same shuffle, a PAIRING_POSITIVE at \u03c1=0 can reflect broken exchangeability (exact orthogonality) rather than planted pairing or label leak."
+    },
+    "rho0_construction": {
+      "planted": "ATAC_k = w with w forced exactly orthogonal to RNA_k=z (after centre/scale). Sample mean product per donor\u00d7channel is machine-zero (~1e-16), stronger than population independence E[z\u00b7w]=0.",
+      "nuisance": "Independent RNA/ATAC nuisance channels plus a shared donor_shift; donor_shift is label-blind (RNG keyed by donor id, not y).",
+      "label_term": "The (2y\u22121)\u00b7\u03c1\u00b7z term vanishes at \u03c1=0, so planted channels carry no designed label signal."
+    },
+    "within_donor_atac_shuffle": {
+      "preserves": [
+        "Within-donor ATAC row multiset (exact marginals)",
+        "Donor identity and labels",
+        "RNA matrix unchanged",
+        "Cross-donor isolation"
+      ],
+      "breaks": [
+        "Exact planted-channel orthogonality (z \u22a5 w cell pairing)",
+        "Any learned dependence on the original cell alignment"
+      ],
+      "exchangeability": "Under true conditional independence of RNA/ATAC given donor, within-donor ATAC permutation leaves the joint law invariant. The frozen \u03c1=0 construction places (z,w) on the measure-zero set {w\u22a5z}, which permutation leaves; therefore original and shuffled joints are not exchangeable under this generator."
+    },
+    "implication_for_fitted_null": "Observed \u03c1=0 PAIRING_POSITIVE is consistent with a broken exchangeability null (models can exploit exact orthogonality that shuffle destroys). It does not by itself prove a neural leak of label information, nor does one positive 95% CI prove systematic error without a valid exchangeable reference."
+  },
+  "orthogonal_panel": {
+    "n_seeds": 16,
+    "original_max_abs_max": 2.498001805406602e-16,
+    "original_max_abs_median": 1.496198998029996e-16,
+    "shuffled_mean_abs_mean": 0.1452961827023909,
+    "shuffled_mean_abs_min": 0.13145726373789018,
+    "shuffled_mean_abs_max": 0.16433780832791114,
+    "all_original_near_machine_zero": true,
+    "all_shuffled_far_from_zero": true
+  },
+  "independent_gaussian_panel": {
+    "kind": "diagnostic_alternative_independent_gaussian_rho0",
+    "not_s9_replacement": true,
+    "n_seeds": 64,
+    "original_mean_abs_mean": 0.14488679278377903,
+    "original_mean_abs_std": 0.011705460839763914,
+    "shuffled_mean_abs_mean": 0.14446380553783206,
+    "shuffled_mean_abs_std": 0.011745017027775388,
+    "mean_shuffle_over_original_ratio": 1.0026952623816614,
+    "exchangeability_approx": "Under independent Gaussians, original and shuffled mean-|product| are the same order; ratio near 1 supports approximate exchangeability of this statistic (unlike exact orthogonalization).",
+    "ratio_near_one": true
+  },
+  "marginal_uncertainty": {
+    "rho": 1.0,
+    "arms": {
+      "logreg_rna": {
+        "pooled_ba": 0.75,
+        "complete": true,
+        "exceeds_marginal_max": true,
+        "donor_bootstrap": {
+          "n_draws_requested": 2000,
+          "n_valid": 2000,
+          "n_invalid_single_class": 0,
+          "mean": 0.7497377797512086,
+          "ci95": [
+            0.5625,
+            0.9166666666666666
+          ],
+          "fraction_ba_gt_0_60": 0.9345,
+          "interpretation": "Donor-cluster bootstrap of one saved prediction vector estimates uncertainty from resampling the same 24 donors; it does not simulate independent new donor draws from a chance classifier."
+        },
+        "n_correct": 18
+      },
+      "logreg_atac": {
+        "pooled_ba": 0.7083333333333334,
+        "complete": true,
+        "exceeds_marginal_max": true,
+        "donor_bootstrap": {
+          "n_draws_requested": 2000,
+          "n_valid": 2000,
+          "n_invalid_single_class": 0,
+          "mean": 0.7075237592000362,
+          "ci95": [
+            0.5251917200446611,
+            0.8785714285714286
+          ],
+          "fraction_ba_gt_0_60": 0.8705,
+          "interpretation": "Donor-cluster bootstrap of one saved prediction vector estimates uncertainty from resampling the same 24 donors; it does not simulate independent new donor draws from a chance classifier."
+        },
+        "n_correct": 17
+      }
+    },
+    "chance_independent_draw_reference": {
+      "model": "Hypergeometric overlap of a size-12 predicted-positive set with 12 true class-1 donors (balanced chance classifier).",
+      "n_donors": 24,
+      "n_per_class": 12,
+      "note": "This is an independent-draw chance reference for a single balanced prediction vector. It is not the same as donor-cluster bootstrap of one fixed prediction vector (which resamples the same 24 donors).",
+      "P_BA_ge": {
+        "P_BA_ge_0.5": 0.657863673545461,
+        "P_BA_ge_0.6": 0.1101733775714123,
+        "P_BA_ge_0.7083333333333334": 0.019562850663940985,
+        "P_BA_ge_0.75": 0.019562850663940985
+      },
+      "P_BA_eq_0.75": 0.017898375685426432,
+      "P_BA_eq_0.666667_approx": 0.09061052690747132
+    },
+    "distinction": {
+      "independent_donor_draws": "Chance hypergeometric reference: new random balanced predictions each time; P(BA\u22650.75) and P(BA\u22650.60) under pure chance.",
+      "repeated_resampling_of_24": "Donor bootstrap: resamples the fixed observed prediction vector; CI reflects instability of that vector under donor resampling, not a new generative chance experiment.",
+      "marginal_failure_reading": "Observed RNA BA=0.75 / ATAC\u22480.708 can occur under chance for n=24 balanced donors with non-negligible probability; finite-sample nuisance association is plausible. This does not overturn INVALID (gate failed), nor prove a structural unimodal leak without a prospective chance-calibrated marginal rule."
+    }
+  },
+  "candidate_null": {
+    "status": "CANDIDATE_DIAGNOSTIC_NULL",
+    "id": "independent_gaussian_rho0_within_donor_shuffle_20261001",
+    "statement": "For a future software pairing-use control, generate planted channels as independent centre-scaled Gaussians at \u03c1_plant=0 (no exact orthogonalization). The fitted-mechanism null remains: within-donor ATAC shuffle must not yield PAIRING_POSITIVE for CA. Under this generator the product-mean statistic is approximately exchangeable under the same shuffle (ratio near 1 in the preregistered panel).",
+    "role": "Diagnostic alternative generator for exchangeability \u2014 not a successful replacement of frozen S9 and not authorization to rerun S9.",
+    "what_would_change_conclusion": [
+      "Demonstration that independent-Gaussian \u03c1=0 still yields systematic PAIRING_POSITIVE under serial deterministic fits (would point past exchangeability to optimization/RNG).",
+      "Analytic proof that another intervention (e.g. label-blind feature scramble) better matches the estimand."
+    ],
+    "explicitly_not": [
+      "No constant/Bernoulli BA band calibration from S9 outcomes",
+      "No threshold chosen from observed S9 CI lowers",
+      "No claim that this fixes unimodal marginal BA"
+    ]
+  },
+  "shared_s9_raw": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_s9_analytic_pairing_20260930",
+  "shared_raw_unchanged": true,
+  "shared_raw_tree_sha256": "0309b6c9d5d4715dbb624bffc757d69b1a7fe630203153d3f0719e53848fe549",
+  "scientific_label_retained": "INVALID",
+  "limits": [
+    "Zero model fits; no S9 replacement claimed.",
+    "Independent-Gaussian null is a diagnostic alternative only.",
+    "Finite-sample chance BA reference does not overturn INVALID gate.",
+    "Does not establish the neural outcome's unique cause."
+  ]
+}
