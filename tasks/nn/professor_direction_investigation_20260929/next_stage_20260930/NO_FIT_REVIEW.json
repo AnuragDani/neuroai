@@ -1,0 +1,86 @@
+{
+  "task": "Q9",
+  "disposition": "PASS",
+  "protocol_id": "S9_analytic_pairing_use_synthetic_20260930",
+  "date": "2026-10-01",
+  "branch": "gnhf/execute-the-p22-data-146414",
+  "fits": 0,
+  "research_fits_executed": 0,
+  "network_bytes": 0,
+  "depends_on": [
+    "Q8"
+  ],
+  "reviewer": {
+    "identity": "cursor Task generalPurpose agent (independent of Q7/Q8 authoring session)",
+    "agent_id": "393c27bd-2487-49eb-8225-ddd76b74ec4a",
+    "self_certification": false,
+    "review_file": "INDEPENDENT_REVIEW_Q9.md"
+  },
+  "verdict": "PASS",
+  "correction_cycle": 0,
+  "max_correction_cycles": 2,
+  "critical_findings": [],
+  "non_critical_notes": [
+    "Finite-gradient / reload checks are not research fits.",
+    "Equal-supervision learned-arm identity deferred to Q10 execution with 0 fits so far.",
+    "refuse_forbidden_raw_root is soft for non-S7/S8; hard S9 root is refuse_if_not_allowed_raw_root."
+  ],
+  "reviewed_hashes": {
+    "SYNTHETIC_PROTOCOL.json": "eedf5e77c4ba08d8a801609e5a2bdfccc5d882e2d297d9469c4af364ad25ec7a",
+    "SPLIT_MANIFEST.json": "2d9a3b9fac7bfd8dd48b7517e0ad22e297eab9a4e9f775ac814dd99b8c50fd4d",
+    "FIT_LEDGER.json": "841c8468b6b17a43628d14af00f277ffb156b774264fe1dad0545b2ab5cd3563",
+    "src/p22/eval/s9_analytic.py": "dad126cd6dc33e9e8226b9924baa7c0b0fd3e88f8b413a6b06c9313c06d4ea02",
+    "tests/test_next_stage_s9_implement_q8.py": "e2902507396691f58865e2448ee4c8c486c76eb0146d06dfcfeb5bb705b35836",
+    "tests/test_next_stage_synthetic_protocol_q7.py": "1235f661bc2baad860662ba614e21b7db65091bf1461dc718bfeb4b2b091df43"
+  },
+  "hashes_match": true,
+  "checklist": {
+    "equations": "PASS",
+    "estimand": "PASS",
+    "null_validity": "PASS",
+    "oracle_interpretation": "PASS",
+    "arm_multiplicity_rule": "PASS",
+    "leakage": "PASS",
+    "power_language": "PASS",
+    "fit_arithmetic": "PASS",
+    "output_root_safety": "PASS",
+    "change_scope": "PASS"
+  },
+  "independent_recompute": {
+    "rho1_oracle_ba": 1.0,
+    "rho0_oracle_ba": 0.625,
+    "rho1_shuffled_oracle_ba": 0.5,
+    "smoke_plus_screen_jobs": 49,
+    "cap": 60,
+    "decision_seed": 9001,
+    "headroom_seeds": [9101, 9102, 9103],
+    "seeds_disjoint": true
+  },
+  "focused_tests": {
+    "command": "PYTHONPATH=<workspace>/src .venv-p22/bin/python -m pytest tests/test_next_stage_synthetic_protocol_q7.py tests/test_next_stage_s9_implement_q8.py -q",
+    "exit_code": 0,
+    "passed": 13
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "q3_regulatory": "REGULATORY_ADEQUACY_UNRESOLVED",
+    "q5_external": "EXTERNAL_FEASIBILITY_BOUNDED / confirmatory UNRESOLVED"
+  },
+  "checkpoint_c": {
+    "authorized_by_review": true,
+    "blocks_if": "critical FAIL/UNRESOLVED on exact reviewed hashes",
+    "resource_headroom_established": true,
+    "planned_fits": 49,
+    "cap": 60,
+    "headroom_fits": 11,
+    "fitting_hours_cap": 4,
+    "artifact_gib_cap": 2
+  },
+  "next": "Checkpoint C then Q10 bounded synthetic batch under frozen hashes"
+}

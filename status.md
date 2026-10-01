@@ -1,8 +1,12 @@
 # P22 current status
 
-Updated: 2026-09-30. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
+Updated: 2026-10-01. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
+
+## Data-driven continuation Q9 / Checkpoint C — PASS — 2026-10-01
+
+**Q9 DONE** with disposition **`PASS`** and **Checkpoint C DONE (`PASS`)** on `gnhf/execute-the-p22-data-146414`. Independent Task generalPurpose reviewer (agent `393c27bd-2487-49eb-8225-ddd76b74ec4a`; no self-certification) recomputed exact protocol/code/test SHA-256 hashes, reran Q7+Q8 focused tests (13 PASS), and verified oracle/fit-arithmetic/seed/leakage/root checklist items 1–10. Critical findings empty; correction_cycle 0/2. Resource headroom established (49≤60; headroom 11). Research fits for frozen `S9_analytic_pairing_use_synthetic_20260930` are authorized only under reviewed hashes and raw root `reports/generated/nn_s9_analytic_pairing_20260930/`. Unresolved Q2/Q3/Q5 flags retained; biological pilot still blocked. **0 research fits so far.** Q10 next. Primary remains **`B_NULL`**; S7-v1/v2 **`INVALID`**; prior S8 **`NO FIT`**; power `POWER_UNESTABLISHED`; study `STUDY_PARTIAL`. [NO_FIT_REVIEW](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/NO_FIT_REVIEW.json); [INDEPENDENT_REVIEW_Q9](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/INDEPENDENT_REVIEW_Q9.md); [CHECKPOINT_C](tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/CHECKPOINT_C.md).
 
 ## Data-driven continuation Q8 — IMPLEMENT_PASS — 2026-09-30
 
@@ -96,7 +100,7 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 
 ## Next verified milestones
 
-1. Data-driven continuation Q0–Q8 done (Q2 `ENDPOINT_UNRESOLVED`; Q3 structural PASS / `REGULATORY_ADEQUACY_UNRESOLVED`; Q4 `SUPPORT_REPAIR_PASS` / `ELIGIBILITY_FROZEN`; Q5 `EXTERNAL_FEASIBILITY_BOUNDED` / confirmatory `UNRESOLVED`; Q6 `EXPERIMENT_SELECTED` / fit `PASS`; Q7 `PROTOCOL_FROZEN`; Q8 `IMPLEMENT_PASS` for `S9_analytic_pairing_use_synthetic_20260930`; Checkpoints A–B accepted); execute Q9 independent review on exact hashes next with unresolved flags retained. Biological cell-state pilot remains blocked by Q2; no fits until Checkpoint C. Prior S8 `NO FIT` preserved; not a stop on all future designs.
+1. Data-driven continuation Q0–Q9 + Checkpoint C done (Q2 `ENDPOINT_UNRESOLVED`; Q3 structural PASS / `REGULATORY_ADEQUACY_UNRESOLVED`; Q4 `SUPPORT_REPAIR_PASS` / `ELIGIBILITY_FROZEN`; Q5 `EXTERNAL_FEASIBILITY_BOUNDED` / confirmatory `UNRESOLVED`; Q6 `EXPERIMENT_SELECTED` / fit `PASS`; Q7 `PROTOCOL_FROZEN`; Q8 `IMPLEMENT_PASS`; Q9 independent `PASS` on exact hashes; Checkpoint C `PASS` authorizing S9 fits under frozen hashes / new raw root; Checkpoints A–C accepted); execute Q10 bounded synthetic batch next with unresolved biological flags retained. Biological cell-state pilot remains blocked by Q2. Prior S8 `NO FIT` preserved; not a stop on all future designs.
 2. Professor-direction continuation closeout complete (`NO FIT`); no S8 fits authorized. Bounded internal null/detectability paper (F4) remains a valid later writing path, not the predetermined destination of Q0–Q12.
 3. S7-v2 handoff remains (`INVALID`); no further S7-v2 fits under frozen rules. Local review of branch + durable ledger; no push/merge from this status.
 4. Independent review corrections are complete; reviewed finish branch and unsent packet are ready. Merge/push remain a separate milestone.
