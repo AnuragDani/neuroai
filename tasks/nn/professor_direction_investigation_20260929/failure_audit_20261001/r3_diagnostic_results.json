@@ -1,0 +1,220 @@
+{
+  "attempt_cap": 12,
+  "attempts": 12,
+  "comparisons": {
+    "concurrent_J1_A5_vs_A7": {
+      "both_ok": true,
+      "left": "A5",
+      "pred_digest_equal": true,
+      "right": "A7",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "concurrent_J2_A6_vs_A8": {
+      "both_ok": true,
+      "left": "A6",
+      "pred_digest_equal": true,
+      "right": "A8",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "post_concurrent_A9_vs_A1": {
+      "both_ok": true,
+      "left": "A9",
+      "pred_digest_equal": true,
+      "right": "A1",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "serial_J1_A1_vs_A2": {
+      "both_ok": true,
+      "left": "A1",
+      "pred_digest_equal": true,
+      "right": "A2",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "serial_J1_A1_vs_concurrent_A5": {
+      "both_ok": true,
+      "left": "A1",
+      "pred_digest_equal": true,
+      "right": "A5",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "serial_J2_A3_vs_A4": {
+      "both_ok": true,
+      "left": "A3",
+      "pred_digest_equal": true,
+      "right": "A4",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    },
+    "serial_J2_A3_vs_concurrent_A6": {
+      "both_ok": true,
+      "left": "A3",
+      "pred_digest_equal": true,
+      "right": "A6",
+      "state_max_abs_diff": 0.0,
+      "state_sha_equal": true
+    }
+  },
+  "deliberate_fail_status": "error: ValueError: donor_ids is empty",
+  "diagnostic_fits_this_run": 12,
+  "disposition": "DIAGNOSTIC_FITS_COMPLETE",
+  "records": [
+    {
+      "attempt_id": "A1",
+      "attempt_index": 1,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "serial",
+      "seconds": 0.6452667500016105,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A2",
+      "attempt_index": 2,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "serial",
+      "seconds": 0.011724583000614075,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A3",
+      "attempt_index": 3,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J2",
+      "n_state_tensors": 14,
+      "pred_digest": "ac1d31a10f751922cecff9090e15bb7da47e12b691efbc6db8930de4dc07156f",
+      "route": "serial",
+      "seconds": 0.010264458000165178,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A4",
+      "attempt_index": 4,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J2",
+      "n_state_tensors": 14,
+      "pred_digest": "ac1d31a10f751922cecff9090e15bb7da47e12b691efbc6db8930de4dc07156f",
+      "route": "serial",
+      "seconds": 0.010970916999212932,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A5",
+      "attempt_index": 5,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "thread_pool_workers_2",
+      "seconds": 0.023510208000516286,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A6",
+      "attempt_index": 6,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J2",
+      "n_state_tensors": 14,
+      "pred_digest": "ac1d31a10f751922cecff9090e15bb7da47e12b691efbc6db8930de4dc07156f",
+      "route": "thread_pool_workers_2",
+      "seconds": 0.02702645899989875,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A7",
+      "attempt_index": 7,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "thread_pool_workers_2",
+      "seconds": 0.019846666997182183,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A8",
+      "attempt_index": 8,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J2",
+      "n_state_tensors": 14,
+      "pred_digest": "ac1d31a10f751922cecff9090e15bb7da47e12b691efbc6db8930de4dc07156f",
+      "route": "thread_pool_workers_2",
+      "seconds": 0.023309708001761464,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A9",
+      "attempt_index": 9,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "serial",
+      "seconds": 0.009521542000584304,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A10",
+      "attempt_index": 10,
+      "donor_balanced_accuracy": null,
+      "job_key": "J_FAIL",
+      "n_state_tensors": 0,
+      "pred_digest": null,
+      "route": "serial_deliberate_fail",
+      "seconds": 0.0003647499979706481,
+      "state_sha256": null,
+      "status": "error: ValueError: donor_ids is empty"
+    },
+    {
+      "attempt_id": "A11",
+      "attempt_index": 11,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "n_state_tensors": 14,
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "serial_resume_fixture",
+      "seconds": 0.009200124997732928,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "ok"
+    },
+    {
+      "attempt_id": "A12",
+      "attempt_index": 12,
+      "donor_balanced_accuracy": 0.5,
+      "job_key": "J1",
+      "pred_digest": "9ebe5ca46ef3463403e3bd3f00196ce8759264aac393b643df5752762f38355b",
+      "route": "serial_resume_fixture",
+      "seconds": 0.0,
+      "state_sha256": "db706cb78a49fbe845fa02276d36b412a8af0de65766f6c54b7fddad53e353f5",
+      "status": "skipped_already_done:A11"
+    }
+  ],
+  "repair_recommendation": "none_required_from_this_diagnostic",
+  "resume_skip_status": "skipped_already_done:A11",
+  "review_agent_id": null,
+  "rng_interference_finding": "NO_DIVERGENCE_OBSERVED_UNDER_SPEC",
+  "scientific_label_retained": "INVALID",
+  "shared_raw_unchanged": true,
+  "shared_s9_tree_sha256": "0309b6c9d5d4715dbb624bffc757d69b1a7fe630203153d3f0719e53848fe549",
+  "spec_id": "r3_rng_thread_diag_20261001",
+  "spec_sha256": "9e534c6132a1f2a6c003671a811a5eda3e762db6fe4a8a26604529583abba123",
+  "wall_seconds": 0.753
+}

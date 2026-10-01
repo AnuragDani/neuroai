@@ -113,9 +113,12 @@ def test_seed_schedule_committed_and_counter(report: dict) -> None:
     assert schedule["fit_attempts_allowed"] == 0
     assert len(schedule["independent_gaussian_generator_seeds"]) == 64
     assert len(schedule["orthogonal_rho0_generator_seeds"]) == 16
+    # R2 itself spent zero diagnostic fits; later R3 may legitimately use the cap.
+    assert report["diagnostic_fits"] == 0
+    assert report["research_fits"] == 0
     counter = json.loads(COUNTER.read_text())
     assert counter["scientific_fit_attempts"] == 0
-    assert counter["diagnostic_fit_attempts"] == 0
+    assert counter["diagnostic_fit_attempts"] <= counter["diagnostic_fit_cap"]
     assert counter["generator_only_draws"] == report["generator_draws_cumulative"]
     assert counter["generator_only_draws"] <= counter["generator_only_cap"]
 

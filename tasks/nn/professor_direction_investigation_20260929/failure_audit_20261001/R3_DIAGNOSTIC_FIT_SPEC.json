@@ -1,0 +1,157 @@
+{
+  "attempt_cap": 12,
+  "committed_before_any_diagnostic_fit": true,
+  "frozen_at": "2026-10-01T08:26:30Z",
+  "frozen_split_indices": {
+    "test_donors": [
+      3,
+      7
+    ],
+    "train_donors": [
+      0,
+      1,
+      4,
+      5
+    ],
+    "val_donors": [
+      2,
+      6
+    ]
+  },
+  "jobs": [
+    {
+      "attempt_ids": [
+        "A1",
+        "A2"
+      ],
+      "job_key": "J1",
+      "purpose": "serial repeatability (A2 must match A1 state_dict+preds)",
+      "route": "serial"
+    },
+    {
+      "attempt_ids": [
+        "A3",
+        "A4"
+      ],
+      "job_key": "J2",
+      "purpose": "second fold-equivalent serial identity (swap test/val)",
+      "route": "serial",
+      "split_override": {
+        "test_donors": [
+          2,
+          6
+        ],
+        "train_donors": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "val_donors": [
+          3,
+          7
+        ]
+      }
+    },
+    {
+      "attempt_ids": [
+        "A5",
+        "A6"
+      ],
+      "job_keys": [
+        "J1",
+        "J2"
+      ],
+      "purpose": "concurrent pair #1; compare to serial A1/A3 references",
+      "route": "thread_pool_workers_2"
+    },
+    {
+      "attempt_ids": [
+        "A7",
+        "A8"
+      ],
+      "job_keys": [
+        "J1",
+        "J2"
+      ],
+      "purpose": "concurrent pair #2; assess concurrent-vs-concurrent stability",
+      "route": "thread_pool_workers_2"
+    },
+    {
+      "attempt_ids": [
+        "A9"
+      ],
+      "job_key": "J1",
+      "purpose": "post-concurrent serial contamination check vs A1",
+      "route": "serial"
+    },
+    {
+      "attempt_ids": [
+        "A10"
+      ],
+      "deliberate_failure": "empty_train_indices",
+      "job_key": "J_FAIL",
+      "purpose": "failed-attempt accounting + counter survival (empty train)",
+      "route": "serial_deliberate_fail"
+    },
+    {
+      "attempt_ids": [
+        "A11",
+        "A12"
+      ],
+      "job_key": "J1",
+      "purpose": "A11 writes ledger row then stops; A12 resume must refuse double-count or skip already-done fit_id",
+      "route": "serial_resume_fixture"
+    }
+  ],
+  "model": "gated_fusion",
+  "not_favourable_seed_selection": true,
+  "not_s9_rescue": true,
+  "outputs": {
+    "ledger": "reports/generated/nn_failure_audit_20261001/r3_diagnostic_ledger.jsonl",
+    "results_json": "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/r3_diagnostic_results.json"
+  },
+  "protocol": {
+    "batch_size": 8,
+    "dropout": 0.0,
+    "embed_dim": 8,
+    "hidden_dim": 8,
+    "learning_rate": 0.001,
+    "max_epochs": 3,
+    "model_seed": 7701,
+    "n_heads": 2,
+    "n_tokens": 2,
+    "patience": 3
+  },
+  "purpose": "Diagnose whether concurrent ThreadPoolExecutor workers racing on process-global set_all_seeds change neural init/train outcomes versus serial execution on identical fixed tensors. Code diagnosis only; not an S9 scientific performance run or seed-shopping exercise.",
+  "review_gate": {
+    "required": true,
+    "self_certification_forbidden": true,
+    "unavailable_means": "REVIEW_PENDING; read-only audit still completes; 0 diagnostic fits"
+  },
+  "scientific_fits_allowed": 0,
+  "spec_id": "r3_rng_thread_diag_20261001",
+  "success_criteria": {
+    "concurrent_divergence_is_evidence_of_rng_interference": true,
+    "concurrent_match_does_not_prove_absence_of_race": true,
+    "repair_if_confirmed": "Prefer serial jobs (workers=1) as default; process isolation only if serial cannot eliminate observed interference",
+    "serial_identity_atol_preds": 1e-12,
+    "serial_identity_atol_state": 0.0
+  },
+  "tensors": {
+    "cells_per_donor": 4,
+    "construction": "numpy Generator(7701): RNA/ATAC ~ N(0,1); donor labels fixed [0,0,0,0,1,1,1,1]; train/val/test indices frozen in this spec",
+    "generator_seed_for_fixed_arrays": 7701,
+    "label_balance": "4_pos_4_neg_donors",
+    "n_classes": 2,
+    "n_donors": 8,
+    "n_features_atac": 4,
+    "n_features_rna": 4
+  },
+  "tolerances": {
+    "prediction_max_abs_diff_serial": 1e-12,
+    "report_all_differences": true,
+    "state_dict_max_abs_diff_serial": 0.0
+  },
+  "wall_minutes_cap": 15
+}
