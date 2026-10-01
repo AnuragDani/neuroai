@@ -5,7 +5,7 @@
 Detailed acceptance criteria, verification commands, dependencies and likely files are defined per task in [the dated plan](nn/professor_direction_investigation_20260929/next_stage_20260930/PLAN.md#execution-amendment-detailed-tasks-and-verification). This is the canonical checklist for the new continuation. Existing checkboxes below retain their original scope. Earlier D0 metadata/count checks completed; Q1 adds a fresh reproducible replay and failure checks.
 
 - [x] Q0: Pin source/runtime/input provenance; preserve dirty main; copy only owned plan/evidence into isolated worktree. — `DONE`. Evidence: [PREFLIGHT.md](nn/professor_direction_investigation_20260929/next_stage_20260930/PREFLIGHT.md); owned plan/prompt/three diagnostic JSONs copied with matching SHA-256; root plan/checklist appended without overwriting older sections.
-- [ ] Q1: Reproduce saved diagnostics and canonical verifier; verify tamper/order/overwrite refusals.
+- [x] Q1: Reproduce saved diagnostics and canonical verifier; verify tamper/order/overwrite refusals. — `DONE`. Evidence: [REPLAY.md](nn/professor_direction_investigation_20260929/next_stage_20260930/REPLAY.md); fresh root `reports/generated/nn_next_stage_q1_replay_20260930/` byte-identical to three golden JSONs; `verify_ladder.py` PASS/`B_NULL` without `--write`; 17 pytest PASS including new refusal tests.
 - [ ] Q2: Audit independent cell-state endpoint or record ENDPOINT_UNRESOLVED.
 - [ ] Q3: Quantify all fold-specific ATAC panels; distinguish measured coverage from regulatory adequacy.
 - [ ] Checkpoint A: Source/replay/measurement contracts checked; unresolved endpoint cannot unlock a biological fit.
