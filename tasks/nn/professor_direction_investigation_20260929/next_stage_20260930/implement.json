@@ -1,0 +1,263 @@
+{
+  "task": "Q8",
+  "disposition": "IMPLEMENT_PASS",
+  "protocol_id": "S9_analytic_pairing_use_synthetic_20260930",
+  "date": "2026-09-30",
+  "branch": "gnhf/execute-the-p22-data-146414",
+  "fits": 0,
+  "research_fits_executed": 0,
+  "trainability_with_learning": "REFUSED_UNTIL_CHECKPOINT_C",
+  "network_bytes": 0,
+  "depends_on": [
+    "Q7"
+  ],
+  "hashes": {
+    "SYNTHETIC_PROTOCOL.json": "eedf5e77c4ba08d8a801609e5a2bdfccc5d882e2d297d9469c4af364ad25ec7a",
+    "SPLIT_MANIFEST.json": "2d9a3b9fac7bfd8dd48b7517e0ad22e297eab9a4e9f775ac814dd99b8c50fd4d",
+    "FIT_LEDGER.json": "841c8468b6b17a43628d14af00f277ffb156b774264fe1dad0545b2ab5cd3563"
+  },
+  "reuse": {
+    "paired_model": true,
+    "model_inputs": true,
+    "predict": true,
+    "binary_log_loss": true,
+    "identity_check": true,
+    "make_fit_id": true,
+    "nn_factory_not_required_for_s9_seven_arms": true,
+    "note": "S9 seven arms reuse multiome_runner.paired_model (same as S7), not ladder nn_factory R* names."
+  },
+  "oracle": {
+    "rho1_oracle_ba": 1.0,
+    "rho0_oracle_ba": 0.625,
+    "rho1_shuffled_oracle_ba": 0.5,
+    "rho1_oracle_detects_pairing": true,
+    "rho0_oracle_near_chance": true,
+    "shuffle_destroys_rho1_oracle": true,
+    "planted_rna_rho_invariant": true,
+    "shuffle_preserves_within_donor_marginals": true,
+    "rho1_atac_equals_signed_rna": true,
+    "oracle_gate": "PASS"
+  },
+  "null_semantics": {
+    "kind": "fitted_pairing_plant_null",
+    "toy_rho0_logloss_drop": {
+      "rho": 0.0,
+      "log_loss_original": 0.6931471805599453,
+      "log_loss_shuffled": 0.7087112240534129,
+      "mean_drop": 0.015564043493467627,
+      "n_donors": 24
+    },
+    "toy_rho1_logloss_drop": {
+      "rho": 1.0,
+      "log_loss_original": 0.01814992791780973,
+      "log_loss_shuffled": 0.7188617019861292,
+      "mean_drop": 0.7007117740683194,
+      "n_donors": 24
+    },
+    "note": "Toy logistic-of-oracle-score scaffolding only; fitted CA null gate remains for Q10 after Checkpoint C.",
+    "rejects_chance_bernoulli_ba_band": true,
+    "prior_s8_no_fit_unchanged": true
+  },
+  "pairing_marginal_preservation": true,
+  "donor_isolation_fold0": true,
+  "job_coverage": {
+    "smoke": 7,
+    "screen": 42,
+    "total": 49,
+    "cap": 60,
+    "within_cap": true,
+    "job_ids_unique": true
+  },
+  "fit_arithmetic": {
+    "smoke_fold0_rho1": 7,
+    "screen_rho0": 21,
+    "screen_rho1": 21,
+    "pairing_interventions_as_fits": 0,
+    "total_attempted_fits": 49,
+    "cap": 60,
+    "fits_within_cap": true,
+    "headroom_fits": 11,
+    "fitting_hours_cap": 4,
+    "artifact_gib_cap": 2,
+    "decision_generator_seed": 9001,
+    "headroom_generator_seeds_disjoint": [
+      9101,
+      9102,
+      9103
+    ],
+    "pairing_shuffle_seeds_not_counted_as_fits": [
+      4001,
+      4002,
+      4003,
+      4004,
+      4005,
+      4006,
+      4007,
+      4008,
+      4009,
+      4010,
+      4011,
+      4012,
+      4013,
+      4014,
+      4015,
+      4016
+    ],
+    "note": "Pairing shuffle interventions evaluate saved checkpoints and do not consume fit attempts. Headroom seeds cannot retune the frozen decision rule or null threshold."
+  },
+  "resources": {
+    "planned_attempted_fits": 49,
+    "max_total_fits": 60,
+    "fitting_hours_cap": 4,
+    "artifact_gib_cap": 2,
+    "max_simultaneous_workers": 2,
+    "torch_threads_per_worker": 2,
+    "new_raw_root": "reports/generated/nn_s9_analytic_pairing_20260930/"
+  },
+  "arm_build": {
+    "cross_attention": {
+      "kind": "neural",
+      "built": true,
+      "n_params": 74754
+    },
+    "token_concat": {
+      "kind": "neural",
+      "built": true,
+      "n_params": 70530
+    },
+    "rna_atac_concat": {
+      "kind": "neural",
+      "built": true,
+      "n_params": 12738
+    },
+    "gated_fusion": {
+      "kind": "neural",
+      "built": true,
+      "n_params": 14820
+    },
+    "logreg_concat": {
+      "kind": "logreg",
+      "built": true
+    },
+    "logreg_rna": {
+      "kind": "logreg",
+      "built": true
+    },
+    "logreg_atac": {
+      "kind": "logreg",
+      "built": true
+    }
+  },
+  "param_match": {
+    "cross_attention": 74754,
+    "token_concat": 70530,
+    "relative_abs_diff": 0.05650533750702304,
+    "tolerance": 0.1,
+    "pass": true
+  },
+  "finite_gradients": [
+    {
+      "arm": "cross_attention",
+      "finite": true,
+      "loss": 0.6869392991065979,
+      "max_abs_grad": 0.02280900627374649,
+      "n_cells": 64
+    },
+    {
+      "arm": "token_concat",
+      "finite": true,
+      "loss": 0.6923737525939941,
+      "max_abs_grad": 0.024307643994688988,
+      "n_cells": 64
+    },
+    {
+      "arm": "rna_atac_concat",
+      "finite": true,
+      "loss": 0.7094968557357788,
+      "max_abs_grad": 0.06875395029783249,
+      "n_cells": 64
+    },
+    {
+      "arm": "gated_fusion",
+      "finite": true,
+      "loss": 0.7167099714279175,
+      "max_abs_grad": 0.060705021023750305,
+      "n_cells": 64
+    }
+  ],
+  "reload_equality": [
+    {
+      "arm": "cross_attention",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 64
+    },
+    {
+      "arm": "token_concat",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 64
+    },
+    {
+      "arm": "rna_atac_concat",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 64
+    },
+    {
+      "arm": "gated_fusion",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 64
+    }
+  ],
+  "refusals": {
+    "cases": [
+      {
+        "case": "protocol_hash",
+        "refused": true
+      },
+      {
+        "case": "raw_root:reports/generated/nn_s7_covariance_20260929/",
+        "refused": true
+      },
+      {
+        "case": "raw_root:reports/generated/nn_s7_covariance_split_v2_20260929/",
+        "refused": true
+      },
+      {
+        "case": "raw_root:reports/generated/nn_s8_fake/",
+        "refused": true
+      }
+    ],
+    "allowed_raw_root_accepted": true,
+    "unreviewed_trainability_refused": true,
+    "donor_leakage_refused": true
+  },
+  "cell_ids_sample": [
+    "s9_donor_00__cell_00",
+    "s9_donor_00__cell_01",
+    "s9_donor_00__cell_02"
+  ],
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL"
+  },
+  "unresolved_flags_retained": [
+    "ENDPOINT_UNRESOLVED",
+    "REGULATORY_ADEQUACY_UNRESOLVED",
+    "EXTERNAL_FEASIBILITY_BOUNDED/confirmatory UNRESOLVED",
+    "POWER_UNESTABLISHED",
+    "fitted_ba_montecarlo_joint_calibration DESIGN_UNRESOLVED"
+  ],
+  "no_fits_until": "Checkpoint C (Q7+Q8+Q9 PASS on exact hashes)",
+  "next": "Q9 independent scientific/code review on exact hashes"
+}
