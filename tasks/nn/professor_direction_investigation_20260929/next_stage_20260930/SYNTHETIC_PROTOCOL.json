@@ -1,0 +1,258 @@
+{
+  "task": "Q7",
+  "disposition": "PROTOCOL_FROZEN",
+  "protocol_id": "S9_analytic_pairing_use_synthetic_20260930",
+  "kind": "analytic_synthetic_pairing_use_software_control",
+  "date": "2026-09-30",
+  "branch": "gnhf/execute-the-p22-data-146414",
+  "fits": 0,
+  "predictions": null,
+  "network_bytes": 0,
+  "depends_on": [
+    "Q6"
+  ],
+  "hypothesis": "Can the existing seven-arm NN factory, under equal supervision and the frozen analytic generator, detect planted within-cell RNA/ATAC pairing via donor log-loss drop under within-donor ATAC shuffle?",
+  "generation": {
+    "n_donors": 24,
+    "cells_per_donor": 32,
+    "n_features_rna": 16,
+    "n_features_atac": 16,
+    "n_planted_channels": 4,
+    "n_nuisance_channels": 12,
+    "donor_label_equation": "Rank donor_ids by SHA256('s9-label\\n'+generator_seed+'\\n'+donor_id); first 12 \u2192 class 0, remaining 12 \u2192 class 1. Labels are analytic and independent of any biological disease label.",
+    "planted_equation": "For each donor d and planted channel k\u2208{0..3}: draw z,w ~ N(0,I) from SHA256(generator_seed, donor_id, channel, 'z'|'w') SeedSequence; centre/scale z to mean 0 variance 1; orthogonalize w against z then centre/scale. Set RNA[cells,k]=z and ATAC[cells,k]=(2*y_d-1)*rho*z + sqrt(1-rho^2)*w. Latent draws do not depend on fold index.",
+    "nuisance_equation": "For channels k\u2208{4..15}: independent Gaussian draws per view plus a donor-level mean shift (0.5 * SHA256-stable donor shift vector). Nuisance is independent of y_d and of planted z.",
+    "interpretation": "At all rho, planted channels have mean 0 and variance 1 per donor. rho controls signed within-cell cross-view covariance. At rho=0 there is no planted pairing; at rho=1 ATAC planted equals signed RNA planted. Unimodal marginals of planted channels carry no label signal.",
+    "row_identity": "Generate in stable donor_id \u00d7 cell_id order (s9_donor_XX__cell_YY); restore to fold tensor order at fit time.",
+    "test_pairing_shuffle": "Permute ATAC rows within each held-out donor using fixed PAIRING_SHUFFLE_SEEDS; preserve exact within-donor ATAC marginal row multiset; never shuffle across donors or labels."
+  },
+  "oracle": {
+    "definition": "Non-learned donor score = mean over cells of sum of planted-channel products RNA[k]*ATAC[k] for k=0..3. Predict class 1 iff score > 0.",
+    "role": "Validates that the constructed pairing signal exists and is destroyed by the intended within-donor ATAC shuffle. Does not validate learned models.",
+    "gates": {
+      "rho1_ba_min": 0.9,
+      "chance_ba_max": 0.7,
+      "require_rho1_detects": true,
+      "require_rho0_near_chance": true,
+      "require_shuffle_destroys_rho1": true
+    },
+    "toy_verification": {
+      "rho1_oracle_ba": 1.0,
+      "rho0_oracle_ba": 0.625,
+      "rho1_shuffled_oracle_ba": 0.5,
+      "rho1_oracle_detects_pairing": true,
+      "rho0_oracle_near_chance": true,
+      "shuffle_destroys_rho1_oracle": true,
+      "planted_rna_rho_invariant": true,
+      "shuffle_preserves_within_donor_marginals": true,
+      "rho1_atac_equals_signed_rna": true,
+      "oracle_gate": "PASS"
+    }
+  },
+  "null": {
+    "kind": "fitted_pairing_plant_null",
+    "statement": "Under the same fitted pipeline and within-donor ATAC shuffle intervention at rho=0, CA must not yield PAIRING_POSITIVE (donor log-loss-drop 95% CI lower <= 0).",
+    "matches_tested_mechanism": true,
+    "rejects_chance_bernoulli_ba_band": true,
+    "prior_s8_no_fit_unchanged": true,
+    "multiplicity": "Joint coverage rule requires all seven arms to complete smoke+screen before interpreting pairing; the primary pairing estimand is CA-only. No joint seven-arm fitted-BA critical value is used (that path remains DESIGN_UNRESOLVED under the cap)."
+  },
+  "seeds": {
+    "decision_generator_seed": 9001,
+    "decision_split_seed": 0,
+    "decision_model_seed": 9001,
+    "pairing_shuffle_seeds": [
+      4001,
+      4002,
+      4003,
+      4004,
+      4005,
+      4006,
+      4007,
+      4008,
+      4009,
+      4010,
+      4011,
+      4012,
+      4013,
+      4014,
+      4015,
+      4016
+    ],
+    "headroom_generator_seeds": [
+      9101,
+      9102,
+      9103
+    ],
+    "calibration_decision_disjoint": true,
+    "disjoint_rule": "Decision seeds (9001 / split 0 / model 9001) are frozen before any result. Headroom seeds 9101+ are disjoint and may only be used within remaining fit headroom after review; they cannot retune the frozen null threshold, oracle gates, or primary statistic."
+  },
+  "splits": {
+    "n_folds": 3,
+    "method": "s9-class-quota-sha256",
+    "units": "donor",
+    "outer_test_per_fold": 8,
+    "train_val_per_fold": [
+      12,
+      4
+    ],
+    "both_classes_required": true,
+    "manifest_ref": "SPLIT_MANIFEST.json",
+    "fold_rationale": "Prospective F=3 for analytic synthetic software/mechanism detectability of a planted pairing signal \u2014 not biological power and not a post-hoc shrink of the frozen S7 5-fold disease protocol."
+  },
+  "models": {
+    "arms": [
+      "cross_attention",
+      "token_concat",
+      "rna_atac_concat",
+      "gated_fusion",
+      "logreg_concat",
+      "logreg_rna",
+      "logreg_atac"
+    ],
+    "n_arms": 7,
+    "equal_supervision": true,
+    "selection": "Same inner-validation donor log-loss and identical available training budget for neural arms; no hyperparameter sweep.",
+    "reuse": "Existing paired_model / model_inputs / train_model / fit_logistic / donor_cell_weights / nn_factory; Q8 adds only generator/statistic/runner pieces demonstrably missing.",
+    "training_budget": {
+      "max_epochs": 20,
+      "patience": 5,
+      "learning_rate": 0.001,
+      "batch_size": 64,
+      "n_tokens": 8,
+      "embed_dim": 32,
+      "hidden_dim": 128,
+      "n_heads": 4,
+      "dropout": 0.2,
+      "param_match_ca_tc_relative": 0.1
+    }
+  },
+  "evaluation": {
+    "primary_statistic": {
+      "name": "pairing_use_donor_logloss_drop",
+      "definition": "For CA at rho=1: mean donor log-loss(shuffled ATAC) - log-loss(original); average shuffle outcomes within donor across PAIRING_SHUFFLE_SEEDS, then paired donor-bootstrap 95% CI (1000 draws, seed 22). PAIRING_POSITIVE iff CI lower > 0.",
+      "applies_to": "cross_attention",
+      "rho": 1.0
+    },
+    "fitted_mechanism_null_gate": {
+      "definition": "Same pairing statistic at rho=0 must have CI lower <= 0; otherwise label INVALID (design/optimization leak), not a method claim.",
+      "rho": 0.0
+    },
+    "advantage_contrast": {
+      "name": "ca_minus_token_concat_pooled_ba",
+      "label": "SEPARATE_NON_PRIMARY",
+      "definition": "Pooled donor BA(CA) - BA(token_concat) at rho=1 with paired donor-bootstrap CI. Reported for description only; does not define PAIRING_POSITIVE and is not required for a valid pairing-use control."
+    },
+    "joint_rule": "All seven arms must complete smoke+screen coverage before interpreting pairing. Incomplete coverage => INCOMPLETE, not a partial positive.",
+    "marginal_check": "At rho=1, logreg_rna and logreg_atac donor BA <= 0.60; failure suggests unimodal/background shortcut and refuses pairing-only interpretation.",
+    "donor_prediction": "Mean held-out cell probability; threshold fixed 0.5; three disjoint outer folds pooled once per rho for descriptive BA only.",
+    "bootstrap": {
+      "draws": 1000,
+      "seed": 22,
+      "cluster_unit": "donor",
+      "paired_shared_draws": true,
+      "invalid_draws": "Count/report single-class draws; never silently redraw; insufficient valid draws (<950) => incomplete"
+    }
+  },
+  "screen": {
+    "generator_seed": 9001,
+    "rho_grid": [
+      0.0,
+      1.0
+    ],
+    "fixed_decision_cell": 1.0,
+    "do_not_choose_best_rho": true,
+    "fits": 42
+  },
+  "smoke": {
+    "fold": 0,
+    "rho": 1.0,
+    "fits": 7,
+    "require_both_classes_held_out": true
+  },
+  "resources": {
+    "max_total_fits": 60,
+    "planned_attempted_fits": 49,
+    "fitting_hours_cap": 4,
+    "artifact_gib_cap": 2,
+    "max_simultaneous_workers": 2,
+    "torch_threads_per_worker": 2,
+    "fit_arithmetic": {
+      "smoke_fold0_rho1": 7,
+      "screen_rho0": 21,
+      "screen_rho1": 21,
+      "pairing_interventions_as_fits": 0,
+      "total_attempted_fits": 49,
+      "cap": 60,
+      "fits_within_cap": true,
+      "headroom_fits": 11,
+      "fitting_hours_cap": 4,
+      "artifact_gib_cap": 2,
+      "decision_generator_seed": 9001,
+      "headroom_generator_seeds_disjoint": [
+        9101,
+        9102,
+        9103
+      ],
+      "pairing_shuffle_seeds_not_counted_as_fits": [
+        4001,
+        4002,
+        4003,
+        4004,
+        4005,
+        4006,
+        4007,
+        4008,
+        4009,
+        4010,
+        4011,
+        4012,
+        4013,
+        4014,
+        4015,
+        4016
+      ],
+      "note": "Pairing shuffle interventions evaluate saved checkpoints and do not consume fit attempts. Headroom seeds cannot retune the frozen decision rule or null threshold."
+    },
+    "no_optimum_search_loop": true,
+    "count_failed_attempts": true
+  },
+  "output_roots": {
+    "new_raw_root": "reports/generated/nn_s9_analytic_pairing_20260930/",
+    "refuse_roots": [
+      "reports/generated/nn_s7_covariance_20260929/",
+      "reports/generated/nn_s7_covariance_split_v2_20260929/",
+      "reports/generated/nn_s8_*"
+    ],
+    "no_write_through_shared_symlink": true
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL"
+  },
+  "unresolved_flags_retained": [
+    "ENDPOINT_UNRESOLVED",
+    "REGULATORY_ADEQUACY_UNRESOLVED",
+    "EXTERNAL_FEASIBILITY_BOUNDED/confirmatory UNRESOLVED",
+    "POWER_UNESTABLISHED",
+    "fitted_ba_montecarlo_joint_calibration DESIGN_UNRESOLVED"
+  ],
+  "split_manifest_summary": {
+    "n_folds": 3,
+    "n_donors": 24,
+    "class_balance": {
+      "0": 12,
+      "1": 12
+    },
+    "validation": {
+      "both_classes_every_partition": true,
+      "outer_test_exactly_once": true,
+      "train_val_test_disjoint": true
+    }
+  },
+  "no_fits_until": "Checkpoint C (Q7+Q8+Q9 PASS on exact hashes)"
+}
