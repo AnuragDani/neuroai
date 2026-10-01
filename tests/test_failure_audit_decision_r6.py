@@ -92,7 +92,9 @@ def test_counter_consistency_and_serial_default(report: dict, budget: dict) -> N
     stage = budget["stage_cumulative_before_r7"]
     assert stage["diagnostic_fit_attempts"] == counter["diagnostic_fit_attempts"]
     assert stage["scientific_fit_attempts"] == counter["scientific_fit_attempts"]
-    assert stage["generator_only_draws"] == counter["generator_only_draws"]
+    # Ledger freezes pre-R7 generator draws; counter may grow in R7+.
+    assert stage["generator_only_draws"] == 81
+    assert counter["generator_only_draws"] >= stage["generator_only_draws"]
     assert stage["diagnostic_remaining"] == 0
     assert report["chosen_experiment"]["execution"]["workers"] == 1
     assert report["chosen_experiment"]["execution"]["parallel_scientific_dispatch"] is False

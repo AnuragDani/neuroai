@@ -1,0 +1,197 @@
+{
+  "allowed_raw_root": "reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001/",
+  "arms": [
+    "cross_attention",
+    "token_concat",
+    "rna_atac_concat",
+    "gated_fusion",
+    "logreg_concat",
+    "logreg_rna",
+    "logreg_atac"
+  ],
+  "attempt_counter_after": {
+    "diagnostic_fit_attempts": 12,
+    "generator_only_draws": 97,
+    "scientific_fit_attempts": 0
+  },
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "claim_level": 1,
+  "date": "2026-10-01",
+  "decision_seeds": {
+    "generator": 9301,
+    "model": 9301,
+    "split": 17
+  },
+  "diagnostic_fits_executed": 0,
+  "disposition": "IMPLEMENT_PASS",
+  "exchangeability_panel": {
+    "band": [
+      0.95,
+      1.05
+    ],
+    "max_ratio": 1.2009999455461493,
+    "mean_ratio": 1.0043166718824277,
+    "min_ratio": 0.9137014471950877,
+    "n_seeds": 16,
+    "ratio_within_band": true,
+    "seeds": [
+      5301,
+      5302,
+      5303,
+      5304,
+      5305,
+      5306,
+      5307,
+      5308,
+      5309,
+      5310,
+      5311,
+      5312,
+      5313,
+      5314,
+      5315,
+      5316
+    ]
+  },
+  "fit_arithmetic": {
+    "artifact_gib_cap": 4.0,
+    "cap": 90,
+    "decision_generator_seed": 9301,
+    "decision_model_seed": 9301,
+    "decision_split_seed": 17,
+    "fits_within_cap": true,
+    "fitting_hours_cap": 6.0,
+    "headroom_fits": 41,
+    "headroom_generator_seeds_disjoint": [
+      9401,
+      9402,
+      9403
+    ],
+    "note": "Smoke counts as scientific (diagnostic allowance exhausted). Pairing shuffle interventions are not fits. Serial workers=1 default.",
+    "pairing_interventions_as_fits": 0,
+    "pairing_shuffle_seeds_not_counted_as_fits": [
+      4001,
+      4002,
+      4003,
+      4004,
+      4005,
+      4006,
+      4007,
+      4008,
+      4009,
+      4010,
+      4011,
+      4012,
+      4013,
+      4014,
+      4015,
+      4016
+    ],
+    "r7_exchangeability_seeds": [
+      5301,
+      5302,
+      5303,
+      5304,
+      5305,
+      5306,
+      5307,
+      5308,
+      5309,
+      5310,
+      5311,
+      5312,
+      5313,
+      5314,
+      5315,
+      5316
+    ],
+    "screen_rho0": 21,
+    "screen_rho1": 21,
+    "smoke_fold0_rho1": 7,
+    "torch_threads": 2,
+    "total_attempted_fits": 49,
+    "workers": 1
+  },
+  "fits": 0,
+  "generator_draws_this_run": 16,
+  "gradients_finite": {
+    "cross_attention": true,
+    "gated_fusion": true,
+    "rna_atac_concat": true,
+    "token_concat": true
+  },
+  "hashes": {
+    "S10_PROTOCOL.json": "f16e503df4e4ba19029ddf06354b3c95aa1612a6ba0c49dbc2d891e8beb1798c",
+    "S10_SEED_SCHEDULE.json": "4ef154fe783db23aa0df09ba31d38e409a3efd2070cb581603a226b8b25c33ec",
+    "S10_SPLIT_MANIFEST.json": "ec210b253386938a62047728992c094107e6e65f0169aa04ef7e59ff6b676ba6",
+    "src/p22/eval/s10_analytic.py": "5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e",
+    "src/p22/eval/s10_execute.py": "f5cfc2fe898a7313f82922d333906a3fa99d2da2f78a2170351cc21db4f88242"
+  },
+  "job_coverage": {
+    "job_ids_unique": true,
+    "screen": 42,
+    "smoke": 7,
+    "total": 49,
+    "within_cap": true
+  },
+  "logreg_arms": [
+    "logreg_concat",
+    "logreg_rna",
+    "logreg_atac"
+  ],
+  "neural_arms": [
+    "cross_attention",
+    "token_concat",
+    "rna_atac_concat",
+    "gated_fusion"
+  ],
+  "null_candidate_id": "independent_gaussian_rho0_within_donor_shuffle_20261001",
+  "oracle": {
+    "oracle_gate": "PASS",
+    "planted_rna_rho_invariant": true,
+    "rho0_max_abs_product_mean": 0.3741281454092913,
+    "rho0_not_exact_orthogonal": true,
+    "rho0_oracle_ba": 0.5416666666666666,
+    "rho0_oracle_near_chance": true,
+    "rho1_atac_equals_signed_rna": true,
+    "rho1_oracle_ba": 1.0,
+    "rho1_oracle_detects_pairing": true,
+    "rho1_shuffled_oracle_ba": 0.5416666666666667,
+    "shuffle_destroys_rho1_oracle": true,
+    "shuffle_preserves_within_donor_marginals": true
+  },
+  "param_match": {
+    "cross_attention": 74754,
+    "pass": true,
+    "relative_abs_diff": 0.05650533750702304,
+    "token_concat": 70530,
+    "tolerance": 0.1
+  },
+  "protocol_id": "S10_corrected_null_pairing_use_20261001",
+  "refusals": {
+    "allowed_raw_ok": true,
+    "forbidden_s7_raw": true,
+    "forbidden_s9_raw": true,
+    "hash_mismatch": true,
+    "unreviewed_fits": true
+  },
+  "reload_pass": {
+    "cross_attention": true,
+    "gated_fusion": true,
+    "rna_atac_concat": true,
+    "token_concat": true
+  },
+  "research_fits_executed": 0,
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "prior_s8": "NO FIT",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "s9": "INVALID",
+    "s9_immutable": true,
+    "study": "STUDY_PARTIAL"
+  },
+  "torch_threads": 2,
+  "trainability_with_learning": "REFUSED_UNTIL_CHECKPOINT_C",
+  "workers": 1
+}
