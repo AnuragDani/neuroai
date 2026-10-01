@@ -91,7 +91,10 @@ def test_counter_consistency_and_serial_default(report: dict, budget: dict) -> N
     counter = json.loads(COUNTER.read_text())
     stage = budget["stage_cumulative_before_r7"]
     assert stage["diagnostic_fit_attempts"] == counter["diagnostic_fit_attempts"]
-    assert stage["scientific_fit_attempts"] == counter["scientific_fit_attempts"]
+    # Ledger freezes pre-R7 scientific fits at 0; counter may grow in R9+.
+    assert stage["scientific_fit_attempts"] == 0
+    assert counter["scientific_fit_attempts"] >= stage["scientific_fit_attempts"]
+    assert counter["scientific_fit_attempts"] <= counter["scientific_fit_cap"]
     # Ledger freezes pre-R7 generator draws; counter may grow in R7+.
     assert stage["generator_only_draws"] == 81
     assert counter["generator_only_draws"] >= stage["generator_only_draws"]

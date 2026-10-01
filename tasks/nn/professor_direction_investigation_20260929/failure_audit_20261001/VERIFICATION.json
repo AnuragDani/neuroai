@@ -1,0 +1,198 @@
+{
+  "task": "R10",
+  "disposition": "DONE",
+  "scientific_result": "INVALID",
+  "protocol_id": "S10_corrected_null_pairing_use_20261001",
+  "date": "2026-10-01",
+  "timestamp_utc": "2026-10-01T23:18:15Z",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "base_commit": "67245a2b19de9d6fb094fc01190590d9362d6d43",
+  "tip_before_r10": "faf67a24c7acab45de1da7f2f093e80a4bcc0599",
+  "worktree": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c",
+  "interpreter": "/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python",
+  "p22_file": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c/src/p22/__init__.py",
+  "network_bytes_payloads": 0,
+  "network_metadata_bytes_r5": 927209,
+  "depends_on": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9"
+  ],
+  "task_dispositions": {
+    "R0": {
+      "status": "DONE",
+      "label": "PASS",
+      "evidence": "PREFLIGHT.md"
+    },
+    "R1": {
+      "status": "DONE",
+      "label": "REPLAY_PASS",
+      "evidence": "S9_AUDIT.md; s9_audit.json"
+    },
+    "R2": {
+      "status": "DONE",
+      "label": "NULL_AUDIT_PASS",
+      "evidence": "NULL_AUDIT.md; null_audit.json"
+    },
+    "Checkpoint_A": {
+      "status": "DONE",
+      "evidence": "CHECKPOINT_A.md"
+    },
+    "R3": {
+      "status": "DONE",
+      "label": "EXECUTION_AUDIT_PASS",
+      "evidence": "EXECUTION_AUDIT.md; r3_diagnostic_results.json",
+      "diagnostic_fits": 12
+    },
+    "R4": {
+      "status": "DONE",
+      "label": "GUIDANCE_CLAIMS_PASS",
+      "evidence": "GUIDANCE_AND_CLAIMS.md",
+      "reviewer_agent_id": "f7042b9d-22ff-46c9-a8bc-99f65c5dce5a",
+      "self_certification": false
+    },
+    "R5": {
+      "status": "DONE",
+      "label": "TASK_DATA_OPTIONS_BOUNDED",
+      "evidence": "TASK_DATA_OPTIONS.md",
+      "nemo_role": "PRESERVED"
+    },
+    "Checkpoint_B": {
+      "status": "DONE",
+      "evidence": "CHECKPOINT_B.md"
+    },
+    "R6": {
+      "status": "DONE",
+      "label": "EXPERIMENT_SELECTED",
+      "fit_arithmetic": "PASS",
+      "evidence": "DECISION.md; BUDGET_LEDGER.md"
+    },
+    "R7": {
+      "status": "DONE",
+      "label": "PROTOCOL_FROZEN; IMPLEMENT_PASS",
+      "evidence": "S10_PROTOCOL.md; IMPLEMENT.md",
+      "scientific_fits": 0
+    },
+    "R8": {
+      "status": "DONE",
+      "label": "PASS",
+      "evidence": "NO_FIT_REVIEW_R8.json; INDEPENDENT_REVIEW_R8.md; R8_REVIEWED_HASHES.json",
+      "reviewer_agent_id": "fd860419-c20a-4e11-8c6f-f56ddc15fdec",
+      "self_certification": false
+    },
+    "Checkpoint_C": {
+      "status": "DONE",
+      "label": "PASS",
+      "evidence": "CHECKPOINT_C.md"
+    },
+    "R9": {
+      "status": "DONE",
+      "label": "INVALID",
+      "evidence": "EXECUTE.md; execute.json",
+      "fits": 49,
+      "replay_mode": "skip_fits",
+      "refits": 0,
+      "attempt_counters_preserved_on_replay": true
+    },
+    "R10": {
+      "status": "DONE",
+      "evidence": "HANDOFF.md; VERIFICATION.json"
+    },
+    "Checkpoint_D": {
+      "status": "DONE",
+      "stop_condition_met": true
+    }
+  },
+  "r9_gates": {
+    "coverage_complete": true,
+    "attempted_fits": 49,
+    "completed_ok": 49,
+    "failed": 0,
+    "marginal_pass": false,
+    "logreg_rna_ba": 0.3333333333333333,
+    "logreg_atac_ba": 0.625,
+    "pairing_rho1": "PAIRING_NEGATIVE",
+    "pairing_rho0": "PAIRING_NEGATIVE",
+    "disposition": "INVALID",
+    "primary_reason": "rho=1 unimodal marginal BA exceeds 0.60 (logreg_rna/logreg_atac shortcut)"
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "s9_selected_experiment": "INVALID",
+    "s9_immutable": true,
+    "s10_selected_experiment": "INVALID",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED"
+  },
+  "reviewed_hashes": {
+    "S10_PROTOCOL.json": "f16e503df4e4ba19029ddf06354b3c95aa1612a6ba0c49dbc2d891e8beb1798c",
+    "S10_SPLIT_MANIFEST.json": "ec210b253386938a62047728992c094107e6e65f0169aa04ef7e59ff6b676ba6",
+    "S10_SEED_SCHEDULE.json": "4ef154fe783db23aa0df09ba31d38e409a3efd2070cb581603a226b8b25c33ec",
+    "src/p22/eval/s10_analytic.py": "5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e",
+    "src/p22/eval/s10_execute.py": "2aed78eaf2f0e9ef9643acfad9ddc7a8e7d81afca35ac7e92ad426e012eefe77"
+  },
+  "raw_paths": {
+    "stage_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c/reports/generated/nn_failure_audit_20261001",
+    "s10_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c/reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001",
+    "s10_attempt_ledger": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c/reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001/attempt_ledger.jsonl",
+    "s9_shared_readonly": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/reports/generated/nn_s9_analytic_pairing_20260930"
+  },
+  "resources": {
+    "scientific_fit_attempts": 49,
+    "scientific_fit_cap": 90,
+    "within_scientific_cap": true,
+    "diagnostic_fit_attempts": 12,
+    "diagnostic_fit_cap": 12,
+    "generator_only_draws": 97,
+    "generator_only_cap": 256,
+    "fitting_hours_stage": 0.0009592700697178063,
+    "fitting_hours_cap": 6.0,
+    "s10_fitting_seconds": 2.6623660839868535,
+    "s10_fitting_hours": 0.0007395461344407926,
+    "artifacts_gib_approx": 0.003407,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "payloads_mib": 0
+  },
+  "attempt_counter_preservation": {
+    "skip_fits_replay": true,
+    "stage_attempt_counter_sha256_before_after_identical": true,
+    "s10_attempt_counter_sha256_before_after_identical": true,
+    "stage_attempt_counter_sha256": "2caf1877598aabca24ff60ec92c3fa466061b73bb7e5e56b0757d147b608f3a8",
+    "s10_attempt_counter_sha256": "c9c89421b0c916e02389356239df108b6881f1bd230992a529aa899f9854c07e"
+  },
+  "one_smallest_next_action": "Obtain or define an independently measured cell-state/maturation endpoint orthogonal to NN RNA inputs before any biological pilot; otherwise write the already-framed F4 bounded null/detectability paper from immutable gates. Do not search for a positive S10 redesign.",
+  "stop_condition": {
+    "configured": "Finish R9 by replaying existing 49 saved S10 fits without refitting; commit verified R9 report and R10 handoff, then stop. Preserve all attempt counters. No new fits or positive-result search.",
+    "met": true
+  },
+  "forbidden_actions_observed": {
+    "new_fits_during_closeout": false,
+    "positive_result_search": false,
+    "push_merge": false,
+    "vault_mom_packet_edits": false,
+    "package_installs": false
+  },
+  "evidence_hashes_r10": {
+    "HANDOFF.md": "c15d5c4ca04a0b3418bb297b5614f589c5c635bc14aa77dc9da9c643f3bc36ac",
+    "EXECUTE.md": "698a1eda1c0dd9f21bce46c436114b04590363357ba26220fa14d6fcd3d77ada",
+    "execute.json": "032ffaaf81701098c5ef4f0cb3363d4588d415486e3dfa5afd8e0909b28c2f81",
+    "R8_REVIEWED_HASHES.json": "8934014fd5b145da1ac720ce2799c41edf8931a53e3670d3ed8dc70ab0a90285",
+    "src/p22/eval/s10_execute.py": "2aed78eaf2f0e9ef9643acfad9ddc7a8e7d81afca35ac7e92ad426e012eefe77",
+    "src/p22/eval/s10_analytic.py": "5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e",
+    "scripts/report_failure_audit_s10_execute_r9.py": "38af2d5825109814e9a18f53b8474e1f6cf3fd05a3da79c8e8b286ab32c62b6f",
+    "note": "execute.json may change only via non-scientific fields on future skip-fits replays; scientific gates locked by sidecars"
+  }
+}

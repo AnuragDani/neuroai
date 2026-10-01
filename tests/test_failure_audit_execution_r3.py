@@ -67,7 +67,8 @@ def test_audit_files_disposition_and_budget(report: dict, diag: dict) -> None:
     assert report["diagnostic_fits_cumulative"] == 12
     counter = json.loads(COUNTER.read_text())
     assert counter["diagnostic_fit_attempts"] == 12
-    assert counter["scientific_fit_attempts"] == 0
+    # R3 spent 0 scientific fits; later R9 may consume scientific attempts within cap.
+    assert counter["scientific_fit_attempts"] <= counter["scientific_fit_cap"]
     assert counter["diagnostic_fit_attempts"] <= counter["diagnostic_fit_cap"]
 
 

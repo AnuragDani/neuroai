@@ -1,0 +1,439 @@
+{
+  "task": "R9",
+  "disposition": "INVALID",
+  "claim_disposition": "INVALID",
+  "protocol_id": "S10_corrected_null_pairing_use_20261001",
+  "date": "2026-10-01",
+  "timestamp_utc": "2026-10-01T23:17:58Z",
+  "branch": "gnhf/execute-p22-s-failur-d8f02c",
+  "fits": 49,
+  "research_fits_executed": 49,
+  "network_bytes": 0,
+  "depends_on": [
+    "R8",
+    "Checkpoint C"
+  ],
+  "raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c/reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001",
+  "reviewed_hashes": {
+    "S10_PROTOCOL.json": "f16e503df4e4ba19029ddf06354b3c95aa1612a6ba0c49dbc2d891e8beb1798c",
+    "S10_SPLIT_MANIFEST.json": "ec210b253386938a62047728992c094107e6e65f0169aa04ef7e59ff6b676ba6",
+    "S10_SEED_SCHEDULE.json": "4ef154fe783db23aa0df09ba31d38e409a3efd2070cb581603a226b8b25c33ec",
+    "src/p22/eval/s10_analytic.py": "5440d8cd42feb69c4c8f0e6416620315b6916dd2d980d655b8ff1b409ad3fb9e",
+    "src/p22/eval/s10_execute.py": "2aed78eaf2f0e9ef9643acfad9ddc7a8e7d81afca35ac7e92ad426e012eefe77"
+  },
+  "coverage": {
+    "planned": 49,
+    "attempted": 49,
+    "completed_ok": 49,
+    "failed": 0,
+    "unique_fit_ids": 49,
+    "complete": true
+  },
+  "execution": {
+    "n_executed_this_call": 0,
+    "n_skipped_already_done": 0,
+    "wall_seconds": 0.0,
+    "skipped": true,
+    "skip_fits": true,
+    "mode": "replay_saved_sidecars"
+  },
+  "oracle": {
+    "rho1_oracle_ba": 1.0,
+    "rho0_oracle_ba": 0.5416666666666666,
+    "rho1_shuffled_oracle_ba": 0.5416666666666667,
+    "rho1_oracle_detects_pairing": true,
+    "rho0_oracle_near_chance": true,
+    "shuffle_destroys_rho1_oracle": true,
+    "planted_rna_rho_invariant": true,
+    "shuffle_preserves_within_donor_marginals": true,
+    "rho1_atac_equals_signed_rna": true,
+    "rho0_not_exact_orthogonal": true,
+    "rho0_max_abs_product_mean": 0.3741281454092913,
+    "oracle_gate": "PASS"
+  },
+  "marginal_check": {
+    "logreg_rna_ba": 0.3333333333333333,
+    "logreg_atac_ba": 0.625,
+    "threshold": 0.6,
+    "pass": false,
+    "logreg_rna": {
+      "complete": true,
+      "n_folds": 3,
+      "n_donors": 24,
+      "ba": 0.3333333333333333,
+      "donor_ids": [
+        "s9_donor_01",
+        "s9_donor_02",
+        "s9_donor_06",
+        "s9_donor_10",
+        "s9_donor_18",
+        "s9_donor_19",
+        "s9_donor_21",
+        "s9_donor_22",
+        "s9_donor_09",
+        "s9_donor_11",
+        "s9_donor_13",
+        "s9_donor_14",
+        "s9_donor_15",
+        "s9_donor_17",
+        "s9_donor_20",
+        "s9_donor_23",
+        "s9_donor_00",
+        "s9_donor_03",
+        "s9_donor_04",
+        "s9_donor_05",
+        "s9_donor_07",
+        "s9_donor_08",
+        "s9_donor_12",
+        "s9_donor_16"
+      ]
+    },
+    "logreg_atac": {
+      "complete": true,
+      "n_folds": 3,
+      "n_donors": 24,
+      "ba": 0.625,
+      "donor_ids": [
+        "s9_donor_01",
+        "s9_donor_02",
+        "s9_donor_06",
+        "s9_donor_10",
+        "s9_donor_18",
+        "s9_donor_19",
+        "s9_donor_21",
+        "s9_donor_22",
+        "s9_donor_09",
+        "s9_donor_11",
+        "s9_donor_13",
+        "s9_donor_14",
+        "s9_donor_15",
+        "s9_donor_17",
+        "s9_donor_20",
+        "s9_donor_23",
+        "s9_donor_00",
+        "s9_donor_03",
+        "s9_donor_04",
+        "s9_donor_05",
+        "s9_donor_07",
+        "s9_donor_08",
+        "s9_donor_12",
+        "s9_donor_16"
+      ]
+    }
+  },
+  "pairing_rho1": {
+    "complete": true,
+    "rho": 1.0,
+    "model": "cross_attention",
+    "n_donors": 24,
+    "n_shuffle_seeds": 16,
+    "pairing_label": "PAIRING_NEGATIVE",
+    "pc_label_raw": "PC_FAIL",
+    "gate": {
+      "pc_label": "PC_FAIL",
+      "eligible_for_confirmation": false,
+      "identity": {
+        "passed": true,
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "reason": null
+      },
+      "drops": {
+        "n_donors": 24,
+        "n_seeds": 16,
+        "mean_ll_drop_estimate": 4.0195955477187926e-05,
+        "mean_ba_drop_estimate": 0.0
+      },
+      "ll_drop_bootstrap": {
+        "estimate": 4.0195955477187926e-05,
+        "lower": -5.5856042638940754e-05,
+        "upper": 0.0001272142605707991,
+        "level": 0.95,
+        "n_donors": 24,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "incomplete": false,
+        "reason": null
+      },
+      "ba_drop_bootstrap": {
+        "estimate": 0.0,
+        "lower": 0.0,
+        "upper": 0.0,
+        "level": 0.95,
+        "n_donors": 24,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "incomplete": false,
+        "reason": null
+      }
+    }
+  },
+  "pairing_rho0": {
+    "complete": true,
+    "rho": 0.0,
+    "model": "cross_attention",
+    "n_donors": 24,
+    "n_shuffle_seeds": 16,
+    "pairing_label": "PAIRING_NEGATIVE",
+    "pc_label_raw": "PC_FAIL",
+    "gate": {
+      "pc_label": "PC_FAIL",
+      "eligible_for_confirmation": false,
+      "identity": {
+        "passed": true,
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "reason": null
+      },
+      "drops": {
+        "n_donors": 24,
+        "n_seeds": 16,
+        "mean_ll_drop_estimate": 8.717919571532158e-06,
+        "mean_ba_drop_estimate": 0.0
+      },
+      "ll_drop_bootstrap": {
+        "estimate": 8.717919571532158e-06,
+        "lower": -0.00010393731119455066,
+        "upper": 0.00011086715239087997,
+        "level": 0.95,
+        "n_donors": 24,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "incomplete": false,
+        "reason": null
+      },
+      "ba_drop_bootstrap": {
+        "estimate": 0.0,
+        "lower": 0.0,
+        "upper": 0.0,
+        "level": 0.95,
+        "n_donors": 24,
+        "n_draws_requested": 1000,
+        "n_valid": 1000,
+        "incomplete": false,
+        "reason": null
+      }
+    }
+  },
+  "advantage_contrast": {
+    "label": "SEPARATE_NON_PRIMARY",
+    "ca_ba": 0.4166666666666667,
+    "token_concat_ba": 0.4166666666666667,
+    "ca_minus_token_concat": 0.0,
+    "complete": true
+  },
+  "interpretation": {
+    "disposition": "INVALID",
+    "primary_pairing": null,
+    "reason": "rho=1 unimodal marginal BA exceeds 0.60 (logreg_rna/logreg_atac shortcut)",
+    "secondary_findings": [
+      "also: CA rho=1 pairing was PAIRING_NEGATIVE"
+    ],
+    "marginal": {
+      "logreg_rna": {
+        "complete": true,
+        "n_folds": 3,
+        "n_donors": 24,
+        "ba": 0.3333333333333333,
+        "donor_ids": [
+          "s9_donor_01",
+          "s9_donor_02",
+          "s9_donor_06",
+          "s9_donor_10",
+          "s9_donor_18",
+          "s9_donor_19",
+          "s9_donor_21",
+          "s9_donor_22",
+          "s9_donor_09",
+          "s9_donor_11",
+          "s9_donor_13",
+          "s9_donor_14",
+          "s9_donor_15",
+          "s9_donor_17",
+          "s9_donor_20",
+          "s9_donor_23",
+          "s9_donor_00",
+          "s9_donor_03",
+          "s9_donor_04",
+          "s9_donor_05",
+          "s9_donor_07",
+          "s9_donor_08",
+          "s9_donor_12",
+          "s9_donor_16"
+        ]
+      },
+      "logreg_atac": {
+        "complete": true,
+        "n_folds": 3,
+        "n_donors": 24,
+        "ba": 0.625,
+        "donor_ids": [
+          "s9_donor_01",
+          "s9_donor_02",
+          "s9_donor_06",
+          "s9_donor_10",
+          "s9_donor_18",
+          "s9_donor_19",
+          "s9_donor_21",
+          "s9_donor_22",
+          "s9_donor_09",
+          "s9_donor_11",
+          "s9_donor_13",
+          "s9_donor_14",
+          "s9_donor_15",
+          "s9_donor_17",
+          "s9_donor_20",
+          "s9_donor_23",
+          "s9_donor_00",
+          "s9_donor_03",
+          "s9_donor_04",
+          "s9_donor_05",
+          "s9_donor_07",
+          "s9_donor_08",
+          "s9_donor_12",
+          "s9_donor_16"
+        ]
+      },
+      "pass": false
+    },
+    "pairing_rho0": {
+      "complete": true,
+      "rho": 0.0,
+      "model": "cross_attention",
+      "n_donors": 24,
+      "n_shuffle_seeds": 16,
+      "pairing_label": "PAIRING_NEGATIVE",
+      "pc_label_raw": "PC_FAIL",
+      "gate": {
+        "pc_label": "PC_FAIL",
+        "eligible_for_confirmation": false,
+        "identity": {
+          "passed": true,
+          "atol": 1e-06,
+          "max_abs_diff": 0.0,
+          "reason": null
+        },
+        "drops": {
+          "n_donors": 24,
+          "n_seeds": 16,
+          "mean_ll_drop_estimate": 8.717919571532158e-06,
+          "mean_ba_drop_estimate": 0.0
+        },
+        "ll_drop_bootstrap": {
+          "estimate": 8.717919571532158e-06,
+          "lower": -0.00010393731119455066,
+          "upper": 0.00011086715239087997,
+          "level": 0.95,
+          "n_donors": 24,
+          "n_draws_requested": 1000,
+          "n_valid": 1000,
+          "incomplete": false,
+          "reason": null
+        },
+        "ba_drop_bootstrap": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "level": 0.95,
+          "n_donors": 24,
+          "n_draws_requested": 1000,
+          "n_valid": 1000,
+          "incomplete": false,
+          "reason": null
+        }
+      }
+    },
+    "pairing_rho1": {
+      "complete": true,
+      "rho": 1.0,
+      "model": "cross_attention",
+      "n_donors": 24,
+      "n_shuffle_seeds": 16,
+      "pairing_label": "PAIRING_NEGATIVE",
+      "pc_label_raw": "PC_FAIL",
+      "gate": {
+        "pc_label": "PC_FAIL",
+        "eligible_for_confirmation": false,
+        "identity": {
+          "passed": true,
+          "atol": 1e-06,
+          "max_abs_diff": 0.0,
+          "reason": null
+        },
+        "drops": {
+          "n_donors": 24,
+          "n_seeds": 16,
+          "mean_ll_drop_estimate": 4.0195955477187926e-05,
+          "mean_ba_drop_estimate": 0.0
+        },
+        "ll_drop_bootstrap": {
+          "estimate": 4.0195955477187926e-05,
+          "lower": -5.5856042638940754e-05,
+          "upper": 0.0001272142605707991,
+          "level": 0.95,
+          "n_donors": 24,
+          "n_draws_requested": 1000,
+          "n_valid": 1000,
+          "incomplete": false,
+          "reason": null
+        },
+        "ba_drop_bootstrap": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "level": 0.95,
+          "n_donors": 24,
+          "n_draws_requested": 1000,
+          "n_valid": 1000,
+          "incomplete": false,
+          "reason": null
+        }
+      }
+    }
+  },
+  "resources": {
+    "attempted_fits": 49,
+    "completed_ok": 49,
+    "failed": 0,
+    "cap": 90,
+    "within_cap": true,
+    "fitting_seconds": 2.6623660839868535,
+    "fitting_hours": 0.0007395461344407926,
+    "fitting_hours_cap": 6.0,
+    "within_fitting_hours": true,
+    "artifacts_gib": 0.003407,
+    "artifact_gib_cap": 4.0,
+    "within_artifact_cap": true,
+    "workers": 1,
+    "torch_threads": 2,
+    "planned_fits": 49
+  },
+  "stage_attempt_counter": {
+    "scientific_fit_attempts": 49,
+    "scientific_fit_cap": 90,
+    "diagnostic_fit_attempts": 12,
+    "diagnostic_fit_cap": 12,
+    "generator_only_draws": 97,
+    "fitting_hours": 0.0009592700697178063,
+    "r9_scientific_fits": 49,
+    "r9_fitting_hours_this_run": 0.0007395461344407926
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "prior_s8": "NO FIT",
+    "s9": "INVALID",
+    "power": "POWER_UNESTABLISHED",
+    "study": "STUDY_PARTIAL",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED"
+  },
+  "ruled_in": [
+    "Under corrected independent-Gaussian null, \u03c1=0 pairing gate is PAIRING_NEGATIVE (supports that S9 \u03c1=0 PAIRING_POSITIVE is explained by broken orthogonal-null exchangeability rather than requiring a leak claim from that alone)."
+  ],
+  "ruled_out_or_not_established": [
+    "Method claim / biology upgrade from this software control",
+    "Unimodal marginal PASS at \u03c1=1 under frozen joint gate",
+    "CA \u03c1=1 PAIRING_POSITIVE under corrected null (observed PAIRING_NEGATIVE)"
+  ]
+}

@@ -117,7 +117,9 @@ def test_seed_schedule_committed_and_counter(report: dict) -> None:
     assert report["diagnostic_fits"] == 0
     assert report["research_fits"] == 0
     counter = json.loads(COUNTER.read_text())
-    assert counter["scientific_fit_attempts"] == 0
+    # R2 spent 0 scientific fits; later R9 may legitimately consume the scientific cap.
+    assert counter["scientific_fit_attempts"] <= counter["scientific_fit_cap"]
+    assert counter.get("r2_updated_at") is not None
     assert counter["diagnostic_fit_attempts"] <= counter["diagnostic_fit_cap"]
     # R2 cumulative must remain recorded; later stages may add generator draws.
     assert report["generator_draws_cumulative"] == 81

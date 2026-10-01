@@ -219,6 +219,7 @@ def test_refusals_and_executor_gate(report: dict) -> None:
     assert seed["disjoint_from"]["s9_decision_generator"] == 9001
     assert DECISION_GENERATOR_SEED != 9001
     counter = json.loads(COUNTER.read_text())
-    assert counter["scientific_fit_attempts"] == 0
+    # R7 spent 0 scientific fits; later R9 may consume scientific attempts within cap.
+    assert counter["scientific_fit_attempts"] <= counter["scientific_fit_cap"]
     assert report["generator_draws_this_run"] == 16
     assert counter["generator_only_draws"] >= 81 + 16
