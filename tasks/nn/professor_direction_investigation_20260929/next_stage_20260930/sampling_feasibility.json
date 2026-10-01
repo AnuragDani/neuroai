@@ -1,0 +1,1238 @@
+{
+  "record_type": "next_stage_sampling_feasibility_q4",
+  "date": "2026-09-30",
+  "disposition": "SUPPORT_REPAIR_PASS",
+  "eligibility_status": "ELIGIBILITY_FROZEN",
+  "inputs": {
+    "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "h5ad_sha256": "08d6eff265db6e6a2e1c4a259153588f3dba3c51f5f754736dc63c28795fcdbb",
+    "global_sampling_record": "/Users/anuragdani/Github/niw-eb1a/P22/docs/nn_v2/sampling_cap1000_seed22.json",
+    "global_sampling_sha256": "e515b2eee03804b3836256ba3e8b7604fa6a8043e50c06c36b24988250423b2f",
+    "golden_targeted_json": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414/tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/TARGETED_SAMPLING_FEASIBILITY.json",
+    "golden_targeted_sha256": "5c0fbd58d6c33db43c005e1c34fb6f82990efbe4d0fbe4c8ab2a0599a662b8d9"
+  },
+  "sampling": {
+    "global_cap_per_donor": 1000,
+    "targeted_cap_per_donor_per_type": 64,
+    "seed": 22,
+    "sampler": "p22.data.nn_sampling.sample_donor_stratified_cells",
+    "support_cutoff_cells_per_donor": 20,
+    "global_n_cells_selected": 30000,
+    "targeted_n_cells_selected": 23591,
+    "targeted_selected_ids_sha256_by_type": {
+      "AST": "ab26de2af7a4767600158dd65116d680912769b7e6359fcf95aedc3120b10fed",
+      "IPC": "fa5fd9d7aad4860d17806bec671799813cd2c9361a8dfda07ff0fd3e65fc93c4",
+      "IPC_prol": "938e4d279e77ad7a64d786a706505bdc6653ec33f2ca7f16d64ca3d994f88d80",
+      "MIC": "00e32aef968636b8df341789981d0364aca513921c63b0eb1de6b4e6821d5dfc",
+      "NEU_CALB2": "a251cbd7963851dd9fd18b0199c07aef75d4cf1654fae85c018f07f255a04745",
+      "NEU_CUX2": "5edb1502064850113216ce6f1733cdbf272458cb8af3d8b2f72b8ed26337ccd2",
+      "NEU_RELN": "7a8c51591a8445714c119ca53f43419ada406d4766ad99e8865d988f309110b3",
+      "NEU_RORB": "7ebdaaa7a8003222f79c8783ea769c62aced1658412edddf5dae3340e1e7e87d",
+      "NEU_SST": "737afbe54a3c2e9fd75faae72e0b93e7cdd1deb815a9c66afadbafabb7991af9",
+      "NEU_TLE4": "b305ff7086063750538aada0149c4304370a838bf3ab7237db22c11a3d429383",
+      "NEU_low": "54b00690170f498c3356b7a1d4d5bc25d83bde83f2cdf76ee1fdaa5ee505daf6",
+      "OPC": "b45d4b9e713b30d9bc8f8391be1c68da3d5a027dd2a402d5f966909fe7975ec7",
+      "RG": "07a164718bf74719ecef0a883efe633d5547969232c601eda587563185d07905",
+      "RG_prol": "bdd3ca82725a5a990707315f138e513ef5e5112360cc75f203f4175475b74294",
+      "VASC": "f9032b09d036566a4ebd46e82ec9a7a08114671ac21fe944e0d9f6033792575a"
+    },
+    "targeted_all_types_ids_sha256": "5df45f72b8603011cb39934ad92555ceccb2fb57e3ed36b16a0035b3058bbcf0",
+    "golden_targeted_ids_exact_match": true,
+    "label_free_check": {
+      "label_free": true,
+      "n_selected": 1920,
+      "selected_ids_sha256": "8acfbc578c5f4f5ea9145dcdfe5b102704b62d8e65e2352984aa781ca1323259"
+    }
+  },
+  "global_support_by_type": {
+    "AST": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 1,
+        "available_cells": 853,
+        "selected_cells": 110
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 4,
+        "available_cells": 1481,
+        "selected_cells": 200
+      }
+    },
+    "IPC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 14,
+        "available_cells": 10297,
+        "selected_cells": 1261
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 11451,
+        "selected_cells": 1379
+      }
+    },
+    "IPC_prol": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 11,
+        "available_cells": 4330,
+        "selected_cells": 503
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 5005,
+        "selected_cells": 614
+      }
+    },
+    "MIC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 9,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 399,
+        "selected_cells": 63
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 486,
+        "selected_cells": 77
+      }
+    },
+    "NEU_CALB2": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 12,
+        "available_cells": 5325,
+        "selected_cells": 645
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 10,
+        "available_cells": 5126,
+        "selected_cells": 617
+      }
+    },
+    "NEU_CUX2": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 38745,
+        "selected_cells": 4905
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 41927,
+        "selected_cells": 5152
+      }
+    },
+    "NEU_RELN": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 2,
+        "available_cells": 1840,
+        "selected_cells": 204
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 4,
+        "available_cells": 1928,
+        "selected_cells": 290
+      }
+    },
+    "NEU_RORB": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 10,
+        "available_cells": 15435,
+        "selected_cells": 1808
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 9,
+        "available_cells": 5769,
+        "selected_cells": 717
+      }
+    },
+    "NEU_SST": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 7079,
+        "selected_cells": 876
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 12,
+        "available_cells": 6812,
+        "selected_cells": 800
+      }
+    },
+    "NEU_TLE4": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 14,
+        "selected_donors": 15,
+        "selected_donors_ge20": 14,
+        "available_cells": 14468,
+        "selected_cells": 1630
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 12309,
+        "selected_cells": 1398
+      }
+    },
+    "NEU_low": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 12,
+        "selected_donors": 15,
+        "selected_donors_ge20": 1,
+        "available_cells": 1066,
+        "selected_cells": 121
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 790,
+        "selected_cells": 114
+      }
+    },
+    "OPC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 12,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 725,
+        "selected_cells": 104
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 855,
+        "selected_cells": 123
+      }
+    },
+    "RG": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 20364,
+        "selected_cells": 2171
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 23167,
+        "selected_cells": 2806
+      }
+    },
+    "RG_prol": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 11,
+        "available_cells": 4991,
+        "selected_cells": 537
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 5088,
+        "selected_cells": 639
+      }
+    },
+    "VASC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 8,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 468,
+        "selected_cells": 62
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 8,
+        "selected_donors": 15,
+        "selected_donors_ge20": 0,
+        "available_cells": 419,
+        "selected_cells": 74
+      }
+    }
+  },
+  "targeted_support_by_type": {
+    "AST": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 10,
+        "available_cells": 853,
+        "selected_cells": 459
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 10,
+        "available_cells": 1481,
+        "selected_cells": 605
+      }
+    },
+    "IPC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 10297,
+        "selected_cells": 960
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 11451,
+        "selected_cells": 960
+      }
+    },
+    "IPC_prol": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 4330,
+        "selected_cells": 946
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 5005,
+        "selected_cells": 951
+      }
+    },
+    "MIC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 9,
+        "selected_donors": 15,
+        "selected_donors_ge20": 9,
+        "available_cells": 399,
+        "selected_cells": 399
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 10,
+        "selected_donors": 15,
+        "selected_donors_ge20": 10,
+        "available_cells": 486,
+        "selected_cells": 453
+      }
+    },
+    "NEU_CALB2": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 5325,
+        "selected_cells": 915
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 5126,
+        "selected_cells": 960
+      }
+    },
+    "NEU_CUX2": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 38745,
+        "selected_cells": 960
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 41927,
+        "selected_cells": 960
+      }
+    },
+    "NEU_RELN": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 1840,
+        "selected_cells": 717
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 1928,
+        "selected_cells": 823
+      }
+    },
+    "NEU_RORB": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 15435,
+        "selected_cells": 899
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 5769,
+        "selected_cells": 814
+      }
+    },
+    "NEU_SST": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 7079,
+        "selected_cells": 960
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 6812,
+        "selected_cells": 943
+      }
+    },
+    "NEU_TLE4": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 14,
+        "selected_donors": 15,
+        "selected_donors_ge20": 14,
+        "available_cells": 14468,
+        "selected_cells": 913
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 12309,
+        "selected_cells": 939
+      }
+    },
+    "NEU_low": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 12,
+        "selected_donors": 15,
+        "selected_donors_ge20": 12,
+        "available_cells": 1066,
+        "selected_cells": 519
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 790,
+        "selected_cells": 605
+      }
+    },
+    "OPC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 12,
+        "selected_donors": 15,
+        "selected_donors_ge20": 12,
+        "available_cells": 725,
+        "selected_cells": 602
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 13,
+        "selected_donors": 15,
+        "selected_donors_ge20": 13,
+        "available_cells": 855,
+        "selected_cells": 692
+      }
+    },
+    "RG": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 20364,
+        "selected_cells": 960
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 23167,
+        "selected_cells": 960
+      }
+    },
+    "RG_prol": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 4991,
+        "selected_cells": 940
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 15,
+        "selected_donors": 15,
+        "selected_donors_ge20": 15,
+        "available_cells": 5088,
+        "selected_cells": 960
+      }
+    },
+    "VASC": {
+      "CON": {
+        "available_donors": 15,
+        "available_donors_ge20": 8,
+        "selected_donors": 15,
+        "selected_donors_ge20": 8,
+        "available_cells": 468,
+        "selected_cells": 398
+      },
+      "DS": {
+        "available_donors": 15,
+        "available_donors_ge20": 8,
+        "selected_donors": 15,
+        "selected_donors_ge20": 8,
+        "available_cells": 419,
+        "selected_cells": 419
+      }
+    }
+  },
+  "measured_support_repair": {
+    "decision": "targeted_sampling_repairs_measured_loss_of_support",
+    "types": [
+      {
+        "cell_type": "AST",
+        "global_selected_ge20": {
+          "CON": 1,
+          "DS": 4
+        },
+        "targeted_selected_ge20": {
+          "CON": 10,
+          "DS": 10
+        },
+        "available_ge20": {
+          "CON": 10,
+          "DS": 10
+        }
+      },
+      {
+        "cell_type": "IPC",
+        "global_selected_ge20": {
+          "CON": 14,
+          "DS": 15
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "IPC_prol",
+        "global_selected_ge20": {
+          "CON": 11,
+          "DS": 13
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "MIC",
+        "global_selected_ge20": {
+          "CON": 0,
+          "DS": 0
+        },
+        "targeted_selected_ge20": {
+          "CON": 9,
+          "DS": 10
+        },
+        "available_ge20": {
+          "CON": 9,
+          "DS": 10
+        }
+      },
+      {
+        "cell_type": "NEU_CALB2",
+        "global_selected_ge20": {
+          "CON": 12,
+          "DS": 10
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "NEU_RELN",
+        "global_selected_ge20": {
+          "CON": 2,
+          "DS": 4
+        },
+        "targeted_selected_ge20": {
+          "CON": 13,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 13,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "NEU_RORB",
+        "global_selected_ge20": {
+          "CON": 10,
+          "DS": 9
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 13
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 13
+        }
+      },
+      {
+        "cell_type": "NEU_SST",
+        "global_selected_ge20": {
+          "CON": 13,
+          "DS": 12
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "NEU_TLE4",
+        "global_selected_ge20": {
+          "CON": 14,
+          "DS": 13
+        },
+        "targeted_selected_ge20": {
+          "CON": 14,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 14,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "NEU_low",
+        "global_selected_ge20": {
+          "CON": 1,
+          "DS": 0
+        },
+        "targeted_selected_ge20": {
+          "CON": 12,
+          "DS": 13
+        },
+        "available_ge20": {
+          "CON": 12,
+          "DS": 13
+        }
+      },
+      {
+        "cell_type": "OPC",
+        "global_selected_ge20": {
+          "CON": 0,
+          "DS": 0
+        },
+        "targeted_selected_ge20": {
+          "CON": 12,
+          "DS": 13
+        },
+        "available_ge20": {
+          "CON": 12,
+          "DS": 13
+        }
+      },
+      {
+        "cell_type": "RG_prol",
+        "global_selected_ge20": {
+          "CON": 11,
+          "DS": 13
+        },
+        "targeted_selected_ge20": {
+          "CON": 15,
+          "DS": 15
+        },
+        "available_ge20": {
+          "CON": 15,
+          "DS": 15
+        }
+      },
+      {
+        "cell_type": "VASC",
+        "global_selected_ge20": {
+          "CON": 0,
+          "DS": 0
+        },
+        "targeted_selected_ge20": {
+          "CON": 8,
+          "DS": 8
+        },
+        "available_ge20": {
+          "CON": 8,
+          "DS": 8
+        }
+      }
+    ],
+    "do_not_rerun_full_ladder_merely_with_more_cells": true
+  },
+  "age_sex_library_support": {
+    "age_counts_by_class": {
+      "10": {
+        "CON": 1,
+        "DS": 0
+      },
+      "11": {
+        "CON": 1,
+        "DS": 2
+      },
+      "12": {
+        "CON": 3,
+        "DS": 3
+      },
+      "13": {
+        "CON": 2,
+        "DS": 4
+      },
+      "14": {
+        "CON": 1,
+        "DS": 0
+      },
+      "15": {
+        "CON": 0,
+        "DS": 1
+      },
+      "16": {
+        "CON": 1,
+        "DS": 1
+      },
+      "17": {
+        "CON": 2,
+        "DS": 1
+      },
+      "18": {
+        "CON": 2,
+        "DS": 2
+      },
+      "20": {
+        "CON": 2,
+        "DS": 1
+      }
+    },
+    "one_class_ages": {
+      "10": {
+        "CON": 1
+      },
+      "14": {
+        "CON": 1
+      },
+      "15": {
+        "DS": 1
+      }
+    },
+    "common_ages_both_classes": [
+      "11",
+      "12",
+      "13",
+      "16",
+      "17",
+      "18",
+      "20"
+    ],
+    "sex_counts_by_class": {
+      "male": {
+        "CON": 8,
+        "DS": 9
+      },
+      "female": {
+        "CON": 7,
+        "DS": 6
+      }
+    },
+    "n_two_library_donors": 7,
+    "n_donors": 30
+  },
+  "fold_class_support_targeted_ge20": [
+    {
+      "cell_type": "AST",
+      "eligible_donors_ge20": {
+        "CON": 10,
+        "DS": 10
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 1,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.1,
+      "score_resolution_eligible_donors": 0.05,
+      "split_feasible_under_frozen_5x5": false
+    },
+    {
+      "cell_type": "IPC",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "IPC_prol",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "MIC",
+      "eligible_donors_ge20": {
+        "CON": 9,
+        "DS": 10
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 1,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.12,
+      "score_resolution_eligible_donors": 0.05555555555555555,
+      "split_feasible_under_frozen_5x5": false
+    },
+    {
+      "cell_type": "NEU_CALB2",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "NEU_CUX2",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "NEU_RELN",
+      "eligible_donors_ge20": {
+        "CON": 13,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.08,
+      "score_resolution_eligible_donors": 0.038461538461538464,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "NEU_RORB",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 13
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.08,
+      "score_resolution_eligible_donors": 0.038461538461538464,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "NEU_SST",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "NEU_TLE4",
+      "eligible_donors_ge20": {
+        "CON": 14,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 1,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.08,
+      "score_resolution_eligible_donors": 0.03571428571428571,
+      "split_feasible_under_frozen_5x5": false
+    },
+    {
+      "cell_type": "NEU_low",
+      "eligible_donors_ge20": {
+        "CON": 12,
+        "DS": 13
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 1,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.09,
+      "score_resolution_eligible_donors": 0.041666666666666664,
+      "split_feasible_under_frozen_5x5": false
+    },
+    {
+      "cell_type": "OPC",
+      "eligible_donors_ge20": {
+        "CON": 12,
+        "DS": 13
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 1,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.09,
+      "score_resolution_eligible_donors": 0.041666666666666664,
+      "split_feasible_under_frozen_5x5": false
+    },
+    {
+      "cell_type": "RG",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "RG_prol",
+      "eligible_donors_ge20": {
+        "CON": 15,
+        "DS": 15
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 0,
+      "both_classes_every_fold": true,
+      "practical_margin_eligible_donors": 0.07,
+      "score_resolution_eligible_donors": 0.03333333333333333,
+      "split_feasible_under_frozen_5x5": true
+    },
+    {
+      "cell_type": "VASC",
+      "eligible_donors_ge20": {
+        "CON": 8,
+        "DS": 8
+      },
+      "n_repeats": 5,
+      "n_folds": 5,
+      "split_base_seed": 0,
+      "split_status": "PASS",
+      "donor_overlap_count": 0,
+      "n_folds_total": 25,
+      "n_folds_missing_both_classes_train_or_test": 4,
+      "both_classes_every_fold": false,
+      "practical_margin_eligible_donors": 0.13,
+      "score_resolution_eligible_donors": 0.0625,
+      "split_feasible_under_frozen_5x5": false
+    }
+  ],
+  "eligibility_freeze": {
+    "frozen_before_effect_analysis": true,
+    "rules": {
+      "sampler": "p22.data.nn_sampling.sample_donor_stratified_cells",
+      "sampling_seed": 22,
+      "global_cap_per_donor": 1000,
+      "targeted_cap_per_donor_per_type": 64,
+      "min_cells_per_donor_support_floor": 20,
+      "min_cells_note": "Descriptive \u226520 screen is frozen as the type-restricted support floor for eligibility tables; it is not a biological power gate.",
+      "split_protocol": {
+        "n_repeats": 5,
+        "n_folds": 5,
+        "base_seed": 0,
+        "method": "StratifiedGroupKFold donor-held-out",
+        "require_both_classes_every_train_and_test_fold": true
+      },
+      "age_covariate_rules": {
+        "age_is_not_cell_state_endpoint": true,
+        "one_class_ages_excluded_from_age_matched_claims": [
+          "10",
+          "14",
+          "15"
+        ],
+        "common_ages_both_classes": [
+          "11",
+          "12",
+          "13",
+          "16",
+          "17",
+          "18",
+          "20"
+        ],
+        "age_matched_analyses_require_common_age_donors_only": true
+      },
+      "sex_covariate_rules": {
+        "sex_is_covariate_not_endpoint": true,
+        "no_performance_based_donor_deletion": true
+      },
+      "author_cell_type_role": "stratification / sampling factor only; not independent cell-state truth (Q2 ENDPOINT_UNRESOLVED)",
+      "preserve_all_eligible_donors": true,
+      "no_outcome_based_type_or_donor_selection": true
+    },
+    "candidate_types_split_feasible_under_frozen_5x5": [
+      "IPC",
+      "IPC_prol",
+      "NEU_CALB2",
+      "NEU_CUX2",
+      "NEU_RELN",
+      "NEU_RORB",
+      "NEU_SST",
+      "RG",
+      "RG_prol"
+    ],
+    "candidate_types_with_both_class_support_but_not_5x5_feasible": [
+      "AST",
+      "MIC",
+      "NEU_TLE4",
+      "NEU_low",
+      "OPC",
+      "VASC"
+    ],
+    "types_insufficient_both_class_ge20_selected": [],
+    "types_with_measured_support_repair": [
+      "AST",
+      "IPC",
+      "IPC_prol",
+      "MIC",
+      "NEU_CALB2",
+      "NEU_RELN",
+      "NEU_RORB",
+      "NEU_SST",
+      "NEU_TLE4",
+      "NEU_low",
+      "OPC",
+      "RG_prol",
+      "VASC"
+    ],
+    "biological_cell_state_pilot_eligibility": {
+      "status": "BLOCKED",
+      "reason": "Q2 ENDPOINT_UNRESOLVED \u2014 no independent cell-state endpoint"
+    },
+    "power_status": "POWER_UNESTABLISHED",
+    "uncertainty_note": "practical_margin / score_resolution below are donor-count score-grid descriptions for a stated donor-balanced-accuracy contrast; they are not established biological power or CI-width proxies."
+  },
+  "cohort_uncertainty_full_15_plus_15": {
+    "n_control_donors": 15,
+    "n_ds_donors": 15,
+    "score_resolution": 0.03333333333333333,
+    "practical_margin": 0.07,
+    "inference_rule": "donor_balanced_accuracy contrast with donor-bootstrap interval; advantage requires CI above practical_margin",
+    "power_status": "POWER_UNESTABLISHED"
+  },
+  "limits": [
+    "More cells do not add independent donors.",
+    "Support repair does not authorize biological cell-state fits (Q2).",
+    "practical_margin is not established biological power.",
+    "No disease-effect calculation or model fit was performed."
+  ]
+}
