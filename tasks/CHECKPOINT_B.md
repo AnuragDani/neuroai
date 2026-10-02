@@ -59,4 +59,4 @@ Result (2026-10-02, this checkout):
 
 ## Continue
 
-Compact evidence handoff at `tasks/EXECUTION_REPAIR_HANDOFF.md` with commands, exits, hashes and unresolved issues. Stop before E4. Zero research fits.
+Compact evidence handoff written: [EXECUTION_REPAIR_HANDOFF.md](EXECUTION_REPAIR_HANDOFF.md). Stop before E4. Zero research fits.
