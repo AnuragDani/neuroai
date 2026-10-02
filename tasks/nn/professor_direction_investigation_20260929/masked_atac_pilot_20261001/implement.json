@@ -1,0 +1,438 @@
+{
+  "disposition": "IMPLEMENT_PASS",
+  "task": "M7",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "claim_level": 2,
+  "no_fits": true,
+  "trainability_with_learning": "REFUSED_UNTIL_M8",
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "reuse": {
+    "paired_model": true,
+    "model_inputs": true,
+    "predict": true,
+    "donor_cell_weights": true,
+    "visible_atac_tfidf_fit": "available_via_masked_atac_metrics",
+    "classification_apis_unmodified": true
+  },
+  "adapter": {
+    "module": "p22.eval.masked_atac_adapter",
+    "selection_metric": "donor_average_cell_log_loss",
+    "requirements": {
+      "existing_mil_loop_assumption": "p22.training.mil_loop._donor_label_map refuses any donor with mixed cell labels; disease bags assume one label per donor",
+      "required_adapter": "donor-average of within-donor mean cell-target binary log-loss (equal donor weighting); do not substitute donor-average probability or invent a fake donor disease class",
+      "preserve_classification_api": true,
+      "fake_disease_class_forbidden": true,
+      "donor_average_probability_forbidden_as_primary": true
+    },
+    "arms": {
+      "constant": "training_prevalence_constant",
+      "logreg": [
+        "logreg_rna",
+        "logreg_visible_atac"
+      ],
+      "neural": [
+        "feature_concat_mlp",
+        "token_concat",
+        "cross_attention"
+      ],
+      "paired_name_map": {
+        "feature_concat_mlp": "rna_atac_concat",
+        "token_concat": "token_concat",
+        "cross_attention": "cross_attention"
+      },
+      "all_protocol_arms": [
+        "training_prevalence_constant",
+        "logreg_rna",
+        "logreg_visible_atac",
+        "feature_concat_mlp",
+        "token_concat",
+        "cross_attention"
+      ]
+    },
+    "toy_mixed_label_fit": {
+      "arm": "token_concat",
+      "epochs_run": 3,
+      "best_epoch": 3,
+      "initial_state_sha256": "d8910a4b21106a0e6363ade86ebbc639610f010ccdce297ce16e49c02d001a95",
+      "checkpoint_sha256": "4f8719511c1b75ef0086f96fe0819a78ee1c06196a01b566f2b69e742c5afbab",
+      "val_donor_average_cell_log_loss": 0.7170524260135881,
+      "note": "Toy-array unit verification only; does not reserve attempt counters and is not a smoke/main research fit"
+    }
+  },
+  "attempt_arithmetic": {
+    "n_learned_arms": 5,
+    "n_outer_folds": 5,
+    "planned_main_fits": 25,
+    "planned_smoke_fits": 5,
+    "planned_total_intended": 30,
+    "constant_arm_fits": 0,
+    "hard_attempt_cap": 40,
+    "headroom": 10,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "arithmetic": "5 learned arms \u00d7 5 folds = 25 main; + 5 reserved smoke (one per learned arm, fold 0) = 30 intended; hard cap 40; headroom 10; constant arm = 0 fits",
+    "within_caps": true
+  },
+  "planned_jobs": [
+    {
+      "stage": "smoke",
+      "arm": "logreg_rna",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "logreg_visible_atac",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "feature_concat_mlp",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "token_concat",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "cross_attention",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    }
+  ],
+  "workers": 1,
+  "torch_threads": 2,
+  "fitting_hours_cap": 6.0,
+  "artifact_gib_cap": 4.0,
+  "allowed_raw_root": "reports/generated/nn_masked_atac_pilot_20261001/",
+  "counter_snapshot": {
+    "ok": true,
+    "total_attempts_used": 0,
+    "smoke_fits_used": 0,
+    "scientific_fits_used": 0,
+    "hard_cap": 40,
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json"
+  },
+  "param_match_toy": {
+    "cross_attention": 23298,
+    "token_concat": 22210,
+    "relative_error": 0.046699,
+    "tolerance": 0.1,
+    "matched": true
+  },
+  "gradient_checks": [
+    {
+      "arm": "feature_concat_mlp",
+      "finite": true,
+      "loss": 0.724334180355072,
+      "max_abs_grad": 0.09110260009765625,
+      "n_cells": 10
+    },
+    {
+      "arm": "token_concat",
+      "finite": true,
+      "loss": 0.7084029912948608,
+      "max_abs_grad": 0.04101739451289177,
+      "n_cells": 10
+    },
+    {
+      "arm": "cross_attention",
+      "finite": true,
+      "loss": 0.7249515056610107,
+      "max_abs_grad": 0.04186980053782463,
+      "n_cells": 10
+    }
+  ],
+  "reload_checks": [
+    {
+      "arm": "feature_concat_mlp",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 10
+    },
+    {
+      "arm": "token_concat",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 10
+    },
+    {
+      "arm": "cross_attention",
+      "passed": true,
+      "max_abs_diff": 0.0,
+      "atol": 1e-06,
+      "n_cells": 10
+    }
+  ],
+  "selection_check": {
+    "cell_log_loss_prefers_good": true,
+    "loss_good": 0.19438741656569078,
+    "loss_bad": 0.631282116665979,
+    "wrong_statistic_values_differ_from_correct": true,
+    "selection_metric": "donor_average_cell_log_loss"
+  },
+  "refusals": [
+    {
+      "case": "protocol_hash",
+      "refused": true
+    },
+    {
+      "case": "raw_root:reports/generated/nn_s7_covariance_20260929/",
+      "refused": true
+    },
+    {
+      "case": "raw_root:reports/generated/nn_s9_analytic_pairing_20260930/",
+      "refused": true
+    },
+    {
+      "case": "raw_root:reports/generated/nn_failure_audit_20261001/s10_corrected_null_pairing_20261001/",
+      "refused": true
+    },
+    {
+      "case": "allowed_raw_root",
+      "refused": false,
+      "allowed": true
+    },
+    {
+      "case": "overwrite",
+      "refused": true
+    },
+    {
+      "case": "unreviewed_smoke_main_learning",
+      "refused": true,
+      "lock_present": false
+    }
+  ],
+  "hashes": {
+    "PILOT_PROTOCOL.json": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "M6_REVIEWED_HASHES.json": "865ca57d9bfd3ccffae89f9e4e838d4689ff544dd7a8e1a592dcd9fe0b81adc4"
+  },
+  "m6_lock": {
+    "verdict": "PASS",
+    "m7_may_implement": true,
+    "m8_still_required": true,
+    "fits_authorized": false,
+    "reviewer_agent_id": "d3e35bc3-b15e-47e7-9300-a5271b324ad5"
+  },
+  "checks": {
+    "m6_pass_authorizes_implement": true,
+    "attempt_arithmetic_within_caps": true,
+    "planned_jobs_30": true,
+    "planned_main_25": true,
+    "planned_smoke_5": true,
+    "counters_still_zero": true,
+    "mil_mixed_refused": true,
+    "train_model_donor_mode_refuses_mixed": true,
+    "adapter_mixed_label_train_ok": true,
+    "selection_prefers_cell_log_loss": true,
+    "constant_arm_zero_params": true,
+    "logreg_probabilities_finite": true,
+    "finite_gradients_all_neural": true,
+    "reload_identity_all_neural": true,
+    "ca_tc_param_match_toy_widths": true,
+    "protocol_hash_mismatch_refused": true,
+    "forbidden_raw_roots_refused": true,
+    "allowed_raw_root_accepted": true,
+    "overwrite_refused": true,
+    "learning_refused_until_m8": true,
+    "no_smoke_main_fits": true,
+    "claim_level_2": true
+  },
+  "next": "M8 independent full executor/dependency hash review before any learning"
+}
