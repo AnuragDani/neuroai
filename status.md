@@ -4,6 +4,10 @@ Updated: 2026-10-01. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## Masked ATAC pilot Checkpoint A — PASS — 2026-10-01
+
+**Checkpoint A DONE** (`PASS`) on `gnhf/execute-the-p22-mask-6010ee`. M1–M3 evidence rechecked: exact 465-region measurements + chromosome-mask contract; training-only targets 5/5; splits/sampling frozen (cap256/seed22, 7680 cells); visible ATAC 423–440 (adequate multimodal comparison); no predictive outcomes consulted. Focused M1–M3 suite **13 PASS**. No fits. Prior S10/S9/S7 **`INVALID`**; primary **`B_NULL`**; Q2 `ENDPOINT_UNRESOLVED` unchanged. Next: M4 leakage/metric falsification. [CHECKPOINT_A](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_A.md).
+
 ## Masked ATAC pilot M3 — splits/sampling FROZEN — 2026-10-01
 
 **M3 DONE** (`SPLITS_AND_SAMPLING_FROZEN`) on `gnhf/execute-the-p22-mask-6010ee`. Archival repeat-0 / split_seed=0 five outer folds reused (30 donors each held out once); M2 label-free inner-val salt/rule adopted as **FROZEN** (targets remain valid). Matched paired sample: `sample_donor_stratified_cells` cap **256** / seed **22** / strata author_cell_type×library → **7680** cells (0 donors below cap); one global cell set shared across arms. Per-fold target / visible-ATAC indices / train-val-test cell IDs and SHA-256 pinned; disease stratification disclosed, not a feature; class-dependent metrics report unavailable rather than dropping donors. No fits. Prior S10/S9/S7 **`INVALID`**; primary **`B_NULL`**; Q2 `ENDPOINT_UNRESOLVED` unchanged. Next: Checkpoint A then M4 leakage/metric falsification. [SPLITS_AND_SAMPLING](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.md); [SPLITS_AND_SAMPLING.json](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.json).
