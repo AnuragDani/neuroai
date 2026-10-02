@@ -1,17 +1,21 @@
-"""M7 dry-run executor scaffolding for the masked ATAC pilot.
+"""Masked ATAC pilot executor: M7 dry-run + M8-gated serial path.
 
 Enumerates planned jobs, verifies adapter/factory reuse, finite gradients,
 reload identity, mixed-label selection contract, counter/hash/overwrite
-refusals, and **refuses all smoke/main learning until M8 PASS**.
+refusals, live M8 hash verification, reserve-before-dispatch, and skip-fits
+replay. Smoke/main learning requires independent M8 PASS with matching
+working-tree digests.
 
-Does not dispatch research fits. Unit-test adapter learning on toy arrays is
-separate from smoke attempts and does not mutate attempt counters.
+Unit-test adapter learning on toy arrays is separate from smoke attempts and
+does not mutate the owned attempt counters.
 """
 
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping
+import tempfile
+import time
+from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +45,7 @@ from p22.eval.masked_atac_protocol import (
     CLAIM_LEVEL,
     CONSTANT_ARM,
     FITTING_HOURS_CAP,
+    HARD_ATTEMPT_CAP,
     NEURAL,
     PLANNED_MAIN_FITS,
     PLANNED_SMOKE_FITS,
@@ -73,10 +78,57 @@ M8_LOCK_RELATIVE = (
     "tasks/nn/professor_direction_investigation_20260929/"
     "masked_atac_pilot_20261001/M8_REVIEWED_HASHES.json"
 )
+M8_REVIEW_RELATIVE = (
+    "tasks/nn/professor_direction_investigation_20260929/"
+    "masked_atac_pilot_20261001/NO_FIT_REVIEW_M8.json"
+)
+COUNTER_NAME = "attempt_counter.json"
+LEDGER_NAME = "attempt_ledger.jsonl"
+
+# External M8 lock keys (must match M8_REVIEWED_HASHES.reviewed_hashes).
+REQUIRED_LOCK_KEYS = (
+    "PILOT_PROTOCOL.json",
+    "implement.json",
+    "M6_REVIEWED_HASHES.json",
+    "src/p22/eval/masked_atac_execute.py",
+    "src/p22/eval/masked_atac_adapter.py",
+    "src/p22/eval/masked_atac_protocol.py",
+    "src/p22/eval/masked_atac_metrics.py",
+    "src/p22/eval/masked_atac_splits.py",
+    "src/p22/eval/masked_atac_target.py",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json",
+)
 
 
 class MaskedAtacExecuteRefusal(ValueError):
     """Refuse unauthorized learning or unsafe output contracts."""
+
+
+def _stage_dir(workspace: Path) -> Path:
+    return (
+        Path(workspace)
+        / "tasks/nn/professor_direction_investigation_20260929"
+        / "masked_atac_pilot_20261001"
+    )
+
+
+def review_lock_path(workspace: Path | None = None) -> Path:
+    if workspace is None:
+        return Path(M8_LOCK_RELATIVE)
+    return Path(workspace) / M8_LOCK_RELATIVE
+
+
+def job_fit_id(job: Mapping[str, Any]) -> str:
+    return f"{job['stage']}|{job['arm']}|fold{int(job['fold'])}"
+
+
+def resolve_lock_artifact_path(workspace: Path, key: str) -> Path:
+    """Map reviewed_hashes keys to workspace files."""
+    workspace = Path(workspace)
+    stage = _stage_dir(workspace)
+    if key.startswith("src/") or key.startswith("reports/"):
+        return workspace / key
+    return stage / key
 
 
 def refuse_if_not_allowed_raw_root(raw_root: str | Path) -> None:
@@ -92,18 +144,82 @@ def refuse_if_not_allowed_raw_root(raw_root: str | Path) -> None:
             )
 
 
-def refuse_unreviewed_learning(*, m8_lock_path: Path | None) -> None:
-    """Smoke/main learning requires an independent M8 PASS lock file."""
+def load_reviewed_hashes(lock_path: Path | None = None) -> dict[str, str]:
+    path = Path(lock_path) if lock_path is not None else Path(M8_LOCK_RELATIVE)
+    if not path.is_file():
+        return {key: "" for key in REQUIRED_LOCK_KEYS}
+    blob = json.loads(path.read_text(encoding="utf-8"))
+    hashes = blob.get("reviewed_hashes") if isinstance(blob, dict) else None
+    if not isinstance(hashes, dict):
+        return {key: "" for key in REQUIRED_LOCK_KEYS}
+    return {key: str(hashes.get(key, "") or "") for key in REQUIRED_LOCK_KEYS}
+
+
+def reviewed_hashes_complete(lock_path: Path | None = None) -> bool:
+    hashes = load_reviewed_hashes(lock_path)
+    return all(isinstance(v, str) and len(v) == 64 for v in hashes.values())
+
+
+def verify_reviewed_hashes(
+    *,
+    workspace: Path,
+    lock_path: Path | None = None,
+) -> dict[str, str]:
+    """Require live digests to match the external M8 reviewed_hashes lock."""
+    workspace = Path(workspace)
+    lock = Path(lock_path) if lock_path is not None else review_lock_path(workspace)
+    if not lock.is_file():
+        raise MaskedAtacExecuteRefusal(
+            f"REFUSED_UNTIL_M8: missing lock {M8_LOCK_RELATIVE}"
+        )
+    blob = json.loads(lock.read_text(encoding="utf-8"))
+    if blob.get("verdict") != "PASS" or not blob.get("fits_authorized"):
+        raise MaskedAtacExecuteRefusal(
+            "REFUSED_UNTIL_M8: lock present but fits_authorized is not true"
+        )
+    if not reviewed_hashes_complete(lock):
+        raise MaskedAtacExecuteRefusal(
+            "M8_REVIEWED_HASHES incomplete; independent review PASS with full "
+            "reviewed_hashes required before smoke/main learning"
+        )
+    expected = load_reviewed_hashes(lock)
+    live: dict[str, str] = {}
+    for key, digest in expected.items():
+        path = resolve_lock_artifact_path(workspace, key)
+        if not path.is_file():
+            raise MaskedAtacExecuteRefusal(f"missing reviewed artifact {key}: {path}")
+        actual = sha256_file(path)
+        live[key] = actual
+        if actual != digest:
+            raise MaskedAtacExecuteRefusal(
+                f"M8 hash mismatch for {key}: expected {digest} got {actual}"
+            )
+    return live
+
+
+def refuse_unreviewed_learning(
+    *,
+    m8_lock_path: Path | None,
+    workspace: Path | None = None,
+) -> None:
+    """Smoke/main learning requires M8 PASS lock with matching live hashes."""
     if m8_lock_path is None or not Path(m8_lock_path).is_file():
         raise MaskedAtacExecuteRefusal(
             "REFUSED_UNTIL_M8: neural smoke/main learning unauthorized; "
             f"missing lock {M8_LOCK_RELATIVE}"
         )
-    lock = json.loads(Path(m8_lock_path).read_text())
-    if lock.get("verdict") != "PASS" or not lock.get("fits_authorized"):
+    lock = Path(m8_lock_path)
+    blob = json.loads(lock.read_text(encoding="utf-8"))
+    if blob.get("verdict") != "PASS" or not blob.get("fits_authorized"):
         raise MaskedAtacExecuteRefusal(
             "REFUSED_UNTIL_M8: lock present but fits_authorized is not true"
         )
+    # Live hash match is mandatory (M8-C1); workspace defaults from lock path.
+    if workspace is None:
+        # .../tasks/nn/.../masked_atac_pilot_20261001/M8_REVIEWED_HASHES.json
+        # parents[4] == workspace root under the standard layout.
+        workspace = lock.resolve().parents[4]
+    verify_reviewed_hashes(workspace=Path(workspace), lock_path=lock)
 
 
 def refuse_mismatched_protocol_hash(expected: str, actual: str) -> None:
@@ -111,6 +227,249 @@ def refuse_mismatched_protocol_hash(expected: str, actual: str) -> None:
         raise MaskedAtacExecuteRefusal(
             f"protocol hash mismatch: expected {expected} got {actual}"
         )
+
+
+def load_attempt_counter(counter_path: Path) -> dict[str, Any]:
+    path = Path(counter_path)
+    if not path.is_file():
+        return {
+            "stage": PROTOCOL_ID,
+            "scientific_fits": {"used": 0, "cap": HARD_ATTEMPT_CAP},
+            "smoke_fits": {"used": 0, "cap": PLANNED_SMOKE_FITS},
+            "total_attempts": {"used": 0, "hard_cap": HARD_ATTEMPT_CAP},
+            "fitting_hours": {"used": 0.0, "cap": FITTING_HOURS_CAP},
+            "artifacts_gib": {"used": 0.0, "cap": ARTIFACT_GIB_CAP},
+            "network_bytes": 0,
+            "workers": WORKERS,
+            "torch_threads": TORCH_THREADS,
+            "reserved_fit_ids": [],
+            "completed_fit_ids": [],
+            "failed_fit_ids": [],
+        }
+    counter = json.loads(path.read_text(encoding="utf-8"))
+    counter.setdefault("reserved_fit_ids", [])
+    counter.setdefault("completed_fit_ids", [])
+    counter.setdefault("failed_fit_ids", [])
+    return counter
+
+
+def save_attempt_counter(counter_path: Path, counter: Mapping[str, Any]) -> Path:
+    path = Path(counter_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(dict(counter), indent=2, sort_keys=True) + "\n")
+    return path
+
+
+def reserve_attempt_before_dispatch(
+    *,
+    counter_path: Path,
+    fit_id: str,
+    stage: str,
+) -> dict[str, Any]:
+    """Crash-safe reserve: increment counters and record fit_id before learning."""
+    counter = load_attempt_counter(counter_path)
+    hard_cap = int(counter["total_attempts"]["hard_cap"])
+    used = int(counter["total_attempts"]["used"])
+    if used >= hard_cap:
+        raise MaskedAtacExecuteRefusal(
+            f"hard attempt cap {hard_cap} already reached ({used})"
+        )
+    reserved = list(counter.get("reserved_fit_ids", []))
+    if fit_id not in reserved:
+        reserved.append(fit_id)
+    counter["reserved_fit_ids"] = reserved
+    counter["total_attempts"]["used"] = used + 1
+    if stage == "smoke":
+        smoke_used = int(counter["smoke_fits"]["used"])
+        smoke_cap = int(counter["smoke_fits"]["cap"])
+        if smoke_used >= smoke_cap:
+            raise MaskedAtacExecuteRefusal(
+                f"smoke cap {smoke_cap} already reached ({smoke_used})"
+            )
+        counter["smoke_fits"]["used"] = smoke_used + 1
+    else:
+        sci_used = int(counter["scientific_fits"]["used"])
+        sci_cap = int(counter["scientific_fits"]["cap"])
+        if sci_used >= sci_cap:
+            raise MaskedAtacExecuteRefusal(
+                f"scientific cap {sci_cap} already reached ({sci_used})"
+            )
+        counter["scientific_fits"]["used"] = sci_used + 1
+    hours_used = float(counter["fitting_hours"]["used"])
+    if hours_used >= float(counter["fitting_hours"]["cap"]):
+        raise MaskedAtacExecuteRefusal(
+            f"fitting hours cap already reached ({hours_used})"
+        )
+    save_attempt_counter(counter_path, counter)
+    return counter
+
+
+def append_ledger_row(raw_root: Path, row: Mapping[str, Any]) -> None:
+    path = Path(raw_root) / LEDGER_NAME
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(dict(row), sort_keys=True) + "\n")
+
+
+def prepare_raw_root(raw_root: Path | str) -> Path:
+    root = Path(raw_root)
+    refuse_if_not_allowed_raw_root(root)
+    if root.exists() and root.is_symlink():
+        raise MaskedAtacExecuteRefusal(f"raw root must not be a symlink: {root}")
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "checkpoints").mkdir(exist_ok=True)
+    (root / "predictions").mkdir(exist_ok=True)
+    (root / "logs").mkdir(exist_ok=True)
+    return root
+
+
+def execute_jobs_serial(
+    jobs: list[Mapping[str, Any]],
+    *,
+    raw_root: Path,
+    counter_path: Path,
+    fit_fn: Callable[[Mapping[str, Any]], dict[str, Any]],
+    attempt_cap: int = HARD_ATTEMPT_CAP,
+) -> dict[str, Any]:
+    """Serial one-worker loop with per-job reserve before dispatch."""
+    if WORKERS != 1:
+        raise MaskedAtacExecuteRefusal("masked ATAC pilot requires WORKERS=1")
+    counter = load_attempt_counter(counter_path)
+    done_ids = set(counter.get("completed_fit_ids", []))
+    remaining = [j for j in jobs if job_fit_id(j) not in done_ids]
+    used = int(counter["total_attempts"]["used"])
+    if used > attempt_cap:
+        raise MaskedAtacExecuteRefusal(
+            f"attempt counter {used} already exceeds cap {attempt_cap}"
+        )
+    if used + len(remaining) > attempt_cap:
+        raise MaskedAtacExecuteRefusal(
+            f"planned remaining {len(remaining)} would exceed cap "
+            f"({used} + {len(remaining)} > {attempt_cap})"
+        )
+    started = time.perf_counter()
+    results: list[dict[str, Any]] = []
+    for job in remaining:
+        fit_id = job_fit_id(job)
+        counter = reserve_attempt_before_dispatch(
+            counter_path=counter_path,
+            fit_id=fit_id,
+            stage=str(job["stage"]),
+        )
+        job_started = time.perf_counter()
+        try:
+            record = fit_fn(job)
+            status = "ok"
+            completed = list(counter.get("completed_fit_ids", []))
+            if fit_id not in completed:
+                completed.append(fit_id)
+            counter["completed_fit_ids"] = completed
+        except Exception as exc:  # noqa: BLE001 — ledger must retain failures
+            record = {"fit_id": fit_id, "error": f"{type(exc).__name__}: {exc}"}
+            status = "failed"
+            failed = list(counter.get("failed_fit_ids", []))
+            if fit_id not in failed:
+                failed.append(fit_id)
+            counter["failed_fit_ids"] = failed
+        seconds = float(time.perf_counter() - job_started)
+        counter["fitting_hours"]["used"] = float(
+            counter["fitting_hours"]["used"]
+        ) + seconds / 3600.0
+        save_attempt_counter(counter_path, counter)
+        payload = {
+            "fit_id": fit_id,
+            "stage": job["stage"],
+            "arm": job["arm"],
+            "fold": int(job["fold"]),
+            "status": status,
+            "seconds": seconds,
+            "record": record,
+        }
+        append_ledger_row(raw_root, payload)
+        pred_dir = Path(raw_root) / "predictions"
+        pred_dir.mkdir(parents=True, exist_ok=True)
+        pred_path = pred_dir / f"{fit_id.replace('|', '__')}.json"
+        if not pred_path.exists():
+            pred_path.write_text(json.dumps(payload, indent=2, default=str) + "\n")
+        results.append(payload)
+        if float(counter["fitting_hours"]["used"]) > float(
+            counter["fitting_hours"]["cap"]
+        ):
+            raise MaskedAtacExecuteRefusal(
+                f"fitting hours exceeded cap after {fit_id}"
+            )
+    return {
+        "n_executed_this_call": len(results),
+        "n_skipped_already_done": len(jobs) - len(remaining),
+        "wall_seconds": float(time.perf_counter() - started),
+        "counter": dict(load_attempt_counter(counter_path)),
+        "records": results,
+        "workers": 1,
+        "parallel_dispatch": False,
+    }
+
+
+def run_authorized_pilot(
+    *,
+    workspace: Path,
+    raw_root: Path | str | None = None,
+    m8_lock_path: Path | None = None,
+    review_path: Path | None = None,
+    skip_fits: bool = False,
+    fit_fn: Callable[[Mapping[str, Any]], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Authorize via external M8 lock; optionally run serial jobs or skip-fits replay."""
+    workspace = Path(workspace)
+    lock = Path(m8_lock_path) if m8_lock_path is not None else review_lock_path(workspace)
+    review = (
+        Path(review_path)
+        if review_path is not None
+        else workspace / M8_REVIEW_RELATIVE
+    )
+    live_hashes = verify_reviewed_hashes(workspace=workspace, lock_path=lock)
+    if not review.is_file():
+        raise MaskedAtacExecuteRefusal(f"missing M8 review record: {review}")
+    review_blob = json.loads(review.read_text(encoding="utf-8"))
+    if review_blob.get("verdict") != "PASS":
+        raise MaskedAtacExecuteRefusal("M8 independent review must be PASS before fits")
+    if not review_blob.get("fits_authorized", False):
+        raise MaskedAtacExecuteRefusal("M8 review fits_authorized must be true")
+
+    root = prepare_raw_root(raw_root or (workspace / ALLOWED_RAW_ROOT))
+    counter_path = root / COUNTER_NAME
+    jobs = enumerate_planned_jobs()
+    if skip_fits:
+        counter = load_attempt_counter(counter_path)
+        return {
+            "skip_fits": True,
+            "n_executed_this_call": 0,
+            "n_skipped_already_done": 0,
+            "reviewed_hashes": live_hashes,
+            "counter": counter,
+            "planned_jobs": len(jobs),
+            "workers": WORKERS,
+            "torch_threads": TORCH_THREADS,
+            "raw_root": str(root),
+            "learning": False,
+        }
+    if fit_fn is None:
+        raise MaskedAtacExecuteRefusal(
+            "fit_fn required when skip_fits is False; refuse implicit learning"
+        )
+    exec_summary = execute_jobs_serial(
+        jobs,
+        raw_root=root,
+        counter_path=counter_path,
+        fit_fn=fit_fn,
+    )
+    return {
+        "skip_fits": False,
+        "reviewed_hashes": live_hashes,
+        "raw_root": str(root),
+        "learning": True,
+        "workers": WORKERS,
+        "torch_threads": TORCH_THREADS,
+        **exec_summary,
+    }
 
 
 def counter_still_zero(counter_path: Path) -> dict[str, Any]:
@@ -284,7 +643,7 @@ def run_m7_dry_run(
     learning_refused = False
     lock_path = m8_lock if m8_lock is not None else workspace / M8_LOCK_RELATIVE
     try:
-        refuse_unreviewed_learning(m8_lock_path=lock_path)
+        refuse_unreviewed_learning(m8_lock_path=lock_path, workspace=workspace)
     except MaskedAtacExecuteRefusal:
         learning_refused = True
     refusals.append(
@@ -292,6 +651,30 @@ def run_m7_dry_run(
             "case": "unreviewed_smoke_main_learning",
             "refused": learning_refused,
             "lock_present": Path(lock_path).is_file(),
+        }
+    )
+
+    # M8-C1: PASS + fits_authorized without live hash match must still refuse.
+    empty_hash_lock_refused = False
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = Path(tmp) / "M8_REVIEWED_HASHES.json"
+            fake.write_text(
+                json.dumps(
+                    {
+                        "verdict": "PASS",
+                        "fits_authorized": True,
+                        "reviewed_hashes": {},
+                    }
+                )
+            )
+            refuse_unreviewed_learning(m8_lock_path=fake, workspace=workspace)
+    except MaskedAtacExecuteRefusal:
+        empty_hash_lock_refused = True
+    refusals.append(
+        {
+            "case": "empty_reviewed_hashes_pass_lock",
+            "refused": empty_hash_lock_refused,
         }
     )
 
@@ -324,8 +707,12 @@ def run_m7_dry_run(
         ),
         "overwrite_refused": overwrite_refused,
         "learning_refused_until_m8": learning_refused,
+        "empty_hash_pass_lock_refused": empty_hash_lock_refused,
         "no_smoke_main_fits": True,
         "claim_level_2": CLAIM_LEVEL == 2,
+        "executor_has_verify_reviewed_hashes": True,
+        "executor_has_reserve_before_dispatch": True,
+        "executor_has_skip_fits": True,
     }
     all_pass = all(bool(v) for v in checks.values())
     body: dict[str, Any] = {

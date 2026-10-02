@@ -1,0 +1,41 @@
+{
+  "task": "M8",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "date": "2026-10-01",
+  "verdict": "FAIL",
+  "reviewer_agent_id": "64da0eef-2eac-4d5a-b6ec-0cd9ba1ed6ca",
+  "reviewer_agent_id_source": "runtime agent transcript folder UUID (this review session)",
+  "self_certification": false,
+  "git_commit_at_review": "2be3c934800919c0553f15221b088599a7c0320b",
+  "binds_working_tree_hashes": true,
+  "note": "External lock of working-tree digests at independent M8 review. Does NOT authorize fits or smoke. Does NOT include hash of this file. Critical executor gaps block Checkpoint C.",
+  "reviewed_hashes": {
+    "PILOT_PROTOCOL.json": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "implement.json": "bd4be2ab01929ba89b0cc11075905cce4089a7cd7bf51ab733d4da610a32660c",
+    "M6_REVIEWED_HASHES.json": "865ca57d9bfd3ccffae89f9e4e838d4689ff544dd7a8e1a592dcd9fe0b81adc4",
+    "src/p22/eval/masked_atac_execute.py": "9c164838b4c3c828c0f2874de601352f783d4ca3f988918d0bf94d319d98b377",
+    "src/p22/eval/masked_atac_adapter.py": "cda024a4e0812c7ba76cb435b6e4cfd66de2879d408413f4a6a2d5f19068aae6",
+    "src/p22/eval/masked_atac_protocol.py": "1ad3fdb97a470573254569195e712a7376ce1f1e581722c7aa3eb5939d22fb5d",
+    "src/p22/eval/masked_atac_metrics.py": "64553c501ac3a0619d97fcdc547d7fb98a96555ab3d3f8ccea9cee2fc019a9c5",
+    "src/p22/eval/masked_atac_splits.py": "9c54324234cd3cffd5f622604bda00aee966b1147e205179b83cf182f1e8f415",
+    "src/p22/eval/masked_atac_target.py": "c771f1069a9a6d40c3107efd65131f762af4285799eb01ef07e395b555d0cd02",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "5a801b6c1aa821b4e11ad8058f044c11efb3b65d0ff8af1112b00b606e1b8be1"
+  },
+  "dependency_hashes_not_in_lock": {
+    "IMPLEMENT.md": "b6d08f253871b9272bbf87c9a087785d4d51fd3c2cc46babc07685e49e0deac0",
+    "src/p22/eval/multiome_runner.py": "119f93e269eee11a27b93e29f1c85a192b25793d9fad28e546bba99c93abd0b5",
+    "src/p22/eval/s7_runner.py": "290b5e2769629d139691be52c2be292bc03c5af986c3c33bf8a1feefe8d84790",
+    "src/p22/training/loop.py": "195274bf29284e17746bef20020394737d175666361c5537fb0cdac1df347c1a",
+    "src/p22/training/mil_loop.py": "6956d20037f81205f86302940005cbc17659ad40497bf3117d76fd7bb8d428e0",
+    "tests/test_masked_atac_implement_m7.py": "fb4f9d3d092061b61ba7d86738cc1152a07fe39ba68ed70ecd41eb21fe3e55e8"
+  },
+  "authorized_raw_root": "reports/generated/nn_masked_atac_pilot_20261001/",
+  "workers": 1,
+  "torch_threads": 2,
+  "planned_fits_intended": 30,
+  "hard_attempt_cap": 40,
+  "fits_authorized": false,
+  "smoke_learning_authorized": false,
+  "checkpoint_c_may_proceed": false,
+  "m6_protocol_lock_still_valid": true
+}

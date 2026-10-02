@@ -1,0 +1,200 @@
+{
+  "task": "M8",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "date": "2026-10-01",
+  "branch": "gnhf/execute-the-p22-mask-6010ee",
+  "git_commit_at_review": "2be3c934800919c0553f15221b088599a7c0320b",
+  "note": "Independent full-path executor review. Authorization would bind working-tree hashes below; verdict FAIL so fits remain unauthorized. No smoke/main learning run by this reviewer.",
+  "verdict": "FAIL",
+  "disposition": "FAIL",
+  "correction_cycle": 0,
+  "max_correction_cycles": 2,
+  "self_certification": false,
+  "reviewer": {
+    "identity": "cursor Task generalPurpose agent (independent of M0-M7 authoring session)",
+    "agent_id": "64da0eef-2eac-4d5a-b6ec-0cd9ba1ed6ca",
+    "agent_id_source": "runtime agent transcript folder UUID for this review session",
+    "self_certification": false,
+    "review_file": "INDEPENDENT_REVIEW_M8.md"
+  },
+  "critical_findings": [
+    {
+      "id": "M8-C1",
+      "severity": "learning_gate_no_live_hash_match",
+      "summary": "refuse_unreviewed_learning only checks lock file presence + verdict==PASS + fits_authorized; it does not verify live digests against reviewed_hashes. A synthetic lock with empty reviewed_hashes and fits_authorized=true is accepted.",
+      "evidence": "src/p22/eval/masked_atac_execute.py:refuse_unreviewed_learning; contrast src/p22/eval/s10_execute.py:verify_reviewed_hashes",
+      "blocks_fits": true
+    },
+    {
+      "id": "M8-C2",
+      "severity": "no_reserve_before_dispatch_implementation",
+      "summary": "Reserve-before-dispatch / crash-safe counters exist only as declarative reserve_before_dispatch_rules() in masked_atac_protocol.py. masked_atac_execute.py has no reserved_fit_ids, no per-job counter increment before dispatch, and no durable mid-fit crash accounting.",
+      "evidence": "masked_atac_protocol.py:reserve_before_dispatch_rules; masked_atac_execute.py lacks reserved_fit_ids/save_attempt_counter dispatch loop; contrast s10_execute.py serial reserve loop",
+      "blocks_fits": true
+    },
+    {
+      "id": "M8-C3",
+      "severity": "no_serial_fit_dispatch_or_replay_skip_path",
+      "summary": "Executor is dry-run scaffolding only (run_m7_dry_run). No skip_fits/replay-completed-only resume path, no serial job runner for the 30 planned smoke/main jobs, and no persistence path for research checkpoints under the owned raw root. PLAN M8 requires full-path code with reservations, crash-safe counters, and replay-only mode before learning.",
+      "evidence": "masked_atac_execute.py module docstring and API surface; EXECUTE_CONTAINS[skip_fits]=False; EXECUTE_CONTAINS[verify_reviewed_hashes]=False",
+      "blocks_fits": true
+    }
+  ],
+  "non_critical_notes": [
+    "M6-locked protocol/helper/test hashes still match live recomputation; protocol files unchanged since M6.",
+    "Adapter mixed-label train/select and disease mil_loop/train_model mixed-label refusal verified by dry-run and M7 tests.",
+    "Overwrite refusal, unique owned raw-root markers, workers=1×torch_threads=2, and attempt arithmetic 25+5≤40 are correct where implemented.",
+    "This review does not mark Checkpoint C and does not authorize fits/smoke.",
+    "Correction cycle remaining: up to 2 across protocol/executor reviews (this is cycle 0 FAIL)."
+  ],
+  "reviewed_hashes": {
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PLAN.md": "a9bf38e474e868bd0b32403cce5998ee825bde78e6947e9b28bf19bfbbe0e834",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PILOT_PROTOCOL.md": "178b9927483f8487c563be39553bfe889bd1b9288fd481536a9c0169862c98b0",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PILOT_PROTOCOL.json": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/BUDGET_LEDGER.md": "e9f0809afca5966b7fc42c10cec28688183f4dbaa5f322e43fd58dcc56e2002e",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/budget_ledger.json": "0c1251d41d22921ef2f09fdd67752be349baa324f644620ec42fd279e2777980",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.md": "08f28f037e36596378db8f909ecd013d8675b4d94596f0dc6362b122931f62a2",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.json": "20514e94873b46faf99bebd0077e3e44765d5df0c4193dc2267ef342002f4341",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/TARGET_FEASIBILITY.md": "d3dfce63abe64b256cee558a6bc09a357bd48a2514173374ac336f586ff930e0",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/target_feasibility.json": "09b6a5cf6c809f8674e661821d1dff933849e33f205910415b243c36940f9c3a",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/INPUT_AND_MASKING.md": "4b56ecca59e85cab71f02100b43e4c8c67b6d2688bbd47d70b98d8ff5144cf39",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/input_and_masking.json": "bbd02573dce3c74ca6a0c86e79ec51dd55ee6987d99afc9b3a922f2b66510922",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.md": "8bd75c14449e94f143afd3bbd3d3046c835e006d20f511fb9e02fd0d15a4137a",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.json": "3375f744825e0c383aecb410c9d8af2d6eb9887e7671a0ff18e624753a46f64f",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_A.md": "f5f8b9c59b1cc3e3f727e4c70d3ace75e939d78b4dec18402abe4699a6f403e7",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_B.md": "407e16f23f45b742a860538f33368dd051fc3995dc53c7162cf1f8799155ba18",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PREFLIGHT.md": "81e4eddce459a940ee5650067535d367a553af25d2e62c784bf8fc10b84a6645",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/IMPLEMENT.md": "b6d08f253871b9272bbf87c9a087785d4d51fd3c2cc46babc07685e49e0deac0",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/implement.json": "bd4be2ab01929ba89b0cc11075905cce4089a7cd7bf51ab733d4da610a32660c",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/M6_REVIEWED_HASHES.json": "865ca57d9bfd3ccffae89f9e4e838d4689ff544dd7a8e1a592dcd9fe0b81adc4",
+    "src/p22/eval/masked_atac_target.py": "c771f1069a9a6d40c3107efd65131f762af4285799eb01ef07e395b555d0cd02",
+    "src/p22/eval/masked_atac_splits.py": "9c54324234cd3cffd5f622604bda00aee966b1147e205179b83cf182f1e8f415",
+    "src/p22/eval/masked_atac_metrics.py": "64553c501ac3a0619d97fcdc547d7fb98a96555ab3d3f8ccea9cee2fc019a9c5",
+    "src/p22/eval/masked_atac_protocol.py": "1ad3fdb97a470573254569195e712a7376ce1f1e581722c7aa3eb5939d22fb5d",
+    "src/p22/eval/masked_atac_adapter.py": "cda024a4e0812c7ba76cb435b6e4cfd66de2879d408413f4a6a2d5f19068aae6",
+    "src/p22/eval/masked_atac_execute.py": "9c164838b4c3c828c0f2874de601352f783d4ca3f988918d0bf94d319d98b377",
+    "tests/test_masked_atac_input_and_masking_m1.py": "fe0dd488e5a086c33adc0d280f4616ae4fc0d385ab8d26e3076e80a6062956ad",
+    "tests/test_masked_atac_target_feasibility_m2.py": "f4ab6ddcaf859ffcd3c7cda030435cd108235d0236b3998427d16b76124ab0a1",
+    "tests/test_masked_atac_splits_m3.py": "56dee1036b36fcf7d75e5b9339c63da5e6ce9f0c84405395e6cbdb81b8f61c9f",
+    "tests/test_masked_atac_falsification_m4.py": "373fca78764affeb1941094b9dde6391c55ab5fdfe9dbd8820ec5297b5d7ab2a",
+    "tests/test_masked_atac_protocol_m5.py": "986e301284fe6e43a45001078a4def5aadb40a5ffe938e1650f4cf9a136d82d0",
+    "tests/test_masked_atac_implement_m7.py": "fb4f9d3d092061b61ba7d86738cc1152a07fe39ba68ed70ecd41eb21fe3e55e8",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "5a801b6c1aa821b4e11ad8058f044c11efb3b65d0ff8af1112b00b606e1b8be1"
+  },
+  "dependency_hashes_not_in_lock": {
+    "src/p22/eval/multiome_runner.py": "119f93e269eee11a27b93e29f1c85a192b25793d9fad28e546bba99c93abd0b5",
+    "src/p22/eval/s7_runner.py": "290b5e2769629d139691be52c2be292bc03c5af986c3c33bf8a1feefe8d84790",
+    "src/p22/training/loop.py": "195274bf29284e17746bef20020394737d175666361c5537fb0cdac1df347c1a",
+    "src/p22/training/mil_loop.py": "6956d20037f81205f86302940005cbc17659ad40497bf3117d76fd7bb8d428e0"
+  },
+  "hashes_match": true,
+  "m6_lock_protocol_hashes_still_valid": true,
+  "checklist": {
+    "executor_full_path_exists": "PASS",
+    "m6_protocol_lock_still_valid": "PASS",
+    "attempt_arithmetic_25_plus_5_le_40": "PASS",
+    "serial_workers_1_torch_threads_2": "PASS",
+    "reserve_crash_safe_overwrite_unique_root": "FAIL",
+    "learning_blocked_unless_m8_lock_present_and_matches": "FAIL",
+    "mixed_label_adapter_and_disease_refusal": "PASS",
+    "chromosome_mask_visible_only_tfidf_contracts": "PASS",
+    "ca_tc_param_match_le_10pct": "PASS",
+    "replay_skip_fits_dry_run_zero_learning": "FAIL",
+    "claim_level_2_prior_labels_preserved": "PASS",
+    "focused_tests_m1_m7_pass": "PASS"
+  },
+  "independent_recompute": {
+    "planned_main_fits": 25,
+    "planned_smoke_fits": 5,
+    "constant_arm_fits": 0,
+    "planned_total_intended": 30,
+    "hard_attempt_cap": 40,
+    "headroom": 10,
+    "within_caps": true,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "attempt_counter_scientific_used": 0,
+    "attempt_counter_smoke_used": 0,
+    "attempt_counter_total_used": 0,
+    "counters_still_zero_after_dry_run": true,
+    "ca_tc_param_match": {
+      "rna128_atac423": {
+        "cross_attention": 23074,
+        "token_concat": 21986,
+        "relative_error": 0.047153,
+        "tolerance": 0.1,
+        "matched": true
+      },
+      "rna128_atac430": {
+        "cross_attention": 23298,
+        "token_concat": 22210,
+        "relative_error": 0.046699,
+        "tolerance": 0.1,
+        "matched": true
+      },
+      "rna128_atac440": {
+        "cross_attention": 23618,
+        "token_concat": 22530,
+        "relative_error": 0.046067,
+        "tolerance": 0.1,
+        "matched": true
+      }
+    },
+    "protocol_sha256_listed_in_m6": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "protocol_sha256_recomputed": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "protocol_sha256_match": true,
+    "learning_refused_until_m8_before_this_lock": true,
+    "gate_accepts_lock_without_hash_match": true,
+    "executor_has_verify_reviewed_hashes": false,
+    "executor_has_reserved_fit_ids": false,
+    "executor_has_skip_fits": false,
+    "executor_has_serial_dispatch_loop": false,
+    "dry_run_disposition": "IMPLEMENT_PASS",
+    "dry_run_trainability": "REFUSED_UNTIL_M8",
+    "dry_run_no_fits": true,
+    "implement_disposition": "IMPLEMENT_PASS",
+    "allowed_raw_root": "reports/generated/nn_masked_atac_pilot_20261001/",
+    "preserved_labels": {
+      "primary": "B_NULL",
+      "S7": "INVALID",
+      "S9": "INVALID",
+      "S10": "INVALID",
+      "S8": "NO FIT",
+      "Q2": "ENDPOINT_UNRESOLVED"
+    }
+  },
+  "focused_tests": {
+    "command": "cd <workspace> && PYTHONPATH=<workspace>/src /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/test_masked_atac_input_and_masking_m1.py tests/test_masked_atac_target_feasibility_m2.py tests/test_masked_atac_splits_m3.py tests/test_masked_atac_falsification_m4.py tests/test_masked_atac_protocol_m5.py tests/test_masked_atac_implement_m7.py -q",
+    "exit_code": 0,
+    "passed": 26
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7": "INVALID",
+    "s9": "INVALID",
+    "s10": "INVALID",
+    "s9_immutable": true,
+    "prior_s8": "NO FIT",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "s10_pairing_positive_is_gate": false,
+    "q2_endpoint_required_for_claim_level_2": false,
+    "claim_level": 2,
+    "forbidden_claims": [
+      "biological_state",
+      "causal_mechanism",
+      "external_validation",
+      "single_locus_performance",
+      "established_power",
+      "confirmatory_inference",
+      "S10_pairing_positive_as_gate",
+      "Q2_endpoint_required"
+    ]
+  },
+  "checkpoint_c_may_proceed": false,
+  "checkpoint_c_marked": false,
+  "fits_authorized": false,
+  "smoke_learning_authorized": false,
+  "next": "Correction cycle: implement serial reserve-before-dispatch + live hash verification against M8 lock + skip_fits/replay path in masked_atac_execute.py (or equivalent full executor), then re-request independent M8 review. No fits/smoke until PASS."
+}
