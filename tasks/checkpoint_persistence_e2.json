@@ -1,0 +1,41 @@
+{
+  "disposition": "CHECKPOINT_PERSISTENCE_PASS",
+  "stage": "E2",
+  "date": "2026-10-02",
+  "research_fits": 0,
+  "bounded_toy_only": true,
+  "checks": {
+    "checkpoint_saved": true,
+    "checkpoint_bytes": 48687,
+    "checkpoint_sha256_file": "2ce9d8fa1d0462584b97ab0ef822a7d0d580c5027976267293dbaec18c751be0",
+    "has_initial_state": true,
+    "has_final_state": true,
+    "epoch_history_len": 3,
+    "selection_identity_present": true,
+    "reload_probability_identity": true,
+    "overwrite_refused": true,
+    "interrupted_tmp_load_refused": true,
+    "interrupted_tmp_discarded": true,
+    "interrupted_not_promoted": true,
+    "initial_state_sha256": "fef6c6e898645eaf7a90b3be3766fae446346fc148d51a6cd95655eae52794b4",
+    "checkpoint_sha256": "8b6b702bbc04fc4613ebffe04ee3a3919ce1727c81a839e47fd4a9aa99684a51",
+    "pilot_checkpoints_dir_empty_historical": true
+  },
+  "required_checks_pass": true,
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "artifacts": {
+    "helper": "src/p22/eval/execution_repair_checkpoint.py",
+    "pilot_wiring": "src/p22/eval/masked_atac_pilot.py",
+    "focused_tests": "tests/test_execution_repair_checkpoint_e2.py"
+  },
+  "notes": [
+    "Historical M9 checkpoints/ directory remains empty (pre-repair gap).",
+    "Prediction sidecars already carried epoch history metadata; E2 adds reloadable initial/final state artifacts.",
+    "M8 locked adapter/execute digests unchanged; helpers live outside lock."
+  ]
+}

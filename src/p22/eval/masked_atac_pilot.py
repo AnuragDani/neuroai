@@ -26,6 +26,7 @@ import torch
 from scipy import sparse
 
 from p22.data.transforms import fit_train_only
+from p22.eval.execution_repair_checkpoint import fit_neural_with_checkpoint
 from p22.eval.execution_repair_provenance import (
     DEFAULT_ATAC_REL,
     DEFAULT_H5AD_REL,
@@ -504,8 +505,15 @@ def _jsonable_probs(values: np.ndarray) -> list[float]:
 def fit_one_job(
     job: Mapping[str, Any],
     folds: Mapping[int, FoldFeatureBundle],
+    *,
+    checkpoint_dir: Path | str | None = None,
 ) -> dict[str, Any]:
-    """Fit one smoke/main learned arm on a frozen fold feature bundle."""
+    """Fit one smoke/main learned arm on a frozen fold feature bundle.
+
+    Neural arms persist initial/final state, epoch history and selection
+    identity under ``checkpoint_dir`` when provided (E2). Resume refuses
+    overwrite of an existing checkpoint file.
+    """
     stage = str(job["stage"])
     arm = str(job["arm"])
     fold_i = int(job["fold"])
@@ -579,24 +587,41 @@ def fit_one_job(
 
     torch.set_num_threads(int(TORCH_THREADS))
     views = bundle.views()
-    fitted = fit_neural_cell_target(
-        arm,
-        views,
-        labels,
-        donors,
-        train,
-        val,
-        test,
-        protocol=NEURAL,
-    )
+    fit_id = job_fit_id(job)
+    if checkpoint_dir is not None:
+        fitted = fit_neural_with_checkpoint(
+            arm=arm,
+            views=views,
+            labels=labels,
+            donors=donors,
+            train_idx=train,
+            val_idx=val,
+            test_idx=test,
+            fit_id=fit_id,
+            checkpoint_dir=checkpoint_dir,
+            protocol=NEURAL,
+            stage=stage,
+            fold=fold_i,
+        )
+    else:
+        fitted = fit_neural_cell_target(
+            arm,
+            views,
+            labels,
+            donors,
+            train,
+            val,
+            test,
+            protocol=NEURAL,
+        )
     model = fitted.pop("model")
     result_dict = fitted["result"]
     selected = model_inputs(ARM_TO_PAIRED_NAME[arm], dict(views))
     _, p_train = predict_fn(model, {k: v[train] for k, v in selected.items()})
     test_probs = np.asarray(fitted["probabilities"], dtype=np.float64)
     train_probs = p_train[:, 1].astype(np.float64)
-    return {
-        "fit_id": job_fit_id(job),
+    out: dict[str, Any] = {
+        "fit_id": fit_id,
         "stage": stage,
         "arm": arm,
         "fold": fold_i,
@@ -635,6 +660,11 @@ def fit_one_job(
         "protocol_id": PROTOCOL_ID,
         "preserved_labels": dict(PRESERVED_LABELS),
     }
+    if "checkpoint_path" in fitted:
+        out["checkpoint_path"] = fitted["checkpoint_path"]
+        out["reload_identity_ok"] = bool(fitted.get("reload_identity_ok"))
+        out["selection_identity"] = fitted.get("selection_identity")
+    return out
 
 
 def filter_jobs(
@@ -719,8 +749,11 @@ def run_m9_jobs(
     if not jobs:
         raise MaskedAtacPilotError(f"no jobs for stages={list(stages)!r}")
 
+    checkpoint_dir = raw_root / "checkpoints"
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
     def _fit_fn(job: Mapping[str, Any]) -> dict[str, Any]:
-        return fit_one_job(job, folds)
+        return fit_one_job(job, folds, checkpoint_dir=checkpoint_dir)
 
     torch.set_num_threads(int(TORCH_THREADS))
     exec_summary = execute_jobs_serial(
