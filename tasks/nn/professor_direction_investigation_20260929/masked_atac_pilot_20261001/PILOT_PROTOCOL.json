@@ -1,0 +1,500 @@
+{
+  "disposition": "PROTOCOL_FROZEN",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "claim_level": 2,
+  "no_fits": true,
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "primary_contrast": {
+    "name": "mean_donor_paired_cell_log_loss_tc_minus_ca",
+    "sign": "positive_means_ca_lower_loss_than_token_concat",
+    "clip": 1e-15,
+    "aggregation": "equal mean across donors of within-donor mean cell binary log-loss difference (TC \u2212 CA); same cells/targets within fold",
+    "practical_margin": 0.01,
+    "practical_margin_justification": "Absolute exploratory threshold 0.01 on paired mean donor cell-log-loss difference (TC\u2212CA). Chosen before any pilot outcomes as larger than PROB_CLIP=1e-15 numerical scale and << ln(2)\u22480.693 (constant-0.5 vs oracle gap). Disease BA practical_margin is not applicable to continuous mixed-label cell log-loss. This is not established power, confirmatory alpha, or training/selection uncertainty.",
+    "model_selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection.",
+    "adapter_requirements": {
+      "existing_mil_loop_assumption": "p22.training.mil_loop._donor_label_map refuses any donor with mixed cell labels; disease bags assume one label per donor",
+      "required_adapter": "donor-average of within-donor mean cell-target binary log-loss (equal donor weighting); do not substitute donor-average probability or invent a fake donor disease class",
+      "preserve_classification_api": true,
+      "fake_disease_class_forbidden": true,
+      "donor_average_probability_forbidden_as_primary": true
+    }
+  },
+  "bootstrap": {
+    "n_replicates": 1000,
+    "seed": 601001,
+    "level": 0.95,
+    "kind": "fixed_prediction_paired_donor",
+    "limits": "Fixed-prediction donor bootstrap only: does not capture overlapping training sets across folds, training-only target selection variability, model-init/selection uncertainty, or hyperparameter uncertainty. Exploratory uncertainty display, not confirmatory inference.",
+    "single_class_draws_dropped": false
+  },
+  "fold_reporting": {
+    "outer_folds": 5,
+    "repeats": 1,
+    "report_per_fold": [
+      "target_region_id",
+      "target_chrom",
+      "visible_atac_count",
+      "train_prevalence",
+      "per_arm_donor_average_cell_log_loss",
+      "primary_contrast_tc_minus_ca",
+      "secondary_metrics_or_unavailable"
+    ],
+    "pooled_primary": "Equal mean across all 30 donors of paired within-donor (L_TC \u2212 L_CA), using matched cells/targets within each fold's test donors (each donor held out once)",
+    "estimand_is_selection_algorithm": true,
+    "not_single_locus_performance": true
+  },
+  "secondary_metrics": {
+    "primary": "mean_donor_paired_cell_log_loss_tc_minus_ca",
+    "secondary_descriptive": [
+      "AUROC",
+      "Brier",
+      "balanced_accuracy"
+    ],
+    "auroc_ba_availability": "Report unavailable per fold/donor when a class is absent; do not drop donors or targets to force AUROC/BA",
+    "log_loss_always_defined": true,
+    "single_class_bootstrap_drop_from_ds_tasks": "not_imported_for_log_loss",
+    "interventions": "Descriptive remove/shuffle visible ATAC or RNA under frozen scheme; no refits; distribution-shift limits disclosed; not causal routing"
+  },
+  "models": [
+    {
+      "arm": "training_prevalence_constant",
+      "role": "sanity/descriptive baseline",
+      "fits": 0,
+      "implementation": "Per-fold training-prevalence constant probability; zero learned params",
+      "selection": "none"
+    },
+    {
+      "arm": "logreg_rna",
+      "role": "simple measured-modality control",
+      "fits": 5,
+      "implementation": "sklearn LogisticRegression",
+      "settings": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "random_state": 0
+      },
+      "features": "RNA train-only top-variance feature_budget=128; RNA assay totals OK",
+      "selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection."
+    },
+    {
+      "arm": "logreg_visible_atac",
+      "role": "simple measured-modality control",
+      "fits": 5,
+      "implementation": "sklearn LogisticRegression",
+      "settings": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "random_state": 0
+      },
+      "features": "Visible ATAC only after whole-target-chromosome mask; TF-IDF/depth fit on visible train regions only",
+      "selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection."
+    },
+    {
+      "arm": "feature_concat_mlp",
+      "role": "required simple fusion control",
+      "fits": 5,
+      "implementation": "ConcatFusionModel via paired_model('rna_atac_concat')",
+      "settings": {
+        "n_tokens": 4,
+        "embed_dim": 16,
+        "hidden_dim": 32,
+        "n_heads": 2,
+        "dropout": 0.1,
+        "feature_budget": 128,
+        "cell_cap": 256,
+        "max_epochs": 20,
+        "patience": 5,
+        "batch_size": 64,
+        "learning_rate": 0.001,
+        "n_repeats": 1,
+        "n_folds": 5,
+        "split_seed": 0,
+        "model_seed": 0,
+        "sampling_seed": 22
+      },
+      "features": "Matched RNA + visible-ATAC feature order across primary arms",
+      "selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection."
+    },
+    {
+      "arm": "token_concat",
+      "role": "matched primary comparator",
+      "fits": 5,
+      "implementation": "TokenConcatFusionModel via paired_model('token_concat')",
+      "settings": {
+        "n_tokens": 4,
+        "embed_dim": 16,
+        "hidden_dim": 32,
+        "n_heads": 2,
+        "dropout": 0.1,
+        "feature_budget": 128,
+        "cell_cap": 256,
+        "max_epochs": 20,
+        "patience": 5,
+        "batch_size": 64,
+        "learning_rate": 0.001,
+        "n_repeats": 1,
+        "n_folds": 5,
+        "split_seed": 0,
+        "model_seed": 0,
+        "sampling_seed": 22
+      },
+      "param_match_vs_ca": "relative error \u2264 0.1",
+      "selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection."
+    },
+    {
+      "arm": "cross_attention",
+      "role": "primary model",
+      "fits": 5,
+      "implementation": "CrossAttentionModel via paired_model('cross_attention')",
+      "settings": {
+        "n_tokens": 4,
+        "embed_dim": 16,
+        "hidden_dim": 32,
+        "n_heads": 2,
+        "dropout": 0.1,
+        "feature_budget": 128,
+        "cell_cap": 256,
+        "max_epochs": 20,
+        "patience": 5,
+        "batch_size": 64,
+        "learning_rate": 0.001,
+        "n_repeats": 1,
+        "n_folds": 5,
+        "split_seed": 0,
+        "model_seed": 0,
+        "sampling_seed": 22
+      },
+      "param_match_vs_tc": "relative error \u2264 0.1",
+      "selection": "Inner-validation checkpoint selection by equal-donor mean of within-donor mean cell-target binary log-loss (mixed labels allowed). Do not use donor-average probability, fake disease class, AUROC, BA, or disease labels for selection."
+    }
+  ],
+  "neural_protocol": {
+    "n_tokens": 4,
+    "embed_dim": 16,
+    "hidden_dim": 32,
+    "n_heads": 2,
+    "dropout": 0.1,
+    "feature_budget": 128,
+    "cell_cap": 256,
+    "max_epochs": 20,
+    "patience": 5,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "n_repeats": 1,
+    "n_folds": 5,
+    "split_seed": 0,
+    "model_seed": 0,
+    "sampling_seed": 22
+  },
+  "neural_fingerprint": "5517354c43d542731ef64f674ab3c90eac6a7b342973bc62c0996c717dc002f0",
+  "param_match_checks": {
+    "rna128_atac423": {
+      "cross_attention": 23074,
+      "token_concat": 21986,
+      "relative_error": 0.047153,
+      "tolerance": 0.1,
+      "matched": true
+    },
+    "rna128_atac430": {
+      "cross_attention": 23298,
+      "token_concat": 22210,
+      "relative_error": 0.046699,
+      "tolerance": 0.1,
+      "matched": true
+    },
+    "rna128_atac440": {
+      "cross_attention": 23618,
+      "token_concat": 22530,
+      "relative_error": 0.046067,
+      "tolerance": 0.1,
+      "matched": true
+    }
+  },
+  "attempt_arithmetic": {
+    "n_learned_arms": 5,
+    "n_outer_folds": 5,
+    "planned_main_fits": 25,
+    "planned_smoke_fits": 5,
+    "planned_total_intended": 30,
+    "constant_arm_fits": 0,
+    "hard_attempt_cap": 40,
+    "headroom": 10,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "arithmetic": "5 learned arms \u00d7 5 folds = 25 main; + 5 reserved smoke (one per learned arm, fold 0) = 30 intended; hard cap 40; headroom 10; constant arm = 0 fits",
+    "within_caps": true
+  },
+  "planned_jobs": [
+    {
+      "stage": "smoke",
+      "arm": "logreg_rna",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "logreg_visible_atac",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "feature_concat_mlp",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "token_concat",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "smoke",
+      "arm": "cross_attention",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 0,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 1,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 2,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 3,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_rna",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "logreg_visible_atac",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "feature_concat_mlp",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "token_concat",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    },
+    {
+      "stage": "main",
+      "arm": "cross_attention",
+      "fold": 4,
+      "counts_toward_budget": true,
+      "learning_authorized_only_after": "M8_PASS"
+    }
+  ],
+  "reserve_rules": {
+    "reserve_attempt_counter_before_dispatch": true,
+    "failed_and_smoke_count": true,
+    "never_reset_counters_after_interruption": true,
+    "do_not_refit_completed_jobs_after_token_cap_stop": true,
+    "timeout_counts_as_attempt": true,
+    "crash_before_sidecar_still_reserved": true,
+    "resume_replays_completed_only": true,
+    "serial_workers": 1,
+    "torch_threads": 2,
+    "rng_isolation": "Serial one-worker fits; set_all_seeds(model_seed) per job; no concurrent writers; global RNG not shared across parallel jobs",
+    "no_neural_smoke_before_m8": true,
+    "no_hyperparameter_seed_target_sweep": true
+  },
+  "inputs": {
+    "m3_disposition": "SPLITS_AND_SAMPLING_FROZEN",
+    "m4_disposition": "FALSIFICATION_PASS"
+  },
+  "toy_verification": {
+    "hand_estimate": 0.169189427751798,
+    "got_estimate": 0.169189427751798,
+    "bootstrap_n_valid": 200,
+    "bootstrap_estimate": 0.169189427751798
+  },
+  "checks": {
+    "attempt_arithmetic_within_caps": true,
+    "planned_main_fits_is_25": true,
+    "planned_jobs_count_matches_intended": true,
+    "ca_tc_param_match_all_widths": true,
+    "toy_contrast_matches_hand": true,
+    "bootstrap_keeps_single_class_draws": true,
+    "practical_margin_not_disease_ba": true,
+    "m3_frozen_present": true,
+    "m4_falsification_pass": true,
+    "no_fits": true
+  },
+  "forbidden_claims": [
+    "biological_state",
+    "causal_mechanism",
+    "external_validation",
+    "single_locus_performance",
+    "established_power",
+    "confirmatory_inference",
+    "S10_pairing_positive_as_gate",
+    "Q2_endpoint_required"
+  ],
+  "protocol_sha256": "cae381acf0ad8849d27ca3a8283ef59aa4a31b46195e442489017da8560f7c28"
+}
