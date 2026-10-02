@@ -1,0 +1,503 @@
+{
+  "task": "M10_REPLAY",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "disposition": "REPLAY_PASS_DIAGNOSTIC_ONLY",
+  "claim_level": 2,
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "fits_run": 0,
+  "counters_modified": false,
+  "m8_locks_modified": false,
+  "prospective_executor_review_gate": "FAIL",
+  "scientific_acceptance_of_M9": "NOT_AUTHORIZED",
+  "scientific_acceptance_note": "Diagnostic numerical replay only. Prospective executor-review gate FAIL (unlocked masked_atac_pilot.py / run_masked_atac_m9.py) blocks scientific acceptance of M9; retrospective inspection cannot satisfy it.",
+  "coverage_review": {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/M10_COVERAGE_REVIEW.json",
+    "sha256": "7b9a87c142e1bb6b047cddfbd3b248c54b5866395062f4137f199f2c04872cca",
+    "prospective_executor_review_gate": "FAIL",
+    "retrospective_path_inspection": "PARTIAL",
+    "scientific_acceptance_of_M9": "NOT_AUTHORIZED",
+    "reviewer_agent_id": "68919dae-61a9-4c39-80f7-5ad0845bbc03",
+    "self_certification": false,
+    "review_duration_minutes": 2.98
+  },
+  "pre_replay_pins": {
+    "pins_path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/M10_PRE_REPLAY_PINS.json",
+    "pins_sha256": "1e01a9f531e561f106cd6eaab42270ab436453289423881b190a931640a64ceb",
+    "n_checked": 35,
+    "all_match": true,
+    "mismatches": []
+  },
+  "post_replay_counter": {
+    "sha256_before": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a",
+    "sha256_after": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a",
+    "preserved": true,
+    "total_attempts_used": 30,
+    "hard_cap": 40,
+    "smoke_fits_used": 5,
+    "scientific_fits_used": 25,
+    "failed": 0,
+    "fitting_hours_used": 0.0017774834488874247,
+    "artifacts_gib_used_counter_field": 0.0,
+    "workers": 1,
+    "torch_threads": 2
+  },
+  "artifact_bytes": {
+    "du_kib": 12668,
+    "du_gib": 0.012081146240234375,
+    "note": "live du -sk; counter artifacts_gib.used=0.0 is not filesystem measurement"
+  },
+  "smoke": {
+    "n_smoke_ok": 5,
+    "expected": 5,
+    "arms_equal_cells_labels_donors_target": true,
+    "stored_vs_recomputed_loss_match": true,
+    "donor_average_cell_log_loss": {
+      "logreg_rna": 0.6017970588417084,
+      "logreg_visible_atac": 0.6032346279221908,
+      "feature_concat_mlp": 0.5372254566457425,
+      "token_concat": 0.5346485055803588,
+      "cross_attention": 0.5281184112813108
+    },
+    "sidecar_sha256": {
+      "logreg_rna": "04ff3b532cb51a9fd97b46a4f569c1e79946d3a891fceef52abbd0ece784c89f",
+      "logreg_visible_atac": "513b263872656d5cc07076e9b288247b302bfbea451ec7f8723a04a6a8fde8bc",
+      "feature_concat_mlp": "ce47fc774fdb11789e6d4ad4a0407269780ebdc1385e40e6ab3349cad6eba09e",
+      "token_concat": "352a4794420024b02aa47470d0b2152d193404f128b366c8133db450c6815f94",
+      "cross_attention": "980f8f805087c8151e9b4c22c24a99d8c5fe6acdd5030bb7c01cddb4a57adf1b"
+    }
+  },
+  "main_coverage": {
+    "n_folds": 5,
+    "n_learned_arms": 5,
+    "n_main_sidecars": 25,
+    "all_folds_equality_and_loss_match": true
+  },
+  "equality_across_arms": {
+    "per_fold_cell_label_donor_identity": true,
+    "sampling_cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+    "all_folds_share_sampling_hash": true
+  },
+  "primary_contrast": {
+    "name": "mean_donor_paired_cell_log_loss_tc_minus_ca",
+    "sign": "positive_means_ca_lower_loss_than_token_concat",
+    "pooled_estimate": 0.001537164353085707,
+    "n_donors_pooled": 30,
+    "per_donor_delta_tc_minus_ca": {
+      "PCW10_CON_11950": -0.0022442523234402767,
+      "PCW11_CON_17833": 0.0014821586193062286,
+      "PCW11_DS_15405": 0.005145944603259123,
+      "PCW11_DS_17720": 0.001130662837028007,
+      "PCW12_CON_12152": 0.010836114124908924,
+      "PCW12_CON_14427": -0.0003957771266264176,
+      "PCW12_CON_15569": 0.0017083118817355913,
+      "PCW12_DS_12941": -0.030404553516933275,
+      "PCW12_DS_15186": 0.002848760093607572,
+      "PCW12_DS_15931": -0.0015385274566670493,
+      "PCW13_CON_11928": 0.008120278510974743,
+      "PCW13_CON_15044": -0.004003794982609499,
+      "PCW13_DS_12740": 0.0011650707609224265,
+      "PCW13_DS_14239": 0.008651166638607544,
+      "PCW13_DS_15848": 0.0011895877135144062,
+      "PCW13_DS_16427": 0.0032663878695081694,
+      "PCW14_CON_15077": 0.010760412007306208,
+      "PCW15_DS_15744": 0.005938430730997091,
+      "PCW16_CON_14940": 0.0057769248457441025,
+      "PCW16_DS_15877": -0.021049417573138163,
+      "PCW17_CON_14310": 0.004181446977185477,
+      "PCW17_CON_14559": -0.002941084646750469,
+      "PCW17_DS_16070": 0.0087843928915321,
+      "PCW18_CON_16419": 0.0003692613247929799,
+      "PCW18_CON_18189": -0.004912075844380581,
+      "PCW18_DS_16485": 0.023580439025197852,
+      "PCW18_DS_16545": 0.010736644758541747,
+      "PCW20_CON_15167": 0.003327668608368972,
+      "PCW20_CON_17916": 0.0024565930509540257,
+      "PCW20_DS_15619_13": -0.007852243810876347
+    },
+    "practical_margin": 0.01,
+    "practical_margin_justification": "Absolute exploratory threshold 0.01 on paired mean donor cell-log-loss difference (TC\u2212CA). Chosen before any pilot outcomes as larger than PROB_CLIP=1e-15 numerical scale and << ln(2)\u22480.693 (constant-0.5 vs oracle gap). Disease BA practical_margin is not applicable to continuous mixed-label cell log-loss. This is not established power, confirmatory alpha, or training/selection uncertainty.",
+    "exploratory_advantage_observed": false,
+    "exploratory_advantage_rule": "exploratory_only: estimate >= practical_margin AND bootstrap interval[0] > 0; not confirmatory; not power; not biological state",
+    "bootstrap": {
+      "estimate": 0.001537164353085707,
+      "interval": [
+        -0.0021965699499891665,
+        0.004745642124888475
+      ],
+      "level": 0.95,
+      "n_replicates": 1000,
+      "n_valid": 1000,
+      "seed": 601001,
+      "limits": "Fixed-prediction donor bootstrap only: does not capture overlapping training sets across folds, training-only target selection variability, model-init/selection uncertainty, or hyperparameter uncertainty. Exploratory uncertainty display, not confirmatory inference.",
+      "single_class_draws_dropped": false
+    },
+    "per_fold_estimates": {
+      "0": 0.006530094299048078,
+      "1": 0.0009365928300419935,
+      "2": 0.003731936866460006,
+      "3": 0.0029032177983771834,
+      "4": -0.006416020028498726
+    }
+  },
+  "secondary_descriptive": {
+    "role": "model_sensitivity_not_causal_routing",
+    "mean_across_folds_donor_average_cell_log_loss": {
+      "logreg_rna": 0.6288125935389768,
+      "logreg_visible_atac": 0.6648808900459667,
+      "feature_concat_mlp": 0.5936467020024864,
+      "token_concat": 0.5964489628701892,
+      "cross_attention": 0.5949117985171035,
+      "training_prevalence_constant": 0.61673521770384
+    },
+    "limitations": "Arm-wise mean test cell log-loss is descriptive only. Does not establish causal modality routing, biological mechanism, or independent external validation. Diagnostic under prospective gate FAIL."
+  },
+  "per_fold": {
+    "0": {
+      "fold": 0,
+      "target_label": "chr19:6424686-6425606",
+      "target_index": 238,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "5f3d1abf361d28eb3bd4ca33c33c03019ec8f7d82a9559075fc8fd76e609f0d4",
+      "arms_equal_cells_labels_donors_target": true,
+      "stored_vs_recomputed_loss_match": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6017970588417084,
+        "logreg_visible_atac": 0.6032346279221908,
+        "feature_concat_mlp": 0.5372254566457425,
+        "token_concat": 0.5346485055803588,
+        "cross_attention": 0.5281184112813108,
+        "training_prevalence_constant": 0.5844762685187529
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.006530094299048078,
+        "n_donors": 6
+      },
+      "bootstrap_fold": {
+        "estimate": 0.006530094299048078,
+        "interval": [
+          0.0008621985652021621,
+          0.014431016161819438
+        ],
+        "n_valid": 1000,
+        "seed": 601001,
+        "level": 0.95
+      },
+      "loss_checks": {
+        "logreg_rna": {
+          "recomputed": 0.6017970588417084,
+          "stored": 0.6017970588417084,
+          "match": true,
+          "sidecar_sha256": "495d7e5efb06d285a4d8e2ae70f1e558215843598e70683d32644f1d9ad12387"
+        },
+        "logreg_visible_atac": {
+          "recomputed": 0.6032346279221908,
+          "stored": 0.6032346279221908,
+          "match": true,
+          "sidecar_sha256": "a729f55ad14105f7a306fc7e0c82d7ea82b8d40370ddbd2a27e55855f21a4491"
+        },
+        "feature_concat_mlp": {
+          "recomputed": 0.5372254566457425,
+          "stored": 0.5372254566457425,
+          "match": true,
+          "sidecar_sha256": "25722ccba0d15ba1defe6df1c29bb64e278517fb50c4f73c678ed7be6aca797d"
+        },
+        "token_concat": {
+          "recomputed": 0.5346485055803588,
+          "stored": 0.5346485055803588,
+          "match": true,
+          "sidecar_sha256": "00c8186ec4255285c5c5dbd09eec7569b8ec4771a4a18993652392982ceaf21a"
+        },
+        "cross_attention": {
+          "recomputed": 0.5281184112813108,
+          "stored": 0.5281184112813108,
+          "match": true,
+          "sidecar_sha256": "59acb2c7b4b320721a9f39d743fc10cc1c6464b3518a433623c3eaac1ad68344"
+        }
+      }
+    },
+    "1": {
+      "fold": 1,
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors_target": true,
+      "stored_vs_recomputed_loss_match": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6227890341749067,
+        "logreg_visible_atac": 0.5841218072373479,
+        "feature_concat_mlp": 0.5773726738698649,
+        "token_concat": 0.5866209304358972,
+        "cross_attention": 0.5856843376058553,
+        "training_prevalence_constant": 0.5668641234843541
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.0009365928300419935,
+        "n_donors": 6
+      },
+      "bootstrap_fold": {
+        "estimate": 0.0009365928300419935,
+        "interval": [
+          -0.001842319843287717,
+          0.003630272624603596
+        ],
+        "n_valid": 1000,
+        "seed": 601001,
+        "level": 0.95
+      },
+      "loss_checks": {
+        "logreg_rna": {
+          "recomputed": 0.6227890341749067,
+          "stored": 0.6227890341749067,
+          "match": true,
+          "sidecar_sha256": "33f42c5882da149c055205e02228f63e8e93b9c218ca622392cf7b08e9859fbf"
+        },
+        "logreg_visible_atac": {
+          "recomputed": 0.5841218072373479,
+          "stored": 0.5841218072373479,
+          "match": true,
+          "sidecar_sha256": "0e28ca6ab5addadedc9c0fbbd9cc40d103332b141f17024c76eed320176889d1"
+        },
+        "feature_concat_mlp": {
+          "recomputed": 0.5773726738698649,
+          "stored": 0.5773726738698649,
+          "match": true,
+          "sidecar_sha256": "86e9e78a2d1057947b7d5c425a2899f291b3c26ac7a71a31bd0d9227f870f4b9"
+        },
+        "token_concat": {
+          "recomputed": 0.5866209304358972,
+          "stored": 0.5866209304358972,
+          "match": true,
+          "sidecar_sha256": "27be3722411355882108ef41ef001924816024e8b1b4e34296605f114278b2cb"
+        },
+        "cross_attention": {
+          "recomputed": 0.5856843376058553,
+          "stored": 0.5856843376058553,
+          "match": true,
+          "sidecar_sha256": "04b58e6a187b52754e3913b407dbca852625cbd78be8eecd13a3b2cb160f04a3"
+        }
+      }
+    },
+    "2": {
+      "fold": 2,
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors_target": true,
+      "stored_vs_recomputed_loss_match": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6059144429800488,
+        "logreg_visible_atac": 0.7219240790144931,
+        "feature_concat_mlp": 0.5958092599239629,
+        "token_concat": 0.6002532708562215,
+        "cross_attention": 0.5965213339897614,
+        "training_prevalence_constant": 0.6056370202837215
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.003731936866460006,
+        "n_donors": 6
+      },
+      "bootstrap_fold": {
+        "estimate": 0.003731936866460006,
+        "interval": [
+          0.001345098766546331,
+          0.0068319213455309185
+        ],
+        "n_valid": 1000,
+        "seed": 601001,
+        "level": 0.95
+      },
+      "loss_checks": {
+        "logreg_rna": {
+          "recomputed": 0.6059144429800488,
+          "stored": 0.6059144429800488,
+          "match": true,
+          "sidecar_sha256": "d19c88888b0bab368bf5b44d9266c5eeb1302d656b964037d81e9eb2b89e1573"
+        },
+        "logreg_visible_atac": {
+          "recomputed": 0.7219240790144931,
+          "stored": 0.7219240790144931,
+          "match": true,
+          "sidecar_sha256": "b3ffc3651e2384e89bb2824333234757031b107e46042747f7492c588b180b08"
+        },
+        "feature_concat_mlp": {
+          "recomputed": 0.5958092599239629,
+          "stored": 0.5958092599239629,
+          "match": true,
+          "sidecar_sha256": "bb0a6b45b80f2d5b6b2ce5ba17587996263679d0067eb9f59e68d7c8200060b4"
+        },
+        "token_concat": {
+          "recomputed": 0.6002532708562215,
+          "stored": 0.6002532708562215,
+          "match": true,
+          "sidecar_sha256": "8cddbfec112ba57dcc7fb093ab8591f2ff2dff6fc01cef5279e60a39a3472b40"
+        },
+        "cross_attention": {
+          "recomputed": 0.5965213339897614,
+          "stored": 0.5965213339897614,
+          "match": true,
+          "sidecar_sha256": "7d6f57f545c0c556bb906b54a9464870a4fe6175d42b3571b494575f7e24902c"
+        }
+      }
+    },
+    "3": {
+      "fold": 3,
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors_target": true,
+      "stored_vs_recomputed_loss_match": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6421106386736429,
+        "logreg_visible_atac": 0.692774357170374,
+        "feature_concat_mlp": 0.6164487559973105,
+        "token_concat": 0.6221232232203092,
+        "cross_attention": 0.619220005421932,
+        "training_prevalence_constant": 0.6700638742848565
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.0029032177983771834,
+        "n_donors": 6
+      },
+      "bootstrap_fold": {
+        "estimate": 0.0029032177983771834,
+        "interval": [
+          -0.0011763678319497552,
+          0.007213581456204081
+        ],
+        "n_valid": 1000,
+        "seed": 601001,
+        "level": 0.95
+      },
+      "loss_checks": {
+        "logreg_rna": {
+          "recomputed": 0.6421106386736429,
+          "stored": 0.6421106386736429,
+          "match": true,
+          "sidecar_sha256": "2d761623b34e0eaae6bcacb01bb7d11b72bc05455ce166c9bfe0ce1a0755f428"
+        },
+        "logreg_visible_atac": {
+          "recomputed": 0.692774357170374,
+          "stored": 0.692774357170374,
+          "match": true,
+          "sidecar_sha256": "f21ef456105c0a3f2e9ede75e3dae1648a718fb0d5fe02856511967765847144"
+        },
+        "feature_concat_mlp": {
+          "recomputed": 0.6164487559973105,
+          "stored": 0.6164487559973105,
+          "match": true,
+          "sidecar_sha256": "607e5717b029da5b76ef277738300ad30339108c96c60f1d64396a4cb746d206"
+        },
+        "token_concat": {
+          "recomputed": 0.6221232232203092,
+          "stored": 0.6221232232203092,
+          "match": true,
+          "sidecar_sha256": "f5c8b0913145f5a32e38483170af549590e8d080c5b344caebf6df7e3e28dace"
+        },
+        "cross_attention": {
+          "recomputed": 0.619220005421932,
+          "stored": 0.619220005421932,
+          "match": true,
+          "sidecar_sha256": "8e38f634d9eb593a4c75137cd1b764063000bcf8b1f11430e4182c4da6b72136"
+        }
+      }
+    },
+    "4": {
+      "fold": 4,
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors_target": true,
+      "stored_vs_recomputed_loss_match": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6714517930245766,
+        "logreg_visible_atac": 0.7223495788854278,
+        "feature_concat_mlp": 0.641377363575551,
+        "token_concat": 0.638598884258159,
+        "cross_attention": 0.6450149042866579,
+        "training_prevalence_constant": 0.6566348019475151
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": -0.006416020028498726,
+        "n_donors": 6
+      },
+      "bootstrap_fold": {
+        "estimate": -0.006416020028498726,
+        "interval": [
+          -0.019820955703549987,
+          0.005087772783690547
+        ],
+        "n_valid": 1000,
+        "seed": 601001,
+        "level": 0.95
+      },
+      "loss_checks": {
+        "logreg_rna": {
+          "recomputed": 0.6714517930245766,
+          "stored": 0.6714517930245766,
+          "match": true,
+          "sidecar_sha256": "b470f1d2c06734555371089c74e9d382d7268503bd0ac73047bdbba63fd57328"
+        },
+        "logreg_visible_atac": {
+          "recomputed": 0.7223495788854278,
+          "stored": 0.7223495788854278,
+          "match": true,
+          "sidecar_sha256": "b05df9c0df9832d771683ec8b1a3f44e24bc6552aa5c4d3a9c1eb52aa67e7f26"
+        },
+        "feature_concat_mlp": {
+          "recomputed": 0.641377363575551,
+          "stored": 0.641377363575551,
+          "match": true,
+          "sidecar_sha256": "d6aa5ef5e77ab23969bb649daad16d792f42beffa51790ac8da76d80082b63d5"
+        },
+        "token_concat": {
+          "recomputed": 0.638598884258159,
+          "stored": 0.638598884258159,
+          "match": true,
+          "sidecar_sha256": "3ed240eb8411d64b074f763a4f960a20876edd698e463d7762ce77a8c5a90591"
+        },
+        "cross_attention": {
+          "recomputed": 0.6450149042866579,
+          "stored": 0.6450149042866579,
+          "match": true,
+          "sidecar_sha256": "83936e371b82b8f2f370228c81dfc844a5f6b69e51cf563bb66b3ac727bef29e"
+        }
+      }
+    }
+  },
+  "execute_comparison": {
+    "execute_present": true,
+    "execute_sha256": "7468f28d09161be6e199ebee1cea5ad45aa9c2b6262d45b54770a6216a803a27",
+    "checks": {
+      "pooled_estimate": true,
+      "n_donors_pooled": true,
+      "bootstrap_interval_lo": true,
+      "bootstrap_interval_hi": true,
+      "exploratory_advantage_observed": true,
+      "per_donor_deltas": true
+    },
+    "primary_match": true
+  },
+  "diagnostic_replay_pass": true,
+  "raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001"
+}

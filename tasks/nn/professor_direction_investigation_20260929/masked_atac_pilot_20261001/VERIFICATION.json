@@ -1,0 +1,171 @@
+{
+  "task": "M10",
+  "disposition": "DONE",
+  "scientific_acceptance_of_M9": "NOT_AUTHORIZED",
+  "prospective_executor_review_gate": "FAIL",
+  "diagnostic_replay_disposition": "REPLAY_PASS_DIAGNOSTIC_ONLY",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "date": "2026-10-02",
+  "timestamp_utc": "2026-10-02T14:48:38Z",
+  "branch": "gnhf/execute-the-p22-mask-6010ee",
+  "base_commit": "8c17ed86d04d78ab66e938db6a96fa4866e05bd2",
+  "tip_before_m10_closeout": "02c608032d7fa5f09cd5ba45a751bc446caf77fc",
+  "worktree": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001",
+  "interpreter": "/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python",
+  "p22_file": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/src/p22/__init__.py",
+  "pythonpath": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/src",
+  "network_bytes_payloads": 0,
+  "fits_run_during_m10": 0,
+  "refits": 0,
+  "counters_reset": false,
+  "m8_locks_modified": false,
+  "claim_level": 2,
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "depends_on": [
+    "M0",
+    "M1",
+    "M2",
+    "M3",
+    "Checkpoint_A",
+    "M4",
+    "Checkpoint_B",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "Checkpoint_C",
+    "M9"
+  ],
+  "task_dispositions": {
+    "M0": {"status": "DONE", "label": "PASS", "evidence": "PREFLIGHT.md"},
+    "M1": {"status": "DONE", "label": "INPUT_AND_MASKING_PASS", "evidence": "INPUT_AND_MASKING.md; input_and_masking.json"},
+    "M2": {"status": "DONE", "label": "TARGET_FEASIBILITY_PASS", "evidence": "TARGET_FEASIBILITY.md; target_feasibility.json"},
+    "M3": {"status": "DONE", "label": "SPLITS_AND_SAMPLING_FROZEN", "evidence": "SPLITS_AND_SAMPLING.md; SPLITS_AND_SAMPLING.json"},
+    "Checkpoint_A": {"status": "DONE", "label": "PASS", "evidence": "CHECKPOINT_A.md"},
+    "M4": {"status": "DONE", "label": "FALSIFICATION_PASS", "evidence": "FALSIFICATION.md; FALSIFICATION.json"},
+    "Checkpoint_B": {"status": "DONE", "label": "PASS", "evidence": "CHECKPOINT_B.md"},
+    "M5": {"status": "DONE", "label": "PROTOCOL_FROZEN", "evidence": "PILOT_PROTOCOL.md; BUDGET_LEDGER.md"},
+    "M6": {
+      "status": "DONE",
+      "label": "PASS",
+      "evidence": "INDEPENDENT_REVIEW_M6.md; NO_FIT_REVIEW_M6.json; M6_REVIEWED_HASHES.json",
+      "reviewer_agent_id": "d3e35bc3-b15e-47e7-9300-a5271b324ad5",
+      "self_certification": false
+    },
+    "M7": {"status": "DONE", "label": "IMPLEMENT_PASS", "evidence": "IMPLEMENT.md; implement.json"},
+    "M8": {
+      "status": "DONE",
+      "label": "PASS",
+      "correction_cycle": 1,
+      "evidence": "INDEPENDENT_REVIEW_M8.md; NO_FIT_REVIEW_M8.json; M8_REVIEWED_HASHES.json",
+      "reviewer_agent_id": "85a8e8e7-0d66-4336-91c1-d3e018ba54c8",
+      "self_certification": false,
+      "scope_note": "locked wrapper/adapter/protocol helpers only; not post-M8 real-data pilot path"
+    },
+    "Checkpoint_C": {"status": "DONE", "label": "PASS", "evidence": "CHECKPOINT_C.md"},
+    "M9": {
+      "status": "DONE",
+      "label": "EXECUTE_COMPLETE",
+      "scientific_acceptance": "NOT_AUTHORIZED",
+      "evidence": "EXECUTE.md; EXECUTE.json; EXECUTE_SMOKE.md",
+      "fits": 30,
+      "smoke": 5,
+      "main": 25,
+      "failed": 0
+    },
+    "M10": {
+      "status": "DONE",
+      "coverage_gate": "FAIL",
+      "diagnostic_replay": "REPLAY_PASS_DIAGNOSTIC_ONLY",
+      "evidence": "INDEPENDENT_REVIEW_M10_COVERAGE.md; M10_COVERAGE_REVIEW.json; REPLAY.md; REPLAY.json; HANDOFF.md; VERIFICATION.json",
+      "reviewer_agent_id": "68919dae-61a9-4c39-80f7-5ad0845bbc03",
+      "self_certification": false,
+      "review_duration_minutes": 2.98
+    },
+    "Checkpoint_D": {
+      "status": "DONE",
+      "stop_condition_met": true,
+      "evidence": "HANDOFF.md; VERIFICATION.json; CHECKPOINT_D.md"
+    }
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONPATH=<worktree>/src /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python scripts/run_masked_atac_m10_replay.py",
+      "exit_code": 0,
+      "notes": "REPLAY_PASS_DIAGNOSTIC_ONLY; counters preserved; EXECUTE primary rematch"
+    },
+    {
+      "command": "PYTHONPATH=<worktree>/src /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest -q tests/test_masked_atac_input_and_masking_m1.py tests/test_masked_atac_target_feasibility_m2.py tests/test_masked_atac_splits_m3.py tests/test_masked_atac_falsification_m4.py tests/test_masked_atac_protocol_m5.py tests/test_masked_atac_implement_m7.py tests/test_masked_atac_executor_m8_correction.py tests/test_masked_atac_pilot_m9.py tests/test_masked_atac_m10_replay.py",
+      "exit_code": 0,
+      "n_passed": 41
+    },
+    {
+      "command": "ruff check src/p22/eval/masked_atac_m10_replay.py scripts/run_masked_atac_m10_replay.py tests/test_masked_atac_m10_replay.py",
+      "exit_code": 0
+    },
+    {
+      "command": "shasum -a 256 reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json",
+      "exit_code": 0,
+      "digest": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a",
+      "notes": "unchanged vs M10_PRE_REPLAY_PINS"
+    }
+  ],
+  "resources": {
+    "total_attempts_used": 30,
+    "total_attempts_cap": 40,
+    "smoke_fits_used": 5,
+    "scientific_fits_used": 25,
+    "failed": 0,
+    "fitting_hours_used": 0.0017774834488874247,
+    "fitting_hours_cap": 6.0,
+    "artifacts_gib_used_counter_field": 0.0,
+    "artifacts_du_gib": 0.012081146240234375,
+    "artifacts_du_kib": 12668,
+    "artifacts_note": "live du -sk; counter artifacts_gib.used is not filesystem measurement",
+    "workers": 1,
+    "torch_threads": 2
+  },
+  "raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001",
+  "primary_contrast_diagnostic": {
+    "name": "mean_donor_paired_cell_log_loss_tc_minus_ca",
+    "pooled_estimate": 0.001537164353085707,
+    "n_donors_pooled": 30,
+    "bootstrap_interval": [-0.0021965699499891665, 0.004745642124888475],
+    "bootstrap_seed": 601001,
+    "practical_margin": 0.01,
+    "exploratory_advantage_observed": false,
+    "scientific_use": "diagnostic_only_under_prospective_gate_FAIL"
+  },
+  "hashes": {
+    "REPLAY.json": "a3de00a25d7a72a18d25a3818166b5d23385765e897ffdb9301dbc96573417a2",
+    "REPLAY.md": "2dfc515eb059466fa87980707c0374bf1ed43e0a170e2eb81a00a0fb3af5874c",
+    "HANDOFF.md": "8b737cfe40b6e006f414505d6afe3e4b791cbac39a79aa2480445282ee2ea499",
+    "CHECKPOINT_D.md": "3eccdf81488161ab1675f1fa65c47a08825667e81269e76211ce0c7f9da2d592",
+    "M10_COVERAGE_REVIEW.json": "7b9a87c142e1bb6b047cddfbd3b248c54b5866395062f4137f199f2c04872cca",
+    "M10_PRE_REPLAY_PINS.json": "1e01a9f531e561f106cd6eaab42270ab436453289423881b190a931640a64ceb",
+    "M10_POST_REPLAY_PINS.json": "34c730c1e2bfb3f541f3be6fc31861c0f162ffcafb23b9d72b248ec3c3f3a4fb",
+    "EXECUTE.json": "7468f28d09161be6e199ebee1cea5ad45aa9c2b6262d45b54770a6216a803a27",
+    "M8_REVIEWED_HASHES.json": "def57d20601552b1959b4cf9b7f76fe2f00c40f9c0e22e697212f8366faf96a1",
+    "attempt_counter.json": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a",
+    "src/p22/eval/masked_atac_m10_replay.py": "ccdc8916b65a7223e422342a9ed0664ac64fbc128dcbbf515aa48d450c0395b5",
+    "scripts/run_masked_atac_m10_replay.py": "b099c12c9a49b956717bd256b9e8c28d6c4ad0aac9c64713727e3adfc3d168bc",
+    "src/p22/eval/masked_atac_pilot.py": "f8d86654b963011a03f94f31a8d91b3b3e003b4c818f7ccbfdee20685a51ffc1",
+    "scripts/run_masked_atac_m9.py": "f31374774d609c7ac62ebfbdffb5f0e506590d6654cdb81f44711b23b565c281"
+  },
+  "forbidden_promotions": [
+    "scientific_PASS_of_M9",
+    "biological_state",
+    "causal_mechanism",
+    "external_validation",
+    "relabel_prior_INVALID_or_NO_FIT_or_B_NULL_or_ENDPOINT_UNRESOLVED"
+  ],
+  "one_next_action": "Stop. Do not search for a positive result. Any future scientific claim on this estimand requires a new independent pre-fit hash lock of the real-data path (masked_atac_pilot.py / runner) before fits; retrospective sidecar inspection cannot authorize PASS.",
+  "stop_condition_met": true
+}
