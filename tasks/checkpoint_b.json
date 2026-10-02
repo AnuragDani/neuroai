@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-02",
+  "disposition": "PASS",
+  "record_type": "execution_repair_checkpoint_b",
+  "research_fits": 0,
+  "scope": "execution_repair_e2_e3",
+  "checks": {
+    "checkpoint_persistence_pass": true,
+    "full_executor_authorization_pass": true,
+    "focused_suite_passed": true,
+    "focused_suite_n_passed": 18,
+    "focused_suite_exit": 0,
+    "integration_suite_passed": true,
+    "integration_suite_n_passed": 24,
+    "integration_suite_exit": 0,
+    "zero_research_fits": true,
+    "scientific_labels_unchanged": true,
+    "scientific_fits_authorized": false,
+    "checkpoint_a_still_valid": true
+  },
+  "evidence": {
+    "checkpoint_persistence_e2_md": "tasks/CHECKPOINT_PERSISTENCE_E2.md",
+    "checkpoint_persistence_e2_json": "tasks/checkpoint_persistence_e2.json",
+    "checkpoint_persistence_e2_json_sha256": "96cb644359b241d58239996c6049620dd63e50ff568570384a5f150c2198d894",
+    "authorization_e3_md": "tasks/AUTHORIZATION_E3.md",
+    "authorization_e3_json": "tasks/authorization_e3.json",
+    "authorization_e3_json_sha256": "bcf37e8dd0e6005bc8ecc1df07fad2d5910e0fb6fcd913c4db064873c600eed2",
+    "full_executor_lock": "configs/execution_repair_full_executor_lock_2026-10-02.json",
+    "full_executor_lock_sha256": "6a7dee7e1253478034db145f2269b4c209232a7fd206e9e6363c9deab83ce571",
+    "provenance_e0_json_sha256": "c0947a19fb8666280bc8a6f59271544acd0ae058e9a42952f1da6e7a77717e43",
+    "runtime_mask_e1_json_sha256": "54a5f1c8c6e5d27cbc27db75678613230228a4a8f7963362428d883e4d5724dc",
+    "checkpoint_a_json_sha256": "56b6f49b3c22d2ef1b923e9fd2cfa97dfc0dafdadda6ff509ce6b8ba0233faaf",
+    "focused_tests": [
+      "tests/test_execution_repair_provenance_e0.py",
+      "tests/test_execution_repair_runtime_mask_e1.py",
+      "tests/test_execution_repair_checkpoint_e2.py",
+      "tests/test_execution_repair_authorization_e3.py"
+    ],
+    "integration_tests": [
+      "tests/test_execution_repair_provenance_e0.py",
+      "tests/test_execution_repair_runtime_mask_e1.py",
+      "tests/test_execution_repair_checkpoint_e2.py",
+      "tests/test_execution_repair_authorization_e3.py",
+      "tests/test_masked_atac_pilot_m9.py"
+    ]
+  },
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "what_this_authorizes": "Proceed to compact EXECUTION_REPAIR_HANDOFF and stop before independent E4 review. Does not authorize research fits or scientific re-acceptance of M9.",
+  "next": "EXECUTION_REPAIR_HANDOFF_then_stop_before_E4"
+}
