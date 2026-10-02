@@ -4,7 +4,7 @@ Detailed acceptance, verification, dependencies and file scope: [repair plan](pl
 
 - [x] E0: Establish portable inputs and immutable archived evidence. — `DONE` (`PORTABLE_PROVENANCE_PASS`). Evidence: [PROVENANCE_E0.md](PROVENANCE_E0.md); [provenance_e0.json](provenance_e0.json); [portable inputs](../configs/execution_repair_portable_inputs_2026-10-02.json); primary-relative ATAC/H5AD defaults in `masked_atac_pilot`; 28/28 archive digests match; 30/30 sidecars + ledger pins rematch; former worktree ATAC path absent; scientific NOT_AUTHORIZED/`B_NULL` retained; 0 fits.
 - [x] E1: Enforce whole-target-chromosome exclusion in actual feature construction. — `DONE` (`RUNTIME_MASK_PASS`). Evidence: [RUNTIME_MASK_E1.md](RUNTIME_MASK_E1.md); [runtime_mask_e1.json](runtime_mask_e1.json); `enforce_runtime_feature_mask` in unlocked `execution_repair_runtime_mask` + `build_fold_features`; corrupt same-chrom visible manifest refused; target-count perturbation leaves encoded RNA/ATAC identical; live BED + 5/5 frozen folds exclusive; M8 locked metrics/target digests unchanged; scientific NOT_AUTHORIZED/`B_NULL` retained; 0 fits.
-- [ ] Checkpoint A: Provenance and leakage tests pass.
+- [x] Checkpoint A: Provenance and leakage tests pass. — `DONE` (`PASS`). Evidence: [CHECKPOINT_A.md](CHECKPOINT_A.md); [checkpoint_a.json](checkpoint_a.json); live E0 `PORTABLE_PROVENANCE_PASS` + E1 `RUNTIME_MASK_PASS`; focused E0+E1 suite **8 PASS** (exit 0); evidence SHA pins recorded; scientific NOT_AUTHORIZED/`B_NULL`/INVALID/NO FIT retained; 0 fits.
 - [ ] E2: Save/reload checkpoints and epoch history with safe resume.
 - [ ] E3: Lock the full executor and measure artifacts.
 - [ ] Checkpoint B: Focused and integration controls pass, no research fits.

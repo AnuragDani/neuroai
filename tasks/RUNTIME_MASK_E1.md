@@ -29,4 +29,4 @@ the training-only preprocessing contract. No research fits.
 - `src/p22/eval/masked_atac_pilot.py` → `build_fold_features`
 - Focused tests: `tests/test_execution_repair_runtime_mask_e1.py`
 
-No research fits. Checkpoint A next.
+No research fits. Checkpoint A PASS recorded; E2 next.

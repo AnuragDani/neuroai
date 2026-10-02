@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-02",
+  "disposition": "PASS",
+  "record_type": "execution_repair_checkpoint_a",
+  "research_fits": 0,
+  "scope": "execution_repair_e0_e1",
+  "checks": {
+    "portable_provenance_pass": true,
+    "runtime_mask_pass": true,
+    "focused_suite_passed": true,
+    "focused_suite_n_passed": 8,
+    "focused_suite_exit": 0,
+    "zero_research_fits": true,
+    "scientific_labels_unchanged": true
+  },
+  "evidence": {
+    "provenance_e0_md": "tasks/PROVENANCE_E0.md",
+    "provenance_e0_json": "tasks/provenance_e0.json",
+    "provenance_e0_json_sha256": "c0947a19fb8666280bc8a6f59271544acd0ae058e9a42952f1da6e7a77717e43",
+    "runtime_mask_e1_md": "tasks/RUNTIME_MASK_E1.md",
+    "runtime_mask_e1_json": "tasks/runtime_mask_e1.json",
+    "runtime_mask_e1_json_sha256": "54a5f1c8c6e5d27cbc27db75678613230228a4a8f7963362428d883e4d5724dc",
+    "portable_inputs_contract": "configs/execution_repair_portable_inputs_2026-10-02.json",
+    "portable_inputs_sha256": "f4a6e214667df30f2d6855b19df584d2dc7a2035007c0087f38e66c3c4dcd9e0",
+    "focused_tests": [
+      "tests/test_execution_repair_provenance_e0.py",
+      "tests/test_execution_repair_runtime_mask_e1.py"
+    ]
+  },
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "what_this_authorizes": "Proceed to E2 checkpoint/epoch persistence with bounded toy tests only. Does not authorize research fits or scientific re-acceptance of M9.",
+  "next": "E2"
+}
