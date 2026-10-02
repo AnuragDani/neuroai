@@ -1,5 +1,27 @@
 # Paired DS multiome implementation checklist
 
+## Masked ATAC computational pilot — M0–M10
+
+Canonical checklist for this dated computational-prediction scope. Per-task acceptance, verification, dependencies and file scope: [M plan](nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PLAN.md). Earlier M1–M8 development tasks below are separate historical scope; keep their records unchanged.
+
+- [x] M0: Pin reviewed base/provenance, copy owned plan/prompt, preserve shared inputs and old results. — `DONE`. Evidence: [PREFLIGHT.md](nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PREFLIGHT.md); owned PLAN.md / GNHF_PROMPT.md copied with matching SHA-256; root plan/checklist appended without overwriting older R0–R10 or prior sections; new raw root `reports/generated/nn_masked_atac_pilot_20261001/` with zeroed counters.
+- [ ] M1: Verify exact measurements, inherited panel provenance and chromosome masking contract.
+- [ ] M2: Freeze training-only candidate ranking/support; select per-fold target or precise NO_TARGET_SUPPORT.
+- [ ] M3: Freeze donor/inner-validation/cell/feature manifests and matched paired sampling.
+- [ ] Checkpoint A: Inputs and training-only target support pass; no predictive outcomes consulted.
+- [ ] M4: Falsify target/depth/preprocessing leakage and mixed-label donor-metric mistakes.
+- [ ] Checkpoint B: Leakage/metric fixtures pass; classification adapter needs explicitly identified.
+- [ ] M5: Commit estimand/statistical/model/resource protocol and attempt arithmetic.
+- [ ] M6: Independent protocol/claim review; exact requirements and limitations accepted.
+- [ ] M7: Minimal measured-target adapter/runner and meaningful regressions; no unreviewed smoke learning.
+- [ ] M8: Independent actual-executor/dependency review and exact hash lock.
+- [ ] Checkpoint C: Input/design/test/review/resource gates pass before fits.
+- [ ] M9: Execute one bounded real-data computational pilot, preserving all attempts and sidecars.
+- [ ] M10: Independent replay and committed handoff/verification with one next action.
+- [ ] Checkpoint D: Stop after verified dispositions or precise blocker with independent safe work finished.
+
+Limit: 40 total attempts/six fitting hours/4GiB new outputs; no new downloads, synthetic rescue or positive-result search. Blocked/skipped tasks retain unchecked box and evidence-backed disposition. Launch prompt: [GNHF_PROMPT.md](nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/GNHF_PROMPT.md).
+
 ## Failure audit and next experiment — R0–R10
 
 Canonical checklist; per-task acceptance/verification/dependencies/files in [dated R plan](nn/professor_direction_investigation_20260929/failure_audit_20261001/PLAN.md). Preserve older Q/M/E/R task records; this R0–R10 block has its own dated scope.

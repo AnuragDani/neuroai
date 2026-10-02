@@ -1,5 +1,9 @@
 # Paired DS multiome development plan
 
+## Masked ATAC computational pilot — 2026-10-01
+
+R0–R10 closeout at `8c17ed8` retained S10 INVALID after saved-fit replay. Next scoped work: [M0–M10 masked accessibility plan](nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PLAN.md), claim-level-2 computational prediction on existing measured paired inputs, with whole-target-chromosome ATAC masking, mixed cell-target donor-loss verification, matched concat/CA budgets and independent full-executor review. [Canonical checklist](todo.md#masked-atac-computational-pilot-m0m10). No state/causal/external-validation promotion; no dataset acquisition or new synthetic-control rescue. Earlier task records preserved.
+
 ## Failure audit and next experiment — 2026-10-01
 
 Q0–Q12 GNHF closed at `67245a2`: S9 49/49 fits INVALID; biological pilot blocked; current primary B_NULL retained. Researcher asks to continue the established plan/verification/GNHF workflow. [R0–R10 plan](nn/professor_direction_investigation_20260929/failure_audit_20261001/PLAN.md) audits null exchangeability, shared RNG/thread reproducibility, full executor review, and endpoint/claim alignment before choosing one next experiment. [Checklist](todo.md#failure-audit-and-next-experiment-r0r10). Original records and earlier task dispositions remain unchanged. New no-fit diagnostic confirms exact rho=0 orthogonality is not preserved by shuffle; it does not establish cause of the neural result.
