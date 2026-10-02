@@ -1,0 +1,245 @@
+{
+  "task": "M10_COVERAGE",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "date": "2026-10-02",
+  "review_kind": "review_coverage_audit",
+  "self_certification": false,
+  "reviewer_agent_id": "68919dae-61a9-4c39-80f7-5ad0845bbc03",
+  "reviewer_agent_id_source": "runtime agent transcript folder UUID (this review session)",
+  "review_start_utc": "2026-10-02T14:41:23Z",
+  "review_end_utc": "2026-10-02T14:44:22Z",
+  "review_duration_minutes": 2.98,
+  "fits_run": 0,
+  "counters_modified": false,
+  "m8_locks_modified": false,
+  "notes_md_edited": false,
+  "prospective_executor_review_gate": "FAIL",
+  "retrospective_path_inspection": "PARTIAL",
+  "scientific_acceptance_of_M9": "NOT_AUTHORIZED",
+  "scientific_acceptance_note": "M9 numerical results retained as provisional diagnostic only under prospective gate failure; retrospective inspection cannot satisfy the prospective gate",
+  "historical_m8_verdict_preserved": true,
+  "historical_m8_verdict": "PASS",
+  "historical_m8_scope": "locked wrapper/adapter/protocol helpers and zeroed counter only; not the post-M8 real-data pilot path",
+  "pre_fit_independent_coverage_of_new_path_found": false,
+  "files_absent_from_m8_lock": [
+    {
+      "path": "src/p22/eval/masked_atac_pilot.py",
+      "sha256": "f8d86654b963011a03f94f31a8d91b3b3e003b4c818f7ccbfdee20685a51ffc1",
+      "lines": 733,
+      "introduced_at_commit": "315d6a9fa374d38b5ac2732e543c811b4676528b",
+      "present_at_m8_pass_ff0f770": false,
+      "present_at_checkpoint_c_2c3e85e": false,
+      "present_at_git_commit_at_review_8fe4d38": false
+    },
+    {
+      "path": "scripts/run_masked_atac_m9.py",
+      "sha256": "f31374774d609c7ac62ebfbdffb5f0e506590d6654cdb81f44711b23b565c281",
+      "lines": 83,
+      "introduced_at_commit": "315d6a9fa374d38b5ac2732e543c811b4676528b",
+      "present_at_m8_pass_ff0f770": false,
+      "present_at_checkpoint_c_2c3e85e": false,
+      "present_at_git_commit_at_review_8fe4d38": false
+    }
+  ],
+  "recomputed_hashes": {
+    "src/p22/eval/masked_atac_pilot.py": "f8d86654b963011a03f94f31a8d91b3b3e003b4c818f7ccbfdee20685a51ffc1",
+    "scripts/run_masked_atac_m9.py": "f31374774d609c7ac62ebfbdffb5f0e506590d6654cdb81f44711b23b565c281",
+    "src/p22/eval/masked_atac_execute.py": "a9798c008689489ac913563a978726e2011a3e10cdb08f77d42df954a93987aa",
+    "src/p22/eval/masked_atac_adapter.py": "cda024a4e0812c7ba76cb435b6e4cfd66de2879d408413f4a6a2d5f19068aae6",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a"
+  },
+  "m8_required_lock_keys_live_rematch": {
+    "PILOT_PROTOCOL.json": "MATCH",
+    "implement.json": "MATCH",
+    "M6_REVIEWED_HASHES.json": "MATCH",
+    "src/p22/eval/masked_atac_execute.py": "MATCH",
+    "src/p22/eval/masked_atac_adapter.py": "MATCH",
+    "src/p22/eval/masked_atac_protocol.py": "MATCH",
+    "src/p22/eval/masked_atac_metrics.py": "MATCH",
+    "src/p22/eval/masked_atac_splits.py": "MATCH",
+    "src/p22/eval/masked_atac_target.py": "MATCH",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "MISMATCH_EXPECTED_PROGRESSED"
+  },
+  "m8_zero_counter_digest": "5a801b6c1aa821b4e11ad8058f044c11efb3b65d0ff8af1112b00b606e1b8be1",
+  "live_counter_summary": {
+    "total_attempts_used": 30,
+    "hard_cap": 40,
+    "smoke_fits_used": 5,
+    "scientific_fits_used": 25,
+    "failed": 0,
+    "artifacts_gib_used_counter_field": 0.0,
+    "artifacts_gib_note": "counter field is not a filesystem byte measurement",
+    "fitting_hours_used": 0.0017774834488874247,
+    "workers": 1,
+    "torch_threads": 2
+  },
+  "git_timeline": {
+    "m8_git_commit_at_review": {
+      "commit": "8fe4d3858f0f936d03e01adf369265577c3775f0",
+      "committed_at": "2026-10-01 17:45:20 -0700",
+      "new_path_present": false
+    },
+    "m8_pass": {
+      "commit": "ff0f770f68cd4f552bd83a83bf4e66c35794980a",
+      "committed_at": "2026-10-01 17:51:39 -0700",
+      "new_path_present": false
+    },
+    "checkpoint_c": {
+      "commit": "2c3e85eff91236707d014db40e27c5a8ea9427c3",
+      "committed_at": "2026-10-01 17:54:12 -0700",
+      "new_path_present": false
+    },
+    "new_real_data_path_and_smoke": {
+      "commit": "315d6a9fa374d38b5ac2732e543c811b4676528b",
+      "committed_at": "2026-10-01 18:05:55 -0700",
+      "new_path_present": true,
+      "same_commit_as_smoke_learning": true,
+      "subject": "gnhf 16: Started M9 with a new unlocked real-data fit path and completed authorized smoke 5/5 (main still pending)."
+    },
+    "m9_complete": {
+      "commit": "a221c677a0769b4702cb1dd411bbcfdb5fa32367",
+      "committed_at": "2026-10-01 18:09:43 -0700",
+      "new_path_present": true
+    }
+  },
+  "m8_artifacts_read": [
+    "INDEPENDENT_REVIEW_M8.md",
+    "NO_FIT_REVIEW_M8.json",
+    "M8_REVIEWED_HASHES.json"
+  ],
+  "m8_lock_includes_new_pilot_path": false,
+  "m8_dependency_notes_include_new_pilot_path": false,
+  "transcript_search": {
+    "m6_reviewer_d3e35bc3": {
+      "mentions_masked_atac_pilot_py": 0,
+      "pre_fit_coverage": false
+    },
+    "m8_cycle0_64da0eef": {
+      "mentions_masked_atac_pilot_py": 0,
+      "pre_fit_coverage": false
+    },
+    "m8_cycle1_85a8e8e7": {
+      "mentions_masked_atac_pilot_py": 0,
+      "pre_fit_coverage": false
+    },
+    "gnhf_iter16_5065f65e": {
+      "role": "authoring_worker_not_independent_reviewer",
+      "authored_pilot_module": true,
+      "dispatched_smoke": true,
+      "pre_fit_independent_coverage": false
+    },
+    "gnhf_iter17_a80bf4c6": {
+      "role": "m9_continuation_worker",
+      "pre_fit_independent_coverage": false
+    },
+    "gnhf_iter18_85f9f814": {
+      "role": "m9_continuation_worker",
+      "pre_fit_independent_coverage": false
+    }
+  },
+  "execution_path_inspected": {
+    "entrypoint": "scripts/run_masked_atac_m9.py",
+    "pilot_module": "src/p22/eval/masked_atac_pilot.py",
+    "authorize": "authorize_immutable_lock (full lock if used==0; IMMUTABLE_LOCK_KEYS + allow_progressed_counter if used>=1)",
+    "loader": "load_pilot_arrays (H5AD + ATAC npz; M3 sampling order; matrix/ordered-cell SHA pins)",
+    "feature_builder": "build_fold_features / build_all_fold_features",
+    "fit_fn": "fit_one_job -> fit_logreg_cell_target / fit_neural_cell_target",
+    "dispatch": "execute_jobs_serial from masked_atac_execute",
+    "metrics": "donor_average_cell_log_loss; visible_atac_tfidf_fit",
+    "chromosome_masking": "inherits M3 visible indices; refuses target index in visible; rematches visible SHA; does not re-call assert_chromosome_mask_exclusivity at fit time",
+    "train_only_rna_variance": true,
+    "train_only_atac_tfidf_idf": true,
+    "mixed_label_donor_average_cell_log_loss": true,
+    "parameter_selection_budgets": {
+      "feature_budget": 128,
+      "max_epochs": 20,
+      "patience": 5,
+      "sidecar_epochs_run_observed": 6,
+      "sidecar_stopped_early_observed": true,
+      "selection_metric": "donor_average_cell_log_loss"
+    },
+    "prediction_sidecars_sampled": [
+      "smoke__logreg_rna__fold0.json",
+      "smoke__cross_attention__fold0.json",
+      "main__token_concat__fold0.json",
+      "main__cross_attention__fold2.json"
+    ],
+    "prediction_sidecar_schema": {
+      "outer_keys": ["fit_id", "stage", "arm", "fold", "status", "seconds", "record"],
+      "record_includes": [
+        "target_label",
+        "target_index",
+        "n_visible_atac",
+        "rna_width",
+        "atac_width",
+        "cell_ids_sha256",
+        "labels_sha256",
+        "test_cell_ids",
+        "test_donors",
+        "test_labels",
+        "test_probabilities",
+        "train_donor_average_cell_log_loss",
+        "val_donor_average_cell_log_loss",
+        "test_donor_average_cell_log_loss",
+        "claim_level",
+        "protocol_id",
+        "preserved_labels"
+      ],
+      "test_n_cells_observed": 1536,
+      "mixed_label_donors_in_sampled_tests": true
+    },
+    "attempt_ledger": {
+      "path": "reports/generated/nn_masked_atac_pilot_20261001/attempt_ledger.jsonl",
+      "n_entries": 30,
+      "all_status_ok_in_sample": true
+    },
+    "checkpoints_dir_empty": true,
+    "logs_dir_empty": true,
+    "n_prediction_sidecars": 30
+  },
+  "retrospective_path_inspection_rationale": "Path largely consistent with protocol contracts for train-only transforms, mixed-label donor-average loss, serial dispatch, and budget ceilings; PARTIAL due to unlocked real-data modules, no runtime chromosome re-assert, empty checkpoints/logs dirs, and counter artifacts_gib not measuring filesystem bytes",
+  "claim_limits": {
+    "claim_level": 2,
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED",
+    "forbidden_promotions": [
+      "scientific_PASS_of_M9",
+      "biological_state",
+      "causal_mechanism",
+      "external_validation",
+      "relabel_prior_INVALID_or_NO_FIT_or_B_NULL_or_ENDPOINT_UNRESOLVED"
+    ]
+  },
+  "findings": [
+    "Prospective executor-review gate FAIL: real-data path introduced and used for learning in 315d6a9 after M8/Checkpoint C without independent pre-fit hash lock.",
+    "masked_atac_pilot.py and run_masked_atac_m9.py absent at 8fe4d38 / ff0f770 / 2c3e85e.",
+    "Live digests pilot f8d86654…51ffc1 and runner f3137477…565c281 are not in REQUIRED_LOCK_KEYS.",
+    "M8 locked wrapper digests for execute/adapter still rematch; rematch does not establish review of the new path.",
+    "Attempt counter progressed to 30/40 (5 smoke + 25 main); live counter SHA differs from M8 zero digest as expected.",
+    "No M6/M8 independent-reviewer transcript covered the new files; GNHF 5065f65e authored and smoked them.",
+    "Retrospective inspection: train-only RNA/ATAC transforms, mixed-label donor-average losses, sidecar schema, and serial budget accounting appear protocol-consistent -> PARTIAL (empty checkpoints/logs; no runtime chrom re-assert; unlocked modules).",
+    "scientific_acceptance_of_M9 remains NOT_AUTHORIZED; M9 numbers are diagnostic only.",
+    "Historical M8 PASS left intact for the locked wrapper; not rewritten by this audit.",
+    "fits_run=0; counters_modified=false; M8 lock files not modified; notes.md not edited."
+  ],
+  "evidence_commands": [
+    "date -u +\"%Y-%m-%dT%H:%M:%SZ\"",
+    "shasum -a 256 src/p22/eval/masked_atac_pilot.py scripts/run_masked_atac_m9.py src/p22/eval/masked_atac_execute.py src/p22/eval/masked_atac_adapter.py reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json",
+    "git log -1 --format=\"%H %ci %s\" ff0f770 8fe4d38 2c3e85e 315d6a9 a221c67",
+    "git cat-file -e ff0f770:src/p22/eval/masked_atac_pilot.py  # ABSENT",
+    "git cat-file -e 2c3e85e:src/p22/eval/masked_atac_pilot.py  # ABSENT",
+    "git cat-file -e 315d6a9:src/p22/eval/masked_atac_pilot.py  # PRESENT",
+    "python rematch of M8_REVIEWED_HASHES.reviewed_hashes vs live files",
+    "rg masked_atac_pilot.py across M6/M8/GNHF agent transcripts",
+    "read masked_atac_pilot.py / run_masked_atac_m9.py / execute / adapter / metrics; sample 4 prediction sidecars + attempt_ledger.jsonl",
+    "find .../checkpoints .../logs -type f | wc -l  # 0"
+  ],
+  "review_files_written": [
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/INDEPENDENT_REVIEW_M10_COVERAGE.md",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/M10_COVERAGE_REVIEW.json"
+  ]
+}

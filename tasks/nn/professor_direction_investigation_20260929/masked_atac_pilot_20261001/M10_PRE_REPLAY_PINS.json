@@ -1,0 +1,52 @@
+{
+  "artifact_bytes": {
+    "du_gib": 0.012081146240234375,
+    "du_kib": 12668,
+    "note": "live du -sk; counter artifacts_gib.used=0.0 is not filesystem measurement"
+  },
+  "ledger_pins": {
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "2b4bd43c81460a7945bd5374ab2822d6bbf3440031f00639313387170857112a",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_ledger.jsonl": "c9db949bd064bb4f11f01106eb14b152f19a0db2101e025c3eed5620787bd9d4",
+    "reports/generated/nn_masked_atac_pilot_20261001/constant_arm_descriptive.json": "7e4db65046c6c300a7d1ea6b72c9ee1a1dbed644de3b49448c10a31844d1b0d3"
+  },
+  "n_prediction_sidecars": 30,
+  "pinned_at_utc": "2026-10-02T14:41:26Z",
+  "post_m8_path_hashes": {
+    "scripts/run_masked_atac_m9.py": "f31374774d609c7ac62ebfbdffb5f0e506590d6654cdb81f44711b23b565c281",
+    "src/p22/eval/masked_atac_pilot.py": "f8d86654b963011a03f94f31a8d91b3b3e003b4c818f7ccbfdee20685a51ffc1"
+  },
+  "prediction_sidecar_sha256": {
+    "main__cross_attention__fold0.json": "59acb2c7b4b320721a9f39d743fc10cc1c6464b3518a433623c3eaac1ad68344",
+    "main__cross_attention__fold1.json": "04b58e6a187b52754e3913b407dbca852625cbd78be8eecd13a3b2cb160f04a3",
+    "main__cross_attention__fold2.json": "7d6f57f545c0c556bb906b54a9464870a4fe6175d42b3571b494575f7e24902c",
+    "main__cross_attention__fold3.json": "8e38f634d9eb593a4c75137cd1b764063000bcf8b1f11430e4182c4da6b72136",
+    "main__cross_attention__fold4.json": "83936e371b82b8f2f370228c81dfc844a5f6b69e51cf563bb66b3ac727bef29e",
+    "main__feature_concat_mlp__fold0.json": "25722ccba0d15ba1defe6df1c29bb64e278517fb50c4f73c678ed7be6aca797d",
+    "main__feature_concat_mlp__fold1.json": "86e9e78a2d1057947b7d5c425a2899f291b3c26ac7a71a31bd0d9227f870f4b9",
+    "main__feature_concat_mlp__fold2.json": "bb0a6b45b80f2d5b6b2ce5ba17587996263679d0067eb9f59e68d7c8200060b4",
+    "main__feature_concat_mlp__fold3.json": "607e5717b029da5b76ef277738300ad30339108c96c60f1d64396a4cb746d206",
+    "main__feature_concat_mlp__fold4.json": "d6aa5ef5e77ab23969bb649daad16d792f42beffa51790ac8da76d80082b63d5",
+    "main__logreg_rna__fold0.json": "495d7e5efb06d285a4d8e2ae70f1e558215843598e70683d32644f1d9ad12387",
+    "main__logreg_rna__fold1.json": "33f42c5882da149c055205e02228f63e8e93b9c218ca622392cf7b08e9859fbf",
+    "main__logreg_rna__fold2.json": "d19c88888b0bab368bf5b44d9266c5eeb1302d656b964037d81e9eb2b89e1573",
+    "main__logreg_rna__fold3.json": "2d761623b34e0eaae6bcacb01bb7d11b72bc05455ce166c9bfe0ce1a0755f428",
+    "main__logreg_rna__fold4.json": "b470f1d2c06734555371089c74e9d382d7268503bd0ac73047bdbba63fd57328",
+    "main__logreg_visible_atac__fold0.json": "a729f55ad14105f7a306fc7e0c82d7ea82b8d40370ddbd2a27e55855f21a4491",
+    "main__logreg_visible_atac__fold1.json": "0e28ca6ab5addadedc9c0fbbd9cc40d103332b141f17024c76eed320176889d1",
+    "main__logreg_visible_atac__fold2.json": "b3ffc3651e2384e89bb2824333234757031b107e46042747f7492c588b180b08",
+    "main__logreg_visible_atac__fold3.json": "f21ef456105c0a3f2e9ede75e3dae1648a718fb0d5fe02856511967765847144",
+    "main__logreg_visible_atac__fold4.json": "b05df9c0df9832d771683ec8b1a3f44e24bc6552aa5c4d3a9c1eb52aa67e7f26",
+    "main__token_concat__fold0.json": "00c8186ec4255285c5c5dbd09eec7569b8ec4771a4a18993652392982ceaf21a",
+    "main__token_concat__fold1.json": "27be3722411355882108ef41ef001924816024e8b1b4e34296605f114278b2cb",
+    "main__token_concat__fold2.json": "8cddbfec112ba57dcc7fb093ab8591f2ff2dff6fc01cef5279e60a39a3472b40",
+    "main__token_concat__fold3.json": "f5c8b0913145f5a32e38483170af549590e8d080c5b344caebf6df7e3e28dace",
+    "main__token_concat__fold4.json": "3ed240eb8411d64b074f763a4f960a20876edd698e463d7762ce77a8c5a90591",
+    "smoke__cross_attention__fold0.json": "980f8f805087c8151e9b4c22c24a99d8c5fe6acdd5030bb7c01cddb4a57adf1b",
+    "smoke__feature_concat_mlp__fold0.json": "ce47fc774fdb11789e6d4ad4a0407269780ebdc1385e40e6ab3349cad6eba09e",
+    "smoke__logreg_rna__fold0.json": "04ff3b532cb51a9fd97b46a4f569c1e79946d3a891fceef52abbd0ece784c89f",
+    "smoke__logreg_visible_atac__fold0.json": "513b263872656d5cc07076e9b288247b302bfbea451ec7f8723a04a6a8fde8bc",
+    "smoke__token_concat__fold0.json": "352a4794420024b02aa47470d0b2152d193404f128b366c8133db450c6815f94"
+  },
+  "purpose": "M10 pre-replay/raw integrity pin; preserve before and after replay",
+  "raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001"
+}

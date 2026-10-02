@@ -1,5 +1,15 @@
 # Masked ATAC computational pilot — 2026-10-01
 
+## Resume amendment — 2026-10-02: M10 closeout only
+
+GNHF stopped at iteration 18 on the 20M token cap after M9 commit `a221c67`; M10 handoff/verification is not committed. Raw root contains 30 prediction sidecars and 30 attempt-ledger records; counters are 5 smoke + 25 main. Complete M10 from saved evidence only. No new learning, refits, smoke, target/seed/model changes, counter reset or new research stage. Preserve raw/counter hashes before and after replay.
+
+**Review-coverage conflict:** M8 immutable hashes still match, but commit `315d6a9` introduced `src/p22/eval/masked_atac_pilot.py` (733 lines) and `scripts/run_masked_atac_m9.py` after M8 PASS. These implement real-data preprocessing, fit dispatch and resume authorization and are absent from M8's lock. Matching the older locked wrapper does not establish review of this new execution path. M9's statement of fully reviewed execution is provisional; task DONE is not scientific acceptance.
+
+M10 independent reviewer must inspect actual full execution path, original review transcripts for any separate pre-fit coverage, fit histories/checkpoints, train-only preprocessing, chromosome masking, mixed-label donor metrics, parameter/selection budgets and counter progression. Report review timing. If no pre-fit independent review covered the new path, record failure of the prospective executor-review gate. Retrospective review cannot retroactively satisfy it. Preserve numerical replay as diagnostic evidence with that limitation; do not modify old M8 locks or silently promote scientific PASS.
+
+Replay all 25 main sidecars with independently calculated donor-average losses and frozen bootstrap; check hashes, donor/cell/label/target equality and coverage. Verify five smoke records separately. Measure actual artifact bytes: counter `artifacts_gib.used=0.0` is not a filesystem measurement. Keep tracked reports compact rather than dumping per-cell JSON. Finish HANDOFF.md, VERIFICATION.json and Checkpoint D with scientific/task dispositions, actual command exits, reviewer identity, resources, claim limits and one next decision. If review unavailable, record precise blocker after safe replay work. Stop; no positive-result search.
+
 ## Objective and authority
 
 Run one prospective exploratory computational benchmark on the existing paired cohort: can RNA plus visible ATAC predict a withheld measured accessibility target, and does cross-attention improve over matched token concatenation? Original July professor guidance motivates independently measured modalities, donor-held-out evaluation, fair concat/simple baselines and direct interventions. This is worker protocol design, not a recorded new professor endorsement.
