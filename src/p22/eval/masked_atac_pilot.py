@@ -26,6 +26,10 @@ import torch
 from scipy import sparse
 
 from p22.data.transforms import fit_train_only
+from p22.eval.execution_repair_authorization import (
+    AuthorizationBindingError,
+    refuse_changed_source_learning,
+)
 from p22.eval.execution_repair_checkpoint import fit_neural_with_checkpoint
 from p22.eval.execution_repair_provenance import (
     DEFAULT_ATAC_REL,
@@ -173,12 +177,17 @@ def authorize_immutable_lock(
     workspace: Path,
     m8_lock_path: Path | None = None,
     allow_progressed_counter: bool = False,
+    e3_lock_path: Path | None = None,
 ) -> dict[str, Any]:
     """Authorize fits without requiring the zeroed counter digest after progress.
 
     First entry (counters still zero) uses full ``verify_reviewed_hashes``.
     Resume after reserved attempts verifies only immutable ``REQUIRED_LOCK_KEYS``
     (excludes attempt_counter) and refuses counter reset.
+
+    E3 additionally rematches the full real-data executor path (runner, pilot,
+    repair helpers, transitive deps). Mutable counters stay outside that lock.
+    Scientific M9 acceptance remains NOT_AUTHORIZED regardless of rematch.
     """
     workspace = Path(workspace)
     lock = Path(m8_lock_path) if m8_lock_path is not None else review_lock_path(workspace)
@@ -192,6 +201,14 @@ def authorize_immutable_lock(
     if review_blob.get("verdict") != "PASS" or not review_blob.get("fits_authorized"):
         raise MaskedAtacExecuteRefusal("M8 PASS with fits_authorized required")
 
+    try:
+        e3 = refuse_changed_source_learning(
+            workspace=workspace,
+            lock_file=Path(e3_lock_path) if e3_lock_path is not None else None,
+        )
+    except AuthorizationBindingError as exc:
+        raise MaskedAtacExecuteRefusal(str(exc)) from exc
+
     raw_root = prepare_raw_root(workspace / ALLOWED_RAW_ROOT)
     counter_path = raw_root / COUNTER_NAME
     counter = load_attempt_counter(counter_path)
@@ -202,6 +219,7 @@ def authorize_immutable_lock(
         return {
             "mode": "full_lock_including_zero_counter",
             "reviewed_hashes": live,
+            "full_executor": e3,
             "counter": counter,
             "raw_root": str(raw_root),
         }
@@ -232,11 +250,12 @@ def authorize_immutable_lock(
     return {
         "mode": "immutable_lock_progressed_counter",
         "reviewed_hashes": live,
+        "full_executor": e3,
         "counter": counter,
         "raw_root": str(raw_root),
         "note": (
             "attempt_counter excluded from live rematch after first reservation; "
-            "never reset; skip completed fit_ids"
+            "never reset; skip completed fit_ids; E3 full-executor rematch required"
         ),
     }
 

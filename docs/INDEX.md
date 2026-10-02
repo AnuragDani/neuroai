@@ -1,6 +1,6 @@
 # P22 document index
 
-Start at [current status](../status.md). Next: [execution repair plan](../tasks/plan.md) (E0 portable provenance PASS — [PROVENANCE_E0](../tasks/PROVENANCE_E0.md); E1 runtime mask PASS — [RUNTIME_MASK_E1](../tasks/RUNTIME_MASK_E1.md); Checkpoint A PASS — [CHECKPOINT_A](../tasks/CHECKPOINT_A.md); E2 checkpoint persistence PASS — [CHECKPOINT_PERSISTENCE_E2](../tasks/CHECKPOINT_PERSISTENCE_E2.md); next E3). Archive map: [consolidation inventory](CONSOLIDATION_2026-10-02.json). This index points to one entry per job; dated records remain available but do not override current evidence.
+Start at [current status](../status.md). Next: [execution repair plan](../tasks/plan.md) (E0 portable provenance PASS — [PROVENANCE_E0](../tasks/PROVENANCE_E0.md); E1 runtime mask PASS — [RUNTIME_MASK_E1](../tasks/RUNTIME_MASK_E1.md); Checkpoint A PASS — [CHECKPOINT_A](../tasks/CHECKPOINT_A.md); E2 checkpoint persistence PASS — [CHECKPOINT_PERSISTENCE_E2](../tasks/CHECKPOINT_PERSISTENCE_E2.md); E3 full-executor authorization PASS — [AUTHORIZATION_E3](../tasks/AUTHORIZATION_E3.md); next Checkpoint B). Archive map: [consolidation inventory](CONSOLIDATION_2026-10-02.json). This index points to one entry per job; dated records remain available but do not override current evidence.
 
 | Need | Open | Role |
 |---|---|---|
