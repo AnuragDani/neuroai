@@ -1,0 +1,41 @@
+{
+  "schema": "execution_repair_e4_reviewed_hashes_v1",
+  "record_type": "e4_reviewed_hashes",
+  "stage": "E4",
+  "date": "2026-10-02",
+  "verdict": "PASS",
+  "reviewed_commit": "3eb7f74279d5f27bfee1dc0d7c59a9a8996b8aed",
+  "note": "External independent-review rematch of the complete real-data execution path. Does NOT include hash of this file. Mutable attempt_counter excluded. scientific_fits_authorized remains false. Any change to listed paths invalidates E4.",
+  "source_lock": "configs/execution_repair_full_executor_lock_2026-10-02.json",
+  "source_lock_sha256": "6a7dee7e1253478034db145f2269b4c209232a7fd206e9e6363c9deab83ce571",
+  "live_hashes_evidence": "tasks/execution_repair_e4/live_hashes.txt",
+  "live_hashes_sha256": "f845b9e8ca5cd2548b29d5c7b0893855cd22a4803d9157db7181a7578b605d0c",
+  "n_immutable_keys": 17,
+  "immutable_reviewed_hashes": {
+    "scripts/run_masked_atac_m9.py": "f31374774d609c7ac62ebfbdffb5f0e506590d6654cdb81f44711b23b565c281",
+    "src/p22/eval/masked_atac_pilot.py": "41105254cb56c304ba98ffafdc968e78b1455af843ffa1cf924f8be4189c42a0",
+    "src/p22/eval/execution_repair_authorization.py": "19329f4ad116f547f0d6f8c894bb8884fa0a39372c165dbd0abbe4b668691b4f",
+    "src/p22/eval/execution_repair_provenance.py": "975a21850cdc53b5a6a1a20ade2deab1d0545d56ff4b33df637a6f82a8c8ec59",
+    "src/p22/eval/execution_repair_runtime_mask.py": "f9939ffae2a963c3b2230181c784bcf19ad53cfb4749cf55fe9eff48797ee114",
+    "src/p22/eval/execution_repair_checkpoint.py": "7c32784d7811caa1b0c8835c2149da7f96c65a9874952b6b342cd10f78b9a4fb",
+    "src/p22/eval/masked_atac_execute.py": "a9798c008689489ac913563a978726e2011a3e10cdb08f77d42df954a93987aa",
+    "src/p22/eval/masked_atac_adapter.py": "cda024a4e0812c7ba76cb435b6e4cfd66de2879d408413f4a6a2d5f19068aae6",
+    "src/p22/eval/masked_atac_protocol.py": "1ad3fdb97a470573254569195e712a7376ce1f1e581722c7aa3eb5939d22fb5d",
+    "src/p22/eval/masked_atac_metrics.py": "64553c501ac3a0619d97fcdc547d7fb98a96555ab3d3f8ccea9cee2fc019a9c5",
+    "src/p22/eval/masked_atac_splits.py": "9c54324234cd3cffd5f622604bda00aee966b1147e205179b83cf182f1e8f415",
+    "src/p22/eval/masked_atac_target.py": "c771f1069a9a6d40c3107efd65131f762af4285799eb01ef07e395b555d0cd02",
+    "src/p22/eval/multiome_runner.py": "119f93e269eee11a27b93e29f1c85a192b25793d9fad28e546bba99c93abd0b5",
+    "src/p22/eval/s7_runner.py": "290b5e2769629d139691be52c2be292bc03c5af986c3c33bf8a1feefe8d84790",
+    "src/p22/training/loop.py": "195274bf29284e17746bef20020394737d175666361c5537fb0cdac1df347c1a",
+    "src/p22/training/mil_loop.py": "6956d20037f81205f86302940005cbc17659ad40497bf3117d76fd7bb8d428e0",
+    "src/p22/data/transforms.py": "16cb590ec6943a98b8a1363bbc42c31f250d8cb913ff9f91c6e28e84a453488a"
+  },
+  "scientific_fits_authorized": false,
+  "smoke_learning_authorized": false,
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  }
+}
