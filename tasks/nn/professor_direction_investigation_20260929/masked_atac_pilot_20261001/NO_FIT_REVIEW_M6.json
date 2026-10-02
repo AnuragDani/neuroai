@@ -1,0 +1,169 @@
+{
+  "task": "M6",
+  "protocol_id": "masked_atac_pilot_20261001",
+  "date": "2026-10-01",
+  "branch": "gnhf/execute-the-p22-mask-6010ee",
+  "git_commit_at_review": "7c60f08841400d5ff89bac04eaee39dc4c8bcc1d",
+  "note": "Authorization binds working-tree file hashes below; M6 is protocol/claim scope only. No fits or smoke learning authorized. Executor does not yet exist; this review cannot certify a future executor.",
+  "verdict": "PASS",
+  "disposition": "PASS",
+  "correction_cycle": 0,
+  "max_correction_cycles": 2,
+  "self_certification": false,
+  "reviewer": {
+    "identity": "cursor Task generalPurpose agent (independent of M0-M5 authoring session)",
+    "agent_id": "d3e35bc3-b15e-47e7-9300-a5271b324ad5",
+    "self_certification": false,
+    "review_file": "INDEPENDENT_REVIEW_M6.md"
+  },
+  "critical_findings": [],
+  "non_critical_notes": [
+    "Historical 256-region panels disclose outer-training-library prevalence selection; not claimed as strict inner-train-only provenance.",
+    "Fixed-prediction donor bootstrap limits are disclosed and do not cover training/selection/init uncertainty.",
+    "masked_atac_execute.py is absent; M7 may implement but M8 still required before any learning.",
+    "This review does not mark Checkpoint C."
+  ],
+  "reviewed_hashes": {
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PLAN.md": "a9bf38e474e868bd0b32403cce5998ee825bde78e6947e9b28bf19bfbbe0e834",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PILOT_PROTOCOL.md": "178b9927483f8487c563be39553bfe889bd1b9288fd481536a9c0169862c98b0",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PILOT_PROTOCOL.json": "925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/BUDGET_LEDGER.md": "e9f0809afca5966b7fc42c10cec28688183f4dbaa5f322e43fd58dcc56e2002e",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/budget_ledger.json": "0c1251d41d22921ef2f09fdd67752be349baa324f644620ec42fd279e2777980",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.md": "08f28f037e36596378db8f909ecd013d8675b4d94596f0dc6362b122931f62a2",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.json": "20514e94873b46faf99bebd0077e3e44765d5df0c4193dc2267ef342002f4341",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/TARGET_FEASIBILITY.md": "d3dfce63abe64b256cee558a6bc09a357bd48a2514173374ac336f586ff930e0",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/target_feasibility.json": "09b6a5cf6c809f8674e661821d1dff933849e33f205910415b243c36940f9c3a",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/INPUT_AND_MASKING.md": "4b56ecca59e85cab71f02100b43e4c8c67b6d2688bbd47d70b98d8ff5144cf39",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/input_and_masking.json": "bbd02573dce3c74ca6a0c86e79ec51dd55ee6987d99afc9b3a922f2b66510922",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.md": "8bd75c14449e94f143afd3bbd3d3046c835e006d20f511fb9e02fd0d15a4137a",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.json": "3375f744825e0c383aecb410c9d8af2d6eb9887e7671a0ff18e624753a46f64f",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_A.md": "f5f8b9c59b1cc3e3f727e4c70d3ace75e939d78b4dec18402abe4699a6f403e7",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_B.md": "407e16f23f45b742a860538f33368dd051fc3995dc53c7162cf1f8799155ba18",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/PREFLIGHT.md": "81e4eddce459a940ee5650067535d367a553af25d2e62c784bf8fc10b84a6645",
+    "src/p22/eval/masked_atac_target.py": "c771f1069a9a6d40c3107efd65131f762af4285799eb01ef07e395b555d0cd02",
+    "src/p22/eval/masked_atac_splits.py": "9c54324234cd3cffd5f622604bda00aee966b1147e205179b83cf182f1e8f415",
+    "src/p22/eval/masked_atac_metrics.py": "64553c501ac3a0619d97fcdc547d7fb98a96555ab3d3f8ccea9cee2fc019a9c5",
+    "src/p22/eval/masked_atac_protocol.py": "1ad3fdb97a470573254569195e712a7376ce1f1e581722c7aa3eb5939d22fb5d",
+    "tests/test_masked_atac_input_and_masking_m1.py": "fe0dd488e5a086c33adc0d280f4616ae4fc0d385ab8d26e3076e80a6062956ad",
+    "tests/test_masked_atac_target_feasibility_m2.py": "f4ab6ddcaf859ffcd3c7cda030435cd108235d0236b3998427d16b76124ab0a1",
+    "tests/test_masked_atac_splits_m3.py": "56dee1036b36fcf7d75e5b9339c63da5e6ce9f0c84405395e6cbdb81b8f61c9f",
+    "tests/test_masked_atac_falsification_m4.py": "373fca78764affeb1941094b9dde6391c55ab5fdfe9dbd8820ec5297b5d7ab2a",
+    "tests/test_masked_atac_protocol_m5.py": "986e301284fe6e43a45001078a4def5aadb40a5ffe938e1650f4cf9a136d82d0",
+    "reports/generated/nn_masked_atac_pilot_20261001/attempt_counter.json": "5a801b6c1aa821b4e11ad8058f044c11efb3b65d0ff8af1112b00b606e1b8be1"
+  },
+  "hashes_match": true,
+  "checklist": {
+    "target_selection_provenance": "PASS",
+    "mask_count_semantics": "PASS",
+    "trainer_adaptation": "PASS",
+    "leakage": "PASS",
+    "task_usefulness_claim_level_2": "PASS",
+    "fair_comparisons": "PASS",
+    "statistical_assumptions": "PASS",
+    "claim_hierarchy": "PASS",
+    "resource_caps": "PASS",
+    "no_fit_authorization": "PASS"
+  },
+  "independent_recompute": {
+    "planned_main_fits": 25,
+    "planned_smoke_fits": 5,
+    "constant_arm_fits": 0,
+    "planned_total_intended": 30,
+    "hard_attempt_cap": 40,
+    "headroom": 10,
+    "within_caps": true,
+    "fitting_hours_cap": 6.0,
+    "artifact_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2,
+    "attempt_counter_scientific_used": 0,
+    "attempt_counter_smoke_used": 0,
+    "attempt_counter_total_used": 0,
+    "ca_tc_param_match": {
+      "rna128_atac423": {
+        "cross_attention": 23074,
+        "token_concat": 21986,
+        "relative_error": 0.047153,
+        "tolerance": 0.1,
+        "matched": true
+      },
+      "rna128_atac430": {
+        "cross_attention": 23298,
+        "token_concat": 22210,
+        "relative_error": 0.046699,
+        "tolerance": 0.1,
+        "matched": true
+      },
+      "rna128_atac440": {
+        "cross_attention": 23618,
+        "token_concat": 22530,
+        "relative_error": 0.046067,
+        "tolerance": 0.1,
+        "matched": true
+      }
+    },
+    "protocol_sha256_listed": "cae381acf0ad8849d27ca3a8283ef59aa4a31b46195e442489017da8560f7c28",
+    "protocol_sha256_recomputed": "cae381acf0ad8849d27ca3a8283ef59aa4a31b46195e442489017da8560f7c28",
+    "protocol_sha256_match": true,
+    "live_dispositions": {
+      "input_and_masking": "INPUT_AND_MASKING_PASS",
+      "target_feasibility": "TARGET_FEASIBILITY_PASS",
+      "splits_and_sampling": "SPLITS_AND_SAMPLING_FROZEN",
+      "falsification": "FALSIFICATION_PASS",
+      "pilot_protocol": "PROTOCOL_FROZEN"
+    },
+    "n_overlapping_interval_pairs": 58,
+    "unique_selected_targets": [
+      "chr19:6424686-6425606",
+      "chr3:93470145-93471055"
+    ],
+    "estimand_is_selection_algorithm": true,
+    "not_single_locus_performance": true,
+    "practical_margin": 0.01,
+    "bootstrap_n": 1000,
+    "bootstrap_seed": 601001,
+    "executor_exists": false,
+    "all_planned_jobs_require_m8": true,
+    "preserved_labels": {
+      "primary": "B_NULL",
+      "S7": "INVALID",
+      "S9": "INVALID",
+      "S10": "INVALID",
+      "S8": "NO FIT",
+      "Q2": "ENDPOINT_UNRESOLVED"
+    }
+  },
+  "focused_tests": {
+    "command": "cd <workspace> && PYTHONPATH=<workspace>/src /Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python -m pytest tests/test_masked_atac_input_and_masking_m1.py tests/test_masked_atac_target_feasibility_m2.py tests/test_masked_atac_splits_m3.py tests/test_masked_atac_falsification_m4.py tests/test_masked_atac_protocol_m5.py -q",
+    "exit_code": 0,
+    "passed": 21
+  },
+  "scientific_invariants": {
+    "primary": "B_NULL",
+    "s7": "INVALID",
+    "s9": "INVALID",
+    "s10": "INVALID",
+    "s9_immutable": true,
+    "prior_s8": "NO FIT",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "s10_pairing_positive_is_gate": false,
+    "q2_endpoint_required_for_claim_level_2": false,
+    "claim_level": 2,
+    "forbidden_claims": [
+      "biological_state",
+      "causal_mechanism",
+      "external_validation",
+      "single_locus_performance",
+      "established_power",
+      "confirmatory_inference",
+      "S10_pairing_positive_as_gate",
+      "Q2_endpoint_required"
+    ]
+  },
+  "m7_may_implement": true,
+  "m8_still_required": true,
+  "checkpoint_c_marked": false,
+  "fits_authorized": false,
+  "smoke_learning_authorized": false,
+  "next": "M7 implement smallest measured-target adapter under reviewed hashes; no fits/smoke until M8 PASS"
+}
