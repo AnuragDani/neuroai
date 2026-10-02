@@ -170,3 +170,29 @@ def test_live_splits_manifest_pins() -> None:
     assert NEURAL.feature_budget == 128
     assert VIEW_A == "view_a"
     assert VIEW_B == "view_b"
+
+
+def test_live_execute_main_coverage_contracts() -> None:
+    execute_path = TASK_DIR / "EXECUTE.json"
+    if not execute_path.is_file():
+        pytest.skip("EXECUTE.json written after main fits")
+    blob = json.loads(execute_path.read_text(encoding="utf-8"))
+    assert blob["disposition"] == "EXECUTE_COMPLETE"
+    assert blob["claim_level"] == 2
+    assert blob["preserved_labels"]["primary"] == "B_NULL"
+    cov = blob["coverage"]
+    assert cov["smoke_ok"] == 5
+    assert cov["main_ok"] == 25
+    assert cov["failed"] == 0
+    assert len(cov["completed_fit_ids"]) == 30
+    primary = blob["primary_contrast"]
+    assert primary["name"] == "mean_donor_paired_cell_log_loss_tc_minus_ca"
+    assert primary["n_donors_pooled"] == 30
+    assert primary["practical_margin"] == 0.01
+    assert "exploratory_advantage_observed" in primary
+    assert blob["equality_across_arms"]["per_fold_cell_label_donor_identity"] is True
+    counter = load_attempt_counter(ROOT / ALLOWED_RAW_ROOT / COUNTER_NAME)
+    assert int(counter["total_attempts"]["used"]) == 30
+    assert int(counter["smoke_fits"]["used"]) == 5
+    assert int(counter["scientific_fits"]["used"]) == 25
+    assert counter["failed_fit_ids"] == []

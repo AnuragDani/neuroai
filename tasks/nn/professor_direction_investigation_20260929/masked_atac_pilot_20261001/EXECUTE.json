@@ -1,0 +1,516 @@
+{
+  "protocol_id": "masked_atac_pilot_20261001",
+  "disposition": "EXECUTE_COMPLETE",
+  "claim_level": 2,
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "S8": "NO FIT",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "authorization": {
+    "mode": "immutable_lock_progressed_counter",
+    "raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001",
+    "m8_immutable_keys_rematched": true,
+    "note": "attempt_counter excluded from live rematch after first reservation; never reset; skip completed fit_ids"
+  },
+  "coverage": {
+    "smoke_ok": 5,
+    "main_ok": 25,
+    "failed": 0,
+    "planned_smoke": 5,
+    "planned_main": 25,
+    "completed_fit_ids": [
+      "smoke|logreg_rna|fold0",
+      "smoke|logreg_visible_atac|fold0",
+      "smoke|feature_concat_mlp|fold0",
+      "smoke|token_concat|fold0",
+      "smoke|cross_attention|fold0",
+      "main|logreg_rna|fold0",
+      "main|logreg_visible_atac|fold0",
+      "main|feature_concat_mlp|fold0",
+      "main|token_concat|fold0",
+      "main|cross_attention|fold0",
+      "main|logreg_rna|fold1",
+      "main|logreg_visible_atac|fold1",
+      "main|feature_concat_mlp|fold1",
+      "main|token_concat|fold1",
+      "main|cross_attention|fold1",
+      "main|logreg_rna|fold2",
+      "main|logreg_visible_atac|fold2",
+      "main|feature_concat_mlp|fold2",
+      "main|token_concat|fold2",
+      "main|cross_attention|fold2",
+      "main|logreg_rna|fold3",
+      "main|logreg_visible_atac|fold3",
+      "main|feature_concat_mlp|fold3",
+      "main|token_concat|fold3",
+      "main|cross_attention|fold3",
+      "main|logreg_rna|fold4",
+      "main|logreg_visible_atac|fold4",
+      "main|feature_concat_mlp|fold4",
+      "main|token_concat|fold4",
+      "main|cross_attention|fold4"
+    ],
+    "failed_fit_ids": []
+  },
+  "resources": {
+    "total_attempts_used": 30,
+    "total_attempts_cap": 40,
+    "smoke_fits_used": 5,
+    "scientific_fits_used": 25,
+    "fitting_hours_used": 0.0017774834488874247,
+    "fitting_hours_cap": 6.0,
+    "artifacts_gib_used": 0.0,
+    "artifacts_gib_cap": 4.0,
+    "workers": 1,
+    "torch_threads": 2
+  },
+  "inputs": {
+    "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "atac_counts": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+    "ordered_full_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "sampling_cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+    "n_sampled_cells": 7680
+  },
+  "fold_pins": {
+    "0": {
+      "target_label": "chr19:6424686-6425606",
+      "target_index": 238,
+      "n_visible_atac": 423,
+      "rna_width": 128,
+      "atac_width": 423,
+      "rna_encoded_sha256": "7c59906a9435fe4fd460ec7d3220227475733f277361a32d5129cf6b3722d005",
+      "atac_encoded_sha256": "1e31ae9ba1d7327e154ffa521fada8947ae6f071460ebc617f863a5fa0ae1270",
+      "labels_sha256": "5f3d1abf361d28eb3bd4ca33c33c03019ec8f7d82a9559075fc8fd76e609f0d4",
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "n_train": 4096,
+      "n_val": 2048,
+      "n_test": 1536
+    },
+    "1": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "rna_width": 128,
+      "atac_width": 440,
+      "rna_encoded_sha256": "81687d3ff85585eff5fd1379990c60b2fea734d692cea07f7c5e8cbb5ed0475a",
+      "atac_encoded_sha256": "2424fb92951f219e2797e8d1047956aa6321e5710179fa561229a6bbc3af5fe3",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "n_train": 4096,
+      "n_val": 2048,
+      "n_test": 1536
+    },
+    "2": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "rna_width": 128,
+      "atac_width": 440,
+      "rna_encoded_sha256": "a1202acc16065891c470797a24a9c633635c55f9fe6a46319ca3ee6332f1b052",
+      "atac_encoded_sha256": "1667ece8084dd0f879587a706900ca5f19a01b43f35de6a2ec1550ec18e22549",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "n_train": 4096,
+      "n_val": 2048,
+      "n_test": 1536
+    },
+    "3": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "rna_width": 128,
+      "atac_width": 440,
+      "rna_encoded_sha256": "6672aa1cc6f73ac4dcf953721bdb68b48a45d9ced57177ac6d852de9382a4e80",
+      "atac_encoded_sha256": "6c970bc48b7046e3db19111f89ce0cbc840b2e4df441ee264abaca399f791e68",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "n_train": 4096,
+      "n_val": 2048,
+      "n_test": 1536
+    },
+    "4": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "rna_width": 128,
+      "atac_width": 440,
+      "rna_encoded_sha256": "289a3a4fff0ec77be02c89bbae31d61149ca2f9b5e7eb98c30e3bee4ae04b767",
+      "atac_encoded_sha256": "dffbe3fb4d253ed596c44c1c01b8b0fba500e36edce39985b49f4b3129acd87e",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "n_train": 4096,
+      "n_val": 2048,
+      "n_test": 1536
+    }
+  },
+  "equality_across_arms": {
+    "per_fold_cell_label_donor_identity": true,
+    "sampling_cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+    "all_folds_share_sampling_hash": true
+  },
+  "primary_contrast": {
+    "name": "mean_donor_paired_cell_log_loss_tc_minus_ca",
+    "sign": "positive_means_ca_lower_loss_than_token_concat",
+    "pooled_estimate": 0.001537164353085707,
+    "n_donors_pooled": 30,
+    "per_donor_delta_tc_minus_ca": {
+      "PCW10_CON_11950": -0.0022442523234402767,
+      "PCW11_CON_17833": 0.0014821586193062286,
+      "PCW11_DS_15405": 0.005145944603259123,
+      "PCW11_DS_17720": 0.001130662837028007,
+      "PCW12_CON_12152": 0.010836114124908924,
+      "PCW12_CON_14427": -0.0003957771266264176,
+      "PCW12_CON_15569": 0.0017083118817355913,
+      "PCW12_DS_12941": -0.030404553516933275,
+      "PCW12_DS_15186": 0.002848760093607572,
+      "PCW12_DS_15931": -0.0015385274566670493,
+      "PCW13_CON_11928": 0.008120278510974743,
+      "PCW13_CON_15044": -0.004003794982609499,
+      "PCW13_DS_12740": 0.0011650707609224265,
+      "PCW13_DS_14239": 0.008651166638607544,
+      "PCW13_DS_15848": 0.0011895877135144062,
+      "PCW13_DS_16427": 0.0032663878695081694,
+      "PCW14_CON_15077": 0.010760412007306208,
+      "PCW15_DS_15744": 0.005938430730997091,
+      "PCW16_CON_14940": 0.0057769248457441025,
+      "PCW16_DS_15877": -0.021049417573138163,
+      "PCW17_CON_14310": 0.004181446977185477,
+      "PCW17_CON_14559": -0.002941084646750469,
+      "PCW17_DS_16070": 0.0087843928915321,
+      "PCW18_CON_16419": 0.0003692613247929799,
+      "PCW18_CON_18189": -0.004912075844380581,
+      "PCW18_DS_16485": 0.023580439025197852,
+      "PCW18_DS_16545": 0.010736644758541747,
+      "PCW20_CON_15167": 0.003327668608368972,
+      "PCW20_CON_17916": 0.0024565930509540257,
+      "PCW20_DS_15619_13": -0.007852243810876347
+    },
+    "practical_margin": 0.01,
+    "practical_margin_justification": "Absolute exploratory threshold 0.01 on paired mean donor cell-log-loss difference (TC\u2212CA). Chosen before any pilot outcomes as larger than PROB_CLIP=1e-15 numerical scale and << ln(2)\u22480.693 (constant-0.5 vs oracle gap). Disease BA practical_margin is not applicable to continuous mixed-label cell log-loss. This is not established power, confirmatory alpha, or training/selection uncertainty.",
+    "exploratory_advantage_observed": false,
+    "exploratory_advantage_rule": "exploratory_only: estimate >= practical_margin AND bootstrap interval[0] > 0; not confirmatory; not power; not biological state",
+    "bootstrap": {
+      "estimate": 0.001537164353085707,
+      "interval": [
+        -0.0021965699499891665,
+        0.004745642124888475
+      ],
+      "level": 0.95,
+      "n_replicates": 1000,
+      "n_valid": 1000,
+      "seed": 601001,
+      "limits": "Fixed-prediction donor bootstrap only: does not capture overlapping training sets across folds, training-only target selection variability, model-init/selection uncertainty, or hyperparameter uncertainty. Exploratory uncertainty display, not confirmatory inference.",
+      "single_class_draws_dropped": false
+    },
+    "per_fold_estimates": {
+      "0": 0.006530094299048078,
+      "1": 0.0009365928300419935,
+      "2": 0.003731936866460006,
+      "3": 0.0029032177983771834,
+      "4": -0.006416020028498726
+    }
+  },
+  "secondary_descriptive": {
+    "role": "model_sensitivity_not_causal_routing",
+    "mean_across_folds_donor_average_cell_log_loss": {
+      "logreg_rna": 0.6288125935389768,
+      "logreg_visible_atac": 0.6648808900459667,
+      "feature_concat_mlp": 0.5936467020024864,
+      "token_concat": 0.5964489628701892,
+      "cross_attention": 0.5949117985171035,
+      "training_prevalence_constant": 0.61673521770384
+    },
+    "per_fold": {
+      "0": {
+        "logreg_rna": 0.6017970588417084,
+        "logreg_visible_atac": 0.6032346279221908,
+        "feature_concat_mlp": 0.5372254566457425,
+        "token_concat": 0.5346485055803588,
+        "cross_attention": 0.5281184112813108,
+        "training_prevalence_constant": 0.5844762685187529
+      },
+      "1": {
+        "logreg_rna": 0.6227890341749067,
+        "logreg_visible_atac": 0.5841218072373479,
+        "feature_concat_mlp": 0.5773726738698649,
+        "token_concat": 0.5866209304358972,
+        "cross_attention": 0.5856843376058553,
+        "training_prevalence_constant": 0.5668641234843541
+      },
+      "2": {
+        "logreg_rna": 0.6059144429800488,
+        "logreg_visible_atac": 0.7219240790144931,
+        "feature_concat_mlp": 0.5958092599239629,
+        "token_concat": 0.6002532708562215,
+        "cross_attention": 0.5965213339897614,
+        "training_prevalence_constant": 0.6056370202837215
+      },
+      "3": {
+        "logreg_rna": 0.6421106386736429,
+        "logreg_visible_atac": 0.692774357170374,
+        "feature_concat_mlp": 0.6164487559973105,
+        "token_concat": 0.6221232232203092,
+        "cross_attention": 0.619220005421932,
+        "training_prevalence_constant": 0.6700638742848565
+      },
+      "4": {
+        "logreg_rna": 0.6714517930245766,
+        "logreg_visible_atac": 0.7223495788854278,
+        "feature_concat_mlp": 0.641377363575551,
+        "token_concat": 0.638598884258159,
+        "cross_attention": 0.6450149042866579,
+        "training_prevalence_constant": 0.6566348019475151
+      }
+    },
+    "limitations": "Arm-wise mean test cell log-loss is descriptive only. Does not establish causal modality routing, biological mechanism, or independent external validation. Distribution shift vs disease endpoint tasks is expected; AUROC may be unavailable on mixed/single-class folds and is not required for the primary log-loss estimand."
+  },
+  "per_fold": {
+    "0": {
+      "target_label": "chr19:6424686-6425606",
+      "target_index": 238,
+      "n_visible_atac": 423,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "5f3d1abf361d28eb3bd4ca33c33c03019ec8f7d82a9559075fc8fd76e609f0d4",
+      "arms_equal_cells_labels_donors": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6017970588417084,
+        "logreg_visible_atac": 0.6032346279221908,
+        "feature_concat_mlp": 0.5372254566457425,
+        "token_concat": 0.5346485055803588,
+        "cross_attention": 0.5281184112813108,
+        "training_prevalence_constant": 0.5844762685187529
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.006530094299048078,
+        "n_donors": 6,
+        "per_donor_delta_tc_minus_ca": {
+          "PCW10_CON_11950": -0.0022442523234402767,
+          "PCW12_CON_14427": -0.0003957771266264176,
+          "PCW13_CON_11928": 0.008120278510974743,
+          "PCW15_DS_15744": 0.005938430730997091,
+          "PCW17_CON_14310": 0.004181446977185477,
+          "PCW18_DS_16485": 0.023580439025197852
+        }
+      },
+      "bootstrap_fold": {
+        "estimate": 0.006530094299048078,
+        "interval": [
+          0.0008621985652021621,
+          0.014431016161819438
+        ],
+        "n_valid": 1000,
+        "seed": 601001
+      },
+      "sidecar_sha256": {
+        "logreg_rna": "495d7e5efb06d285a4d8e2ae70f1e558215843598e70683d32644f1d9ad12387",
+        "logreg_visible_atac": "a729f55ad14105f7a306fc7e0c82d7ea82b8d40370ddbd2a27e55855f21a4491",
+        "feature_concat_mlp": "25722ccba0d15ba1defe6df1c29bb64e278517fb50c4f73c678ed7be6aca797d",
+        "token_concat": "00c8186ec4255285c5c5dbd09eec7569b8ec4771a4a18993652392982ceaf21a",
+        "cross_attention": "59acb2c7b4b320721a9f39d743fc10cc1c6464b3518a433623c3eaac1ad68344"
+      }
+    },
+    "1": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6227890341749067,
+        "logreg_visible_atac": 0.5841218072373479,
+        "feature_concat_mlp": 0.5773726738698649,
+        "token_concat": 0.5866209304358972,
+        "cross_attention": 0.5856843376058553,
+        "training_prevalence_constant": 0.5668641234843541
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.0009365928300419935,
+        "n_donors": 6,
+        "per_donor_delta_tc_minus_ca": {
+          "PCW11_CON_17833": 0.0014821586193062286,
+          "PCW12_DS_15186": 0.002848760093607572,
+          "PCW13_CON_15044": -0.004003794982609499,
+          "PCW16_CON_14940": 0.0057769248457441025,
+          "PCW17_CON_14559": -0.002941084646750469,
+          "PCW20_CON_17916": 0.0024565930509540257
+        }
+      },
+      "bootstrap_fold": {
+        "estimate": 0.0009365928300419935,
+        "interval": [
+          -0.001842319843287717,
+          0.003630272624603596
+        ],
+        "n_valid": 1000,
+        "seed": 601001
+      },
+      "sidecar_sha256": {
+        "logreg_rna": "33f42c5882da149c055205e02228f63e8e93b9c218ca622392cf7b08e9859fbf",
+        "logreg_visible_atac": "0e28ca6ab5addadedc9c0fbbd9cc40d103332b141f17024c76eed320176889d1",
+        "feature_concat_mlp": "86e9e78a2d1057947b7d5c425a2899f291b3c26ac7a71a31bd0d9227f870f4b9",
+        "token_concat": "27be3722411355882108ef41ef001924816024e8b1b4e34296605f114278b2cb",
+        "cross_attention": "04b58e6a187b52754e3913b407dbca852625cbd78be8eecd13a3b2cb160f04a3"
+      }
+    },
+    "2": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6059144429800488,
+        "logreg_visible_atac": 0.7219240790144931,
+        "feature_concat_mlp": 0.5958092599239629,
+        "token_concat": 0.6002532708562215,
+        "cross_attention": 0.5965213339897614,
+        "training_prevalence_constant": 0.6056370202837215
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.003731936866460006,
+        "n_donors": 6,
+        "per_donor_delta_tc_minus_ca": {
+          "PCW11_DS_15405": 0.005145944603259123,
+          "PCW12_CON_15569": 0.0017083118817355913,
+          "PCW13_DS_12740": 0.0011650707609224265,
+          "PCW13_DS_16427": 0.0032663878695081694,
+          "PCW18_CON_16419": 0.0003692613247929799,
+          "PCW18_DS_16545": 0.010736644758541747
+        }
+      },
+      "bootstrap_fold": {
+        "estimate": 0.003731936866460006,
+        "interval": [
+          0.001345098766546331,
+          0.0068319213455309185
+        ],
+        "n_valid": 1000,
+        "seed": 601001
+      },
+      "sidecar_sha256": {
+        "logreg_rna": "d19c88888b0bab368bf5b44d9266c5eeb1302d656b964037d81e9eb2b89e1573",
+        "logreg_visible_atac": "b3ffc3651e2384e89bb2824333234757031b107e46042747f7492c588b180b08",
+        "feature_concat_mlp": "bb0a6b45b80f2d5b6b2ce5ba17587996263679d0067eb9f59e68d7c8200060b4",
+        "token_concat": "8cddbfec112ba57dcc7fb093ab8591f2ff2dff6fc01cef5279e60a39a3472b40",
+        "cross_attention": "7d6f57f545c0c556bb906b54a9464870a4fe6175d42b3571b494575f7e24902c"
+      }
+    },
+    "3": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6421106386736429,
+        "logreg_visible_atac": 0.692774357170374,
+        "feature_concat_mlp": 0.6164487559973105,
+        "token_concat": 0.6221232232203092,
+        "cross_attention": 0.619220005421932,
+        "training_prevalence_constant": 0.6700638742848565
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": 0.0029032177983771834,
+        "n_donors": 6,
+        "per_donor_delta_tc_minus_ca": {
+          "PCW11_DS_17720": 0.001130662837028007,
+          "PCW12_DS_15931": -0.0015385274566670493,
+          "PCW13_DS_14239": 0.008651166638607544,
+          "PCW14_CON_15077": 0.010760412007306208,
+          "PCW18_CON_18189": -0.004912075844380581,
+          "PCW20_CON_15167": 0.003327668608368972
+        }
+      },
+      "bootstrap_fold": {
+        "estimate": 0.0029032177983771834,
+        "interval": [
+          -0.0011763678319497552,
+          0.007213581456204081
+        ],
+        "n_valid": 1000,
+        "seed": 601001
+      },
+      "sidecar_sha256": {
+        "logreg_rna": "2d761623b34e0eaae6bcacb01bb7d11b72bc05455ce166c9bfe0ce1a0755f428",
+        "logreg_visible_atac": "f21ef456105c0a3f2e9ede75e3dae1648a718fb0d5fe02856511967765847144",
+        "feature_concat_mlp": "607e5717b029da5b76ef277738300ad30339108c96c60f1d64396a4cb746d206",
+        "token_concat": "f5c8b0913145f5a32e38483170af549590e8d080c5b344caebf6df7e3e28dace",
+        "cross_attention": "8e38f634d9eb593a4c75137cd1b764063000bcf8b1f11430e4182c4da6b72136"
+      }
+    },
+    "4": {
+      "target_label": "chr3:93470145-93471055",
+      "target_index": 324,
+      "n_visible_atac": 440,
+      "n_test_cells": 1536,
+      "n_test_donors": 6,
+      "cell_ids_sha256": "9ace24c200672ee9b26027f2dafa4e7f9421848498961f8f8d886d94d90eef1a",
+      "labels_sha256": "e844ce1f67233b99d146d3aea787a374fc391d89f9ffadaffb76275e3887c059",
+      "arms_equal_cells_labels_donors": true,
+      "donor_average_cell_log_loss": {
+        "logreg_rna": 0.6714517930245766,
+        "logreg_visible_atac": 0.7223495788854278,
+        "feature_concat_mlp": 0.641377363575551,
+        "token_concat": 0.638598884258159,
+        "cross_attention": 0.6450149042866579,
+        "training_prevalence_constant": 0.6566348019475151
+      },
+      "primary_contrast_tc_minus_ca": {
+        "estimate": -0.006416020028498726,
+        "n_donors": 6,
+        "per_donor_delta_tc_minus_ca": {
+          "PCW12_CON_12152": 0.010836114124908924,
+          "PCW12_DS_12941": -0.030404553516933275,
+          "PCW13_DS_15848": 0.0011895877135144062,
+          "PCW16_DS_15877": -0.021049417573138163,
+          "PCW17_DS_16070": 0.0087843928915321,
+          "PCW20_DS_15619_13": -0.007852243810876347
+        }
+      },
+      "bootstrap_fold": {
+        "estimate": -0.006416020028498726,
+        "interval": [
+          -0.019820955703549987,
+          0.005087772783690547
+        ],
+        "n_valid": 1000,
+        "seed": 601001
+      },
+      "sidecar_sha256": {
+        "logreg_rna": "b470f1d2c06734555371089c74e9d382d7268503bd0ac73047bdbba63fd57328",
+        "logreg_visible_atac": "b05df9c0df9832d771683ec8b1a3f44e24bc6552aa5c4d3a9c1eb52aa67e7f26",
+        "feature_concat_mlp": "d6aa5ef5e77ab23969bb649daad16d792f42beffa51790ac8da76d80082b63d5",
+        "token_concat": "3ed240eb8411d64b074f763a4f960a20876edd698e463d7762ce77a8c5a90591",
+        "cross_attention": "83936e371b82b8f2f370228c81dfc844a5f6b69e51cf563bb66b3ac727bef29e"
+      }
+    }
+  },
+  "claim_limits": [
+    "claim_level_2_computational_prediction_only",
+    "not_biological_state",
+    "not_causal_mechanism",
+    "not_external_validation",
+    "primary_B_NULL_unchanged",
+    "S7_S9_S10_INVALID_unchanged",
+    "S8_NO_FIT_unchanged",
+    "Q2_ENDPOINT_UNRESOLVED_unchanged",
+    "estimand_is_training_only_target_selection_algorithm_not_single_locus",
+    "bootstrap_fixed_prediction_exploratory_only"
+  ]
+}

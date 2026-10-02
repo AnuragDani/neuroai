@@ -4,9 +4,13 @@ Updated: 2026-10-01. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
-## Masked ATAC pilot M9 — smoke COMPLETE (main pending) — 2026-10-01
+## Masked ATAC pilot M9 — EXECUTE COMPLETE — 2026-10-01
 
-**M9 IN PROGRESS** (`SMOKE_COMPLETE`) on `gnhf/execute-the-p22-mask-6010ee`. Authorized real-data smoke: **5/5** learned arms on fold 0 under M8 immutable lock rematch; new `masked_atac_pilot` module (outside `REQUIRED_LOCK_KEYS`) builds chromosome-masked fold features and supplies `fit_fn`. Counters: total **5/40**, smoke **5/5**, scientific **0**; hours ≈0.00035/6; workers 1×2. Predictions under owned raw root; donor/cell/target hashes matched across arms. Resume for main uses `allow_progressed_counter` (locked zero counter digest cannot rematch after first reservation; never reset). Focused suite **35 PASS**. Claim-level-2; prior S10/S9/S7 **`INVALID`**, S8 **`NO FIT`**, primary **`B_NULL`**, Q2 `ENDPOINT_UNRESOLVED` unchanged. Next: M9 main 25 fits + primary contrast replay. [EXECUTE_SMOKE](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/EXECUTE_SMOKE.md).
+**M9 DONE** (`EXECUTE_COMPLETE`) on `gnhf/execute-the-p22-mask-6010ee`. Authorized serial real-data pilot: smoke **5/5** + main **25/25** (0 failed) under M8 immutable lock rematch with `allow_progressed_counter` resume (never reset). Counters: total **30/40**, smoke **5/5**, scientific **25**; hours ≈0.00178/6; workers 1×2. Primary pooled TC−CA donor-average cell log-loss ≈**+0.00154** (below exploratory margin 0.01; fixed-prediction bootstrap 95% CI includes 0 → exploratory advantage **not met**). Per-fold / arm equality pins PASS; constant arm 0-fit descriptive for folds 0–4. Claim-level-2; prior S10/S9/S7 **`INVALID`**, S8 **`NO FIT`**, primary **`B_NULL`**, Q2 `ENDPOINT_UNRESOLVED` unchanged. Focused suite **36 PASS**. Next: M10 independent replay + HANDOFF/VERIFICATION. [EXECUTE](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/EXECUTE.md); [EXECUTE.json](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/EXECUTE.json).
+
+## Masked ATAC pilot M9 — smoke COMPLETE (historical) — 2026-10-01
+
+Historical partial gate: smoke 5/5 before main batch. Superseded by M9 `EXECUTE_COMPLETE` above. [EXECUTE_SMOKE](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/EXECUTE_SMOKE.md).
 
 ## Masked ATAC pilot Checkpoint C — fit authorization PASS — 2026-10-01
 
