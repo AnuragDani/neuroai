@@ -8,7 +8,11 @@ Primary checkout contains the complete reviewed history through `964b54e`, inclu
 
 Cleanup removed all 28 secondary worktrees; only the primary checkout remains. Fresh focused suite: 41 passed. Cleanup preserves all secondary checkout files, ignored raw outputs and dirty edits in hashed local archives under `reports/generated/consolidation_20261002/`. [Archive inventory](docs/CONSOLIDATION_2026-10-02.json) maps original paths, commits and archive hashes. Unique obsolete branch heads are preserved as archive tags rather than merged into accepted source. Historical absolute paths are provenance records; use archives for old outputs. Current pilot sidecars and measured ATAC package are copied to primary `reports/generated/` with original content.
 
-Next work repairs runtime masking, model persistence and full-path review locks. No research fits are authorized by this plan. Original professor MOM and last sent packet remain unchanged.
+The execution repair is complete. E5 is NO_GO for an automatic pilot. No research fits are authorized. Original professor MOM and last sent packet remain unchanged.
+
+## Bounded short paper revised — 2026-10-02
+
+[Short paper](paper/short_paper.md) now includes pseudobulk RNA baseline, selected-arm pooled metrics, power limits and later invalid-control context. Unauthorized masked-ATAC pilot remains excluded from accepted quantitative results. Fresh saved-fold ladder replay PASS, numerical table equality PASS, independent scoped evidence review PASS. [Review and remaining scope](paper/SHORT_PAPER_REVIEW_2026-10-02.md); [source hashes](paper/short_paper_evidence_2026-10-02.json). The original full draft/claim ledger is not reconciled in this pass; this revision is not submission-ready certification. No new fits, push, professor packet or messages.
 
 ## Historical status before consolidation
 

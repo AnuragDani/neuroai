@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-02",
+  "scope": "bounded short-paper consolidation",
+  "manuscript": "paper/short_paper.md",
+  "manuscript_sha256": "e90dff2700d0bf41db403fd6dd0d35cf54b39eb4774c76dcda2826bab0277967",
+  "primary": {
+    "estimate": 0.026666666666666672,
+    "ci": [
+      -0.025000000000000022,
+      0.07678571428571423
+    ],
+    "valid_draws": 1000,
+    "margin": 0.07,
+    "advantage": false
+  },
+  "result_table": [
+    {
+      "arm": "R3_ca",
+      "balanced_accuracy": 0.4,
+      "auroc": 0.3582222222222222,
+      "source": "docs/nn_v2/ladder_verification.json",
+      "key": "/per_arm/R3_ca"
+    },
+    {
+      "arm": "R3_tc",
+      "balanced_accuracy": 0.37333333333333335,
+      "auroc": 0.33155555555555555,
+      "source": "docs/nn_v2/ladder_verification.json",
+      "key": "/per_arm/R3_tc"
+    },
+    {
+      "arm": "logreg_rna",
+      "balanced_accuracy": 0.42666666666666664,
+      "auroc": 0.3982222222222222,
+      "source": "docs/nn_v2/ladder_verification.json",
+      "key": "/per_arm/logreg_rna"
+    },
+    {
+      "arm": "pseudobulk_rna_logistic",
+      "balanced_accuracy": 0.5133333333333333,
+      "auroc": 0.5573333333333333,
+      "source": "docs/nn_v2/ladder_verification.json",
+      "key": "/per_arm/pseudobulk_rna_logistic"
+    }
+  ],
+  "source_hashes": {
+    "docs/nn_v2/ladder_verification.json": "aec19fda88d60a30fda4ebdb9af53c790c62d5210206a5627c54521bfd947256",
+    "docs/nn_v2/PROTOCOL_FREEZE.md": "c07712e29a6acac2d07afb1c5e61e5daa5c4f6a855f6555bf0ecd87cbaca9cba",
+    "docs/nn_v2/v6/DETECTABILITY.md": "f521b6d60ab8eef71116ca22b5a8b1cf5894f8ba0685387f940cd0843b9021cf",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/HANDOFF.md": "c15d5c4ca04a0b3418bb297b5614f589c5c635bc14aa77dc9da9c643f3bc36ac",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md": "8b737cfe40b6e006f414505d6afe3e4b791cbac39a79aa2480445282ee2ea499",
+    "tasks/DECISION_E5.md": "edff6817e595b8b16253e4b876ea7b5e19993c91162b0cd1c8ebb4a60ae6ecea",
+    "tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/HANDOFF.md": "49bd1d2f781c1358abe993cb0d7a9292aefc814b7feda1f39e55c758e03fd996"
+  },
+  "verification": {
+    "saved_fold_replay_exit": 0,
+    "table_equality": "PASS",
+    "primary_ci_rounding": "PASS",
+    "no_new_fits": true,
+    "independent_scoped_evidence_review": "PASS",
+    "reviewer": "paper_evidence_review"
+  },
+  "limits": [
+    "Not publication certification",
+    "Original full draft not reconciled in this pass",
+    "No external validation",
+    "Power unestablished",
+    "Masked pilot NOT_AUTHORIZED; excluded from accepted quantitative results"
+  ]
+}
