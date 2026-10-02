@@ -1,0 +1,79 @@
+{
+  "task": "E5",
+  "scope": "execution_repair_20261002",
+  "date": "2026-10-02",
+  "branch": "gnhf/p22-nn-cellstate",
+  "disposition": "NO_GO",
+  "verdict": "NO_GO",
+  "decision_report": "tasks/DECISION_E5.md",
+  "dependencies": {
+    "e4_disposition": "PASS",
+    "e4_reviewed_commit": "3eb7f74279d5f27bfee1dc0d7c59a9a8996b8aed",
+    "e4_n_immutable_keys_rematch": 17,
+    "e4_evidence": [
+      "tasks/INDEPENDENT_REVIEW_E4.md",
+      "tasks/NO_FIT_REVIEW_E4.json",
+      "tasks/E4_REVIEWED_HASHES.json"
+    ]
+  },
+  "live_verification": {
+    "head_at_decision": "4c3a010627e895b2c78a8088d68752b05d5909f5",
+    "reviewed_commit_is_ancestor_of_head": true,
+    "immutable_lock_keys_rematch": 17,
+    "immutable_lock_mismatches": 0,
+    "src_and_runner_diff_vs_reviewed_commit": "none",
+    "research_fits": 0,
+    "reviewed_execution_source_modified": false
+  },
+  "diagnostic_context_not_scientific_acceptance": {
+    "m9_scientific_acceptance": "NOT_AUTHORIZED",
+    "pooled_tc_minus_ca": 0.00154,
+    "bootstrap_ci_95": [-0.00220, 0.00475],
+    "practical_margin": 0.01,
+    "exploratory_advantage_met": false,
+    "source": "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md"
+  },
+  "july_guidance_comparison": {
+    "g7_discriminating_benchmark": "diagnostic near-null does not justify repeating the same CA-vs-TC contrast as a differentiating case",
+    "claim_level_4_biology": "blocked by Q2 ENDPOINT_UNRESOLVED",
+    "guidance_evidence": "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md"
+  },
+  "reasons_no_go": [
+    "Same claim-2 estimand already measured diagnostically; exploratory advantage not met — re-fit under E4 lock adds process hygiene, not scientific value beyond diagnostics",
+    "Outcome visibility on TC−CA makes identical re-dispatch outcome-conditioned and conflicts with M10 stop / no positive-result search",
+    "E4 process readiness is necessary but not sufficient for scientific pilot justification",
+    "Claim-4 biological pilot remains blocked by Q2",
+    "Dataset/model/threshold/seed changes to improve results after the near-null are forbidden"
+  ],
+  "protocol_proposal_issued": false,
+  "scientific_value_question_estimand_success_rule_budget": null,
+  "rejected_alternatives": [
+    "GO_identical_m5_m9_estimand_under_e4_lock",
+    "GO_same_estimand_changed_margin_or_seeds",
+    "GO_new_dataset_or_model_to_improve_contrast",
+    "GO_biological_cell_state_pilot",
+    "GO_claim1_software_recontrol_in_this_loop",
+    "promote_diagnostic_near_null_to_scientific_m9_pass_or_fail"
+  ],
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT",
+    "q2_endpoint": "ENDPOINT_UNRESOLVED",
+    "scientific_fits_authorized": false
+  },
+  "what_this_authorizes": "E5 NO_GO record only. Does not authorize fits. Does not revoke E0–E4 repairs. Does not forbid a later separately planned stage with a new pre-outcome question.",
+  "what_this_does_not_authorize": [
+    "research_fits",
+    "automatic_new_pilot",
+    "dataset_downloads",
+    "counter_resets",
+    "push",
+    "professor_messages",
+    "biological_cell_state_claims"
+  ],
+  "fits_authorized": false,
+  "checkpoint_c_marked": false,
+  "one_next_action": "CHECKPOINT_C_commit_verified_handoff_and_stop_zero_fits"
+}
