@@ -1,17 +1,17 @@
 # M8 — Independent full executor / dependency review (masked ATAC pilot)
 
-**Reviewer identity:** cursor Task generalPurpose agent (independent of M0–M7 authoring session)  
-**Agent ID:** `64da0eef-2eac-4d5a-b6ec-0cd9ba1ed6ca` (runtime agent transcript folder UUID)  
+**Reviewer identity:** cursor Task generalPurpose agent (independent of M0–M7 authoring session and of cycle-0 reviewer)  
+**Agent ID:** `85a8e8e7-0d66-4336-91c1-d3e018ba54c8` (runtime agent transcript folder UUID)  
 **Date:** 2026-10-01  
 **Protocol under review:** `masked_atac_pilot_20261001`  
 **Scope:** claim-level-2 computational masked-measurement prediction (NOT biological state / causal / external)  
 **Interpreter:** `/Users/anuragdani/Github/niw-eb1a/P22/.venv-p22/bin/python`  
 **PYTHONPATH:** `<workspace>/src`  
-**git commit at review:** `2be3c934800919c0553f15221b088599a7c0320b` (authorization binds **working-tree** file hashes)  
-**Correction cycle:** 0 of max 2  
+**git commit at review:** `8fe4d3858f0f936d03e01adf369265577c3775f0` (authorization binds **working-tree** file hashes)  
+**Correction cycle:** 1 of max 2  
 **Self-certification:** false
 
-Worker self-assertion was not used. File SHA-256 digests, attempt arithmetic, CA/TC param counts, M6 lock validity, learning-gate behavior, dry-run refusals, attempt counters, and focused M1–M7 tests were recomputed by this reviewer. No neural smoke/main research fits were run. Toy-array adapter unit learning inside dry-run was observed but does not mutate attempt counters.
+Worker self-assertion was not used. File SHA-256 digests, attempt arithmetic, CA/TC param counts, M6 lock validity, learning-gate behavior (including temporary fake locks, deleted after), reserve-before-dispatch durability, serial skip/replay, `skip_fits` authorization path, attempt counters, and focused M1–M7 + M8-correction tests were recomputed by this reviewer. No neural smoke/main research fits were run. Toy-array adapter unit learning inside dry-run/tests does not mutate owned attempt counters (still 0).
 
 Machine record: [NO_FIT_REVIEW_M8.json](NO_FIT_REVIEW_M8.json). External lock: [M8_REVIEWED_HASHES.json](M8_REVIEWED_HASHES.json).
 
@@ -19,22 +19,22 @@ Machine record: [NO_FIT_REVIEW_M8.json](NO_FIT_REVIEW_M8.json). External lock: [
 
 ## Overall verdict
 
-**FAIL**
+**PASS**
 
-Three critical executor defects block safe fit authorization. M6 protocol lock remains valid; adapter/mixed-label contracts and focused tests PASS; dry-run correctly refuses learning **while M8 lock is absent**. However the full execution path required by PLAN M8 / Checkpoint C is not yet reviewable as fit-safe: learning gate does not bind live hashes, reserve-before-dispatch / crash-safe counters are declarative only, and there is no serial dispatch / skip-fits replay path. Prior S10/S9/S7 `INVALID`, S8 `NO FIT`, primary `B_NULL`, Q2 `ENDPOINT_UNRESOLVED` unchanged. Checkpoint C must **not** proceed; **fits_authorized = false**.
+Cycle-0 critical findings **M8-C1 / M8-C2 / M8-C3 are resolved** in post-correction `masked_atac_execute.py`. Live digest verification against `REQUIRED_LOCK_KEYS`, durable reserve-before-dispatch, serial `workers=1` dispatch with completed-fit skip, and `run_authorized_pilot(skip_fits=True)` no-learning path were independently proved. M6 protocol lock still valid. Focused suite **30 PASS**, exit 0. Prior S10/S9/S7 `INVALID`, S8 `NO FIT`, primary `B_NULL`, Q2 `ENDPOINT_UNRESOLVED` unchanged. **`fits_authorized = true`**; **`smoke_learning_authorized = true`**; **`checkpoint_c_may_proceed = true`**. This review does **not** mark Checkpoint C (`checkpoint_c_marked = false`). No fits in this review. Authorization binds working-tree hashes below; any code/protocol change requires re-review.
 
 ---
 
-## Critical findings
+## Cycle-0 findings — resolution status
 
-1. **M8-C1 — Learning gate does not verify live hash match.**  
-   `refuse_unreviewed_learning` accepts any present lock with `verdict=="PASS"` and `fits_authorized` truthy. It does **not** compare working-tree digests to `reviewed_hashes`. Independent proof: a temporary lock with empty `reviewed_hashes` and `fits_authorized: true` is accepted. Contrast: `s10_execute.verify_reviewed_hashes`. Checklist item 6 requires lock **present and matches**.
+1. **M8-C1 (learning gate / live hash match) — RESOLVED.**  
+   `refuse_unreviewed_learning` → `verify_reviewed_hashes` requires `verdict==PASS`, `fits_authorized`, complete 64-hex digests for all `REQUIRED_LOCK_KEYS`, and live SHA-256 match. Independent proof with temporary fake locks under the task dir (deleted after): empty PASS refused; partial PASS refused; hash mismatch refused; current FAIL lock refused; complete matching PASS accepted.
 
-2. **M8-C2 — No reserve-before-dispatch / crash-safe counter implementation.**  
-   Protocol declares `reserve_before_dispatch_rules()`, but `masked_atac_execute.py` has no `reserved_fit_ids`, no per-job counter write before dispatch, and no durable crash-before-sidecar accounting. Overwrite refusal and unique raw-root markers alone are insufficient.
+2. **M8-C2 (reserve-before-dispatch / crash-safe counters) — RESOLVED.**  
+   `reserve_attempt_before_dispatch` increments and writes `reserved_fit_ids` / used counters to disk **before** `fit_fn`. Re-read from disk confirmed. Owned production counter untouched (tmp counters only).
 
-3. **M8-C3 — No serial fit dispatch or replay/skip-fits path.**  
-   Executor is dry-run scaffolding (`run_m7_dry_run`) only. No `skip_fits` resume, no serial runner for the 30 planned jobs, no research checkpoint/prediction persistence under the owned raw root. PLAN M8 requires full-path code with reservations, crash-safe counters, and replay-only mode before learning.
+3. **M8-C3 (serial dispatch / skip_fits replay) — RESOLVED.**  
+   `execute_jobs_serial` runs with `workers=1`, `parallel_dispatch=False`, skips `completed_fit_ids` without refit. `run_authorized_pilot(skip_fits=True)` authorizes under matching PASS lock and returns `learning=False` / `n_executed_this_call=0` (no fit_fn dispatch). FAIL lock still refuses even with `skip_fits=True`. Implicit learning refused when `skip_fits=False` and `fit_fn is None`.
 
 ---
 
@@ -66,16 +66,19 @@ Three critical executor defects block safe fit authorization. M6 protocol lock r
 | `src/p22/eval/masked_atac_metrics.py` | `64553c501ac3a0619d97fcdc547d7fb98a96555ab3d3f8ccea9cee2fc019a9c5` |
 | `src/p22/eval/masked_atac_protocol.py` | `1ad3fdb97a470573254569195e712a7376ce1f1e581722c7aa3eb5939d22fb5d` |
 | `src/p22/eval/masked_atac_adapter.py` | `cda024a4e0812c7ba76cb435b6e4cfd66de2879d408413f4a6a2d5f19068aae6` |
-| `src/p22/eval/masked_atac_execute.py` | `9c164838b4c3c828c0f2874de601352f783d4ca3f988918d0bf94d319d98b377` |
+| `src/p22/eval/masked_atac_execute.py` | `a9798c008689489ac913563a978726e2011a3e10cdb08f77d42df954a93987aa` |
 | `tests/test_masked_atac_input_and_masking_m1.py` | `fe0dd488e5a086c33adc0d280f4616ae4fc0d385ab8d26e3076e80a6062956ad` |
 | `tests/test_masked_atac_target_feasibility_m2.py` | `f4ab6ddcaf859ffcd3c7cda030435cd108235d0236b3998427d16b76124ab0a1` |
 | `tests/test_masked_atac_splits_m3.py` | `56dee1036b36fcf7d75e5b9339c63da5e6ce9f0c84405395e6cbdb81b8f61c9f` |
 | `tests/test_masked_atac_falsification_m4.py` | `373fca78764affeb1941094b9dde6391c55ab5fdfe9dbd8820ec5297b5d7ab2a` |
 | `tests/test_masked_atac_protocol_m5.py` | `986e301284fe6e43a45001078a4def5aadb40a5ffe938e1650f4cf9a136d82d0` |
 | `tests/test_masked_atac_implement_m7.py` | `fb4f9d3d092061b61ba7d86738cc1152a07fe39ba68ed70ecd41eb21fe3e55e8` |
+| `tests/test_masked_atac_executor_m8_correction.py` | `d669c8a0bd824531bae631fff5f6a9f32b59985422485cee8dcfef46a18d6e69` |
 | `reports/generated/.../attempt_counter.json` | `5a801b6c1aa821b4e11ad8058f044c11efb3b65d0ff8af1112b00b606e1b8be1` |
 
-**M6 protocol lock still valid:** `true` (`PILOT_PROTOCOL.json` and other M6-locked protocol/helper digests unchanged). Executor/adapter/implement are new since M6 (expected).
+**M6 protocol lock still valid:** `true` (all M6-locked digests including `PILOT_PROTOCOL.json` unchanged). Executor digest changed vs cycle-0 (expected post-correction).
+
+**External lock keys (`REQUIRED_LOCK_KEYS` / `M8_REVIEWED_HASHES.reviewed_hashes`):** the ten keys verified by the live gate (short basenames / `src/` / `reports/` paths). This file’s own digest is **not** included.
 
 **Optional dependency digests (not lock keys):**  
 `multiome_runner.py` `119f93e2…abd0b5`; `s7_runner.py` `290b5e27…d84790`; `training/loop.py` `195274bf…347c1a`; `mil_loop.py` `6956d200…d428e0`.
@@ -84,18 +87,18 @@ Three critical executor defects block safe fit authorization. M6 protocol lock r
 
 ## Checklist (PLAN M8 / acceptance)
 
-1. **Executor full path exists — PASS.** `src/p22/eval/masked_atac_execute.py` + `masked_atac_adapter.py` present; dry-run API `run_m7_dry_run`.
-2. **M6 protocol lock still valid — PASS.** Recomputed M6-locked artifact hashes match `M6_REVIEWED_HASHES.json`.
-3. **Attempt arithmetic — PASS.** 25 main + 5 smoke ≤ 40; constant arm 0 fits; headroom 10.
-4. **Serial workers / threads — PASS.** `WORKERS=1`, `TORCH_THREADS=2` in protocol and dry-run report.
-5. **Reserve / crash-safe / overwrite / unique root — FAIL.** Overwrite refusal + owned raw root OK; **reserve-before-dispatch and crash-safe counters not implemented** in executor (rules only).
-6. **Learning blocked unless M8 lock present and matches — FAIL.** Absent lock correctly refuses; present lock with `fits_authorized` is accepted **without** live hash match.
-7. **Mixed-label adapter — PASS.** Equal-donor mean cell log-loss train/select; disease `mil_loop` / `train_model` still refuse mixed labels.
+1. **Executor full path exists — PASS.** `masked_atac_execute.py` + adapter; `run_authorized_pilot` / `execute_jobs_serial` / dry-run present.
+2. **M6 protocol lock still valid — PASS.** Recomputed M6-locked hashes match `M6_REVIEWED_HASHES.json`.
+3. **Attempt arithmetic — PASS.** 25 main + 5 smoke ≤ 40; constant arm 0 fits; headroom 10; 30 planned jobs.
+4. **Serial workers / threads — PASS.** `WORKERS=1`, `TORCH_THREADS=2`; serial loop `parallel_dispatch=False`.
+5. **Reserve / crash-safe / overwrite / unique root — PASS.** Reserve writes before `fit_fn`; overwrite + owned raw-root refusals intact.
+6. **Learning blocked unless M8 lock present and matches — PASS.** Empty/partial/mismatch/FAIL refuse; matching PASS accepts (proved with temp locks).
+7. **Mixed-label adapter — PASS.** Equal-donor mean cell log-loss; disease APIs still refuse mixed labels (M7 tests + dry-run contracts).
 8. **Chromosome-mask / visible-only TF-IDF — PASS.** Intact via M1–M5 contracts + focused tests.
-9. **CA/TC param-match ≤10% — PASS.** Live recompute at RNA128×ATAC{423,430,440}: rel_err ≈0.0472 / 0.0467 / 0.0461.
-10. **Replay/skip-fits / dry-run zero learning — FAIL.** Dry-run zero learning PASS; **skip-fits/replay path missing**.
-11. **Claim level 2 + prior labels — PASS.** Claim level 2; `B_NULL` / S7·S9·S10 `INVALID` / S8 `NO FIT` / Q2 `ENDPOINT_UNRESOLVED` preserved.
-12. **Focused tests M1–M7 — PASS.** 26 passed, exit 0.
+9. **CA/TC param-match ≤10% — PASS.** Live recompute RNA128×ATAC{423,430,440}: rel_err ≈0.0472 / 0.0467 / 0.0461.
+10. **Replay/skip-fits / dry-run zero learning — PASS.** `skip_fits` no-learning path; serial skip completed; owned counters still 0 after this review.
+11. **Claim level 2 + prior labels — PASS.** Claim level 2; `B_NULL` / S7·S9·S10 `INVALID` / S8 `NO FIT` / Q2 `ENDPOINT_UNRESOLVED` preserved; no biological/causal/external promotion.
+12. **Focused tests M1–M8-correction — PASS.** 30 passed, exit 0 (run under pre-PASS FAIL lock state).
 
 ---
 
@@ -109,10 +112,11 @@ cd <workspace> && PYTHONPATH=<workspace>/src \
   tests/test_masked_atac_splits_m3.py \
   tests/test_masked_atac_falsification_m4.py \
   tests/test_masked_atac_protocol_m5.py \
-  tests/test_masked_atac_implement_m7.py -q
+  tests/test_masked_atac_implement_m7.py \
+  tests/test_masked_atac_executor_m8_correction.py -q
 ```
 
-Exit 0; **26 passed**.
+Exit 0; **30 passed**.
 
 ---
 
@@ -126,26 +130,29 @@ Exit 0; **26 passed**.
 | Intended total / hard cap / headroom | 30 / 40 / 10 |
 | Workers × torch threads | 1 × 2 |
 | CA/TC param-match (423/430/440) | matched; rel_err ≈0.0472 / 0.0467 / 0.0461 |
-| attempt_counter used | scientific/smoke/total = 0 (unchanged after dry-run) |
-| Learning refused before this lock | true (`REFUSED_UNTIL_M8`; lock absent) |
-| Gate accepts lock without hash match | **true (critical)** |
-| Executor `verify_reviewed_hashes` / `reserved_fit_ids` / `skip_fits` | **absent** |
-| Dry-run disposition | `IMPLEMENT_PASS` / `no_fits` / trainability `REFUSED_UNTIL_M8` |
+| attempt_counter used | scientific/smoke/total = 0 (unchanged after review) |
+| Protocol SHA-256 vs M6 | match `925560d95c18c28d528ea61ee040849037393d643836ee1c61b3ba56e0638249` |
+| Gate empty/partial/mismatch/FAIL | all refuse |
+| Gate complete matching PASS | accepts |
+| `verify_reviewed_hashes` / reserve / `skip_fits` / serial | present and verified |
+| Critical findings remaining | none |
 
 ---
 
 ## Non-critical notes
 
-- Adapter and disease-API separation look correct for claim-level-2 mixed-label cell targets.
-- M7 implement report disposition `IMPLEMENT_PASS` is consistent with dry-run; it does not substitute for M8 full-path authorization.
-- This review does not edit `status.md` / `tasks/todo.md` and does not mark Checkpoint C.
+- Correction tests that hardcode “live lock is FAIL” will need authoring-session update after this PASS lock write; they do not indicate a fit-safety gap (suite was 30 PASS before writing PASS).
+- M7 dry-run still reports `trainability_with_learning: REFUSED_UNTIL_M8` in its static field; post-PASS, `learning_refused_until_m8` check semantics change — authoring session should refresh dry-run reporting when marking Checkpoint C.
+- Dependency modules (`multiome_runner`, `mil_loop`, etc.) remain outside `REQUIRED_LOCK_KEYS` (same pattern as cycle-0 / R8); changing them without re-review is still forbidden by policy even if the live gate does not hash them.
+- This review does not edit `status.md` / `tasks/todo.md` and does not write `CHECKPOINT_C.md`.
 
 ---
 
 ## Checkpoint C authorization statement
 
-**`checkpoint_c_may_proceed`:** false  
-**`fits_authorized`:** false  
-**`smoke_learning_authorized`:** false  
+**`checkpoint_c_may_proceed`:** true  
+**`checkpoint_c_marked`:** false  
+**`fits_authorized`:** true  
+**`smoke_learning_authorized`:** true  
 
-Checkpoint C requires M6 **and** M8 independent PASS on current hashes with a fit-safe full executor path. M6 remains PASS; M8 is **FAIL**. Do not run smoke or main learning. Next: implement live hash verification against the external lock, serial reserve-before-dispatch with crash-safe counters, and skip-fits/replay-only resume in the executor (or equivalent), then re-request independent M8 review (correction cycle ≤2).
+Checkpoint C may be marked by the **authoring session only** after verifying M6+M8 PASS locks still match live digests. No smoke/main fits were run in this review. No code/protocol change without re-review.

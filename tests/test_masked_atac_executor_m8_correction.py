@@ -31,12 +31,24 @@ COUNTER = ROOT / "reports/generated/nn_masked_atac_pilot_20261001/attempt_counte
 
 
 def test_fail_lock_and_empty_pass_lock_refuse_learning() -> None:
-    with pytest.raises(MaskedAtacExecuteRefusal, match="fits_authorized"):
-        refuse_unreviewed_learning(m8_lock_path=M8_LOCK, workspace=ROOT)
-    # Synthetic PASS without complete reviewed_hashes must refuse (M8-C1).
-    fake = TASK_DIR / "_tmp_fake_m8_lock_for_test.json"
+    # Live M8 PASS lock must authorize (correction cycle 1).
+    refuse_unreviewed_learning(m8_lock_path=M8_LOCK, workspace=ROOT)
+    fake_fail = TASK_DIR / "_tmp_fake_m8_fail_lock_for_test.json"
+    fake_partial = TASK_DIR / "_tmp_fake_m8_partial_lock_for_test.json"
     try:
-        fake.write_text(
+        fake_fail.write_text(
+            json.dumps(
+                {
+                    "verdict": "FAIL",
+                    "fits_authorized": False,
+                    "reviewed_hashes": {},
+                }
+            )
+        )
+        with pytest.raises(MaskedAtacExecuteRefusal, match="fits_authorized"):
+            refuse_unreviewed_learning(m8_lock_path=fake_fail, workspace=ROOT)
+        # Synthetic PASS without complete reviewed_hashes must refuse (M8-C1).
+        fake_partial.write_text(
             json.dumps(
                 {
                     "verdict": "PASS",
@@ -46,10 +58,11 @@ def test_fail_lock_and_empty_pass_lock_refuse_learning() -> None:
             )
         )
         with pytest.raises(MaskedAtacExecuteRefusal):
-            refuse_unreviewed_learning(m8_lock_path=fake, workspace=ROOT)
+            refuse_unreviewed_learning(m8_lock_path=fake_partial, workspace=ROOT)
     finally:
-        if fake.exists():
-            fake.unlink()
+        for path in (fake_fail, fake_partial):
+            if path.exists():
+                path.unlink()
 
 
 def test_reserve_before_dispatch_is_durable(tmp_path: Path) -> None:
@@ -120,19 +133,62 @@ def test_serial_skip_completed_and_skip_fits_path(tmp_path: Path) -> None:
     assert second["n_skipped_already_done"] == 2
     assert len(calls) == 2  # no refit
 
-    # skip_fits under FAIL lock must refuse authorization.
-    with pytest.raises(MaskedAtacExecuteRefusal):
-        run_authorized_pilot(
-            workspace=ROOT,
-            raw_root=raw,
-            m8_lock_path=M8_LOCK,
-            skip_fits=True,
+    # skip_fits under synthetic FAIL lock must refuse authorization.
+    fake_fail = TASK_DIR / "_tmp_fake_m8_fail_lock_skip_fits.json"
+    try:
+        fake_fail.write_text(
+            json.dumps(
+                {
+                    "verdict": "FAIL",
+                    "fits_authorized": False,
+                    "reviewed_hashes": {},
+                }
+            )
         )
+        with pytest.raises(MaskedAtacExecuteRefusal):
+            run_authorized_pilot(
+                workspace=ROOT,
+                raw_root=raw,
+                m8_lock_path=fake_fail,
+                skip_fits=True,
+            )
+    finally:
+        if fake_fail.exists():
+            fake_fail.unlink()
+
+    # Live PASS + skip_fits must authorize without dispatching learning or
+    # mutating the owned production counter.
+    prod_before = json.loads(COUNTER.read_text())
+    replay = run_authorized_pilot(
+        workspace=ROOT,
+        raw_root=raw,
+        m8_lock_path=M8_LOCK,
+        skip_fits=True,
+    )
+    assert replay.get("learning") is False or replay.get("n_executed_this_call", 0) == 0
+    prod_after = json.loads(COUNTER.read_text())
+    assert prod_after["total_attempts"]["used"] == prod_before["total_attempts"]["used"] == 0
 
 
 def test_verify_reviewed_hashes_rejects_fail_lock() -> None:
-    with pytest.raises(MaskedAtacExecuteRefusal):
-        verify_reviewed_hashes(workspace=ROOT, lock_path=M8_LOCK)
+    live = verify_reviewed_hashes(workspace=ROOT, lock_path=M8_LOCK)
+    assert len(live) >= 10
+    fake_fail = TASK_DIR / "_tmp_fake_m8_fail_lock_verify.json"
+    try:
+        fake_fail.write_text(
+            json.dumps(
+                {
+                    "verdict": "FAIL",
+                    "fits_authorized": False,
+                    "reviewed_hashes": {},
+                }
+            )
+        )
+        with pytest.raises(MaskedAtacExecuteRefusal):
+            verify_reviewed_hashes(workspace=ROOT, lock_path=fake_fail)
+    finally:
+        if fake_fail.exists():
+            fake_fail.unlink()
     # Production counter and ALLOWED_RAW_ROOT contract still present.
     assert COUNTER.is_file()
     assert "nn_masked_atac_pilot_20261001" in ALLOWED_RAW_ROOT

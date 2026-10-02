@@ -139,8 +139,12 @@ def test_gradients_reload_and_m8_gate() -> None:
         assert g["finite"] is True
         r = check_state_dict_reload_equality_cell_target(arm, toy["views"])
         assert r["passed"] is True
+    # Missing lock still refuses; live M8 PASS lock authorizes (post cycle-1).
     with pytest.raises(MaskedAtacExecuteRefusal, match="REFUSED_UNTIL_M8"):
-        refuse_unreviewed_learning(m8_lock_path=TASK_DIR / "M8_REVIEWED_HASHES.json")
+        refuse_unreviewed_learning(m8_lock_path=None, workspace=ROOT)
+    refuse_unreviewed_learning(
+        m8_lock_path=TASK_DIR / "M8_REVIEWED_HASHES.json", workspace=ROOT
+    )
     with pytest.raises(MaskedAtacExecuteRefusal):
         refuse_if_not_allowed_raw_root("reports/generated/nn_s9_analytic_pairing_20260930/")
     refuse_if_not_allowed_raw_root(ROOT / "reports/generated/nn_masked_atac_pilot_20261001/")
