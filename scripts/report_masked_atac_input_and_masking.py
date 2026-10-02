@@ -25,14 +25,10 @@ for _path in (ROOT / "src",):
     if str(_path) not in sys.path:
         sys.path.insert(0, str(_path))
 
-DEFAULT_H5AD = Path(
-    "/Users/anuragdani/Github/niw-eb1a/P22/data/real/"
-    "f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
-)
-DEFAULT_ATAC = Path(
-    "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/"
-    "p22-results-executio-debda8/reports/generated/"
-    "atac_tiebreak_measured_20260921/counts/counts.npz"
+DEFAULT_H5AD = ROOT / "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
+DEFAULT_ATAC = (
+    ROOT
+    / "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz"
 )
 DEFAULT_BED = ROOT / "configs" / "atac_tiebreak_union_2026-09-21.bed"
 DEFAULT_REGION_SETS = ROOT / "configs" / "atac_tiebreak_region_sets_2026-09-21.json"

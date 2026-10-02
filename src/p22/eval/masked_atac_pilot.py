@@ -26,6 +26,14 @@ import torch
 from scipy import sparse
 
 from p22.data.transforms import fit_train_only
+from p22.eval.execution_repair_provenance import (
+    DEFAULT_ATAC_REL,
+    DEFAULT_H5AD_REL,
+    EXPECTED_MATRIX_SHA256,
+    EXPECTED_ORDERED_CELLS_SHA256,
+    default_atac_path,
+    default_h5ad_path,
+)
 from p22.eval.masked_atac_adapter import (
     ARM_TO_PAIRED_NAME,
     LOGREG_ARMS,
@@ -76,21 +84,10 @@ STAGE_DIR_REL = (
     "tasks/nn/professor_direction_investigation_20260929/"
     "masked_atac_pilot_20261001"
 )
-DEFAULT_H5AD = Path(
-    "/Users/anuragdani/Github/niw-eb1a/P22/data/real/"
-    "f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
-)
-DEFAULT_ATAC = Path(
-    "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/"
-    "p22-results-executio-debda8/reports/generated/"
-    "atac_tiebreak_measured_20260921/counts/counts.npz"
-)
-EXPECTED_MATRIX_SHA256 = (
-    "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969"
-)
-EXPECTED_ORDERED_CELLS_SHA256 = (
-    "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53"
-)
+# Backward-compatible aliases; prefer workspace-relative defaults via
+# default_h5ad_path / default_atac_path (E0 portable provenance).
+DEFAULT_H5AD = Path(DEFAULT_H5AD_REL)
+DEFAULT_ATAC = Path(DEFAULT_ATAC_REL)
 IMMUTABLE_LOCK_KEYS = tuple(
     k for k in REQUIRED_LOCK_KEYS if not k.endswith(COUNTER_NAME)
 )
@@ -249,8 +246,14 @@ def load_pilot_arrays(
     if sample_sha != splits["sampling"]["cell_ids_sha256"]:
         raise MaskedAtacPilotError("sampling_cell_ids_sorted hash mismatch vs M3")
 
-    h5ad_path = Path(h5ad or DEFAULT_H5AD)
-    atac_path = Path(atac_npz or DEFAULT_ATAC)
+    h5ad_path = Path(h5ad) if h5ad is not None else default_h5ad_path(workspace)
+    atac_path = (
+        Path(atac_npz) if atac_npz is not None else default_atac_path(workspace)
+    )
+    if not h5ad_path.is_file() and not h5ad_path.is_absolute():
+        h5ad_path = (Path(workspace) / h5ad_path).resolve()
+    if not atac_path.is_file() and not atac_path.is_absolute():
+        atac_path = (Path(workspace) / atac_path).resolve()
     for path in (h5ad_path, atac_path):
         if not path.is_file():
             raise MaskedAtacPilotError(f"missing required input: {path}")

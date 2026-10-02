@@ -2,6 +2,8 @@
 
 Primary checkout contains the complete reviewed history through `964b54e`, including M10 handoff. Scientific pilot acceptance remains **NOT_AUTHORIZED** because the real executor was added after pre-fit review. Diagnostic replay PASS: TC−CA loss +0.001537, CI [-0.002197,+0.004746], advantage not met. Primary **B_NULL** unchanged.
 
+**Execution repair E0 DONE** (`PORTABLE_PROVENANCE_PASS`): primary-relative measured ATAC/H5AD defaults; 28/28 consolidation archive digests match; 30/30 pilot sidecars + ledger pins rematch; former worktree ATAC path absent. Evidence: [PROVENANCE_E0](tasks/PROVENANCE_E0.md), [portable inputs](configs/execution_repair_portable_inputs_2026-10-02.json). Next: E1 runtime target-chromosome exclusion. Zero research fits.
+
 [Canonical handoff](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md), [verification](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/VERIFICATION.json), [next repair plan](tasks/plan.md), [checklist](tasks/todo.md).
 
 Cleanup removed all 28 secondary worktrees; only the primary checkout remains. Fresh focused suite: 41 passed. Cleanup preserves all secondary checkout files, ignored raw outputs and dirty edits in hashed local archives under `reports/generated/consolidation_20261002/`. [Archive inventory](docs/CONSOLIDATION_2026-10-02.json) maps original paths, commits and archive hashes. Unique obsolete branch heads are preserved as archive tags rather than merged into accepted source. Historical absolute paths are provenance records; use archives for old outputs. Current pilot sidecars and measured ATAC package are copied to primary `reports/generated/` with original content.

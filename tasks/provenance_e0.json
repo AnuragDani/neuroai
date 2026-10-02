@@ -1,0 +1,89 @@
+{
+  "archives": {
+    "all_archives_match": true,
+    "all_live_worktrees_absent": true,
+    "live_worktrees_missing_sample": [
+      "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-atac-access-and-b89c8a",
+      "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-deep-research-pr-3ad124",
+      "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-openrouter-conti-0dc110"
+    ],
+    "n_archives": 28,
+    "n_archives_hash_ok": 28,
+    "n_live_worktrees_missing": 28
+  },
+  "checks": {
+    "archives_immutable_hashes_ok": true,
+    "canonical_paths_resolve_without_worktrees": true,
+    "pilot_sidecars_retain_exact_hashes": true,
+    "zero_research_fits": true
+  },
+  "contract": "configs/execution_repair_portable_inputs_2026-10-02.json",
+  "disposition": "PORTABLE_PROVENANCE_PASS",
+  "historical_absolute_paths": {
+    "former_atac_counts_npz": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "former_pilot_raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001",
+    "former_union_bed": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_union_2026-09-21.bed",
+    "note": "Former worktree absolute paths are provenance records only; they do not resolve after consolidation. Use archive_dir / archive_manifest entries."
+  },
+  "measured_inputs": {
+    "all_required_digests_match": true,
+    "former_worktree_atac_resolves": false,
+    "h5ad": {
+      "bytes": 1569658860,
+      "exists": true,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
+    },
+    "matrix": {
+      "exists": true,
+      "expected_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+      "match": true,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+      "sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969"
+    },
+    "ordered_cells_from_counts_json": {
+      "exists": true,
+      "expected_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+      "match": true,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/atac_tiebreak_measured_20260921/counts/counts.json",
+      "sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53"
+    },
+    "portable_defaults": {
+      "atac_rel": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+      "atac_resolved": "/Users/anuragdani/Github/niw-eb1a/P22/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+      "h5ad_rel": "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+      "h5ad_resolved": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad"
+    },
+    "region_sets": {
+      "exists": true,
+      "expected_sha256": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+      "match": true,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/configs/atac_tiebreak_region_sets_2026-09-21.json",
+      "sha256": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407"
+    },
+    "union_bed": {
+      "exists": true,
+      "expected_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+      "match": true,
+      "path": "/Users/anuragdani/Github/niw-eb1a/P22/configs/atac_tiebreak_union_2026-09-21.bed",
+      "sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23"
+    }
+  },
+  "missing_older_dependencies": {
+    "all_28_secondary_worktrees": "removed; preserved as hashed tar archives under reports/generated/consolidation_20261002/",
+    "ordered_cells_txt": "never shipped beside counts.npz; ordered-cell SHA is pinned via counts.json cells_sha256 and H5AD obs_names"
+  },
+  "pilot_sidecars": {
+    "all_ledger_pins_match": true,
+    "all_sidecars_match": true,
+    "n_ledger_pins_match": 3,
+    "n_sidecars_expected": 30,
+    "n_sidecars_match": 30
+  },
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "stage": "E0"
+}

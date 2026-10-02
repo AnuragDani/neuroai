@@ -2,7 +2,7 @@
 
 Detailed acceptance, verification, dependencies and file scope: [repair plan](plan.md).
 
-- [ ] E0: Establish portable inputs and immutable archived evidence.
+- [x] E0: Establish portable inputs and immutable archived evidence. — `DONE` (`PORTABLE_PROVENANCE_PASS`). Evidence: [PROVENANCE_E0.md](PROVENANCE_E0.md); [provenance_e0.json](provenance_e0.json); [portable inputs](../configs/execution_repair_portable_inputs_2026-10-02.json); primary-relative ATAC/H5AD defaults in `masked_atac_pilot`; 28/28 archive digests match; 30/30 sidecars + ledger pins rematch; former worktree ATAC path absent; scientific NOT_AUTHORIZED/`B_NULL` retained; 0 fits.
 - [ ] E1: Enforce whole-target-chromosome exclusion in actual feature construction.
 - [ ] Checkpoint A: Provenance and leakage tests pass.
 - [ ] E2: Save/reload checkpoints and epoch history with safe resume.

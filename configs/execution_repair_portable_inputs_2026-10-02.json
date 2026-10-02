@@ -1,0 +1,42 @@
+{
+  "record_type": "execution_repair_portable_inputs",
+  "declared_at_utc": "2026-10-02T18:30:00Z",
+  "stage": "E0",
+  "purpose": "Map measured ATAC pilot inputs and archived worktree provenance to primary-checkout relative paths after consolidation removed live worktrees.",
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "paths": {
+    "h5ad": "data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "atac_counts_npz": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "atac_counts_json": "reports/generated/atac_tiebreak_measured_20260921/counts/counts.json",
+    "union_bed": "configs/atac_tiebreak_union_2026-09-21.bed",
+    "region_sets": "configs/atac_tiebreak_region_sets_2026-09-21.json",
+    "measurement_contract": "configs/atac_tiebreak_measurement_contract_2026-09-21.json",
+    "pilot_raw_root": "reports/generated/nn_masked_atac_pilot_20261001",
+    "pilot_predictions": "reports/generated/nn_masked_atac_pilot_20261001/predictions",
+    "consolidation_inventory": "docs/CONSOLIDATION_2026-10-02.json",
+    "archive_manifest": "reports/generated/consolidation_20261002/archive_manifest.json",
+    "archive_dir": "reports/generated/consolidation_20261002",
+    "m10_pre_replay_pins": "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/M10_PRE_REPLAY_PINS.json"
+  },
+  "expected_sha256": {
+    "atac_counts_npz": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+    "ordered_cells": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "union_bed": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+    "region_sets": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407"
+  },
+  "historical_absolute_paths": {
+    "note": "Former worktree absolute paths are provenance records only; they do not resolve after consolidation. Use archive_dir / archive_manifest entries.",
+    "former_atac_counts_npz": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "former_pilot_raw_root": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/reports/generated/nn_masked_atac_pilot_20261001",
+    "former_union_bed": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_union_2026-09-21.bed"
+  },
+  "missing_live_dependencies": {
+    "all_28_secondary_worktrees": "removed; preserved as hashed tar archives under reports/generated/consolidation_20261002/",
+    "ordered_cells_txt": "never shipped beside counts.npz; ordered-cell SHA is pinned via counts.json cells_sha256 and H5AD obs_names"
+  }
+}
