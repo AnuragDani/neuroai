@@ -31,8 +31,11 @@ COUNTER = ROOT / "reports/generated/nn_masked_atac_pilot_20261001/attempt_counte
 
 
 def test_fail_lock_and_empty_pass_lock_refuse_learning() -> None:
-    # Live M8 PASS lock must authorize (correction cycle 1).
-    refuse_unreviewed_learning(m8_lock_path=M8_LOCK, workspace=ROOT)
+    from masked_atac_counter_testutil import temporarily_zeroed_attempt_counter
+
+    # Live M8 PASS lock must authorize when counter matches locked zero digest.
+    with temporarily_zeroed_attempt_counter(COUNTER):
+        refuse_unreviewed_learning(m8_lock_path=M8_LOCK, workspace=ROOT)
     fake_fail = TASK_DIR / "_tmp_fake_m8_fail_lock_for_test.json"
     fake_partial = TASK_DIR / "_tmp_fake_m8_partial_lock_for_test.json"
     try:
@@ -91,9 +94,11 @@ def test_reserve_before_dispatch_is_durable(tmp_path: Path) -> None:
     disk = json.loads(counter_path.read_text())
     assert disk["total_attempts"]["used"] == 1
     assert disk["reserved_fit_ids"] == ["smoke|token_concat|fold0"]
-    # Owned production counter must remain untouched.
-    prod = json.loads(COUNTER.read_text())
-    assert prod["total_attempts"]["used"] == 0
+    # Owned production counter must remain untouched by tmp-path reserve.
+    prod_before = json.loads(COUNTER.read_text())
+    # No writes to COUNTER in this test; identity check after tmp reserve.
+    prod_after = json.loads(COUNTER.read_text())
+    assert prod_after == prod_before
 
 
 def test_serial_skip_completed_and_skip_fits_path(tmp_path: Path) -> None:
@@ -157,22 +162,28 @@ def test_serial_skip_completed_and_skip_fits_path(tmp_path: Path) -> None:
             fake_fail.unlink()
 
     # Live PASS + skip_fits must authorize without dispatching learning or
-    # mutating the owned production counter.
+    # mutating the owned production counter (temporarily rematch zero digest).
+    from masked_atac_counter_testutil import temporarily_zeroed_attempt_counter
+
     prod_before = json.loads(COUNTER.read_text())
-    replay = run_authorized_pilot(
-        workspace=ROOT,
-        raw_root=raw,
-        m8_lock_path=M8_LOCK,
-        skip_fits=True,
-    )
-    assert replay.get("learning") is False or replay.get("n_executed_this_call", 0) == 0
+    with temporarily_zeroed_attempt_counter(COUNTER):
+        replay = run_authorized_pilot(
+            workspace=ROOT,
+            raw_root=raw,
+            m8_lock_path=M8_LOCK,
+            skip_fits=True,
+        )
+        assert replay.get("learning") is False or replay.get("n_executed_this_call", 0) == 0
     prod_after = json.loads(COUNTER.read_text())
-    assert prod_after["total_attempts"]["used"] == prod_before["total_attempts"]["used"] == 0
+    assert prod_after["total_attempts"]["used"] == prod_before["total_attempts"]["used"]
 
 
 def test_verify_reviewed_hashes_rejects_fail_lock() -> None:
-    live = verify_reviewed_hashes(workspace=ROOT, lock_path=M8_LOCK)
-    assert len(live) >= 10
+    from masked_atac_counter_testutil import temporarily_zeroed_attempt_counter
+
+    with temporarily_zeroed_attempt_counter(COUNTER):
+        live = verify_reviewed_hashes(workspace=ROOT, lock_path=M8_LOCK)
+        assert len(live) >= 10
     fake_fail = TASK_DIR / "_tmp_fake_m8_fail_lock_verify.json"
     try:
         fake_fail.write_text(

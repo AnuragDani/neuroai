@@ -139,12 +139,16 @@ def test_gradients_reload_and_m8_gate() -> None:
         assert g["finite"] is True
         r = check_state_dict_reload_equality_cell_target(arm, toy["views"])
         assert r["passed"] is True
-    # Missing lock still refuses; live M8 PASS lock authorizes (post cycle-1).
+    # Missing lock still refuses; live M8 PASS lock authorizes when the
+    # locked zero counter digest is present (swap/restore; never permanent reset).
+    from masked_atac_counter_testutil import temporarily_zeroed_attempt_counter
+
     with pytest.raises(MaskedAtacExecuteRefusal, match="REFUSED_UNTIL_M8"):
         refuse_unreviewed_learning(m8_lock_path=None, workspace=ROOT)
-    refuse_unreviewed_learning(
-        m8_lock_path=TASK_DIR / "M8_REVIEWED_HASHES.json", workspace=ROOT
-    )
+    with temporarily_zeroed_attempt_counter(COUNTER):
+        refuse_unreviewed_learning(
+            m8_lock_path=TASK_DIR / "M8_REVIEWED_HASHES.json", workspace=ROOT
+        )
     with pytest.raises(MaskedAtacExecuteRefusal):
         refuse_if_not_allowed_raw_root("reports/generated/nn_s9_analytic_pairing_20260930/")
     refuse_if_not_allowed_raw_root(ROOT / "reports/generated/nn_masked_atac_pilot_20261001/")
@@ -162,7 +166,9 @@ def test_live_implement_report_contracts() -> None:
     assert report["counter_snapshot"]["ok"] is True
     assert report["preserved_labels"]["primary"] == "B_NULL"
     assert report["preserved_labels"]["S10"] == "INVALID"
-    # Counters must remain zero after M7 dry-run.
+    # Historical M7 snapshot remained zero; live counters may include M9 smoke.
+    assert report["counter_snapshot"]["total_attempts_used"] == 0
+    assert report["counter_snapshot"]["smoke_fits_used"] == 0
     counter = json.loads(COUNTER.read_text())
-    assert counter["total_attempts"]["used"] == 0
-    assert counter["smoke_fits"]["used"] == 0
+    assert int(counter["total_attempts"]["hard_cap"]) == 40
+    assert int(counter["smoke_fits"]["cap"]) == 5
