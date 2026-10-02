@@ -2,7 +2,7 @@
 
 Primary checkout contains the complete reviewed history through `964b54e`, including M10 handoff. Scientific pilot acceptance remains **NOT_AUTHORIZED** because the real executor was added after pre-fit review. Diagnostic replay PASS: TC−CA loss +0.001537, CI [-0.002197,+0.004746], advantage not met. Primary **B_NULL** unchanged.
 
-**Execution repair E0 DONE** (`PORTABLE_PROVENANCE_PASS`): primary-relative measured ATAC/H5AD defaults; 28/28 consolidation archive digests match; 30/30 pilot sidecars + ledger pins rematch; former worktree ATAC path absent. Evidence: [PROVENANCE_E0](tasks/PROVENANCE_E0.md), [portable inputs](configs/execution_repair_portable_inputs_2026-10-02.json). Next: E1 runtime target-chromosome exclusion. Zero research fits.
+**Execution repair E0–E1 DONE** (`PORTABLE_PROVENANCE_PASS`, `RUNTIME_MASK_PASS`): primary-relative measured ATAC/H5AD defaults; 28/28 consolidation archive digests match; 30/30 pilot sidecars + ledger pins rematch; runtime feature construction rejects target-chromosome visible ATAC and target-inclusive depth (corrupt same-chrom manifest refused; target perturbation leaves encoded inputs identical); M8 locked metrics/target digests unchanged. Evidence: [PROVENANCE_E0](tasks/PROVENANCE_E0.md), [RUNTIME_MASK_E1](tasks/RUNTIME_MASK_E1.md), [portable inputs](configs/execution_repair_portable_inputs_2026-10-02.json). Next: Checkpoint A then E2 checkpoint persistence. Zero research fits.
 
 [Canonical handoff](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md), [verification](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/VERIFICATION.json), [next repair plan](tasks/plan.md), [checklist](tasks/todo.md).
 

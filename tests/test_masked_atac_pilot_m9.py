@@ -82,6 +82,8 @@ def test_toy_fold_features_and_logreg_fit() -> None:
     atac[:24, 0] = 0
     atac[24:, 0] = 3
     visible = list(range(1, n_regions))
+    # Target on chrT; all visible regions on other chromosomes.
+    region_chroms = ["chrT"] + [f"chrV{i}" for i in range(1, n_regions)]
     train_ids = cell_ids[:32]
     val_ids = cell_ids[32:40]
     test_ids = cell_ids[40:]
@@ -90,6 +92,7 @@ def test_toy_fold_features_and_logreg_fit() -> None:
         "target": {
             "region_index": 0,
             "region_label": "chrT:0-1",
+            "chrom": "chrT",
         },
         "visible_atac": {
             "visible_region_indices": visible,
@@ -110,7 +113,9 @@ def test_toy_fold_features_and_logreg_fit() -> None:
         rna_counts=rna,
         atac_counts=atac,
     )
-    bundle = build_fold_features(arrays, fold_blob, feature_budget=8)
+    bundle = build_fold_features(
+        arrays, fold_blob, feature_budget=8, region_chroms=region_chroms
+    )
     assert isinstance(bundle, FoldFeatureBundle)
     assert bundle.rna.shape == (n_cells, 8)
     assert bundle.atac.shape == (n_cells, len(visible))
@@ -140,9 +145,10 @@ def test_target_in_visible_refused() -> None:
         atac_counts=np.ones((12, 4), dtype=np.float64),
     )
     visible = [0, 1, 2]
+    region_chroms = ["chrT", "chrA", "chrB", "chrC"]
     fold_blob = {
         "fold": 0,
-        "target": {"region_index": 0, "region_label": "chrT:0-1"},
+        "target": {"region_index": 0, "region_label": "chrT:0-1", "chrom": "chrT"},
         "visible_atac": {
             "visible_region_indices": visible,
             "visible_region_indices_sha256": sha256_lines([str(i) for i in visible]),
@@ -154,7 +160,9 @@ def test_target_in_visible_refused() -> None:
         },
     }
     with pytest.raises(MaskedAtacPilotError, match="leaked into visible"):
-        build_fold_features(arrays, fold_blob, feature_budget=4)
+        build_fold_features(
+            arrays, fold_blob, feature_budget=4, region_chroms=region_chroms
+        )
 
 
 def test_live_splits_manifest_pins() -> None:

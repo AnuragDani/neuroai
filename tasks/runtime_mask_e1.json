@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "feature_construction_enforces_runtime_mask": true,
+    "frozen_folds_chromosome_exclusive": true,
+    "n_folds_checked": 5,
+    "n_regions": 465,
+    "target_inclusive_depth_refused": true,
+    "training_only_frozen_donor_splits": true,
+    "union_bed_digest_ok": true
+  },
+  "date": "2026-10-02",
+  "disposition": "RUNTIME_MASK_PASS",
+  "folds": [
+    {
+      "fold": 0,
+      "n_visible": 423,
+      "ok": true,
+      "target_chrom": "chr19"
+    },
+    {
+      "fold": 1,
+      "n_visible": 440,
+      "ok": true,
+      "target_chrom": "chr3"
+    },
+    {
+      "fold": 2,
+      "n_visible": 440,
+      "ok": true,
+      "target_chrom": "chr3"
+    },
+    {
+      "fold": 3,
+      "n_visible": 440,
+      "ok": true,
+      "target_chrom": "chr3"
+    },
+    {
+      "fold": 4,
+      "n_visible": 440,
+      "ok": true,
+      "target_chrom": "chr3"
+    }
+  ],
+  "record_type": "execution_repair_runtime_mask_e1",
+  "research_fits": 0,
+  "scientific_status_unchanged": {
+    "masked_atac_m9": "NOT_AUTHORIZED",
+    "primary": "B_NULL",
+    "prior_S10_S9_S7": "INVALID",
+    "prior_S8": "NO FIT"
+  },
+  "union_bed": {
+    "expected_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+    "match": true,
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/configs/atac_tiebreak_union_2026-09-21.bed",
+    "sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23"
+  },
+  "what_this_authorizes": "Runtime feature construction must reject target-chromosome visible ATAC and target-inclusive panel depth. Does not authorize research fits."
+}

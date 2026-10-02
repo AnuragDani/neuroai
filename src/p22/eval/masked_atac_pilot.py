@@ -31,8 +31,14 @@ from p22.eval.execution_repair_provenance import (
     DEFAULT_H5AD_REL,
     EXPECTED_MATRIX_SHA256,
     EXPECTED_ORDERED_CELLS_SHA256,
+    EXPECTED_UNION_BED_SHA256,
     default_atac_path,
     default_h5ad_path,
+    resolve_portable_path,
+)
+from p22.eval.execution_repair_runtime_mask import (
+    enforce_runtime_feature_mask,
+    load_union_bed_chroms,
 )
 from p22.eval.masked_atac_adapter import (
     ARM_TO_PAIRED_NAME,
@@ -140,6 +146,9 @@ class PilotArrays:
     matrix_sha256: str
     ordered_full_cells_sha256: str
     sampling_cell_ids_sha256: str
+    region_chroms: list[str]
+    union_bed_path: str
+    union_bed_sha256: str
 
 
 def _stage_dir(workspace: Path) -> Path:
@@ -264,6 +273,20 @@ def load_pilot_arrays(
             f"ATAC matrix hash mismatch: {matrix_sha} != {EXPECTED_MATRIX_SHA256}"
         )
 
+    bed_path = resolve_portable_path(workspace, "union_bed")
+    if not bed_path.is_file():
+        raise MaskedAtacPilotError(f"missing required input: {bed_path}")
+    bed_sha = sha256_file(bed_path)
+    if bed_sha != EXPECTED_UNION_BED_SHA256:
+        raise MaskedAtacPilotError(
+            f"union BED hash mismatch: {bed_sha} != {EXPECTED_UNION_BED_SHA256}"
+        )
+    region_chroms = load_union_bed_chroms(bed_path)
+    if len(region_chroms) != 465:
+        raise MaskedAtacPilotError(
+            f"unexpected union BED region count {len(region_chroms)}"
+        )
+
     # Full in-memory load: backed CSR fancy-index is broken under this
     # anndata/scipy pair (``_validate_indices`` AttributeError). File is
     # ~1.5 GiB on disk; 128 GiB host RAM makes a one-shot load safer than a
@@ -304,6 +327,9 @@ def load_pilot_arrays(
         matrix_sha256=matrix_sha,
         ordered_full_cells_sha256=ordered_sha,
         sampling_cell_ids_sha256=sample_sha,
+        region_chroms=list(region_chroms),
+        union_bed_path=str(bed_path),
+        union_bed_sha256=bed_sha,
     )
 
 
@@ -323,16 +349,36 @@ def build_fold_features(
     fold_blob: Mapping[str, Any],
     *,
     feature_budget: int = NEURAL.feature_budget,
+    region_chroms: Sequence[str] | None = None,
 ) -> FoldFeatureBundle:
-    """Train-only RNA variance+scale and visible-only ATAC TF-IDF(+scale)."""
+    """Train-only RNA variance+scale and visible-only ATAC TF-IDF(+scale).
+
+    Runtime E1 mask: every visible ATAC column must exclude the target index and
+    the whole target chromosome; panel depth uses visible columns only.
+    """
     fold_i = int(fold_blob["fold"])
     target = fold_blob["target"]
     target_index = int(target["region_index"])
+    target_chrom = str(target["chrom"])
     visible = [int(i) for i in fold_blob["visible_atac"]["visible_region_indices"]]
-    if target_index in visible:
+    chroms = (
+        [str(c) for c in region_chroms]
+        if region_chroms is not None
+        else [str(c) for c in getattr(arrays, "region_chroms", [])]
+    )
+    if not chroms:
         raise MaskedAtacPilotError(
-            f"fold {fold_i}: target index {target_index} leaked into visible ATAC"
+            f"fold {fold_i}: region_chroms required for runtime chromosome mask"
         )
+    try:
+        enforce_runtime_feature_mask(
+            region_chroms=chroms,
+            visible_indices=visible,
+            target_index=target_index,
+            target_chrom=target_chrom,
+        )
+    except ValueError as exc:
+        raise MaskedAtacPilotError(f"fold {fold_i}: {exc}") from exc
     got_vis_sha = sha256_lines([str(i) for i in visible])
     want_vis_sha = fold_blob["visible_atac"]["visible_region_indices_sha256"]
     if got_vis_sha != want_vis_sha:
@@ -381,7 +427,10 @@ def build_fold_features(
     rna_encoded = np.asarray(rna_fit.transform(rna_dense), dtype=np.float64)
 
     # ATAC: visible-only TF-IDF (train IDF / visible depth), then train-only scale.
+    # Target-inclusive panel depth is refused by the runtime mask above.
     tfidf = visible_atac_tfidf_fit(arrays.atac_counts, visible, train_mask)
+    if int(tfidf["n_visible"]) != len(visible):
+        raise MaskedAtacPilotError(f"fold {fold_i}: visible TF-IDF width mismatch")
     atac_raw = np.asarray(tfidf["encoded"], dtype=np.float64)
     atac_fit = fit_train_only(
         atac_raw,
@@ -423,10 +472,21 @@ def build_fold_features(
 def build_all_fold_features(
     arrays: PilotArrays,
     splits: Mapping[str, Any],
+    *,
+    region_chroms: Sequence[str] | None = None,
 ) -> dict[int, FoldFeatureBundle]:
+    chroms = (
+        [str(c) for c in region_chroms]
+        if region_chroms is not None
+        else [str(c) for c in getattr(arrays, "region_chroms", [])]
+    )
+    if not chroms:
+        raise MaskedAtacPilotError(
+            "region_chroms required for runtime chromosome mask"
+        )
     out: dict[int, FoldFeatureBundle] = {}
     for fold_blob in splits["folds"]:
-        bundle = build_fold_features(arrays, fold_blob)
+        bundle = build_fold_features(arrays, fold_blob, region_chroms=chroms)
         out[int(bundle.fold)] = bundle
     if sorted(out) != [0, 1, 2, 3, 4]:
         raise MaskedAtacPilotError(f"expected folds 0..4; got {sorted(out)}")
