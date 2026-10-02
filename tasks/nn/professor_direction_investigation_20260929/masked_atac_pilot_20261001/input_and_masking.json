@@ -1,0 +1,240 @@
+{
+  "record_type": "masked_atac_pilot_m1_input_and_masking",
+  "date": "2026-10-01",
+  "disposition": "INPUT_AND_MASKING_PASS",
+  "claim_level": 2,
+  "claim_level_meaning": "computational prediction of measured accessibility presence; not biological state, causal mechanism, or external validation",
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S8": "NO FIT",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "count_semantics": {
+    "genome_build": "GRCh38",
+    "interval_convention": "chr:start-end 0-based half-open (cellranger-arc)",
+    "count_unit": "unique_fragment_overlap",
+    "fragment_qualifies_when": "fragment_start < region_end and fragment_end > region_start; fragment_start >= fragment_end ignored",
+    "matrix_orientation": "regions \u00d7 cells",
+    "source_contract": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_measurement_contract_2026-09-21.json",
+    "contract_count_unit": "unique_fragment_overlap",
+    "contract_interval_rule": "a fragment record qualifies for region [beg, end) when fragment_start < end and fragment_end > beg; fragment_start >= fragment_end records are ignored"
+  },
+  "inputs": {
+    "h5ad": "/Users/anuragdani/Github/niw-eb1a/P22/data/real/f16c25da-15bd-46a4-9a3f-17093f27a2f1.h5ad",
+    "atac_counts": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8/reports/generated/atac_tiebreak_measured_20260921/counts/counts.npz",
+    "union_bed": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_union_2026-09-21.bed",
+    "region_sets": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_region_sets_2026-09-21.json",
+    "n_cells": 248998,
+    "n_rna_vars": 35477,
+    "n_donors": 30,
+    "n_regions": 465,
+    "n_chromosomes": 24,
+    "chromosomes": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX",
+      "chrY"
+    ],
+    "matrix_shape": [
+      465,
+      248998
+    ],
+    "matrix_nnz": 9616203,
+    "matrix_zero_fraction": 0.9169470981629856,
+    "stored_count_values_all_positive": true,
+    "has_negative_counts": false,
+    "matrix_sha256": "5f13c089c0b598c45323d0afc874f96bdf7d4074307c3c01dc40129862d9f969",
+    "matrix_sha256_match": true,
+    "bed_sha256": "d20d437ac96401746c20ff3645c464bc668ac7ed942bfb709a5bc667ef26bc23",
+    "bed_sha256_match": true,
+    "region_sets_sha256": "13f630a6777a059db4ac1b5f17b397976030e0b0e29193e2bc09eab24dc46407",
+    "region_sets_sha256_match": true,
+    "ordered_cells_sha256": "7a56c2a906f66b528dd673f944c067a006d4f09127eda70ced4155c281a09e53",
+    "ordered_cells_sha256_match": true
+  },
+  "measured_zero_vs_missing": {
+    "missing_input_policy": "Unmeasured regions are absent from the union/matrix; they are never filled as biological zeros.",
+    "measured_zero_meaning": "A zero for a union region/cell means no unique fragment qualified under the half-open overlap rule for that exact interval; sparse storage omits zeros but they are measured.",
+    "target_labels_vs_visible_features": "Target is binary count>0 at one withheld region; visible ATAC excludes the entire target chromosome. RNA remains a separate measured assay and may stay as input.",
+    "forbidden_as_model_inputs": [
+      "full nCount_ATAC",
+      "full nFeature_ATAC",
+      "target-inclusive QC/depth summaries",
+      "all-region latent / gene-activity values computed before masking",
+      "disease / donor / author_cell_type labels as features"
+    ]
+  },
+  "overlap_and_masking": {
+    "n_overlapping_interval_pairs": 58,
+    "n_chromosomes_with_overlapping_pairs": 9,
+    "overlapping_pairs_by_chromosome": {
+      "chr17": 27,
+      "chr10": 15,
+      "chr3": 6,
+      "chr1": 4,
+      "chr19": 2,
+      "chr14": 1,
+      "chr18": 1,
+      "chr2": 1,
+      "chr6": 1
+    },
+    "plan_note_clarification": "PLAN cites 58 overlapping pairs in the 465-region union spanning 24 chromosomes. Live enumeration confirms 58 pairs; pairs occur on 9 chromosomes within the 24-chromosome union (not one pair on every chromosome).",
+    "example_pairs": [
+      {
+        "chrom": "chr1",
+        "region_a": "chr1:9428562-9429470",
+        "region_b": "chr1:9428572-9429476",
+        "index_a": 3,
+        "index_b": 4,
+        "overlap_bp": 898
+      },
+      {
+        "chrom": "chr1",
+        "region_a": "chr1:28642680-28643595",
+        "region_b": "chr1:28642682-28643600",
+        "index_a": 8,
+        "index_b": 9,
+        "overlap_bp": 913
+      },
+      {
+        "chrom": "chr1",
+        "region_a": "chr1:54764199-54765091",
+        "region_b": "chr1:54764206-54765120",
+        "index_a": 16,
+        "index_b": 17,
+        "overlap_bp": 885
+      },
+      {
+        "chrom": "chr1",
+        "region_a": "chr1:148388442-148389311",
+        "region_b": "chr1:148388443-148389329",
+        "index_a": 23,
+        "index_b": 24,
+        "overlap_bp": 868
+      },
+      {
+        "chrom": "chr10",
+        "region_a": "chr10:39986056-39986949",
+        "region_b": "chr10:39986057-39986950",
+        "index_a": 39,
+        "index_b": 40,
+        "overlap_bp": 892
+      }
+    ],
+    "half_open_boundary_checks": {
+      "adjacent_chr1_10_20_vs_20_30_overlap": false,
+      "interior_chr1_10_20_vs_19_25_overlap": true
+    },
+    "leakage": {
+      "n_targets_evaluated": 465,
+      "target_id_removal": {
+        "targets_with_interval_overlapping_visible_region": 45,
+        "targets_with_same_chromosome_visible_region": 464,
+        "eliminates_shared_fragment_risk": false,
+        "reason": "Same-chromosome counted intervals remain visible; overlapping or nearby intervals can share fragment records under unique_fragment_overlap half-open counting."
+      },
+      "whole_target_chromosome_mask": {
+        "targets_with_interval_overlapping_visible_region": 0,
+        "targets_with_same_chromosome_visible_region": 0,
+        "eliminates_shared_fragment_risk_under_documented_semantics": true,
+        "reason": "All visible ATAC chromosome IDs differ from the target chromosome, so no same-chromosome fragment can qualify for both target and visible intervals under the documented fragment_start < end and fragment_end > beg rule.",
+        "visible_region_count_by_masked_chromosome": {
+          "chr1": 428,
+          "chr10": 448,
+          "chr11": 440,
+          "chr12": 442,
+          "chr13": 457,
+          "chr14": 446,
+          "chr15": 453,
+          "chr16": 437,
+          "chr17": 415,
+          "chr18": 455,
+          "chr19": 423,
+          "chr2": 446,
+          "chr20": 457,
+          "chr21": 459,
+          "chr22": 458,
+          "chr3": 440,
+          "chr4": 446,
+          "chr5": 443,
+          "chr6": 439,
+          "chr7": 435,
+          "chr8": 454,
+          "chr9": 454,
+          "chrX": 456,
+          "chrY": 464
+        },
+        "min_visible_regions": 415,
+        "max_visible_regions": 464
+      }
+    },
+    "chromosome_naming_consistent_chr_prefix": true
+  },
+  "inherited_panel_provenance": {
+    "selection_rule": "per outer fold: top-N exact intervals by that fold's training-library prevalence; ties broken by sha256(salt + '\\n' + region) with salt 'p22-atac-tiebreak-v1', then region",
+    "tie_break": "sha256",
+    "tie_break_salt": "p22-atac-tiebreak-v1",
+    "top_n": 256,
+    "n_panels": 25,
+    "label_independence_statement": "peaks called per library from fragments; each fold's set uses only its training libraries, so no test donor's peaks enter that fold's feature space",
+    "union_regions_match_bed": true,
+    "all_panel_regions_subset_of_union": true,
+    "donor_library_isolation": {
+      "n_panels": 25,
+      "panels_with_train_test_donor_overlap": 0,
+      "panels_with_test_library_in_train_libraries": 0,
+      "panels_with_train_library_outside_train_donors": 0,
+      "pass": true
+    },
+    "strict_inner_train_only_panel_construction": false,
+    "inherited_processing_disclosure": "Historical 256-region panels are selected by outer-fold training-library prevalence (archival 5\u00d75 disease-stratified donor splits). That uses outer-training donors/libraries and does not prove a later inner-validation-only construction. This pilot pins the measured 465-region union as the candidate target/feature space; M2 must freeze training-only target ranking without inventing stricter provenance than evidenced. Disease labels stratify archival splits only and are not model features.",
+    "candidate_repeat_for_pilot": {
+      "proposed": "repeat 0 / five outer folds from region_sets",
+      "fold0_repeat0_regions_sha256": "a309beb192038509c6ef93f86920c07a498d4cc2f0b05973cbbe1e6eb81df81c",
+      "fold0_repeat0_n_train_donors": 24,
+      "note": "M3 freezes the actual pilot split/sampling; M1 only traces existing panel-to-donor provenance."
+    }
+  },
+  "checks": {
+    "hash_and_dimension_pass": true,
+    "target_id_removal_insufficient": true,
+    "chromosome_mask_eliminates_same_chrom_visible": true,
+    "visible_atac_nonempty_for_every_masked_chromosome": true
+  },
+  "what_this_authorizes": {
+    "allowed_next": [
+      "M2 training-only target feasibility on the pinned union",
+      "Continue independent safe feasibility without fits"
+    ],
+    "not_authorized": [
+      "Model fitting or neural smoke learning",
+      "Claiming biological regulatory function or cell-state",
+      "Relabeling Q2/S9/S10/primary B_NULL",
+      "Strict inner-train-only historical panel provenance",
+      "Target-ID-only ATAC masking"
+    ]
+  }
+}
