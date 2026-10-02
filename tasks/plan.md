@@ -1,3 +1,61 @@
+# Execution repair plan — 2026-10-02
+
+## Scope and authority
+Consolidated source ends at masked-ATAC M10: scientific NOT_AUTHORIZED, diagnostic replay only. Preserve B_NULL, prior INVALID/NO FIT and original MOM. This plan repairs execution controls without research fits. A new pilot requires a separate scientific decision and independent pre-fit approval. Preserve all older incomplete task sections below.
+
+## Dependencies
+E0 → E1 → Checkpoint A → E2 → E3 → Checkpoint B → E4 → E5 → Checkpoint C.
+
+## E0: Establish portable provenance (S)
+**Acceptance:** Canonical paths resolve without worktrees. Historical artifacts remain immutable in hashed archives. Current measured input and pilot sidecars retain exact hashes.
+**Verification:** Compare archive manifest, count matrix/cell/BED digests and 30 sidecar digests. Record missing older dependencies explicitly.
+**Files:** input contract, provenance report, focused provenance test.
+**Dependencies:** None.
+
+## E1: Enforce masking at runtime (S)
+**Acceptance:** Actual feature construction rejects every target-chromosome ATAC region and target-inclusive depth. Training-only preprocessing uses frozen donor splits.
+**Verification:** Corrupt a visible-region manifest and perturb target counts. Require rejection or identical input tensors as appropriate.
+**Files:** masked_atac_pilot.py, focused leakage test.
+**Dependencies:** E0.
+
+## Checkpoint A
+Portable inputs and runtime leakage tests pass. No research fits.
+
+## E2: Preserve model artifacts (M)
+**Acceptance:** Each neural job saves initial/final state, per-epoch history and selection identity before completion. Reload reproduces saved probabilities. Resume cannot overwrite evidence.
+**Verification:** One bounded toy test exercises checkpoint reload and interrupted write recovery. It is not a research pilot.
+**Files:** adapter, pilot, focused persistence test.
+**Dependencies:** E1.
+
+## E3: Bind authorization to the full executor (M)
+**Acceptance:** Review lock covers runner, actual preprocessing/fit module and transitive dependencies. Changed source refuses learning. Mutable counters remain separate from immutable source hashes. Measure actual artifact bytes.
+**Verification:** Mutate each execution entry in a temporary fixture and require refusal. Resume fixture preserves counters and skips completed jobs.
+**Files:** authorization helper, runner, focused lock test, budget report.
+**Dependencies:** E2.
+
+## Checkpoint B
+Focused controls and integration tests pass. Scientific pilot status remains NOT_AUTHORIZED.
+
+## E4: Independent no-fit review (S)
+**Acceptance:** A separate reviewer traces actual data-to-result path and records exact reviewed hashes. Any source change invalidates approval. Maximum two correction cycles.
+**Verification:** Replay reviewer hash lock against committed source and run refusal tests. No self-certification. Unavailable reviewer is an explicit blocker.
+**Files:** independent review and reviewed hash manifest.
+**Dependencies:** E3.
+
+## E5: Decide whether another pilot is justified (S)
+**Acceptance:** Explain the scientific value beyond current diagnostic results. Define a fixed question, cohort/targets, estimand, success rule and attempt budget before outcomes. Do not select dataset or model changes merely to improve results.
+**Verification:** Compare decision to original July professor guidance and current diagnostic/primary claims. State GO or NO_GO with reasons. GO does not itself dispatch fits.
+**Files:** decision report and next-stage protocol proposal if justified.
+**Dependencies:** E4.
+
+## Checkpoint C and stop
+Commit verified repair/review/decision handoff. Stop with zero research fits. No dataset downloads, professor messages or automatic new pilot. Future biological claims need an independently measured cell-state endpoint.
+
+## Risks
+Missing archives or old absolute paths block provenance. Empty checkpoint files block persistence. Uncovered execution modules block pre-fit approval. Diagnostic outcomes cannot become accepted evidence through retrospective review.
+
+---
+
 # Paired DS multiome development plan
 
 ## Masked ATAC computational pilot — 2026-10-01

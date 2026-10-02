@@ -1,6 +1,6 @@
 # P22 document index
 
-Start at [current status](../status.md). This index points to one entry per job; dated records remain available but do not override current evidence.
+Start at [current status](../status.md). Next: [execution repair plan](../tasks/plan.md). Archive map: [consolidation inventory](CONSOLIDATION_2026-10-02.json). This index points to one entry per job; dated records remain available but do not override current evidence.
 
 | Need | Open | Role |
 |---|---|---|

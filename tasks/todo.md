@@ -1,3 +1,17 @@
+## Execution repair — 2026-10-02
+
+Detailed acceptance, verification, dependencies and file scope: [repair plan](plan.md).
+
+- [ ] E0: Establish portable inputs and immutable archived evidence.
+- [ ] E1: Enforce whole-target-chromosome exclusion in actual feature construction.
+- [ ] Checkpoint A: Provenance and leakage tests pass.
+- [ ] E2: Save/reload checkpoints and epoch history with safe resume.
+- [ ] E3: Lock the full executor and measure artifacts.
+- [ ] Checkpoint B: Focused and integration controls pass, no research fits.
+- [ ] E4: Independent full-path no-fit review on exact hashes.
+- [ ] E5: Record evidence-based GO/NO_GO for a separately scoped future pilot.
+- [ ] Checkpoint C: Commit truthful handoff and stop, zero research fits.
+
 # Paired DS multiome implementation checklist
 
 ## Masked ATAC computational pilot — M0–M10

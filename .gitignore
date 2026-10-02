@@ -26,3 +26,8 @@ build/
 
 # Hidden AI planning files
 .yourai/
+
+# Local execution logs and checkout archives
+.worktrees/
+/tasks/nn/professor_direction_investigation_20260929/*.log
+._*

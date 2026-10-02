@@ -897,3 +897,8 @@ If the verifier still fails after a clean rerun, return to A1 with its output.
 ## Finish definition and positive-result decision — 2026-09-28
 
 Acceptance, frozen positive-result criteria, C1–C3 closeout and prospective research decision: [finish plan](finish_20260928/PLAN.md). Current internal completion does not require positivity. Runner starts are manual only; external validation remains separate.
+
+
+## Parallel finish continuation — 2026-09-28
+
+User authorized GNHF/Cursor parallel execution. Tasks, ownership, checks and dependency join: [finish plan](finish_20260928/PLAN.md). Existing task history preserved; E1–E3 and W1–W3 checkboxes maintained there.

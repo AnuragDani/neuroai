@@ -1,3 +1,15 @@
+# P22 consolidated status — 2026-10-02
+
+Primary checkout contains the complete reviewed history through `964b54e`, including M10 handoff. Scientific pilot acceptance remains **NOT_AUTHORIZED** because the real executor was added after pre-fit review. Diagnostic replay PASS: TC−CA loss +0.001537, CI [-0.002197,+0.004746], advantage not met. Primary **B_NULL** unchanged.
+
+[Canonical handoff](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md), [verification](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/VERIFICATION.json), [next repair plan](tasks/plan.md), [checklist](tasks/todo.md).
+
+Cleanup removed all 28 secondary worktrees; only the primary checkout remains. Fresh focused suite: 41 passed. Cleanup preserves all secondary checkout files, ignored raw outputs and dirty edits in hashed local archives under `reports/generated/consolidation_20261002/`. [Archive inventory](docs/CONSOLIDATION_2026-10-02.json) maps original paths, commits and archive hashes. Unique obsolete branch heads are preserved as archive tags rather than merged into accepted source. Historical absolute paths are provenance records; use archives for old outputs. Current pilot sidecars and measured ATAC package are copied to primary `reports/generated/` with original content.
+
+Next work repairs runtime masking, model persistence and full-path review locks. No research fits are authorized by this plan. Original professor MOM and last sent packet remain unchanged.
+
+## Historical status before consolidation
+
 # P22 current status
 
 Updated: 2026-10-02. Read this first, then [document index](docs/INDEX.md). This is a snapshot, not permission to run an experiment or change a scientific gate. For live work, recheck the linked status and verifier files before acting.

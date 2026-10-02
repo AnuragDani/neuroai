@@ -1,0 +1,316 @@
+[
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-atac-access-and-b89c8a",
+    "head": "f32077b40b64a1963e810527c0cbd21a1def18f5",
+    "branch": "refs/heads/gnhf/p22-atac-access-and-b89c8a",
+    "dirty": [],
+    "kib": 34972,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/01-p22-atac-access-and-b89c8a.tar",
+    "sha256": "8b5434a3876762feab7511c283fdf0a4c5389ddd726535f1c45c3d75748e9af3",
+    "archive_bytes": 35819520
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-deep-research-pr-3ad124",
+    "head": "be5c297d8cdad671ce214d9ae587218629ea323d",
+    "branch": "refs/heads/gnhf/p22-deep-research-pr-3ad124",
+    "dirty": [],
+    "kib": 54764,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/02-p22-deep-research-pr-3ad124.tar",
+    "sha256": "d79e8458622a4e1f9cd48aab89f4055a06223ff6e3f73c3cf6fc1c4185bb7c05",
+    "archive_bytes": 56094720
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-openrouter-conti-0dc110",
+    "head": "42f85ff55473bf12e0443cf774f5a098a0921eda",
+    "branch": "refs/heads/gnhf/p22-openrouter-conti-0dc110",
+    "dirty": [],
+    "kib": 19512,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/03-p22-openrouter-conti-0dc110.tar",
+    "sha256": "c6041624cbac025c207e2edcef54a0d58173524beb99086d6cbd6f1f3b6abe2a",
+    "archive_bytes": 19988480
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-research-campaig-b057f9",
+    "head": "b64ba07e3e2beb7eca2504aced4ccf2aa806ebc1",
+    "branch": "refs/heads/gnhf/p22-research-campaig-b057f9",
+    "dirty": [],
+    "kib": 45456,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/04-p22-research-campaig-b057f9.tar",
+    "sha256": "d78d72fe9d473c212bb904df054d01a78111e8e23e5e75256c3d053319b7e281",
+    "archive_bytes": 46551040
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22-gnhf-worktrees/p22-results-executio-debda8",
+    "head": "ec562f4054bfd34da6c3e0d6074602e5184c1046",
+    "branch": "refs/heads/gnhf/p22-results-executio-debda8",
+    "dirty": [],
+    "kib": 353516,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/05-p22-results-executio-debda8.tar",
+    "sha256": "7b27530623901688fe0a5c005a26daccaa30acdb854ae7b927f964c7fdc7523a",
+    "archive_bytes": 362065920
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/atac",
+    "head": "1e392274d505e170fd3bfdb1e3e43f0edaa06e6a",
+    "branch": "refs/heads/gnhf/p22-nn-atac",
+    "dirty": [],
+    "kib": 232460,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/06-atac.tar",
+    "sha256": "93fa28dea086635381f82f7f8bc4a0789ab41f25033815abd8a123f8735036db",
+    "archive_bytes": 233308160
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/audit",
+    "head": "54b7c0637593a080a870aec4bd8be63b1016452d",
+    "branch": "refs/heads/gnhf/p22-nn-audit",
+    "dirty": [
+      " M docs/nn_v2/ladder_verification.json"
+    ],
+    "kib": 22932,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/07-audit.tar",
+    "sha256": "a44bc07a72608468ed884f1bd68bcf7854583a7d03e434db06f17e00544a9ef5",
+    "archive_bytes": 23388160
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/export",
+    "head": "b5dca73e7b22881df94e51547958e92d21e1752e",
+    "branch": "refs/heads/gnhf/p22-nn-export",
+    "dirty": [],
+    "kib": 156060,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/08-export.tar",
+    "sha256": "0985b490d7fbea3b14ae812659c3520ce7f157befdd0efe3864df1928d39c397",
+    "archive_bytes": 155013120
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/faith",
+    "head": "f063492bb18355689a6de6e4bfa4754687add506",
+    "branch": "refs/heads/gnhf/p22-nn-faith",
+    "dirty": [],
+    "kib": 159740,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/09-faith.tar",
+    "sha256": "75feb66592c2f5ec756d6b1fe9c1280b72a81954dbd6c2a0276d4e58709efb55",
+    "archive_bytes": 158781440
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-base",
+    "head": "90a6b2a295345ea89dcc7c1391e4ea9cb6da18f6",
+    "branch": "refs/heads/codex/p22-nn-finish-base",
+    "dirty": [],
+    "kib": 71464,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/10-finish-base.tar",
+    "sha256": "71d76bff5f3362efa932d4eab62a2c09c768d9dfe49f7ebcfb8cc13768daa3fc",
+    "archive_bytes": 72878080
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928",
+    "head": "b4faa72f3dcd80cb24e0444e1df923c6140fba2d",
+    "branch": "refs/heads/codex/p22-finish-engineering-20260928",
+    "dirty": [
+      " M paper/draft.md"
+    ],
+    "kib": 26320,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/11-finish-engineering-20260928.tar",
+    "sha256": "cace0e36a88015df14d1dd5f42f95c0be7c7c81ecf4ce6cd75c958b0328efdf5",
+    "archive_bytes": 26787840
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202",
+    "head": "808fa734a8dc2d89d34853204251bd9decea2a06",
+    "branch": "refs/heads/codex/p22-s7-v2-plan-20260929",
+    "dirty": [
+      " M paper/draft.md"
+    ],
+    "kib": 41040,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/12-read-tasks-nn-finish-ee2202.tar",
+    "sha256": "d1b8db090d2e2eda1b7b11fc4d9e47e9394633600b716acf820a74fa8d322b39",
+    "archive_bytes": 41799680
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180",
+    "head": "04282f0a803cc40c5d40aa0a9a7c535a213e1560",
+    "branch": "refs/heads/codex/p22-data-driven-base-20260930",
+    "dirty": [],
+    "kib": 26936,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/13-read-users-anuragdan-b61180.tar",
+    "sha256": "6e9d0ce1d8c2acaf3d5c50a742a770006c8bf688b82d8a26ca3a0276ecf31eac",
+    "archive_bytes": 27392000
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414",
+    "head": "67245a2b19de9d6fb094fc01190590d9362d6d43",
+    "branch": "refs/heads/codex/p22-failure-audit-base-20261001",
+    "dirty": [],
+    "kib": 45788,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/14-execute-the-p22-data-146414.tar",
+    "sha256": "cd541a693ddea40faf870c20e318bcf6e27a58013bbc0e70b486d5c756f412d6",
+    "archive_bytes": 46612480
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-b61180-gnhf-worktrees/execute-the-p22-data-146414-gnhf-worktrees/execute-p22-s-failur-d8f02c",
+    "head": "8c17ed86d04d78ab66e938db6a96fa4866e05bd2",
+    "branch": "refs/heads/codex/p22-masked-atac-base-20261001",
+    "dirty": [],
+    "kib": 45956,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/15-execute-p22-s-failur-d8f02c.tar",
+    "sha256": "89075f62e7537090c9aa760b92e0b7531a92e19d51db7000de0a18575c568273",
+    "archive_bytes": 46745600
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-caf4c8",
+    "head": "4d0c3b943ac61022a86644fffee30915a0feab56",
+    "branch": "refs/heads/gnhf/read-users-anuragdan-caf4c8",
+    "dirty": [],
+    "kib": 25400,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/16-read-users-anuragdan-caf4c8.tar",
+    "sha256": "7eb3ea7837d32417297fd44010e142e696c45c6462b9b640440d655c91eb3e45",
+    "archive_bytes": 25835520
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-engineering-20260928-gnhf-worktrees/read-tasks-nn-finish-ee2202-gnhf-worktrees/read-users-anuragdan-ea5475",
+    "head": "010a07f3b4798ab8cb81e5d71ac782e04c511413",
+    "branch": "refs/heads/gnhf/read-users-anuragdan-ea5475",
+    "dirty": [],
+    "kib": 25424,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/17-read-users-anuragdan-ea5475.tar",
+    "sha256": "2b45b393e102958b36daec96d46ef62ff20e4351c55d9ab2f7e79d0ba6a05773",
+    "archive_bytes": 25856000
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/finish-writing-20260928",
+    "head": "0948a4a229b3e08ffc4be1f6abfcfde798bef345",
+    "branch": "refs/heads/codex/p22-finish-writing-20260928",
+    "dirty": [],
+    "kib": 27988,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/18-finish-writing-20260928.tar",
+    "sha256": "1a06a3055fb43d93817749f00bf5228d915a7a22250a36715fbdd83c9d65f18e",
+    "archive_bytes": 28487680
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/geneact",
+    "head": "a1fda17c569b79639540e3b695f97c89281e7a00",
+    "branch": "refs/heads/gnhf/p22-nn-geneact",
+    "dirty": [],
+    "kib": 152160,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/19-geneact.tar",
+    "sha256": "26515eb516544698b675e149ceff2a709fb1696aa882b513e49cdbad3209de53",
+    "archive_bytes": 151019520
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/interpret",
+    "head": "bac42835536d65d2548083369fcf0d32d55e904e",
+    "branch": "refs/heads/gnhf/p22-nn-interpret",
+    "dirty": [],
+    "kib": 158780,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/20-interpret.tar",
+    "sha256": "da6684cac433cfe914c3ebd7a8c53688ce043496e6b79f454137e965c2c0065b",
+    "archive_bytes": 157818880
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/ladder",
+    "head": "61558c970a9945cfe31c0a919550fc92d8af9f45",
+    "branch": "refs/heads/gnhf/p22-nn-ladder",
+    "dirty": [],
+    "kib": 319420,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/21-ladder.tar",
+    "sha256": "76057317482cc91d1fc2a54da4916b1ba06e79c02a480c5cf05d995d11a92232",
+    "archive_bytes": 322304000
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001",
+    "head": "964b54edf60a2d844bf9ec2f9ecc8b634b725a43",
+    "branch": "refs/heads/gnhf/execute-the-p22-mask-6010ee",
+    "dirty": [],
+    "kib": 63804,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/22-masked-atac-20261001.tar",
+    "sha256": "1798a7b31653ef4835919d890a14380ece48202de0c2fdafa197f8a468c9c774",
+    "archive_bytes": 65075200
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/mil",
+    "head": "938f812d351495d86db6f82a85c7f1a00f654f99",
+    "branch": "refs/heads/gnhf/p22-nn-mil",
+    "dirty": [],
+    "kib": 22412,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/23-mil.tar",
+    "sha256": "25eec85f92da2bb42279592fd3fae36d6fc66f58ef9bf481de8d76b8eebac6a1",
+    "archive_bytes": 22917120
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/paper",
+    "head": "e1bc3dae10c7700939052599ae4f8809e46f524e",
+    "branch": "refs/heads/gnhf/p22-nn-paper",
+    "dirty": [],
+    "kib": 161404,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/24-paper.tar",
+    "sha256": "0dc70f625c9bf41d3dc913485471062de5c40e0d0758a55ccc42b98a65b81d85",
+    "archive_bytes": 160501760
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/paper0",
+    "head": "efef16e9e336dcd46c5d3b7cc0c29f07ae316940",
+    "branch": "refs/heads/gnhf/p22-nn-paper0",
+    "dirty": [],
+    "kib": 154328,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/25-paper0.tar",
+    "sha256": "2b19ed983d30401da1157994048e49ed336d082b0aa3c0b6ad44acb7b9d04373",
+    "archive_bytes": 153292800
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/paper1",
+    "head": "3942512d2121cfc8a9ba8f9203bed9221bba734c",
+    "branch": "refs/heads/gnhf/p22-nn-paper1",
+    "dirty": [],
+    "kib": 153064,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/26-paper1.tar",
+    "sha256": "d86bfba5603e99a2808d697f46567d379c291bbbbd977ffd6a01dd8f1cd8e31b",
+    "archive_bytes": 151992320
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/robust",
+    "head": "19564605765c950f9e81735b8863d8477e4b74ee",
+    "branch": "refs/heads/gnhf/p22-nn-robust",
+    "dirty": [],
+    "kib": 173704,
+    "ancestor_latest": false,
+    "archive": "reports/generated/consolidation_20261002/27-robust.tar",
+    "sha256": "627b55622b1a01da5ca22ffd7b97c48db6d8b124db5b120387990e5f1714a7f3",
+    "archive_bytes": 173076480
+  },
+  {
+    "path": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/tokens",
+    "head": "95feda39efa3223fd9ab6ae503fe30ec2071c749",
+    "branch": "refs/heads/gnhf/p22-nn-tokens",
+    "dirty": [],
+    "kib": 154028,
+    "ancestor_latest": true,
+    "archive": "reports/generated/consolidation_20261002/28-tokens.tar",
+    "sha256": "65e2cc13f7ae09118f309e3fef1a9e257e6f680458bfb7146ee758a247809d07",
+    "archive_bytes": 152985600
+  }
+]
