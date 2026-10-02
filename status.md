@@ -4,6 +4,10 @@ Updated: 2026-10-01. Read this first, then [document index](docs/INDEX.md). This
 
 Companion research vault: [vault status](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/status.md>) and [vault MOM index](<../../../Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/README.md>).
 
+## Masked ATAC pilot M4 — falsification PASS — 2026-10-01
+
+**M4 DONE** (`FALSIFICATION_PASS`) on `gnhf/execute-the-p22-mask-6010ee`. No-fit leakage/metric suite: target-count perturbation leaves RNA and visible-ATAC IDF/encoded/panel-depth unchanged; target-inclusive panel-depth path shown to leak and refused; hand-calculated unequal-cell mixed-label donor-average cell log-loss matches closed form; donor-mean-probability + majority-label substitution differs and is forbidden as primary; live `mil_loop._donor_label_map` refuses mixed cell labels → task-specific donor-average cell-loss adapter required (preserve classification API; no fake disease class). M3 frozen folds rechecked chromosome-exclusive 5/5. Focused M4 tests **4 PASS** (M1–M4 suite **17 PASS**). No fits. Prior S10/S9/S7 **`INVALID`**; primary **`B_NULL`**; Q2 `ENDPOINT_UNRESOLVED` unchanged. Next: Checkpoint B then M5 protocol freeze. [FALSIFICATION](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.md); [FALSIFICATION.json](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/FALSIFICATION.json).
+
 ## Masked ATAC pilot Checkpoint A — PASS — 2026-10-01
 
 **Checkpoint A DONE** (`PASS`) on `gnhf/execute-the-p22-mask-6010ee`. M1–M3 evidence rechecked: exact 465-region measurements + chromosome-mask contract; training-only targets 5/5; splits/sampling frozen (cap256/seed22, 7680 cells); visible ATAC 423–440 (adequate multimodal comparison); no predictive outcomes consulted. Focused M1–M3 suite **13 PASS**. No fits. Prior S10/S9/S7 **`INVALID`**; primary **`B_NULL`**; Q2 `ENDPOINT_UNRESOLVED` unchanged. Next: M4 leakage/metric falsification. [CHECKPOINT_A](tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/CHECKPOINT_A.md).

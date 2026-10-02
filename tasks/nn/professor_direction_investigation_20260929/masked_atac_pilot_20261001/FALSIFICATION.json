@@ -1,0 +1,200 @@
+{
+  "record_type": "masked_atac_pilot_m4_falsification",
+  "date": "2026-10-01",
+  "disposition": "FALSIFICATION_PASS",
+  "claim_level": 2,
+  "claim_level_meaning": "computational prediction of measured accessibility presence; not biological state, causal mechanism, or external validation",
+  "preserved_labels": {
+    "primary": "B_NULL",
+    "S7": "INVALID",
+    "S8": "NO FIT",
+    "S9": "INVALID",
+    "S10": "INVALID",
+    "Q2": "ENDPOINT_UNRESOLVED"
+  },
+  "inputs": {
+    "m3_splits_and_sampling": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/SPLITS_AND_SAMPLING.json",
+    "m3_disposition": "SPLITS_AND_SAMPLING_FROZEN",
+    "union_bed": "/Users/anuragdani/Github/niw-eb1a/P22/.worktrees/masked-atac-20261001/configs/atac_tiebreak_union_2026-09-21.bed",
+    "n_regions": 465
+  },
+  "metric_contract": {
+    "binary_target": "1 if exact-region unique_fragment_overlap count > 0 else 0",
+    "primary_aggregation": "equal mean across donors of within-donor mean cell binary log-loss",
+    "probability_clip": 1e-15,
+    "mixed_cell_labels_allowed": true,
+    "donor_average_probability_forbidden_as_primary": true,
+    "fake_disease_class_forbidden": true,
+    "hand_calculated_example": {
+      "expected_donor_average": 0.2702787416837405,
+      "got_donor_average": 0.2702787416837405,
+      "n_cells_unequal": true,
+      "mixed_labels_in_donor_A": true,
+      "wrong_donor_avg_prob_value": 0.4067166732172236,
+      "correct_donor_avg_cell_loss": 0.2702787416837405
+    },
+    "oracle_constant_direction": {
+      "oracle_value": 1.000000500029089e-06,
+      "constant_0_5_value": 0.6931471805599453,
+      "oracle_better_than_constant": true,
+      "oracle_near_zero": true,
+      "constant_equals_ln2": true
+    }
+  },
+  "leakage_contract": {
+    "mask": "whole target chromosome excluded from ATAC input",
+    "fit_statistics": "ATAC TF/IDF/panel depth fit on visible regions and train rows only",
+    "target_perturbation_leaves_inputs_unchanged": true,
+    "target_inclusive_depth_refused": "target_inclusive_nCount_or_panel_depth",
+    "target_inclusive_depth_demonstration": {
+      "target_inclusive_depth_changes_visible_tf": true,
+      "correct_visible_only_invariant": true,
+      "base_visible_encoded_sha256": "17a587a5ad5ae467ba8d0bcbb968acf785ca91d5c8f018f95c77ea69d7464052",
+      "refused_path": "target_inclusive_nCount_or_panel_depth"
+    },
+    "forbidden_feature_fields": [
+      "disease",
+      "donor_id",
+      "group",
+      "nCount_ATAC",
+      "nFeature_ATAC",
+      "nucleosome_signal",
+      "TSS.enrichment",
+      "target_count",
+      "target_region_index",
+      "target_chrom",
+      "gene_activity_all_regions"
+    ],
+    "rna_is_separate_measured_assay_allowed": true,
+    "disease_donor_author_cell_type_as_features": false
+  },
+  "adapter_requirements": {
+    "existing_mil_loop_assumption": "p22.training.mil_loop._donor_label_map refuses any donor with mixed cell labels; disease bags assume one label per donor",
+    "required_adapter": "donor-average of within-donor mean cell-target binary log-loss (equal donor weighting); do not substitute donor-average probability or invent a fake donor disease class",
+    "preserve_classification_api": true,
+    "fake_disease_class_forbidden": true,
+    "donor_average_probability_forbidden_as_primary": true,
+    "live_mil_mixed_label_check": {
+      "mixed_refused": true,
+      "message": "donor 'D0' carries both labels",
+      "uniform_accepted": true,
+      "adapter_required": true,
+      "adapter_requirements": {
+        "existing_mil_loop_assumption": "p22.training.mil_loop._donor_label_map refuses any donor with mixed cell labels; disease bags assume one label per donor",
+        "required_adapter": "donor-average of within-donor mean cell-target binary log-loss (equal donor weighting); do not substitute donor-average probability or invent a fake donor disease class",
+        "preserve_classification_api": true,
+        "fake_disease_class_forbidden": true,
+        "donor_average_probability_forbidden_as_primary": true
+      }
+    }
+  },
+  "guards": {
+    "feature_order_hash": {
+      "hash_forward": "689cb33a1e17428da08a59b3cfa331192c2628f7d3574f6a552bc92c53383d79",
+      "hash_reversed": "1cc39a5925a828053a540580dc18e012e173e11ad0b339dfd01bd0c7585bfc64",
+      "allowed_features": [
+        "rna_gene_0",
+        "rna_gene_1",
+        "visible_atac_0",
+        "visible_atac_1"
+      ]
+    },
+    "prediction_reload": {
+      "match": {
+        "passed": true,
+        "atol": 1e-06,
+        "max_abs_diff": 0.0,
+        "reason": null
+      },
+      "drift": {
+        "passed": false,
+        "atol": 1e-06,
+        "max_abs_diff": 0.7,
+        "reason": "predictions differ beyond atol"
+      }
+    },
+    "output_overwrite_refusal_verified": true
+  },
+  "m3_mask_verification": {
+    "m3_disposition": "SPLITS_AND_SAMPLING_FROZEN",
+    "n_folds_checked": 5,
+    "all_folds_exclusive": true,
+    "folds": [
+      {
+        "fold": 0,
+        "target_chrom": "chr19",
+        "target_index": 238,
+        "n_visible": 423,
+        "chromosome_mask_exclusive": true,
+        "target_not_in_visible": true
+      },
+      {
+        "fold": 1,
+        "target_chrom": "chr3",
+        "target_index": 324,
+        "n_visible": 440,
+        "chromosome_mask_exclusive": true,
+        "target_not_in_visible": true
+      },
+      {
+        "fold": 2,
+        "target_chrom": "chr3",
+        "target_index": 324,
+        "n_visible": 440,
+        "chromosome_mask_exclusive": true,
+        "target_not_in_visible": true
+      },
+      {
+        "fold": 3,
+        "target_chrom": "chr3",
+        "target_index": 324,
+        "n_visible": 440,
+        "chromosome_mask_exclusive": true,
+        "target_not_in_visible": true
+      },
+      {
+        "fold": 4,
+        "target_chrom": "chr3",
+        "target_index": 324,
+        "n_visible": 440,
+        "chromosome_mask_exclusive": true,
+        "target_not_in_visible": true
+      }
+    ]
+  },
+  "checks": {
+    "hand_calculated_metric_match": true,
+    "wrong_donor_avg_prob_differs": true,
+    "oracle_better_than_constant": true,
+    "oracle_near_zero": true,
+    "constant_equals_ln2": true,
+    "mil_mixed_label_refused": true,
+    "target_perturbation_invariant": true,
+    "target_inclusive_depth_leaks": true,
+    "chromosome_mask_exclusivity_ok": true,
+    "chromosome_mask_leak_refused": true,
+    "forbidden_features_detected": true,
+    "allowed_features_clean": true,
+    "feature_order_hash_sensitive": true,
+    "prediction_reload_identity": true,
+    "prediction_reload_detects_drift": true,
+    "output_overwrite_refused": true,
+    "m3_chromosome_mask_exclusivity": true,
+    "m3_disposition_frozen": true
+  },
+  "what_this_authorizes": {
+    "allowed_next": [
+      "Checkpoint B after leakage/metric fixtures pass",
+      "M5 estimand/statistical/resource protocol freeze",
+      "Continue independent safe feasibility without fits"
+    ],
+    "not_authorized": [
+      "Model fitting or neural smoke learning",
+      "Reusing mil_loop donor-label bags for mixed cell targets without adapter",
+      "Donor-average probability or fake disease class as primary estimand",
+      "Target-inclusive ATAC depth/QC/IDF/latent inputs",
+      "Relabeling Q2/S9/S10/primary B_NULL"
+    ]
+  },
+  "no_fits": true
+}
