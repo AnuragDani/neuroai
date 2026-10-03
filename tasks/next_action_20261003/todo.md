@@ -28,9 +28,11 @@ Disposition: **PASS**. No label/value disagreement with live gate leaves. Tasks 
 
 ### Task 2 — bounded paper
 
-- [ ] Short/full papers preserve accepted claims and exclusions.
-- [ ] `PAPER_COMPLETION.md` records the paper checker and manual claim/citation/figure checks.
-- [ ] Open declaration and venue items name an owner and completion condition. No submission-ready claim is made.
+- [x] Short/full papers preserve accepted claims and exclusions.
+- [x] `PAPER_COMPLETION.md` records the paper checker and manual claim/citation/figure checks.
+- [x] Open declaration and venue items name an owner and completion condition. No submission-ready claim is made.
+
+Evidence: [PAPER_COMPLETION.md](PAPER_COMPLETION.md); manuscripts `paper/draft.md`, `paper/short_paper.md` (venue-neutral Declarations; revision `PREPARATION_2026-10-03`). Post-edit `check_paper.py --json` PASS; saved-fold replay PASS.
 
 ### Task 3 — offline desk decision
 
@@ -42,8 +44,10 @@ Evidence: [EXTERNAL_DESK_DECISION.md](EXTERNAL_DESK_DECISION.md). Disposition `N
 
 ### Checkpoint B
 
-- [ ] Task 2 and Task 3 outputs satisfy their criteria.
-- [ ] No unresolved manuscript claim/source discrepancy remains.
+- [x] Task 2 and Task 3 outputs satisfy their criteria.
+- [x] No unresolved manuscript claim/source discrepancy remains.
+
+Disposition: **PASS**. Paper checker + replay PASS after manuscript edits; desk remains `NO_GO_NOW`; open declaration/venue items tracked with owner and completion conditions (submission pending).
 
 ### Task 4 — closeout and Definition of Done
 

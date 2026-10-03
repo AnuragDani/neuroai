@@ -105,9 +105,11 @@ Run the saved-fold replay command below without `--write`. Record its verdict an
 Finish venue-neutral formatting and declarations identified by paper/FULL_DRAFT_REVIEW_2026-10-02.md.
 
 **Acceptance criteria:**
-- [ ] Accepted numerical claims remain pinned. Explain absolute performance, dosage dominance, null contrast and power limits. Exclude M9 from accepted results.
-- [ ] List remaining citation, figure, declaration and submission requirements. Mark unknown researcher-only facts as unresolved.
-- [ ] Do not invent funding, conflicts, professor approval or submission readiness. Do not submit or send a packet.
+- [x] Accepted numerical claims remain pinned. Explain absolute performance, dosage dominance, null contrast and power limits. Exclude M9 from accepted results.
+- [x] List remaining citation, figure, declaration and submission requirements. Mark unknown researcher-only facts as unresolved.
+- [x] Do not invent funding, conflicts, professor approval or submission readiness. Do not submit or send a packet.
+
+Task 2 complete: [PAPER_COMPLETION.md](PAPER_COMPLETION.md); manuscripts updated with venue-neutral Declarations (`PREPARATION_2026-10-03`).
 
 **Verification:** Run the existing paper source checker. Examine scientific wording against the scoped paper review and live gate records.
 In `PAPER_COMPLETION.md`, record command outcomes, changed sections and manual claim/citation/figure checks.
@@ -155,9 +157,11 @@ The 256 MiB payload ceiling remains historical and is not raised. Preserve every
 
 **Dependencies:** Tasks 2 and 3.
 
-- [ ] Manuscripts and `PAPER_COMPLETION.md` exist. The paper checker reports PASS and manual checks are recorded.
-- [ ] `EXTERNAL_DESK_DECISION.md` reports `NO_GO_NOW` with source-backed blockers and no unsupported acquisition recommendation.
-- [ ] No unsupported scientific/source discrepancy remains. Open declaration and venue items have owners and completion conditions.
+- [x] Manuscripts and `PAPER_COMPLETION.md` exist. The paper checker reports PASS and manual checks are recorded.
+- [x] `EXTERNAL_DESK_DECISION.md` reports `NO_GO_NOW` with source-backed blockers and no unsupported acquisition recommendation.
+- [x] No unsupported scientific/source discrepancy remains. Open declaration and venue items have owners and completion conditions.
+
+Checkpoint B **PASS** (2026-10-03): [PAPER_COMPLETION.md](PAPER_COMPLETION.md); [EXTERNAL_DESK_DECISION.md](EXTERNAL_DESK_DECISION.md).
 
 ## Task 4 — record closeout
 

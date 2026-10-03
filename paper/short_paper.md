@@ -70,6 +70,22 @@ The completed donor-held-out comparison does not demonstrate that cross-modal at
 
 A later masked-ATAC pilot is excluded from the accepted numerical results in this paper. Its real-data executor was added after the independent pre-fit review. Saved-result replay agrees with its predictions, but its scientific status remains NOT_AUTHORIZED. Later execution repairs passed an independent review and preserved that historical status. The repair-stage decision was NO_GO for an automatic new pilot. This paper reports the accepted original comparison, not a retrospective authorization of the later pilot.
 
+## Declarations (venue-neutral preparation)
+
+These stubs finish venue-neutral preparation. They do not invent funding, conflicts, author facts, ethics approvals or professor endorsement. Venue selection remains open. Status: **preparation complete; submission pending**.
+
+| Item | Status | Owner | Completion condition |
+|---|---|---|---|
+| Funding statement | Unresolved | Researcher | Supply exact funding text, or an explicit none statement, for the chosen venue |
+| Competing interests | Unresolved | Researcher | Supply conflicts disclosure, or an explicit none statement |
+| Author list and contributions | Unresolved | Researcher | Confirm authors, affiliations and contribution roles before submission |
+| Ethics / data-use statement | Unresolved | Researcher | Confirm reuse language required by the source atlas and chosen venue |
+| Data availability | Partial | Researcher | Public atlas citation is present; add accession or repository links required by the venue |
+| Code / artifact availability | Partial | Researcher | Repository paths and verifier commands exist; add a public release URL if the venue requires one |
+| Venue length and style | Unresolved | Researcher | Select venue; apply length, section and reference-style rules |
+
+No submission-ready claim is made here.
+
 ## References
 
 1. Lattke et al., “Single-cell atlas of the developing Down syndrome brain cortex,” *Nature Medicine*, 2026. [Article](https://www.nature.com/articles/s41591-026-04211-1).

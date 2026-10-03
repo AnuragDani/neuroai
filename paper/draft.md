@@ -4,7 +4,8 @@ Related Work; N26 wrote Methods; N27 wrote Results and claims.csv; N29 wrote Dis
 and Limitations; N30 wrote the title and Abstract. The References section is left for a
 later typesetting pass; all in-text keys are validated against refs_frozen.bib.
 Historical label: DRAFT_V3_COMPLETE
-Current revision: EVIDENCE_RECONCILED_2026-10-02 (not submission certification)
+Historical revision: EVIDENCE_RECONCILED_2026-10-02
+Current revision: PREPARATION_2026-10-03 (venue-neutral declarations; not submission certification)
 -->
 
 # Cross-modal attention versus matched token fusion in a 30-donor developmental cortex cohort
@@ -351,6 +352,26 @@ The independently measured cell-state endpoint remains `ENDPOINT_UNRESOLVED`.
 Disease-label scores and RNA-derived spectra cannot stand in for that endpoint.
 This restriction does not mean every computational prediction claim requires a
 wet-lab experiment. No new fits or professor packet were prepared for this revision.
+
+## Declarations (venue-neutral preparation)
+
+These stubs finish venue-neutral preparation. They do not invent funding, conflicts,
+author facts, ethics approvals or professor endorsement. Venue selection remains open.
+Status: **preparation complete; submission pending**.
+
+| Item | Status | Owner | Completion condition |
+|---|---|---|---|
+| Funding statement | Unresolved | Researcher | Supply exact funding text, or an explicit none statement, for the chosen venue |
+| Competing interests | Unresolved | Researcher | Supply conflicts disclosure, or an explicit none statement |
+| Author list and contributions | Unresolved | Researcher | Confirm authors, affiliations and contribution roles before submission |
+| Ethics / data-use statement | Unresolved | Researcher | Confirm reuse language required by the source atlas and chosen venue |
+| Data availability | Partial | Researcher | Public atlas citation is present; add accession or repository links required by the venue |
+| Code / artifact availability | Partial | Researcher | Repository paths and verifier commands exist; add a public release URL if the venue requires one |
+| Bibliography typesetting | Partial | Researcher | In-text keys validate against `refs_frozen.bib`; expand the References section to venue style |
+| Figure packaging | Partial | Researcher | Embedded figure paths resolve; produce venue-format panels/captions if required |
+| Venue length and style | Unresolved | Researcher | Select venue; apply length, section and reference-style rules |
+
+No submission-ready claim is made here.
 
 
 ## References

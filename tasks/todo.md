@@ -1176,9 +1176,9 @@ Detailed criteria: [dated checklist](next_action_20261003/todo.md).
 
 - [x] Task 1: publish `EVIDENCE_BOUNDARY.md` with live source hashes and accepted labels. Evidence: [EVIDENCE_BOUNDARY.md](next_action_20261003/EVIDENCE_BOUNDARY.md); live saved-fold replay PASS.
 - [x] Checkpoint A: evidence boundary agrees with live gates. Disposition PASS; no source disagreements.
-- [ ] Task 2: update bounded manuscripts and publish `PAPER_COMPLETION.md` with checks and open items.
+- [x] Task 2: update bounded manuscripts and publish `PAPER_COMPLETION.md` with checks and open items. Evidence: [PAPER_COMPLETION.md](next_action_20261003/PAPER_COMPLETION.md); post-edit paper checker PASS and saved-fold replay PASS.
 - [x] Task 3: publish offline `EXTERNAL_DESK_DECISION.md` with `NO_GO_NOW` and source-backed blockers. Evidence: [EXTERNAL_DESK_DECISION.md](next_action_20261003/EXTERNAL_DESK_DECISION.md).
-- [ ] Checkpoint B: paper and desk outputs satisfy their acceptance criteria.
+- [x] Checkpoint B: paper and desk outputs satisfy their acceptance criteria. Disposition PASS; submission pending on researcher-owned declaration/venue items.
 - [ ] Task 4: publish `CLOSEOUT.md`, complete all Definition of Done checks, update status once and stop.
 
 Preparation complete does not mean submission-ready. No fits or external acquisition are authorized.
