@@ -126,9 +126,12 @@ Read TASK_DATA_OPTIONS.md section C1 and next_stage_20260930/external_feasibilit
 Do not repeat Q5/R5 or browse in this task. Record file-level Open/Controlled access and reuse as known or unresolved.
 
 **Acceptance criteria:**
-- [ ] Emit NO_GO_NOW for acquisition/scoring under the current question and contracts. Record the exact blockers and future evidence required.
-- [ ] Preserve unresolved specimen independence, QC release and exact feature/count semantics. Different donor IDs and annotation-count agreement are insufficient.
-- [ ] Record ATAC counts package 1,540,753,269 bytes and the historical 256 MiB payload ceiling. Do not issue a purchase/download recommendation.
+- [x] Emit NO_GO_NOW for acquisition/scoring under the current question and contracts. Record the exact blockers and future evidence required.
+- [x] Preserve unresolved specimen independence, QC release and exact feature/count semantics. Different donor IDs and annotation-count agreement are insufficient.
+- [x] Record ATAC counts package 1,540,753,269 bytes and the historical 256 MiB payload ceiling. Do not issue a purchase/download recommendation.
+
+Task 3 complete: [EXTERNAL_DESK_DECISION.md](EXTERNAL_DESK_DECISION.md) (`NO_GO_NOW`; zero network).
+
 The ceiling source is failure_audit_20261001/TASK_DATA_OPTIONS.md, section C1 Metadata / payload and section D predictive-ingestion constraint.
 It is distinct from external_feasibility.json network.budget_ceiling_bytes=67108864, the completed Q5 metadata budget.
 

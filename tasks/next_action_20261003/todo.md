@@ -34,9 +34,11 @@ Disposition: **PASS**. No label/value disagreement with live gate leaves. Tasks 
 
 ### Task 3 — offline desk decision
 
-- [ ] `EXTERNAL_DESK_DECISION.md` exists and reports `NO_GO_NOW`.
-- [ ] It cites existing payload/access sources and the unresolved specimen, QC and exact-input contracts.
-- [ ] It makes no new acquisition recommendation and records no network activity or counter changes.
+- [x] `EXTERNAL_DESK_DECISION.md` exists and reports `NO_GO_NOW`.
+- [x] It cites existing payload/access sources and the unresolved specimen, QC and exact-input contracts.
+- [x] It makes no new acquisition recommendation and records no network activity or counter changes.
+
+Evidence: [EXTERNAL_DESK_DECISION.md](EXTERNAL_DESK_DECISION.md). Disposition `NO_GO_NOW`; ATAC counts 1,540,753,269 bytes exceed historical 256 MiB ceiling; Q5 blockers inherited; zero network/fits/scores.
 
 ### Checkpoint B
 
