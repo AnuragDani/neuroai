@@ -97,6 +97,20 @@ def test_numbers_fail_missing_value():
     assert any("0.99" in p for p in report["numbers"])
 
 
+def test_claim_sources_checks_sign_type_pointer_and_rounding(tmp_path):
+    (tmp_path / "source.json").write_text(
+        '{"ci": [-0.02500000000001, 0.076785714], "gate": true, "level": 0.95}'
+    )
+    header = "sentence_id,value,json_path,json_key\n"
+    valid = header + "ci,-0.0250,source.json,/ci[0]\nci,0.0768,source.json,/ci/1\nlevel,95%,source.json,/level\n"
+    assert check_paper.check_claim_sources(valid, tmp_path) == []
+    for value, key in (("0.0250", "/ci[0]"), ("0.0770", "/ci/1"),
+                       ("1.0", "/gate"), ("0.0", "/absent")):
+        assert check_paper.check_claim_sources(
+            header + f"bad,{value},source.json,{key}\n", tmp_path
+        )
+
+
 # --- check (3) forbidden words ---------------------------------------------
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Paper checker for the P22-NN draft (decision-tree N31 checks 1-5).
+"""Paper checker for the P22-NN draft (N31 checks plus numerical source checks).
 
 Stdlib only. Checks:
   (1) every [@key] in the draft is a key in refs_frozen.bib;
@@ -8,6 +8,7 @@ Stdlib only. Checks:
       state-of-the-art);
   (4) every markdown image path in the draft exists on disk;
   (5) per-section and total word counts are within the N26-N30 limits.
+  (6) signed numerical ledger values match numeric JSON leaves at display precision.
 
 Usage:
     python paper/check_paper.py [--draft P] [--refs P] [--claims P] [--figures D] [--json]
@@ -17,7 +18,10 @@ Exit codes: 0 = all checks pass, 1 = at least one check failed, 2 = draft missin
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -102,6 +106,38 @@ def check_numbers(sections: dict[str, str], claims_text: str) -> list[str]:
     return problems
 
 
+def check_claim_sources(claims_text: str, source_root: Path) -> list[str]:
+    """Check signed ledger values against numeric JSON leaves at display precision."""
+    problems = []
+    reader = csv.DictReader(io.StringIO(claims_text))
+    required = {"sentence_id", "value", "json_path", "json_key"}
+    if not required.issubset(reader.fieldnames or []):
+        return ["[sources] missing required claim-ledger columns"]
+    for line, row in enumerate(reader, 2):
+        try:
+            source = json.loads((source_root / row["json_path"]).read_text())
+            # Accept existing /ci[0] notation and ordinary /ci/0 JSON pointers.
+            pointer = re.sub(r"\[(\d+)\]", r"/\1", row["json_key"])
+            for key in pointer.strip("/").split("/"):
+                key = key.replace("~1", "/").replace("~0", "~")
+                source = source[int(key)] if isinstance(source, list) else source[key]
+            if isinstance(source, bool) or not isinstance(source, (int, float)):
+                raise ValueError("source is not a numeric leaf")
+            display = row["value"].strip()
+            scale = 100 if display.endswith("%") else 1
+            number = display.removesuffix("%")
+            value = float(number) / scale
+            decimals = len(number.split(".")[1]) if "." in number else 0
+            tolerance = 0.5 * 10 ** (-decimals) / scale
+            if not math.isfinite(value) or not math.isfinite(source):
+                raise ValueError("non-finite value")
+            if abs(value - source) > tolerance + 1e-12:
+                raise ValueError(f"{display} differs from source {source}")
+        except (OSError, ValueError, TypeError, KeyError, IndexError) as exc:
+            problems.append(f"[sources] row {line} ({row.get('sentence_id')}): {exc}")
+    return problems
+
+
 def check_forbidden(draft_text: str) -> list[str]:
     problems = []
     for m in FORBIDDEN_RE.finditer(draft_text):
@@ -180,6 +216,7 @@ def main(argv: list[str] | None = None) -> int:
         valid_keys = set()
     claims_text = args.claims.read_text(encoding="utf-8") if args.claims.exists() else ""
     report = run_checks(draft_text, valid_keys, claims_text, args.draft.parent)
+    report["claim_sources"] = check_claim_sources(claims_text, _HERE.parent)
     failures = sum(len(v) for v in report.values())
 
     if args.json:
