@@ -13,14 +13,18 @@ Root task list: `../todo.md`, section **Next action execution — 2026-10-03**. 
 
 ### Task 1 — evidence boundary
 
-- [ ] `EVIDENCE_BOUNDARY.md` exists with live sources, exact leaves and hashes.
-- [ ] Primary R3 contrast, absolute metrics and scientific labels agree with the sources.
-- [ ] Professor instructions and worker gates are distinguished. Original records remain unchanged.
+- [x] `EVIDENCE_BOUNDARY.md` exists with live sources, exact leaves and hashes.
+- [x] Primary R3 contrast, absolute metrics and scientific labels agree with the sources.
+- [x] Professor instructions and worker gates are distinguished. Original records remain unchanged.
+
+Evidence: [EVIDENCE_BOUNDARY.md](EVIDENCE_BOUNDARY.md). Live replay PASS (`gnhf/verify_ladder.py --run reports/generated/nn_20260923/ladder_v3`, no `--write`).
 
 ### Checkpoint A
 
-- [ ] Saved-fold replay reports PASS without learning or source writes.
-- [ ] Source disagreements are resolved or block the next tasks.
+- [x] Saved-fold replay reports PASS without learning or source writes.
+- [x] Source disagreements are resolved or block the next tasks.
+
+Disposition: **PASS**. No label/value disagreement with live gate leaves. Tasks 2 and 3 authorized from the pinned boundary.
 
 ### Task 2 — bounded paper
 

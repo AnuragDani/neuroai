@@ -48,9 +48,11 @@ Known external-data blockers are the desk decision's outcome. They do not preven
 
 **Dependencies:** Task 1. **Verification:** compare `EVIDENCE_BOUNDARY.md` with live gates and exact source leaves.
 
-- [ ] Evidence record exists with source paths, hashes and professor/worker distinction.
-- [ ] Primary R3 pair, replay CI, absolute metrics and every scientific label agree with live evidence.
-- [ ] Any disagreement is resolved or reported as a blocker before Tasks 2 and 3 start.
+- [x] Evidence record exists with source paths, hashes and professor/worker distinction.
+- [x] Primary R3 pair, replay CI, absolute metrics and every scientific label agree with live evidence.
+- [x] Any disagreement is resolved or reported as a blocker before Tasks 2 and 3 start.
+
+Checkpoint A **PASS** (2026-10-03): [EVIDENCE_BOUNDARY.md](EVIDENCE_BOUNDARY.md); live `verify_ladder.py` replay PASS without `--write`.
 
 ## Task 1 — pin the complete evidence boundary
 
@@ -62,9 +64,11 @@ Known external-data blockers are the desk decision's outcome. They do not preven
 Read the live verifier, E5 and original professor MOM. Separate professor statements from worker decisions.
 
 **Acceptance criteria:**
-- [ ] Preserve primary R3_ca minus R3_tc BA +0.02667, CI [-0.0250,+0.07679], margin 0.07 and primary B_NULL.
-- [ ] Preserve M9 NOT_AUTHORIZED, M10 diagnostic-only, S7/S9/S10 INVALID, S8 NO FIT, E5 NO_GO, ENDPOINT_UNRESOLVED and POWER_UNESTABLISHED.
-- [ ] Include absolute performance, dosage baseline and the pooled-threshold caveat below. Do not assert new professor endorsement.
+- [x] Preserve primary R3_ca minus R3_tc BA +0.02667, CI [-0.0250,+0.07679], margin 0.07 and primary B_NULL.
+- [x] Preserve M9 NOT_AUTHORIZED, M10 diagnostic-only, S7/S9/S10 INVALID, S8 NO FIT, E5 NO_GO, ENDPOINT_UNRESOLVED and POWER_UNESTABLISHED.
+- [x] Include absolute performance, dosage baseline and the pooled-threshold caveat below. Do not assert new professor endorsement.
+
+Task 1 complete: [EVIDENCE_BOUNDARY.md](EVIDENCE_BOUNDARY.md).
 
 | Accepted saved-result arm | BA | AUROC | Recorded parameters |
 |---|---:|---:|---:|

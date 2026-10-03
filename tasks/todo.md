@@ -1174,8 +1174,8 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
 Plan: [execution plan and Definition of Done](next_action_20261003/PLAN.md).
 Detailed criteria: [dated checklist](next_action_20261003/todo.md).
 
-- [ ] Task 1: publish `EVIDENCE_BOUNDARY.md` with live source hashes and accepted labels.
-- [ ] Checkpoint A: evidence boundary agrees with live gates.
+- [x] Task 1: publish `EVIDENCE_BOUNDARY.md` with live source hashes and accepted labels. Evidence: [EVIDENCE_BOUNDARY.md](next_action_20261003/EVIDENCE_BOUNDARY.md); live saved-fold replay PASS.
+- [x] Checkpoint A: evidence boundary agrees with live gates. Disposition PASS; no source disagreements.
 - [ ] Task 2: update bounded manuscripts and publish `PAPER_COMPLETION.md` with checks and open items.
 - [ ] Task 3: publish offline `EXTERNAL_DESK_DECISION.md` with `NO_GO_NOW` and source-backed blockers.
 - [ ] Checkpoint B: paper and desk outputs satisfy their acceptance criteria.
