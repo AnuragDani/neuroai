@@ -14,6 +14,10 @@ The execution repair is complete. E5 is NO_GO for an automatic pilot. No researc
 
 [Short paper](paper/short_paper.md) now includes pseudobulk RNA baseline, selected-arm pooled metrics, power limits and later invalid-control context. Unauthorized masked-ATAC pilot remains excluded from accepted quantitative results. Fresh saved-fold ladder replay PASS, numerical table equality PASS, independent scoped evidence review PASS. [Review and remaining scope](paper/SHORT_PAPER_REVIEW_2026-10-02.md); [source hashes](paper/short_paper_evidence_2026-10-02.json). The original full draft/claim ledger is not reconciled in this pass; this revision is not submission-ready certification. No new fits, push, professor packet or messages.
 
+## Full draft and claim ledger reconciled — 2026-10-02
+
+[Full draft](paper/draft.md) and [claims](paper/claims.csv) reconciled after the earlier short-paper pass. Fresh saved-fold replay PASS; numerical source-leaf checks PASS; 13 focused paper-tool tests PASS; independent scoped evidence review PASS. [Review](paper/FULL_DRAFT_REVIEW_2026-10-02.md); [hash manifest](paper/full_draft_evidence_2026-10-02.json). This closes the full-draft reconciliation item above. Primary B_NULL, power POWER_UNESTABLISHED, invalid controls, masked pilot NOT_AUTHORIZED and E5 NO_GO preserved. Publication formatting/declarations remain; no submission certification. Next: separate dated unsent professor update under the vault guide. Zero new fits; no packet, message or push.
+
 ## Historical status before consolidation
 
 # P22 current status

@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-02",
+  "scope": "full draft and numerical claim-ledger reconciliation",
+  "base_commit": "1e636ad",
+  "artifact_hashes": {
+    "paper/draft.md": "f36f4fcb245ef70cb2c4aafd7318081d01aef060c9bd5d9e43088bc97c795147",
+    "paper/claims.csv": "e768510a318532f200654c0e77527f043e65abc0030e9c160675595386ff3d89",
+    "paper/check_paper.py": "551ddd7f30a71e7f6361f057f8a735c9d2832def96fe72d8c4ac22c497845284",
+    "tests/test_paper_tools.py": "d861ae9035bcc949c11d36366e31738d00ccc89d517263d30b860af58a06ab8c"
+  },
+  "source_hashes": {
+    "/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/2026-07-02/MOM_07-02-2026_Transcript_and_Meeting_Notes.md": "38871f240c5a0f7f95ea9e279fa5b73a4306152e24a6b1b5515a509011529a91",
+    "/Users/anuragdani/Obsidian Vault/Personal Pet Projects/niw-eb1a/papers/P22/MOM/2026-07-21/MOM_07-21-2026_Transcript_and_Meeting_Notes.md": "0bce4ea91e7daefac37645bfc6dc35b4742473ea3b5152737ded8bf9eff3ace2",
+    "configs/nn_protocol_v2_2026-09-23.json": "98b169f68710d66e34d44728d72c2aadd01c60cfe351c2924e7660cc8a249154",
+    "docs/nn_v2/chr21_excluded.json": "ab3ca49b3f53957ef80413607c13c7e71cc9a7802a99bc66652a80954920b7c6",
+    "docs/nn_v2/faithfulness.json": "725b0486ae983dca06bb495d449083e85f64a596d229b1fc5e0229360fa0c236",
+    "docs/nn_v2/fold_prep_smoke.json": "4324ce09d4943a5a9d43981ebf481655763dcfccd0fbe0f309dbf804926d7351",
+    "docs/nn_v2/gene_activity_results.json": "9105eb5aba0353939e29cc3803cbae72e74f606192e706f8f4e65e37e687c944",
+    "docs/nn_v2/ladder_summary.json": "9add634e69dfbd7de1f764d6d7d3e3a217101efec2445c426b1b7be3f4ebc4c7",
+    "docs/nn_v2/ladder_verification.json": "aec19fda88d60a30fda4ebdb9af53c790c62d5210206a5627c54521bfd947256",
+    "docs/nn_v2/nuisance_probe.json": "5231d55bbe2d36dbbcbcad29f5e1e566555be41b97ca9c664a253ca387d48465",
+    "docs/nn_v2/parameter_counts.json": "cbfdfa38a2f44c1d98dccd7a467a740bd8abc71223c55abe7f2eb4859e23e405",
+    "docs/nn_v2/planted_benchmark.json": "b60b1a5f81dd5e509ba9724b214830767c1a2c9672178d806c49548623c9ff82",
+    "docs/nn_v2/seed_sensitivity.json": "348a946deac2af8d428ccb7a7d6fb1826fc9df1f567a86e62204d9637d3e624d",
+    "docs/nn_v2/spectrum.json": "cf6981a39add989a8f4364d1e785a7edff3eeea17516d0aeaea0fbe3880aab28",
+    "docs/nn_v2/v5/per_fold_metrics.json": "9fb908c5b6ddc28279ce92eb8840316574ee37ed0dc6ee2c8cc910c43cfe2d46",
+    "docs/nn_v2/v5/planted_gene_aligned.json": "7f85fa9476923eb915fac74237e65a20640e7bbc7f7cf3464c130b5f1cd48d43",
+    "docs/nn_v2/v5/positive_control.json": "3a531aa0e7509ed980a67091830b77f452122949d517200b954ec93cb7a550e0",
+    "docs/nn_v2/v6/chr21_forced_compare.json": "713e887d1de17d2abdb8a6f9e3cea91e6aae14bc608e05c937d9a8f59480eed1",
+    "docs/nn_v2/v6/detectability.json": "7bb6fa445cb8c169964cf4b4ce4220c1f04bc1470e0b3bec87fe0deb92f3c3d4",
+    "docs/nn_v2/v6/ladder_v4_summary.json": "eb5b883e6bc2154d8a1483b108cde1610e39b8c71607b4e8f4315c5d164479c8",
+    "docs/nn_v2/v6/per_fold_contrast.json": "ddb53bf777b2b601e73afbdb6f97d85f7602b365d1d96d94bd4489e10ce8e01a",
+    "gnhf/verify_ladder.py": "e63224dc33577f1618c615d3546d0d26204b09c01951d74e29e77f33b0cf0c6b",
+    "paper/refs_frozen.bib": "9d5432d7faf3ad28eb159945f239b1eb1fd67e1f76174ffca691f5c2f11a3da4",
+    "scripts/nn_v5_per_fold_metrics.py": "417581f6d6568e649df17343d5d5492ef78e3bb71ca824fc4a280c819d028ae1",
+    "tasks/DECISION_E5.md": "edff6817e595b8b16253e4b876ea7b5e19993c91162b0cd1c8ebb4a60ae6ecea",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/HANDOFF.md": "c15d5c4ca04a0b3418bb297b5614f589c5c635bc14aa77dc9da9c643f3bc36ac",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/guidance_and_claims.json": "d5ccf498ede4d870a21fb9841cf555186feb7c5570c679402a23a6efc46f2254",
+    "tasks/nn/professor_direction_investigation_20260929/masked_atac_pilot_20261001/HANDOFF.md": "8b737cfe40b6e006f414505d6afe3e4b791cbac39a79aa2480445282ee2ea499",
+    "tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/HANDOFF.md": "49bd1d2f781c1358abe993cb0d7a9292aefc814b7feda1f39e55c758e03fd996",
+    "docs/nn_v2/v6/DETECTABILITY.md": "f521b6d60ab8eef71116ca22b5a8b1cf5894f8ba0685387f940cd0843b9021cf"
+  },
+  "numerical_ledger_rows": 88,
+  "paper_checks": {
+    "ok": true,
+    "failures": 0,
+    "report": {
+      "citations": [],
+      "numbers": [],
+      "forbidden": [],
+      "figures": [],
+      "word_counts": [],
+      "claim_sources": []
+    }
+  },
+  "saved_fold_replay": {
+    "verdict": "PASS",
+    "primary_recomputed": {
+      "estimate": 0.026666666666666672,
+      "ci": [
+        -0.024999999999999967,
+        0.07678571428571429
+      ],
+      "valid_draws": 1000,
+      "margin": 0.07,
+      "advantage": false
+    },
+    "problems": [],
+    "notes": [
+      "majority pooled BA 0.300 < 0.5: fold-wise thresholds pooled across folds depress BA (stratified folds flip the training majority); report AUROC alongside BA"
+    ]
+  },
+  "paper_tool_tests": {
+    "command": ".venv-p22/bin/python -m pytest tests/test_paper_tools.py -k \"not make_figures\" -q",
+    "passed": 13,
+    "deselected": 8
+  },
+  "independent_scoped_review": {
+    "reviewer": "paper_evidence_review",
+    "verdict": "PASS"
+  },
+  "scientific_dispositions": {
+    "primary": "B_NULL",
+    "power": "POWER_UNESTABLISHED",
+    "s7_v1": "INVALID",
+    "s7_v2": "INVALID",
+    "s8": "NO FIT",
+    "s9": "INVALID",
+    "s10": "INVALID",
+    "masked_pilot": "NOT_AUTHORIZED",
+    "execution_repair_e5": "NO_GO",
+    "biological_endpoint": "ENDPOINT_UNRESOLVED"
+  },
+  "limits": [
+    "Numeric ledger leaves verified; checker does not establish sentence-to-source entailment",
+    "Original source records and figures preserved; historical Fig. 3 no longer embedded",
+    "Reference bibliography keys checked; no fresh comprehensive reference or figure-content certification",
+    "Submission formatting and declarations remain outside this reconciliation"
+  ],
+  "new_fits": 0,
+  "professor_packet_prepared": false,
+  "pushed": false
+}
