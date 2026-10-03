@@ -1,0 +1,12 @@
+{
+  "path": "/private/tmp/p22-claude-review-170584c0",
+  "reviewed_plan_sha256": "4c0984806306216be4901fcae78027edcd1e15a73582739252ddce2af7f70d32",
+  "source_hashes": {
+    "tasks/DECISION_E5.md": "edff6817e595b8b16253e4b876ea7b5e19993c91162b0cd1c8ebb4a60ae6ecea",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md": "c452b45c8533a15d8631856cf26323adfc620a09a221a157a1b649bb1586af6f",
+    "tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/TASK_DATA_OPTIONS.md": "5802efde787aba17b487d27cd970c131f3042f0ff369e60992854a5bafd49d96",
+    "tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/external_feasibility.json": "c429aefc4ee77f3f124e9fc4c903f34eff9c1362bd64cffb613adc25ce2068ea",
+    "paper/FULL_DRAFT_REVIEW_2026-10-02.md": "e46b8f8b8bc0b4a350aa7a762d569abc16a13ade93afc8c589ff28390684191f",
+    "docs/nn_v2/ladder_verification.json": "aec19fda88d60a30fda4ebdb9af53c790c62d5210206a5627c54521bfd947256"
+  }
+}

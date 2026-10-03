@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "record_kind": "independent_plan_review",
+  "reviewer": "claude",
+  "date": "2026-10-03",
+  "target": "PLAN.md",
+  "verdict": "PASS_WITH_CHANGES",
+  "research_fits_authorized": false,
+  "review_passes": 1,
+  "actions_taken": {
+    "fits": 0,
+    "downloads": 0,
+    "network_requests": 0,
+    "evidence_modified": false,
+    "messages_sent": 0
+  },
+  "sources_cited": [
+    "PLAN.md",
+    "evidence/docs/nn_v2/ladder_verification.json",
+    "evidence/tasks/DECISION_E5.md",
+    "evidence/tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md",
+    "evidence/tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/TASK_DATA_OPTIONS.md",
+    "evidence/tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/external_feasibility.json",
+    "evidence/paper/FULL_DRAFT_REVIEW_2026-10-02.md"
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "severity": "high",
+      "area": "feasibility",
+      "summary": "Planned NeMO ATAC counts MEX cannot satisfy the plan's own exact-465-region no-zero-fill transfer rule; only fragment or alignment data could, and the plan forbids fragments.",
+      "evidence": [
+        "evidence/tasks/nn/professor_direction_investigation_20260929/next_stage_20260930/external_feasibility.json#contracts.feature_count_semantics",
+        "evidence/tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/TASK_DATA_OPTIONS.md#C1",
+        "PLAN.md#Task 4"
+      ]
+    },
+    {
+      "id": "B2",
+      "severity": "high",
+      "area": "novelty_and_scientific_value",
+      "summary": "No transportable internal performance exists: most ladder arms are at or below chance (R0_ca BA 0.473 / AUROC 0.389; R1-R3 BA 0.34-0.40) while zero-parameter chr21_dosage reaches BA 1.000 / AUROC 1.000, so the Task 4 transport question is void and PLAN.md cites neither number.",
+      "evidence": [
+        "evidence/docs/nn_v2/ladder_verification.json#per_arm",
+        "PLAN.md#Task 4"
+      ]
+    },
+    {
+      "id": "B3",
+      "severity": "medium",
+      "area": "professor_alignment",
+      "summary": "Task 4 adopts the person-level specimen outcome that G2/G4 call too coarse and a contrast whose CI spans zero against G7's differentiating-benchmark request, while G9 plus attestation professor_approval_date=null leaves a new external cohort outside attested existing-public-data scope; PLAN.md only asks to examine that scope.",
+      "evidence": [
+        "evidence/tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md#A",
+        "evidence/tasks/nn/professor_direction_investigation_20260929/failure_audit_20261001/GUIDANCE_AND_CLAIMS.md#E",
+        "PLAN.md#Task 4"
+      ]
+    }
+  ],
+  "required_changes": [
+    {
+      "id": "C1",
+      "addresses": "B1",
+      "change": "Checkpoint A must state that the counts MEX cannot close feature_count_semantics, name the fragment or alignment data actually required and its size, and cost the proposal against that expectation, or drop the exact-transfer claim."
+    },
+    {
+      "id": "C2",
+      "addresses": "B2",
+      "change": "Suspend Task 4 until a question exists that is not transport of a chance-level model; do not spend acquisition budget on it."
+    },
+    {
+      "id": "C3",
+      "addresses": "B2",
+      "change": "Task 1 preserved set must add chr21_dosage BA 1.000 / AUROC 1.000 and the ladder_verification.json notes entry on pooled-threshold BA depression with AUROC below 0.5."
+    },
+    {
+      "id": "C4",
+      "addresses": "novelty_beyond_Q5_R5",
+      "change": "Collapse Task 3 to a desk decision citing TASK_DATA_OPTIONS.md section C1 and external_feasibility.json, which already record public access, the 1.4G listing, the 256 MiB exceedance and the three blocking contracts; use network only if file-level Open/Controlled access is genuinely unknown."
+    },
+    {
+      "id": "C5",
+      "addresses": "donor_level_statistics",
+      "change": "State that with 8 control / 10 Ts21 donors at PCW 13-20 the equal-weight BA grid steps are 0.0625 and 0.05, so margin 0.07 is about one donor flip, and that the current primary CI upper bound 0.0768 against margin 0.07 already makes advantage near-structurally unreachable."
+    },
+    {
+      "id": "C6",
+      "addresses": "acquisition_budget",
+      "change": "Reconcile the three ceilings in play (32 MiB / 20 requests in PLAN.md, 64 MiB / 10 requests in external_feasibility.json, 256 MiB historical acquisition) and name which register governs each counter."
+    },
+    {
+      "id": "C7",
+      "addresses": "E5_preservation",
+      "change": "Task 4 must cite the specific frozen selection record ID for the CA/TC checkpoints rather than original selection records generically, per the outcome-visibility reasoning in DECISION_E5.md."
+    }
+  ],
+  "preserved_labels_check": {
+    "status": "PASS",
+    "note": "PLAN.md preserves M9 NOT_AUTHORIZED, M10 diagnostic-only, S7/S9/S10 INVALID, S8 NO FIT, primary B_NULL, Q2 ENDPOINT_UNRESOLVED, POWER_UNESTABLISHED and E5 NO_GO consistently with DECISION_E5.md and FULL_DRAFT_REVIEW_2026-10-02.md. No silent relabel found."
+  },
+  "endorsed_without_change": [
+    "Task 1 evidence-boundary pinning, subject to C3",
+    "Task 2 bounded paper completion as first deliverable",
+    "Gate structure PAYLOAD_REQUIRED / NO_GO / GO_FOR_PROTOCOL with separate acquisition and scoring authorization records"
+  ],
+  "prior_cursor_review_endorsed": false,
+  "recommended_next_action": "Execute Task 1 with C3 and C5 folded in, finish Task 2, replace Task 3 with the C4 desk decision emitting PAYLOAD_REQUIRED or NO_GO from existing records, and leave Task 4 suspended. No fits, payload downloads or acquisition authorized."
+}

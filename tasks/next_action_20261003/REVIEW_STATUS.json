@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-03",
+  "stage": "next_action_plan_review",
+  "cursor_initial_critique": "PASS_WITH_CHANGES",
+  "cursor_initial_runner": "ABORTED_TOKEN_CAP_AFTER_COMPLETED_CRITIQUE_FILE_WRITE",
+  "cursor_final_review": "PASS",
+  "claude_review": "PASS_WITH_CHANGES",
+  "dual_review_complete": true,
+  "research_fits": 0,
+  "payload_downloads": 0,
+  "external_scores": 0,
+  "scientific_fits_authorized": false,
+  "executor_lock_live_matches": 17,
+  "executor_lock_live_mismatches": [],
+  "paper_source_check": "PASS",
+  "files_sha256": {
+    "PROPOSAL.md": "ecf9fa51e94a7a024ef7a9bfd5b777c2bddf1aad6b094f048d9c0079c4bb9582",
+    "PLAN.md": "5347c8e8dedd02d00fb41b70cfac69e20be0a9e4ea7870447a4c46bb3ecf45f5",
+    "CURSOR_REVIEW.md": "6b827f279ccc2cb4db9920bbf26be9c88cb50773ea515e986ea369d052bc31db",
+    "CURSOR_FINAL_REVIEW.md": "98aff5f727dbdfbdf1815f9fc928fe13694ebf0f93288e80df28641a0b6e107b",
+    "CURSOR_FINAL_REVIEW.json": "33b5df42c6290e48ffe75b8aa2dfb26ca326fc9fdd8f922f9be9d01fe004c766",
+    "PLAN_REVIEWED_DUAL.md": "9269342f756c1169972f3971756f6cd0d3200f88e33e076ff37df87f32d73c34",
+    "CURSOR_FINAL_ACCEPTANCE.md": "cca022e766b80341667eb648e9c2766b7bf068b2c6e7a27cdb0cef38dd5b1911",
+    "CURSOR_FINAL_ACCEPTANCE.json": "529fe52b1a78138a5063f3394f3cd13d72ae96c2ae73ee5514386f1b71a08acd",
+    "CLAUDE_FINAL_ACCEPTANCE.md": "f3c606fbc398c5feea96eabfb2cdecc9121b2afe45dd54fae81c6a00f71201e6",
+    "CLAUDE_FINAL_ACCEPTANCE.json": "c664fd1402b026d4b72ce14ee2c0b7c700d76b33051d1b440b93584db0d2bfd8",
+    "CLAUDE_REVIEW.md": "f02ae11299d0651b96cecba0b9908aa6c5c593aaa2d9e8f13ec947bd938a4a1e",
+    "CLAUDE_REVIEW.json": "c98af66adec0617876725badc0c6e69cae790364c914d5e8f08802af8227a606"
+  },
+  "reviewed_plan_note": "Both agents reviewed the same PLAN_REVIEWED_DUAL.md snapshot. PLAN.md then received source-checked Claude RC1-RC4 factual/provenance corrections and accurate review-status text. Claude verdict remains PASS_WITH_CHANGES, not an unconditional PASS. Definition of Done and task breakdown were subsequently added at the researcher request. Prior review verdicts apply to preserved snapshots; no new independent review is claimed.",
+  "review_workspaces": {
+    "cursor": "/private/tmp/p22-plan-review-20261003/cursor",
+    "cursor-final": "/private/tmp/p22-plan-review-20261003/cursor-final",
+    "claude": "/private/tmp/p22-plan-review-20261003/claude",
+    "final_dual": "/private/tmp/p22-final-dual-review-9b5781b8"
+  },
+  "claude_historical_auth_error": "OAuth session expired and could not be refreshed",
+  "claude_authentication": "RESTORED",
+  "remaining_plan_blockers": [],
+  "claude_required_changes_resolution": {
+    "RC1": "RESOLVED_PRIMARY_R3_PAIR_AND_REPLAY_CI",
+    "RC2": "RESOLVED_LOGREG_CONCAT_ROW",
+    "RC3": "RESOLVED_HISTORICAL_PAYLOAD_SOURCE",
+    "RC4": "RESOLVED_RECORDED_PARAMETER_COUNTS"
+  },
+  "planning_update": {
+    "date": "2026-10-03",
+    "scope": "Definition of Done, task breakdown, outputs, dependencies, checkpoints and runnable checks",
+    "new_independent_review": false,
+    "implementation_started": false,
+    "scientific_scope_changed": false
+  }
+}

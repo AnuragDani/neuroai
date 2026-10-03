@@ -43,3 +43,8 @@ Start at [current status](../status.md). Execution repair E0–E5 + Checkpoints 
 - `paper/`: manuscript and its claim ledger. `reports/generated/`: raw outputs, not hand-edited narrative.
 
 Current paths stay in place while swarm runs: code and task checks reference them. When run ends, move study documents only with link/path checks and a clear old-to-new map. Do not treat a move as a new scientific result.
+
+
+## Next action without professor response — 2026-10-03
+
+[Final plan](../tasks/next_action_20261003/PLAN.md), [Cursor acceptance](../tasks/next_action_20261003/CURSOR_FINAL_ACCEPTANCE.md), [Claude acceptance](../tasks/next_action_20261003/CLAUDE_FINAL_ACCEPTANCE.md), [review status](../tasks/next_action_20261003/REVIEW_STATUS.json). Both GNHF reviews complete. Cursor PASS, Claude PASS_WITH_CHANGES with no blockers and all required source corrections resolved. Paper first, one offline NO_GO_NOW desk decision. No fits or acquisition authorized.

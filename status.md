@@ -248,3 +248,13 @@ Current internal finish task **COMPLETE** after independent review corrections. 
 ## Status maintenance
 
 Update this file after an accepted gate, material blocker, or final result. Include date, direct evidence links, and any disagreement between task labels and checks. Avoid updates for every quota retry. For scientific claims, verified raw evidence and gates outrank task labels; task labels outrank narrative handoffs.
+
+
+## Next-action plan review — 2026-10-03
+
+[Revised plan](tasks/next_action_20261003/PLAN.md): finish the bounded paper first, with a narrow parallel file-level external-access/acquisition decision. Initial Cursor critique required six changes; [final Cursor GNHF review](tasks/next_action_20261003/CURSOR_FINAL_REVIEW.md) PASS after revision. Claude GNHF failed authentication because OAuth expired; no Claude review exists, so dual review remains incomplete. [Review status and logs](tasks/next_action_20261003/REVIEW_STATUS.json). Fresh paper source check PASS and executor lock 17/17 match. Zero research fits, payload downloads, external scores, professor messages or push. Original scientific dispositions unchanged.
+
+
+## Next-action dual review complete — 2026-10-03
+
+Claude authentication restored. Both GNHF reviews completed against the same final narrowed snapshot: Cursor PASS; Claude PASS_WITH_CHANGES with no blockers. Claude RC1–RC4 source/provenance corrections are applied and directly checked. [Final plan](tasks/next_action_20261003/PLAN.md), [Cursor](tasks/next_action_20261003/CURSOR_FINAL_ACCEPTANCE.md), [Claude](tasks/next_action_20261003/CLAUDE_FINAL_ACCEPTANCE.md), [machine status](tasks/next_action_20261003/REVIEW_STATUS.json). This supersedes the authentication blocker above. Next: finish the bounded paper, with one offline external-data NO_GO_NOW desk decision. External acquisition/scoring is suspended. Primary R3_ca−R3_tc B_NULL and all historical scientific gates remain unchanged. Zero fits, payload downloads, external scores, professor messages or push.

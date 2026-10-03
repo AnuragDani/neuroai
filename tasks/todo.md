@@ -1162,3 +1162,23 @@ records preserved; see `configs/results_execution_amendment_2026-09-21.json` and
   published common measured feature set or an embargo resolution.
 - [ ] R5c: finalize the professor-facing notebook and handoff with the real
   execution status (remaining in-scope work).
+
+
+## Next action review — 2026-10-03
+
+- [x] Complete [Cursor and Claude review with final plan](next_action_20261003/todo.md).
+
+
+## Next action execution — 2026-10-03
+
+Plan: [execution plan and Definition of Done](next_action_20261003/PLAN.md).
+Detailed criteria: [dated checklist](next_action_20261003/todo.md).
+
+- [ ] Task 1: publish `EVIDENCE_BOUNDARY.md` with live source hashes and accepted labels.
+- [ ] Checkpoint A: evidence boundary agrees with live gates.
+- [ ] Task 2: update bounded manuscripts and publish `PAPER_COMPLETION.md` with checks and open items.
+- [ ] Task 3: publish offline `EXTERNAL_DESK_DECISION.md` with `NO_GO_NOW` and source-backed blockers.
+- [ ] Checkpoint B: paper and desk outputs satisfy their acceptance criteria.
+- [ ] Task 4: publish `CLOSEOUT.md`, complete all Definition of Done checks, update status once and stop.
+
+Preparation complete does not mean submission-ready. No fits or external acquisition are authorized.

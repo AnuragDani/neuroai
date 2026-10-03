@@ -1,0 +1,62 @@
+{
+  "reviewer": "claude",
+  "date": "2026-10-03",
+  "target": "PLAN.md",
+  "verdict": "PASS_WITH_CHANGES",
+  "research_fits_authorized": false,
+  "blockers": [],
+  "required_changes": [
+    {
+      "id": "RC1",
+      "severity": "material",
+      "area": "Task 1",
+      "issue": "Primary CA-TC estimate +0.02667 is arm-ambiguous: R3_ca-R3_tc (0.4000-0.3733) and R4_ca-R4_tc (0.5267-0.5000) both equal +0.026667, and ladder_verification.json primary_recomputed does not name the rung.",
+      "change": "Name the exact rung/arm pair and record ID carrying the primary contrast and CI [-0.0250,+0.07679]; absolute BA differs (0.40 vs 0.53) and the paper's performance-limit statement depends on which.",
+      "source": "docs/nn_v2/ladder_verification.json primary_recomputed, per_arm"
+    },
+    {
+      "id": "RC2",
+      "severity": "material",
+      "area": "Task 1 / Task 2",
+      "issue": "Accepted-results table reports CA arms but omits the concatenation fusion comparator, while the plan's own future-trigger section states G7 requires a concat comparator. logreg_concat (BA 0.4133, AUROC 0.3822) is in the same source leaf.",
+      "change": "Add logreg_concat (and state why other arms are excluded) so the reported subset is not selective against the required fusion baseline.",
+      "source": "docs/nn_v2/ladder_verification.json per_arm.logreg_concat; GUIDANCE_AND_CLAIMS.md G7"
+    },
+    {
+      "id": "RC3",
+      "severity": "minor-material",
+      "area": "Task 3 / Budget register",
+      "issue": "The 'historical 256 MiB payload ceiling' is not supported by any supplied leaf; external_feasibility.json declares budget_ceiling_bytes 67108864 (64 MiB) and 10 requests.",
+      "change": "Cite the specific historical ledger leaf for the 256 MiB figure, or label it unverified against supplied evidence.",
+      "source": "next_stage_20260930/external_feasibility.json network.budget_ceiling_bytes"
+    },
+    {
+      "id": "RC4",
+      "severity": "minor",
+      "area": "Task 1",
+      "issue": "Absolute-performance reporting omits capacity. R4 arms carry 29,970/25,746 parameters versus ~384,250 at R3, and chr21_dosage carries 0.",
+      "change": "Report parameter_count beside BA/AUROC so absolute comparisons are not capacity-confounded.",
+      "source": "docs/nn_v2/ladder_verification.json per_arm.parameter_count"
+    }
+  ],
+  "verified_consistent": [
+    "CA-TC +0.026666..., CI [-0.0250,+0.07679], margin 0.07, advantage=false, primary B_NULL",
+    "R3_ca 0.4000/0.3582, R3_tc 0.3733/0.3316, R4_ca 0.5267/0.5147, R4_tc 0.5000/0.4427, pseudobulk_rna_logistic 0.5133/0.5573, chr21_dosage 1.0/1.0",
+    "majority pooled BA 0.300 and AUROC 0.300 with fold-wise threshold note reproduced from verifier notes",
+    "E5 NO_GO; M9 NOT_AUTHORIZED; M10 diagnostic-only; S7/S9/S10 INVALID; S8 NO FIT; Q2 ENDPOINT_UNRESOLVED; POWER_UNESTABLISHED",
+    "ATAC counts package 1,540,753,269 bytes, MD5 796c8b3aa587b257af0a46615a437dba, payload_downloaded=false",
+    "QC discrepancy 117,532 vs 113,801 with 3,731 class!='Unk', exclusion_applied=false, qc_reproduced=false",
+    "Specimen provenance UNRESOLVED; empty donor_id_overlap treated as no-overlap evidence, not certification",
+    "PCW 13-20 overlap at 8 control / 10 Ts21 donors with support_is_not_power=true",
+    "Per-flip BA increments 0.0625 (1/16) and 0.05 (1/20) are arithmetically correct for 8/10 per-class recalls",
+    "Peak-interval reasoning sound: study-specific peak calling plus paired_matrices_checked=false means no exact recount on the fixed 465-region union without identical interval/count semantics or fragment-level data; no zero-fill",
+    "Zero network, zero bytes, zero fits, zero external scores; historical ledgers preserved and not combined"
+  ],
+  "overreach_checks": {
+    "null_treated_as_no_signal": false,
+    "donor_arithmetic_treated_as_impossibility": false,
+    "active_transport_experiment_proposed": false,
+    "new_professor_endorsement_asserted": false
+  },
+  "notes": "Scope limits: TASK_DATA_OPTIONS.md section C1, paper/FULL_DRAFT_REVIEW_2026-10-02.md and the paper source checker were not supplied, so Task 2 and the C1 read are reviewed as process, not verified content. Review only; no edits to PLAN.md or evidence, no fits, downloads, browsing or messages."
+}

@@ -778,3 +778,13 @@ RNA results cannot satisfy paired-data gates.
 ## Completion evidence
 
 A completed extension has versioned input/QC/feature/protocol manifests, passing focused integrity tests, donor-disjoint internal results, clearly labeled model families, and an external report with uncertainty and limitations. A failed compatibility or independent-evaluation check is reported explicitly; it is not converted into a successful multimodal claim.
+
+
+## Next action proposal — 2026-10-03
+
+Researcher requests action without waiting for professor. See [proposal](next_action_20261003/PROPOSAL.md) and [checklist](next_action_20261003/todo.md). [Final plan](next_action_20261003/PLAN.md): both GNHF reviews complete. Cursor PASS, Claude PASS_WITH_CHANGES with no blockers. All requested source corrections resolved. Paper first, one offline NO_GO_NOW desk decision, external scoring/acquisition suspended. This continuation preserves prior plan items and scientific gates. No fits are authorized.
+
+
+### Definition of Done and execution breakdown — 2026-10-03
+
+The [active continuation](next_action_20261003/PLAN.md#definition-of-done) now defines four bounded tasks, named outputs, dependencies, Checkpoints A–B, runnable verification and completion/failure rules. [Root task target](todo.md#next-action-execution--2026-10-03) retains all unrelated unfinished work. Completion means preparation complete with tracked submission items. No fits or external acquisition are authorized.
