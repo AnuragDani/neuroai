@@ -19,14 +19,14 @@ Record usage in [VENUES.md](VENUES.md) / [AUDIT.md](AUDIT.md).
 **Acceptance:** sourced comparison exists; recommendation is provisional; costs/limits are current or explicitly unresolved. **MET.**
 
 ### S2 — Adapt a copy of the manuscript
-- [ ] Dependency: S1 complete
-- [ ] Copy accepted full draft to `paper/submission_20261003/draft.md` (do not alter accepted `paper/draft.md`, `paper/short_paper.md`, `paper/claims.csv`)
-- [ ] Adapt sections/refs/figure paths to provisional venue rules; keep accepted numerical results and frozen citation keys
-- [ ] Expand references from `refs_frozen.bib` with verified metadata; state remaining export requirement if venue format unsupported
+- [x] Dependency: S1 complete
+- [x] Copy accepted full draft to `paper/submission_20261003/draft.md` (do not alter accepted `paper/draft.md`, `paper/short_paper.md`, `paper/claims.csv`)
+- [x] Adapt sections/refs/figure paths to provisional venue rules; keep accepted numerical results and frozen citation keys
+- [x] Expand references from `refs_frozen.bib` with verified metadata; state remaining export requirement if venue format unsupported
 
-**Output:** [paper/submission_20261003/draft.md](../../paper/submission_20261003/draft.md)
+**Output:** [paper/submission_20261003/draft.md](../../paper/submission_20261003/draft.md) — provisional BMC Research Notes Research note; Abstract Objective/Results; Intro+main+Limitations ≈850 words (≤2000); 1 table + 2 figures (≤3); paths `../figures/…`; Markdown retained with Word/portal export remaining. Checker on this draft: ok=true, failures=0. Accepted draft/short/claims SHA-256 unchanged vs CLOSEOUT.
 
-**Acceptance:** draft is clearly provisional, complies with known venue rules, preserves original scientific scope.
+**Acceptance:** draft is clearly provisional, complies with known venue rules, preserves original scientific scope. **MET.**
 
 ### S3 — Audit sources and list missing human facts
 - [ ] Dependencies: S1 and S2 complete
