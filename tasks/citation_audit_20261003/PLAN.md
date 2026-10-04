@@ -41,7 +41,7 @@ Done requires a claim/source inventory; exact primary URL and section/page; shor
 - [x] Run both paper checkers and saved-prediction ladder verifier with no --write.
 - [x] Rematch protected scientific/manuscript/MOM hashes; record audit coverage and resource limits.
 - [x] Update current READINESS.md, stage task marks, status.md and docs/INDEX.md at accepted gate.
-- [ ] Commit and push final work to main; verify clean tree, matching remote HEAD and one worktree.
+- [x] Commit and push final work to main; verify clean tree, matching remote HEAD and one worktree. Audit commit `455b259` pushed; 21 historical archive tags also pushed. Final documentation closure follows.
 **Acceptance:** READY_FOR_RESEARCHER_REVIEW only if all required scientific/source checks are resolved; otherwise BLOCKED with unfinished tasks unchecked, exact evidence and smallest unblock. Human authors/funding/ethics/venue/export items stay separate.
 **Verification commands:**
 ```
