@@ -2,9 +2,9 @@
 
 **Scope:** provisional BMC Research Notes copy at `paper/submission_20261003/draft.md` only.
 **Not authorized:** new learning, predictions, analyses, figure regeneration, or network citation PDF retrieval.
-**Network budget (stage shared with S1):** requests ≈25/24 (exhausted); docs ≈0.56 MiB / 32 MiB. **No external requests this audit.** Citation primary-PDF entailment therefore uses local `refs_frozen.bib` metadata and prior dated reviews only.
+**Network budget (stage shared with S1):** requests ≈25/24 (exhausted); docs ≈0.56 MiB / 32 MiB. **No external requests this audit.** Only local `refs_frozen.bib` metadata and prior dated reviews were examined; these do not complete citation entailment.
 
-Status of this audit: **complete for independent machine + local manual checks**. Remaining human/venue/export items are listed in [INPUTS_NEEDED.md](INPUTS_NEEDED.md), not invented here.
+Status of this audit: **BLOCKED — required citation-support check C3 unfinished**. Numerical and figure checks are recorded below. Under [PROMPT.md](PROMPT.md), budget preventing a required source audit requires BLOCKED. Bibliographic metadata does not establish support for cited claims. Original worker audit is preserved at commit `7d1da80e1c043b2f53711165727eef5333455fe6`.
 
 ---
 
@@ -55,7 +55,7 @@ No numerical discrepancy requiring a draft edit was found. No unsupported scient
 | C3 | Primary PDF / publisher HTML entailment of citation *use* (e.g. Squair donor-replicate reasoning; Jain/Wiegreffe attention-as-explanation stance) | **Unresolved** | Stage request budget exhausted; no new citation PDF fetches. Prior dated short-paper metadata notes and frozen bib remain the authority for keys, not a fresh entailment audit |
 | C4 | Atlas cell-count / cohort facts attributed to [@lattke2026down] | **PASS** against local sampling leaf 248998 + prior SHORT_PAPER_REVIEW note that the Nature Medicine article reports 248,998 cells | Not a fresh publisher re-fetch |
 
-Do not treat C1–C2 as full scientific-content citation audit. C3 stays explicit for the researcher if a venue requires verified quote-level support.
+Do not treat C1–C2 as full scientific-content citation audit. C3 is required by this stage contract, independent of venue policy. Complete a claim-to-primary-source audit; accessible primary HTML or other retained primary text is sufficient where it supports the cited claim. A PDF is not mandatory for every citation.
 
 ---
 
@@ -94,7 +94,7 @@ This audit does **not** silently relabel path checks as a full scientific-conten
 | Figures (F) | 3 | 1 (F4 generator re-plot) | 0 |
 | Venue local (V) | 4 | 1 (V5 export; V2 counting uncertainty noted) | 0 |
 
-**Scientific/source disposition for the provisional draft:** no failed numerical or path check; no unsupported scientific claim found that requires a draft rewrite. Unresolved items are budget-limited citation PDF entailment, unauthorized figure re-plot, BMC export packaging, and human declaration facts — all named for the researcher.
+**Scientific/source disposition for the provisional draft:** numerical and path checks PASS; citation support remains unverified at C3. This prevents READY_FOR_RESEARCHER_REVIEW. Figure regeneration is outside scope and is not needed to resolve C3. Export and declarations remain separate submission tasks.
 
 ---
 

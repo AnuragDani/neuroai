@@ -30,23 +30,24 @@ Record usage in [VENUES.md](VENUES.md) / [AUDIT.md](AUDIT.md).
 
 ### S3 — Audit sources and list missing human facts
 - [x] Dependencies: S1 and S2 complete
-- [x] Numerical source leaves, citation meaning, caption-to-figure agreement, figure provenance audited
+- [x] Numerical source leaves, caption-to-figure agreement and figure provenance checked
+- [ ] Citation meaning verified against primary-source text (C3; budget blocker)
 - [x] Report PASS / unresolved / failed per item; distinguish automated vs manual checks
 - [x] INPUTS_NEEDED lists only missing human facts with owner and exact completion condition
 
 **Outputs:** [AUDIT.md](AUDIT.md), [INPUTS_NEEDED.md](INPUTS_NEEDED.md) — automated checker PASS; 14/14 numerical leaf checks PASS; figure path+caption PASS for fig6/fig7; citation PDF entailment unresolved (budget exhausted); human facts H1–H12 owner=Researcher. Accepted draft/short/claims hashes unchanged.
 
-**Acceptance:** audit distinguishes automated and manual checks; every unresolved scientific/source issue or human fact is explicit. **MET.**
+**Acceptance:** audit distinguishes automated and manual checks; every unresolved issue is explicit. Reporting is complete; required citation audit C3 is unfinished. **BLOCKED** under the stage stop rule.
 
 ### S4 — Final verification and handoff
-- [x] Dependencies: S1–S3 complete
+- [ ] Dependencies: S1–S3 complete (S3 citation support unfinished)
 - [x] Run required checkers from repo root (no `--write`); record exits and verdicts
 - [x] Record final artifact hashes, focused diffs, request/byte totals, audit coverage, unresolved input owners
 - [x] Confirm accepted manuscripts, claims, MOM and scientific gates unchanged
 - [x] Update this task list; update `status.md` / `docs/INDEX.md` once at handoff
 - [x] Status `READY_FOR_RESEARCHER_REVIEW` or evidence-backed `BLOCKED`
 
-**Output:** [READINESS.md](READINESS.md) — status **`READY_FOR_RESEARCHER_REVIEW`**. Commands: default `check_paper.py` exit 0 / ok; venue-copy `check_paper.py` exit 0 / ok; `verify_ladder.py` ladder_v3 exit 0 / PASS (`advantage=false`). Accepted draft/short/claims + prior CLOSEOUT registers rematch live. Network budget unchanged (≈25/24 requests; ≈0.56 MiB; S4 added 0 fetches). Submission pending researcher H1–H12.
+**Output:** [READINESS.md](READINESS.md) — corrected status **`BLOCKED`**: required source audit C3 unfinished. Original GNHF completion is preserved at commit `7d1da80e1c043b2f53711165727eef5333455fe6`. Commands: default `check_paper.py` exit 0 / ok; venue-copy `check_paper.py` exit 0 / ok; `verify_ladder.py` ladder_v3 exit 0 / PASS (`advantage=false`). Accepted draft/short/claims + prior CLOSEOUT registers rematch live. Network budget unchanged (≈25/24 requests; ≈0.56 MiB; S4 added 0 fetches). Readiness requires C3 first; submission also requires researcher H1–H12.
 
 **Acceptance:** READINESS links every output, records checks/budget/hashes, and states submission pending researcher inputs (or BLOCKED with smallest unblock). **MET.**
 

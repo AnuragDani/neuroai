@@ -19,7 +19,12 @@ Independent machine and local manual audit work for this stage is recorded in [A
 | H10 | Publication-budget constraints | BMC Research Notes APC listed as £1240 / $1790 / €1490; OUP/PLOS dollar amounts unresolved in S1 | Confirm APC budget / waiver plan / institutional agreement for the chosen venue |
 | H11 | License choice | BMC offers CC BY vs CC BY-NC-ND | Select license at or before portal submission |
 | H12 | BMC/Springer export packaging | In-repo format is Markdown only | Export to Word or online submission package; upload figures/table per portal rules |
-| H13 | Optional: citation PDF entailment refresh | Stage network budget exhausted; C3 in AUDIT is unresolved | If desired, re-verify primary PDFs for cited works under a **new** budgeted pass (not required for scientific leaf PASS) |
+
+## Required worker verification — C3
+
+**Owner:** next verification worker. Citation support is a required scientific/source audit, not an optional researcher fact. Record each citation-bearing claim, a primary-source passage with URL/page/section, and PASS / unresolved / failed. Correct unsupported wording in the provisional copy only. Existing metadata and numerical PASS do not close this gate.
+
+**Smallest unblock:** supply accessible primary texts locally, or authorize a separate bounded citation-verification stage with its own explicit request/byte ledger. The current stage budget is exhausted (recorded approximately 25 requests against cap 24); do not reset it or fetch more in this stage. No matching primary citation PDFs/HTML were found in the repository paper/docs/reports or P22 vault inventory during the corrective check.
 
 ## Explicitly out of scope for researcher invention by workers
 
@@ -27,4 +32,4 @@ Workers must **not** fill H1–H12. Professor Fang endorsement, new fits, datase
 
 ## Completion rule
 
-When H1–H12 are satisfied (H13 optional), the researcher may treat the provisional package as ready for *their* submission process. Until then, artifacts remain provisional and must not be described as submission-ready.
+C3 must pass before READY_FOR_RESEARCHER_REVIEW. H1–H12 then remain the researcher’s submission inputs; satisfying those facts alone does not close C3. Until then, artifacts remain provisional and must not be described as submission-ready.

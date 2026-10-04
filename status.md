@@ -1,8 +1,10 @@
 # P22 consolidated status — 2026-10-03
 
-## Submission readiness — READY_FOR_RESEARCHER_REVIEW — 2026-10-03
+## Submission readiness — BLOCKED — 2026-10-03
 
-Bounded venue-prep stage complete ([READINESS](tasks/submission_readiness_20261003/READINESS.md)). Provisional target BMC Research Notes Research note ([VENUES](tasks/submission_readiness_20261003/VENUES.md)); venue copy [paper/submission_20261003/draft.md](paper/submission_20261003/draft.md); audit [AUDIT](tasks/submission_readiness_20261003/AUDIT.md); researcher inputs [INPUTS_NEEDED](tasks/submission_readiness_20261003/INPUTS_NEEDED.md). Fresh default + venue-copy `check_paper.py` PASS; ladder_v3 verifier PASS (`advantage=false`). Accepted `paper/draft.md` / `short_paper.md` / `claims.csv` and original MOM indexes unchanged. Submission pending researcher H1–H12 (venue, authors, funding, conflicts, ethics, releases, APC, export). Not submission-certified. Zero fits; no push, contact or portal submit. Prior [next_action closeout](tasks/next_action_20261003/CLOSEOUT.md) preserved.
+GNHF stopped after 4 successful iterations and 4 commits (0 agent failures), but its READY handoff conflicts with the required citation-support gate C3. Corrected [READINESS](tasks/submission_readiness_20261003/READINESS.md) uses **BLOCKED** under [PROMPT](tasks/submission_readiness_20261003/PROMPT.md). Numerical/default/venue-copy checks independently rerun PASS; ladder advantage remains false. All 16 original handoff hashes rematched before documentation correction. The stage ledger records approximately 25 requests against cap 24; no further requests or counter reset. Citation metadata does not establish claim support.
+
+Completed outputs retained: provisional [VENUES](tasks/submission_readiness_20261003/VENUES.md), [venue draft](paper/submission_20261003/draft.md), [AUDIT](tasks/submission_readiness_20261003/AUDIT.md), [INPUTS_NEEDED](tasks/submission_readiness_20261003/INPUTS_NEEDED.md). Next: supply primary source text locally or authorize a separate bounded citation-support verification stage; finish C3 before reconsidering readiness. Researcher H1–H12 and export then remain submission inputs. No new training is needed for this blocker. Accepted manuscripts, scientific gates and original MOM unchanged; no fits, push, contact or submission. Original worker handoff preserved in commit `7d1da80e1c043b2f53711165727eef5333455fe6`; prior [closeout](tasks/next_action_20261003/CLOSEOUT.md) preserved.
 
 # P22 consolidated status — 2026-10-02
 
