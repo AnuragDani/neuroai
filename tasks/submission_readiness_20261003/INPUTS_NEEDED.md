@@ -20,11 +20,9 @@ Independent machine and local manual audit work for this stage is recorded in [A
 | H11 | License choice | BMC offers CC BY vs CC BY-NC-ND | Select license at or before portal submission |
 | H12 | BMC/Springer export packaging | In-repo format is Markdown only | Export to Word or online submission package; upload figures/table per portal rules |
 
-## Required worker verification — C3
+## Required worker verification — C3 closed
 
-**Owner:** next verification worker. Citation support is a required scientific/source audit, not an optional researcher fact. Record each citation-bearing claim, a primary-source passage with URL/page/section, and PASS / unresolved / failed. Correct unsupported wording in the provisional copy only. Existing metadata and numerical PASS do not close this gate.
-
-**Smallest unblock:** supply accessible primary texts locally, or authorize a separate bounded citation-verification stage with its own explicit request/byte ledger. The current stage budget is exhausted (recorded approximately 25 requests against cap 24); do not reset it or fetch more in this stage. No matching primary citation PDFs/HTML were found in the repository paper/docs/reports or P22 vault inventory during the corrective check.
+**Owner:** audit worker. **Status:** PASS after surgical wording corrections in [citation audit](../citation_audit_20261003/AUDIT.md), with 17/17 keys and 22/22 revised citation uses mapped to primary sources. Gemini approved the plan via AGy CLI. Accepted scientific artifacts remain unchanged; both paper checks and ladder replay PASS. No further citation acquisition is required for these retained provisional claims. Historical stage request limits remain documented, not re-certified.
 
 ## Explicitly out of scope for researcher invention by workers
 
@@ -32,4 +30,4 @@ Workers must **not** fill H1–H12. Professor Fang endorsement, new fits, datase
 
 ## Completion rule
 
-C3 must pass before READY_FOR_RESEARCHER_REVIEW. H1–H12 then remain the researcher’s submission inputs; satisfying those facts alone does not close C3. Until then, artifacts remain provisional and must not be described as submission-ready.
+C3 now passes for the audited provisional copy. H1–H12 remain researcher-owned submission inputs; edits that introduce new citation claims require renewed source verification. Until then, artifacts remain provisional and must not be described as submission-ready.

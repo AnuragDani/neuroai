@@ -1,0 +1,407 @@
+{
+  "scope": "provisional venue draft only",
+  "source_gate": "C3",
+  "verdict": "PASS_AFTER_SURGICAL_WORDING_CORRECTIONS",
+  "original_groups": [
+    {
+      "group": 1,
+      "line": 21,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "**Objective.** Determine whether cross-modal attention improves donor-held-out Down syndrome classification over matched token concatenation on paired single-cell RNA and ATAC from thirty developmental-cortex donors [@lattke2026down]."
+    },
+    {
+      "group": 2,
+      "line": 27,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "Paired single-cell RNA and ATAC profiles invite fusion models, including cross-modal attention. It remains unclear when attention improves donor-level prediction over simpler fusion that sees the same cells and features. We treat the question as an internal comparison: planted-signal regimes where the joint label is known, and a real donor disease-label task on one developmental-cortex atlas [@lattke2026down]. Donor hold-out follows biological-replicate reasoning in differential expression [@squair2021confronting]; it does not guarantee transportability. We report where the evidence does not support an attention advantage and where controls fail their fixed gates."
+    },
+    {
+      "group": 3,
+      "line": 27,
+      "keys": [
+        "squair2021confronting"
+      ],
+      "text": "Paired single-cell RNA and ATAC profiles invite fusion models, including cross-modal attention. It remains unclear when attention improves donor-level prediction over simpler fusion that sees the same cells and features. We treat the question as an internal comparison: planted-signal regimes where the joint label is known, and a real donor disease-label task on one developmental-cortex atlas [@lattke2026down]. Donor hold-out follows biological-replicate reasoning in differential expression [@squair2021confronting]; it does not guarantee transportability. We report where the evidence does not support an attention advantage and where controls fail their fixed gates."
+    },
+    {
+      "group": 4,
+      "line": 31,
+      "keys": [
+        "hao2021integrated",
+        "argelaguet2020mofa",
+        "ashuach2023multivi"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 5,
+      "line": 31,
+      "keys": [
+        "tsai2019multimodal",
+        "nagrani2021attention",
+        "vaswani2017attention"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 6,
+      "line": 31,
+      "keys": [
+        "ilse2018attention"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 7,
+      "line": 31,
+      "keys": [
+        "jain2019attention",
+        "wiegreffe2019attention"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 8,
+      "line": 31,
+      "keys": [
+        "ganin2015unsupervised",
+        "ganin2016domain",
+        "oord2018representation",
+        "radford2021learning"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 9,
+      "line": 31,
+      "keys": [
+        "stuart2021signac"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 10,
+      "line": 31,
+      "keys": [
+        "lee1999learning"
+      ],
+      "text": "Weighted nearest neighbours, MOFA+ and MultiVI combine paired modalities for broader integration goals [@hao2021integrated; @argelaguet2020mofa; @ashuach2023multivi]. Multimodal transformers and attention bottlenecks motivate cross-modal fusion [@tsai2019multimodal; @nagrani2021attention; @vaswani2017attention]; attention-based multiple-instance learning motivates donor bags [@ilse2018attention]. Attention weights are treated as diagnostics to probe, not as explanations [@jain2019attention; @wiegreffe2019attention]. Domain-adversarial training and contrastive pairing objectives appear in the ladder as declared components [@ganin2015unsupervised; @ganin2016domain; @oord2018representation; @radford2021learning]. Gene-activity summaries follow established window practice [@stuart2021signac]; NMF tokens are a classical alternative [@lee1999learning]."
+    },
+    {
+      "group": 11,
+      "line": 35,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "**Data and sampling.** We analyse 248,998 processed paired cells from 30 donors [@lattke2026down]. Each donor contributes at most 1,000 cells (seed 22), stratified by author cell type and library. Outer folds hold out entire donors. Within each outer-training fold we select 2,000 RNA genes by label-free dispersion and 256 ATAC regions by training-library prevalence (not a curated regulatory panel). RNA uses training-only standard scaling after `log1p` library normalisation; ATAC uses training-only TF-IDF. Donor is the unit of inference [@squair2021confronting]."
+    },
+    {
+      "group": 12,
+      "line": 35,
+      "keys": [
+        "squair2021confronting"
+      ],
+      "text": "**Data and sampling.** We analyse 248,998 processed paired cells from 30 donors [@lattke2026down]. Each donor contributes at most 1,000 cells (seed 22), stratified by author cell type and library. Outer folds hold out entire donors. Within each outer-training fold we select 2,000 RNA genes by label-free dispersion and 256 ATAC regions by training-library prevalence (not a curated regulatory panel). RNA uses training-only standard scaling after `log1p` library normalisation; ATAC uses training-only TF-IDF. Donor is the unit of inference [@squair2021confronting]."
+    },
+    {
+      "group": 13,
+      "line": 68,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "Donor *n* = 30 leaves the primary estimate imprecise; statistical power for the real-data contrast is unestablished. Detectability finds no CA−TC CI excluding 0 up to planted δ = 1.0. The ATAC panel is prevalence-selected. Disease labels are same-cohort annotations [@lattke2026down]. Developmental stage is recorded but not separately residualized beyond the declared adversary. Planted signals are synthetic. Pooling across stratified folds can depress pooled AUROC relative to per-fold scores. Later invalid controls supply no method validation."
+    },
+    {
+      "group": 14,
+      "line": 82,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "| Availability of data and materials | Partial | Researcher | Atlas citation [@lattke2026down] present; add accession/repository links required by BMC |"
+    }
+  ],
+  "revised_groups": [
+    {
+      "group": 1,
+      "line": 21,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "**Objective.** Determine whether cross-modal attention improves donor-held-out Down syndrome classification over matched token concatenation on paired single-cell RNA and ATAC from thirty developmental-cortex donors [@lattke2026down]."
+    },
+    {
+      "group": 2,
+      "line": 27,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "Paired single-cell RNA and ATAC profiles invite fusion models, including cross-modal attention. It remains unclear when attention improves donor-level prediction over simpler fusion that sees the same cells and features. We treat the question as an internal comparison: planted-signal regimes where the joint label is known, and a real donor disease-label task on one developmental-cortex atlas [@lattke2026down]. Squair et al. show that differential-expression methods must account for variation between biological replicates [@squair2021confronting]. We choose donor hold-out for this classification comparison; it does not guarantee transportability. We report where the evidence does not support an attention advantage and where controls fail their fixed gates."
+    },
+    {
+      "group": 3,
+      "line": 27,
+      "keys": [
+        "squair2021confronting"
+      ],
+      "text": "Paired single-cell RNA and ATAC profiles invite fusion models, including cross-modal attention. It remains unclear when attention improves donor-level prediction over simpler fusion that sees the same cells and features. We treat the question as an internal comparison: planted-signal regimes where the joint label is known, and a real donor disease-label task on one developmental-cortex atlas [@lattke2026down]. Squair et al. show that differential-expression methods must account for variation between biological replicates [@squair2021confronting]. We choose donor hold-out for this classification comparison; it does not guarantee transportability. We report where the evidence does not support an attention advantage and where controls fail their fixed gates."
+    },
+    {
+      "group": 4,
+      "line": 31,
+      "keys": [
+        "hao2021integrated"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 5,
+      "line": 31,
+      "keys": [
+        "argelaguet2020mofa"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 6,
+      "line": 31,
+      "keys": [
+        "ashuach2023multivi"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 7,
+      "line": 31,
+      "keys": [
+        "vaswani2017attention"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 8,
+      "line": 31,
+      "keys": [
+        "tsai2019multimodal"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 9,
+      "line": 31,
+      "keys": [
+        "nagrani2021attention"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 10,
+      "line": 31,
+      "keys": [
+        "ilse2018attention"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 11,
+      "line": 31,
+      "keys": [
+        "jain2019attention"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 12,
+      "line": 31,
+      "keys": [
+        "wiegreffe2019attention"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 13,
+      "line": 31,
+      "keys": [
+        "ganin2015unsupervised",
+        "ganin2016domain"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 14,
+      "line": 31,
+      "keys": [
+        "oord2018representation"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 15,
+      "line": 31,
+      "keys": [
+        "radford2021learning"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 16,
+      "line": 31,
+      "keys": [
+        "stuart2021signac"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 17,
+      "line": 31,
+      "keys": [
+        "lee1999learning"
+      ],
+      "text": "Weighted nearest-neighbour integration learns the relative utility of modalities in each cell [@hao2021integrated]. MOFA+ models modalities in a shared sample space [@argelaguet2020mofa]; MultiVI integrates multimodal and single-modality data [@ashuach2023multivi]. Transformers provide attention-based sequence modelling [@vaswani2017attention]; MulT uses pairwise cross-modal attention [@tsai2019multimodal], and attention bottlenecks restrict information exchange between modalities [@nagrani2021attention]. Attention-based multiple-instance learning provides bag-level aggregation [@ilse2018attention]; assigning donors as bags is our adaptation. Jain and Wallace question attention weights as explanations [@jain2019attention], whereas Wiegreffe and Pinter argue that their explanatory value depends on the definition and diagnostic tests [@wiegreffe2019attention]. We probe weights as diagnostics. Our nuisance adversary is motivated by domain-adversarial representation learning [@ganin2015unsupervised; @ganin2016domain]; pairing draws on contrastive predictive coding [@oord2018representation] and image–text matching [@radford2021learning]. Signac estimates activity from gene bodies and upstream regions [@stuart2021signac]; our secondary summary uses gene bodies with flanks at both ends. NMF supplies a non-negative representation [@lee1999learning]; its use for tokens is our adaptation."
+    },
+    {
+      "group": 18,
+      "line": 35,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "**Data and sampling.** The source atlas reports 248,998 retained Multiome cells from 30 fetal samples [@lattke2026down]. Our processed input contains 248,998 paired cells from 30 donors; analysis samples at most 1,000 cells per donor (seed 22), stratified by author cell type and library. Outer folds hold out entire donors. Within each outer-training fold we select 2,000 RNA genes by label-free dispersion and 256 ATAC regions by training-library prevalence (not a curated regulatory panel). RNA uses training-only standard scaling after `log1p` library normalisation; ATAC uses training-only TF-IDF. We choose donors as inference units, motivated by biological-replicate variation in differential expression [@squair2021confronting]."
+    },
+    {
+      "group": 19,
+      "line": 35,
+      "keys": [
+        "squair2021confronting"
+      ],
+      "text": "**Data and sampling.** The source atlas reports 248,998 retained Multiome cells from 30 fetal samples [@lattke2026down]. Our processed input contains 248,998 paired cells from 30 donors; analysis samples at most 1,000 cells per donor (seed 22), stratified by author cell type and library. Outer folds hold out entire donors. Within each outer-training fold we select 2,000 RNA genes by label-free dispersion and 256 ATAC regions by training-library prevalence (not a curated regulatory panel). RNA uses training-only standard scaling after `log1p` library normalisation; ATAC uses training-only TF-IDF. We choose donors as inference units, motivated by biological-replicate variation in differential expression [@squair2021confronting]."
+    },
+    {
+      "group": 20,
+      "line": 68,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "Donor *n* = 30 leaves the primary estimate imprecise; statistical power for the real-data contrast is unestablished. Detectability finds no CA−TC CI excluding 0 up to planted δ = 1.0. The ATAC panel is prevalence-selected. Disease labels are same-cohort annotations [@lattke2026down]. Developmental stage is recorded but not separately residualized beyond the declared adversary. Planted signals are synthetic. Pooling across stratified folds can depress pooled AUROC relative to per-fold scores. Later invalid controls supply no method validation."
+    },
+    {
+      "group": 21,
+      "line": 82,
+      "keys": [
+        "lattke2026down"
+      ],
+      "text": "| Availability of data and materials | Partial | Researcher | Atlas citation [@lattke2026down] present; add accession/repository links required by BMC |"
+    }
+  ],
+  "sources": {
+    "lattke2026down": {
+      "url": "https://www.nature.com/articles/s41591-026-04211-1",
+      "locator": "Results: A single-cell gene expression and chromatin accessibility atlas; first paragraph / Fig. 1a–b",
+      "support_paraphrase": "Profiling used 10X Multiome in 15 DS and 15 control fetal samples, with 248,998 cells retained after QC. Same-cohort disease groups and paired modality provenance are supported; local sampled counts require the sampling ledger.",
+      "verdict": "PASS; methods narrowed to distinguish available cells from sampled analysis"
+    },
+    "squair2021confronting": {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34584091/",
+      "locator": "Abstract, second paragraph; Fig. 3 caption",
+      "support_paraphrase": "DE methods ignoring variation between biological replicates are prone to false discoveries. This supports the DE warning; it does not validate donor-held-out classifier performance or mandate our precise bootstrap design.",
+      "verdict": "NARROWED_AND_PASS; both uses distinguish our donor design from published DE findings"
+    },
+    "hao2021integrated": {
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=34062119&retmode=xml",
+      "locator": "PubmedArticle/MedlineCitation/Article/Abstract/AbstractText; PMID 34062119",
+      "support_paraphrase": "WNN is an unsupervised framework learning each modality’s relative utility in each cell for multimodal integration. The abstract is sufficient for this general claim; no specific RNA–ATAC benchmark or algorithmic reproduction is attributed to it.",
+      "verdict": "PASS; claim made source-specific"
+    },
+    "argelaguet2020mofa": {
+      "url": "https://link.springer.com/article/10.1186/s13059-020-02015-1",
+      "locator": "Abstract; Background paragraph beginning MOFA+, in contrast",
+      "support_paraphrase": "MOFA+ provides scalable multimodal integration and uses a common sample space with measurements from the same cells. No superiority over our neural arms is claimed.",
+      "verdict": "PASS"
+    },
+    "ashuach2023multivi": {
+      "url": "https://www.nature.com/articles/s41592-023-01909-9",
+      "locator": "Abstract; Main paragraphs describing paired and single-modality integration",
+      "support_paraphrase": "MultiVI creates joint representations of multiomic data and accommodates missing modalities, integrating multimodal with single-modality datasets.",
+      "verdict": "PASS"
+    },
+    "vaswani2017attention": {
+      "url": "https://arxiv.org/abs/1706.03762",
+      "locator": "Abstract; arXiv v7 viewed, first submitted 2017",
+      "support_paraphrase": "The Transformer uses attention for sequence transduction, without recurrence or convolutions. This is architectural background, not RNA–ATAC or donor-task evidence.",
+      "verdict": "NARROWED_AND_PASS; separated from cross-modal applications"
+    },
+    "tsai2019multimodal": {
+      "url": "https://aclanthology.org/P19-1656/",
+      "locator": "Abstract, second paragraph",
+      "support_paraphrase": "MulT uses directional pairwise cross-modal attention for unaligned multimodal language sequences. Donor bag adaptation is ours, not a reported application.",
+      "verdict": "PASS"
+    },
+    "nagrani2021attention": {
+      "url": "https://arxiv.org/abs/2107.00135",
+      "locator": "Abstract, second paragraph; arXiv v3 viewed",
+      "support_paraphrase": "Multimodal fusion bottlenecks require information exchange through a limited set of latent bottlenecks. Audio-visual results are not transferred to this biological task. The viewed revision notes an AudioSet metric correction; none of those numbers is cited here.",
+      "verdict": "PASS"
+    },
+    "ilse2018attention": {
+      "url": "https://proceedings.mlr.press/v80/ilse18a.html",
+      "locator": "Abstract, first paragraph",
+      "support_paraphrase": "MIL assigns a class to a bag of instances and uses a permutation-invariant attention aggregation operator. Donor bags are our application; this source does not validate donor biology or explanations for this study.",
+      "verdict": "NARROWED_AND_PASS"
+    },
+    "jain2019attention": {
+      "url": "https://aclanthology.org/N19-1357/",
+      "locator": "Abstract, second and final paragraphs",
+      "support_paraphrase": "On tested NLP tasks, attention distributions can disagree with gradient importance and different distributions can yield equivalent predictions; authors caution against treating standard attention as explanations.",
+      "verdict": "NARROWED_AND_PASS; position attributed individually"
+    },
+    "wiegreffe2019attention": {
+      "url": "https://aclanthology.org/D19-1002/",
+      "locator": "Abstract, second through fourth paragraphs",
+      "support_paraphrase": "Authors challenge blanket conclusions, tie explanation claims to definitions and whole-model tests, and propose diagnostics. Their position is not consensus that attention never explains.",
+      "verdict": "NARROWED_AND_PASS; disagreement explicit"
+    },
+    "ganin2015unsupervised": {
+      "url": "https://proceedings.mlr.press/v37/ganin15.html",
+      "locator": "Abstract, second/third paragraphs",
+      "support_paraphrase": "Domain-adaptation training promotes task-discriminative yet domain-invariant features using gradient reversal. Our conditional nuisance adversary is an adaptation, not evidence of successful removal in this cohort.",
+      "verdict": "PASS"
+    },
+    "ganin2016domain": {
+      "url": "https://jmlr.org/papers/v17/15-239.html",
+      "locator": "Abstract, second/third paragraphs",
+      "support_paraphrase": "Domain-adversarial learning uses gradient reversal to pursue task discrimination and domain indiscrimination. The grouped 2015/2016 citation independently supports this common motivation.",
+      "verdict": "PASS"
+    },
+    "oord2018representation": {
+      "url": "https://arxiv.org/abs/1807.03748",
+      "locator": "Abstract, second paragraph; arXiv v2 viewed",
+      "support_paraphrase": "Contrastive predictive coding uses a probabilistic contrastive objective and negative sampling for representations. It does not itself establish cross-modal RNA–ATAC pairing utility.",
+      "verdict": "NARROWED_AND_PASS; paired with its own claim"
+    },
+    "radford2021learning": {
+      "url": "https://proceedings.mlr.press/v139/radford21a.html",
+      "locator": "Abstract, second paragraph",
+      "support_paraphrase": "Predicting which caption matches an image learns transferable visual representations. Cross-modal matching motivates our pairing choice, without validating RNA–ATAC performance.",
+      "verdict": "NARROWED_AND_PASS; image–text attribution explicit"
+    },
+    "stuart2021signac": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9255697/",
+      "locator": "Methods: PBMC multiome analysis / Multimodal label transfer",
+      "support_paraphrase": "Signac counts fragments over each gene body and a 2-kb upstream region. Our implementation instead expands both genomic boundaries; the draft now states the distinction rather than claiming an identical window.",
+      "verdict": "NARROWED_AND_PASS"
+    },
+    "lee1999learning": {
+      "url": "https://www.nature.com/articles/44565",
+      "locator": "Abstract, first/second paragraphs",
+      "support_paraphrase": "NMF uses non-negativity constraints for additive representations, demonstrated on faces and text. Token construction in this study is our adaptation, not this paper’s biological result.",
+      "verdict": "NARROWED_AND_PASS"
+    }
+  },
+  "draft_before_sha256": "50779ebb58aa4957b926dc2e3c7c69ebdde83bed4cd32eac469cebcd6a1dbd4a",
+  "draft_after_sha256": "fa80103f2ea220102372605b067bafb14b3c26ecc8915949e17ee6ce914ef0fc",
+  "unique_keys": 17,
+  "original_key_uses": 22,
+  "revised_key_uses": 22
+}

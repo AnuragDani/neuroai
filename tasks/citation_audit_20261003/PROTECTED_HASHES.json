@@ -1,0 +1,14 @@
+{
+  "paper/draft.md": "fa16ffad2feb37d5a22a30b492c587a4a8920bcc39e36f161568296512ad812e",
+  "paper/short_paper.md": "7a69ecd9177b41fa3b3a9c50ebdad82e9d9d54661d6a8916bde4d6a98100f12f",
+  "paper/claims.csv": "e768510a318532f200654c0e77527f043e65abc0030e9c160675595386ff3d89",
+  "paper/refs_frozen.bib": "9d5432d7faf3ad28eb159945f239b1eb1fd67e1f76174ffca691f5c2f11a3da4",
+  "paper/figures/fig6_per_fold_auroc.png": "d6d4a939335b2b88cbd8a3e7ef8e15738fd1270900facdcd584a25dc310fc36c",
+  "paper/figures/fig7_detectability.png": "b9d3fa4ce0e07c17bd1b57b6ec77d2ec1ed5c887085db60e14c6545aea62f1dd",
+  "docs/nn_v2/ladder_verification.json": "aec19fda88d60a30fda4ebdb9af53c790c62d5210206a5627c54521bfd947256",
+  "docs/nn_v2/ladder_summary.json": "9add634e69dfbd7de1f764d6d7d3e3a217101efec2445c426b1b7be3f4ebc4c7",
+  "MOM/README.md": "18e8c8ade62a075097a09e1da7565c5a6c33566d5298f0f319e5d9fb2ed6a4c9",
+  "MOM/2026-07-02/README.md": "d411701b09dc34cfaf0674ea82733341ff8cd3355d9dd1823666242845212fa0",
+  "MOM/2026-07-21/README.md": "cf732e339e5348d260c121b10f5b0f4dcb15d276cdf3bdaf5aadb3c7ee25e0e6",
+  "tasks/next_action_20261003/CLOSEOUT.md": "db21d4855654ceb4262945b436238032517bab1a343aa20fc77eb49cbfa59b71"
+}

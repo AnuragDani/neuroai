@@ -1,5 +1,7 @@
 # Source and figure audit — submission readiness 2026-10-03
 
+**Current C3 disposition: PASS after surgical wording corrections in the separately authorized [citation audit](../citation_audit_20261003/AUDIT.md).** The S3 tables below are a historical worker snapshot; their unresolved C3 was subsequently closed with primary-source evidence. The old network overrun remains historical and is not re-certified. Current readiness is [READINESS.md](READINESS.md).
+
 **Scope:** provisional BMC Research Notes copy at `paper/submission_20261003/draft.md` only.
 **Not authorized:** new learning, predictions, analyses, figure regeneration, or network citation PDF retrieval.
 **Network budget (stage shared with S1):** requests ≈25/24 (exhausted); docs ≈0.56 MiB / 32 MiB. **No external requests this audit.** Only local `refs_frozen.bib` metadata and prior dated reviews were examined; these do not complete citation entailment.

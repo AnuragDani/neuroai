@@ -1,0 +1,126 @@
+{
+  "stage": "citation_audit_20261003",
+  "acquisitionAttemptCap": 32,
+  "retainedResponseByteCap": 33554432,
+  "acquisitionAttempts": 28,
+  "cachedNavigationOperations": 28,
+  "responseRepresentationBytes": 280195,
+  "underlyingHttpRequests": "unknown: web tool does not expose internal requests, caching or redirects",
+  "downloadedBytes": "unknown for web tool; XML response measured 48236 bytes",
+  "entries": [
+    {
+      "n": 1,
+      "kind": "open",
+      "targets": [
+        "https://www.nature.com/articles/s41591-026-04211-1",
+        "https://www.nature.com/articles/s41467-021-25960-2",
+        "https://aclanthology.org/N19-1357/",
+        "https://aclanthology.org/D19-1002/",
+        "https://www.nature.com/articles/s41592-021-01282-5"
+      ],
+      "attempts": 5,
+      "returnedBytes": 33933
+    },
+    {
+      "n": 2,
+      "kind": "open+search",
+      "targets": [
+        "https://www.cell.com/cell/fulltext/S0092-8674(21)00583-3",
+        "https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02015-1",
+        "https://www.nature.com/articles/s41592-023-01909-9",
+        "https://aclanthology.org/P19-1656/",
+        "https://arxiv.org/abs/2107.00135",
+        "https://arxiv.org/abs/1706.03762",
+        "https://proceedings.mlr.press/v80/ilse18a.html",
+        "https://proceedings.mlr.press/v37/ganin15.html",
+        "https://jmlr.org/papers/v17/15-239.html",
+        "https://arxiv.org/abs/1807.03748",
+        "https://proceedings.mlr.press/v139/radford21a.html",
+        "https://www.nature.com/articles/44565"
+      ],
+      "queries": [
+        "Squair primary PMC",
+        "Signac primary PMC"
+      ],
+      "attempts": 14,
+      "returnedBytes": 34225
+    },
+    {
+      "n": 3,
+      "kind": "fallback-open+search+cached-find",
+      "targets": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8479118/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9255697/"
+      ],
+      "queries": [
+        "Hao primary paper PMC"
+      ],
+      "attempts": 3,
+      "cachedFinds": 13,
+      "returnedBytes": 34049
+    },
+    {
+      "n": 4,
+      "kind": "cached-open",
+      "cachedOpens": 4,
+      "attempts": 0,
+      "returnedBytes": 33452
+    },
+    {
+      "n": 5,
+      "kind": "cached-open",
+      "cachedOpens": 9,
+      "attempts": 0,
+      "returnedBytes": 31273
+    },
+    {
+      "n": 6,
+      "kind": "Hao-fallback+cached-publisher-open+cached-find",
+      "targets": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8238499/"
+      ],
+      "attempts": 1,
+      "cachedOpens": 1,
+      "cachedFinds": 1,
+      "returnedBytes": 34909
+    },
+    {
+      "n": 7,
+      "kind": "fallback-for-inaccessible-PMC",
+      "targets": [
+        "https://pubmed.ncbi.nlm.nih.gov/34584091/",
+        "https://pubmed.ncbi.nlm.nih.gov/34062119/"
+      ],
+      "attempts": 2,
+      "returnedBytes": 29534
+    },
+    {
+      "n": 8,
+      "kind": "author-primary-copy-after-inaccessible-PubMed",
+      "targets": [
+        "https://mjanelee.github.io/files/seurat_v4.pdf"
+      ],
+      "attempts": 1,
+      "returnedBytes": 285
+    },
+    {
+      "n": 9,
+      "kind": "publisher-primary-abstract",
+      "targets": [
+        "https://www.sciencedirect.com/science/article/pii/S0092867421005833"
+      ],
+      "attempts": 1,
+      "returnedBytes": 299
+    },
+    {
+      "n": 10,
+      "kind": "official-PubMed-XML",
+      "targets": [
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=34062119&retmode=xml"
+      ],
+      "attempts": 1,
+      "returnedBytes": 48236,
+      "bytesType": "measured raw XML response"
+    }
+  ]
+}

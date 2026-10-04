@@ -31,23 +31,23 @@ Record usage in [VENUES.md](VENUES.md) / [AUDIT.md](AUDIT.md).
 ### S3 — Audit sources and list missing human facts
 - [x] Dependencies: S1 and S2 complete
 - [x] Numerical source leaves, caption-to-figure agreement and figure provenance checked
-- [ ] Citation meaning verified against primary-source text (C3; budget blocker)
+- [x] Citation meaning verified against primary-source text (C3 closed by separately authorized citation_audit_20261003; 17 keys / 22 revised uses)
 - [x] Report PASS / unresolved / failed per item; distinguish automated vs manual checks
 - [x] INPUTS_NEEDED lists only missing human facts with owner and exact completion condition
 
-**Outputs:** [AUDIT.md](AUDIT.md), [INPUTS_NEEDED.md](INPUTS_NEEDED.md) — automated checker PASS; 14/14 numerical leaf checks PASS; figure path+caption PASS for fig6/fig7; citation PDF entailment unresolved (budget exhausted); human facts H1–H12 owner=Researcher. Accepted draft/short/claims hashes unchanged.
+**Outputs:** [AUDIT.md](AUDIT.md), [INPUTS_NEEDED.md](INPUTS_NEEDED.md) — automated checker PASS; 14/14 numerical leaf checks PASS; figure path+caption PASS for fig6/fig7; original citation entailment was budget-blocked and is now resolved by the separate citation audit; human facts H1–H12 owner=Researcher. Accepted draft/short/claims hashes unchanged.
 
-**Acceptance:** audit distinguishes automated and manual checks; every unresolved issue is explicit. Reporting is complete; required citation audit C3 is unfinished. **BLOCKED** under the stage stop rule.
+**Acceptance:** audit distinguishes automated and manual checks; required citation support completed in [citation audit](../citation_audit_20261003/AUDIT.md). **MET**. The earlier request-cap overrun remains documented.
 
 ### S4 — Final verification and handoff
-- [ ] Dependencies: S1–S3 complete (S3 citation support unfinished)
+- [x] Dependencies: S1–S3 complete (C3 closed in separately authorized citation stage)
 - [x] Run required checkers from repo root (no `--write`); record exits and verdicts
 - [x] Record final artifact hashes, focused diffs, request/byte totals, audit coverage, unresolved input owners
 - [x] Confirm accepted manuscripts, claims, MOM and scientific gates unchanged
 - [x] Update this task list; update `status.md` / `docs/INDEX.md` once at handoff
 - [x] Status `READY_FOR_RESEARCHER_REVIEW` or evidence-backed `BLOCKED`
 
-**Output:** [READINESS.md](READINESS.md) — corrected status **`BLOCKED`**: required source audit C3 unfinished. Original GNHF completion is preserved at commit `7d1da80e1c043b2f53711165727eef5333455fe6`. Commands: default `check_paper.py` exit 0 / ok; venue-copy `check_paper.py` exit 0 / ok; `verify_ladder.py` ladder_v3 exit 0 / PASS (`advantage=false`). Accepted draft/short/claims + prior CLOSEOUT registers rematch live. Network budget unchanged (≈25/24 requests; ≈0.56 MiB; S4 added 0 fetches). Readiness requires C3 first; submission also requires researcher H1–H12.
+**Output:** [READINESS.md](READINESS.md) — current status **`READY_FOR_RESEARCHER_REVIEW`**: required source audit C3 closed by the separately authorized citation stage. Original GNHF completion is preserved at commit `7d1da80e1c043b2f53711165727eef5333455fe6`. Commands: default `check_paper.py` exit 0 / ok; venue-copy `check_paper.py` exit 0 / ok; `verify_ladder.py` ladder_v3 exit 0 / PASS (`advantage=false`). Accepted draft/short/claims + prior CLOSEOUT registers rematch live. Network budget unchanged (≈25/24 requests; ≈0.56 MiB; S4 added 0 fetches). C3 now passes; submission still requires researcher H1–H12.
 
 **Acceptance:** READINESS links every output, records checks/budget/hashes, and states submission pending researcher inputs (or BLOCKED with smallest unblock). **MET.**
 

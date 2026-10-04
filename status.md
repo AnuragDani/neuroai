@@ -1,10 +1,14 @@
 # P22 consolidated status — 2026-10-03
 
-## Submission readiness — BLOCKED — 2026-10-03
+## Submission readiness — READY_FOR_RESEARCHER_REVIEW — 2026-10-03
 
-GNHF stopped after 4 successful iterations and 4 commits (0 agent failures), but its READY handoff conflicts with the required citation-support gate C3. Corrected [READINESS](tasks/submission_readiness_20261003/READINESS.md) uses **BLOCKED** under [PROMPT](tasks/submission_readiness_20261003/PROMPT.md). Numerical/default/venue-copy checks independently rerun PASS; ladder advantage remains false. All 16 original handoff hashes rematched before documentation correction. The stage ledger records approximately 25 requests against cap 24; no further requests or counter reset. Citation metadata does not establish claim support.
+The separately authorized [citation audit](tasks/citation_audit_20261003/AUDIT.md) closes C3 after surgical edits to three provisional-draft paragraphs: **17/17 references, 22/22 citation uses** supported by primary texts. [Gemini plan review](tasks/citation_audit_20261003/GEMINI_PLAN_REVIEW.md): **PASS**, `gemini-3.1-pro-high` through AGy CLI (acpx/Gemini client unsupported). [Current handoff](tasks/submission_readiness_20261003/READINESS.md), [provisional draft](paper/submission_20261003/draft.md), [researcher inputs](tasks/submission_readiness_20261003/INPUTS_NEEDED.md).
 
-Completed outputs retained: provisional [VENUES](tasks/submission_readiness_20261003/VENUES.md), [venue draft](paper/submission_20261003/draft.md), [AUDIT](tasks/submission_readiness_20261003/AUDIT.md), [INPUTS_NEEDED](tasks/submission_readiness_20261003/INPUTS_NEEDED.md). Next: supply primary source text locally or authorize a separate bounded citation-support verification stage; finish C3 before reconsidering readiness. Researcher H1–H12 and export then remain submission inputs. No new training is needed for this blocker. Accepted manuscripts, scientific gates and original MOM unchanged; no fits, push, contact or submission. Original worker handoff preserved in commit `7d1da80e1c043b2f53711165727eef5333455fe6`; prior [closeout](tasks/next_action_20261003/CLOSEOUT.md) preserved.
+Both paper checkers and saved-prediction ladder replay PASS; advantage=false; **12/12 protected hashes** match. Accepted manuscripts, frozen bib, claims, original MOM and scientific gates unchanged. Available atlas cells are now distinguished from sampled analysis, published DE findings from our donor design, opposing attention positions, and Signac’s window from our two-flank adaptation. No new fits, plots, datasets or professor endorsement.
+
+Old GNHF premature READY and corrected BLOCKED snapshots remain in commits `7d1da80` and `d0f043c`. The old ≈25/24 request overrun remains recorded. New [resource ledger](tasks/citation_audit_20261003/NETWORK.md) records 28 source acquisitions/discovery attempts plus 28 cached-page navigation operations; 280,195 response-representation bytes. Underlying web HTTP/download totals are unavailable; no strict physical-cap certification. Human H1–H12, venue confirmation and Word/portal export remain submission inputs. **Not submission-ready.**
+
+Branch consolidation/push completed: `main` contains all previous live branch heads, merged local/remote develop and gnhf branch names removed, only primary worktree remains. Current audit changes are pending final commit/push. Earlier hashed worktree archives and history remain preserved.
 
 # P22 consolidated status — 2026-10-02
 
