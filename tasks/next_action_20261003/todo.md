@@ -51,10 +51,11 @@ Disposition: **PASS**. Paper checker + replay PASS after manuscript edits; desk 
 
 ### Task 4 — closeout and Definition of Done
 
-- [ ] `CLOSEOUT.md` links every required output and current artifact hash.
-- [ ] Final paper checker and saved-fold replay report PASS. Manual checks and open items are recorded.
-- [ ] Every Definition of Done item in `PLAN.md` has completion evidence.
-- [ ] Root/detailed task marks and `status.md` agree with the closeout.
-- [ ] Record preparation complete; submission pending where required. Stop without automatic research continuation.
+- [x] `CLOSEOUT.md` links every required output and current artifact hash.
+- [x] Final paper checker and saved-fold replay report PASS. Manual checks and open items are recorded.
+- [x] Every Definition of Done item in `PLAN.md` has completion evidence.
+- [x] Root/detailed task marks and `status.md` agree with the closeout.
+- [x] Record preparation complete; submission pending where required. Stop without automatic research continuation.
 
-These are planned completion checks, not claims that execution occurred.
+Task 4 evidence: [CLOSEOUT.md](CLOSEOUT.md). Final checks and output hashes are recorded there.
+Status: **preparation complete; submission pending**. The original GNHF run remains token-aborted; Codex finished closeout locally.

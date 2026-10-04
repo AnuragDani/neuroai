@@ -101,7 +101,7 @@ A separately authorized proposal — outside this preparation stage — would ne
 1. Exact frozen checkpoint/selection record IDs and a distinct information-bearing external question (not automatic continuation of this desk note).
 2. File-level access ledger for every required RNA/ATAC/fragment object, with Open vs Controlled and reuse terms resolved or explicitly authorized.
 3. Costed byte plan if any object exceeds 256 MiB, without silently raising historical ceilings or mixing Q5 counters.
-4. Closed or waived written contracts for QC release, specimen independence and exact feature/count (or exact recount) semantics, including RNA transforms.
+4. Resolved written contracts for QC release, specimen independence and exact feature/count (or exact recount) semantics, including RNA transforms. A waiver cannot substitute for measured input compatibility or establish specimen independence.
 5. Complete reviewed inference/execution hashes and untouched external outcomes until protocol freeze.
 
 Until then: **no acquisition, no external score, no purchase/download recommendation.**

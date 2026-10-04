@@ -788,3 +788,8 @@ Researcher requests action without waiting for professor. See [proposal](next_ac
 ### Definition of Done and execution breakdown — 2026-10-03
 
 The [active continuation](next_action_20261003/PLAN.md#definition-of-done) now defines four bounded tasks, named outputs, dependencies, Checkpoints A–B, runnable verification and completion/failure rules. [Root task target](todo.md#next-action-execution--2026-10-03) retains all unrelated unfinished work. Completion means preparation complete with tracked submission items. No fits or external acquisition are authorized.
+
+
+### Preparation closeout accepted — 2026-10-03
+
+[Task 4 closeout](next_action_20261003/CLOSEOUT.md) completes this continuation and its Definition of Done. Fresh paper checks and saved-fold replay PASS. Preparation complete; submission pending on tracked researcher/venue items. External desk decision remains NO_GO_NOW. No fits or acquisition follow automatically.

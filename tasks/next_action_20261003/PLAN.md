@@ -31,14 +31,14 @@ Do not let the desk decision change the paper's accepted scientific evidence.
 
 This definition applies to the preparation stage. It does not certify submission readiness or authorize experiments.
 
-- [ ] **Outputs exist:** `EVIDENCE_BOUNDARY.md`, updated manuscripts, `PAPER_COMPLETION.md`, `EXTERNAL_DESK_DECISION.md` and `CLOSEOUT.md` are linked.
-- [ ] **Evidence is traceable:** numbers identify exact arm pairs, source leaves and dated source hashes. Original MOM and raw artifacts remain intact.
-- [ ] **Paper checks pass:** the existing numerical checker and saved-fold replay report PASS. Manual claim, citation and figure checks are recorded.
-- [ ] **Scientific limits remain explicit:** all historical gates, power limits, dosage interpretation and endpoint limits remain unchanged.
-- [ ] **Desk decision is bounded:** `NO_GO_NOW` names the unresolved contracts and future evidence required, without acquisition or a repeated audit.
-- [ ] **Open items are honest:** researcher-only declarations and venue requirements name an owner and completion condition. They prevent a submission-ready label.
-- [ ] **Completion is evidenced:** the closeout links outputs, current hashes, commands, outcomes and unresolved items before task boxes are marked complete.
-- [ ] **Scope remains intact:** zero research fits, external scores, research network requests, downloads, counter resets, outbound messages or automatic research continuation.
+- [x] **Outputs exist:** `EVIDENCE_BOUNDARY.md`, updated manuscripts, `PAPER_COMPLETION.md`, `EXTERNAL_DESK_DECISION.md` and `CLOSEOUT.md` are linked.
+- [x] **Evidence is traceable:** numbers identify exact arm pairs, source leaves and dated source hashes. Original MOM and raw artifacts remain intact.
+- [x] **Paper checks pass:** the existing numerical checker and saved-fold replay report PASS. Manual claim, citation and figure checks are recorded.
+- [x] **Scientific limits remain explicit:** all historical gates, power limits, dosage interpretation and endpoint limits remain unchanged.
+- [x] **Desk decision is bounded:** `NO_GO_NOW` names the unresolved contracts and future evidence required, without acquisition or a repeated audit.
+- [x] **Open items are honest:** researcher-only declarations and venue requirements name an owner and completion condition. They prevent a submission-ready label.
+- [x] **Completion is evidenced:** the closeout links outputs, current hashes, commands, outcomes and unresolved items before task boxes are marked complete.
+- [x] **Scope remains intact:** zero research fits, external scores, research network requests, downloads, counter resets, outbound messages or automatic research continuation.
 
 Any unresolved discrepancy in a manuscript claim or its supporting source blocks preparation completion.
 Named declaration facts and venue requirements can remain open if clearly tracked. Use **preparation complete; submission pending** for that result.
@@ -139,11 +139,12 @@ It is distinct from external_feasibility.json network.budget_ceiling_bytes=67108
 
 A MEX matrix over different peak intervals generally cannot reproduce counts on the fixed 465-region panel.
 Exact transfer requires documented identical intervals/count semantics or compatible fragment/alignment data for exact recounting.
-The supplied sources do not establish either path. Fragment availability and size remain unknown. Do not invent a size or declare all transfer mathematically impossible.
+The supplied sources do not establish either path. The offline Open bag declares a 20,610,908,160-byte DSdevctx fragment package.
+Actual access, working-set cost and exact recount feasibility remain unresolved. Do not declare transfer mathematically impossible.
 RNA features and saved training transformations also require an exact contract. Never zero-fill missing measured regions.
 
 **Verification:** Cite the existing source URL, payload hash, byte declaration and unresolved contracts.
-Compare the decision against the existing Q5/R5 records. Record unknown fragment size and access as unknown.
+Compare the decision against existing Q5/R5 records and the pinned offline bag. Distinguish declared fragment size from unresolved actual access.
 **Failure rule:** Unsupported access, size or compatibility claims prevent Task 3 completion. Retain unresolved labels instead of inventing a PASS.
 No new requests, bytes or counter changes.
 
@@ -172,9 +173,9 @@ Checkpoint B **PASS** (2026-10-03): [PAPER_COMPLETION.md](PAPER_COMPLETION.md); 
 **Output:** A dated closeout with artifact links, final hashes, command outcomes, manual checks and open items.
 
 **Acceptance criteria:**
-- [ ] Every Definition of Done item has a linked output or explicit check result.
-- [ ] Closeout states **preparation complete; submission pending** when researcher-only or venue requirements remain open.
-- [ ] Task completion marks agree with closeout evidence. Update `status.md` once at the accepted completion gate.
+- [x] Every Definition of Done item has a linked output or explicit check result.
+- [x] Closeout states **preparation complete; submission pending** when researcher-only or venue requirements remain open.
+- [x] Task completion marks agree with closeout evidence. Update `status.md` once at the accepted completion gate.
 
 **Verification:** Repeat the two commands below after the manuscript edits. Compare current hashes and labels with Task 1's source record.
 Check that output links resolve. Confirm no fits, downloads, external scores, messages, counter resets or new research stages occurred.
@@ -244,3 +245,9 @@ See CURSOR_FINAL_ACCEPTANCE.md, CLAUDE_FINAL_ACCEPTANCE.md and REVIEW_STATUS.jso
 This operational update adds task outputs, estimates, checkpoints, runnable checks and the explicit Definition of Done.
 It preserves the reviewed scientific scope. Prior Cursor/Claude verdicts refer to their saved snapshots, not a new review of this update.
 Implementation task boxes remain unchecked until their output evidence exists.
+
+## Accepted preparation closeout — 2026-10-03
+
+Task 4 and the Definition of Done are complete. [CLOSEOUT.md](CLOSEOUT.md) records final checks, artifact hashes and open submission items.
+Status: **preparation complete; submission pending**. GNHF hit its token cap before closeout, so Codex completed Task 4 locally.
+No scientific result or experiment authorization changed. No automatic research continuation follows.

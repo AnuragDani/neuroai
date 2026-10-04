@@ -15,7 +15,7 @@
   "paper_source_check": "PASS",
   "files_sha256": {
     "PROPOSAL.md": "ecf9fa51e94a7a024ef7a9bfd5b777c2bddf1aad6b094f048d9c0079c4bb9582",
-    "PLAN.md": "5347c8e8dedd02d00fb41b70cfac69e20be0a9e4ea7870447a4c46bb3ecf45f5",
+    "PLAN.md": "6c608a855e1a30c8b5f60532d37ca5946ce20c8207581dbf82323eeab4a19687",
     "CURSOR_REVIEW.md": "6b827f279ccc2cb4db9920bbf26be9c88cb50773ea515e986ea369d052bc31db",
     "CURSOR_FINAL_REVIEW.md": "98aff5f727dbdfbdf1815f9fc928fe13694ebf0f93288e80df28641a0b6e107b",
     "CURSOR_FINAL_REVIEW.json": "33b5df42c6290e48ffe75b8aa2dfb26ca326fc9fdd8f922f9be9d01fe004c766",
@@ -49,5 +49,24 @@
     "new_independent_review": false,
     "implementation_started": false,
     "scientific_scope_changed": false
+  },
+  "execution_closeout": {
+    "date": "2026-10-03",
+    "status": "PREPARATION_COMPLETE_SUBMISSION_PENDING",
+    "tasks_complete": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runner_status": "ABORTED_TOKEN_CAP",
+    "closeout_completed_by": "Codex",
+    "paper_checker": "PASS",
+    "saved_fold_replay": "PASS",
+    "executor_hash_matches": 17,
+    "research_fits": 0,
+    "payload_downloads": 0,
+    "external_scores": 0,
+    "closeout_sha256": "db21d4855654ceb4262945b436238032517bab1a343aa20fc77eb49cbfa59b71"
   }
 }
