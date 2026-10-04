@@ -1,3 +1,9 @@
+# P22 consolidated status — 2026-10-03
+
+## Submission readiness — READY_FOR_RESEARCHER_REVIEW — 2026-10-03
+
+Bounded venue-prep stage complete ([READINESS](tasks/submission_readiness_20261003/READINESS.md)). Provisional target BMC Research Notes Research note ([VENUES](tasks/submission_readiness_20261003/VENUES.md)); venue copy [paper/submission_20261003/draft.md](paper/submission_20261003/draft.md); audit [AUDIT](tasks/submission_readiness_20261003/AUDIT.md); researcher inputs [INPUTS_NEEDED](tasks/submission_readiness_20261003/INPUTS_NEEDED.md). Fresh default + venue-copy `check_paper.py` PASS; ladder_v3 verifier PASS (`advantage=false`). Accepted `paper/draft.md` / `short_paper.md` / `claims.csv` and original MOM indexes unchanged. Submission pending researcher H1–H12 (venue, authors, funding, conflicts, ethics, releases, APC, export). Not submission-certified. Zero fits; no push, contact or portal submit. Prior [next_action closeout](tasks/next_action_20261003/CLOSEOUT.md) preserved.
+
 # P22 consolidated status — 2026-10-02
 
 Primary checkout contains the complete reviewed history through `964b54e`, including M10 handoff. Scientific pilot acceptance remains **NOT_AUTHORIZED** because the real executor was added after pre-fit review. Diagnostic replay PASS: TC−CA loss +0.001537, CI [-0.002197,+0.004746], advantage not met. Primary **B_NULL** unchanged.

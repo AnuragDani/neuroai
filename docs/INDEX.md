@@ -53,3 +53,9 @@ Current paths stay in place while swarm runs: code and task checks reference the
 ## Bounded preparation closeout — 2026-10-03
 
 [CLOSEOUT](../tasks/next_action_20261003/CLOSEOUT.md) completes Tasks 1–4 and the Definition of Done. Preparation complete; submission pending. [Paper checklist](../tasks/next_action_20261003/PAPER_COMPLETION.md), [offline desk decision](../tasks/next_action_20261003/EXTERNAL_DESK_DECISION.md). No further GNHF run or automatic experiment is needed for this stage.
+
+## Submission readiness handoff — 2026-10-03
+
+| Need | Open | Role |
+|---|---|---|
+| Where is the provisional venue package? | [READINESS](../tasks/submission_readiness_20261003/READINESS.md), [VENUES](../tasks/submission_readiness_20261003/VENUES.md), [venue draft](../paper/submission_20261003/draft.md), [AUDIT](../tasks/submission_readiness_20261003/AUDIT.md), [INPUTS_NEEDED](../tasks/submission_readiness_20261003/INPUTS_NEEDED.md), [task list](../tasks/submission_readiness_20261003/todo.md) | **READY_FOR_RESEARCHER_REVIEW**: provisional BMC Research Notes Research note; automated checks PASS; accepted manuscripts unchanged; submission pending researcher H1–H12. Not submission-certified. No fits/push/contact. |

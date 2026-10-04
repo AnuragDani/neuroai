@@ -39,16 +39,16 @@ Record usage in [VENUES.md](VENUES.md) / [AUDIT.md](AUDIT.md).
 **Acceptance:** audit distinguishes automated and manual checks; every unresolved scientific/source issue or human fact is explicit. **MET.**
 
 ### S4 — Final verification and handoff
-- [ ] Dependencies: S1–S3 complete
-- [ ] Run required checkers from repo root (no `--write`); record exits and verdicts
-- [ ] Record final artifact hashes, focused diffs, request/byte totals, audit coverage, unresolved input owners
-- [ ] Confirm accepted manuscripts, claims, MOM and scientific gates unchanged
-- [ ] Update this task list; update `status.md` / `docs/INDEX.md` once at handoff
-- [ ] Status `READY_FOR_RESEARCHER_REVIEW` or evidence-backed `BLOCKED`
+- [x] Dependencies: S1–S3 complete
+- [x] Run required checkers from repo root (no `--write`); record exits and verdicts
+- [x] Record final artifact hashes, focused diffs, request/byte totals, audit coverage, unresolved input owners
+- [x] Confirm accepted manuscripts, claims, MOM and scientific gates unchanged
+- [x] Update this task list; update `status.md` / `docs/INDEX.md` once at handoff
+- [x] Status `READY_FOR_RESEARCHER_REVIEW` or evidence-backed `BLOCKED`
 
-**Output:** [READINESS.md](READINESS.md)
+**Output:** [READINESS.md](READINESS.md) — status **`READY_FOR_RESEARCHER_REVIEW`**. Commands: default `check_paper.py` exit 0 / ok; venue-copy `check_paper.py` exit 0 / ok; `verify_ladder.py` ladder_v3 exit 0 / PASS (`advantage=false`). Accepted draft/short/claims + prior CLOSEOUT registers rematch live. Network budget unchanged (≈25/24 requests; ≈0.56 MiB; S4 added 0 fetches). Submission pending researcher H1–H12.
 
-**Acceptance:** READINESS links every output, records checks/budget/hashes, and states submission pending researcher inputs (or BLOCKED with smallest unblock).
+**Acceptance:** READINESS links every output, records checks/budget/hashes, and states submission pending researcher inputs (or BLOCKED with smallest unblock). **MET.**
 
 ## Preserved labels (do not rewrite)
 
