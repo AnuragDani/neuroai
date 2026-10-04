@@ -29,14 +29,14 @@ Record usage in [VENUES.md](VENUES.md) / [AUDIT.md](AUDIT.md).
 **Acceptance:** draft is clearly provisional, complies with known venue rules, preserves original scientific scope. **MET.**
 
 ### S3 — Audit sources and list missing human facts
-- [ ] Dependencies: S1 and S2 complete
-- [ ] Numerical source leaves, citation meaning, caption-to-figure agreement, figure provenance audited
-- [ ] Report PASS / unresolved / failed per item; distinguish automated vs manual checks
-- [ ] INPUTS_NEEDED lists only missing human facts with owner and exact completion condition
+- [x] Dependencies: S1 and S2 complete
+- [x] Numerical source leaves, citation meaning, caption-to-figure agreement, figure provenance audited
+- [x] Report PASS / unresolved / failed per item; distinguish automated vs manual checks
+- [x] INPUTS_NEEDED lists only missing human facts with owner and exact completion condition
 
-**Outputs:** [AUDIT.md](AUDIT.md), [INPUTS_NEEDED.md](INPUTS_NEEDED.md)
+**Outputs:** [AUDIT.md](AUDIT.md), [INPUTS_NEEDED.md](INPUTS_NEEDED.md) — automated checker PASS; 14/14 numerical leaf checks PASS; figure path+caption PASS for fig6/fig7; citation PDF entailment unresolved (budget exhausted); human facts H1–H12 owner=Researcher. Accepted draft/short/claims hashes unchanged.
 
-**Acceptance:** audit distinguishes automated and manual checks; every unresolved scientific/source issue or human fact is explicit.
+**Acceptance:** audit distinguishes automated and manual checks; every unresolved scientific/source issue or human fact is explicit. **MET.**
 
 ### S4 — Final verification and handoff
 - [ ] Dependencies: S1–S3 complete
